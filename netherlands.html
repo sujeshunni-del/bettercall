@@ -1,60 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netherlands Program | Better Call Immigration</title>
+    <meta name="description" content="Advance your career in the Netherlands. White Collar Opportunities with Competitive Salaries (€5000 - €6500).">
     
-    <!-- SEO & Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <!-- Using Outfit font to match Finland style -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Lenis Smooth Scroll -->
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
     
-    <!-- Configuration -->
     <script>
-        if (typeof tailwind !== 'undefined') {
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        fontFamily: {
-                            sans: ['Inter', 'sans-serif'],
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        serif: ['Outfit', 'sans-serif'], 
+                    },
+                    colors: {
+                        'deep-space': '#050B14',
+                        'space-indigo': '#1C2B4C', 
+                        'brand-blue': '#3B82F6',      
+                        'brand-purple': '#8B5CF6',     
+                        'brand-gold': '#FFD700',
+                        'brand-white': '#FFFFFF',
+                        'vfs-teal': '#14B8A6',
+                        
+                        // Netherlands Specific Colors (mapped for the new theme)
+                        'nether-orange': '#FF6600',     
+                        'nether-blue': '#21468B',       
+                        'nether-red': '#AE1C28',
+                        'nether-light': '#FFF5E6',
+                        
+                        // Aliases to make Finland logic work with Nether colors
+                        'finland-blue': '#21468B', // Map Finland Blue to Nether Blue
+                        'finland-sky': '#FF6600',  // Map Finland Sky to Nether Orange (Accent)
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shimmer': 'shimmer 2.5s linear infinite',
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
                         },
-                        colors: {
-                            'deep-space': '#050B14',
-                            'space-indigo': '#1C2B4C',
-                            'deep-blue': '#0B132B',
-                            'pure-white': '#FFFFFF',
-                            'brand-blue': '#3B82F6',      
-                            'brand-gold': '#FFD700',
-                            
-                            // Netherlands Theme (Orange & Blue)
-                            'nether-orange': '#FF6600',     // Iconic Dutch Orange
-                            'nether-blue': '#21468B',       // Flag Blue
-                            'nether-red': '#AE1C28',        // Flag Red
-                            'nether-light': '#FFF5E6',      // Light Orange Tint
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
                         },
-                        animation: {
-                            'float': 'float 8s ease-in-out infinite',
-                            'pulse-glow': 'pulseGlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                            'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                            'star-field': 'starField 300s linear infinite',
-                            'shine': 'shine 8s linear infinite',
-                        },
-                        keyframes: {
-                            float: { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-20px)' } },
-                            fadeInUp: { '0%': { opacity: '0', transform: 'translateY(40px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-                            starField: { 'from': { transform: 'translateY(0px)' }, 'to': { transform: 'translateY(-2000px)' } },
-                            shine: { '0%': { 'background-position': '0% center' }, '50%': { 'background-position': '100% center' }, '100%': { 'background-position': '0% center' } },
-                            pulseGlow: { '0%, 100%': { 'box-shadow': '0 0 0 0 rgba(255, 102, 0, 0.4)' }, '50%': { 'box-shadow': '0 0 0 15px rgba(255, 102, 0, 0)' } },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 }
@@ -62,287 +69,349 @@
         }
     </script>
 
-    <!-- CUSTOM STYLES -->
     <style>
-        /* Recommended CSS for Lenis */
-        html.lenis, html.lenis body { height: auto; }
+        body {
+            background-color: #050B14;
+            color: #E2E8F0;
+            overflow-x: hidden;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* --- LENIS SMOOTH SCROLL CSS --- */
+        html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
         .lenis.lenis-stopped { overflow: hidden; }
         .lenis.lenis-scrolling iframe { pointer-events: none; }
 
-        body { 
-            background-color: #050B14; 
-            color: #E0E7FF; 
-            -webkit-font-smoothing: antialiased; 
-            font-family: 'Inter', sans-serif; 
-            overflow-x: hidden;
-        }
-
         /* Ambient Background */
-        .ambient-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; transform: translateZ(0); }
-        .orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; will-change: transform; }
-        .orb-1 { top: -15%; left: -10%; width: 50vw; height: 50vw; background: #FF6600; animation: float 14s infinite; }
-        .orb-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #21468B; animation: float 16s infinite reverse; }
-        .orb-3 { top: 40%; left: 30%; width: 35vw; height: 35vw; background: #AE1C28; opacity: 0.15; animation: float 20s infinite; }
-        
-        .glass-base {
-            background: rgba(33, 70, 139, 0.15);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 60px rgba(0, 0, 0, 0.4);
+        .ambient-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            transform: translateZ(0); 
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.25;
+            will-change: transform; 
+        }
+        /* Netherlands Colors (Orange, Blue, Red) */
+        .orb-1 { top: -15%; left: -10%; width: 50vw; height: 50vw; background: #FF6600; animation: float 14s infinite; opacity: 0.2; }
+        .orb-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #21468B; animation: float 16s infinite reverse; opacity: 0.15; }
+        .orb-3 { top: 40%; left: 30%; width: 35vw; height: 35vw; background: #AE1C28; opacity: 0.1; animation: float 20s infinite; }
+
+        /* Glass Components */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36); transition: all 0.4s;
-        }
-        .glass-panel:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 102, 0, 0.3); transform: translateY(-5px); }
-        
-        .floating-nav { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 100px; box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5); transition: all 0.3s ease; }
-        .floating-nav.scrolled { background: rgba(15, 23, 42, 0.9); border-color: rgba(255, 255, 255, 0.15); box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8); }
-        .dropdown-glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8); }
-        .glass-input { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.2); color: #E0E7FF; transition: all 0.3s; }
-        .glass-input:focus { border-color: #FF6600; background: rgba(0, 0, 0, 0.4); outline: none; }
-        .glass-input::placeholder { color: #94a3b8; }
-
-        /* GRID CARD STYLE: Compact & Vertical */
-        .job-card-grid {
-            background: linear-gradient(145deg, rgba(255, 102, 0, 0.05) 0%, rgba(33, 70, 139, 0.1) 100%);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            min-height: 180px;
-        }
-        .job-card-grid:hover {
-            background: rgba(255, 102, 0, 0.15);
-            border-color: #FF6600; 
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 102, 0, 0.3); /* Orange border on hover */
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.15);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        }
+        .dropdown-glass {
+            background: rgba(15, 23, 42, 0.7); 
+            backdrop-filter: blur(24px);       
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+        }
+        .floating-nav {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            transform: translateZ(0); 
+        }
+        .floating-nav.scrolled {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+        }
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .group:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        /* Language Dropdown specific styles */
+        #language-dropdown {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.9);
+            transform-origin: bottom left;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #lang-toggle-btn.active .fa-chevron-up {
+            transform: rotate(180deg);
+        }
+        #lang-toggle-btn.active + #language-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
         }
 
-        /* Language Dropdown specific styles */
-        #language-dropdown { opacity: 0; visibility: hidden; transform: scale(0.9); transform-origin: bottom left; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        #lang-toggle-btn.active .fa-chevron-up { transform: rotate(180deg); }
-        #lang-toggle-btn.active + #language-dropdown { opacity: 1; visibility: visible; transform: scale(1); }
-
-        .text-gradient-hero-nether { background: linear-gradient(to right, #FFFFFF, #FF6600, #AE1C28); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 8s linear infinite; background-size: 300% auto; }
-        .reveal-item { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal-item.active { opacity: 1; transform: translateY(0); }
+        /* Smooth Scroll Reveal Classes */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1), transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-item.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
         
-        .dropdown-menu { opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s; }
-        .group:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-        .modal-open { overflow: hidden; }
-        .modal-backdrop { background: rgba(5, 11, 20, 0.85); backdrop-filter: blur(10px); }
-        .modal-scroll::-webkit-scrollbar { width: 6px; }
-        .modal-scroll::-webkit-scrollbar-track { background: #1a1a1a; }
-        .modal-scroll::-webkit-scrollbar-thumb { background: #FF6600; border-radius: 4px; }
-        
-        #search-overlay { opacity: 0; visibility: hidden; transition: all 0.3s ease; }
-        #search-overlay.active { opacity: 1; visibility: visible; }
-        #search-container { transform: scale(0.95); transition: transform 0.3s; }
-        #search-overlay.active #search-container { transform: scale(1); }
-        .text-highlight { color: #FF6600; font-weight: 700; background: rgba(255, 102, 0, 0.1); border-radius: 2px; padding: 0 1px; }
+        .text-highlight {
+            color: #FF6600;
+            font-weight: 700;
+            background: rgba(255, 102, 0, 0.1);
+            border-radius: 2px;
+            padding: 0 1px;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050B14; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .glow-text { text-shadow: 0 0 20px rgba(255, 102, 0, 0.5); }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* --- MODAL STYLES --- */
+        .modal-backdrop {
+            background: rgba(5, 11, 20, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        .modal-content {
+            background: #0F172A;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Search Animation */
+        .search-glow:focus-within {
+            box-shadow: 0 0 30px rgba(255, 102, 0, 0.3);
+            border-color: rgba(255, 102, 0, 0.5);
+        }
     </style>
 </head>
-<body id="netherlands-page">
+<body class="antialiased min-h-screen flex flex-col relative" id="page-body">
 
-    <!-- Background Effects -->
     <div class="ambient-light">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
     </div>
 
-    <!-- NOTE: Global Nav Injected via JS -->
+    <main class="flex-grow">
+        
+        <!-- Hero Section -->
+        <header class="relative min-h-[70vh] flex flex-col items-center justify-center pt-32 pb-8 overflow-hidden z-20">
+            <div class="container mx-auto px-4 relative z-10 text-center flex flex-col items-center justify-center h-full">
+                
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-nether-orange/30 text-white font-bold tracking-widest text-xs uppercase mb-6 animate-fade-in-up">
+                    <span class="w-2 h-2 rounded-full bg-nether-orange animate-pulse"></span>
+                    <span data-i18n="hiring_now">Hiring Now: Netherlands 2025</span>
+                    <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                </div>
 
-    <!-- Hero Section -->
-    <header class="relative pt-36 md:pt-40 pb-16 md:pb-20 overflow-hidden z-20">
-        <div class="container mx-auto px-4 relative z-10 text-center">
-            <div class="inline-flex items-center gap-3 glass-base px-6 py-2.5 rounded-full mb-8 animate-fade-in-up" style="animation-delay: 0.1s;">
-                <span class="w-2 h-2 rounded-full bg-nether-orange animate-pulse"></span>
-                <span class="text-gray-300 text-xs md:text-sm font-bold uppercase tracking-widest" data-i18n="hero_badge">Hiring Now: Netherlands 2025</span>
+                <div class="mb-6 reveal-item w-full flex flex-col items-center" style="animation-delay: 0.1s;">
+                    <h1 class="text-5xl md:text-8xl font-black tracking-tighter leading-none text-white mb-6" style="text-shadow: 0 0 50px rgba(255, 102, 0, 0.3);">
+                        <span data-i18n="hero_title_1">Advance Career in</span> <br><span class="text-nether-orange" data-i18n="hero_title_2">The Netherlands</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed" data-i18n="hero_subtitle">
+                        White Collar Opportunities with Competitive Salaries (€5000 - €6500). <br class="hidden md:block">Comprehensive Benefits & Visa Support Included.
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-5 justify-center items-center reveal-item mt-10" style="animation-delay: 0.3s;">
+                    <a href="#jobs" class="w-full sm:w-auto relative group overflow-hidden rounded-full bg-nether-orange px-10 py-4 transition-all duration-300 text-white font-bold text-lg hover:scale-105 shadow-[0_0_30px_rgba(255,102,0,0.4)] hover:shadow-[0_0_50px_rgba(255,102,0,0.7)]">
+                        <span class="relative z-10 flex items-center justify-center gap-3 tracking-wide uppercase">
+                            <span data-i18n="view_positions">View Positions</span>
+                            <i class="fa-solid fa-arrow-down group-hover:translate-y-1 transition-transform"></i>
+                        </span>
+                    </a>
+                    
+                    <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1238/GSK4V1JQJ3OWPBPJP1" target="_blank" class="w-full sm:w-auto glass-panel px-10 py-4 rounded-full font-bold text-white text-lg hover:bg-white/10 border-white/10 transition-all flex items-center justify-center gap-3 group tracking-wide uppercase">
+                        <span data-i18n="check_eligibility">Check Eligibility</span>
+                        <i class="fa-solid fa-clipboard-check text-nether-orange group-hover:scale-110 transition-transform"></i>
+                    </a>
+                </div>
             </div>
-            <h1 class="text-5xl md:text-7xl font-bold text-white mb-8 leading-[1.1] animate-fade-in-up glow-text" style="animation-delay: 0.2s;">
-                <span data-i18n="hero_title_1">Advance Your Career in</span> <br>
-                <span class="text-gradient-hero-nether" data-i18n="hero_title_2">The Netherlands</span>
-            </h1>
-            <p class="text-lg md:text-2xl text-gray-300 max-w-3xl mx-auto mb-12 font-light leading-relaxed animate-fade-in-up" style="animation-delay: 0.3s;" data-i18n="hero_subtitle">
-                White Collar Opportunities with Competitive Salaries (€5000 - €6500). Comprehensive Benefits & Visa Support Included.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-5 justify-center items-center animate-fade-in-up" style="animation-delay: 0.4s;">
-                <a href="#jobs" class="w-full sm:w-auto relative group overflow-hidden rounded-full bg-nether-orange px-10 py-5 transition-all duration-300 text-white font-bold hover:scale-105 shadow-[0_0_30px_rgba(255,102,0,0.5)]">
-                    <span class="relative z-10 flex items-center justify-center gap-3 text-lg"><i class="fa-solid fa-briefcase"></i> <span data-i18n="view_positions">View Positions</span></span>
-                    <div class="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-                </a>
-                <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1238/GSK4V1JQJ3OWPBPJP1" target="_blank" class="w-full sm:w-auto glass-base text-white font-bold text-lg px-10 py-5 rounded-full hover:bg-space-indigo/80 transition-all border border-white/10 group">
-                    <i class="fa-solid fa-clipboard-check text-nether-orange mr-2 group-hover:scale-110 transition-transform"></i> <span data-i18n="check_eligibility">Check Eligibility</span>
-                </a>
+        </header>
+
+        <!-- Department Filter Section -->
+        <div id="category-filter-section" class="py-6 pt-12 relative z-20">
+            <div class="container mx-auto px-4">
+                <div class="max-w-7xl mx-auto mb-6">
+                    <h3 class="text-xl md:text-2xl font-bold text-white mb-4 text-center" data-i18n="select_department">Select Job Department</h3>
+                </div>
+                <!-- Grid of Category Buttons -->
+                <div class="flex overflow-x-auto md:flex-wrap md:justify-center gap-3 max-w-7xl mx-auto pb-4 md:pb-0 hide-scrollbar snap-x px-1" id="categoryButtons">
+                    <!-- Buttons injected by JS -->
+                </div>
             </div>
         </div>
-    </header>
-
-    <!-- Search Section -->
-    <div id="jobs" class="sticky top-20 z-40 transition-all duration-300 pt-4 pb-2">
-        <div class="container mx-auto px-4">
-            <div class="glass-base rounded-2xl p-4 shadow-xl border border-white/10">
-                <div class="flex flex-col md:flex-row gap-4 max-w-6xl mx-auto">
-                    <div class="relative flex-grow group">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-nether-orange transition-colors text-lg"></i>
-                        <input type="text" id="searchInput" class="w-full pl-12 pr-4 py-4 glass-input rounded-xl focus:ring-2 focus:ring-nether-orange/50 outline-none placeholder-gray-500 font-medium text-lg" placeholder="Filter jobs (e.g. Accountant, Engineer)..." onkeyup="filterJobs()">
+        
+        <!-- Search Section -->
+        <div class="py-6 relative z-30">
+            <div class="container mx-auto px-4">
+                <div class="max-w-2xl mx-auto relative group">
+                    <!-- Glow Effect Background -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-nether-blue via-nether-orange to-nether-red rounded-full blur opacity-20 group-hover:opacity-40 transition duration-700"></div>
+                    
+                    <!-- Search Bar -->
+                    <div class="relative glass-panel rounded-full flex items-center px-6 py-4 shadow-2xl border border-white/10 search-glow transition-all duration-300 bg-[#0B132B]/60 backdrop-blur-xl">
+                        <i class="fa-solid fa-magnifying-glass text-nether-orange text-xl mr-4 group-focus-within:scale-110 transition-transform"></i>
+                        <input type="text" id="jobSearchInput" placeholder="Search for positions (e.g. Accountant, Engineer)..." 
+                            class="bg-transparent border-none outline-none text-white w-full text-lg placeholder-gray-500 font-medium focus:ring-0"
+                            autocomplete="off"
+                            onkeyup="handleSearch(this.value)">
+                        
+                        <!-- Pulse Indicator -->
+                        <div class="hidden group-focus-within:block absolute right-6">
+                             <span class="relative flex h-3 w-3">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-nether-orange opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-3 w-3 bg-nether-orange"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <!-- Categories -->
-                <div class="mt-4 flex gap-3 overflow-x-auto hide-scrollbar pb-2" id="mobileCategories"></div>
-            </div>
-            <div class="text-center mt-3"><p id="jobCount" class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Loading...</p></div>
-        </div>
-    </div>
-
-    <!-- Job Groups Grid (Department Sections) -->
-    <section class="py-12 relative">
-        <div class="container mx-auto px-4 relative z-10">
-            <div id="jobContainer" class="flex flex-col gap-12 max-w-7xl mx-auto">
-                <!-- JS will populate department sections here -->
+                <div class="text-center mt-6"><p id="jobCount" class="text-sm font-bold text-nether-orange uppercase tracking-wide">Loading...</p></div>
             </div>
         </div>
-    </section>
 
-    <!-- Process Timeline -->
-    <section id="process" class="py-24 relative">
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-16 reveal-item">
-                <span class="text-nether-orange font-bold tracking-[0.2em] text-sm uppercase mb-4 block" data-i18n="process_kicker">Transparency First</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4" data-i18n="process_title">Application Process & Fees</h2>
-                <p class="text-xl text-gray-400" data-i18n="process_subtitle">A structured path to your new career in the Netherlands.</p>
-            </div>
-            <div class="max-w-4xl mx-auto">
-                <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-white/20">
-                    <div id="timelineContainer"></div>
+        <section id="jobs" class="py-12 relative z-20">
+            <div class="container mx-auto px-4 relative z-10">
+                <div id="jobContainer" class="flex flex-col gap-16 max-w-7xl mx-auto">
+                    <!-- Jobs Injected Here -->
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- CREATIVE TOTAL PRICE HOLDER -->
-    <section class="py-16 relative z-20">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto reveal-item">
-                <!-- Card Container with Gradient Border & Glow -->
-                <div class="relative group rounded-3xl p-[1px] bg-gradient-to-br from-nether-orange via-nether-red to-nether-blue hover:shadow-[0_0_100px_rgba(255,102,0,0.3)] transition-all duration-500">
-                    
-                    <!-- Glass Content Layer -->
-                    <div class="bg-[#0B132B]/95 backdrop-blur-xl rounded-[23px] relative overflow-hidden">
+        <!-- Process Timeline -->
+        <section id="process" class="py-20 relative bg-transparent border-t border-white/5">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto text-center mb-20 reveal-item">
+                    <span class="text-nether-orange font-bold tracking-[0.2em] text-sm uppercase mb-4 block" data-i18n="process_kicker">Transparency First</span>
+                    <h2 class="text-4xl md:text-6xl font-bold text-white mb-4" data-i18n="process_title">Application Process</h2>
+                    <p class="text-xl text-gray-400" data-i18n="process_subtitle">A structured path to your new career in the Netherlands.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-6 gap-6 relative">
+                    <div id="timelineContainer" class="col-span-1 lg:col-span-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PREMIUM PACKAGE / PRICE PLAN (Preserved from Netherlands HTML) -->
+        <section class="py-16 relative z-20">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto reveal-item">
+                    <!-- Card Container with Gradient Border & Glow -->
+                    <div class="relative group rounded-3xl p-[1px] bg-gradient-to-br from-nether-orange via-nether-red to-nether-blue hover:shadow-[0_0_100px_rgba(255,102,0,0.3)] transition-all duration-500">
                         
-                        <!-- Decorative Orbs inside card -->
-                        <div class="absolute top-0 right-0 w-96 h-96 bg-nether-orange/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-                        <div class="absolute bottom-0 left-0 w-64 h-64 bg-nether-blue/10 rounded-full blur-[60px] translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
-
-                        <div class="flex flex-col lg:flex-row">
+                        <!-- Glass Content Layer -->
+                        <div class="bg-[#0B132B]/95 backdrop-blur-xl rounded-[23px] relative overflow-hidden">
                             
-                            <!-- Left: Inclusions List -->
-                            <div class="p-8 md:p-12 lg:w-3/5 border-b lg:border-b-0 lg:border-r border-white/5">
-                                <div class="flex items-center gap-3 mb-6">
-                                    <span class="w-12 h-12 rounded-full bg-nether-orange/20 flex items-center justify-center text-nether-orange">
-                                        <i class="fa-solid fa-crown text-xl"></i>
-                                    </span>
-                                    <div>
-                                        <h3 class="text-2xl font-bold text-white" data-i18n="package_title">Premium Package</h3>
-                                        <p class="text-xs text-gray-400 uppercase tracking-widest" data-i18n="package_subtitle">All-Inclusive Relocation</p>
+                            <!-- Decorative Orbs inside card -->
+                            <div class="absolute top-0 right-0 w-96 h-96 bg-nether-orange/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                            <div class="absolute bottom-0 left-0 w-64 h-64 bg-nether-blue/10 rounded-full blur-[60px] translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+
+                            <div class="flex flex-col lg:flex-row">
+                                
+                                <!-- Left: Inclusions List -->
+                                <div class="p-8 md:p-12 lg:w-3/5 border-b lg:border-b-0 lg:border-r border-white/5">
+                                    <div class="flex items-center gap-3 mb-6">
+                                        <span class="w-12 h-12 rounded-full bg-nether-orange/20 flex items-center justify-center text-nether-orange">
+                                            <i class="fa-solid fa-crown text-xl"></i>
+                                        </span>
+                                        <div>
+                                            <h3 class="text-2xl font-bold text-white" data-i18n="package_title">Premium Package</h3>
+                                            <p class="text-xs text-gray-400 uppercase tracking-widest" data-i18n="package_subtitle">All-Inclusive Relocation</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-4">
+                                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                                            <div class="mt-1 text-green-400"><i class="fa-solid fa-circle-check"></i></div>
+                                            <div>
+                                                <span class="block text-white font-semibold text-base" data-i18n="inc_consult">Expert Consultation</span>
+                                                <span class="text-xs text-gray-500">Profile assessment & strategy planning.</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                                            <div class="mt-1 text-green-400"><i class="fa-solid fa-circle-check"></i></div>
+                                            <div>
+                                                <span class="block text-white font-semibold text-base" data-i18n="inc_doc">Documentation & Legalization</span>
+                                                <span class="text-xs text-gray-500">Complete review and preparation of assets.</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                                            <div class="mt-1 text-green-400"><i class="fa-solid fa-circle-check"></i></div>
+                                            <div>
+                                                <span class="block text-white font-semibold text-base" data-i18n="inc_visa">Visa Application & Appointments</span>
+                                                <span class="text-xs text-gray-500">Embassy slot booking and filing.</span>
+                                            </div>
+                                        </div>
+                                        <!-- Travel Ticket Highlight -->
+                                        <div class="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-nether-orange/20 to-transparent border border-nether-orange/30">
+                                            <div class="mt-1 text-nether-orange animate-pulse"><i class="fa-solid fa-plane-circle-check"></i></div>
+                                            <div>
+                                                <span class="block text-white font-bold text-base" data-i18n="inc_flight">Flight Ticket Included</span>
+                                                <span class="text-xs text-gray-400">One-way travel ticket to the Netherlands.</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="space-y-4">
-                                    <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                                        <div class="mt-1 text-green-400"><i class="fa-solid fa-circle-check"></i></div>
-                                        <div>
-                                            <span class="block text-white font-semibold text-base" data-i18n="inc_consult">Expert Consultation</span>
-                                            <span class="text-xs text-gray-500">Profile assessment & strategy planning.</span>
-                                        </div>
+                                <!-- Right: Price & CTA -->
+                                <div class="p-8 md:p-12 lg:w-2/5 flex flex-col justify-center items-center text-center relative">
+                                    <div class="mb-2 text-sm text-gray-400 uppercase tracking-widest" data-i18n="total_inv">Total Investment</div>
+                                    <div class="text-6xl font-black text-white mb-2 tracking-tight">€6,000</div>
+                                    <div class="text-xs text-gray-500 mb-8 max-w-[200px]" data-i18n="price_note">Transparent pricing with milestone-based payments.</div>
+                                    
+                                    <a href="https://bettercall.setmore.com/services/3b30ecba-8a10-478d-8736-0931fa2e5083" target="_blank" class="w-full relative group overflow-hidden rounded-xl bg-nether-orange px-8 py-5 transition-all duration-300 text-white font-bold text-lg shadow-lg hover:shadow-orange-500/40 hover:-translate-y-1">
+                                        <span class="relative z-10 flex items-center justify-center gap-2">
+                                            <span data-i18n="start_process">Start Process Now</span> <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                                        </span>
+                                        <div class="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                                    </a>
+                                    
+                                    <div class="mt-6 flex items-center gap-2 text-xs text-gray-500">
+                                        <i class="fa-solid fa-lock text-gray-600"></i> Secure Payment Gateways
                                     </div>
-                                    <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                                        <div class="mt-1 text-green-400"><i class="fa-solid fa-circle-check"></i></div>
-                                        <div>
-                                            <span class="block text-white font-semibold text-base" data-i18n="inc_doc">Documentation & Legalization</span>
-                                            <span class="text-xs text-gray-500">Complete review and preparation of assets.</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                                        <div class="mt-1 text-green-400"><i class="fa-solid fa-circle-check"></i></div>
-                                        <div>
-                                            <span class="block text-white font-semibold text-base" data-i18n="inc_visa">Visa Application & Appointments</span>
-                                            <span class="text-xs text-gray-500">Embassy slot booking and filing.</span>
-                                        </div>
-                                    </div>
-                                    <!-- Travel Ticket Highlight -->
-                                    <div class="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-nether-orange/20 to-transparent border border-nether-orange/30">
-                                        <div class="mt-1 text-nether-orange animate-pulse"><i class="fa-solid fa-plane-circle-check"></i></div>
-                                        <div>
-                                            <span class="block text-white font-bold text-base" data-i18n="inc_flight">Flight Ticket Included</span>
-                                            <span class="text-xs text-gray-400">One-way travel ticket to the Netherlands.</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Right: Price & CTA -->
-                            <div class="p-8 md:p-12 lg:w-2/5 flex flex-col justify-center items-center text-center relative">
-                                <div class="mb-2 text-sm text-gray-400 uppercase tracking-widest" data-i18n="total_inv">Total Investment</div>
-                                <div class="text-6xl font-black text-white mb-2 tracking-tight">€6,000</div>
-                                <div class="text-xs text-gray-500 mb-8 max-w-[200px]" data-i18n="price_note">Transparent pricing with milestone-based payments.</div>
-                                
-                                <a href="https://bettercall.setmore.com/services/3b30ecba-8a10-478d-8736-0931fa2e5083" target="_blank" class="w-full relative group overflow-hidden rounded-xl bg-nether-orange px-8 py-5 transition-all duration-300 text-white font-bold text-lg shadow-lg hover:shadow-orange-500/40 hover:-translate-y-1">
-                                    <span class="relative z-10 flex items-center justify-center gap-2">
-                                        <span data-i18n="start_process">Start Process Now</span> <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                                    </span>
-                                    <div class="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-                                </a>
-                                
-                                <div class="mt-6 flex items-center gap-2 text-xs text-gray-500">
-                                    <i class="fa-solid fa-lock text-gray-600"></i> Secure Payment Gateways
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- CREATIVE FINAL CTA SECTION -->
-    <section class="py-20 relative z-20 pb-32">
-        <div class="container mx-auto px-4 text-center">
-            <div class="glass-base rounded-3xl p-10 md:p-14 relative overflow-hidden max-w-5xl mx-auto border border-nether-orange/30 group hover:border-nether-orange/50 transition-all duration-500">
-                <!-- Ambient Glows -->
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-nether-orange/5 blur-3xl -z-10"></div>
-                <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-nether-blue/10 rounded-full blur-3xl"></div>
-                <div class="absolute -top-10 -left-10 w-64 h-64 bg-nether-red/10 rounded-full blur-3xl"></div>
-                
-                <span class="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-nether-orange text-xs font-bold uppercase tracking-widest mb-6 animate-pulse">Limited Slots Available</span>
-                
-                <h2 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">Ready to Start Your <br><span class="text-gradient-hero-nether">European Journey?</span></h2>
-                <p class="text-lg text-gray-300 mb-10 max-w-2xl mx-auto font-light">Don't wait for opportunity. Create it. Submit your application today and take the first step towards a new life in the Netherlands.</p>
-                
-                <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1458/EVODA1H8MIWXID161K" target="_blank" class="inline-flex items-center justify-center gap-4 bg-gradient-to-r from-nether-orange to-nether-red text-white font-bold py-5 px-12 rounded-full text-xl shadow-[0_0_40px_rgba(255,102,0,0.4)] hover:shadow-[0_0_60px_rgba(255,102,0,0.6)] hover:scale-105 transition-all group">
-                    <span>Apply Now</span>
-                    <i class="fa-solid fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
+    </main>
+    
     <!-- Floating Language Selector (Left Side) -->
     <div class="fixed bottom-8 left-4 md:left-8 z-50">
         <div class="relative">
@@ -365,85 +434,93 @@
         </div>
     </div>
 
-    <!-- Floating WhatsApp -->
-    <a href="https://wa.me/971503666382" target="_blank" class="fixed bottom-8 right-4 md:right-8 z-50 bg-[#25D366] text-white w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 group animate-[pulse-glow_3s_cubic-bezier(0.4,0,0.6,1)_infinite] shadow-[0_0_20px_rgba(255,102,0,0.4)]"><i class="fa-brands fa-whatsapp text-3xl"></i></a>
+    <!-- Floating Apply Button (Center) -->
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs px-4 sm:px-0 flex justify-center pointer-events-none">
+        <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1238/GSK4V1JQJ3OWPBPJP1" target="_blank" class="pointer-events-auto relative group bg-gradient-to-r from-nether-orange to-nether-red text-white font-bold py-4 px-8 rounded-full shadow-[0_0_30px_rgba(255,102,0,0.5)] hover:shadow-[0_0_50px_rgba(255,102,0,0.8)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 overflow-hidden flex items-center gap-3 border border-white/20">
+            <span class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+            <span class="relative z-10 text-lg tracking-widest uppercase" data-i18n="modal_apply">Apply Now</span>
+            <i class="fa-solid fa-paper-plane relative z-10 group-hover:translate-x-1 transition-transform"></i>
+            <!-- Pulse ring -->
+            <span class="absolute inset-0 rounded-full border-2 border-white/30 animate-ping opacity-20"></span>
+        </a>
+    </div>
 
-    <!-- Job Modal (Fixed Scrolling) -->
+    <!-- Floating WhatsApp Button (Right Side) -->
+    <div class="fixed bottom-8 right-4 md:right-8 z-50">
+        <a href="https://wa.me/971503666382" target="_blank" class="bg-[#25D366] text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-110 group animate-pulse" rel="noopener noreferrer">
+            <i class="fa-brands fa-whatsapp text-3xl md:text-4xl"></i>
+        </a>
+    </div>
+
+    <!-- JOB MODAL -->
     <div id="jobModal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="fixed inset-0 modal-backdrop transition-opacity" onclick="closeModal()"></div>
-        <div class="fixed inset-0 z-10 overflow-hidden flex items-center justify-center p-4"> 
-            <div class="relative transform overflow-hidden rounded-3xl glass-base text-left shadow-2xl transition-all w-full max-w-2xl border border-white/10 bg-[#0B132B] flex flex-col max-h-[85vh]">
-                <!-- Header -->
-                <div class="bg-gradient-to-r from-nether-orange to-nether-red px-8 py-8 relative shrink-0">
-                    <button onclick="closeModal()" class="absolute top-6 right-6 text-white/70 hover:text-white bg-white/10 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
-                    <div class="flex gap-5 items-center relative z-10">
-                        <div id="modalIcon" class="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center text-white text-4xl border border-white/20 shadow-lg"></div>
-                        <div>
-                            <span id="modalDept" class="bg-white/90 text-nether-red text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-sm"></span>
-                            <h3 id="modalTitle" class="text-3xl font-bold text-white leading-tight"></h3>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Body (Scrollable Area) -->
-                <div class="px-8 py-8 bg-deep-space/95 text-gray-300 overflow-y-auto modal-scroll flex-grow" data-lenis-prevent>
-                    <!-- Salary Info -->
-                    <div class="flex items-center justify-between p-6 glass-base rounded-2xl mb-8 border border-white/10">
-                        <div>
-                            <p class="text-xs text-gray-500 font-bold uppercase mb-1" data-i18n="modal_salary">Monthly Salary Range</p>
-                            <div class="flex items-baseline gap-2">
-                                <span id="modalEuro" class="text-3xl font-bold text-white"></span>
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center">
+                <div class="relative transform overflow-hidden rounded-3xl modal-content text-left shadow-2xl transition-all w-full max-w-2xl border border-nether-orange/30">
+                    
+                    <div class="bg-gradient-to-r from-nether-orange to-nether-red px-8 py-8 border-b border-white/10 relative">
+                        <button onclick="closeModal()" class="absolute top-6 right-6 text-white/70 hover:text-white transition bg-white/10 rounded-full w-10 h-10 flex items-center justify-center hover:bg-white/20"><i class="fa-solid fa-xmark text-xl"></i></button>
+                        <div class="flex gap-6 items-center">
+                            <div id="modalIcon" class="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center text-white text-4xl border border-white/10 shadow-lg"></div>
+                            <div>
+                                <span id="modalDept" class="text-white text-xs font-bold uppercase tracking-widest mb-2 block opacity-80"></span>
+                                <h3 id="modalTitle" class="text-3xl md:text-4xl font-bold text-white leading-tight"></h3>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <p class="text-xs text-gray-500 font-bold uppercase mb-1" data-i18n="modal_process">Process Time</p>
-                            <span class="text-lg font-semibold text-nether-orange">3 - 4 Months</span>
+                    </div>
+
+                    <div class="px-8 py-8 bg-[#0B1120] text-gray-300 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                        <div class="flex items-center justify-between p-6 bg-white/5 rounded-2xl mb-8 border border-white/5">
+                            <div>
+                                <p class="text-xs text-gray-400 font-bold uppercase mb-1" data-i18n="modal_salary">Monthly Salary Range</p>
+                                <div id="modalEuro" class="text-3xl font-bold text-brand-gold"></div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs text-gray-400 font-bold uppercase mb-1" data-i18n="modal_process">Process Time</p>
+                                <span class="text-lg font-semibold text-white">3 - 4 Months</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <h4 class="text-sm font-bold text-nether-orange uppercase tracking-widest mb-4" data-i18n="modal_benefits">Benefits</h4>
+                            <div class="grid grid-cols-2 gap-4 text-base text-gray-300">
+                                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg text-lg md:text-base"><i class="fa-solid fa-house text-nether-blue text-xl"></i> <span data-i18n="benefit_acc">Accommodation</span></div>
+                                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg text-lg md:text-base"><i class="fa-solid fa-utensils text-nether-blue text-xl"></i> <span data-i18n="benefit_food">Food Provided</span></div>
+                                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg text-lg md:text-base"><i class="fa-solid fa-plane text-nether-blue text-xl"></i> <span data-i18n="benefit_air">Air Ticket</span></div>
+                                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg text-lg md:text-base"><i class="fa-solid fa-bus text-nether-blue text-xl"></i> <span data-i18n="benefit_trans">Transport</span></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-sm font-bold text-nether-orange uppercase tracking-widest mb-4" data-i18n="modal_docs">Required Documents</h4>
+                            <div id="modalDocs" class="space-y-3">
+                                <!-- Documents Injected Here -->
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Benefits -->
-                    <div class="mb-8">
-                        <h4 class="text-sm font-bold text-white uppercase tracking-wide mb-4 border-b border-white/10 pb-2" data-i18n="modal_benefits">Benefits</h4>
-                        <div class="grid grid-cols-2 gap-4 text-base">
-                            <div class="flex items-center gap-3"><i class="fa-solid fa-house text-nether-orange text-lg"></i> <span data-i18n="benefit_acc">Accommodation</span></div>
-                            <div class="flex items-center gap-3"><i class="fa-solid fa-utensils text-nether-orange text-lg"></i> <span data-i18n="benefit_food">Food Provided</span></div>
-                            <div class="flex items-center gap-3"><i class="fa-solid fa-bus text-nether-orange text-lg"></i> <span data-i18n="benefit_trans">Transport</span></div>
-                            <div class="flex items-center gap-3"><i class="fa-solid fa-plane text-nether-orange text-lg"></i> <span data-i18n="benefit_air">Air Ticket</span></div>
-                        </div>
+                    <div class="bg-black/30 px-8 py-6 flex flex-col sm:flex-row gap-4 border-t border-white/10">
+                         <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1238/GSK4V1JQJ3OWPBPJP1" target="_blank" class="w-full text-center bg-nether-orange hover:bg-nether-red text-white font-bold text-lg py-4 rounded-xl transition shadow-lg shadow-nether-orange/20" data-i18n="modal_apply">Apply Now</a>
                     </div>
-
-                    <!-- Required Documents -->
-                    <div>
-                        <h4 class="text-sm font-bold text-white uppercase tracking-wide mb-4 border-b border-white/10 pb-2 flex items-center gap-2" data-i18n="modal_docs">
-                            <i class="fa-solid fa-file-shield text-nether-orange"></i> Required Documents
-                        </h4>
-                        <div id="modalDocs" class="space-y-3">
-                            <!-- JS will inject documents here -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="bg-deep-space px-8 py-6 flex gap-4 border-t border-white/10 shrink-0">
-                        <a href="https://bettercall.setmore.com/services/3b30ecba-8a10-478d-8736-0931fa2e5083" target="_blank" class="w-full bg-nether-orange text-white font-bold text-lg py-4 rounded-xl hover:scale-[1.01] transition shadow-md flex items-center justify-center" data-i18n="modal_apply">Apply Now</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
     <script>
-        // --- TRANSLATION DATA ---
+        // --- TRANSLATION DATA (From Netherlands File) ---
         const translations = {
             en: {
-                hero_badge: "Hiring Now: Netherlands 2025",
-                hero_title_1: "Advance Your Career in",
+                hiring_now: "Hiring Now: Netherlands 2025",
+                hero_title_1: "Advance Career in",
                 hero_title_2: "The Netherlands",
-                hero_subtitle: "White Collar Opportunities with Competitive Salaries (€5000 - €6500). Comprehensive Benefits & Visa Support Included.",
+                hero_subtitle: "White Collar Opportunities with Competitive Salaries (€5000 - €6500). <br class='hidden md:block'>Comprehensive Benefits & Visa Support Included.",
                 view_positions: "View Positions",
                 check_eligibility: "Check Eligibility",
+                select_department: "Select Job Department",
                 process_kicker: "Transparency First",
-                process_title: "Application Process & Fees",
+                process_title: "Application Process",
                 process_subtitle: "A structured path to your new career in the Netherlands.",
                 package_title: "Premium Package",
                 package_subtitle: "All-Inclusive Relocation",
@@ -463,7 +540,7 @@
                 benefit_food: "Food Provided",
                 benefit_trans: "Transport",
                 benefit_air: "Air Ticket",
-                cat_all: "All",
+                cat_all: "All Jobs",
                 cat_corp: "Corporate & Office",
                 cat_sales: "Sales & Marketing",
                 cat_tech: "Technical & Engineering",
@@ -477,14 +554,15 @@
                 step_7: "Travel"
             },
             hi: {
-                hero_badge: "भर्ती शुरू: नीदरलैंड 2025",
+                hiring_now: "भर्ती शुरू: नीदरलैंड 2025",
                 hero_title_1: "अपना करियर बनाएं",
                 hero_title_2: "नीदरलैंड में",
-                hero_subtitle: "प्रतिस्पर्धी वेतन (€5000 - €6500) के साथ व्हाइट कॉलर अवसर। व्यापक लाभ और वीज़ा सहायता शामिल।",
+                hero_subtitle: "प्रतिस्पर्धी वेतन (€5000 - €6500) के साथ व्हाइट कॉलर अवसर। <br class='hidden md:block'>व्यापक लाभ और वीज़ा सहायता शामिल।",
                 view_positions: "नौकरियां देखें",
                 check_eligibility: "पात्रता जांचें",
+                select_department: "विभाग चुनें",
                 process_kicker: "पारदर्शिता पहले",
-                process_title: "आवेदन प्रक्रिया और शुल्क",
+                process_title: "आवेदन प्रक्रिया",
                 process_subtitle: "नीदरलैंड में आपके नए करियर का एक संरचित मार्ग।",
                 package_title: "प्रीमियम पैकेज",
                 package_subtitle: "सभी समावेशी रिलोकेशन",
@@ -504,7 +582,7 @@
                 benefit_food: "भोजन",
                 benefit_trans: "परिवहन",
                 benefit_air: "हवाई टिकट",
-                cat_all: "सभी",
+                cat_all: "सभी नौकरियां",
                 cat_corp: "कॉर्पोरेट और कार्यालय",
                 cat_sales: "बिक्री और विपणन",
                 cat_tech: "तकनीकी और इंजीनियरिंग",
@@ -518,14 +596,15 @@
                 step_7: "यात्रा"
             },
             ml: {
-                hero_badge: "നിയമനം: നെതർലാൻഡ്സ് 2025",
-                hero_title_1: "നിങ്ങളുടെ കരിയർ വളർത്തൂ",
+                hiring_now: "നിയമനം: നെതർലാൻഡ്സ് 2025",
+                hero_title_1: "കരിയർ വളർത്തൂ",
                 hero_title_2: "നെതർലാൻഡ്‌സിൽ",
-                hero_subtitle: "ഉയർന്ന ശമ്പളത്തോടുകൂടിയ വൈറ്റ് കോളർ അവസരങ്ങൾ (€5000 - €6500). വിസയും മറ്റ് ആനുകൂല്യങ്ങളും ഉൾപ്പെടുന്നു.",
+                hero_subtitle: "ഉയർന്ന ശമ്പളത്തോടുകൂടിയ വൈറ്റ് കോളർ അവസരങ്ങൾ (€5000 - €6500). <br class='hidden md:block'>വിസയും മറ്റ് ആനുകൂല്യങ്ങളും ഉൾപ്പെടുന്നു.",
                 view_positions: "തൊഴിലുകൾ കാണുക",
                 check_eligibility: "യോഗ്യത പരിശോധിക്കുക",
+                select_department: "തൊഴിൽ വിഭാഗം",
                 process_kicker: "സുതാര്യത ആദ്യം",
-                process_title: "അപേക്ഷാ നടപടികളും ഫീസും",
+                process_title: "അപേക്ഷാ നടപടികൾ",
                 process_subtitle: "നെതർലാൻഡ്‌സിലെ നിങ്ങളുടെ പുതിയ കരിയറിലേക്കുള്ള വഴി.",
                 package_title: "പ്രീമിയം പാക്കേജ്",
                 package_subtitle: "പൂർണ്ണമായ റീലൊക്കേഷൻ",
@@ -545,7 +624,7 @@
                 benefit_food: "ഭക്ഷണം",
                 benefit_trans: "ഗതാഗതം",
                 benefit_air: "വിമാന ടിക്കറ്റ്",
-                cat_all: "എല്ലാം",
+                cat_all: "എല്ലാ ജോലികളും",
                 cat_corp: "ഓഫീസ് & അഡ്മിൻ",
                 cat_sales: "സെയിൽസ്",
                 cat_tech: "ടെക്നിക്കൽ",
@@ -559,12 +638,13 @@
                 step_7: "യാത്ര"
             },
             ta: {
-                hero_badge: "வேலைவாய்ப்பு: நெதர்லாந்து 2025",
+                hiring_now: "வேலைவாய்ப்பு: நெதர்லாந்து 2025",
                 hero_title_1: "உங்கள் தொழிலை வளருங்கள்",
                 hero_title_2: "நெதர்லாந்தில்",
-                hero_subtitle: "€5000 - €6500 சம்பளத்துடன் வேலை வாய்ப்புகள். விசா மற்றும் சலுகைகள் சேர்க்கப்பட்டுள்ளன.",
+                hero_subtitle: "€5000 - €6500 சம்பளத்துடன் வேலை வாய்ப்புகள். <br class='hidden md:block'>விசா மற்றும் சலுகைகள் சேர்க்கப்பட்டுள்ளன.",
                 view_positions: "வேலைகளைப் பார்க்கவும்",
                 check_eligibility: "தகுதியைச் சரிபார்க்கவும்",
+                select_department: "துறையைத் தேர்ந்தெடுக்கவும்",
                 process_kicker: "வெளிப்படைத்தன்மை",
                 process_title: "விண்ணப்ப செயல்முறை",
                 process_subtitle: "நெதர்லாந்தில் உங்கள் புதிய வேலைக்கான பாதை.",
@@ -586,7 +666,7 @@
                 benefit_food: "உணவு",
                 benefit_trans: "போக்குவரத்து",
                 benefit_air: "விமான டிக்கெட்",
-                cat_all: "அனைத்தும்",
+                cat_all: "அனைத்து வேலைகளும்",
                 cat_corp: "கார்ப்பரேட்",
                 cat_sales: "விற்பனை",
                 cat_tech: "தொழில்நுட்பம்",
@@ -600,12 +680,13 @@
                 step_7: "பயணம்"
             },
             fil: {
-                hero_badge: "Hiring Ngayon: Netherlands 2025",
+                hiring_now: "Hiring Ngayon: Netherlands 2025",
                 hero_title_1: "Isulong ang Career sa",
                 hero_title_2: "The Netherlands",
-                hero_subtitle: "Mga oportunidad na White Collar na may mapagkumpitensyang sahod (€5000 - €6500). Kasama ang Visa at Benepisyo.",
+                hero_subtitle: "Mga oportunidad na White Collar na may mapagkumpitensyang sahod (€5000 - €6500). <br class='hidden md:block'>Kasama ang Visa at Benepisyo.",
                 view_positions: "Tingnan ang Posisyon",
                 check_eligibility: "Suriin ang Kwalipikasyon",
+                select_department: "Piliin ang Departamento",
                 process_kicker: "Transparency Una",
                 process_title: "Proseso ng Aplikasyon",
                 process_subtitle: "Isang organisadong daan patungo sa iyong bagong karera.",
@@ -641,12 +722,13 @@
                 step_7: "Paglalakbay"
             },
             si: {
-                hero_badge: "බඳවා ගැනීම්: නෙදර්ලන්තය 2025",
-                hero_title_1: "ඔබේ වෘත්තිය අරඹන්න",
+                hiring_now: "බඳවා ගැනීම්: නෙදර්ලන්තය 2025",
+                hero_title_1: "වෘත්තිය අරඹන්න",
                 hero_title_2: "නෙදර්ලන්තයේ",
-                hero_subtitle: "ඉහළ වැටුප් සහිත රැකියා (€5000 - €6500). වීසා සහ ප්‍රතිලාභ ඇතුළත්.",
+                hero_subtitle: "ඉහළ වැටුප් සහිත රැකියා (€5000 - €6500). <br class='hidden md:block'>වීසා සහ ප්‍රතිලාභ ඇතුළත්.",
                 view_positions: "තනතුරු බලන්න",
                 check_eligibility: "සුදුසුකම් පරීක්ෂා කරන්න",
+                select_department: "රැකියා අංශය",
                 process_kicker: "විනිවිදභාවය",
                 process_title: "අයදුම් කිරීමේ ක්‍රියාවලිය",
                 process_subtitle: "නෙදර්ලන්තයේ ඔබේ නව වෘත්තියට මාර්ගයක්.",
@@ -682,12 +764,13 @@
                 step_7: "සංචාරය"
             },
             sw: {
-                hero_badge: "Inaajiri Sasa: Uholanzi 2025",
+                hiring_now: "Inaajiri Sasa: Uholanzi 2025",
                 hero_title_1: "Kuza Kazi Yako",
                 hero_title_2: "Uholanzi",
-                hero_subtitle: "Fursa za White Collar zenye Mishahara ya Ushindani (€5000 - €6500). Visa na Faida Zimejumuishwa.",
+                hero_subtitle: "Fursa za White Collar zenye Mishahara ya Ushindani (€5000 - €6500). <br class='hidden md:block'>Visa na Faida Zimejumuishwa.",
                 view_positions: "Angalia Nafasi",
                 check_eligibility: "Angalia Kustahiki",
+                select_department: "Chagua Idara",
                 process_kicker: "Uwazi Kwanza",
                 process_title: "Mchakato wa Maombi",
                 process_subtitle: "Njia iliyopangwa kwa kazi yako mpya Uholanzi.",
@@ -724,7 +807,27 @@
             }
         };
 
-        // --- GLOBAL UI SHELL ---
+        // --- LENIS SMOOTH SCROLL INITIALIZATION ---
+        function initSmoothScroll() {
+            if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+                    direction: 'vertical',
+                    gestureDirection: 'vertical',
+                    smooth: true,
+                    mouseMultiplier: 1,
+                    smoothTouch: false,
+                    touchMultiplier: 2,
+                });
+                function raf(time) {
+                    lenis.raf(time);
+                    requestAnimationFrame(raf);
+                }
+                requestAnimationFrame(raf);
+            }
+        }
+
         const GLOBAL_HEADER = `
         <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
             <div class="floating-nav w-full max-w-7xl px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
@@ -770,10 +873,6 @@
                     <a href="about.html" class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">About Us</a>
                 </div>
                 <div class="flex items-center gap-2 sm:gap-3 px-2">
-                    <button onclick="toggleSearch()" class="group p-2.5 rounded-full hover:bg-white/10 transition-all duration-300 relative" aria-label="Search">
-                        <i class="fa-solid fa-magnifying-glass text-white/70 group-hover:text-brand-blue text-lg"></i>
-                        <span class="hidden lg:inline-flex absolute -bottom-8 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md px-2 py-0.5 rounded text-[10px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/5">Cmd + K</span>
-                    </button>
                     <button class="lg:hidden p-2 text-white hover:text-brand-blue transition rounded-full hover:bg-white/5" onclick="toggleMobileMenu()">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
@@ -823,28 +922,6 @@
                 </div>
             </div>
         </nav>
-        <div id="search-overlay" class="fixed inset-0 z-[100] bg-deep-space/80 backdrop-blur-xl flex items-start justify-center pt-24 px-4">
-            <div class="absolute inset-0 cursor-default" onclick="toggleSearch()"></div>
-            <div id="search-container" class="w-full max-w-3xl relative z-10 bg-[#0F172A]/90 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh]">
-                <div class="flex items-center p-6 border-b border-white/5">
-                    <i class="fa-solid fa-magnifying-glass text-brand-blue text-xl mr-4"></i>
-                    <input type="text" id="global-search-input" placeholder="Search countries, jobs, or services..." class="bg-transparent border-none outline-none text-xl text-white placeholder-gray-500 w-full font-light" autocomplete="off">
-                    <button onclick="toggleSearch()" class="text-gray-500 hover:text-white transition p-2"><span class="text-xs uppercase font-bold tracking-wider border border-white/10 rounded px-2 py-1">ESC</span></button>
-                </div>
-                <div id="search-results" class="overflow-y-auto p-2 custom-scrollbar">
-                    <div id="search-default" class="p-4">
-                        <p class="text-xs font-bold text-brand-gold uppercase tracking-widest mb-3 opacity-70">Quick Access</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            <a href="germany.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition group"><span class="text-2xl">🇩🇪</span><div class="flex flex-col"><span class="text-white text-sm font-medium group-hover:text-brand-blue transition">Germany</span><span class="text-xs text-gray-500">Care Home & Specialist Visas</span></div></a>
-                            <a href="assessment.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition group"><div class="w-8 h-8 rounded-full bg-brand-blue/20 text-brand-blue flex items-center justify-center text-xs"><i class="fa-solid fa-clipboard-check"></i></div><div class="flex flex-col"><span class="text-white text-sm font-medium group-hover:text-brand-blue transition">Free Assessment</span><span class="text-xs text-gray-500">Check your eligibility instantly</span></div></a>
-                        </div>
-                    </div>
-                    <div id="dynamic-results" class="hidden flex-col gap-1"></div>
-                    <div id="no-results" class="hidden p-8 text-center"><i class="fa-solid fa-circle-question text-gray-600 text-3xl mb-3"></i><p class="text-gray-400 text-sm">No results found for your query.</p></div>
-                </div>
-                <div class="bg-black/20 p-3 text-[10px] text-gray-500 flex justify-between items-center px-6"><div class="flex gap-4"><span class="hidden sm:inline">Use <strong class="text-gray-400">↑</strong> <strong class="text-gray-400">↓</strong> to navigate</span><span class="hidden sm:inline"><strong class="text-gray-400">Enter</strong> to select</span></div><span>Better Call Search</span></div>
-            </div>
-        </div>
         `;
 
         const GLOBAL_FOOTER = `
@@ -913,120 +990,11 @@
         </footer>
         `;
 
+        // 1. INJECT UNIVERSAL COMPONENTS
         document.body.insertAdjacentHTML('afterbegin', GLOBAL_HEADER);
         document.body.insertAdjacentHTML('beforeend', GLOBAL_FOOTER);
 
-        // --- SCROLL, NAV & SEARCH LOGIC ---
-        let lastScrollY = window.scrollY;
-        let ticking = false;
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const nav = document.getElementById('navbar');
-                    if (window.scrollY > 20) nav.classList.add('scrolled');
-                    else nav.classList.remove('scrolled');
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            if (menu.classList.contains('translate-y-full')) menu.classList.remove('translate-y-full');
-            else menu.classList.add('translate-y-full');
-        }
-
-        // Search Variables & Init
-        let searchOverlay, globalSearchInput, searchResults, defaultResults, dynamicResults, noResults;
-        const searchData = [
-            { title: "Accountant", type: "Job", url: "netherlands.html", icon: "🔢", keywords: "netherlands, finance, office, accountant" },
-            { title: "IT Professional", type: "Job", url: "netherlands.html", icon: "💻", keywords: "netherlands, tech, developer, it" },
-            { title: "Engineer", type: "Job", url: "netherlands.html", icon: "👷", keywords: "netherlands, engineering, civil, mechanical" },
-            { title: "Manager", type: "Job", url: "netherlands.html", icon: "👔", keywords: "netherlands, management, office" },
-            { title: "Office Clerk", type: "Job", url: "netherlands.html", icon: "📝", keywords: "netherlands, admin, office, clerk" }
-        ];
-
-        function initSearchElements() {
-             searchOverlay = document.getElementById('search-overlay');
-             globalSearchInput = document.getElementById('global-search-input');
-             searchResults = document.getElementById('search-results');
-             defaultResults = document.getElementById('search-default');
-             dynamicResults = document.getElementById('dynamic-results');
-             noResults = document.getElementById('no-results');
-
-            if(globalSearchInput) {
-                 globalSearchInput.addEventListener('input', (e) => {
-                    const query = e.target.value.toLowerCase().trim();
-                    if (query.length === 0) {
-                        defaultResults.classList.remove('hidden');
-                        dynamicResults.classList.add('hidden');
-                        noResults.classList.add('hidden');
-                        return;
-                    }
-                    const filtered = searchData.filter(item => 
-                        item.title.toLowerCase().includes(query) || 
-                        item.keywords.toLowerCase().includes(query) ||
-                        item.type.toLowerCase().includes(query)
-                    );
-                    renderResults(filtered, query);
-                });
-            }
-        }
-        initSearchElements();
-
-        function toggleSearch() {
-            if(!searchOverlay) initSearchElements();
-            const isActive = searchOverlay.classList.contains('active');
-            if (isActive) {
-                searchOverlay.classList.remove('active');
-                document.body.style.overflow = ''; 
-            } else {
-                searchOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden'; 
-                setTimeout(() => globalSearchInput.focus(), 100);
-            }
-        }
-
-        function highlightMatch(text, query) {
-            const regex = new RegExp(`(${query})`, 'gi');
-            return text.replace(regex, '<span class="text-highlight">$1</span>');
-        }
-
-        function renderResults(results, query) {
-            defaultResults.classList.add('hidden');
-            dynamicResults.innerHTML = '';
-            if (results.length === 0) {
-                dynamicResults.classList.add('hidden');
-                noResults.classList.remove('hidden');
-                return;
-            }
-            noResults.classList.add('hidden');
-            dynamicResults.classList.remove('hidden');
-            results.forEach((result, index) => {
-                const div = document.createElement('a');
-                div.href = result.url;
-                div.className = "flex items-center gap-4 p-4 rounded-xl hover:bg-white/10 transition duration-200 group border border-transparent hover:border-white/5 animate-fade-in-up";
-                div.style.animationDelay = `${index * 50}ms`;
-                let typeColor = "text-gray-500";
-                if(result.type === "Job") typeColor = "text-vfs-teal";
-                const highlightedTitle = highlightMatch(result.title, query);
-                const highlightedKeywords = highlightMatch(result.keywords, query);
-                div.innerHTML = `<div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-xl shadow-inner">${result.icon}</div><div class="flex-1"><div class="flex justify-between items-center"><h4 class="text-white font-medium group-hover:text-brand-blue transition">${highlightedTitle}</h4><span class="text-[10px] uppercase font-bold tracking-wider ${typeColor} bg-white/5 px-2 py-0.5 rounded border border-white/5">${result.type}</span></div><p class="text-xs text-gray-500 mt-0.5 truncate">${highlightedKeywords}</p></div><i class="fa-solid fa-chevron-right text-gray-600 group-hover:text-white transition transform group-hover:translate-x-1"></i>`;
-                dynamicResults.appendChild(div);
-            });
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); toggleSearch(); }
-            if (e.key === 'Escape' && searchOverlay && searchOverlay.classList.contains('active')) { toggleSearch(); }
-            // Close Language Dropdown on ESC
-            if (e.key === 'Escape' && document.getElementById('lang-toggle-btn').classList.contains('active')) {
-                document.getElementById('lang-toggle-btn').classList.remove('active');
-            }
-        });
-
-        // --- NETHERLANDS JOB DATA ---
+        // --- SPECIFIC JOB DATA (Netherlands) ---
         const jobsData = [
             // Corporate & Office
             { title: "Office Clerk / Receptionist", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-clipboard-user" },
@@ -1068,30 +1036,238 @@
         ];
 
         const timelineData = [
-            { step: "1", key: "step_1", title: "Assessment", desc: "Submission of all required documents.", fee: "N/A" },
-            { step: "2", key: "step_2", title: "Registration", desc: "Formal entry into processing system (Day 1).", fee: "€1,000" },
-            { step: "3", key: "step_3", title: "Conditional Offer", desc: "Offer Letter & Medicals (15-45 Days).", fee: "€1,000" },
-            { step: "4", key: "step_4", title: "Original Offer", desc: "Hard copy from Hiring Company (Within 30 Days).", fee: "€2,000" },
-            { step: "5", key: "step_5", title: "Visa Filing", desc: "Visa documents & Embassy appointment.", fee: "€1,500" },
-            { step: "6", key: "step_6", title: "Interview", desc: "Embassy Interview & Stamping.", fee: "N/A" },
-            { step: "7", key: "step_7", title: "Travel", desc: "Flight tickets & Logistics upon Approval.", fee: "€500" }
+            { step: "01", key: "step_1", title: "Assessment", desc: "Submission of all required documents.", fee: "N/A" },
+            { step: "02", key: "step_2", title: "Registration", desc: "Formal entry into processing system.", fee: "€1,000" },
+            { step: "03", key: "step_3", title: "Conditional Offer", desc: "Offer Letter & Medicals (15-45 Days).", fee: "€1,000" },
+            { step: "04", key: "step_4", title: "Original Offer", desc: "Hard copy from Hiring Company.", fee: "€2,000" },
+            { step: "05", key: "step_5", title: "Visa Filing", desc: "Visa documents & Embassy appointment.", fee: "€1,500" },
+            { step: "06", key: "step_6", title: "Interview", desc: "Embassy Interview & Stamping.", fee: "N/A" },
+            { step: "07", key: "step_7", title: "Travel", desc: "Flight tickets & Logistics upon Approval.", fee: "€500" }
         ];
 
+        let currentCategory = 'All';
         let currentLang = 'en';
+        let currentSearchTerm = '';
+        let languageDropdownOpen = false;
 
-        // --- LANGUAGE FUNCTIONS ---
+        // --- RENDER FUNCTIONS ---
+        function renderJobs(data) {
+            const container = document.getElementById('jobContainer');
+            const countLabel = document.getElementById('jobCount');
+            
+            container.innerHTML = "";
+
+            // 1. Start with All Data
+            let filteredData = data;
+            
+            // 2. Filter by Category
+            if (currentCategory !== 'All') {
+                filteredData = filteredData.filter(job => job.dept === currentCategory);
+            }
+            
+            // 3. Filter by Search Term
+            if (currentSearchTerm.trim() !== '') {
+                const term = currentSearchTerm.toLowerCase();
+                filteredData = filteredData.filter(job => 
+                    job.title.toLowerCase().includes(term) || 
+                    job.dept.toLowerCase().includes(term)
+                );
+            }
+            
+            // 4. Group all *filtered* data by Department
+            const grouped = filteredData.reduce((acc, job) => {
+                acc[job.dept] = acc[job.dept] || [];
+                acc[job.dept].push(job);
+                return acc;
+            }, {});
+
+            let totalShown = 0;
+
+            if (Object.keys(grouped).length === 0) {
+                 container.innerHTML = `
+                    <div class="text-center py-20 animate-fade-in-up">
+                        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-magnifying-glass text-4xl text-white/20"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">No positions found</h3>
+                        <p class="text-gray-400">Try adjusting your search or category filter.</p>
+                        <button onclick="clearFilters()" class="mt-6 text-nether-orange font-bold hover:underline">Clear all filters</button>
+                    </div>`;
+                 countLabel.innerText = "0 positions found";
+                 return;
+            }
+
+            // 5. Iterate and Render Sections
+            for (const [dept, jobs] of Object.entries(grouped)) {
+                // Determine limits for "show more"
+                const limit = 4; // Display only 4 jobs by default
+                const showAll = currentSearchTerm.trim() !== ''; 
+                
+                const visibleJobs = showAll ? jobs : jobs.slice(0, limit);
+                const hiddenJobs = showAll ? [] : jobs.slice(limit);
+                const hasMore = hiddenJobs.length > 0;
+
+                // Section Wrapper
+                const section = document.createElement('div');
+                section.className = "reveal-item";
+                
+                // Header (Orange Border for Netherlands)
+                const header = `<h3 class="text-2xl md:text-3xl font-bold text-white mb-8 pl-4 border-l-8 border-nether-orange flex flex-col md:flex-row md:items-baseline gap-2">${dept} <span class="text-base font-normal text-gray-400">(${jobs.length} Positions)</span></h3>`;
+                
+                let gridHTML = `<div class="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">`;
+                
+                // Job Cards (Adapted for Nether colors)
+                const renderCard = (job) => {
+                    const globalIndex = jobsData.findIndex(j => j.title === job.title && j.dept === job.dept);
+                    return `
+                        <div onclick="openJobModal(${globalIndex})" class="glass-panel p-3 sm:p-5 rounded-2xl flex flex-col items-start justify-between cursor-pointer group hover:bg-white/5 transition-all relative overflow-hidden h-full border border-white/5 hover:border-nether-orange/30">
+                            <div class="absolute inset-0 bg-gradient-to-r from-nether-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="flex items-start gap-2 sm:gap-4 relative z-10 w-full">
+                                <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-nether-orange/10 flex items-center justify-center text-nether-orange border border-nether-orange/20 shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-black/30">
+                                    <i class="${job.icon} text-xl sm:text-2xl"></i>
+                                </div>
+                                <div class="flex-grow min-w-0">
+                                    <h4 class="text-sm sm:text-xl md:text-lg font-bold text-white group-hover:text-nether-orange transition-colors mb-1 leading-tight">${job.title}</h4>
+                                    <span class="text-gray-300 md:text-gray-400 text-xs sm:text-base font-medium">${job.exp}</span>
+                                </div>
+                            </div>
+                            <div class="mt-2 relative z-10 w-full text-left">
+                                <span class="inline-block bg-brand-gold/10 border border-brand-gold/30 text-brand-gold font-bold px-2 py-0.5 rounded-lg text-sm sm:text-lg md:text-base tracking-wide whitespace-nowrap">${job.euro}</span>
+                            </div>
+                        </div>
+                    `;
+                };
+
+                visibleJobs.forEach(job => gridHTML += renderCard(job));
+                gridHTML += `</div>`;
+
+                // "Show More" Logic
+                let moreHTML = "";
+                if (hasMore) {
+                    const hiddenID = `more-${dept.replace(/\s+/g, '-').replace('&', '').toLowerCase()}`;
+                    
+                    let hiddenGrid = `<div id="${hiddenID}" class="grid grid-cols-2 md:grid-cols-3 gap-6 hidden transition-all duration-500">`;
+                    hiddenJobs.forEach(job => hiddenGrid += renderCard(job));
+                    hiddenGrid += `</div>`;
+                    
+                    moreHTML = `
+                        ${hiddenGrid}
+                        <div class="text-center mt-6">
+                            <button id="btn-${hiddenID}" onclick="document.getElementById('${hiddenID}').classList.remove('hidden'); this.style.display='none';" class="text-sm font-bold text-nether-orange uppercase tracking-widest hover:text-white transition border border-nether-orange/30 px-8 py-3 rounded-full hover:bg-nether-orange/20">
+                                Show ${hiddenJobs.length} More Positions
+                            </button>
+                        </div>
+                    `;
+                }
+
+                section.innerHTML = header + gridHTML + moreHTML;
+                container.appendChild(section);
+                totalShown += jobs.length;
+            }
+            
+            // Update Count Label
+            if (currentSearchTerm) {
+                 countLabel.innerText = `Found ${totalShown} result${totalShown !== 1 ? 's' : ''} for "${currentSearchTerm}"`;
+            } else {
+                 countLabel.innerText = `Showing ${totalShown} positions in ${currentCategory === 'All' ? 'all departments' : currentCategory}`;
+            }
+            
+            checkScroll();
+        }
+
+        function selectCategory(category) {
+            currentCategory = category;
+            renderCategoryButtons();
+            renderJobs(jobsData);
+        }
+        
+        function handleSearch(val) {
+            currentSearchTerm = val;
+            renderJobs(jobsData);
+        }
+        
+        function clearFilters() {
+            currentCategory = 'All';
+            currentSearchTerm = '';
+            document.getElementById('jobSearchInput').value = '';
+            renderCategoryButtons();
+            renderJobs(jobsData);
+        }
+
+        function renderCategoryButtons() {
+            // Updated Categories for Netherlands
+            const categories = ["All", "Corporate & Office", "Sales & Marketing", "Technical & Engineering", "Operations & Logistics"];
+            const container = document.getElementById('categoryButtons');
+            
+            const catKeys = {
+                "All": "cat_all",
+                "Corporate & Office": "cat_corp",
+                "Sales & Marketing": "cat_sales",
+                "Technical & Engineering": "cat_tech",
+                "Operations & Logistics": "cat_ops"
+            };
+
+            const t = translations[currentLang] || translations['en'];
+
+            if(container) {
+                container.innerHTML = categories.map(cat => {
+                    const isActive = currentCategory === cat;
+                    // Active state uses Nether Orange
+                    const activeClass = isActive 
+                        ? "bg-nether-orange text-white border-nether-orange shadow-lg shadow-nether-orange/30" 
+                        : "bg-white/5 text-gray-400 border-white/10 hover:bg-white/10";
+                    
+                    const translatedName = t[catKeys[cat]] || cat;
+
+                    return `
+                    <button onclick="selectCategory('${cat}')" 
+                        class="px-4 py-3 rounded-xl text-sm md:text-base font-bold transition-all border flex items-center justify-center text-center h-full min-w-[150px] md:min-w-0 flex-shrink-0 snap-center whitespace-nowrap ${activeClass}">
+                        ${translatedName}
+                    </button>
+                `}).join('');
+            }
+        }
+
+        function renderTimeline() {
+            const t = translations[currentLang] || translations['en'];
+            
+            document.getElementById('timelineContainer').innerHTML = timelineData.map((item, index) => {
+                const translatedTitle = t[item.key] || item.title;
+                
+                return `
+                <div class="relative pl-8 sm:pl-32 py-2 group reveal-item" style="transition-delay: ${index * 50}ms">
+                    <div class="font-bold text-white mb-2 sm:mb-0 sm:absolute sm:left-0 sm:w-24 sm:text-right sm:top-2 text-2xl sm:text-xl text-nether-orange">Step ${item.step}</div>
+                    <div class="absolute left-0 sm:left-0 sm:ml-5 -translate-x-1/2 top-3 w-6 h-6 rounded-full border-4 border-deep-blue bg-nether-blue shadow-md group-hover:scale-125 transition-transform"></div>
+                    <div class="glass-panel p-6 rounded-2xl hover:border-nether-orange/30 transition-all border border-white/10">
+                        <h4 class="font-bold text-white text-xl mb-2">${translatedTitle}</h4>
+                        <p class="text-base text-gray-400 mb-4">${item.desc}</p>
+                        <span class="inline-block px-3 py-1.5 rounded-lg text-sm font-bold border border-nether-orange/30 bg-nether-orange/10 text-nether-orange">Fee: ${item.fee}</span>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // --- LANGUAGE LOGIC ---
         function toggleLanguageDropdown(event) {
             const dropdown = document.getElementById('language-dropdown');
             const button = document.getElementById('lang-toggle-btn');
+            
             const isActive = button.classList.toggle('active');
+
             event.stopPropagation();
-            if (!isActive) { document.removeEventListener('click', closeLanguageDropdown); } 
-            else { setTimeout(() => { document.addEventListener('click', closeLanguageDropdown); }, 10); }
+            if (!isActive) {
+                 document.removeEventListener('click', closeLanguageDropdown);
+            } else {
+                 setTimeout(() => { 
+                    document.addEventListener('click', closeLanguageDropdown);
+                 }, 10);
+            }
         }
 
         function closeLanguageDropdown(event) {
             const dropdown = document.getElementById('language-dropdown');
             const button = document.getElementById('lang-toggle-btn');
+            
             if (dropdown && button && !dropdown.contains(event.target) && !button.contains(event.target)) {
                 button.classList.remove('active');
                 document.removeEventListener('click', closeLanguageDropdown);
@@ -1102,202 +1278,67 @@
             currentLang = langCode;
             const t = translations[langCode] || translations['en'];
             
-            // Translate static elements
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
-                if (t[key]) element.innerHTML = t[key];
+                if (t[key]) {
+                    element.innerHTML = t[key];
+                }
             });
 
-            // Re-render components needing translation
+            renderCategoryButtons();
             renderTimeline();
-            renderMobileCategories();
-            
-            // Close dropdown
             document.getElementById('lang-toggle-btn').classList.remove('active');
         }
 
-        // --- RENDER FUNCTIONS (Revised for Visibility) ---
-        const container = document.getElementById('jobContainer');
-        const countLabel = document.getElementById('jobCount');
-        const mobileCatContainer = document.getElementById('mobileCategories');
-
-        function renderJobs(data) {
-            container.innerHTML = "";
-            const t = translations[currentLang] || translations['en'];
-            
-            const grouped = data.reduce((acc, job) => {
-                acc[job.dept] = acc[job.dept] || [];
-                acc[job.dept].push(job);
-                return acc;
-            }, {});
-
-            let totalShown = 0;
-
-            for (const [dept, jobs] of Object.entries(grouped)) {
-                const limit = 4;
-                const visibleJobs = jobs.slice(0, limit);
-                const hasMore = jobs.length > limit;
-
-                const section = document.createElement('div');
-                section.className = "reveal-item";
-                
-                // Translated Dept Name (simple mapping)
-                let deptName = dept;
-                if(dept.includes("Corporate")) deptName = t.cat_corp || dept;
-                if(dept.includes("Sales")) deptName = t.cat_sales || dept;
-                if(dept.includes("Technical")) deptName = t.cat_tech || dept;
-                if(dept.includes("Operations")) deptName = t.cat_ops || dept;
-
-                const header = `<h3 class="text-3xl font-bold text-white mb-8 pl-4 border-l-8 border-nether-orange flex items-baseline gap-3">${deptName} <span class="text-lg font-normal text-gray-400">(${jobs.length})</span></h3>`;
-                
-                // GRID: using 'job-card-grid'
-                // Changed to 2 cols on mobile, 3 on desktop
-                let gridHTML = `<div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 mb-6">`;
-                
-                visibleJobs.forEach((job) => {
-                    const globalIndex = jobsData.findIndex(j => j.title === job.title && j.dept === job.dept);
-                    
-                    gridHTML += `
-                        <div onclick="openJobModal(${globalIndex})" class="job-card-grid group">
-                            <div class="absolute inset-0 bg-gradient-to-br from-nether-orange/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            
-                            <!-- Content Wrapper -->
-                            <div class="relative z-10 flex flex-col h-full justify-between">
-                                <div>
-                                    <!-- Icon -->
-                                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-nether-orange/10 flex items-center justify-center text-nether-orange border border-nether-orange/20 mb-3 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(0,0,0,0.2)]">
-                                        <i class="${job.icon} text-lg md:text-xl"></i>
-                                    </div>
-                                    
-                                    <!-- Title -->
-                                    <h4 class="text-sm md:text-lg font-bold text-white group-hover:text-nether-orange transition-colors leading-tight mb-1 md:mb-2 line-clamp-2">${job.title}</h4>
-                                    
-                                    <!-- Exp -->
-                                    <div class="text-[10px] md:text-xs text-gray-400 mb-2 md:mb-4">
-                                        <i class="fa-solid fa-briefcase text-nether-blue mr-1"></i> ${job.exp}
-                                    </div>
-                                </div>
-                                
-                                <!-- Bottom Row -->
-                                <div class="flex items-end justify-between border-t border-white/5 pt-2 md:pt-3 mt-1">
-                                    <span class="text-xs md:text-sm font-bold text-nether-orange bg-nether-orange/5 px-2 py-0.5 rounded border border-nether-orange/10">${job.euro}</span>
-                                    <div class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-nether-orange group-hover:text-white transition-colors">
-                                        <i class="fa-solid fa-arrow-right text-[10px] md:text-xs -rotate-45 group-hover:rotate-0 transition-transform duration-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+        // --- CORE UI LOGIC ---
+        
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const nav = document.getElementById('navbar');
+                    if (window.scrollY > 20) {
+                        nav.classList.add('scrolled');
+                    } else {
+                        nav.classList.remove('scrolled');
+                    }
+                    ticking = false;
                 });
-                gridHTML += `</div>`;
+                ticking = true;
+            }
+        });
+        
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu.classList.contains('translate-y-full')) {
+                menu.classList.remove('translate-y-full');
+            } else {
+                menu.classList.add('translate-y-full');
+            }
+        }
 
-                if (hasMore) {
-                    const hiddenJobs = jobs.slice(limit);
-                    const hiddenID = `more-${dept.replace(/\s+/g, '')}`;
-                    // Apply same grid classes to hidden section
-                    let hiddenGrid = `<div id="${hiddenID}" class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 hidden mb-6 transition-all duration-500">`;
-                    hiddenJobs.forEach((job) => {
-                        const globalIndex = jobsData.findIndex(j => j.title === job.title && j.dept === job.dept);
-                        hiddenGrid += `
-                            <div onclick="openJobModal(${globalIndex})" class="job-card-grid group">
-                                <div class="absolute inset-0 bg-gradient-to-br from-nether-orange/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <div class="relative z-10 flex flex-col h-full justify-between">
-                                    <div>
-                                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-nether-orange/10 flex items-center justify-center text-nether-orange border border-nether-orange/20 mb-3 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(0,0,0,0.2)]">
-                                            <i class="${job.icon} text-lg md:text-xl"></i>
-                                        </div>
-                                        <h4 class="text-sm md:text-lg font-bold text-white group-hover:text-nether-orange transition-colors leading-tight mb-1 md:mb-2 line-clamp-2">${job.title}</h4>
-                                        <div class="text-[10px] md:text-xs text-gray-400 mb-2 md:mb-4">
-                                            <i class="fa-solid fa-briefcase text-nether-blue mr-1"></i> ${job.exp}
-                                        </div>
-                                    </div>
-                                    <div class="flex items-end justify-between border-t border-white/5 pt-2 md:pt-3 mt-1">
-                                        <span class="text-xs md:text-sm font-bold text-nether-orange bg-nether-orange/5 px-2 py-0.5 rounded border border-nether-orange/10">${job.euro}</span>
-                                        <div class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-nether-orange group-hover:text-white transition-colors">
-                                            <i class="fa-solid fa-arrow-right text-[10px] md:text-xs -rotate-45 group-hover:rotate-0 transition-transform duration-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    hiddenGrid += `</div>`;
-                    
-                    moreHTML = `
-                        ${hiddenGrid}
-                        <div class="text-center">
-                            <button onclick="document.getElementById('${hiddenID}').classList.remove('hidden'); this.style.display='none';" class="text-sm font-bold text-nether-orange uppercase tracking-widest hover:text-white transition border border-nether-orange/30 px-8 py-4 rounded-full hover:bg-nether-orange/20">
-                                Show ${hiddenJobs.length} More in ${deptName}
-                            </button>
-                        </div>
-                    `;
-                    gridHTML += moreHTML;
+        // Reveal Animations
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 }; 
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
                 }
+            });
+        }, observerOptions);
 
-                section.innerHTML = header + gridHTML;
-                container.appendChild(section);
-                totalShown += jobs.length;
-            }
-            
-            countLabel.innerText = `Showing ${totalShown} available positions`;
-            checkScroll();
+        function checkScroll() {
+            document.querySelectorAll('.reveal-item').forEach(el => {
+                if (!el.classList.contains('active')) {
+                    observer.observe(el);
+                }
+            });
         }
-
-        function filterJobs() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = jobsData.filter(job => job.title.toLowerCase().includes(search) || job.dept.toLowerCase().includes(search));
-            renderJobs(filtered);
-        }
-
-        function renderMobileCategories() {
-            const categories = ["All", "Corporate & Office", "Sales & Marketing", "Technical & Engineering", "Operations & Logistics"];
-            const mContainer = document.getElementById('mobileCategories');
-            const t = translations[currentLang] || translations['en'];
-            
-            // Map Translation Keys
-            const catKeys = {
-                "All": "cat_all",
-                "Corporate & Office": "cat_corp",
-                "Sales & Marketing": "cat_sales",
-                "Technical & Engineering": "cat_tech",
-                "Operations & Logistics": "cat_ops"
-            };
-
-            if(mContainer) {
-                mContainer.innerHTML = categories.map(cat => `
-                    <button onclick="document.getElementById('searchInput').value = '${cat === 'All' ? '' : cat}'; filterJobs();" 
-                        class="px-5 py-3 rounded-xl text-sm font-bold whitespace-nowrap transition-colors border border-white/10 glass-base text-gray-300 hover:bg-space-indigo/80 hover:text-white">
-                        ${t[catKeys[cat]] || cat}
-                    </button>
-                `).join('');
-            }
-        }
-
-        function renderTimeline() {
-            const t = translations[currentLang] || translations['en'];
-            document.getElementById('timelineContainer').innerHTML = timelineData.map((item, index) => {
-                const title = t[item.key] || item.title;
-                return `
-                <div class="relative pl-8 sm:pl-32 py-2 group reveal-item" style="transition-delay: ${index * 50}ms">
-                    <div class="font-bold text-white mb-2 sm:mb-0 sm:absolute sm:left-0 sm:w-24 sm:text-right sm:top-2 text-xl sm:text-lg text-nether-orange">Step ${item.step}</div>
-                    <div class="absolute left-0 sm:left-0 sm:ml-5 -translate-x-1/2 top-3 w-5 h-5 rounded-full border-4 border-deep-blue bg-nether-orange shadow-md group-hover:scale-125 transition-transform"></div>
-                    <div class="glass-base p-6 rounded-2xl hover:border-nether-orange/30 transition-all border border-white/10">
-                        <h4 class="font-bold text-white text-xl mb-2">${title}</h4>
-                        <p class="text-base text-gray-400 mb-4">${item.desc}</p>
-                        <span class="inline-block px-3 py-1.5 rounded-full text-sm font-bold border border-white/10 bg-white/5 text-nether-orange">Fee: ${item.fee}</span>
-                    </div>
-                </div>
-            `}).join('');
-        }
-
-        // Scroll Animation
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); observer.unobserve(entry.target); } });
-        }, { threshold: 0.1 });
-        function checkScroll() { document.querySelectorAll('.reveal-item').forEach(el => { if (!el.classList.contains('active')) observer.observe(el); }); }
         window.addEventListener('scroll', checkScroll);
 
-        // Modal Functions
+        // Job Modal Logic
         function openJobModal(index) {
             const job = jobsData[index];
             if(!job) return;
@@ -1306,14 +1347,14 @@
             document.getElementById('modalEuro').innerText = job.euro;
             document.getElementById('modalIcon').innerHTML = `<i class="${job.icon}"></i>`;
             
-            // Inject Full Detailed Document List into Modal
+            // Inject Documents
             const docsList = document.getElementById('modalDocs');
             docsList.innerHTML = documentsData.map(doc => `
                 <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-nether-orange/30 transition-colors">
-                    <div class="w-10 h-10 rounded-full bg-nether-orange/20 flex items-center justify-center text-nether-orange shrink-0 mt-0.5"><i class="${doc.icon} text-sm"></i></div>
+                    <div class="w-10 h-10 rounded-full bg-nether-orange/20 flex items-center justify-center text-nether-orange shrink-0 mt-0.5"><i class="${doc.icon} text-lg"></i></div>
                     <div>
-                        <p class="text-base font-bold text-white mb-1">${doc.title}</p>
-                        <p class="text-sm text-gray-400 leading-relaxed">${doc.desc}</p>
+                        <p class="text-lg md:text-base font-bold text-white mb-1">${doc.title}</p>
+                        <p class="text-base md:text-xs text-gray-300 md:text-gray-400 leading-relaxed">${doc.desc}</p>
                     </div>
                 </div>
             `).join('');
@@ -1321,20 +1362,31 @@
             document.getElementById('jobModal').classList.remove('hidden');
             document.body.classList.add('modal-open');
         }
+
         function closeModal() {
-            document.getElementById('jobModal').classList.add('hidden');
+            const modal = document.getElementById('jobModal');
+            modal.classList.add('hidden');
             document.body.classList.remove('modal-open');
         }
 
-        // Init
-        document.addEventListener('DOMContentLoaded', () => {
-            const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
-            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-            requestAnimationFrame(raf);
+        // Keyboard Shortcut for ESC to close modal/dropdown
+        document.addEventListener('keydown', (e) => {
+            // Close Job Modal
+            if (e.key === 'Escape' && document.getElementById('jobModal').classList.contains('hidden') === false) {
+                closeModal();
+            }
+            // Close Language Dropdown
+            if (e.key === 'Escape' && document.getElementById('lang-toggle-btn').classList.contains('active')) {
+                document.getElementById('lang-toggle-btn').classList.remove('active');
+            }
+        });
 
+        // Initialize Page
+        document.addEventListener('DOMContentLoaded', () => {
+            initSmoothScroll();
+            renderCategoryButtons();
             renderJobs(jobsData);
             renderTimeline();
-            renderMobileCategories();
             checkScroll();
         });
     </script>

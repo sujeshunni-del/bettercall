@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
@@ -32,7 +32,7 @@
                         'brand-gold': '#FFD700',
                         'brand-white': '#FFFFFF',
                         'vfs-teal': '#14B8A6',
-                        // Croatia Specific Accents
+                        // Croatia Specific Accents (Red/Blue)
                         'croatia-red': '#FF0000',
                         'croatia-blue': '#171796',
                     },
@@ -137,27 +137,6 @@
             border-color: rgba(255, 255, 255, 0.15);
             box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
         }
-        
-        /* Gold Gradient Border for Best Value Card */
-        .gold-border-gradient {
-            position: relative;
-            background: rgba(20, 20, 30, 0.6);
-            border-radius: 1rem;
-            z-index: 1;
-        }
-        .gold-border-gradient::before {
-            content: "";
-            position: absolute;
-            inset: -1px;
-            border-radius: 1rem;
-            padding: 1px;
-            background: linear-gradient(45deg, #FF0000, #FFD700, #171796); 
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            z-index: -1;
-        }
-
         .dropdown-menu {
             opacity: 0;
             visibility: hidden;
@@ -187,6 +166,26 @@
             transform: scale(1);
         }
 
+        /* Gold Gradient Border for Best Value Card */
+        .gold-border-gradient {
+            position: relative;
+            background: rgba(20, 20, 30, 0.6);
+            border-radius: 1rem;
+            z-index: 1;
+        }
+        .gold-border-gradient::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: 1rem;
+            padding: 1px;
+            background: linear-gradient(45deg, #FF0000, #FFD700, #171796); 
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
+        }
+
         /* Smooth Scroll Reveal Classes */
         .reveal-item {
             opacity: 0;
@@ -199,22 +198,6 @@
             transform: translateY(0);
         }
         
-        #search-overlay {
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        #search-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        #search-container {
-            transform: scale(0.95);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        #search-overlay.active #search-container {
-            transform: scale(1);
-        }
         .text-highlight {
             color: #3B82F6;
             font-weight: 700;
@@ -237,6 +220,11 @@
             background: #0F172A;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        
+        /* Search Animation */
+        .search-glow:focus-within {
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col relative" id="page-body">
@@ -252,22 +240,22 @@
         <header class="relative min-h-[70vh] flex flex-col items-center justify-center pt-32 pb-8 overflow-hidden z-20">
             <div class="container mx-auto px-4 relative z-10 text-center flex flex-col items-center justify-center h-full">
                 
-                <div class="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-panel border border-croatia-red/30 text-white font-bold tracking-widest text-xs md:text-sm uppercase mb-6 animate-fade-in-up">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-croatia-red/30 text-white font-bold tracking-widest text-xs uppercase mb-6 animate-fade-in-up">
                     <span class="w-2 h-2 rounded-full bg-croatia-red animate-pulse"></span>
                     <span data-i18n="hero_badge">Gulf Experience Required</span>
                     <span class="w-2 h-2 rounded-full bg-croatia-blue animate-pulse"></span>
                 </div>
 
-                <div class="mb-8 reveal-item w-full flex flex-col items-center" style="animation-delay: 0.1s;">
-                    <h1 class="text-5xl md:text-8xl font-black tracking-tighter leading-none text-white mb-6" style="text-shadow: 0 0 40px rgba(23,23,150,0.3);">
+                <div class="mb-6 reveal-item w-full flex flex-col items-center" style="animation-delay: 0.1s;">
+                    <h1 class="text-5xl md:text-8xl font-black tracking-tighter leading-none text-white mb-6" style="text-shadow: 0 0 50px rgba(255, 0, 0, 0.3);">
                         <span data-i18n="hero_title_1">We Are Hiring in</span> <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-croatia-red via-white to-croatia-blue" data-i18n="hero_title_2">CROATIA</span>
                     </h1>
-                    <p class="text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed px-4" data-i18n="hero_subtitle">
-                        Excellent opportunities for skilled workers. <br class="hidden md:block">Food & Accommodation provided by the company.
+                    <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed" data-i18n="hero_subtitle">
+                        Excellent opportunities for skilled workers in Construction & Logistics. <br class="hidden md:block">Food & Accommodation provided by the company.
                     </p>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-5 justify-center items-center reveal-item mt-8 w-full px-4" style="animation-delay: 0.3s;">
+                <div class="flex flex-col sm:flex-row gap-5 justify-center items-center reveal-item mt-10" style="animation-delay: 0.3s;">
                     <a href="#jobs" class="w-full sm:w-auto relative group overflow-hidden rounded-full bg-croatia-red px-10 py-4 transition-all duration-300 text-white font-bold text-lg hover:scale-105 shadow-[0_0_30px_rgba(255,0,0,0.4)] hover:shadow-[0_0_50px_rgba(255,0,0,0.7)]">
                         <span class="relative z-10 flex items-center justify-center gap-3 tracking-wide uppercase">
                             <span data-i18n="btn_view_jobs">View Positions</span>
@@ -276,41 +264,77 @@
                     </a>
                     
                     <a href="#process" class="w-full sm:w-auto glass-panel px-10 py-4 rounded-full font-bold text-white text-lg hover:bg-white/10 border-white/10 transition-all flex items-center justify-center gap-3 group tracking-wide uppercase">
-                        <span data-i18n="btn_req">Requirements</span>
+                        <span data-i18n="btn_req">Process & Plans</span>
                         <i class="fa-solid fa-list-check text-brand-gold group-hover:scale-110 transition-transform"></i>
                     </a>
                 </div>
             </div>
         </header>
 
-        <section id="jobs" class="py-16 relative z-20">
+        <!-- Department Filter Section -->
+        <div id="category-filter-section" class="py-6 pt-12 relative z-20">
             <div class="container mx-auto px-4">
-                <div class="max-w-3xl mx-auto text-center mb-16 reveal-item">
-                    <span class="text-brand-gold font-bold tracking-[0.2em] text-sm uppercase mb-3 block" data-i18n="section_jobs_badge">Open Vacancies</span>
-                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4" data-i18n="section_jobs_title">Current Opportunities</h2>
-                    <p class="text-gray-400 text-base md:text-lg mt-4" data-i18n="section_jobs_subtitle">Working Hours: 9 Hours Daily + 1 Hour Break. Weekly Holiday included.</p>
+                <div class="max-w-7xl mx-auto mb-6">
+                    <h3 class="text-xl md:text-2xl font-bold text-white mb-4 text-center" data-i18n="select_department">Select Job Department</h3>
                 </div>
+                <!-- Grid of Category Buttons (Horizontal Scroll on Mobile) -->
+                <div class="flex overflow-x-auto justify-center gap-3 max-w-7xl mx-auto pb-4 md:pb-0 hide-scrollbar snap-x px-1" id="categoryButtons">
+                    <!-- Buttons injected by JS -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- CREATIVE JOB SEARCH SECTION -->
+        <div class="py-6 relative z-30">
+            <div class="container mx-auto px-4">
+                <div class="max-w-2xl mx-auto relative group">
+                    <!-- Glow Effect Background -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-croatia-red via-white to-croatia-blue rounded-full blur opacity-20 group-hover:opacity-40 transition duration-700"></div>
+                    
+                    <!-- Search Bar -->
+                    <div class="relative glass-panel rounded-full flex items-center px-6 py-4 shadow-2xl border border-white/10 search-glow transition-all duration-300 bg-[#0B132B]/60 backdrop-blur-xl">
+                        <i class="fa-solid fa-magnifying-glass text-croatia-red text-xl mr-4 group-focus-within:scale-110 transition-transform"></i>
+                        <input type="text" id="jobSearchInput" placeholder="Search positions (e.g. Driver, Mason, Welder)..." 
+                            class="bg-transparent border-none outline-none text-white w-full text-lg placeholder-gray-500 font-medium focus:ring-0"
+                            autocomplete="off"
+                            onkeyup="handleSearch(this.value)">
+                        
+                        <!-- Pulse Indicator -->
+                        <div class="hidden group-focus-within:block absolute right-6">
+                             <span class="relative flex h-3 w-3">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-croatia-red opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-3 w-3 bg-croatia-red"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-6"><p id="jobCount" class="text-sm font-bold text-croatia-blue uppercase tracking-wide">Loading...</p></div>
+            </div>
+        </div>
 
-                <div id="jobContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-                    <!-- Jobs rendered via JS -->
+        <section id="jobs" class="py-12 relative z-20">
+            <div class="container mx-auto px-4 relative z-10">
+                <div id="jobContainer" class="flex flex-col gap-16 max-w-7xl mx-auto">
+                    <!-- Jobs Injected Here -->
                 </div>
             </div>
         </section>
 
         <section id="process" class="py-20 relative bg-transparent border-t border-white/5">
             <div class="container mx-auto px-4">
-                <div class="max-w-3xl mx-auto text-center mb-16 reveal-item">
+                <div class="max-w-4xl mx-auto text-center mb-20 reveal-item">
                     <span class="text-brand-blue font-bold tracking-[0.2em] text-sm uppercase mb-4 block" data-i18n="section_process_badge">Process</span>
                     <h2 class="text-4xl md:text-6xl font-bold text-white mb-4" data-i18n="section_process_title">Your Journey</h2>
                     <p class="text-xl text-gray-400" data-i18n="section_process_subtitle">Standard processing time: 3 - 4 months.</p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 relative mb-20">
-                    <div id="timelineContainer" class="col-span-1 lg:col-span-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 relative">
+                    <div id="timelineContainer" class="col-span-1 lg:col-span-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div>
                 </div>
             </div>
         </section>
 
+        <!-- Pricing Section (Adapted with Finland Style Glassmorphism) -->
         <section id="pricing" class="py-20 relative z-20 bg-[#0B1120]/50 backdrop-blur-sm border-t border-white/5">
             <div class="container mx-auto px-4">
                 <div class="max-w-3xl mx-auto text-center mb-16 reveal-item">
@@ -320,6 +344,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     
+                    <!-- One Shot Plan -->
                     <div class="gold-border-gradient p-[1px] reveal-item transform transition-all duration-300 hover:-translate-y-2">
                          <div class="bg-[#0B1120] rounded-2xl p-8 h-full flex flex-col relative overflow-hidden">
                             <div class="absolute top-0 right-0 w-32 h-32 bg-croatia-red/20 rounded-full blur-[50px] pointer-events-none"></div>
@@ -337,7 +362,8 @@
                         </div>
                     </div>
 
-                    <div class="glass-panel p-8 rounded-2xl flex flex-col reveal-item transform transition-all duration-300 hover:-translate-y-2" style="transition-delay: 100ms;">
+                    <!-- 2 Installments -->
+                    <div class="glass-panel p-8 rounded-2xl flex flex-col reveal-item transform transition-all duration-300 hover:-translate-y-2 hover:border-croatia-blue/30" style="transition-delay: 100ms;">
                         <h4 class="text-xl font-bold text-white mb-4">2 Installments</h4>
                         <div class="text-4xl font-bold text-white mb-2">€ 2,700</div>
                         <div class="text-sm text-gray-500 mb-8 font-mono uppercase tracking-wide">Total inc. VAT</div>
@@ -348,7 +374,8 @@
                         <a href="book.html" class="block text-center w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl transition border border-white/10 uppercase tracking-wide text-sm">Select Plan</a>
                     </div>
 
-                    <div class="glass-panel p-8 rounded-2xl flex flex-col reveal-item transform transition-all duration-300 hover:-translate-y-2" style="transition-delay: 200ms;">
+                    <!-- 3 Installments -->
+                    <div class="glass-panel p-8 rounded-2xl flex flex-col reveal-item transform transition-all duration-300 hover:-translate-y-2 hover:border-croatia-blue/30" style="transition-delay: 200ms;">
                         <h4 class="text-xl font-bold text-white mb-4">3 Installments</h4>
                         <div class="text-4xl font-bold text-white mb-2">€ 3,000</div>
                         <div class="text-sm text-gray-500 mb-8 font-mono uppercase tracking-wide">Total inc. VAT</div>
@@ -360,7 +387,8 @@
                         <a href="book.html" class="block text-center w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl transition border border-white/10 uppercase tracking-wide text-sm">Select Plan</a>
                     </div>
 
-                    <div class="glass-panel p-8 rounded-2xl flex flex-col reveal-item transform transition-all duration-300 hover:-translate-y-2" style="transition-delay: 300ms;">
+                    <!-- 4 Installments -->
+                    <div class="glass-panel p-8 rounded-2xl flex flex-col reveal-item transform transition-all duration-300 hover:-translate-y-2 hover:border-croatia-blue/30" style="transition-delay: 300ms;">
                         <div class="flex justify-between items-start mb-6">
                             <h4 class="text-xl font-bold text-white">4 Installments</h4>
                              <span class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded uppercase tracking-wide">Lowest Deposit</span>
@@ -381,7 +409,7 @@
         </section>
 
     </main>
-
+    
     <!-- Floating Language Selector (Left Side) -->
     <div class="fixed bottom-8 left-4 md:left-8 z-50">
         <div class="relative">
@@ -404,24 +432,37 @@
         </div>
     </div>
 
-    <!-- Floating WhatsApp Button (Right Side) -->
-    <a href="https://wa.me/971503666382" target="_blank" class="fixed bottom-8 right-4 md:right-8 z-50 bg-[#25D366] text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-110 group animate-pulse" rel="noopener noreferrer">
-        <i class="fa-brands fa-whatsapp text-3xl md:text-4xl"></i>
-    </a>
+    <!-- Floating Apply Button (Center - Links to Book) -->
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs px-4 sm:px-0 flex justify-center pointer-events-none">
+        <a href="book.html" class="pointer-events-auto relative group bg-gradient-to-r from-croatia-red to-croatia-blue text-white font-bold py-4 px-8 rounded-full shadow-[0_0_30px_rgba(255,0,0,0.5)] hover:shadow-[0_0_50px_rgba(255,0,0,0.8)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 overflow-hidden flex items-center gap-3 border border-white/20">
+            <span class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+            <span class="relative z-10 text-lg tracking-widest uppercase" data-i18n="modal_apply">Apply Now</span>
+            <i class="fa-solid fa-paper-plane relative z-10 group-hover:translate-x-1 transition-transform"></i>
+            <span class="absolute inset-0 rounded-full border-2 border-white/30 animate-ping opacity-20"></span>
+        </a>
+    </div>
 
+    <!-- Floating WhatsApp Button (Right Side) -->
+    <div class="fixed bottom-8 right-4 md:right-8 z-50">
+        <a href="https://wa.me/971503666382" target="_blank" class="bg-[#25D366] text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-110 group animate-pulse" rel="noopener noreferrer">
+            <i class="fa-brands fa-whatsapp text-3xl md:text-4xl"></i>
+        </a>
+    </div>
+
+    <!-- JOB MODAL -->
     <div id="jobModal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="fixed inset-0 modal-backdrop transition-opacity" onclick="closeModal()"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="relative transform overflow-hidden rounded-3xl modal-content text-left shadow-2xl transition-all w-full max-w-xl">
+                <div class="relative transform overflow-hidden rounded-3xl modal-content text-left shadow-2xl transition-all w-full max-w-2xl border border-croatia-red/30">
                     
-                    <div class="bg-gradient-to-r from-gray-900 to-black px-8 py-8 border-b border-white/10 relative">
-                        <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-500 hover:text-white transition bg-white/5 hover:bg-white/10 rounded-full w-10 h-10 flex items-center justify-center"><i class="fa-solid fa-xmark text-xl"></i></button>
+                    <div class="bg-gradient-to-r from-croatia-red to-[#001F4D] px-8 py-8 border-b border-white/10 relative">
+                        <button onclick="closeModal()" class="absolute top-6 right-6 text-white/70 hover:text-white transition bg-white/10 rounded-full w-10 h-10 flex items-center justify-center hover:bg-white/20"><i class="fa-solid fa-xmark text-xl"></i></button>
                         <div class="flex gap-6 items-center">
-                            <div id="modalIcon" class="w-16 h-16 bg-croatia-red/20 rounded-2xl flex items-center justify-center text-croatia-red text-3xl border border-croatia-red/10 shadow-lg"></div>
+                            <div id="modalIcon" class="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center text-white text-4xl border border-white/10 shadow-lg"></div>
                             <div>
-                                <span id="modalDept" class="text-brand-blue text-xs font-bold uppercase tracking-widest mb-2 block"></span>
-                                <h3 id="modalTitle" class="text-3xl font-bold text-white leading-tight"></h3>
+                                <span id="modalDept" class="text-brand-gold text-xs font-bold uppercase tracking-widest mb-2 block"></span>
+                                <h3 id="modalTitle" class="text-3xl md:text-4xl font-bold text-white leading-tight"></h3>
                             </div>
                         </div>
                     </div>
@@ -429,32 +470,35 @@
                     <div class="px-8 py-8 bg-[#0B1120] text-gray-300 max-h-[60vh] overflow-y-auto custom-scrollbar">
                         <div class="flex items-center justify-between p-6 bg-white/5 rounded-2xl mb-8 border border-white/5">
                             <div>
-                                <p class="text-xs text-gray-400 font-bold uppercase mb-1" data-i18n="modal_salary">Pay Rate</p>
-                                <div id="modalSalary" class="text-2xl font-bold text-white"></div>
+                                <p class="text-xs text-gray-400 font-bold uppercase mb-1" data-i18n="modal_salary">Monthly Salary</p>
+                                <div id="modalSalary" class="text-3xl font-bold text-white"></div>
                             </div>
                             <div class="text-right">
-                                <p class="text-xs text-gray-400 font-bold uppercase mb-1" data-i18n="modal_benefits">Benefits</p>
-                                <span class="text-base font-semibold text-brand-gold">Food + Accom.</span>
+                                <p class="text-xs text-gray-400 font-bold uppercase mb-1" data-i18n="modal_experience">Experience</p>
+                                <span id="modalExp" class="text-lg font-semibold text-brand-gold"></span>
                             </div>
                         </div>
 
-                         <div class="mb-8">
-                            <h4 class="text-sm font-bold text-brand-gold uppercase tracking-widest mb-4" data-i18n="modal_req">Mandatory Requirements</h4>
-                             <div class="bg-red-900/20 p-4 rounded-xl border border-red-500/20 mb-4">
-                                <span class="block text-croatia-red text-xs uppercase mb-2 font-bold" data-i18n="modal_critical">Critical Requirement</span>
-                                <span class="text-white text-lg font-bold flex items-center gap-3"><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="modal_gulf_exp">Must have Gulf Experience</span></span>
+                         <div class="bg-red-900/20 p-4 rounded-xl border border-red-500/20 mb-8">
+                            <span class="block text-croatia-red text-xs uppercase mb-2 font-bold" data-i18n="modal_critical">Critical Requirement</span>
+                            <span class="text-white text-lg font-bold flex items-center gap-3"><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="modal_gulf_exp">Must have Gulf Experience</span></span>
+                        </div>
+
+                        <div class="mb-8">
+                            <h4 class="text-sm font-bold text-brand-blue uppercase tracking-widest mb-4" data-i18n="modal_benefits">Benefits</h4>
+                            <div class="grid grid-cols-2 gap-4 text-base text-gray-300">
+                                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg text-lg md:text-base"><i class="fa-solid fa-house text-croatia-blue text-xl"></i> <span data-i18n="benefit_acc">Accommodation</span></div>
+                                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg text-lg md:text-base"><i class="fa-solid fa-utensils text-croatia-blue text-xl"></i> <span data-i18n="benefit_food">Food Provided</span></div>
+                                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg text-lg md:text-base"><i class="fa-solid fa-plane text-croatia-blue text-xl"></i> <span data-i18n="benefit_air">Transport</span></div>
+                                <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg text-lg md:text-base"><i class="fa-solid fa-briefcase-medical text-croatia-blue text-xl"></i> <span data-i18n="benefit_med">Medical Ins.</span></div>
                             </div>
-                         </div>
+                        </div>
 
                         <div>
-                            <h4 class="text-sm font-bold text-brand-gold uppercase tracking-widest mb-4" data-i18n="modal_docs">Required Documents</h4>
-                            <ul class="space-y-4 text-base text-gray-300">
-                                <li class="flex items-start gap-3"><i class="fa-solid fa-check text-green-500 mt-1"></i><span>Passport Scan Copy</span></li>
-                                <li class="flex items-start gap-3"><i class="fa-solid fa-check text-green-500 mt-1"></i><span>Passport Size Photo</span></li>
-                                <li class="flex items-start gap-3"><i class="fa-solid fa-check text-green-500 mt-1"></i><span>Resume / Europass CV</span></li>
-                                <li class="flex items-start gap-3"><i class="fa-solid fa-check text-green-500 mt-1"></i><span>Work Experience Certificate</span></li>
-                                <li class="flex items-start gap-3"><i class="fa-solid fa-check text-green-500 mt-1"></i><span>Working Video & Presentation Video</span></li>
-                            </ul>
+                            <h4 class="text-sm font-bold text-brand-blue uppercase tracking-widest mb-4" data-i18n="modal_docs">Required Documents</h4>
+                            <div id="modalDocs" class="space-y-3">
+                                <!-- Documents Injected Here -->
+                            </div>
                         </div>
                     </div>
 
@@ -475,23 +519,23 @@
                 hero_badge: "Gulf Experience Required",
                 hero_title_1: "We Are Hiring in",
                 hero_title_2: "CROATIA",
-                hero_subtitle: "Excellent opportunities for skilled workers. <br class='hidden md:block'>Food & Accommodation provided by the company.",
+                hero_subtitle: "Excellent opportunities for skilled workers in Construction & Logistics. <br class='hidden md:block'>Food & Accommodation provided by the company.",
                 btn_view_jobs: "View Positions",
-                btn_req: "Requirements",
-                section_jobs_badge: "Open Vacancies",
-                section_jobs_title: "Current Opportunities",
-                section_jobs_subtitle: "Working Hours: 9 Hours Daily + 1 Hour Break. Weekly Holiday included.",
+                btn_req: "Process & Plans",
+                select_department: "Select Job Department",
+                cat_all: "All Jobs", cat_logistics: "Logistics", cat_construction: "Construction",
                 section_process_badge: "Process",
                 section_process_title: "Your Journey",
                 section_process_subtitle: "Standard processing time: 3 - 4 months.",
                 section_pricing_badge: "Investment",
                 section_pricing_title: "Transparent Pricing",
-                modal_salary: "Pay Rate", modal_benefits: "Benefits", modal_req: "Mandatory Requirements", modal_critical: "Critical Requirement", modal_gulf_exp: "Must have Gulf Experience", modal_docs: "Required Documents", modal_apply: "Apply Now",
-                job_driver: "Ready-Mix Truck Driver", job_carpenter: "Shuttering Carpenter", job_mason: "Mason", job_ceramic: "Ceramic Mason", job_plumber: "Plumber", job_gypsum: "Gypsum Board Worker", job_grinder: "Grinder", job_facade: "Facade Worker",
+                modal_salary: "Monthly Salary", modal_experience: "Experience", modal_benefits: "Benefits", modal_critical: "Critical Requirement", modal_gulf_exp: "Must have Gulf Experience", modal_docs: "Required Documents", modal_apply: "Apply Now",
+                benefit_acc: "Accommodation", benefit_food: "Food Provided", benefit_air: "Transport", benefit_med: "Medical Ins.",
                 step_01_title: "Registration", step_01_desc: "Submit Passport, Photo, CV, and Experience Certificate.",
                 step_02_title: "Work Permit", step_02_desc: "Employer applies for work authorization in Croatia.",
                 step_03_title: "Visa Application", step_03_desc: "Submission to Croatian Embassy with Work Permit.",
-                step_04_title: "Travel", step_04_desc: "Visa stamping and flight to Croatia."
+                step_04_title: "Travel", step_04_desc: "Visa stamping and flight to Croatia.",
+                job_driver: "Ready-Mix Truck Driver", job_carpenter: "Shuttering Carpenter", job_mason: "Mason", job_ceramic: "Ceramic Mason", job_plumber: "Plumber", job_gypsum: "Gypsum Board Worker", job_grinder: "Grinder", job_facade: "Facade Worker"
             },
             hi: {
                 nav_home: "होम", nav_programs: "कार्यक्रम", nav_services: "सेवाएं", nav_assess: "निःशुल्क मूल्यांकन", nav_about: "हमारे बारे में", nav_book: "अभी बुक करें",
@@ -501,21 +545,21 @@
                 hero_title_2: "क्रोएशिया",
                 hero_subtitle: "कुशल श्रमिकों के लिए उत्कृष्ट अवसर। <br class='hidden md:block'>कंपनी द्वारा भोजन और आवास प्रदान किया गया।",
                 btn_view_jobs: "नौकरियां देखें",
-                btn_req: "आवश्यकताएं",
-                section_jobs_badge: "खुली रिक्तियां",
-                section_jobs_title: "वर्तमान अवसर",
-                section_jobs_subtitle: "काम के घंटे: प्रतिदिन 9 घंटे + 1 घंटे का ब्रेक। साप्ताहिक अवकाश शामिल।",
+                btn_req: "प्रक्रिया और योजनाएं",
+                select_department: "नौकरी विभाग चुनें",
+                cat_all: "सभी नौकरियां", cat_logistics: "लॉजिस्टिक्स", cat_construction: "निर्माण",
                 section_process_badge: "प्रक्रिया",
                 section_process_title: "आपकी यात्रा",
                 section_process_subtitle: "मानक प्रसंस्करण समय: 3 - 4 महीने।",
                 section_pricing_badge: "निवेश",
                 section_pricing_title: "पारदर्शी मूल्य निर्धारण",
-                modal_salary: "वेतन दर", modal_benefits: "लाभ", modal_req: "अनिवार्य आवश्यकताएं", modal_critical: "महत्वपूर्ण आवश्यकता", modal_gulf_exp: "गल्फ अनुभव होना चाहिए", modal_docs: "आवश्यक दस्तावेज", modal_apply: "अभी आवेदन करें",
-                job_driver: "रेडी-मिक्स ट्रक चालक", job_carpenter: "शटरिंग बढ़ई", job_mason: "राजमिस्त्री", job_ceramic: "सिरेमिक मेसन", job_plumber: "प्लंबर", job_gypsum: "जिप्सम बोर्ड वर्कर", job_grinder: "ग्राइंडर", job_facade: "मुखौटा कार्यकर्ता",
+                modal_salary: "वेतन दर", modal_experience: "अनुभव", modal_benefits: "लाभ", modal_critical: "महत्वपूर्ण आवश्यकता", modal_gulf_exp: "गल्फ अनुभव होना चाहिए", modal_docs: "आवश्यक दस्तावेज", modal_apply: "अभी आवेदन करें",
+                benefit_acc: "आवास", benefit_food: "भोजन उपलब्ध", benefit_air: "परिवहन", benefit_med: "चिकित्सा बीमा",
                 step_01_title: "पंजीकरण", step_01_desc: "पासपोर्ट, फोटो, सीवी और अनुभव प्रमाण पत्र जमा करें।",
                 step_02_title: "वर्क परमिट", step_02_desc: "नियोक्ता क्रोएशिया में कार्य प्राधिकरण के लिए आवेदन करता है।",
                 step_03_title: "वीज़ा आवेदन", step_03_desc: "वर्क परमिट के साथ क्रोएशियाई दूतावास को जमा करना।",
-                step_04_title: "यात्रा", step_04_desc: "वीज़ा स्टैम्पिंग और क्रोएशिया के लिए उड़ान।"
+                step_04_title: "यात्रा", step_04_desc: "वीज़ा स्टैम्पिंग और क्रोएशिया के लिए उड़ान।",
+                job_driver: "रेडी-मिक्स ट्रक चालक", job_carpenter: "शटरिंग बढ़ई", job_mason: "राजमिस्त्री", job_ceramic: "सिरेमिक मेसन", job_plumber: "प्लंबर", job_gypsum: "जिप्सम बोर्ड वर्कर", job_grinder: "ग्राइंडर", job_facade: "मुखौटा कार्यकर्ता"
             },
             ml: {
                 nav_home: "ഹോം", nav_programs: "പ്രോഗ്രാമുകൾ", nav_services: "സേവനങ്ങൾ", nav_assess: "സൗജന്യ മൂല്യനിർണ്ണയം", nav_about: "ഞങ്ങളെക്കുറിച്ച്", nav_book: "ഇപ്പോൾ ബുക്ക് ചെയ്യുക",
@@ -525,21 +569,21 @@
                 hero_title_2: "ക്രൊയേഷ്യ",
                 hero_subtitle: "വിദഗ്ധ തൊഴിലാളികൾക്ക് മികച്ച അവസരങ്ങൾ. <br class='hidden md:block'>ഭക്ഷണവും താമസവും കമ്പനി നൽകുന്നു.",
                 btn_view_jobs: "തൊഴിലുകൾ കാണുക",
-                btn_req: "ആവശ്യകതകൾ",
-                section_jobs_badge: "തൊഴിൽ ഒഴിവുകൾ",
-                section_jobs_title: "നിലവിലെ അവസരങ്ങൾ",
-                section_jobs_subtitle: "ജോലി സമയം: 9 മണിക്കൂർ + 1 മണിക്കൂർ ഇടവേള. ആഴ്ചയിൽ അവധി ലഭിക്കും.",
+                btn_req: "പ്രക്രിയ",
+                select_department: "തൊഴിൽ വിഭാഗം തിരഞ്ഞെടുക്കുക",
+                cat_all: "എല്ലാ ജോലികളും", cat_logistics: "ലോജിസ്റ്റിക്സ്", cat_construction: "നിർമ്മാണം",
                 section_process_badge: "നടപടിക്രമം",
                 section_process_title: "നിങ്ങളുടെ യാത്ര",
                 section_process_subtitle: "സാധാരണ സമയം: 3 - 4 മാസം.",
                 section_pricing_badge: "നിക്ഷേപം",
                 section_pricing_title: "വിലവിവരങ്ങൾ",
-                modal_salary: "ശമ്പളം", modal_benefits: "ആനുകൂല്യങ്ങൾ", modal_req: "നിർബന്ധിത ആവശ്യകതകൾ", modal_critical: "പ്രധാന നിർദ്ദേശം", modal_gulf_exp: "ഗൾഫ് പരിചയം ഉണ്ടായിരിക്കണം", modal_docs: "ആവശ്യമായ രേഖകൾ", modal_apply: "അപേക്ഷിക്കുക",
-                job_driver: "റെഡി-മിക്സ് ട്രക്ക് ഡ്രൈവർ", job_carpenter: "ഷട്ടറിംഗ് കാർപ്പന്റർ", job_mason: "മേസൺ", job_ceramic: "സെറാമിക് മേസൺ", job_plumber: "പ്ലംബർ", job_gypsum: "ജിപ്സം ബോർഡ് വർക്കർ", job_grinder: "ഗ്രൈൻഡർ", job_facade: "ഫസാഡ് വർക്കർ",
+                modal_salary: "ശമ്പളം", modal_experience: "പരിചയം", modal_benefits: "ആനുകൂല്യങ്ങൾ", modal_critical: "പ്രധാന നിർദ്ദേശം", modal_gulf_exp: "ഗൾഫ് പരിചയം ഉണ്ടായിരിക്കണം", modal_docs: "ആവശ്യമായ രേഖകൾ", modal_apply: "അപേക്ഷിക്കുക",
+                benefit_acc: "താമസം", benefit_food: "ഭക്ഷണം", benefit_air: "യാത്ര", benefit_med: "മെഡിക്കൽ ഇൻഷുറൻസ്",
                 step_01_title: "രജിസ്ട്രേഷൻ", step_01_desc: "പാസ്‌പോർട്ട്, ഫോട്ടോ, സിവി, പ്രവൃത്തിപരിചയ സർട്ടിഫിക്കറ്റ് എന്നിവ നൽകുക.",
                 step_02_title: " വർക്ക് പെർമിറ്റ്", step_02_desc: "തൊഴിലുടമ ക്രൊയേഷ്യയിൽ അനുമതിക്കായി അപേക്ഷിക്കുന്നു.",
                 step_03_title: "വിസ അപേക്ഷ", step_03_desc: "എംബസിയിൽ വർക്ക് പെർമിറ്റിനൊപ്പം അപേക്ഷ സമർപ്പിക്കുക.",
-                step_04_title: "യാത്ര", step_04_desc: "വിസ സ്റ്റാമ്പിംഗും ക്രൊയേഷ്യയിലേക്കുള്ള യാത്രയും."
+                step_04_title: "യാത്ര", step_04_desc: "വിസ സ്റ്റാമ്പിംഗും ക്രൊയേഷ്യയിലേക്കുള്ള യാത്രയും.",
+                job_driver: "റെഡി-മിക്സ് ട്രക്ക് ഡ്രൈവർ", job_carpenter: "ഷട്ടറിംഗ് കാർപ്പന്റർ", job_mason: "മേസൺ", job_ceramic: "സെറാമിക് മേസൺ", job_plumber: "പ്ലംബർ", job_gypsum: "ജിപ്സം ബോർഡ് വർക്കർ", job_grinder: "ഗ്രൈൻഡർ", job_facade: "ഫസാഡ് വർക്കർ"
             },
             ta: {
                 nav_home: "முகப்பு", nav_programs: "திட்டங்கள்", nav_services: "சேவைகள்", nav_assess: "இலவச மதிப்பீடு", nav_about: "எங்களைப் பற்றி", nav_book: "பதிவு செய்",
@@ -549,21 +593,21 @@
                 hero_title_2: "குரோஷியா",
                 hero_subtitle: "திறமையான தொழிலாளர்களுக்கு சிறந்த வாய்ப்புகள். <br class='hidden md:block'>உணவு மற்றும் தங்குமிடம் நிறுவனத்தால் வழங்கப்படுகிறது.",
                 btn_view_jobs: "வேலைகள்",
-                btn_req: "தேவைகள்",
-                section_jobs_badge: "காலியிடங்கள்",
-                section_jobs_title: "தற்போதைய வாய்ப்புகள்",
-                section_jobs_subtitle: "வேலை நேரம்: 9 மணி நேரம் + 1 மணி நேர இடைவேளை.",
+                btn_req: "முறை",
+                select_department: "வேலைத் துறையைத் தேர்ந்தெடுக்கவும்",
+                cat_all: "எல்லா வேலைகளும்", cat_logistics: "லாஜிஸ்டிக்ஸ்", cat_construction: "கட்டுமானம்",
                 section_process_badge: "முறை",
                 section_process_title: "உங்கள் பயணம்",
                 section_process_subtitle: "செயலாக்க நேரம்: 3 - 4 மாதங்கள்.",
                 section_pricing_badge: "முதலீடு",
                 section_pricing_title: "வெளிப்படையான விலை",
-                modal_salary: "சம்பளம்", modal_benefits: "நன்மைகள்", modal_req: "கட்டாயத் தேவைகள்", modal_critical: "முக்கிய தேவை", modal_gulf_exp: "வளைகுடா அனுபவம் இருக்க வேண்டும்", modal_docs: "தேவையான ஆவணங்கள்", modal_apply: "விண்ணப்பிக்கவும்",
-                job_driver: "லாரி ஓட்டுநர்", job_carpenter: "தச்சர்", job_mason: "கொத்தனார்", job_ceramic: "செராமிக் மேசன்", job_plumber: "பிளம்பர்", job_gypsum: "ஜிப்சம் பணியாளர்", job_grinder: "கிரைண்டர்", job_facade: "முகப்பு பணியாளர்",
+                modal_salary: "சம்பளம்", modal_experience: "அனுபவம்", modal_benefits: "நன்மைகள்", modal_critical: "முக்கிய தேவை", modal_gulf_exp: "வளைகுடா அனுபவம் இருக்க வேண்டும்", modal_docs: "தேவையான ஆவணங்கள்", modal_apply: "விண்ணப்பிக்கவும்",
+                benefit_acc: "தங்குமிடம்", benefit_food: "உணவு", benefit_air: "போக்குவரத்து", benefit_med: "மருத்துவ காப்பீடு",
                 step_01_title: "பதிவு", step_01_desc: "பாஸ்போர்ட் மற்றும் அனுபவச் சான்றிதழைச் சமர்ப்பிக்கவும்.",
                 step_02_title: "வேலை அனுமதி", step_02_desc: "முதலாளி குரோஷியாவில் அனுமதிக்கு விண்ணப்பிக்கிறார்.",
                 step_03_title: "விசா விண்ணப்பம்", step_03_desc: "தூதரகத்தில் சமர்ப்பிக்கவும்.",
-                step_04_title: "பயணம்", step_04_desc: "விசா மற்றும் பயணம்."
+                step_04_title: "பயணம்", step_04_desc: "விசா மற்றும் பயணம்.",
+                job_driver: "லாரி ஓட்டுநர்", job_carpenter: "தச்சர்", job_mason: "கொத்தனார்", job_ceramic: "செராமிக் மேசன்", job_plumber: "பிளம்பர்", job_gypsum: "ஜிப்சம் பணியாளர்", job_grinder: "கிரைண்டர்", job_facade: "முகப்பு பணியாளர்"
             },
             fil: {
                 nav_home: "Home", nav_programs: "Mga Programa", nav_services: "Serbisyo", nav_assess: "Libreng Pagtatasa", nav_about: "Tungkol sa Amin", nav_book: "Mag-book",
@@ -573,21 +617,21 @@
                 hero_title_2: "CROATIA",
                 hero_subtitle: "Magagandang oportunidad para sa mga skilled workers. <br class='hidden md:block'>Pagkain at tirahan sagot ng kumpanya.",
                 btn_view_jobs: "Tingnan ang Trabaho",
-                btn_req: "Mga Kinakailangan",
-                section_jobs_badge: "Mga Bakante",
-                section_jobs_title: "Kasalukuyang Oportunidad",
-                section_jobs_subtitle: "Oras ng Trabaho: 9 Oras + 1 Oras na Pahinga.",
+                btn_req: "Proseso",
+                select_department: "Piliin ang Departamento",
+                cat_all: "Lahat", cat_logistics: "Logistics", cat_construction: "Construction",
                 section_process_badge: "Proseso",
                 section_process_title: "Ang Iyong Paglalakbay",
                 section_process_subtitle: "Oras ng pagproseso: 3 - 4 na buwan.",
                 section_pricing_badge: "Pamumuhunan",
                 section_pricing_title: "Presyo",
-                modal_salary: "Sahod", modal_benefits: "Benepisyo", modal_req: "Mga Kinakailangan", modal_critical: "Mahalagang Kinakailangan", modal_gulf_exp: "Dapat may Gulf Experience", modal_docs: "Mga Dokumento", modal_apply: "Mag-apply",
-                job_driver: "Ready-Mix Truck Driver", job_carpenter: "Shuttering Carpenter", job_mason: "Mason", job_ceramic: "Ceramic Mason", job_plumber: "Plumber", job_gypsum: "Gypsum Board Worker", job_grinder: "Grinder", job_facade: "Facade Worker",
+                modal_salary: "Sahod", modal_experience: "Karanasan", modal_benefits: "Benepisyo", modal_critical: "Mahalagang Kinakailangan", modal_gulf_exp: "Dapat may Gulf Experience", modal_docs: "Mga Dokumento", modal_apply: "Mag-apply",
+                benefit_acc: "Tirahan", benefit_food: "Pagkain", benefit_air: "Transportasyon", benefit_med: "Medical Ins.",
                 step_01_title: "Rehistrasyon", step_01_desc: "Isubmit ang Passport, Larawan, CV, at Sertipiko ng Karanasan.",
                 step_02_title: "Work Permit", step_02_desc: "Ang employer ay mag-aapply para sa awtorisasyon.",
                 step_03_title: "Visa App", step_03_desc: "Pagsusumite sa Embahada ng Croatia.",
-                step_04_title: "Paglalakbay", step_04_desc: "Visa stamping at flight papuntang Croatia."
+                step_04_title: "Paglalakbay", step_04_desc: "Visa stamping at flight papuntang Croatia.",
+                job_driver: "Ready-Mix Truck Driver", job_carpenter: "Shuttering Carpenter", job_mason: "Mason", job_ceramic: "Ceramic Mason", job_plumber: "Plumber", job_gypsum: "Gypsum Board Worker", job_grinder: "Grinder", job_facade: "Facade Worker"
             },
             si: {
                 nav_home: "මුල් පිටුව", nav_programs: "වැඩසටහන්", nav_services: "සේවා", nav_assess: "තක්සේරුව", nav_about: "අපි ගැන", nav_book: "වෙන්කරවා ගන්න",
@@ -597,21 +641,21 @@
                 hero_title_2: "ක්‍රොඒෂියාව",
                 hero_subtitle: "පුහුණු ශ්‍රමිකයින් සඳහා විශිෂ්ට අවස්ථා. <br class='hidden md:block'>ආහාර සහ නවාතැන් පහසුකම් සමාගම විසින් සපයනු ලැබේ.",
                 btn_view_jobs: "තනතුරු බලන්න",
-                btn_req: "අවශ්‍යතා",
-                section_jobs_badge: "පුරප්පාඩු",
-                section_jobs_title: "වත්මන් අවස්ථා",
-                section_jobs_subtitle: "වැඩ කරන වේලාවන්: පැය 9 + පැය 1 විවේකය.",
+                btn_req: "ක්‍රියාවලිය",
+                select_department: "රැකියා අංශය තෝරන්න",
+                cat_all: "සියල්ල", cat_logistics: "ලොජිස්ටික්ස්", cat_construction: "ඉදිකිරීම්",
                 section_process_badge: "ක්‍රියාවලිය",
                 section_process_title: "ඔබේ ගමන",
                 section_process_subtitle: "සම්මත සැකසුම් කාලය: මාස 3 - 4.",
                 section_pricing_badge: "ආයෝජනය",
                 section_pricing_title: "මිල ගණන්",
-                modal_salary: "වැටුප", modal_benefits: "ප්‍රතිලාභ", modal_req: "අනිවාර්ය අවශ්‍යතා", modal_critical: "වැදගත් අවශ්‍යතාවය", modal_gulf_exp: "ගල්ෆ් පළපුරුද්ද තිබිය යුතුය", modal_docs: "ලිපිලේඛන", modal_apply: "අයදුම් කරන්න",
-                job_driver: "රියදුරු", job_carpenter: "වඩු කාර්මික", job_mason: "මේසන්", job_ceramic: "සෙරමික් මේසන්", job_plumber: "ජලනල කාර්මික", job_gypsum: "ජිප්සම් සේවක", job_grinder: "ග්‍රයින්ඩර්", job_facade: "මුහුණත සේවක",
+                modal_salary: "වැටුප", modal_experience: "පළපුරුද්ද", modal_benefits: "ප්‍රතිලාභ", modal_critical: "වැදගත් අවශ්‍යතාවය", modal_gulf_exp: "ගල්ෆ් පළපුරුද්ද තිබිය යුතුය", modal_docs: "ලිපිලේඛන", modal_apply: "අයදුම් කරන්න",
+                benefit_acc: "නවාතැන්", benefit_food: "ආහාර", benefit_air: "ප්‍රවාහන", benefit_med: "වෛද්‍ය රක්ෂණ",
                 step_01_title: "ලියාපදිංචිය", step_01_desc: "විදේශ ගමන් බලපත්‍රය සහ පළපුරුදු සහතිකය ඉදිරිපත් කරන්න.",
                 step_02_title: "වැඩ බලපත්‍රය", step_02_desc: "හාම්පුතා අයදුම් කරයි.",
                 step_03_title: "වීසා අයදුම්පත", step_03_desc: "තානාපති කාර්යාලයට ඉදිරිපත් කිරීම.",
-                step_04_title: "සංචාරය", step_04_desc: "වීසා සහ ගුවන් ගමන්."
+                step_04_title: "සංචාරය", step_04_desc: "වීසා සහ ගුවන් ගමන්.",
+                job_driver: "රියදුරු", job_carpenter: "වඩු කාර්මික", job_mason: "මේසන්", job_ceramic: "සෙරමික් මේසන්", job_plumber: "ජලනල කාර්මික", job_gypsum: "ජිප්සම් සේවක", job_grinder: "ග්‍රයින්ඩර්", job_facade: "මුහුණත සේවක"
             },
             sw: {
                 nav_home: "Nyumbani", nav_programs: "Programu", nav_services: "Huduma", nav_assess: "Tathmini", nav_about: "Kuhusu Sisi", nav_book: "Weka Nafasi",
@@ -621,21 +665,21 @@
                 hero_title_2: "CROATIA",
                 hero_subtitle: "Nafasi nzuri kwa wafanyakazi wenye ujuzi. <br class='hidden md:block'>Chakula na Malazi hutolewa na kampuni.",
                 btn_view_jobs: "Angalia Nafasi",
-                btn_req: "Mahitaji",
-                section_jobs_badge: "Nafasi za Kazi",
-                section_jobs_title: "Nafasi za Sasa",
-                section_jobs_subtitle: "Masaa ya Kazi: Masaa 9 + Saa 1 Mapumziko.",
+                btn_req: "Mchakato",
+                select_department: "Chagua Idara ya Kazi",
+                cat_all: "Kazi Zote", cat_logistics: "Usafirishaji", cat_construction: "Ujenzi",
                 section_process_badge: "Mchakato",
                 section_process_title: "Safari Yako",
                 section_process_subtitle: "Muda wa kawaida: Miezi 3 - 4.",
                 section_pricing_badge: "Uwekezaji",
                 section_pricing_title: "Bei",
-                modal_salary: "Mshahara", modal_benefits: "Faida", modal_req: "Mahitaji ya Lazima", modal_critical: "Sharti Muhimu", modal_gulf_exp: "Lazima uwe na Uzoefu wa Ghuba", modal_docs: "Nyaraka", modal_apply: "Omba Sasa",
-                job_driver: "Dereva wa Lori", job_carpenter: "Seremala", job_mason: "Mwashi", job_ceramic: "Mwashi wa Kauri", job_plumber: "Fundi Bomba", job_gypsum: "Mfanyakazi wa Gypsum", job_grinder: "Grinder", job_facade: "Mfanyakazi wa Facade",
+                modal_salary: "Mshahara", modal_experience: "Uzoefu", modal_benefits: "Faida", modal_critical: "Sharti Muhimu", modal_gulf_exp: "Lazima uwe na Uzoefu wa Ghuba", modal_docs: "Nyaraka", modal_apply: "Omba Sasa",
+                benefit_acc: "Malazi", benefit_food: "Chakula", benefit_air: "Usafiri", benefit_med: "Bima ya Matibabu",
                 step_01_title: "Usajili", step_01_desc: "Wasilisha Pasipoti, Picha, na Cheti cha Uzoefu.",
                 step_02_title: "Kibali cha Kazi", step_02_desc: "Mwajiri anaomba idhini ya kazi.",
                 step_03_title: "Maombi ya Visa", step_03_desc: "Kuwasilisha kwa Ubalozi wa Croatia.",
-                step_04_title: "Kusafiri", step_04_desc: "Visa na ndege kwenda Croatia."
+                step_04_title: "Kusafiri", step_04_desc: "Visa na ndege kwenda Croatia.",
+                job_driver: "Dereva wa Lori", job_carpenter: "Seremala", job_mason: "Mwashi", job_ceramic: "Mwashi wa Kauri", job_plumber: "Fundi Bomba", job_gypsum: "Mfanyakazi wa Gypsum", job_grinder: "Grinder", job_facade: "Mfanyakazi wa Facade"
             }
         };
 
@@ -665,7 +709,7 @@
             <div class="floating-nav w-full max-w-7xl px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
                 <a href="index.html" class="flex items-center gap-2 md:gap-3 group px-2 md:px-4">
                     <div class="w-8 h-8 md:w-10 md:h-10 bg-space-indigo rounded-full border border-white/10 flex items-center justify-center text-brand-white font-bold text-base md:text-lg shadow-2xl glass-panel overflow-hidden p-1 flex-shrink-0">
-                        <span class="relative z-10 text-brand-white">BC</span>
+                        <span class="relative z-10">BC</span>
                     </div>
                     <div class="block leading-tight"> 
                         <h1 class="font-bold text-white text-xs md:text-sm tracking-wide whitespace-nowrap">BETTER CALL</h1>
@@ -704,10 +748,6 @@
                     <a href="about.html" class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5" data-i18n="nav_about">About Us</a>
                 </div>
                 <div class="flex items-center gap-2 sm:gap-3 px-2">
-                    <button onclick="toggleSearch()" class="group p-2.5 rounded-full hover:bg-white/10 transition-all duration-300 relative" aria-label="Search">
-                        <i class="fa-solid fa-magnifying-glass text-white/70 group-hover:text-brand-blue text-lg"></i>
-                        <span class="hidden lg:inline-flex absolute -bottom-8 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md px-2 py-0.5 rounded text-[10px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/5">Cmd + K</span>
-                    </button>
                     <button class="lg:hidden p-2 text-white hover:text-brand-blue transition rounded-full hover:bg-white/5" onclick="toggleMobileMenu()">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
@@ -757,28 +797,6 @@
                 </div>
             </div>
         </nav>
-        <div id="search-overlay" class="fixed inset-0 z-[100] bg-deep-space/80 backdrop-blur-xl flex items-start justify-center pt-24 px-4">
-            <div class="absolute inset-0 cursor-default" onclick="toggleSearch()"></div>
-            <div id="search-container" class="w-full max-w-3xl relative z-10 bg-[#0F172A]/90 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh]">
-                <div class="flex items-center p-6 border-b border-white/5">
-                    <i class="fa-solid fa-magnifying-glass text-brand-blue text-xl mr-4"></i>
-                    <input type="text" id="global-search-input" placeholder="Search countries, jobs, or services..." class="bg-transparent border-none outline-none text-xl text-white placeholder-gray-500 w-full font-light" autocomplete="off">
-                    <button onclick="toggleSearch()" class="text-gray-500 hover:text-white transition p-2"><span class="text-xs uppercase font-bold tracking-wider border border-white/10 rounded px-2 py-1">ESC</span></button>
-                </div>
-                <div id="search-results" class="overflow-y-auto p-2 custom-scrollbar">
-                    <div id="search-default" class="p-4">
-                        <p class="text-xs font-bold text-brand-gold uppercase tracking-widest mb-3 opacity-70">Quick Access</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            <a href="germany.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition group"><span class="text-2xl">🇩🇪</span><div class="flex flex-col"><span class="text-white text-sm font-medium group-hover:text-brand-blue transition">Germany</span><span class="text-xs text-gray-500">Care Home & Specialist Visas</span></div></a>
-                            <a href="assessment.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition group"><div class="w-8 h-8 rounded-full bg-brand-blue/20 text-brand-blue flex items-center justify-center text-xs"><i class="fa-solid fa-clipboard-check"></i></div><div class="flex flex-col"><span class="text-white text-sm font-medium group-hover:text-brand-blue transition">Free Assessment</span><span class="text-xs text-gray-500">Check your eligibility instantly</span></div></a>
-                        </div>
-                    </div>
-                    <div id="dynamic-results" class="hidden flex-col gap-1"></div>
-                    <div id="no-results" class="hidden p-8 text-center"><i class="fa-solid fa-circle-question text-gray-600 text-3xl mb-3"></i><p class="text-gray-400 text-sm">No results found for your query.</p></div>
-                </div>
-                <div class="bg-black/20 p-3 text-[10px] text-gray-500 flex justify-between items-center px-6"><div class="flex gap-4"><span class="hidden sm:inline">Use <strong class="text-gray-400">↑</strong> <strong class="text-gray-400">↓</strong> to navigate</span><span class="hidden sm:inline"><strong class="text-gray-400">Enter</strong> to select</span></div><span>Better Call Search</span></div>
-            </div>
-        </div>
         `;
 
         const GLOBAL_FOOTER = `
@@ -850,9 +868,12 @@
         document.body.insertAdjacentHTML('afterbegin', GLOBAL_HEADER);
         document.body.insertAdjacentHTML('beforeend', GLOBAL_FOOTER);
 
-        // --- SPECIFIC JOB DATA ---
+        // --- SPECIFIC JOB DATA (Mapped from Croatia Content) ---
         const jobsData = [
+            // A. Logistics Department
             { title: "Ready-Mix Truck Driver", titleKey: "job_driver", dept: "Logistics", salary: "€1,700 / Month", icon: "fa-solid fa-truck-moving" },
+            
+            // B. Construction Department
             { title: "Shuttering Carpenter", titleKey: "job_carpenter", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-hammer" },
             { title: "Mason", titleKey: "job_mason", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-trowel-bricks" },
             { title: "Ceramic Mason", titleKey: "job_ceramic", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-layer-group" },
@@ -862,193 +883,192 @@
             { title: "Facade Worker", titleKey: "job_facade", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-paint-roller" }
         ];
 
-        // Process Steps 
+        const documentsData = [
+            { title: "Passport Scan", desc: "Front & Back Color Scans. Minimum 6 months validity.", icon: "fa-solid fa-passport" },
+            { title: "Passport Size Photo", desc: "White background, recent photo.", icon: "fa-solid fa-camera" },
+            { title: "Europass CV", desc: "Must be in standard Europass format.", icon: "fa-regular fa-file-lines" },
+            { title: "Work Experience Certificate", desc: "Mandatory Gulf Experience proof.", icon: "fa-solid fa-briefcase" },
+            { title: "Working Video", desc: "Video showing you performing your trade.", icon: "fa-solid fa-video" },
+            { title: "Introduction Video", desc: "Self-introduction in English.", icon: "fa-solid fa-user-check" }
+        ];
+
         const timelineData = [
             { step: "01", key: "step_01", title: "Registration", desc: "Submit Passport, Photo, CV, and Experience Certificate.", fee: "Initial" },
             { step: "02", key: "step_02", title: "Work Permit", desc: "Employer applies for work authorization in Croatia.", fee: "Processing" },
             { step: "03", key: "step_03", title: "Visa Application", desc: "Submission to Croatian Embassy with Work Permit.", fee: "Visa Fee" },
             { step: "04", key: "step_04", title: "Travel", desc: "Visa stamping and flight to Croatia.", fee: "Final" }
         ];
-        
+
+        let currentCategory = 'All';
         let currentLang = 'en';
+        let currentSearchTerm = '';
+        let languageDropdownOpen = false;
 
-        // RENDER FUNCTIONS
-        function renderJobs() {
+        // --- RENDER FUNCTIONS ---
+        function renderJobs(data) {
             const container = document.getElementById('jobContainer');
+            const countLabel = document.getElementById('jobCount');
             const t = translations[currentLang] || translations['en'];
+            
+            container.innerHTML = "";
 
-            container.innerHTML = jobsData.map((job, index) => {
-                const displayTitle = t[job.titleKey] || job.title;
+            // 1. Start with All Data
+            let filteredData = data;
+            
+            // 2. Filter by Category
+            if (currentCategory !== 'All') {
+                filteredData = filteredData.filter(job => job.dept === currentCategory);
+            }
+            
+            // 3. Filter by Search Term
+            if (currentSearchTerm.trim() !== '') {
+                const term = currentSearchTerm.toLowerCase();
+                filteredData = filteredData.filter(job => 
+                    (t[job.titleKey] || job.title).toLowerCase().includes(term) || 
+                    job.dept.toLowerCase().includes(term)
+                );
+            }
+            
+            // 4. Group all *filtered* data by Department
+            const grouped = filteredData.reduce((acc, job) => {
+                acc[job.dept] = acc[job.dept] || [];
+                acc[job.dept].push(job);
+                return acc;
+            }, {});
 
-                return `
-                    <div onclick="openJobModal(${index})" class="glass-panel p-8 rounded-3xl group cursor-pointer relative overflow-hidden reveal-item flex flex-col justify-between" style="transition-delay: ${index * 50}ms">
-                         <div class="absolute top-0 right-0 w-32 h-32 bg-croatia-red/5 rounded-full blur-[40px] group-hover:bg-croatia-red/10 transition-all"></div>
-                        
-                        <div>
-                            <div class="flex justify-between items-start mb-6 relative z-10">
-                                <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-croatia-red text-3xl group-hover:scale-110 transition-transform duration-300 border border-white/5 shadow-inner">
-                                    <i class="${job.icon}"></i>
+            let totalShown = 0;
+
+            if (Object.keys(grouped).length === 0) {
+                 container.innerHTML = `
+                    <div class="text-center py-20 animate-fade-in-up">
+                        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-magnifying-glass text-4xl text-white/20"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">No positions found</h3>
+                        <p class="text-gray-400">Try adjusting your search or category filter.</p>
+                        <button onclick="clearFilters()" class="mt-6 text-croatia-blue font-bold hover:underline">Clear all filters</button>
+                    </div>`;
+                 countLabel.innerText = "0 positions found";
+                 return;
+            }
+
+            // 5. Iterate and Render Sections
+            for (const [dept, jobs] of Object.entries(grouped)) {
+                // Mapping Departments to Translation Keys if needed (simplified here)
+                const deptDisplay = dept; 
+
+                const section = document.createElement('div');
+                section.className = "reveal-item";
+                
+                const header = `<h3 class="text-2xl md:text-3xl font-bold text-white mb-8 pl-4 border-l-8 border-croatia-red flex flex-col md:flex-row md:items-baseline gap-2">${deptDisplay} <span class="text-base font-normal text-gray-400">(${jobs.length} Positions)</span></h3>`;
+                
+                let gridHTML = `<div class="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">`;
+                
+                const renderCard = (job) => {
+                    const globalIndex = jobsData.findIndex(j => j.title === job.title && j.dept === job.dept);
+                    const displayTitle = t[job.titleKey] || job.title;
+                    
+                    return `
+                        <div onclick="openJobModal(${globalIndex})" class="glass-panel p-3 sm:p-5 rounded-2xl flex flex-col items-start justify-between cursor-pointer group hover:bg-white/5 transition-all relative overflow-hidden h-full">
+                            <div class="absolute inset-0 bg-gradient-to-r from-croatia-red/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="flex items-start gap-2 sm:gap-4 relative z-10 w-full">
+                                <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-croatia-red/10 flex items-center justify-center text-croatia-red border border-croatia-red/20 shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-black/30">
+                                    <i class="${job.icon} text-xl sm:text-2xl"></i>
                                 </div>
-                                <span class="bg-white/5 text-gray-400 text-sm font-bold px-3 py-1 rounded-lg border border-white/5 uppercase tracking-wide">${job.dept}</span>
+                                <div class="flex-grow min-w-0">
+                                    <h4 class="text-sm sm:text-xl md:text-lg font-bold text-white group-hover:text-brand-blue transition-colors mb-1 leading-tight">${displayTitle}</h4>
+                                    <span class="text-gray-300 md:text-gray-400 text-xs sm:text-base font-medium flex items-center gap-1"><i class="fa-solid fa-check text-green-500"></i> Gulf Exp</span>
+                                </div>
                             </div>
-                            <h3 class="text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-brand-blue transition-colors leading-tight">${displayTitle}</h3>
-                             <div class="flex items-center gap-3 text-sm text-gray-500 mb-6">
-                                    <span class="flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Croatia</span>
-                                    <span class="text-green-400 font-bold flex items-center gap-1 bg-green-900/20 px-2 py-0.5 rounded-full"><i class="fa-solid fa-check"></i> Gulf Exp</span>
+                            <div class="mt-4 relative z-10 w-full text-left">
+                                <span class="inline-block bg-brand-gold/10 border border-brand-gold/30 text-brand-gold font-bold px-2 py-0.5 rounded-lg text-sm sm:text-lg md:text-base tracking-wide whitespace-nowrap">${job.salary}</span>
                             </div>
                         </div>
+                    `;
+                };
 
-                        <div class="flex justify-between items-center pt-6 border-t border-white/5">
-                            <span class="text-white font-bold text-2xl md:text-3xl tracking-tight">${job.salary}</span>
-                            <i class="fa-solid fa-arrow-right text-gray-600 group-hover:text-white group-hover:translate-x-1 transition-all text-xl"></i>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                jobs.forEach(job => gridHTML += renderCard(job));
+                gridHTML += `</div>`;
+                section.innerHTML = header + gridHTML;
+                container.appendChild(section);
+                totalShown += jobs.length;
+            }
+            
+            if (currentSearchTerm) {
+                 countLabel.innerText = `Found ${totalShown} result${totalShown !== 1 ? 's' : ''} for "${currentSearchTerm}"`;
+            } else {
+                 countLabel.innerText = `Showing ${totalShown} positions in ${currentCategory === 'All' ? 'all departments' : currentCategory}`;
+            }
+            
+            checkScroll();
+        }
+
+        function selectCategory(category) {
+            currentCategory = category;
+            renderCategoryButtons();
+            renderJobs(jobsData);
+        }
+        
+        function handleSearch(val) {
+            currentSearchTerm = val;
+            renderJobs(jobsData);
+        }
+        
+        function clearFilters() {
+            currentCategory = 'All';
+            currentSearchTerm = '';
+            document.getElementById('jobSearchInput').value = '';
+            renderCategoryButtons();
+            renderJobs(jobsData);
+        }
+
+        function renderCategoryButtons() {
+            const categories = ["All", "Logistics", "Construction"];
+            const container = document.getElementById('categoryButtons');
+            const t = translations[currentLang] || translations['en'];
+            const catKeys = { "All": "cat_all", "Logistics": "cat_logistics", "Construction": "cat_construction" };
+
+            if(container) {
+                container.innerHTML = categories.map(cat => {
+                    const isActive = currentCategory === cat;
+                    const activeClass = isActive 
+                        ? "bg-croatia-red text-white border-croatia-red shadow-lg shadow-croatia-red/30" 
+                        : "bg-white/5 text-gray-400 border-white/10 hover:bg-white/10";
+                    
+                    const translatedName = t[catKeys[cat]] || cat;
+
+                    return `
+                    <button onclick="selectCategory('${cat}')" 
+                        class="px-6 py-3 rounded-xl text-sm md:text-base font-bold transition-all border flex items-center justify-center text-center h-full min-w-[120px] flex-shrink-0 snap-center whitespace-nowrap ${activeClass}">
+                        ${translatedName}
+                    </button>
+                `}).join('');
+            }
         }
 
         function renderTimeline() {
-            const tlContainer = document.getElementById('timelineContainer');
             const t = translations[currentLang] || translations['en'];
-
-            tlContainer.innerHTML = timelineData.map((item, index) => {
+            
+            document.getElementById('timelineContainer').innerHTML = timelineData.map((item, index) => {
                 const title = t[item.key + "_title"] || item.title;
                 const desc = t[item.key + "_desc"] || item.desc;
-
+                
                 return `
-                <div class="relative group reveal-item" style="transition-delay: ${index * 100}ms">
-                    <div class="glass-panel p-8 rounded-3xl h-full border-t-4 border-t-brand-blue hover:border-t-croatia-red transition-colors flex flex-col">
-                        <div class="text-5xl font-bold text-white/5 mb-4 absolute top-4 right-4 group-hover:text-white/10 transition-colors pointer-events-none">${item.step}</div>
-                        <h4 class="font-bold text-white text-2xl mb-4 relative z-10">${title}</h4>
-                        <p class="text-base text-gray-400 leading-relaxed relative z-10 flex-grow">${desc}</p>
+                <div class="relative pl-8 sm:pl-0 pt-2 sm:pt-16 group reveal-item" style="transition-delay: ${index * 50}ms">
+                     <div class="hidden sm:block absolute top-0 left-0 w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                        <div class="h-full bg-croatia-red origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+                     </div>
+                    <div class="font-bold text-white mb-2 sm:mb-4 sm:absolute sm:top-4 text-2xl sm:text-4xl text-white/10 group-hover:text-croatia-red transition-colors">${item.step}</div>
+                    <div class="absolute left-0 top-3 sm:top-[-6px] w-4 h-4 rounded-full border-2 border-deep-space bg-croatia-red shadow-[0_0_10px_rgba(255,0,0,0.5)] z-10"></div>
+                    <div class="glass-panel p-6 rounded-2xl hover:border-croatia-red/30 transition-all border border-white/10 h-full flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-white text-xl mb-2">${title}</h4>
+                            <p class="text-base text-gray-400 mb-4">${desc}</p>
+                        </div>
+                        <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-bold border border-white/10 bg-white/5 text-gray-300 w-fit">${item.fee}</span>
                     </div>
                 </div>
             `}).join('');
-        }
-
-        // --- SEARCH & UI LOGIC ---
-        const searchData = [
-             { title: "Registered Nurse", type: "Job", url: "germany.html#nurse", icon: "👩‍⚕️", keywords: "health, medical, care home, germany, hospital" },
-            { title: "Software Engineer", type: "Job", url: "germany.html#it", icon: "💻", keywords: "developer, coding, tech, germany, blue card" },
-            { title: "Construction Worker", type: "Job", url: "serbia.html#construction", icon: "👷", keywords: "trades, builder, infrastructure, serbia, latvia" },
-            { title: "Truck Driver", type: "Job", url: "poland.html#logistics", icon: "🚛", keywords: "logistics, transport, driver, poland, lithuania" },
-            { title: "Chef / Cook", type: "Job", url: "albania.html#hospitality", icon: "👨‍🍳", keywords: "kitchen, restaurant, food, albania, croatia" },
-            { title: "Hotel Staff", type: "Job", url: "albania.html#hospitality", icon: "🏨", keywords: "cleaning, housekeeping, reception, albania" },
-            { title: "Airport Ground Staff", type: "Job", url: "sweden.html#airport", icon: "✈️", keywords: "baggage, ramp, airport, sweden" },
-            { title: "Welder / Fitter", type: "Job", url: "czech.html#industry", icon: "🔧", keywords: "metal, factory, industrial, czech" },
-            { title: "Ready-Mix Driver", type: "Job", url: "croatia.html", icon: "🚛", keywords: "driver, transport, logistics, croatia" },
-            { title: "Mason / Carpenter", type: "Job", url: "croatia.html", icon: "🔨", keywords: "construction, builder, croatia, trade" },
-
-            { title: "Germany", type: "Country", url: "germany.html", icon: "🇩🇪", keywords: "care home, nurse, doctor, blue card, visa" },
-            { title: "Sweden", type: "Country", url: "sweden.html", icon: "🇸🇪", keywords: "airport, engineering, hospitality, north" },
-            { title: "Finland", type: "Country", url: "finland.html", icon: "🇫🇮", keywords: "tech, service, happy, north, seasonal" },
-            { title: "Italy", type: "Country", url: "italy.html", icon: "🇮🇹", keywords: "decreto flussi, seasonal, non-seasonal, construction" },
-            { title: "France", type: "Country", url: "france.html", icon: "🇫🇷", keywords: "talent passport, tech, investor, paris" },
-            { title: "Poland", type: "Country", url: "poland.html", icon: "🇵🇱", keywords: "logistics, manufacturing, schengen, work permit" },
-            { title: "Czech Republic", type: "Country", url: "czech.html", icon: "🇨🇿", keywords: "automotive, engineering, prague, factory" },
-            { title: "Latvia", type: "Country", url: "latvia.html", icon: "🇱🇻", keywords: "baltic, logistics, construction, riga" },
-            { title: "Serbia", type: "Country", url: "serbia.html", icon: "🇷🇸", keywords: "construction, trades, infrastructure, belgrade" },
-            { title: "Macedonia", type: "Country", url: "macedonia.html", icon: "🇲🇰", keywords: "emerging, development, skopje" },
-            { title: "Albania", type: "Country", url: "albania.html", icon: "🇦🇱", keywords: "tourism, hospitality, hotels, tirana" },
-            { title: "Croatia", type: "Country", url: "croatia.html", icon: "🇭🇷", keywords: "coastal, tourism, construction, eu" },
-
-            { title: "Visa Appointment", type: "Service", url: "vfs.html", icon: "📅", keywords: "vfs, embassy, slot, booking, date" },
-            { title: "Visa Documentation", type: "Service", url: "visa_documentation.html", icon: "📄", keywords: "legalization, apostille, translation, civil documents" },
-            { title: "Travel Assistance", type: "Service", url: "travel_assistance.html", icon: "✈️", keywords: "flight, hotel, itinerary, booking, reservation" },
-            { title: "Insurance", type: "Service", url: "insurance_assistance.html", icon: "🛡️", keywords: "medical, health, schengen, coverage, policy" },
-            { title: "Medical Assistance", type: "Service", url: "medical_assistance.html", icon: "🩺", keywords: "exam, checkup, doctor, certificate, health" },
-            { title: "Free Assessment", type: "Tool", url: "assessment.html", icon: "📝", keywords: "check, eligibility, qualify, start" },
-            { title: "Book Consultation", type: "Tool", url: "book.html", icon: "📞", keywords: "call, meeting, talk, expert, lawyer" }
-        ];
-
-        let searchOverlay, searchInput, searchResults, defaultResults, dynamicResults, noResults;
-
-        function initSearchElements() {
-             searchOverlay = document.getElementById('search-overlay');
-             searchInput = document.getElementById('global-search-input');
-             searchResults = document.getElementById('search-results');
-             defaultResults = document.getElementById('search-default');
-             dynamicResults = document.getElementById('dynamic-results');
-             noResults = document.getElementById('no-results');
-
-            if(searchInput) {
-                 searchInput.addEventListener('input', (e) => {
-                    const query = e.target.value.toLowerCase().trim();
-                    if (query.length === 0) {
-                        defaultResults.classList.remove('hidden');
-                        dynamicResults.classList.add('hidden');
-                        noResults.classList.add('hidden');
-                        return;
-                    }
-                    const filtered = searchData.filter(item => 
-                        item.title.toLowerCase().includes(query) || 
-                        item.keywords.toLowerCase().includes(query) ||
-                        item.type.toLowerCase().includes(query)
-                    );
-                    renderResults(filtered, query);
-                });
-            }
-        }
-        
-        function toggleSearch() {
-            if(!searchOverlay) initSearchElements();
-            const isActive = searchOverlay.classList.contains('active');
-            if (isActive) {
-                searchOverlay.classList.remove('active');
-                document.body.style.overflow = ''; 
-            } else {
-                searchOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden'; 
-                setTimeout(() => searchInput.focus(), 100);
-            }
-        }
-
-        function highlightMatch(text, query) {
-            const regex = new RegExp(`(${query})`, 'gi');
-            return text.replace(regex, '<span class="text-highlight">$1</span>');
-        }
-
-        function renderResults(results, query) {
-            defaultResults.classList.add('hidden');
-            dynamicResults.innerHTML = '';
-            
-            if (results.length === 0) {
-                dynamicResults.classList.add('hidden');
-                noResults.classList.remove('hidden');
-                return;
-            }
-
-            noResults.classList.add('hidden');
-            dynamicResults.classList.remove('hidden');
-
-            results.forEach((result, index) => {
-                const div = document.createElement('a');
-                div.href = result.url;
-                div.className = "flex items-center gap-4 p-4 rounded-xl hover:bg-white/10 transition duration-200 group border border-transparent hover:border-white/5 animate-fade-in-up";
-                div.style.animationDelay = `${index * 50}ms`;
-                
-                let typeColor = "text-gray-500";
-                if(result.type === "Country") typeColor = "text-brand-gold";
-                if(result.type === "Service") typeColor = "text-brand-blue";
-                if(result.type === "Tool") typeColor = "text-brand-purple";
-                if(result.type === "Job") typeColor = "text-vfs-teal";
-
-                const highlightedTitle = highlightMatch(result.title, query);
-                const highlightedKeywords = highlightMatch(result.keywords, query);
-
-                div.innerHTML = `
-                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-xl shadow-inner">${result.icon}</div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-center">
-                            <h4 class="text-white font-medium group-hover:text-brand-blue transition">${highlightedTitle}</h4>
-                            <span class="text-[10px] uppercase font-bold tracking-wider ${typeColor} bg-white/5 px-2 py-0.5 rounded border border-white/5">${result.type}</span>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-0.5 truncate">${highlightedKeywords}</p>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-gray-600 group-hover:text-white transition transform group-hover:translate-x-1"></i>
-                `;
-                dynamicResults.appendChild(div);
-            });
         }
 
         // --- LANGUAGE LOGIC ---
@@ -1075,28 +1095,21 @@
         }
 
         function setLanguage(langCode) {
-            console.log(`Language set to: ${langCode}`);
             currentLang = langCode;
             const t = translations[langCode] || translations['en'];
             
-            // Update static elements
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
                 if (t[key]) element.innerHTML = t[key];
             });
 
-            // Re-render dynamic content
-            renderJobs();
+            renderCategoryButtons();
+            renderJobs(jobsData);
             renderTimeline();
-
-            // Close dropdown
             document.getElementById('lang-toggle-btn').classList.remove('active');
         }
 
-
         // --- CORE UI LOGIC ---
-        
-        let lastScrollY = window.scrollY;
         let ticking = false;
         window.addEventListener('scroll', () => {
             if (!ticking) {
@@ -1115,11 +1128,7 @@
         
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
-            if (menu.classList.contains('translate-y-full')) {
-                menu.classList.remove('translate-y-full');
-            } else {
-                menu.classList.add('translate-y-full');
-            }
+            menu.classList.toggle('translate-y-full');
         }
 
         // Reveal Animations
@@ -1146,20 +1155,30 @@
         function openJobModal(index) {
             const job = jobsData[index];
             if(!job) return;
-
+            
             const t = translations[currentLang] || translations['en'];
             const displayTitle = t[job.titleKey] || job.title;
 
             document.getElementById('modalTitle').innerText = displayTitle;
             document.getElementById('modalDept').innerText = job.dept;
-            document.getElementById('modalSalary').innerText = job.salary; 
+            document.getElementById('modalSalary').innerText = job.salary;
+            document.getElementById('modalExp').innerText = "Gulf Exp Required";
+            document.getElementById('modalIcon').innerHTML = `<i class="${job.icon}"></i>`;
             
-            const iconContainer = document.getElementById('modalIcon');
-            iconContainer.innerHTML = `<i class="${job.icon}"></i>`;
-            
-            const modal = document.getElementById('jobModal');
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; 
+            // Inject Documents
+            const docsList = document.getElementById('modalDocs');
+            docsList.innerHTML = documentsData.map(doc => `
+                <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-croatia-red/30 transition-colors">
+                    <div class="w-10 h-10 rounded-full bg-croatia-red/20 flex items-center justify-center text-croatia-red shrink-0 mt-0.5"><i class="${doc.icon} text-lg"></i></div>
+                    <div>
+                        <p class="text-lg md:text-base font-bold text-white mb-1">${doc.title}</p>
+                        <p class="text-base md:text-xs text-gray-300 md:text-gray-400 leading-relaxed">${doc.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('jobModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
@@ -1168,16 +1187,11 @@
             document.body.style.overflow = '';
         }
 
-        // Keyboard Shortcut for Search
+        // Keyboard Shortcuts
         document.addEventListener('keydown', (e) => {
-            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-                e.preventDefault();
-                toggleSearch();
-            }
             if (e.key === 'Escape') {
-                if (searchOverlay && searchOverlay.classList.contains('active')) toggleSearch();
                 if (document.getElementById('jobModal').classList.contains('hidden') === false) closeModal();
-                 if (document.getElementById('lang-toggle-btn').classList.contains('active')) {
+                if (document.getElementById('lang-toggle-btn').classList.contains('active')) {
                     document.getElementById('lang-toggle-btn').classList.remove('active');
                 }
             }
@@ -1186,8 +1200,8 @@
         // Initialize Page
         document.addEventListener('DOMContentLoaded', () => {
             initSmoothScroll();
-            initSearchElements();
-            renderJobs();
+            renderCategoryButtons();
+            renderJobs(jobsData);
             renderTimeline();
             checkScroll();
         });

@@ -1060,8 +1060,8 @@
         <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
             <div class="floating-nav w-full max-w-7xl px-4 py-4 md:px-3 md:py-3 flex justify-between items-center transition-all duration-300" id="navbar">
                 <a href="#home" class="flex items-center gap-3 md:gap-4 group px-2 md:px-4">
-                    <div class="w-14 h-14 md:w-12 md:h-12 bg-space-indigo rounded-full border border-white/10 flex items-center justify-center text-brand-white font-bold text-2xl md:text-xl shadow-2xl glass-panel overflow-hidden p-1 flex-shrink-0">
-                        <span class="relative z-10 text-brand-white">BC</span>
+                    <div class="w-14 h-14 md:w-12 md:h-12 rounded-full flex items-center justify-center glass-panel overflow-hidden p-1 flex-shrink-0 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] hover:scale-110 border border-white/10 bg-white/5 backdrop-blur-md">
+                        <img src="https://raw.githubusercontent.com/thebettercall/app/9ca2db3d96700f0412c9f2f420422ed1ccfb52bb/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
                     </div>
                     <div class="block leading-tight"> 
                         <h1 class="font-bold text-white text-xl md:text-xl tracking-wide whitespace-nowrap">BETTER CALL</h1>
@@ -1119,7 +1119,7 @@
                 <button class="absolute top-8 right-8 text-white/50 hover:text-white text-4xl transition" onclick="toggleMobileMenu()">
                     <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
-                <a href="#home" data-i18n="nav_home" onclick="toggleMobileMenu()" class="text-4xl font-light text-white hover:text-brand-blue mb-8">Home</a>
+                <a href="#home" onclick="toggleMobileMenu()" class="text-4xl font-light text-white hover:text-brand-blue mb-8"><i class="fa-solid fa-house"></i></a>
                 <div class="w-full px-8 space-y-10">
                     <div class="text-center">
                         <p data-i18n="footer_destinations" class="text-brand-gold text-sm uppercase tracking-widest mb-6 font-bold opacity-70">Destinations</p>
@@ -1186,8 +1186,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 md:gap-16 mb-8 md:mb-20">
                     <div class="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col items-center md:items-start text-center md:text-left">
                         <a href="#home" class="flex items-center gap-5 group mb-4 md:mb-8 w-fit">
-                            <div class="w-16 h-16 bg-space-indigo rounded-2xl border border-white/10 flex items-center justify-center text-brand-white font-bold text-2xl shadow-2xl glass-panel p-1">
-                                <span class="relative z-10">BC</span>
+                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center glass-panel p-2 transition-all duration-500 hover:shadow-[0_0_40px_rgba(139,92,246,0.5)] hover:scale-105 border border-white/10 bg-white/5 backdrop-blur-md">
+                                <img src="https://raw.githubusercontent.com/thebettercall/app/9ca2db3d96700f0412c9f2f420422ed1ccfb52bb/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                             </div>
                             <div class="block text-left">
                                 <h4 class="font-bold text-white text-xl tracking-wide">BETTER CALL</h4><p class="text-xs font-bold text-brand-gold uppercase tracking-[0.3em]">Immigration</p>
@@ -1295,9 +1295,50 @@
 
         // --- UNIVERSAL SEARCH LOGIC ---
         const searchData = [
-            // --- GERMANY (Healthcare) ---
+            // --- GERMANY (Healthcare, Corporate, General Labor) ---
             { title: "Registered Nurse", type: "Job", url: "germany.html", icon: "👩‍⚕️", keywords: "health, medical, care home, germany, hospital, nurse" },
+            { title: "Care Home Assistant", type: "Job", url: "germany.html", icon: "🩺", keywords: "health, elderly care, germany, nursing assistant" },
             { title: "Software Engineer", type: "Job", url: "germany.html", icon: "💻", keywords: "developer, coding, tech, germany, blue card" },
+            { title: "IT Professional", type: "Job", url: "germany.html", icon: "🖥️", keywords: "tech, systems, germany, blue card" },
+            { title: "Office Clerk", type: "Job", url: "germany.html", icon: "📂", keywords: "admin, corporate, germany, receptionist" },
+            { title: "Accountant", type: "Job", url: "germany.html", icon: "📊", keywords: "finance, money, germany, corporate" },
+            { title: "Agriculture Worker", type: "Job", url: "germany.html", icon: "🌾", keywords: "farm, harvest, germany, general labor" },
+            { title: "Warehouse Worker", type: "Job", url: "germany.html", icon: "📦", keywords: "logistics, factory, packing, germany" },
+            { title: "Hotel Staff", type: "Job", url: "germany.html", icon: "🛎️", keywords: "hospitality, service, germany, hotel" },
+            { title: "Cleaner", type: "Job", url: "germany.html", icon: "🧹", keywords: "cleaning, service, germany, housekeeping" },
+            { title: "Construction Helper", type: "Job", url: "germany.html", icon: "🧱", keywords: "construction, labor, germany, build" },
+
+            // --- NETHERLANDS (High Skilled: Corporate, Tech, Sales, Ops) ---
+            { title: "Office Clerk / Receptionist", type: "Job", url: "netherlands.html", icon: "💼", keywords: "corporate, office, admin, netherlands" },
+            { title: "Accountant", type: "Job", url: "netherlands.html", icon: "📊", keywords: "corporate, finance, netherlands" },
+            { title: "Manager", type: "Job", url: "netherlands.html", icon: "👔", keywords: "corporate, management, netherlands" },
+            { title: "HR Assistant", type: "Job", url: "netherlands.html", icon: "👥", keywords: "corporate, hr, human resources, netherlands" },
+            { title: "Administrative Assistant", type: "Job", url: "netherlands.html", icon: "📂", keywords: "corporate, admin, netherlands" },
+            { title: "Front Office Executive", type: "Job", url: "netherlands.html", icon: "🆔", keywords: "corporate, front office, netherlands" },
+            { title: "Secretary / PA", type: "Job", url: "netherlands.html", icon: "📅", keywords: "corporate, secretary, netherlands" },
+            { title: "Sales & Marketing Exec", type: "Job", url: "netherlands.html", icon: "📢", keywords: "sales, marketing, netherlands" },
+            { title: "Business Dev Exec", type: "Job", url: "netherlands.html", icon: "📈", keywords: "sales, business, netherlands" },
+            { title: "Customer Service Exec", type: "Job", url: "netherlands.html", icon: "🎧", keywords: "sales, service, netherlands" },
+            { title: "IT Professional", type: "Job", url: "netherlands.html", icon: "💻", keywords: "tech, it, netherlands" },
+            { title: "Engineer", type: "Job", url: "netherlands.html", icon: "👷", keywords: "tech, engineer, netherlands" },
+            { title: "Project Coordinator", type: "Job", url: "netherlands.html", icon: "📋", keywords: "tech, project, netherlands" },
+            { title: "Data Entry Operator", type: "Job", url: "netherlands.html", icon: "⌨️", keywords: "tech, data, netherlands" },
+            { title: "Logistics Coordinator", type: "Job", url: "netherlands.html", icon: "🚚", keywords: "ops, logistics, netherlands" },
+            { title: "Store Supervisor", type: "Job", url: "netherlands.html", icon: "🏬", keywords: "ops, store, netherlands" },
+            { title: "Procurement Assistant", type: "Job", url: "netherlands.html", icon: "🛒", keywords: "ops, purchase, netherlands" },
+            { title: "Finance Executive", type: "Job", url: "netherlands.html", icon: "🏦", keywords: "ops, finance, netherlands" },
+
+            // --- FRANCE (Care Home) ---
+            { title: "Care Home Assistant", type: "Job", url: "france.html", icon: "👩‍⚕️", keywords: "france, nurse, healthcare, elderly care" },
+            { title: "Nursing Assistant", type: "Job", url: "france.html", icon: "🩺", keywords: "france, health, hospital, medical" },
+            { title: "Healthcare Support", type: "Job", url: "france.html", icon: "🏥", keywords: "france, medical, support, care" },
+            { title: "Elderly Care Staff", type: "Job", url: "france.html", icon: "👵", keywords: "france, old age home, care" },
+
+            // --- ITALY (Care Home) ---
+            { title: "Care Home Assistant", type: "Job", url: "italy.html", icon: "👩‍⚕️", keywords: "italy, nurse, healthcare, elderly care" },
+            { title: "Nursing Assistant", type: "Job", url: "italy.html", icon: "🩺", keywords: "italy, health, hospital, medical" },
+            { title: "Healthcare Support", type: "Job", url: "italy.html", icon: "🏥", keywords: "italy, medical, support, care" },
+            { title: "Elderly Care Staff", type: "Job", url: "italy.html", icon: "👵", keywords: "italy, old age home, care" },
 
             // --- SERBIA (Construction, Logistics, Service) ---
             { title: "Truck Driver", type: "Job", url: "serbia.html", icon: "🚛", keywords: "logistics, transport, driver, serbia" },
@@ -1327,28 +1368,6 @@
             { title: "Harvesting Worker", type: "Job", url: "poland.html", icon: "🌾", keywords: "agriculture, harvest, poland" },
             { title: "Greenhouse Worker", type: "Job", url: "poland.html", icon: "🌱", keywords: "agriculture, greenhouse, poland" },
             { title: "Poultry Farm Hand", type: "Job", url: "poland.html", icon: "🐔", keywords: "agriculture, farm, poultry, poland" },
-
-            // --- NETHERLANDS (Corporate, Sales, Tech, Ops) ---
-            { title: "Office Clerk / Receptionist", type: "Job", url: "netherlands.html", icon: "💼", keywords: "corporate, office, admin, netherlands" },
-            { title: "Accountant", type: "Job", url: "netherlands.html", icon: "📊", keywords: "corporate, finance, netherlands" },
-            { title: "Manager", type: "Job", url: "netherlands.html", icon: "👔", keywords: "corporate, management, netherlands" },
-            { title: "HR Assistant / Executive", type: "Job", url: "netherlands.html", icon: "👥", keywords: "corporate, hr, netherlands" },
-            { title: "Administrative Assistant", type: "Job", url: "netherlands.html", icon: "📂", keywords: "corporate, admin, netherlands" },
-            { title: "Front Office Executive", type: "Job", url: "netherlands.html", icon: "🆔", keywords: "corporate, front office, netherlands" },
-            { title: "Secretary / PA", type: "Job", url: "netherlands.html", icon: "📅", keywords: "corporate, secretary, netherlands" },
-            { title: "Document Controller", type: "Job", url: "netherlands.html", icon: "📑", keywords: "corporate, document, netherlands" },
-            { title: "Sales & Marketing Exec", type: "Job", url: "netherlands.html", icon: "📢", keywords: "sales, marketing, netherlands" },
-            { title: "Business Dev Exec", type: "Job", url: "netherlands.html", icon: "📈", keywords: "sales, business, netherlands" },
-            { title: "Customer Service Exec", type: "Job", url: "netherlands.html", icon: "🎧", keywords: "sales, service, netherlands" },
-            { title: "Call Centre Executive", type: "Job", url: "netherlands.html", icon: "📞", keywords: "sales, call center, netherlands" },
-            { title: "IT Professional", type: "Job", url: "netherlands.html", icon: "💻", keywords: "tech, it, netherlands" },
-            { title: "Engineer", type: "Job", url: "netherlands.html", icon: "👷", keywords: "tech, engineer, netherlands" },
-            { title: "Project Coordinator", type: "Job", url: "netherlands.html", icon: "📋", keywords: "tech, project, netherlands" },
-            { title: "Data Entry Operator", type: "Job", url: "netherlands.html", icon: "⌨️", keywords: "tech, data, netherlands" },
-            { title: "Logistics Coordinator", type: "Job", url: "netherlands.html", icon: "🚚", keywords: "ops, logistics, netherlands" },
-            { title: "Store Supervisor", type: "Job", url: "netherlands.html", icon: "🏬", keywords: "ops, store, netherlands" },
-            { title: "Procurement Assistant", type: "Job", url: "netherlands.html", icon: "🛒", keywords: "ops, purchase, netherlands" },
-            { title: "Finance Executive", type: "Job", url: "netherlands.html", icon: "🏦", keywords: "ops, finance, netherlands" },
 
             // --- LATVIA (Construction, Mfg, Logistics, IT, Health, Hospitality) ---
             { title: "Welder / Fitter", type: "Job", url: "latvia.html", icon: "🔥", keywords: "construction, welder, latvia" },
@@ -1443,14 +1462,9 @@
             { title: "Heavy Goods Driver", type: "Job", url: "czech.html", icon: "🚛", keywords: "czech, logistics, truck driver" },
             { title: "Software Developer", type: "Job", url: "czech.html", icon: "💻", keywords: "czech, tech, it, developer" },
 
-            // --- FRANCE ---
-            { title: "Care Home Job", type: "Job", url: "france.html", icon: "👩‍⚕️", keywords: "france, nurse, healthcare, elderly care" },
-
-            // --- ITALY ---
-            { title: "Care Home Job", type: "Job", url: "italy.html", icon: "👩‍⚕️", keywords: "italy, nurse, healthcare, elderly care" },
-
             // --- COUNTRIES ---
             { title: "Germany", type: "Country", url: "germany.html", icon: "🇩🇪", keywords: "care home, nurse, doctor, blue card, visa" },
+            { title: "Netherlands", type: "Country", url: "netherlands.html", icon: "🇳🇱", keywords: "tech, high skilled, amsterdam, corporate" },
             { title: "Sweden", type: "Country", url: "sweden.html", icon: "🇸🇪", keywords: "airport, engineering, hospitality, north" },
             { title: "Finland", type: "Country", url: "finland.html", icon: "🇫🇮", keywords: "tech, service, happy, north, seasonal" },
             { title: "Italy", type: "Country", url: "italy.html", icon: "🇮🇹", keywords: "decreto flussi, seasonal, non-seasonal, construction" },
@@ -1462,7 +1476,6 @@
             { title: "Macedonia", type: "Country", url: "macedonia.html", icon: "🇲🇰", keywords: "emerging, development, skopje" },
             { title: "Albania", type: "Country", url: "albania.html", icon: "🇦🇱", keywords: "tourism, hospitality, hotels, tirana" },
             { title: "Croatia", type: "Country", url: "croatia.html", icon: "🇭🇷", keywords: "coastal, tourism, construction, eu" },
-            { title: "Netherlands", type: "Country", url: "netherlands.html", icon: "🇳🇱", keywords: "tech, high skilled, amsterdam, corporate" },
             
             // --- SERVICES ---
             { title: "Visa Appointment", type: "Service", url: "vfs.html", icon: "📅", keywords: "vfs, embassy, slot, booking, date" },

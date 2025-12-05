@@ -152,21 +152,32 @@
             transform: translateY(0);
         }
         
-        /* Language Dropdown specific styles */
+        /* Language Button Styles (Adapted from Italy) */
+        #lang-toggle-btn {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 24px;
+            border-radius: 9999px; /* Pill shape */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #lang-toggle-btn:hover, #lang-toggle-btn.active {
+            background: #DD0000; /* Germany Red */
+            border-color: #DD0000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(221, 0, 0, 0.4);
+        }
         #language-dropdown {
             opacity: 0;
             visibility: hidden;
-            transform: scale(0.9);
-            transform-origin: bottom left; 
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(10px) scale(0.95);
+            transform-origin: bottom left;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        #lang-toggle-btn.active .fa-chevron-up {
-            transform: rotate(180deg);
-        }
-        #lang-toggle-btn.active + #language-dropdown {
+        #language-dropdown.show {
             opacity: 1;
             visibility: visible;
-            transform: scale(1);
+            transform: translateY(0) scale(1);
         }
 
         /* Smooth Scroll Reveal Classes */
@@ -293,7 +304,7 @@
     </div>
 
     <!-- Reduced top/bottom padding significantly for compact view -->
-    <main class="flex-grow w-full max-w-7xl mx-auto relative z-10 space-y-8 pt-24 pb-12 px-3 sm:px-6">
+    <main class="flex-grow w-full max-w-7xl mx-auto relative z-10 space-y-8 pt-24 pb-32 px-3 sm:px-6">
 
         <header class="text-center space-y-4 reveal-item">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel border border-germany-red/30 text-white font-bold tracking-widest text-[9px] uppercase mb-2 animate-fade-in-up">
@@ -427,40 +438,46 @@
             </div>
         </section>
 
-        <!-- APPLY BUTTON SECTION -->
-        <div class="text-center py-10 reveal-item pb-32">
-             <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-998/1LURNX2M3TYUMIESNV" target="_blank" class="inline-flex items-center gap-3 bg-gradient-to-r from-germany-red to-germany-gold text-white font-bold text-lg px-10 py-4 rounded-full shadow-[0_0_20px_rgba(221,0,0,0.4)] hover:shadow-[0_0_40px_rgba(255,206,0,0.6)] hover:scale-105 transition-all duration-300 group">
-                <span data-i18n="btn_apply_main">Apply Now</span>
-                <i class="fa-solid fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-            </a>
-            <p class="text-gray-500 text-xs mt-3 font-light">Start your application process today.</p>
-        </div>
-
     </main>
 
-    <!-- Floating Language Selector (Left Side) -->
+    <!-- Floating Apply Button (Center) - Main CTA -->
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs px-2 sm:px-4 flex justify-center pointer-events-none">
+        <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-998/1LURNX2M3TYUMIESNV" target="_blank" class="pointer-events-auto relative group bg-gradient-to-r from-germany-red to-red-600 text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full shadow-[0_0_30px_rgba(221,0,0,0.5)] hover:shadow-[0_0_50px_rgba(221,0,0,0.8)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 overflow-hidden flex items-center gap-2 md:gap-3 border border-white/20">
+            <!-- Hover Shine Effect -->
+            <span class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+            
+            <!-- Text & Icon -->
+            <span class="relative z-10 text-sm md:text-lg tracking-widest uppercase whitespace-nowrap" data-i18n="btn_apply_main">Apply Now</span>
+            <i class="fa-solid fa-paper-plane relative z-10 group-hover:translate-x-1 transition-transform text-sm md:text-base"></i>
+            
+            <!-- Pulse Ring Animation -->
+            <span class="absolute inset-0 rounded-full border-2 border-white/30 animate-ping opacity-20"></span>
+        </a>
+    </div>
+
+    <!-- Floating Language Selector (Left Side) - Fixed Bottom -->
     <div class="fixed bottom-8 left-4 md:left-8 z-50">
         <div class="relative">
-            <button id="lang-toggle-btn" onclick="toggleLanguageDropdown(event)" class="bg-black/50 backdrop-blur-md border border-white/10 text-white px-4 py-3 rounded-full shadow-2xl flex items-center gap-3 hover:bg-germany-red/80 transition-all duration-300 group" aria-label="Select Language">
-                <i class="fa-solid fa-globe text-lg text-germany-gold group-hover:text-white transition-colors"></i>
-                <span class="font-bold text-xs uppercase tracking-wider hidden sm:block">Lang</span>
-                <i class="fa-solid fa-chevron-up text-[10px] opacity-70 transition-transform duration-300"></i>
+            <button id="lang-toggle-btn" onclick="toggleLanguageDropdown(event)" class="text-white flex items-center gap-3 shadow-2xl group" aria-label="Select Language">
+                <i class="fa-solid fa-globe text-xl text-germany-gold group-hover:text-white transition-colors"></i>
+                <!-- Added "hidden md:inline" to hide text on mobile -->
+                <span class="hidden md:inline font-bold text-sm uppercase tracking-wider" data-i18n="btn_language">Language</span>
+                <i class="fa-solid fa-chevron-up text-xs opacity-70 group-hover:-translate-y-0.5 transition-transform"></i>
             </button>
             
-            <!-- Language Dropdown Menu (Positioned bottom-left, opens up) -->
-            <div id="language-dropdown" class="absolute bottom-full left-0 mb-4 w-48 dropdown-glass rounded-xl p-2 flex flex-col gap-1 shadow-2xl z-50">
-                <button onclick="setLanguage('en');" class="px-3 py-2 rounded-lg text-sm text-white hover:text-germany-red hover:bg-white/10 transition block text-left">English (EN)</button>
-                <button onclick="setLanguage('hi');" class="px-3 py-2 rounded-lg text-sm text-white hover:text-germany-red hover:bg-white/10 transition block text-left">Hindi (HI)</button>
-                <button onclick="setLanguage('ml');" class="px-3 py-2 rounded-lg text-sm text-white hover:text-germany-red hover:bg-white/10 transition block text-left">Malayalam (ML)</button>
-                <button onclick="setLanguage('ta');" class="px-3 py-2 rounded-lg text-sm text-white hover:text-germany-red hover:bg-white/10 transition block text-left">Tamil (TA)</button>
-                <button onclick="setLanguage('fil');" class="px-3 py-2 rounded-lg text-sm text-white hover:text-germany-red hover:bg-white/10 transition block text-left">Filipino (FIL)</button>
-                <button onclick="setLanguage('si');" class="px-3 py-2 rounded-lg text-sm text-white hover:text-germany-red hover:bg-white/10 transition block text-left">Sinhala (SI)</button>
-                <button onclick="setLanguage('sw');" class="px-3 py-2 rounded-lg text-sm text-white hover:text-germany-red hover:bg-white/10 transition block text-left">Swahili (SW)</button>
+            <div id="language-dropdown" class="absolute bottom-full left-0 mb-4 w-56 dropdown-glass rounded-xl p-2 flex flex-col gap-1 shadow-2xl z-50 max-h-[60vh] overflow-y-auto">
+                <button onclick="setLanguage('en');" class="px-3 py-2 rounded-lg text-sm text-white hover:bg-germany-red hover:text-white transition block text-left">English (EN)</button>
+                <button onclick="setLanguage('hi');" class="px-3 py-2 rounded-lg text-sm text-white hover:bg-germany-red hover:text-white transition block text-left">Hindi (HI)</button>
+                <button onclick="setLanguage('ml');" class="px-3 py-2 rounded-lg text-sm text-white hover:bg-germany-red hover:text-white transition block text-left">Malayalam (ML)</button>
+                <button onclick="setLanguage('ta');" class="px-3 py-2 rounded-lg text-sm text-white hover:bg-germany-red hover:text-white transition block text-left">Tamil (TA)</button>
+                <button onclick="setLanguage('fil');" class="px-3 py-2 rounded-lg text-sm text-white hover:bg-germany-red hover:text-white transition block text-left">Filipino (FIL)</button>
+                <button onclick="setLanguage('si');" class="px-3 py-2 rounded-lg text-sm text-white hover:bg-germany-red hover:text-white transition block text-left">Sinhala (SI)</button>
+                <button onclick="setLanguage('sw');" class="px-3 py-2 rounded-lg text-sm text-white hover:bg-germany-red hover:text-white transition block text-left">Swahili (SW)</button>
             </div>
         </div>
     </div>
 
-    <!-- Floating WhatsApp Button (Right Side) -->
+    <!-- Floating WhatsApp Button (Right Side) - Fixed Bottom -->
     <a href="https://wa.me/971503666382" target="_blank" class="fixed bottom-8 right-4 md:right-8 z-50 bg-[#25D366] text-white w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-110 group animate-pulse" rel="noopener noreferrer">
         <i class="fa-brands fa-whatsapp text-2xl md:text-4xl"></i>
     </a>
@@ -483,13 +500,13 @@
                         <!-- Dynamic Info Area -->
                         <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5">
                             <div>
-                                <p class="text-xs text-gray-500 font-bold uppercase mb-1">Monthly Salary</p>
+                                <p class="text-xs text-gray-500 font-bold uppercase mb-1" data-i18n="job_salary_label">Monthly Salary</p>
                                 <div class="flex items-baseline gap-2">
                                     <span id="modalEuro" class="text-xl font-bold text-white">€2,000 - €2,600</span>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <p class="text-xs text-gray-500 font-bold uppercase mb-1">Experience</p>
+                                <p class="text-xs text-gray-500 font-bold uppercase mb-1" data-i18n="job_exp_label">Experience</p>
                                 <span id="modalExp" class="text-sm font-semibold text-germany-gold">Entry Level</span>
                             </div>
                         </div>
@@ -516,98 +533,295 @@
         // --- TRANSLATION DATA ---
         const translations = {
             en: {
+                // UI & Nav
                 nav_home: "Home", nav_programs: "Programs", nav_services: "Services", nav_assess: "Free Assessment", nav_about: "About Us", nav_book: "Book Now",
                 footer_dest: "Destinations", footer_serv: "Services", footer_comp: "Company", footer_off: "Office",
                 hero_badge: "Top Opportunities",
-                hero_title_1: "Germany",
-                hero_title_2: "Professional Program",
-                hero_subtitle_1: "Secure your future in Europe with premium employment opportunities.",
-                hero_subtitle_2: "Fast-track processing",
-                hero_subtitle_3: "in 3-4 months.",
-                job_title: "Care Home Jobs",
-                job_tag: "Healthcare",
-                job_loc: "Germany",
-                job_salary_label: "Monthly Salary",
-                btn_view_details: "View Details",
-                detail_hours_label: "Hours", detail_hours_val: "8 Hours / Day",
-                detail_accom_label: "Accommodation", detail_accom_val: "Provided",
-                detail_food_label: "Food", detail_food_val: "Available",
-                detail_process_label: "Process Time", detail_process_val: "3 - 4 Months",
+                hero_title_1: "Germany", hero_title_2: "Professional Program",
+                hero_subtitle_1: "Secure your future in Europe.", hero_subtitle_2: "Fast-track processing", hero_subtitle_3: "in 3-4 months.",
+                job_salary_label: "Monthly Salary", job_exp_label: "Experience",
+                btn_apply: "Apply Now", btn_close: "Close", btn_apply_main: "Apply Now", btn_language: "Language",
+                modal_title: "Job Details", modal_subtitle: "Full Details & Requirements", modal_req_title: "Requirements & Documents",
+                cat_all: "All", cat_corp: "Corporate", cat_sales: "Sales", cat_tech: "Tech & Eng", cat_ops: "Operations", cat_health: "Healthcare", cat_general: "General Labor",
                 
                 // Timeline
-                process_kicker: "Transparency First",
-                process_title: "Application Process",
-                process_subtitle: "A structured path to your new career in Germany.",
-                step_1: "Assessment",
-                step_2: "Registration",
-                step_3: "Conditional Offer",
-                step_4: "Original Offer",
-                step_5: "Visa Filing",
-                step_6: "Interview",
-                step_7: "Travel",
+                process_kicker: "Transparency First", process_title: "Application Process",
+                step_1: "Assessment", step_2: "Registration", step_3: "Conditional Offer", step_4: "Original Offer", step_5: "Visa Filing", step_6: "Interview", step_7: "Travel",
+                step_1_desc: "Submission of all required documents.",
+                step_2_desc: "Formal entry into processing system (Day 1).",
+                step_3_desc: "Offer Letter & Medicals (15-45 Days).",
+                step_4_desc: "Hard copy from Hiring Company (Within 30 Days).",
+                step_5_desc: "Visa documents & Embassy appointment.",
+                step_6_desc: "Embassy Interview & Stamping.",
+                step_7_desc: "Flight tickets & Logistics upon Approval.",
 
                 // Package
-                package_title: "Premium Package",
-                package_subtitle: "All-Inclusive Relocation",
-                inc_consult: "Expert Consultation",
-                inc_doc: "Documentation & Legalization",
-                inc_visa: "Visa Application",
-                inc_flight: "Flight Ticket Included",
-                total_inv: "Total Investment",
-                price_note: "Milestone-based payments.",
-                start_process: "Start Process Now",
+                package_title: "Premium Package", package_subtitle: "All-Inclusive Relocation",
+                inc_consult: "Expert Consultation", inc_doc: "Documentation & Legalization", inc_visa: "Visa Application", inc_flight: "Flight Ticket Included",
+                total_inv: "Total Investment", price_note: "Milestone-based payments.", start_process: "Start Process Now",
 
-                modal_title: "Job Details", modal_subtitle: "Full Details & Requirements",
-                modal_req_title: "Requirements & Documents", 
-                btn_apply: "Apply Now", btn_close: "Close", btn_apply_main: "Apply Now",
-                cat_all: "All", cat_corp: "Corporate", cat_sales: "Sales", cat_tech: "Tech & Eng", cat_ops: "Operations", cat_health: "Healthcare"
+                // Job Titles
+                job_care: "Care Home Jobs", job_clerk: "Office Clerk / Receptionist", job_accountant: "Accountant", job_manager: "Manager",
+                job_hr: "HR Assistant / Executive", job_admin: "Administrative Assistant", job_front: "Front Office Executive", job_secretary: "Secretary / Personal Assistant",
+                job_doc: "Document Controller", job_sales: "Sales & Marketing Executive", job_bd: "Business Development Executive", job_cs: "Customer Service Executive",
+                job_cc: "Call Centre Executive", job_it: "IT Professional", job_eng: "Engineer", job_proj: "Project Coordinator",
+                job_data: "Data Entry Operator", job_logistics: "Logistics Coordinator", job_store: "Store Supervisor", job_purchase: "Procurement Assistant",
+                job_finance: "Finance Executive",
+                
+                // NEW JOBS
+                job_agri: "Agriculture Workers", job_warehouse: "Warehouse & Factory Workers", job_hospitality: "Hotel & Hospitality Jobs", 
+                job_cleaning: "Cleaning Jobs", job_construction: "Construction Helpers",
+
+                // Departments
+                dept_health: "Healthcare", dept_corp: "Corporate & Office", dept_sales: "Sales & Marketing", dept_tech: "Technical & Engineering", dept_ops: "Operations & Logistics", dept_general: "General Labor",
+
+                // Documents
+                doc_cv_title: "Europass CV", doc_cv_desc: "Current CV formatted to European standards.",
+                doc_pass_title: "Passport Copies", doc_pass_desc: "Full-color scans of all pages.",
+                doc_edu_title: "Educational Certificates", doc_edu_desc: "Scans of degrees and transcripts.",
+                doc_exp_title: "Experience Certificates", doc_exp_desc: "Reference letters validating work history.",
+                doc_pcc_title: "Police Clearance", doc_pcc_desc: "Valid certificate demonstrating a clean record.",
+                doc_photo_title: "Digital Photograph", doc_photo_desc: "White background, 35x45mm."
             },
             hi: {
                 nav_home: "होम", nav_programs: "कार्यक्रम", nav_services: "सेवाएं", nav_assess: "निःशुल्क मूल्यांकन", nav_about: "हमारे बारे में", nav_book: "अभी बुक करें",
                 footer_dest: "गंतव्य", footer_serv: "सेवाएं", footer_comp: "कंपनी", footer_off: "कार्यालय",
-                hero_badge: "शीर्ष देखभाल अवसर",
-                hero_title_1: "जर्मनी",
-                hero_title_2: "पेशेवर कार्यक्रम",
-                hero_subtitle_1: "गारंटीकृत आवास और भोजन के साथ यूरोप में अपना भविष्य सुरक्षित करें।",
-                hero_subtitle_2: "फास्ट-ट्रैक प्रसंस्करण",
-                hero_subtitle_3: "3-4 महीनों में।",
-                job_title: "केयर होम नौकरियां",
-                job_tag: "स्वास्थ्य देखभाल",
-                job_loc: "जर्मनी",
-                job_salary_label: "मासिक वेतन",
-                btn_view_details: "विवरण देखें",
-                detail_hours_label: "घंटे", detail_hours_val: "8 घंटे / दिन",
-                detail_accom_label: "आवास", detail_accom_val: "प्रदान किया गया",
-                detail_food_label: "भोजन", detail_food_val: "उपलब्ध",
-                detail_process_label: "प्रक्रिया समय", detail_process_val: "3 - 4 महीने",
-                
-                // Timeline
-                process_kicker: "पारदर्शिता पहले",
-                process_title: "आवेदन प्रक्रिया और शुल्क",
-                process_subtitle: "जर्मनी में आपके नए करियर का एक संरचित मार्ग।",
-                step_1: "मूल्यांकन",
-                step_2: "पंजीकरण",
-                step_3: "सशर्त प्रस्ताव",
-                step_4: "मूल प्रस्ताव",
-                step_5: "वीज़ा फाइलिंग",
-                step_6: "साक्षात्कार",
-                step_7: "यात्रा",
+                hero_badge: "शीर्ष अवसर", hero_title_1: "जर्मनी", hero_title_2: "पेशेवर कार्यक्रम",
+                hero_subtitle_1: "यूरोप में अपना भविष्य सुरक्षित करें।", hero_subtitle_2: "फास्ट-ट्रैक प्रसंस्करण", hero_subtitle_3: "3-4 महीनों में।",
+                job_salary_label: "मासिक वेतन", job_exp_label: "अनुभव",
+                btn_apply: "अभी आवेदन करें", btn_close: "बंद करें", btn_apply_main: "अभी आवेदन करें", btn_language: "भाषा",
+                modal_title: "नौकरी विवरण", modal_subtitle: "पूर्ण विवरण और आवश्यकताएं", modal_req_title: "आवश्यकताएं और दस्तावेज",
+                cat_all: "सभी", cat_corp: "कॉर्पोरेट", cat_sales: "बिक्री", cat_tech: "तकनीकी", cat_ops: "संचालन", cat_health: "स्वास्थ्य देखभाल",
 
-                // Package
-                package_title: "प्रीमियम पैकेज",
-                package_subtitle: "सभी समावेशी रिलोकेशन",
-                inc_consult: "विशेषज्ञ परामर्श",
-                inc_doc: "दस्तावेज़ीकरण और वैधीकरण",
-                inc_visa: "वीज़ा आवेदन",
-                inc_flight: "हवाई टिकट शामिल",
-                total_inv: "कुल निवेश",
-                price_note: "माइलस्टोन-आधारित भुगतान।",
-                start_process: "प्रक्रिया अभी शुरू करें",
+                process_kicker: "पारदर्शिता पहले", process_title: "आवेदन प्रक्रिया",
+                step_1: "मूल्यांकन", step_2: "पंजीकरण", step_3: "सशर्त प्रस्ताव", step_4: "मूल प्रस्ताव", step_5: "वीज़ा फाइलिंग", step_6: "साक्षात्कार", step_7: "यात्रा",
+                step_1_desc: "सभी आवश्यक दस्तावेजों का प्रस्तुतीकरण।",
+                step_2_desc: "प्रसंस्करण प्रणाली में औपचारिक प्रवेश (दिन 1)।",
+                step_3_desc: "ऑफर लेटर और मेडिकल्स (15-45 दिन)।",
+                step_4_desc: "हायरिंग कंपनी से हार्ड कॉपी (30 दिनों के भीतर)।",
+                step_5_desc: "वीज़ा दस्तावेज़ और दूतावास नियुक्ति।",
+                step_6_desc: "दूतावास साक्षात्कार और मुद्रांकन।",
+                step_7_desc: "अनुमोदन पर उड़ान टिकट और रसद।",
 
-                modal_title: "नौकरी विवरण", modal_subtitle: "पूर्ण विवरण और आवश्यकताएं",
-                modal_req_title: "आवश्यकताएं और दस्तावेज", 
-                btn_apply: "अभी आवेदन करें", btn_close: "बंद करें", btn_apply_main: "अभी आवेदन करें",
-                cat_all: "सभी", cat_corp: "कॉर्पोरेट", cat_sales: "बिक्री", cat_tech: "तकनीकी", cat_ops: "संचालन", cat_health: "स्वास्थ्य देखभाल"
+                package_title: "प्रीमियम पैकेज", package_subtitle: "सभी समावेशी रिलोकेशन",
+                inc_consult: "विशेषज्ञ परामर्श", inc_doc: "दस्तावेज़ीकरण और वैधीकरण", inc_visa: "वीज़ा आवेदन", inc_flight: "हवाई टिकट शामिल",
+                total_inv: "कुल निवेश", price_note: "माइलस्टोन-आधारित भुगतान।", start_process: "प्रक्रिया अभी शुरू करें",
+
+                job_care: "केयर होम नौकरियां", job_clerk: "कार्यालय क्लर्क / रिसेप्शनिस्ट", job_accountant: "लेखाकार", job_manager: "प्रबंधक",
+                job_hr: "एचआर सहायक / कार्यकारी", job_admin: "प्रशासनिक सहायक", job_front: "फ्रंट ऑफिस कार्यकारी", job_secretary: "सचिव / व्यक्तिगत सहायक",
+                job_doc: "दस्तावेज़ नियंत्रक", job_sales: "बिक्री और विपणन कार्यकारी", job_bd: "व्यापार विकास कार्यकारी", job_cs: "ग्राहक सेवा कार्यकारी",
+                job_cc: "कॉल सेंटर कार्यकारी", job_it: "आईटी पेशेवर", job_eng: "इंजीनियर", job_proj: "परियोजना समन्वयक",
+                job_data: "डेटा एंट्री ऑपरेटर", job_logistics: "रसद समन्वयक", job_store: "स्टोर पर्यवेक्षक", job_purchase: "खरीद सहायक",
+                job_finance: "वित्त कार्यकारी",
+
+                dept_health: "स्वास्थ्य देखभाल", dept_corp: "कॉर्पोरेट और कार्यालय", dept_sales: "बिक्री और विपणन", dept_tech: "तकनीकी और इंजीनियरिंग", dept_ops: "संचालन और रसद",
+
+                doc_cv_title: "यूरोपास सीवी", doc_cv_desc: "यूरोपीय मानकों के लिए स्वरूपित वर्तमान सीवी।",
+                doc_pass_title: "पासपोर्ट प्रतियां", doc_pass_desc: "सभी पृष्ठों के पूर्ण-रंगीन स्कैन।",
+                doc_edu_title: "शैक्षिक प्रमाण पत्र", doc_edu_desc: "डिग्री और टेप के स्कैन।",
+                doc_exp_title: "अनुभव प्रमाण पत्र", doc_exp_desc: "काम के इतिहास को मान्य करने वाले संदर्भ पत्र।",
+                doc_pcc_title: "पुलिस क्लीयरेंस", doc_pcc_desc: "स्वच्छ रिकॉर्ड प्रदर्शित करने वाला वैध प्रमाण पत्र।",
+                doc_photo_title: "डिजिटल तस्वीर", doc_photo_desc: "सफेद पृष्ठभूमि, 35x45 मिमी।"
+            },
+            ml: {
+                nav_home: "ഹോം", nav_programs: "പ്രോഗ്രാമുകൾ", nav_services: "സേവനങ്ങൾ", nav_assess: "സൗജന്യ വിലയിരുത്തൽ", nav_about: "ഞങ്ങളെ കുറിച്ച്", nav_book: "ഇപ്പോൾ ബുക്ക് ചെയ്യുക",
+                footer_dest: "ലക്ഷ്യസ്ഥാനങ്ങൾ", footer_serv: "സേവനങ്ങൾ", footer_comp: "കമ്പനി", footer_off: "ഓഫീസ്",
+                hero_badge: "മികച്ച അവസരങ്ങൾ", hero_title_1: "ജർമ്മനി", hero_title_2: "പ്രൊഫഷണൽ പ്രോഗ്രാം",
+                hero_subtitle_1: "യൂറോപ്പിൽ നിങ്ങളുടെ ഭാവി സുരക്ഷിതമാക്കുക.", hero_subtitle_2: "വേഗത്തിലുള്ള നടപടിക്രമങ്ങൾ", hero_subtitle_3: "3-4 മാസത്തിനുള്ളിൽ.",
+                job_salary_label: "പ്രതിമാസ ശമ്പളം", job_exp_label: "പരിചയസമ്പത്ത്",
+                btn_apply: "അപേക്ഷിക്കുക", btn_close: "അടയ്ക്കുക", btn_apply_main: "ഇപ്പോൾ അപേക്ഷിക്കുക", btn_language: "ഭാഷ",
+                modal_title: "ജോലി വിവരങ്ങൾ", modal_subtitle: "പൂർണ്ണ വിവരങ്ങളും ആവശ്യകതകളും", modal_req_title: "ആവശ്യകതകളും രേഖകളും",
+                cat_all: "എല്ലാം", cat_corp: "കോർപ്പറേറ്റ്", cat_sales: "സെയിൽസ്", cat_tech: "ടെക് & എഞ്ചിനീയറിംഗ്", cat_ops: "ഓപ്പറേഷൻസ്", cat_health: "ഹെൽത്ത്കെയർ",
+
+                process_kicker: "സുതാര്യത ആദ്യം", process_title: "അപേക്ഷാ നടപടികൾ",
+                step_1: "വിലയിരുത്തൽ", step_2: "രജിസ്ട്രേഷൻ", step_3: "കണ്ടീഷണൽ ഓഫർ", step_4: "ഒറിജിനൽ ഓഫർ", step_5: "വിസ ഫയലിംഗ്", step_6: "അഭിമുഖം", step_7: "യാത്ര",
+                step_1_desc: "എല്ലാ ആവശ്യ രേഖകളും സമർപ്പിക്കുക.",
+                step_2_desc: "പ്രോസസ്സിംഗ് സിസ്റ്റത്തിലേക്ക് ഔദ്യോഗിക പ്രവേശനം.",
+                step_3_desc: "ഓഫർ ലെറ്ററും മെഡിക്കൽസും (15-45 ദിവസം).",
+                step_4_desc: "കമ്പനിയിൽ നിന്നുള്ള ഒറിജിനൽ ഓഫർ.",
+                step_5_desc: "വിസ രേഖകളും എംബസി അപ്പോയിന്റ്മെന്റും.",
+                step_6_desc: "എംബസി അഭിമുഖവും സ്റ്റാമ്പിംഗും.",
+                step_7_desc: "അംഗീകാരം ലഭിച്ചാൽ വിമാന ടിക്കറ്റുകൾ.",
+
+                package_title: "പ്രീമിയം പാക്കേജ്", package_subtitle: "എല്ലാം ഉൾക്കൊള്ളുന്ന റീലൊക്കേഷൻ",
+                inc_consult: "വിദഗ്ദ്ധ കൺസൾട്ടേഷൻ", inc_doc: "ഡോക്യുമെന്റേഷൻ", inc_visa: "വിസ അപേക്ഷ", inc_flight: "വിമാന ടിക്കറ്റ് ഉൾപ്പെടുന്നു",
+                total_inv: "ആകെ നിക്ഷേപം", price_note: "ഘട്ടം ഘട്ടമായുള്ള പേയ്മെന്റുകൾ.", start_process: "പ്രക്രിയ ആരംഭിക്കുക",
+
+                job_care: "കെയർ ഹോം ജോലികൾ", job_clerk: "ഓഫീസ് ക്ലർക്ക് / റിസപ്ഷനിസ്റ്റ്", job_accountant: "അക്കൗണ്ടന്റ്", job_manager: "മാനേജർ",
+                job_hr: "എച്ച്ആർ എക്സിക്യൂട്ടീവ്", job_admin: "അഡ്മിനിസ്ട്രേറ്റീവ് അസിസ്റ്റന്റ്", job_front: "ഫ്രണ്ട് ഓഫീസ് എക്സിക്യൂട്ടീവ്", job_secretary: "സെക്രട്ടറി",
+                job_doc: "ഡോക്യുമെന്റ് കൺട്രോളർ", job_sales: "സെയിൽസ് & മാർക്കറ്റിംഗ്", job_bd: "ബിസിനസ് ഡെവലപ്‌മെന്റ്", job_cs: "കസ്റ്റമർ സർവീസ്",
+                job_cc: "കോൾ സെന്റർ എക്സിക്യൂട്ടീവ്", job_it: "ഐടി പ്രൊഫഷണൽ", job_eng: "എഞ്ചിനീയർ", job_proj: "പ്രോജക്റ്റ് കോർഡിനേറ്റർ",
+                job_data: "ഡാറ്റ എൻട്രി ഓപ്പറേറ്റർ", job_logistics: "ലോജിസ്റ്റിക്സ് കോർഡിനേറ്റർ", job_store: "സ്റ്റോർ സൂപ്പർവൈസർ", job_purchase: "പർച്ചേസ് അസിസ്റ്റന്റ്",
+                job_finance: "ഫിനാൻസ് എക്സിക്യൂട്ടീവ്",
+
+                dept_health: "ആരോഗ്യ സംരക്ഷണം", dept_corp: "കോർപ്പറേറ്റ് & ഓഫീസ്", dept_sales: "സെയിൽസ് & മാർക്കറ്റിംഗ്", dept_tech: "ടെക്നിക്കൽ & എഞ്ചിനീയറിംഗ്", dept_ops: "ഓപ്പറേഷൻസ് & ലോജിസ്റ്റിക്സ്",
+
+                doc_cv_title: "യൂറോപാസ് സിവി", doc_cv_desc: "യൂറോപ്യൻ നിലവാരത്തിലുള്ള സിവി.",
+                doc_pass_title: "പാസ്‌പോർട്ട് പകർപ്പുകൾ", doc_pass_desc: "എല്ലാ പേജുകളുടെയും കളർ സ്കാൻ.",
+                doc_edu_title: "വിദ്യാഭ്യാസ സർട്ടിഫിക്കറ്റുകൾ", doc_edu_desc: "ബിരുദ സർട്ടിഫിക്കറ്റുകളും മാർക്ക് ലിസ്റ്റുകളും.",
+                doc_exp_title: "പ്രവൃത്തിപരിചയ സർട്ടിഫിക്കറ്റ്", doc_exp_desc: "മുൻ ജോലി വിവരങ്ങൾ തെളിയിക്കുന്ന രേഖകൾ.",
+                doc_pcc_title: "പോലീസ് ക്ലിയറൻസ്", doc_pcc_desc: "ക്ലീൻ റെക്കോർഡ് കാണിക്കുന്ന സർട്ടിഫിക്കറ്റ്.",
+                doc_photo_title: "ഡിജിറ്റൽ ഫോട്ടോ", doc_photo_desc: "വെള്ള പശ്ചാത്തലം, 35x45mm."
+            },
+            ta: {
+                nav_home: "முகப்பு", nav_programs: "திட்டங்கள்", nav_services: "சேவைகள்", nav_assess: "இலவச மதிப்பீடு", nav_about: "எங்களை பற்றி", nav_book: "இப்போதே பதிவு",
+                footer_dest: "இடங்கள்", footer_serv: "சேவைகள்", footer_comp: "நிறுவனம்", footer_off: "அலுவலகம்",
+                hero_badge: "சிறந்த வாய்ப்புகள்", hero_title_1: "ஜெர்மனி", hero_title_2: "தொழில்முறை திட்டம்",
+                hero_subtitle_1: "ஐரோப்பாவில் உங்கள் எதிர்காலத்தை பாதுகாக்கவும்.", hero_subtitle_2: "விரைவான செயலாக்கம்", hero_subtitle_3: "3-4 மாதங்களில்.",
+                job_salary_label: "மாத சம்பளம்", job_exp_label: "அனுபவம்",
+                btn_apply: "விண்ணப்பிக்கவும்", btn_close: "மூடு", btn_apply_main: "இப்போதே விண்ணப்பிக்கவும்", btn_language: "மொழி",
+                modal_title: "வேலை விவரங்கள்", modal_subtitle: "முழு விவரங்கள் மற்றும் தேவைகள்", modal_req_title: "தேவைகள் மற்றும் ஆவணங்கள்",
+                cat_all: "அனைத்தும்", cat_corp: "கார்ப்பரேட்", cat_sales: "விற்பனை", cat_tech: "தொழில்நுட்பம்", cat_ops: "செயல்பாடுகள்", cat_health: "சுகாதாரம்",
+
+                process_kicker: "வெளிப்படைத்தன்மை", process_title: "விண்ணப்ப செயல்முறை",
+                step_1: "மதிப்பீடு", step_2: "பதிவு", step_3: "நிபந்தனை சலுகை", step_4: "அசல் சலுகை", step_5: "விசா தாக்கல்", step_6: "நேர்காணல்", step_7: "பயணம்",
+                step_1_desc: "தேவையான அனைத்து ஆவணங்களையும் சமர்ப்பித்தல்.",
+                step_2_desc: "செயலாக்க அமைப்பில் முறையான நுழைவு.",
+                step_3_desc: "சலுகை கடிதம் மற்றும் மருத்துவம் (15-45 நாட்கள்).",
+                step_4_desc: "நிறுவனத்திடமிருந்து அசல் நகல்.",
+                step_5_desc: "விசா ஆவணங்கள் மற்றும் தூதரக நியமனம்.",
+                step_6_desc: "தூதரக நேர்காணல்.",
+                step_7_desc: "ஒப்புதலுக்குப் பிறகு விமான டிக்கெட்டுகள்.",
+
+                package_title: "பிரீமியம் தொகுப்பு", package_subtitle: "அனைத்தும் உள்ளடங்கியது",
+                inc_consult: "நிபுணர் ஆலோசனை", inc_doc: "ஆவணப்படுத்தல்", inc_visa: "விசா விண்ணப்பம்", inc_flight: "விமான டிக்கெட் சேர்க்கப்பட்டுள்ளது",
+                total_inv: "மொத்த முதலீடு", price_note: "மைல்கல் அடிப்படையிலான கட்டணம்.", start_process: "செயல்முறையை தொடங்கவும்",
+
+                job_care: "பராமரிப்பு இல்ல வேலைகள்", job_clerk: "அலுவலக எழுத்தர்", job_accountant: "கணக்காளர்", job_manager: "மேலாளர்",
+                job_hr: "மனிதவள நிர்வாகி", job_admin: "நிர்வாக உதவியாளர்", job_front: "முன் அலுவலக நிர்வாகி", job_secretary: "செயலாளர்",
+                job_doc: "ஆவணக் கட்டுப்பாட்டாளர்", job_sales: "விற்பனை நிர்வாகி", job_bd: "வணிக மேம்பாட்டு நிர்வாகி", job_cs: "வாடிக்கையாளர் சேவை",
+                job_cc: "கால் சென்டர் நிர்வாகி", job_it: "ஐடி நிபுணர்", job_eng: "பொறியாளர்", job_proj: "திட்ட ஒருங்கிணைப்பாளர்",
+                job_data: "தரவு உள்ளீடு ஆபரேட்டர்", job_logistics: "லாஜிஸ்டிக்ஸ் ஒருங்கிணைப்பாளர்", job_store: "கடை மேற்பார்வையாளர்", job_purchase: "கொள்முதல் உதவியாளர்",
+                job_finance: "நிதி நிர்வாகி",
+
+                dept_health: "சுகாதாரம்", dept_corp: "கார்ப்பரேட் & அலுவலகம்", dept_sales: "விற்பனை & சந்தைப்படுத்தல்", dept_tech: "தொழில்நுட்பம் & பொறியியல்", dept_ops: "செயல்பாடுகள் & லாஜிஸ்டிக்ஸ்",
+
+                doc_cv_title: "ஐரோப்பிய சிவி", doc_cv_desc: "ஐரோப்பிய தரத்திற்கு வடிவமைக்கப்பட்ட சிவி.",
+                doc_pass_title: "கடவுச்சீட்டு நகல்கள்", doc_pass_desc: "அனைத்து பக்கங்களின் வண்ண நகல்கள்.",
+                doc_edu_title: "கல்விச் சான்றிதழ்கள்", doc_edu_desc: "பட்டங்களின் நகல்கள்.",
+                doc_exp_title: "அனுபவச் சான்றிதழ்கள்", doc_exp_desc: "வேலை வரலாற்றை சரிபார்க்கும் கடிதங்கள்.",
+                doc_pcc_title: "காவல்துறை அனுமதி", doc_pcc_desc: "குற்றப் பதிவு இல்லாத சான்றிதழ்.",
+                doc_photo_title: "புகைப்படம்", doc_photo_desc: "வெள்ளை பின்னணி, 35x45 மிமீ."
+            },
+            fil: {
+                nav_home: "Home", nav_programs: "Mga Programa", nav_services: "Mga Serbisyo", nav_assess: "Libreng Pagtatasa", nav_about: "Tungkol sa Amin", nav_book: "Mag-book Ngayon",
+                footer_dest: "Mga Destinasyon", footer_serv: "Serbisyo", footer_comp: "Kumpanya", footer_off: "Opisina",
+                hero_badge: "Nangungunang Opurtunidad", hero_title_1: "Germany", hero_title_2: "Propesyonal na Programa",
+                hero_subtitle_1: "I-secure ang iyong kinabukasan sa Europe.", hero_subtitle_2: "Mabilis na proseso", hero_subtitle_3: "sa loob ng 3-4 buwan.",
+                job_salary_label: "Buwanang Sahod", job_exp_label: "Karanasan",
+                btn_apply: "Mag-apply Ngayon", btn_close: "Isara", btn_apply_main: "Mag-apply Ngayon", btn_language: "Wika",
+                modal_title: "Detalye ng Trabaho", modal_subtitle: "Buong Detalye at Mga Kinakailangan", modal_req_title: "Mga Kinakailangan at Dokumento",
+                cat_all: "Lahat", cat_corp: "Korporasyon", cat_sales: "Benta", cat_tech: "Teknikal", cat_ops: "Operasyon", cat_health: "Kalusugan",
+
+                process_kicker: "Transparency Una", process_title: "Proseso ng Aplikasyon",
+                step_1: "Pagtatasa", step_2: "Pagpaparehistro", step_3: "Kondisyonal na Alok", step_4: "Orihinal na Alok", step_5: "Paghain ng Visa", step_6: "Interview", step_7: "Paglalakbay",
+                step_1_desc: "Pagsusumite ng lahat ng kinakailangang dokumento.",
+                step_2_desc: "Pormal na pagpasok sa sistema ng pagproseso.",
+                step_3_desc: "Liham ng Alok at Medicals (15-45 Araw).",
+                step_4_desc: "Hard copy mula sa Hiring Company.",
+                step_5_desc: "Mga dokumento ng Visa at appointment sa Embahada.",
+                step_6_desc: "Interview sa Embahada at Stamping.",
+                step_7_desc: "Mga tiket sa paglipad kapag naaprubahan.",
+
+                package_title: "Premium Package", package_subtitle: "Lahat-Kasama na Relokasyon",
+                inc_consult: "Konsultasyon ng Eksperto", inc_doc: "Dokumentasyon at Legal", inc_visa: "Aplikasyon ng Visa", inc_flight: "Kasama ang Flight Ticket",
+                total_inv: "Kabuuang Puhunan", price_note: "Pagbabayad batay sa milestone.", start_process: "Simulan ang Proseso",
+
+                job_care: "Care Home Jobs", job_clerk: "Office Clerk / Receptionist", job_accountant: "Accountant", job_manager: "Manager",
+                job_hr: "HR Assistant", job_admin: "Administrative Assistant", job_front: "Front Office Executive", job_secretary: "Secretary",
+                job_doc: "Document Controller", job_sales: "Sales Executive", job_bd: "Business Development", job_cs: "Customer Service",
+                job_cc: "Call Centre Agent", job_it: "IT Professional", job_eng: "Engineer", job_proj: "Project Coordinator",
+                job_data: "Data Entry Operator", job_logistics: "Logistics Coordinator", job_store: "Store Supervisor", job_purchase: "Purchase Assistant",
+                job_finance: "Finance Executive",
+
+                dept_health: "Pangangalaga sa Kalusugan", dept_corp: "Korporasyon at Opisina", dept_sales: "Pagbebenta at Marketing", dept_tech: "Teknikal at Engineering", dept_ops: "Operasyon at Logistics",
+
+                doc_cv_title: "Europass CV", doc_cv_desc: "CV na naka-format sa mga pamantayan sa Europa.",
+                doc_pass_title: "Kopya ng Pasaporte", doc_pass_desc: "Full-color scan ng lahat ng pahina.",
+                doc_edu_title: "Sertipiko ng Edukasyon", doc_edu_desc: "Scan ng mga degree at transcript.",
+                doc_exp_title: "Sertipiko ng Karanasan", doc_exp_desc: "Mga liham ng sanggunian sa trabaho.",
+                doc_pcc_title: "Police Clearance", doc_pcc_desc: "Valid na sertipiko ng malinis na rekord.",
+                doc_photo_title: "Digital na Larawan", doc_photo_desc: "Puting background, 35x45mm."
+            },
+            si: {
+                nav_home: "මුල් පිටුව", nav_programs: "වැඩසටහන්", nav_services: "සේවාවන්", nav_assess: "නොමිලේ තක්සේරුව", nav_about: "අපි ගැන", nav_book: "දැන් වෙන්කරවා ගන්න",
+                footer_dest: "ගමනාන්ත", footer_serv: "සේවාවන්", footer_comp: "සමාගම", footer_off: "කාර්යාලය",
+                hero_badge: "ඉහළම අවස්ථා", hero_title_1: "ජර්මනිය", hero_title_2: "වෘත්තීය වැඩසටහන",
+                hero_subtitle_1: "යුරෝපයේ ඔබේ අනාගතය සුරක්ෂිත කරන්න.", hero_subtitle_2: "කඩිනම් සැකසුම්", hero_subtitle_3: "මාස 3-4 ක් ඇතුලත.",
+                job_salary_label: "මාසික වැටුප", job_exp_label: "පළපුරුද්ද",
+                btn_apply: "අයදුම් කරන්න", btn_close: "වසන්න", btn_apply_main: "දැන් අයදුම් කරන්න", btn_language: "භාෂාව",
+                modal_title: "රැකියා විස්තර", modal_subtitle: "සම්පූර්ණ විස්තර සහ අවශ්‍යතා", modal_req_title: "අවශ්‍යතා සහ ලේඛන",
+                cat_all: "සියල්ල", cat_corp: "ආයතනික", cat_sales: "විකුණුම්", cat_tech: "තාක්ෂණික", cat_ops: "මෙහෙයුම්", cat_health: "සෞඛ්‍ය සේවා",
+
+                process_kicker: "පාරදෘශ්‍යභාවය පළමුව", process_title: "අයදුම් කිරීමේ ක්‍රියාවලිය",
+                step_1: "තක්සේරු කිරීම", step_2: "ලියාපදිංචි කිරීම", step_3: "කොන්දේසි සහිත දීමනාව", step_4: "මුල් දීමනාව", step_5: "වීසා ගොනු කිරීම", step_6: "සම්මුඛ පරීක්ෂණය", step_7: "ගමන්",
+                step_1_desc: "අවශ්ය සියලුම ලියකියවිලි ඉදිරිපත් කිරීම.",
+                step_2_desc: "සැකසුම් පද්ධතියට විධිමත් ලෙස ඇතුල් වීම.",
+                step_3_desc: "පිරිනැමීමේ ලිපිය සහ වෛද්‍ය (දින 15-45).",
+                step_4_desc: "බඳවා ගන්නා සමාගමෙන් මුල් පිටපත.",
+                step_5_desc: "වීසා ලියකියවිලි සහ තානාපති කාර්යාල පත්වීම.",
+                step_6_desc: "තානාපති කාර්යාල සම්මුඛ පරීක්ෂණය.",
+                step_7_desc: "අනුමැතිය මත ගුවන් ටිකට්පත්.",
+
+                package_title: "වාරික පැකේජය", package_subtitle: "සියල්ල ඇතුළත් නැවත පදිංචි කිරීම",
+                inc_consult: "විශේෂඥ උපදේශනය", inc_doc: "ලේඛනගත කිරීම", inc_visa: "වීසා අයදුම්පත", inc_flight: "ගුවන් ටිකට් පත ඇතුළත්",
+                total_inv: "මුළු ආයෝජනය", price_note: "අදියර පදනම් කරගත් ගෙවීම්.", start_process: "ක්රියාවලිය අරඹන්න",
+
+                job_care: "රැකවරණ නිවාස රැකියා", job_clerk: "කාර්යාල ලිපිකරු", job_accountant: "ගණකාධිකාරී", job_manager: "කළමනාකරු",
+                job_hr: "මානව සම්පත් සහකාර", job_admin: "පරිපාලන සහකාර", job_front: "ඉදිරිපස කාර්යාල විධායක", job_secretary: "ලේකම්",
+                job_doc: "ලේඛන පාලක", job_sales: "විකුණුම් විධායක", job_bd: "ව්‍යාපාර සංවර්ධන", job_cs: "පාරිභෝගික සේවාව",
+                job_cc: "ඇමතුම් මධ්‍යස්ථාන නියෝජිත", job_it: "තොරතුරු තාක්ෂණ වෘත්තිකයා", job_eng: "ඉංජිනේරු", job_proj: "ව්‍යාපෘති සම්බන්ධීකාරක",
+                job_data: "දත්ත ඇතුළත් කිරීමේ ක්‍රියාකරු", job_logistics: "ලොජිස්ටික් සම්බන්ධීකාරක", job_store: "ගබඩා අධීක්ෂක", job_purchase: "මිලදී ගැනීමේ සහකාර",
+                job_finance: "මූල්‍ය විධායක",
+
+                dept_health: "සෞඛ්‍ය සේවා", dept_corp: "ආයතනික සහ කාර්යාල", dept_sales: "විකුණුම් සහ අලෙවිකරණය", dept_tech: "තාක්ෂණික සහ ඉංජිනේරු", dept_ops: "මෙහෙයුම් සහ සැපයුම්",
+
+                doc_cv_title: "Europass CV", doc_cv_desc: "යුරෝපීය ප්‍රමිතීන්ට අනුව සකස් කරන ලද CV.",
+                doc_pass_title: "විදේශ ගමන් බලපත්‍ර පිටපත්", doc_pass_desc: "සියලුම පිටුවල වර්ණ ස්කෑන්.",
+                doc_edu_title: "අධ්යාපනික සහතික", doc_edu_desc: "උපාධි ස්කෑන්.",
+                doc_exp_title: "පළපුරුදු සහතික", doc_exp_desc: "සේවා ලිපි.",
+                doc_pcc_title: "පොලිස් නිෂ්කාශනය", doc_pcc_desc: "පිරිසිදු වාර්තාවක් පෙන්වන වලංගු සහතිකය.",
+                doc_photo_title: "ඩිජිටල් ඡායාරූපය", doc_photo_desc: "සුදු පසුබිම, 35x45 මි.මී."
+            },
+            sw: {
+                nav_home: "Nyumbani", nav_programs: "Programu", nav_services: "Huduma", nav_assess: "Tathmini ya Bure", nav_about: "Kutuhusu", nav_book: "Weka Nafasi",
+                footer_dest: "Vituo", footer_serv: "Huduma", footer_comp: "Kampuni", footer_off: "Ofisi",
+                hero_badge: "Fursa za Juu", hero_title_1: "Ujerumani", hero_title_2: "Programu ya Kitaalam",
+                hero_subtitle_1: "Linda mustakabali wako Ulaya.", hero_subtitle_2: "Mchakato wa haraka", hero_subtitle_3: "ndani ya miezi 3-4.",
+                job_salary_label: "Mshahara wa Mwezi", job_exp_label: "Uzoefu",
+                btn_apply: "Omba Sasa", btn_close: "Funga", btn_apply_main: "Omba Sasa", btn_language: "Lugha",
+                modal_title: "Maelezo ya Kazi", modal_subtitle: "Maelezo Kamili na Mahitaji", modal_req_title: "Mahitaji na Nyaraka",
+                cat_all: "Yote", cat_corp: "Shirika", cat_sales: "Mauzo", cat_tech: "Teknolojia", cat_ops: "Uendeshaji", cat_health: "Huduma ya Afya",
+
+                process_kicker: "Uwazi Kwanza", process_title: "Mchakato wa Maombi",
+                step_1: "Tathmini", step_2: "Usajili", step_3: "Ofa ya Masharti", step_4: "Ofa Asili", step_5: "Uwasilishaji wa Visa", step_6: "Mahojiano", step_7: "Kusafiri",
+                step_1_desc: "Uwasilishaji wa nyaraka zote zinazohitajika.",
+                step_2_desc: "Kuingia rasmi katika mfumo wa usindikaji.",
+                step_3_desc: "Barua ya Ofa na Matibabu (Siku 15-45).",
+                step_4_desc: "Nakala halisi kutoka Kampuni ya Kuajiri.",
+                step_5_desc: "Nyaraka za Visa na uteuzi wa Ubalozi.",
+                step_6_desc: "Mahojiano ya Ubalozi.",
+                step_7_desc: "Tiketi za ndege baada ya idhini.",
+
+                package_title: "Kifurushi cha Premium", package_subtitle: "Uhamisho Uliojumuishwa",
+                inc_consult: "Ushauri wa Kitaalam", inc_doc: "Nyaraka na Uhalalishaji", inc_visa: "Maombi ya Visa", inc_flight: "Tiketi ya Ndege Imejumuishwa",
+                total_inv: "Uwekezaji wa Jumla", price_note: "Malipo ya hatua kwa hatua.", start_process: "Anza Mchakato Sasa",
+
+                job_care: "Kazi za Nyumbani za Huduma", job_clerk: "Karani wa Ofisi", job_accountant: "Mhasibu", job_manager: "Meneja",
+                job_hr: "Msaidizi wa HR", job_admin: "Msaidizi wa Utawala", job_front: "Mtendaji wa Ofisi ya Mbele", job_secretary: "Katibu",
+                job_doc: "Msimamizi wa Nyaraka", job_sales: "Mtendaji wa Mauzo", job_bd: "Maendeleo ya Biashara", job_cs: "Huduma kwa Wateja",
+                job_cc: "Wakala wa Kituo cha Simu", job_it: "Mtaalam wa IT", job_eng: "Mhandisi", job_proj: "Mratibu wa Mradi",
+                job_data: "Opereta wa Kuingiza Data", job_logistics: "Mratibu wa Vifaa", job_store: "Msimamizi wa Duka", job_purchase: "Msaidizi wa Ununuzi",
+                job_finance: "Mtendaji wa Fedha",
+
+                dept_health: "Huduma ya Afya", dept_corp: "Shirika na Ofisi", dept_sales: "Mauzo na Masoko", dept_tech: "Teknolojia na Uhandisi", dept_ops: "Uendeshaji na Vifaa",
+
+                doc_cv_title: "Europass CV", doc_cv_desc: "CV iliyoumbizwa kwa viwango vya Ulaya.",
+                doc_pass_title: "Nakala za Pasipoti", doc_pass_desc: "Scan ya rangi kamili ya kurasa zote.",
+                doc_edu_title: "Vyeti vya Elimu", doc_edu_desc: "Scan ya digrii.",
+                doc_exp_title: "Vyeti vya Uzoefu", doc_exp_desc: "Barua za kumbukumbu zinazothibitisha historia ya kazi.",
+                doc_pcc_title: "Kibali cha Polisi", doc_pcc_desc: "Cheti halali kinachoonyesha rekodi safi.",
+                doc_photo_title: "Picha ya Dijiti", doc_photo_desc: "Asili nyeupe, 35x45mm."
             },
         };
 
@@ -792,58 +1006,66 @@
         </footer>
         `;
 
-        // --- 2. DATA (Imported & Merged) ---
+        // --- 2. DATA (UPDATED WITH KEYS) ---
         const jobsData = [
-            // FEATURED (Index 0)
-            { title: "Care Home Jobs", dept: "Healthcare", euro: "€2,000 - €2,600", exp: "Entry Level", icon: "fa-solid fa-user-nurse" },
+            // FEATURED
+            { key: "job_care", title: "Care Home Jobs", deptKey: "dept_health", dept: "Healthcare", euro: "€2,000 - €2,600", exp: "Entry Level", icon: "fa-solid fa-user-nurse" },
             
             // Corporate & Office
-            { title: "Office Clerk / Receptionist", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-clipboard-user" },
-            { title: "Accountant", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-calculator" },
-            { title: "Manager", dept: "Corporate & Office", euro: "€6000+", exp: "3-5 Years", icon: "fa-solid fa-user-tie" },
-            { title: "HR Assistant / Executive", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-users" },
-            { title: "Administrative Assistant", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-file-signature" },
-            { title: "Front Office Executive", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-id-badge" },
-            { title: "Secretary / Personal Assistant", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-calendar-check" },
-            { title: "Document Controller", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-file-circle-check" },
+            { key: "job_clerk", title: "Office Clerk / Receptionist", deptKey: "dept_corp", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-clipboard-user" },
+            { key: "job_accountant", title: "Accountant", deptKey: "dept_corp", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-calculator" },
+            { key: "job_manager", title: "Manager", deptKey: "dept_corp", dept: "Corporate & Office", euro: "€6000+", exp: "3-5 Years", icon: "fa-solid fa-user-tie" },
+            { key: "job_hr", title: "HR Assistant / Executive", deptKey: "dept_corp", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-users" },
+            { key: "job_admin", title: "Administrative Assistant", deptKey: "dept_corp", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-file-signature" },
+            { key: "job_front", title: "Front Office Executive", deptKey: "dept_corp", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-id-badge" },
+            { key: "job_secretary", title: "Secretary / Personal Assistant", deptKey: "dept_corp", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-calendar-check" },
+            { key: "job_doc", title: "Document Controller", deptKey: "dept_corp", dept: "Corporate & Office", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-file-circle-check" },
 
             // Sales & Marketing
-            { title: "Sales & Marketing Executive", dept: "Sales & Marketing", euro: "€5500+", exp: "3-5 Years", icon: "fa-solid fa-bullhorn" },
-            { title: "Business Development Executive", dept: "Sales & Marketing", euro: "€5500+", exp: "3-5 Years", icon: "fa-solid fa-chart-line" },
-            { title: "Customer Service Executive", dept: "Sales & Marketing", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-headset" },
-            { title: "Call Centre Executive", dept: "Sales & Marketing", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-phone-volume" },
+            { key: "job_sales", title: "Sales & Marketing Executive", deptKey: "dept_sales", dept: "Sales & Marketing", euro: "€5500+", exp: "3-5 Years", icon: "fa-solid fa-bullhorn" },
+            { key: "job_bd", title: "Business Development Executive", deptKey: "dept_sales", dept: "Sales & Marketing", euro: "€5500+", exp: "3-5 Years", icon: "fa-solid fa-chart-line" },
+            { key: "job_cs", title: "Customer Service Executive", deptKey: "dept_sales", dept: "Sales & Marketing", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-headset" },
+            { key: "job_cc", title: "Call Centre Executive", deptKey: "dept_sales", dept: "Sales & Marketing", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-phone-volume" },
 
             // Technical & Engineering
-            { title: "IT Professional", dept: "Technical & Engineering", euro: "€6000+", exp: "3-5 Years", icon: "fa-solid fa-laptop-code" },
-            { title: "Engineer (Various Disciplines)", dept: "Technical & Engineering", euro: "€6000+", exp: "3-5 Years", icon: "fa-solid fa-helmet-safety" },
-            { title: "Project Coordinator", dept: "Technical & Engineering", euro: "€5500+", exp: "3-5 Years", icon: "fa-solid fa-list-check" },
-            { title: "Data Entry Operator", dept: "Technical & Engineering", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-keyboard" },
+            { key: "job_it", title: "IT Professional", deptKey: "dept_tech", dept: "Technical & Engineering", euro: "€6000+", exp: "3-5 Years", icon: "fa-solid fa-laptop-code" },
+            { key: "job_eng", title: "Engineer (Various Disciplines)", deptKey: "dept_tech", dept: "Technical & Engineering", euro: "€6000+", exp: "3-5 Years", icon: "fa-solid fa-helmet-safety" },
+            { key: "job_proj", title: "Project Coordinator", deptKey: "dept_tech", dept: "Technical & Engineering", euro: "€5500+", exp: "3-5 Years", icon: "fa-solid fa-list-check" },
+            { key: "job_data", title: "Data Entry Operator", deptKey: "dept_tech", dept: "Technical & Engineering", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-keyboard" },
 
             // Operations & Logistics
-            { title: "Logistics Coordinator", dept: "Operations & Logistics", euro: "€5500+", exp: "3-5 Years", icon: "fa-solid fa-truck-fast" },
-            { title: "Store Supervisor", dept: "Operations & Logistics", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-boxes-stacked" },
-            { title: "Procurement / Purchase Assistant", dept: "Operations & Logistics", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-cart-shopping" },
-            { title: "Bank Assistant / Finance Executive", dept: "Operations & Logistics", euro: "€5500+", exp: "3-5 Years", icon: "fa-solid fa-building-columns" },
+            { key: "job_logistics", title: "Logistics Coordinator", deptKey: "dept_ops", dept: "Operations & Logistics", euro: "€5500+", exp: "3-5 Years", icon: "fa-solid fa-truck-fast" },
+            { key: "job_store", title: "Store Supervisor", deptKey: "dept_ops", dept: "Operations & Logistics", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-boxes-stacked" },
+            { key: "job_purchase", title: "Procurement / Purchase Assistant", deptKey: "dept_ops", dept: "Operations & Logistics", euro: "€5000+", exp: "3-5 Years", icon: "fa-solid fa-cart-shopping" },
+            { key: "job_finance", title: "Bank Assistant / Finance Executive", deptKey: "dept_ops", dept: "Operations & Logistics", euro: "€5500+", exp: "3-5 Years", icon: "fa-solid fa-building-columns" },
+            
+            // NEW UNSKILLED JOBS (General Labor)
+            { key: "job_agri", title: "Agriculture Workers", deptKey: "dept_general", dept: "General Labor", euro: "€1,500 - €2,200", exp: "Entry Level", icon: "fa-solid fa-wheat-awn" },
+            { key: "job_warehouse", title: "Warehouse & Factory Workers", deptKey: "dept_general", dept: "General Labor", euro: "€1,600 - €2,500", exp: "Entry Level", icon: "fa-solid fa-warehouse" },
+            { key: "job_hospitality", title: "Hotel & Hospitality Jobs", deptKey: "dept_general", dept: "General Labor", euro: "€1,600 - €2,300", exp: "Entry Level", icon: "fa-solid fa-bell-concierge" },
+            { key: "job_cleaning", title: "Cleaning Jobs", deptKey: "dept_general", dept: "General Labor", euro: "€1,500 - €2,100", exp: "Entry Level", icon: "fa-solid fa-broom" },
+            { key: "job_construction", title: "Construction Helpers", deptKey: "dept_general", dept: "General Labor", euro: "€1,600 - €2,400", exp: "Entry Level", icon: "fa-solid fa-trowel-bricks" }
         ];
 
+        // UPDATED DOCUMENTS DATA
         const documentsData = [
-            { title: "Europass CV", desc: "Current CV formatted to European standards.", icon: "fa-solid fa-file-lines" },
-            { title: "Passport Copies", desc: "Full-color scans of all pages.", icon: "fa-solid fa-passport" },
-            { title: "Educational Certificates", desc: "Scans of degrees and transcripts.", icon: "fa-solid fa-graduation-cap" },
-            { title: "Experience Certificates", desc: "Reference letters validating work history.", icon: "fa-solid fa-briefcase" },
-            { title: "Police Clearance (PCC)", desc: "Valid certificate demonstrating a clean record.", icon: "fa-solid fa-shield-halved" },
-            { title: "Digital Photograph", desc: "White background, 35x45mm.", icon: "fa-solid fa-camera" }
+            { titleKey: "doc_cv_title", descKey: "doc_cv_desc", icon: "fa-solid fa-file-lines" },
+            { titleKey: "doc_pass_title", descKey: "doc_pass_desc", icon: "fa-solid fa-passport" },
+            { titleKey: "doc_edu_title", descKey: "doc_edu_desc", icon: "fa-solid fa-graduation-cap" },
+            { titleKey: "doc_exp_title", descKey: "doc_exp_desc", icon: "fa-solid fa-briefcase" },
+            { titleKey: "doc_pcc_title", descKey: "doc_pcc_desc", icon: "fa-solid fa-shield-halved" },
+            { titleKey: "doc_photo_title", descKey: "doc_photo_desc", icon: "fa-solid fa-camera" }
         ];
 
-        // --- IMPORTED TIMELINE DATA ---
+        // UPDATED TIMELINE DATA
         const timelineData = [
-            { step: "1", key: "step_1", title: "Assessment", desc: "Submission of all required documents.", fee: "N/A" },
-            { step: "2", key: "step_2", title: "Registration", desc: "Formal entry into processing system (Day 1).", fee: "€1,000" },
-            { step: "3", key: "step_3", title: "Conditional Offer", desc: "Offer Letter & Medicals (15-45 Days).", fee: "€1,000" },
-            { step: "4", key: "step_4", title: "Original Offer", desc: "Hard copy from Hiring Company (Within 30 Days).", fee: "€2,000" },
-            { step: "5", key: "step_5", title: "Visa Filing", desc: "Visa documents & Embassy appointment.", fee: "€1,500" },
-            { step: "6", key: "step_6", title: "Interview", desc: "Embassy Interview & Stamping.", fee: "N/A" },
-            { step: "7", key: "step_7", title: "Travel", desc: "Flight tickets & Logistics upon Approval.", fee: "€500" }
+            { step: "1", key: "step_1", descKey: "step_1_desc", fee: "N/A" },
+            { step: "2", key: "step_2", descKey: "step_2_desc", fee: "€1,000" },
+            { step: "3", key: "step_3", descKey: "step_3_desc", fee: "€1,000" },
+            { step: "4", key: "step_4", descKey: "step_4_desc", fee: "€2,000" },
+            { step: "5", key: "step_5", descKey: "step_5_desc", fee: "€1,500" },
+            { step: "6", key: "step_6", descKey: "step_6_desc", fee: "N/A" },
+            { step: "7", key: "step_7", descKey: "step_7_desc", fee: "€500" }
         ];
 
         let currentFilter = 'All';
@@ -851,12 +1073,13 @@
         // --- 3. FILTERING & SEARCH LOGIC ---
 
         function renderCategoryChips() {
-            const categories = ["All", "Healthcare", "Corporate & Office", "Sales & Marketing", "Technical & Engineering", "Operations & Logistics"];
+            // Added "General Labor" to categories
+            const categories = ["All", "Healthcare", "General Labor", "Corporate & Office", "Sales & Marketing", "Technical & Engineering", "Operations & Logistics"];
             const t = translations[currentLang] || translations['en'];
             
             const catKeys = {
                 "All": "cat_all", "Healthcare": "cat_health", "Corporate & Office": "cat_corp", 
-                "Sales & Marketing": "cat_sales", "Technical & Engineering": "cat_tech", "Operations & Logistics": "cat_ops"
+                "Sales & Marketing": "cat_sales", "Technical & Engineering": "cat_tech", "Operations & Logistics": "cat_ops", "General Labor": "cat_general"
             };
 
             const container = document.getElementById('categoryChips');
@@ -883,9 +1106,13 @@
         function filterPageJobs() {
             const searchInput = document.getElementById('pageSearchInput');
             const query = searchInput ? searchInput.value.toLowerCase() : "";
-            
+            const t = translations[currentLang] || translations['en'];
+
             const filtered = jobsData.filter(job => {
-                const matchesSearch = job.title.toLowerCase().includes(query) || job.dept.toLowerCase().includes(query);
+                const title = (t[job.key] || job.title).toLowerCase();
+                const dept = (t[job.deptKey] || job.dept).toLowerCase();
+                
+                const matchesSearch = title.includes(query) || dept.includes(query);
                 const matchesCat = currentFilter === 'All' || job.dept === currentFilter;
                 return matchesSearch && matchesCat;
             });
@@ -898,6 +1125,7 @@
             const container = document.getElementById('jobContainer');
             const countLabel = document.getElementById('jobCountLabel');
             if(!container) return;
+            const t = translations[currentLang] || translations['en'];
             
             container.innerHTML = "";
             
@@ -912,8 +1140,12 @@
 
             let gridHTML = "";
             data.forEach((job) => {
-                const globalIndex = jobsData.findIndex(j => j.title === job.title && j.dept === job.dept);
+                // Find original index for modal opening
+                const globalIndex = jobsData.findIndex(j => j.key === job.key);
                 
+                const title = t[job.key] || job.title;
+                const dept = t[job.deptKey] || job.dept;
+
                 gridHTML += `
                     <div onclick="openJobModal(${globalIndex})" class="job-card-grid group reveal-item">
                         <div class="absolute inset-0 bg-gradient-to-br from-germany-red/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -923,9 +1155,9 @@
                                 <div class="w-10 h-10 rounded-lg bg-germany-red/10 flex items-center justify-center text-germany-red border border-germany-red/20 mb-3 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(0,0,0,0.2)]">
                                     <i class="${job.icon} text-lg"></i>
                                 </div>
-                                <h4 class="text-sm md:text-base font-bold text-white group-hover:text-germany-gold transition-colors leading-tight mb-2 line-clamp-2">${job.title}</h4>
+                                <h4 class="text-sm md:text-base font-bold text-white group-hover:text-germany-gold transition-colors leading-tight mb-2 line-clamp-2">${title}</h4>
                                 <div class="flex flex-wrap gap-1 mb-3">
-                                    <span class="text-[9px] font-bold uppercase tracking-wider text-gray-400 bg-white/5 px-1.5 py-0.5 rounded">${job.dept}</span>
+                                    <span class="text-[9px] font-bold uppercase tracking-wider text-gray-400 bg-white/5 px-1.5 py-0.5 rounded">${dept}</span>
                                 </div>
                             </div>
                             <div class="flex items-end justify-between border-t border-white/5 pt-3 mt-1">
@@ -950,7 +1182,9 @@
             const t = translations[currentLang] || translations['en'];
             
             container.innerHTML = timelineData.map((item, index) => {
-                const title = t[item.key] || item.title;
+                const title = t[item.key] || item.title; // Fallback handled by translations object structure usually
+                const desc = t[item.descKey] || "";
+
                 return `
                 <div class="relative pl-8 sm:pl-28 py-1 group reveal-item" style="transition-delay: ${index * 50}ms">
                     <div class="font-bold text-white mb-1 sm:mb-0 sm:absolute sm:left-0 sm:w-20 sm:text-right sm:top-1 text-sm text-germany-gold">Step ${item.step}</div>
@@ -960,7 +1194,7 @@
                             <h4 class="font-bold text-white text-base">${title}</h4>
                             <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold border border-white/10 bg-white/5 text-germany-gold whitespace-nowrap">${item.fee}</span>
                         </div>
-                        <p class="text-xs text-gray-400">${item.desc}</p>
+                        <p class="text-xs text-gray-400">${desc}</p>
                     </div>
                 </div>
             `}).join('');
@@ -970,24 +1204,28 @@
         function openJobModal(index) {
             const job = jobsData[index];
             if(!job) return;
+            const t = translations[currentLang] || translations['en'];
 
             // Populate Modal
-            document.getElementById('modalTitle').innerText = job.title;
-            document.getElementById('modalDept').innerText = job.dept;
+            document.getElementById('modalTitle').innerText = t[job.key] || job.title;
+            document.getElementById('modalDept').innerText = t[job.deptKey] || job.dept;
             document.getElementById('modalEuro').innerText = job.euro;
             document.getElementById('modalExp').innerText = job.exp;
 
             // Documents List
             const docsList = document.getElementById('modalDocs');
-            docsList.innerHTML = documentsData.map(doc => `
+            docsList.innerHTML = documentsData.map(doc => {
+                const title = t[doc.titleKey] || "";
+                const desc = t[doc.descKey] || "";
+                return `
                 <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:border-germany-red/30 transition-colors">
                     <div class="w-8 h-8 rounded-full bg-germany-red/20 flex items-center justify-center text-germany-red shrink-0 mt-0.5"><i class="${doc.icon} text-xs"></i></div>
                     <div>
-                        <p class="text-sm font-bold text-white mb-0.5">${doc.title}</p>
-                        <p class="text-xs text-gray-400">${doc.desc}</p>
+                        <p class="text-sm font-bold text-white mb-0.5">${title}</p>
+                        <p class="text-xs text-gray-400">${desc}</p>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
 
             document.getElementById('jobModal').classList.remove('hidden');
             document.body.classList.add('modal-open');
@@ -1010,14 +1248,18 @@
         // --- LANGUAGE LOGIC ---
         function toggleLanguageDropdown(event) {
             const button = document.getElementById('lang-toggle-btn');
-            const isActive = button.classList.toggle('active');
+            const dropdown = document.getElementById('language-dropdown');
             event.stopPropagation();
-            if (!isActive) {
-                 document.removeEventListener('click', closeLanguageDropdown);
-            } else {
+            
+            button.classList.toggle('active');
+            dropdown.classList.toggle('show');
+            
+            if (button.classList.contains('active')) {
                  setTimeout(() => { 
                     document.addEventListener('click', closeLanguageDropdown);
                  }, 10);
+            } else {
+                 document.removeEventListener('click', closeLanguageDropdown);
             }
         }
 
@@ -1026,6 +1268,7 @@
             const button = document.getElementById('lang-toggle-btn');
             if (dropdown && button && !dropdown.contains(event.target) && !button.contains(event.target)) {
                 button.classList.remove('active');
+                dropdown.classList.remove('show');
                 document.removeEventListener('click', closeLanguageDropdown);
             }
         }
@@ -1049,6 +1292,7 @@
 
             // Close dropdown
             document.getElementById('lang-toggle-btn').classList.remove('active');
+            document.getElementById('language-dropdown').classList.remove('show');
         }
         
         // --- SCROLL ANIMATION ---
@@ -1084,6 +1328,10 @@
                 const langBtn = document.getElementById('lang-toggle-btn');
                 if (langBtn && langBtn.classList.contains('active')) {
                      langBtn.classList.remove('active');
+                }
+                const dropdown = document.getElementById('language-dropdown');
+                if (dropdown && dropdown.classList.contains('show')) {
+                     dropdown.classList.remove('show');
                 }
                 closeModal();
             }
