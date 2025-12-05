@@ -28,6 +28,14 @@
                         'italy-green': '#009246',      
                         'italy-red': '#CE2B37',     
                         'brand-gold': '#FFD700',
+                        // Added colors to support Global Header/Footer
+                        'space-indigo': '#1C2B4C',
+                        'sweden-blue': '#006AA7',
+                        'sweden-yellow': '#FECC00',
+                        'brand-white': '#FFFFFF',
+                        'brand-blue': '#3B82F6',
+                        'brand-purple': '#8B5CF6',
+                        'vfs-teal': '#14B8A6',
                     },
                     animation: {
                         'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
@@ -51,7 +59,7 @@
             font-family: 'Outfit', sans-serif;
         }
 
-        /* --- LENIS SMOOTH SCROLL CSS (CRITICAL FOR SCROLLING) --- */
+        /* --- LENIS SMOOTH SCROLL CSS --- */
         html.lenis, html.lenis body { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
@@ -77,6 +85,35 @@
             backdrop-filter: blur(24px);       
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Floating Nav (Added from Sweden) */
+        .floating-nav {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        .floating-nav.scrolled {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+        }
+        
+        /* Dropdown Menu Animations (Added from Sweden) */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .group:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
 
         /* Ambient Orbs */
@@ -156,9 +193,8 @@
         <div class="orb orb-2"></div>
     </div>
 
-    <!-- Navigation (Injected via JS) -->
-    <div id="nav-placeholder"></div>
-
+    <!-- Navigation injected via JS -->
+    
     <main class="flex-grow w-full max-w-7xl mx-auto relative z-10 space-y-8 pt-24 pb-12 px-3 sm:px-6">
 
         <!-- Hero Section -->
@@ -171,7 +207,6 @@
 
             <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-none drop-shadow-[0_0_25px_rgba(0,146,70,0.3)]">
                 <span data-i18n="hero_title_1">Italy</span> <br>
-                <!-- MODIFIED: Changed from gradient to solid text-italy-green -->
                 <span class="text-italy-green" data-i18n="hero_title_2">Professional Program</span>
             </h1>
             
@@ -219,7 +254,7 @@
         </section>
 
         <!-- Pricing Package -->
-        <section class="py-8 relative z-20">
+        <section class="py-8 relative z-20 pb-24"> <!-- Added padding bottom for floating button -->
             <div class="container mx-auto px-2">
                 <div class="max-w-4xl mx-auto">
                     <div class="relative group rounded-2xl p-[1px] bg-gradient-to-br from-italy-green via-white to-italy-red">
@@ -245,10 +280,7 @@
                                 <div class="p-6 md:p-8 lg:w-2/5 flex flex-col justify-center items-center text-center bg-black/20">
                                     <div class="mb-1 text-[10px] text-gray-400 uppercase tracking-widest" data-i18n="total_inv">Total Package</div>
                                     <div class="text-5xl font-black text-white mb-1 tracking-tight">€6,000</div>
-                                    <div class="text-[10px] text-gray-500 mb-6 max-w-[180px]" data-i18n="price_note">Remaining €5,500 after Visa.</div>
-                                    <a href="https://bettercall.setmore.com/services/7fc6514e-af0c-4790-a85f-f3d4ab830491" target="_blank" class="w-full relative group overflow-hidden rounded-lg bg-italy-green px-6 py-4 transition-all duration-300 text-white font-bold text-base shadow-lg hover:shadow-green-500/40 hover:-translate-y-1">
-                                        <span class="relative z-10 flex items-center justify-center gap-2"><span data-i18n="start_process">Start Now</span> <i class="fa-solid fa-arrow-right"></i></span>
-                                    </a>
+                                    <div class="text-[10px] text-gray-500 max-w-[180px]" data-i18n="price_note">Remaining €5,500 after Visa.</div>
                                 </div>
                             </div>
                         </div>
@@ -256,14 +288,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- CTA Section -->
-        <div class="text-center py-10">
-             <a href="https://bettercall.setmore.com/services/7fc6514e-af0c-4790-a85f-f3d4ab830491" target="_blank" class="inline-flex items-center gap-3 bg-gradient-to-r from-italy-green to-teal-600 text-white font-bold text-lg px-10 py-4 rounded-full shadow-[0_0_20px_rgba(0,146,70,0.4)] hover:shadow-[0_0_40px_rgba(0,146,70,0.6)] hover:scale-105 transition-all duration-300 group">
-                <span data-i18n="btn_apply_main">Apply Now</span>
-                <i class="fa-solid fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-            </a>
-        </div>
 
     </main>
 
@@ -300,6 +324,17 @@
                 </button>
             </div>
         </div>
+    </div>
+
+    <!-- Floating Apply Button (Center) - Adapted from Sweden style -->
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs px-2 sm:px-4 flex justify-center pointer-events-none">
+        <a href="https://bettercall.setmore.com/services/7fc6514e-af0c-4790-a85f-f3d4ab830491" target="_blank" class="pointer-events-auto relative group bg-gradient-to-r from-italy-green to-emerald-600 text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full shadow-[0_0_30px_rgba(0,146,70,0.5)] hover:shadow-[0_0_50px_rgba(0,146,70,0.8)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 overflow-hidden flex items-center gap-2 md:gap-3 border border-white/20">
+            <span class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+            <span class="relative z-10 text-sm md:text-lg tracking-widest uppercase whitespace-nowrap" data-i18n="btn_apply_main">Apply Now</span>
+            <i class="fa-solid fa-paper-plane relative z-10 group-hover:translate-x-1 transition-transform text-sm md:text-base"></i>
+            <!-- Pulse ring -->
+            <span class="absolute inset-0 rounded-full border-2 border-white/30 animate-ping opacity-20"></span>
+        </a>
     </div>
 
     <!-- WhatsApp Button -->
@@ -354,6 +389,169 @@
 
     <!-- Scripts -->
     <script>
+        // --- NAV INJECTION ---
+        const GLOBAL_HEADER = `
+        <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
+            <div class="floating-nav w-full max-w-7xl px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
+                <a href="index.html" class="flex items-center gap-2 md:gap-3 group px-2 md:px-4">
+                    <div class="w-8 h-8 md:w-10 md:h-10 bg-space-indigo rounded-full border border-white/10 flex items-center justify-center text-brand-white font-bold text-base md:text-lg shadow-2xl glass-panel overflow-hidden p-1 flex-shrink-0">
+                        <span class="relative z-10">BC</span>
+                    </div>
+                    <div class="block leading-tight"> 
+                        <h1 class="font-bold text-white text-xs md:text-sm tracking-wide whitespace-nowrap">BETTER CALL</h1>
+                        <p class="text-[8px] md:text-[9px] font-bold text-brand-gold uppercase tracking-[0.2em] md:tracking-[0.2em]">Immigration</p>
+                    </div>
+                </a>
+                <div class="hidden lg:flex items-center gap-1">
+                    <a href="index.html" class="px-4 py-2 text-sm text-white hover:text-sweden-blue font-medium transition rounded-full hover:bg-white/5" data-i18n="nav_home">Home</a>
+                    <div class="relative group">
+                        <button class="px-4 py-2 text-sm text-white hover:text-sweden-blue font-medium transition rounded-full hover:bg-white/5 flex items-center gap-1"><span data-i18n="nav_programs">Programs</span> <svg class="w-3 h-3 text-gray-400 group-hover:text-sweden-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                        <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50 max-h-[80vh] overflow-y-auto hide-scrollbar">
+                            <a href="sweden.html" class="px-4 py-2.5 rounded-xl text-sm text-sweden-yellow font-medium hover:bg-sweden-blue/20 transition block">Sweden</a>
+                            <a href="finland.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-purple-400 hover:bg-purple-500/20 transition block">Finland</a>
+                            <a href="germany.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-brand-gold hover:bg-brand-gold/20 transition block">Germany</a>
+                            <a href="italy.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-orange-400 hover:bg-orange-500/20 transition block">Italy</a>
+                            <a href="france.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-500 hover:bg-blue-600/20 transition block">France</a>
+                            <a href="poland.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-400 hover:bg-red-500/20 transition block">Poland</a>
+                            <a href="czech.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-300 hover:bg-blue-400/20 transition block">Czech Republic</a>
+                            <a href="latvia.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-300 hover:bg-red-500/20 transition block">Latvia</a>
+                            <a href="serbia.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-300 hover:bg-blue-500/20 transition block">Serbia</a>
+                            <a href="macedonia.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-yellow-400 hover:bg-yellow-500/20 transition block">Macedonia</a>
+                            <a href="albania.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-500 hover:bg-red-600/20 transition block">Albania</a>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <button class="px-4 py-2 text-sm text-white hover:text-sweden-blue font-medium transition rounded-full hover:bg-white/5 flex items-center gap-1"><span data-i18n="nav_services">Services</span> <svg class="w-3 h-3 text-gray-400 group-hover:text-sweden-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                        <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50">
+                            <a href="vfs.html" class="px-4 py-2.5 rounded-xl text-sm text-vfs-teal font-medium hover:bg-vfs-teal/10 transition block">Visa Appointment</a>
+                            <a href="visa_documentation.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Visa Documentation</a>
+                            <a href="travel_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Travel Assistance</a>
+                            <a href="insurance_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Insurance Assistance</a>
+                            <a href="medical_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Medical Assistance</a>
+                        </div>
+                    </div>
+                    <a href="assessment.html" class="px-4 py-2 text-sm text-white hover:text-sweden-blue font-medium transition rounded-full hover:bg-white/5" data-i18n="nav_assess">Free Assessment</a>
+                    <a href="about.html" class="px-4 py-2 text-sm text-white hover:text-sweden-blue font-medium transition rounded-full hover:bg-white/5" data-i18n="nav_about">About Us</a>
+                </div>
+                <div class="flex items-center gap-2 sm:gap-3 px-2">
+                    <button class="lg:hidden p-2 text-white hover:text-sweden-blue transition rounded-full hover:bg-white/5" onclick="toggleMobileMenu()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <a href="book.html" class="hidden sm:flex group relative px-6 py-2.5 rounded-full bg-sweden-blue text-white font-bold text-sm overflow-hidden transition-all hover:scale-105 shadow-[0_0_20px_rgba(0,106,167,0.4)] hover:shadow-[0_0_30px_rgba(0,106,167,0.6)]">
+                        <span class="relative z-10 group-hover:text-white transition-colors" data-i18n="nav_book">Book Now</span>
+                        <div class="absolute inset-0 bg-sweden-yellow transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                    </a>
+                </div>
+            </div>
+            <div id="mobileMenu" class="fixed inset-0 bg-[#0B132B]/98 backdrop-blur-3xl z-[60] transform translate-y-full transition-transform duration-500 flex flex-col items-center justify-start pt-32 pb-10 overflow-y-auto">
+                <button class="absolute top-6 right-6 text-white/50 hover:text-white text-3xl transition" onclick="toggleMobileMenu()">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <a href="index.html" onclick="toggleMobileMenu()" class="text-3xl font-light text-white hover:text-sweden-blue" data-i18n="nav_home">Home</a>
+                <div class="w-full px-8 space-y-8">
+                    <div class="text-center">
+                        <p class="text-brand-gold text-xs uppercase tracking-widest mb-4 font-bold opacity-70" data-i18n="footer_dest">Destinations</p>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <a href="sweden.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-sweden-yellow bg-sweden-blue/20 font-bold">SWEDEN</a>
+                            <a href="finland.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">FINLAND</a>
+                            <a href="germany.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">GERMANY</a>
+                            <a href="italy.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">ITALY</a>
+                            <a href="france.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">FRANCE</a>
+                            <a href="poland.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">POLAND</a>
+                            <a href="czech.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">CZECHIA</a>
+                            <a href="latvia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">LATVIA</a>
+                            <a href="serbia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">SERBIA</a>
+                            <a href="macedonia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">MACEDONIA</a>
+                            <a href="albania.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">ALBANIA</a>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-brand-gold text-xs uppercase tracking-widest mb-4 font-bold opacity-70" data-i18n="footer_serv">Services</p>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <a href="vfs.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-vfs-teal font-medium">Visa Appointment</a>
+                            <a href="visa_documentation.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Visa Documentation</a>
+                            <a href="travel_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Travel Assistance</a>
+                            <a href="insurance_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Insurance</a>
+                            <a href="medical_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Medical</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4 items-center w-full px-8 pb-10">
+                    <a href="assessment.html" onclick="toggleMobileMenu()" class="w-full max-w-xs text-center text-lg font-bold text-white bg-sweden-blue px-8 py-4 rounded-full shadow-lg hover:scale-105 transition-transform" data-i18n="nav_assess">Free Assessment</a>
+                    <a href="book.html" onclick="toggleMobileMenu()" class="w-full max-w-xs text-center text-lg font-bold text-deep-space bg-brand-gold px-8 py-4 rounded-full shadow-xl hover:scale-105 transition-transform" data-i18n="nav_book">Book Consultation</a>
+                </div>
+            </div>
+        </nav>
+        `;
+
+        const GLOBAL_FOOTER = `
+        <footer class="bg-transparent border-t border-white/5 relative z-10 backdrop-blur-sm">
+            <div class="container mx-auto px-4 py-20">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 md:gap-12 mb-12 md:mb-16">
+                    <div class="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col items-center md:items-start text-center md:text-left">
+                        <a href="index.html" class="flex items-center gap-4 group mb-6 w-fit">
+                            <div class="w-12 h-12 bg-space-indigo rounded-xl border border-white/10 flex items-center justify-center text-brand-white font-bold text-xl shadow-2xl glass-panel p-1">
+                                <span class="relative z-10">BC</span>
+                            </div>
+                            <div class="block text-left">
+                                <h4 class="font-bold text-white text-lg tracking-wide">BETTER CALL</h4><p class="text-[10px] font-bold text-brand-gold uppercase tracking-[0.3em]">Immigration</p>
+                            </div>
+                        </a>
+                        <p class="text-sm leading-relaxed max-w-sm mb-8 font-light text-gray-500">Defining the industry benchmark for professionalism, absolute transparency, and sustained client success in global migration.</p>
+                        <div class="flex gap-4">
+                            <a href="https://wa.me/971503666382" class="w-12 h-12 rounded-full glass-panel hover:bg-sweden-blue hover:text-white flex items-center justify-center transition-all duration-300" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp text-xl"></i></a>
+                            <a href="https://www.instagram.com/the_better_call" class="w-12 h-12 rounded-full glass-panel hover:bg-brand-purple hover:text-white flex items-center justify-center transition-all duration-300" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram text-xl"></i></a>
+                            <a href="mailto:admin@thebettercall.com" class="w-12 h-12 rounded-full glass-panel hover:bg-brand-gold hover:text-white flex items-center justify-center transition-all duration-300"><i class="fa-solid fa-envelope text-xl"></i></a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest" data-i18n="footer_dest">Destinations</h4>
+                        <ul class="space-y-4 text-sm font-light">
+                            <li><a href="germany.html" class="hover:text-sweden-blue transition-colors">Germany</a></li>
+                            <li><a href="sweden.html" class="hover:text-sweden-blue transition-colors text-sweden-yellow font-bold">Sweden</a></li>
+                            <li><a href="finland.html" class="hover:text-sweden-blue transition-colors">Finland</a></li>
+                            <li><a href="italy.html" class="hover:text-sweden-blue transition-colors">Italy</a></li>
+                            <li><a href="france.html" class="hover:text-sweden-blue transition-colors">France</a></li>
+                            <li><a href="poland.html" class="hover:text-sweden-blue transition-colors">Poland</a></li>
+                        </ul>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest" data-i18n="footer_serv">Services</h4>
+                        <ul class="space-y-4 text-sm font-light">
+                            <li><a href="vfs.html" class="hover:text-sweden-blue transition-colors">Visa Appointment</a></li>
+                            <li><a href="visa_documentation.html" class="hover:text-sweden-blue transition-colors">Documentation</a></li>
+                            <li><a href="travel_assistance.html" class="hover:text-sweden-blue transition-colors">Travel Assistance</a></li>
+                            <li><a href="insurance_assistance.html" class="hover:text-sweden-blue transition-colors">Insurance</a></li>
+                            <li><a href="medical_assistance.html" class="hover:text-sweden-blue transition-colors">Medical</a></li>
+                        </ul>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest" data-i18n="footer_comp">Company</h4>
+                        <ul class="space-y-4 text-sm font-light">
+                            <li><a href="about.html" class="hover:text-sweden-blue transition-colors">Our Story</a></li>
+                            <li><a href="assessment.html" class="hover:text-sweden-blue transition-colors">Free Assessment</a></li>
+                        </ul>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest" data-i18n="footer_off">Office</h4>
+                        <ul class="space-y-4 text-sm font-light">
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-location-dot text-brand-gold mt-1"></i><span>R320-12th Floor<br>Dubai Healthcare City<br>UAE</span></li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-phone text-brand-gold"></i><span>+971 50 366 6382</span></li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-envelope text-brand-gold"></i><span>admin@thebettercall.com</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-white/5 pt-8 text-center text-xs text-gray-600 font-light flex flex-col md:flex-row justify-between items-center">
+                    <p>&copy; 2025 Better Call Immigration. All rights reserved.</p>
+                    <div class="flex gap-6 mt-4 md:mt-0"><a href="#" class="hover:text-white transition">Privacy Policy</a><a href="#" class="hover:text-white transition">Terms of Service</a></div>
+                </div>
+            </div>
+        </footer>
+        `;
+
+        document.body.insertAdjacentHTML('afterbegin', GLOBAL_HEADER);
+        document.body.insertAdjacentHTML('beforeend', GLOBAL_FOOTER);
+
         // --- TRANSLATION DATA ---
         const translations = {
             en: {
@@ -370,6 +568,10 @@
                 btn_apply_main: "Apply Now", btn_apply: "Apply Now", btn_close: "Close",
                 modal_salary_label: "Monthly Salary", modal_exp_label: "Experience", modal_req_title: "Requirements & Documents",
                 
+                // Navigation & Footer (Added from Sweden)
+                nav_home: "Home", nav_programs: "Programs", nav_services: "Services", nav_assess: "Free Assessment", nav_about: "About Us", nav_book: "Book Now",
+                footer_dest: "Destinations", footer_serv: "Services", footer_comp: "Company", footer_off: "Office",
+
                 // Job Categories
                 cat_all: "All", cat_healthcare: "Healthcare", cat_corporate: "Corporate", cat_sales: "Sales", cat_technical: "Technical", cat_logistics: "Logistics",
                 
@@ -401,6 +603,9 @@
                 btn_apply_main: "അപേക്ഷിക്കൂ", btn_apply: "അപേക്ഷിക്കൂ", btn_close: "ക്ലോസ്",
                 modal_salary_label: "പ്രതിമാസ ശമ്പളം", modal_exp_label: "പരിചയസമ്പത്ത്", modal_req_title: "ആവശ്യമായ രേഖകൾ",
                 
+                nav_home: "ഹോം", nav_programs: "പ്രോഗ്രാമുകൾ", nav_services: "സേവനങ്ങൾ", nav_assess: "സൗജന്യ മൂല്യനിർണ്ണയം", nav_about: "ഞങ്ങളെക്കുറിച്ച്", nav_book: "ഇപ്പോൾ ബുക്ക് ചെയ്യുക",
+                footer_dest: "ലക്ഷ്യസ്ഥാനങ്ങൾ", footer_serv: "സേവനങ്ങൾ", footer_comp: "കമ്പനി", footer_off: "ഓഫീസ്",
+
                 cat_all: "എല്ലാം", cat_healthcare: "ഹെൽത്ത് കെയർ", cat_corporate: "കോർപ്പറേറ്റ്", cat_sales: "സെയിൽസ്", cat_technical: "ടെക്നിക്കൽ", cat_logistics: "ലോജിസ്റ്റിക്സ്",
 
                 job_care_home: "കെയർ ഹോം അസിസ്റ്റന്റ്", job_nursing_asst: "നഴ്സിംഗ് അസിസ്റ്റന്റ്", job_elderly: "വയോജന പരിചരണം", job_health_supp: "ഹെൽത്ത് കെയർ സപ്പോർട്ട്",
@@ -429,6 +634,9 @@
                 btn_apply_main: "आवेदन करें", btn_apply: "आवेदन करें", btn_close: "बंद करें",
                 modal_salary_label: "मासिक वेतन", modal_exp_label: "अनुभव", modal_req_title: "आवश्यकताएँ और दस्तावेज़",
                 
+                nav_home: "होम", nav_programs: "कार्यक्रम", nav_services: "सेवाएं", nav_assess: "निःशुल्क मूल्यांकन", nav_about: "हमारे बारे में", nav_book: "अभी बुक करें",
+                footer_dest: "गंतव्य", footer_serv: "सेवाएं", footer_comp: "कंपनी", footer_off: "कार्यालय",
+
                 cat_all: "सभी", cat_healthcare: "स्वास्थ्य", cat_corporate: "कॉर्पोरेट", cat_sales: "बिक्री", cat_technical: "तकनीकी", cat_logistics: "लॉजिस्टिक्स",
                 
                 job_care_home: "केयर होम असिस्टेंट", job_nursing_asst: "नर्सिंग असिस्टेंट", job_elderly: "बुजुर्ग देखभाल", job_health_supp: "हेल्थकेयर सपोर्ट",
@@ -453,6 +661,9 @@
                 btn_apply_main: "விண்ணப்பிக்கவும்", btn_apply: "விண்ணப்பிக்கவும்", btn_close: "மூடு",
                 modal_salary_label: "மாத சம்பளம்", modal_exp_label: "அனுபவம்", modal_req_title: "தேவையான ஆவணங்கள்",
                 
+                nav_home: "முகப்பு", nav_programs: "திட்டங்கள்", nav_services: "சேவைகள்", nav_assess: "இலவச மதிப்பீடு", nav_about: "எங்களைப் பற்றி", nav_book: "இப்போது பதிவு செய்",
+                footer_dest: "இடங்கள்", footer_serv: "சேவைகள்", footer_comp: "நிறுவனம்", footer_off: "அலுவலகம்",
+
                 cat_all: "அனைத்தும்", cat_healthcare: "சுகாதாரம்", cat_corporate: "கார்ப்பரேட்", cat_sales: "விற்பனை", cat_technical: "தொழில்நுட்பம்", cat_logistics: "லாஜிஸ்டிக்ஸ்",
                 
                 job_care_home: "கேர் ஹோம் உதவியாளர்", job_nursing_asst: "நர்சிங் உதவியாளர்", job_health_supp: "சுகாதார ஆதரவு",
@@ -477,6 +688,9 @@
                 btn_apply_main: "Mag-apply", btn_apply: "Mag-apply", btn_close: "Isara",
                 modal_salary_label: "Buwanang Sahod", modal_exp_label: "Karanasan", modal_req_title: "Mga Dokumento",
                 
+                nav_home: "Home", nav_programs: "Mga Programa", nav_services: "Serbisyo", nav_assess: "Libreng Pagtatasa", nav_about: "Tungkol sa Amin", nav_book: "Mag-book Ngayon",
+                footer_dest: "Mga Destinasyon", footer_serv: "Mga Serbisyo", footer_comp: "Kumpanya", footer_off: "Opisina",
+
                 cat_all: "Lahat", cat_healthcare: "Kalusugan", cat_corporate: "Opisina", cat_sales: "Sales", cat_technical: "Teknikal", cat_logistics: "Logistics",
                 
                 job_care_home: "Care Home Assistant", job_nursing_asst: "Nursing Assistant", job_health_supp: "Healthcare Support",
@@ -500,6 +714,9 @@
                 btn_apply_main: "අයදුම් කරන්න", btn_apply: "අයදුම් කරන්න", btn_close: "වසන්න",
                 modal_salary_label: "මාසික වැටුප", modal_exp_label: "පළපුරුද්ද", modal_req_title: "අවශ්‍ය ලේඛන",
                 
+                nav_home: "මුල් පිටුව", nav_programs: "වැඩසටහන්", nav_services: "සේවා", nav_assess: "නොමිලේ තක්සේරුව", nav_about: "අපි ගැන", nav_book: "දැන් වෙන්කරවා ගන්න",
+                footer_dest: "ගමනාන්ත", footer_serv: "සේවා", footer_comp: "සමාගම", footer_off: "කාර්යාලය",
+
                 cat_all: "සියල්ල", cat_healthcare: "සෞඛ්‍ය", cat_corporate: "ආයතනික", cat_sales: "විකුණුම්", cat_technical: "තාක්ෂණික", cat_logistics: "ලොජිස්ටික්ස්",
                 
                 job_care_home: "Care Home සහායක", job_nursing_asst: "හෙද සහායක", job_health_supp: "සෞඛ්‍ය සහායක",
@@ -523,6 +740,9 @@
                 btn_apply_main: "Tuma Maombi", btn_apply: "Tuma Maombi", btn_close: "Funga",
                 modal_salary_label: "Mshahara", modal_exp_label: "Uzoefu", modal_req_title: "Mahitaji",
                 
+                nav_home: "Nyumbani", nav_programs: "Programu", nav_services: "Huduma", nav_assess: "Tathmini ya Bure", nav_about: "Kuhusu Sisi", nav_book: "Weka Nafasi Sasa",
+                footer_dest: "Vituo", footer_serv: "Huduma", footer_comp: "Kampuni", footer_off: "Ofisi",
+
                 cat_all: "Yote", cat_healthcare: "Afya", cat_corporate: "Shirika", cat_sales: "Mauzo", cat_technical: "Teknolojia", cat_logistics: "Usafirishaji",
                 
                 job_care_home: "Msaidizi wa Nyumbani", job_nursing_asst: "Msaidizi wa Muuguzi", job_health_supp: "Msaada wa Afya",
@@ -584,29 +804,50 @@
         // --- GLOBAL STATE ---
         let currentLang = 'en';
         let currentFilter = 'All';
-
-        // --- NAV INJECTION ---
-        // Simplified nav for this demo
-        document.getElementById('nav-placeholder').innerHTML = `
-        <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-4">
-            <div class="glass-panel w-full max-w-7xl px-4 py-2 flex justify-between items-center rounded-full bg-[#0F172A]/80 backdrop-blur-xl">
-                <a href="#" class="flex items-center gap-2 group">
-                    <div class="w-10 h-10 bg-[#1C2B4C] rounded-full border border-white/10 flex items-center justify-center font-bold text-white">BC</div>
-                    <div><h1 class="font-bold text-white text-sm">BETTER CALL</h1><p class="text-[9px] text-brand-gold uppercase">Immigration</p></div>
-                </a>
-                <div class="hidden md:flex gap-6 text-sm font-medium text-white/80">
-                    <a href="#" class="hover:text-italy-green transition">Home</a>
-                    <a href="#" class="hover:text-italy-green transition">Programs</a>
-                    <a href="#" class="hover:text-italy-green transition">Services</a>
-                </div>
-                <a href="https://bettercall.setmore.com/services/7fc6514e-af0c-4790-a85f-f3d4ab830491" target="_blank" class="px-5 py-2 rounded-full bg-italy-green text-white text-xs font-bold uppercase tracking-wider hover:bg-green-700 transition">Book Now</a>
-            </div>
-        </nav>`;
+        let ticking = false; // For scroll listener
 
         // --- FUNCTIONS ---
 
+        // Scroll Listener for Navbar (Added from Sweden)
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const nav = document.getElementById('navbar');
+                    if(nav) {
+                        if (window.scrollY > 20) {
+                            nav.classList.add('scrolled');
+                        } else {
+                            nav.classList.remove('scrolled');
+                        }
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Mobile Menu Toggle (Added from Sweden)
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu.classList.contains('translate-y-full')) {
+                menu.classList.remove('translate-y-full');
+            } else {
+                menu.classList.add('translate-y-full');
+            }
+        }
+
         function t(key) {
-            return translations[currentLang][key] || translations['en'][key] || key;
+            // Safety check for keys
+            const langData = translations[currentLang];
+            const enData = translations['en'];
+            
+            if (langData && langData[key]) {
+                return langData[key];
+            } else if (enData && enData[key]) {
+                return enData[key];
+            } else {
+                return key;
+            }
         }
 
         function setLanguage(lang) {
@@ -618,23 +859,25 @@
             // 2. Update Static Text
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                el.innerText = t(key);
+                if(t(key)) el.innerText = t(key);
             });
             
             // 3. Update Placeholders
             document.querySelectorAll('[data-placeholder-i18n]').forEach(el => {
                 const key = el.getAttribute('data-placeholder-i18n');
-                el.placeholder = t(key);
+                if(t(key)) el.placeholder = t(key);
             });
 
             // 4. Re-render Components
             renderCategoryChips();
-            filterPageJobs(); // Re-renders jobs
+            filterPageJobs(); 
             renderTimeline();
             
             // 5. Close Dropdown
-            document.getElementById('language-dropdown').classList.remove('show');
-            document.getElementById('lang-toggle-btn').classList.remove('active');
+            const dropdown = document.getElementById('language-dropdown');
+            const btn = document.getElementById('lang-toggle-btn');
+            if(dropdown) dropdown.classList.remove('show');
+            if(btn) btn.classList.remove('active');
         }
 
         function toggleLanguageDropdown(e) {
@@ -648,8 +891,10 @@
         // Close dropdown when clicking outside
         window.onclick = function(e) {
             if (!e.target.matches('#lang-toggle-btn') && !e.target.closest('#lang-toggle-btn')) {
-                document.getElementById('language-dropdown').classList.remove('show');
-                document.getElementById('lang-toggle-btn').classList.remove('active');
+                const dropdown = document.getElementById('language-dropdown');
+                const btn = document.getElementById('lang-toggle-btn');
+                if(dropdown) dropdown.classList.remove('show');
+                if(btn) btn.classList.remove('active');
             }
         }
 
@@ -763,9 +1008,11 @@
         // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
             // Lenis Smooth Scroll
-            const lenis = new Lenis({ duration: 1.2, smooth: true });
-            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-            requestAnimationFrame(raf);
+            if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({ duration: 1.2, smooth: true });
+                function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+                requestAnimationFrame(raf);
+            }
 
             // Initial Render
             renderCategoryChips();
