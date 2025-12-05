@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Work Programs | Better Call Immigration</title>
+    <meta name="description" content="Explore stable, verified work permit programs across Europe, including Schengen and non-Schengen countries like Sweden, Finland, Poland, Czech Republic, Latvia, Serbia, and North Macedonia.">
+
+    <!-- SEO & Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Configuration - MERGED THEME (Global + Programs Hub) -->
+    <script>
+        if (typeof tailwind !== 'undefined') {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ['Outfit', 'sans-serif'], // Global font
+                            serif: ['"Playfair Display"', 'serif'],
+                        },
+                        colors: {
+                            // Global Base Colors
+                            'deep-space': '#050B14',
+                            'space-indigo': '#1C2B4C',    
+                            'deep-blue': '#0B132B',       
+                            'pure-white': '#FFFFFF',
+                            
+                            // Global Brand Colors
+                            'brand-blue': '#3B82F6',      
+                            'brand-purple': '#8B5CF6',     
+                            'brand-gold': '#FFD700',
+                            'brand-white': '#FFFFFF',
+                            'vfs-teal': '#14B8A6',
+
+                            // Programs Hub Specific Accents
+                            'accent-teal': '#00C4B4',      // Primary Hub Accent
+                            'accent-lime': '#D9FF00',      // Secondary Hub Accent
+                            'accent-blue-vibrant': '#4059AD', 
+                            'accent-yellow': '#FFFF00',    
+                            'light-text': '#E0E7FF',
+                            
+                            // Specific Country Accents (Mapped for card use)
+                            'sweden-blue': '#005B99',
+                            'poland-red': '#DC143C',
+                            'czech-accent': '#00C4B4',
+                            'latvia-red': '#9E3039',
+                            'serbia-red': '#CC0000',
+                            'macedonia-red': '#D20000',
+                            'macedonia-yellow': '#FCE100',
+                        },
+                        animation: {
+                            'float': 'float 8s ease-in-out infinite',
+                            'pulse-glow': 'pulseGlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                            'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                            'star-field': 'starField 300s linear infinite',
+                            'shine': 'shine 8s linear infinite',
+                            'shimmer': 'shimmer 2.5s linear infinite',
+                        },
+                        keyframes: {
+                            float: {
+                                '0%, 100%': { transform: 'translateY(0px)' },
+                                '50%': { transform: 'translateY(-20px)' },
+                            },
+                            fadeInUp: {
+                                '0%': { opacity: '0', transform: 'translateY(40px)' },
+                                '100%': { opacity: '1', transform: 'translateY(0)' },
+                            },
+                            starField: {
+                                'from': { transform: 'translateY(0px)' },
+                                'to': { transform: 'translateY(-2000px)' },
+                            },
+                            shine: {
+                                '0%': { 'background-position': '0% center' },
+                                '50%': { 'background-position': '100% center' },
+                                '100%': { 'background-position': '0% center' },
+                            },
+                            shimmer: {
+                                '0%': { backgroundPosition: '-1000px 0' },
+                                '100%': { backgroundPosition: '1000px 0' },
+                            },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- CUSTOM STYLES -->
+    <style>
+        /* General Setup */
+        body {
+            background-color: #0B132B;
+            color: #E0E7FF;
+            -webkit-font-smoothing: antialiased;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Star Field Effect */
+        .star-field {
+            background: #0B132B url(https://placehold.co/1x2000/0B132B/0B132B?text=.) repeat-y;
+            opacity: 0.15;
+            animation: star-field 300s linear infinite;
+        }
+
+        /* Glass Base (Global Match) */
+        .glass-base {
+            background: rgba(28, 43, 76, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 60px rgba(0, 0, 0, 0.3),
+                        inset 0 0 10px rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Global Glass Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        /* Floating Nav Design (Global) */
+        .floating-nav {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            transform: translateZ(0); 
+        }
+        
+        .floating-nav.scrolled {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Dropdown Glass (Global) */
+        .dropdown-glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Modern Card (Hub Theme) */
+        .modern-card {
+            background: linear-gradient(145deg, rgba(28, 43, 76, 0.7) 0%, rgba(28, 43, 76, 0.3) 100%);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            box-shadow:
+                8px 8px 20px rgba(0, 0, 0, 0.7),
+                -8px -8px 20px rgba(60, 90, 150, 0.15),
+                0 0 50px rgba(0, 196, 180, 0.05); 
+        }
+        .modern-card:hover {
+            transform: translateY(-8px);
+            border-color: #00C4B4; /* Accent Teal */
+            box-shadow: 0 15px 50px rgba(0, 196, 180, 0.3),
+                        10px 10px 25px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Hero Text Gradient */
+        .text-gradient-hero {
+            background: linear-gradient(to right, #FFFF00, #D9FF00, #00C4B4);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 8s linear infinite;
+        }
+
+        /* Animations */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-item.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .group:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Search Overlay Styles (Global) */
+        #search-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        #search-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        #search-container {
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #search-overlay.active #search-container {
+            transform: scale(1);
+        }
+        .text-highlight {
+            color: #3B82F6;
+            font-weight: 700;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 2px;
+            padding: 0 1px;
+        }
+        
+        /* Icon backgrounds for specific countries */
+        .icon-bg-sweden { background-color: rgba(0, 91, 153, 0.1); color: #005B99; border-color: rgba(0, 91, 153, 0.2); }
+        .icon-bg-poland { background-color: rgba(220, 20, 60, 0.1); color: #DC143C; border-color: rgba(220, 20, 60, 0.2); }
+        .icon-bg-czech { background-color: rgba(0, 196, 180, 0.1); color: #00C4B4; border-color: rgba(0, 196, 180, 0.2); }
+        .icon-bg-latvia { background-color: rgba(158, 48, 57, 0.1); color: #9E3039; border-color: rgba(158, 48, 57, 0.2); }
+        .icon-bg-serbia { background-color: rgba(204, 0, 0, 0.1); color: #CC0000; border-color: rgba(204, 0, 0, 0.2); }
+        .icon-bg-macedonia { background-color: rgba(210, 0, 0, 0.1); color: #D20000; border-color: rgba(210, 0, 0, 0.2); }
+        .icon-bg-finland { background-color: rgba(0, 196, 180, 0.1); color: #00C4B4; border-color: rgba(0, 196, 180, 0.2); }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body id="programs-hub-page">
+
+    <!-- Background Star Field & Aurora -->
+    <div class="fixed inset-0 z-0 overflow-hidden">
+        <div class="absolute inset-0 star-field opacity-10"></div>
+        <div class="absolute inset-0 z-10 pointer-events-none">
+            <!-- Aurora Blob 1 (Teal Accent) -->
+            <div class="absolute w-[800px] h-[800px] top-[-300px] left-[-200px] bg-accent-teal/50 rounded-full mix-blend-screen opacity-10 blur-[150px] animate-float" style="animation-delay: 0s;"></div>
+            <!-- Aurora Blob 2 (Lime Accent) -->
+            <div class="absolute w-[1000px] h-[1000px] bottom-[-400px] right-[-300px] bg-accent-lime/40 rounded-full mix-blend-screen opacity-[0.08] blur-[150px] animate-float" style="animation-delay: -4s;"></div>
+            <!-- Aurora Blob 3 (Vibrant Blue Accent) -->
+            <div class="absolute w-[600px] h-[600px] top-[30vh] right-[5vw] bg-accent-blue-vibrant/40 rounded-full mix-blend-screen opacity-[0.05] blur-[100px] animate-float" style="animation-delay: -8s;"></div>
+        </div>
+    </div>
+
+    <!-- NOTE: Global Navigation and Footer are injected via JavaScript at the bottom of the page -->
+
+    <!-- Hero Section -->
+    <header class="relative pt-40 pb-20 overflow-hidden z-20">
+        <div class="container mx-auto px-4 relative z-10 text-center">
+
+            <!-- Badge (Using glass-base) -->
+            <div class="inline-flex items-center gap-3 glass-base px-6 py-2.5 rounded-full mb-8 animate-fade-in-up" style="animation-delay: 0.1s;">
+                <span class="w-2 h-2 rounded-full bg-accent-teal animate-pulse"></span>
+                <span class="text-gray-300 text-xs font-semibold uppercase tracking-widest">Global Work Permit Specialists</span>
+            </div>
+
+            <!-- Main Heading (Gradient updated to Teal/Lime/Yellow) -->
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-8 leading-[1.1] animate-fade-in-up" style="animation-delay: 0.2s;">
+                Explore All <br>
+                <span class="text-gradient-hero font-serif">European Work Programs</span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12 font-light animate-fade-in-up" style="animation-delay: 0.3s;">
+                Find stable, verified job opportunities across the EU and Balkan regions. Your direct path to European residency starts here.
+            </p>
+
+            <!-- Primary Action Button: Teal Accent -->
+            <a href="#program-grid" class="inline-flex items-center justify-center relative group overflow-hidden rounded-full bg-accent-teal px-10 py-4 transition-all duration-300 text-white font-bold hover:scale-105 shadow-[0_0_30px_rgba(0,196,180,0.5)] hover:shadow-[0_0_40px_rgba(0,196,180,0.8)] animate-fade-in-up" style="animation-delay: 0.4s;">
+                <span class="relative z-10 flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-arrow-down-long"></i> Jump to Programs
+                </span>
+                <div class="absolute inset-0 bg-accent-lime transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+            </a>
+        </div>
+    </header>
+
+    <!-- Program Grid -->
+    <section id="program-grid" class="py-20 relative">
+        <div class="container mx-auto px-4 relative z-10">
+            <h2 class="text-3xl font-bold text-white mb-12 text-center reveal-item">Verified Job Opportunities by Region</h2>
+            
+            <div id="countryContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-8xl mx-auto">
+                <!-- Program Cards will be dynamically inserted here -->
+            </div>
+            
+            <div class="text-center mt-20 reveal-item">
+                <h3 class="text-2xl font-bold text-white mb-4">Ready to find your match?</h3>
+                <p class="text-gray-400 mb-6">Complete a free assessment to check your eligibility across all countries.</p>
+                 <a href="assessment.html" class="inline-flex items-center justify-center relative group overflow-hidden rounded-full bg-accent-lime text-deep-blue font-bold px-10 py-4 transition-all duration-300 hover:scale-105 shadow-[0_0_30px_rgba(217,255,0,0.5)] hover:shadow-[0_0_40px_rgba(217,255,0,0.8)]">
+                    <span class="relative z-10 flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-clipboard-check"></i> Free Eligibility Assessment
+                    </span>
+                    <div class="absolute inset-0 bg-accent-teal transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/971503666382" target="_blank" class="fixed bottom-8 right-8 z-50 bg-[#25D366] text-white w-16 h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(217,255,0,0.4)] hover:shadow-[0_0_30px_rgba(217,255,0,0.6)] transition-all duration-300 hover:scale-110 group animate-[pulse-glow_3s_cubic-bezier(0.4,0,0.6,1)_infinite]" rel="noopener noreferrer">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <!-- SCRIPTS -->
+    <script>
+        // --- GLOBAL UI SHELL ---
+        const GLOBAL_HEADER = `
+        <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
+            <div class="floating-nav w-full max-w-7xl px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
+                <a href="index.html" class="flex items-center gap-2 md:gap-3 group px-2 md:px-4">
+                    <div class="w-8 h-8 md:w-10 md:h-10 bg-space-indigo rounded-full border border-white/10 flex items-center justify-center text-brand-white font-bold text-base md:text-lg shadow-2xl glass-panel overflow-hidden p-1 flex-shrink-0">
+                        <span class="relative z-10 text-brand-white">BC</span>
+                    </div>
+                    <div class="block leading-tight"> 
+                        <h1 class="font-bold text-white text-xs md:text-sm tracking-wide whitespace-nowrap">BETTER CALL</h1>
+                        <p class="text-[8px] md:text-[9px] font-bold text-brand-gold uppercase tracking-[0.2em] md:tracking-[0.2em]">Immigration</p>
+                    </div>
+                </a>
+                <div class="hidden lg:flex items-center gap-1">
+                    <a href="index.html" class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">Home</a>
+                    <div class="relative group">
+                        <button class="px-4 py-2 text-sm text-white font-medium transition rounded-full bg-white/10 text-brand-blue flex items-center gap-1">Programs <svg class="w-3 h-3 text-brand-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                        <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50 max-h-[80vh] overflow-y-auto hide-scrollbar">
+                            <a href="sweden.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-400 hover:bg-blue-500/20 transition block">Sweden</a>
+                            <a href="finland.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-purple-400 hover:bg-purple-500/20 transition block">Finland</a>
+                            <a href="germany.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-brand-gold hover:bg-brand-gold/20 transition block">Germany</a>
+                            <a href="italy.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-orange-400 hover:bg-orange-500/20 transition block">Italy</a>
+                            <a href="france.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-500 hover:bg-blue-600/20 transition block">France</a>
+                            <a href="poland.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-400 hover:bg-red-500/20 transition block">Poland</a>
+                            <a href="czech.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-300 hover:bg-blue-400/20 transition block">Czech Republic</a>
+                            <a href="latvia.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-300 hover:bg-red-500/20 transition block">Latvia</a>
+                            <a href="serbia.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-300 hover:bg-blue-500/20 transition block">Serbia</a>
+                            <a href="macedonia.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-yellow-400 hover:bg-yellow-500/20 transition block">Macedonia</a>
+                            <a href="albania.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-500 hover:bg-red-600/20 transition block">Albania</a>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <button class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5 flex items-center gap-1">Services <svg class="w-3 h-3 text-gray-400 group-hover:text-brand-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                        <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50">
+                            <a href="vfs.html" class="px-4 py-2.5 rounded-xl text-sm text-vfs-teal font-medium hover:bg-vfs-teal/10 transition block">Visa Appointment</a>
+                            <a href="visa_documentation.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Visa Documentation</a>
+                            <a href="travel_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Travel Assistance</a>
+                            <a href="insurance_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Insurance Assistance</a>
+                            <a href="medical_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Medical Assistance</a>
+                        </div>
+                    </div>
+                    <a href="assessment.html" class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">Free Assessment</a>
+                    <a href="about.html" class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">About Us</a>
+                </div>
+                <div class="flex items-center gap-2 sm:gap-3 px-2">
+                    <button onclick="toggleSearch()" class="group p-2.5 rounded-full hover:bg-white/10 transition-all duration-300 relative" aria-label="Search">
+                        <i class="fa-solid fa-magnifying-glass text-white/70 group-hover:text-brand-blue text-lg"></i>
+                        <span class="hidden lg:inline-flex absolute -bottom-8 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md px-2 py-0.5 rounded text-[10px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/5">Cmd + K</span>
+                    </button>
+                    <button class="lg:hidden p-2 text-white hover:text-brand-blue transition rounded-full hover:bg-white/5" onclick="toggleMobileMenu()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <a href="book.html" class="hidden sm:flex group relative px-6 py-2.5 rounded-full bg-brand-blue text-white font-bold text-sm overflow-hidden transition-all hover:scale-105 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]">
+                        <span class="relative z-10 group-hover:text-white transition-colors">Book Now</span>
+                        <div class="absolute inset-0 bg-brand-purple transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                    </a>
+                </div>
+            </div>
+            <div id="mobileMenu" class="fixed inset-0 bg-[#0B132B]/98 backdrop-blur-3xl z-[60] transform translate-y-full transition-transform duration-500 flex flex-col items-center justify-start pt-32 pb-10 space-y-8 overflow-y-auto">
+                <button class="absolute top-6 right-6 text-white/50 hover:text-white text-3xl transition" onclick="toggleMobileMenu()">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <a href="index.html" onclick="toggleMobileMenu()" class="text-3xl font-light text-white hover:text-brand-blue">Home</a>
+                <div class="w-full px-8 space-y-8">
+                    <div class="text-center">
+                        <p class="text-brand-gold text-xs uppercase tracking-widest mb-4 font-bold opacity-70">Destinations</p>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <a href="sweden.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Sweden</a>
+                            <a href="finland.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Finland</a>
+                            <a href="germany.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Germany</a>
+                            <a href="italy.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Italy</a>
+                            <a href="france.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">France</a>
+                            <a href="poland.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Poland</a>
+                            <a href="czech.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Czech Republic</a>
+                            <a href="latvia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Latvia</a>
+                            <a href="serbia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Serbia</a>
+                            <a href="macedonia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Macedonia</a>
+                            <a href="albania.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Albania</a>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-brand-gold text-xs uppercase tracking-widest mb-4 font-bold opacity-70">Services</p>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <a href="vfs.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-vfs-teal font-medium">Visa Appointment</a>
+                            <a href="visa_documentation.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Visa Documentation</a>
+                            <a href="travel_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Travel Assistance</a>
+                            <a href="insurance_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Insurance</a>
+                            <a href="medical_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Medical</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4 items-center w-full px-8">
+                    <a href="assessment.html" onclick="toggleMobileMenu()" class="w-full max-w-xs text-center text-lg font-bold text-white bg-brand-blue px-8 py-4 rounded-full shadow-lg hover:scale-105 transition-transform">Free Assessment</a>
+                    <a href="book.html" onclick="toggleMobileMenu()" class="w-full max-w-xs text-center text-lg font-bold text-deep-space bg-brand-gold px-8 py-4 rounded-full shadow-xl hover:scale-105 transition-transform">Book Consultation</a>
+                </div>
+            </div>
+        </nav>
+        <div id="search-overlay" class="fixed inset-0 z-[100] bg-deep-space/80 backdrop-blur-xl flex items-start justify-center pt-24 px-4">
+            <div class="absolute inset-0 cursor-default" onclick="toggleSearch()"></div>
+            <div id="search-container" class="w-full max-w-3xl relative z-10 bg-[#0F172A]/90 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh]">
+                <div class="flex items-center p-6 border-b border-white/5">
+                    <i class="fa-solid fa-magnifying-glass text-brand-blue text-xl mr-4"></i>
+                    <input type="text" id="global-search-input" placeholder="Search countries, jobs, or services..." class="bg-transparent border-none outline-none text-xl text-white placeholder-gray-500 w-full font-light" autocomplete="off">
+                    <button onclick="toggleSearch()" class="text-gray-500 hover:text-white transition p-2"><span class="text-xs uppercase font-bold tracking-wider border border-white/10 rounded px-2 py-1">ESC</span></button>
+                </div>
+                <div id="search-results" class="overflow-y-auto p-2 custom-scrollbar">
+                    <div id="search-default" class="p-4">
+                        <p class="text-xs font-bold text-brand-gold uppercase tracking-widest mb-3 opacity-70">Quick Access</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <a href="germany.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition group"><span class="text-2xl">🇩🇪</span><div class="flex flex-col"><span class="text-white text-sm font-medium group-hover:text-brand-blue transition">Germany</span><span class="text-xs text-gray-500">Care Home & Specialist Visas</span></div></a>
+                            <a href="assessment.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition group"><div class="w-8 h-8 rounded-full bg-brand-blue/20 text-brand-blue flex items-center justify-center text-xs"><i class="fa-solid fa-clipboard-check"></i></div><div class="flex flex-col"><span class="text-white text-sm font-medium group-hover:text-brand-blue transition">Free Assessment</span><span class="text-xs text-gray-500">Check your eligibility instantly</span></div></a>
+                        </div>
+                    </div>
+                    <div id="dynamic-results" class="hidden flex-col gap-1"></div>
+                    <div id="no-results" class="hidden p-8 text-center"><i class="fa-solid fa-circle-question text-gray-600 text-3xl mb-3"></i><p class="text-gray-400 text-sm">No results found for your query.</p></div>
+                </div>
+                <div class="bg-black/20 p-3 text-[10px] text-gray-500 flex justify-between items-center px-6"><div class="flex gap-4"><span class="hidden sm:inline">Use <strong class="text-gray-400">↑</strong> <strong class="text-gray-400">↓</strong> to navigate</span><span class="hidden sm:inline"><strong class="text-gray-400">Enter</strong> to select</span></div><span>Better Call Search</span></div>
+            </div>
+        </div>
+        `;
+
+        const GLOBAL_FOOTER = `
+        <footer class="bg-[#001438] text-gray-400 py-16 md:py-20 border-t border-brand-blue/10 relative z-10 mt-auto">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 md:gap-12 mb-12 md:mb-16">
+                    
+                    <!-- Logo & Description (Center on Mobile, Left on Desktop) -->
+                    <div class="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col items-center md:items-start text-center md:text-left">
+                        <a href="index.html" class="flex items-center gap-4 group mb-6 w-fit">
+                            <div class="w-12 h-12 bg-space-indigo rounded-xl border border-white/10 flex items-center justify-center text-brand-white font-bold text-xl shadow-2xl glass-panel p-1">
+                                <span class="relative z-10">BC</span>
+                            </div>
+                            <div class="block text-left">
+                                <h4 class="font-bold text-white text-lg tracking-wide">BETTER CALL</h4>
+                                <p class="text-[10px] font-bold text-brand-gold uppercase tracking-[0.3em]">Immigration</p>
+                            </div>
+                        </a>
+
+                        <p class="text-sm leading-relaxed max-w-sm mb-8 font-light text-gray-500">
+                            Defining the industry benchmark for professionalism, absolute transparency, and sustained client success in global migration.
+                        </p>
+                        <div class="flex gap-4">
+                            <a href="https://wa.me/971503666382" class="w-12 h-12 rounded-full glass-panel hover:bg-brand-blue hover:text-white flex items-center justify-center transition-all duration-300" target="_blank" rel="noopener noreferrer">
+                                <i class="fa-brands fa-whatsapp text-xl"></i>
+                            </a>
+                            <a href="https://www.instagram.com/the_better_call" class="w-12 h-12 rounded-full glass-panel hover:bg-brand-purple hover:text-white flex items-center justify-center transition-all duration-300" target="_blank" rel="noopener noreferrer">
+                                <i class="fa-brands fa-instagram text-xl"></i>
+                            </a>
+                            <a href="mailto:admin@thebettercall.com" class="w-12 h-12 rounded-full glass-panel hover:bg-brand-gold hover:text-white flex items-center justify-center transition-all duration-300">
+                                <i class="fa-solid fa-envelope text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Programs (Hidden on Mobile) -->
+                    <div class="hidden md:block">
+                        <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest">Destinations</h4>
+                        <ul class="space-y-4 text-sm font-light">
+                            <li><a href="germany.html" class="hover:text-brand-blue transition-colors">Germany</a></li>
+                            <li><a href="sweden.html" class="hover:text-brand-blue transition-colors">Sweden</a></li>
+                            <li><a href="finland.html" class="hover:text-brand-blue transition-colors">Finland</a></li>
+                            <li><a href="italy.html" class="hover:text-brand-blue transition-colors">Italy</a></li>
+                            <li><a href="france.html" class="hover:text-brand-blue transition-colors">France</a></li>
+                            <li><a href="poland.html" class="hover:text-brand-blue transition-colors">Poland</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Services (Hidden on Mobile) -->
+                    <div class="hidden md:block">
+                        <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest">Services</h4>
+                        <ul class="space-y-4 text-sm font-light">
+                            <li><a href="vfs.html" class="hover:text-brand-blue transition-colors">Visa Appointment</a></li>
+                            <li><a href="visa_documentation.html" class="hover:text-brand-blue transition-colors">Documentation</a></li>
+                            <li><a href="travel_assistance.html" class="hover:text-brand-blue transition-colors">Travel Assistance</a></li>
+                            <li><a href="insurance_assistance.html" class="hover:text-brand-blue transition-colors">Insurance</a></li>
+                            <li><a href="medical_assistance.html" class="hover:text-brand-blue transition-colors">Medical</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Company (Hidden on Mobile) -->
+                    <div class="hidden md:block">
+                        <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest">Company</h4>
+                        <ul class="space-y-4 text-sm font-light">
+                            <li><a href="about.html" class="hover:text-brand-blue transition-colors">Our Story</a></li>
+                            <li><a href="assessment.html" class="hover:text-brand-blue transition-colors">Free Assessment</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Office (Hidden on Mobile) -->
+                    <div class="hidden md:block">
+                        <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest">Office</h4>
+                        <ul class="space-y-4 text-sm font-light">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-location-dot text-brand-gold mt-1"></i>
+                                <span>R320-12th Floor, Office 14<br>Sheikh Rashid Rd, Oud Metha<br>Dubai Healthcare City, UAE</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fa-solid fa-phone text-brand-gold"></i>
+                                <span>+971 50 366 6382</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fa-solid fa-envelope text-brand-gold"></i>
+                                <span>admin@thebettercall.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="border-t border-white/5 pt-8 text-center text-xs text-gray-600 font-light flex flex-col md:flex-row justify-between items-center">
+                    <p>&copy; 2025 Better Call Immigration. All rights reserved.</p>
+                    <div class="flex gap-6 mt-4 md:mt-0">
+                        <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                        <a href="#" class="hover:text-white transition">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        `;
+
+        // 1. INJECT UNIVERSAL COMPONENTS
+        document.body.insertAdjacentHTML('afterbegin', GLOBAL_HEADER);
+        document.body.insertAdjacentHTML('beforeend', GLOBAL_FOOTER);
+
+        // 2. SCRIPTS & LOGIC
+        // Navbar Scroll Effect
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const nav = document.getElementById('navbar');
+                    if (window.scrollY > 20) {
+                        nav.classList.add('scrolled');
+                    } else {
+                        nav.classList.remove('scrolled');
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Mobile Menu Toggle (Global Function)
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu.classList.contains('translate-y-full')) {
+                menu.classList.remove('translate-y-full');
+            } else {
+                menu.classList.add('translate-y-full');
+            }
+        }
+
+        // --- UNIVERSAL SEARCH LOGIC ---
+        const searchData = [
+            // JOBS MAPPED
+            { title: "Registered Nurse", type: "Job", url: "germany.html#nurse", icon: "👩‍⚕️", keywords: "health, medical, care home, germany, hospital" },
+            { title: "Software Engineer", type: "Job", url: "germany.html#it", icon: "💻", keywords: "developer, coding, tech, germany, blue card" },
+            { title: "Construction Worker", type: "Job", url: "serbia.html#construction", icon: "👷", keywords: "trades, builder, infrastructure, serbia, latvia" },
+            { title: "Truck Driver", type: "Job", url: "poland.html#logistics", icon: "🚛", keywords: "logistics, transport, driver, poland, lithuania" },
+            { title: "Chef / Cook", type: "Job", url: "albania.html#hospitality", icon: "👨‍🍳", keywords: "kitchen, restaurant, food, albania, croatia" },
+            { title: "Hotel Staff", type: "Job", url: "albania.html#hospitality", icon: "🏨", keywords: "cleaning, housekeeping, reception, albania" },
+            { title: "Airport Ground Staff", type: "Job", url: "sweden.html#airport", icon: "✈️", keywords: "baggage, ramp, airport, sweden" },
+            { title: "Welder / Fitter", type: "Job", url: "czech.html#industry", icon: "🔧", keywords: "metal, factory, industrial, czech" },
+
+            // COUNTRIES
+            { title: "Germany", type: "Country", url: "germany.html", icon: "🇩🇪", keywords: "care home, nurse, doctor, blue card, visa" },
+            { title: "Sweden", type: "Country", url: "sweden.html", icon: "🇸🇪", keywords: "airport, engineering, hospitality, north" },
+            { title: "Finland", type: "Country", url: "finland.html", icon: "🇫🇮", keywords: "tech, service, happy, north, seasonal" },
+            { title: "Italy", type: "Country", url: "italy.html", icon: "🇮🇹", keywords: "decreto flussi, seasonal, non-seasonal, construction" },
+            { title: "France", type: "Country", url: "france.html", icon: "🇫🇷", keywords: "talent passport, tech, investor, paris" },
+            { title: "Poland", type: "Country", url: "poland.html", icon: "🇵🇱", keywords: "logistics, manufacturing, schengen, work permit" },
+            { title: "Czech Republic", type: "Country", url: "czech.html", icon: "🇨🇿", keywords: "automotive, engineering, prague, factory" },
+            { title: "Latvia", type: "Country", url: "latvia.html", icon: "🇱🇻", keywords: "baltic, logistics, construction, riga" },
+            { title: "Serbia", type: "Country", url: "serbia.html", icon: "🇷🇸", keywords: "construction, trades, infrastructure, belgrade" },
+            { title: "Macedonia", type: "Country", url: "macedonia.html", icon: "🇲🇰", keywords: "emerging, development, skopje" },
+            { title: "Albania", type: "Country", url: "albania.html", icon: "🇦🇱", keywords: "tourism, hospitality, hotels, tirana" },
+            
+            // SERVICES
+            { title: "Visa Appointment", type: "Service", url: "vfs.html", icon: "📅", keywords: "vfs, embassy, slot, booking, date" },
+            { title: "Visa Documentation", type: "Service", url: "visa_documentation.html", icon: "📄", keywords: "legalization, apostille, translation, civil documents" },
+            { title: "Travel Assistance", type: "Service", url: "travel_assistance.html", icon: "✈️", keywords: "flight, hotel, itinerary, booking, reservation" },
+            { title: "Insurance", type: "Service", url: "insurance_assistance.html", icon: "🛡️", keywords: "medical, health, schengen, coverage, policy" },
+            { title: "Medical Assistance", type: "Service", url: "medical_assistance.html", icon: "🩺", keywords: "exam, checkup, doctor, certificate, health" },
+            
+            // TOOLS
+            { title: "Free Assessment", type: "Tool", url: "assessment.html", icon: "📝", keywords: "check, eligibility, qualify, start" },
+            { title: "Book Consultation", type: "Tool", url: "book.html", icon: "📞", keywords: "call, meeting, talk, expert, lawyer" }
+        ];
+
+        // Search Variables (Initialized after DOM injection)
+        let searchOverlay, globalSearchInput, searchResults, defaultResults, dynamicResults, noResults;
+
+        function initSearchElements() {
+             searchOverlay = document.getElementById('search-overlay');
+             globalSearchInput = document.getElementById('global-search-input');
+             searchResults = document.getElementById('search-results');
+             defaultResults = document.getElementById('search-default');
+             dynamicResults = document.getElementById('dynamic-results');
+             noResults = document.getElementById('no-results');
+
+            if(globalSearchInput) {
+                 globalSearchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    if (query.length === 0) {
+                        defaultResults.classList.remove('hidden');
+                        dynamicResults.classList.add('hidden');
+                        noResults.classList.add('hidden');
+                        return;
+                    }
+                    const filtered = searchData.filter(item => 
+                        item.title.toLowerCase().includes(query) || 
+                        item.keywords.toLowerCase().includes(query) ||
+                        item.type.toLowerCase().includes(query)
+                    );
+                    renderResults(filtered, query);
+                });
+            }
+        }
+        
+        // Call this immediately to bind to the injected elements
+        initSearchElements();
+
+        function toggleSearch() {
+            if(!searchOverlay) initSearchElements(); // Safety check
+            const isActive = searchOverlay.classList.contains('active');
+            if (isActive) {
+                searchOverlay.classList.remove('active');
+                document.body.style.overflow = ''; 
+            } else {
+                searchOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; 
+                setTimeout(() => globalSearchInput.focus(), 100);
+            }
+        }
+
+        // Helper to highlight matching text
+        function highlightMatch(text, query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="text-highlight">$1</span>');
+        }
+
+        function renderResults(results, query) {
+            defaultResults.classList.add('hidden');
+            dynamicResults.innerHTML = '';
+            
+            if (results.length === 0) {
+                dynamicResults.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            dynamicResults.classList.remove('hidden');
+
+            results.forEach((result, index) => {
+                const div = document.createElement('a');
+                div.href = result.url;
+                div.className = "flex items-center gap-4 p-4 rounded-xl hover:bg-white/10 transition duration-200 group border border-transparent hover:border-white/5 animate-fade-in-up";
+                div.style.animationDelay = `${index * 50}ms`;
+                
+                let typeColor = "text-gray-500";
+                if(result.type === "Country") typeColor = "text-brand-gold";
+                if(result.type === "Service") typeColor = "text-brand-blue";
+                if(result.type === "Tool") typeColor = "text-brand-purple";
+                if(result.type === "Job") typeColor = "text-vfs-teal";
+
+                // Apply highlighting
+                const highlightedTitle = highlightMatch(result.title, query);
+                const highlightedKeywords = highlightMatch(result.keywords, query);
+
+                div.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-xl shadow-inner">${result.icon}</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-white font-medium group-hover:text-brand-blue transition">${highlightedTitle}</h4>
+                            <span class="text-[10px] uppercase font-bold tracking-wider ${typeColor} bg-white/5 px-2 py-0.5 rounded border border-white/5">${result.type}</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-0.5 truncate">${highlightedKeywords}</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-gray-600 group-hover:text-white transition transform group-hover:translate-x-1"></i>
+                `;
+                dynamicResults.appendChild(div);
+            });
+        }
+
+        // Keyboard Shortcut
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                toggleSearch();
+            }
+            if (e.key === 'Escape' && searchOverlay && searchOverlay.classList.contains('active')) {
+                toggleSearch();
+            }
+        });
+
+        // --- PAGE SPECIFIC LOGIC ---
+        const programData = [
+            {
+                name: "Sweden", flag: "🇸🇪", link: "sweden.html", icon: "fa-plane-departure",
+                summary: "Airport contracts in Construction, Catering, & Engineering. High salaries, sponsored accommodation, and clear path to permanent residency.",
+                highlights: ["High Salary (50,000 SEK+)", "Sponsored Accommodation", "Schengen Access", "EU Residency"],
+                accent: "sweden-blue",
+                accent_hover: "accent-lime"
+            },
+            {
+                name: "Finland", flag: "🇫🇮", link: "finland.html", icon: "fa-tractor",
+                summary: "Opportunities in Supermarkets, Agriculture, and Catering. 2-year contract with accommodation, food, and air ticket included.",
+                highlights: ["All-Inclusive Package (€6,000)", "Accommodation & Food Included", "High Demand Roles", "Fast Processing"],
+                accent: "accent-teal",
+                accent_hover: "accent-lime"
+            },
+            {
+                name: "Poland", flag: "🇵🇱", link: "poland.html", icon: "fa-warehouse",
+                summary: "Work in the Schengen Zone in Manufacturing, Logistics, and Skilled Trades. Focus on high overtime potential and subsidized accommodation.",
+                highlights: ["Schengen Work Permit", "High Overtime Potential", "Low Deposit Option", "5-year EU Residency Path"],
+                accent: "poland-red",
+                accent_hover: "accent-lime"
+            },
+            {
+                name: "Czech Republic", flag: "🇨🇿", link: "czech.html", icon: "fa-car-side",
+                summary: "Automotive, Engineering, and Skilled Trades jobs in Central Europe's industrial hub. Direct work permit and fast EU pathway.",
+                highlights: ["Industrial/Automotive Focus", "Good EU Salary (Gross €1,400+)", "Short Processing Time", "Full EU Residency"],
+                accent: "czech-accent",
+                accent_hover: "accent-lime"
+            },
+            {
+                name: "Latvia", flag: "🇱🇻", link: "latvia.html", icon: "fa-hard-hat",
+                summary: "Baltic work permits for Construction, Manufacturing, and IT (Blue Card). High minimum salary benchmark and full social security.",
+                highlights: ["High Minimum Salary (€1,537+)", "EU Blue Card Options", "Schengen Access", "5-year TRP/PR Path"],
+                accent: "latvia-red",
+                accent_hover: "accent-lime"
+            },
+            {
+                name: "Serbia", flag: "🇷🇸", link: "serbia.html", icon: "fa-truck-ramp-box",
+                summary: "3-year renewable Single Permit for Transport, Logistics, and Service. Low cost of living with long-term residency opportunity.",
+                highlights: ["3-Year Single Permit", "Low Cost of Living", "Easy Family Sponsorship", "Permanent Residency Path"],
+                accent: "serbia-red",
+                accent_hover: "accent-lime"
+            },
+            {
+                name: "North Macedonia", flag: "🇲🇰", link: "macedonia.html", icon: "fa-industry",
+                summary: "Low tax environment (10% flat tax) in growing industries. Fast processing and direct path to Balkan/European opportunity.",
+                highlights: ["10% Flat Tax Rate", "Fast Processing (3-4 Months)", "Low Cost of Living", "Balkan/EU Gateway"],
+                accent: "macedonia-red",
+                accent_hover: "macedonia-yellow"
+            },
+            {
+                name: "Albania", flag: "🇦🇱", link: "albania.html", icon: "fa-umbrella-beach",
+                summary: "Seasonal and permanent work in construction and tourism. Emerging market with fast growing economy and beautiful coastlines.",
+                highlights: ["Tourism & Construction", "Growing Economy", "Mediterranean Lifestyle", "Low Startup Cost"],
+                accent: "accent-blue-vibrant", // Using a unique color
+                accent_hover: "accent-yellow"
+            },
+            
+        ];
+
+        // --- RENDER FUNCTION ---
+        function renderProgramCards() {
+            const container = document.getElementById('countryContainer');
+            container.innerHTML = programData.map((program, index) => {
+                // Determine icon background color class dynamically
+                let iconClass = '';
+                if (program.name === 'Sweden') iconClass = 'icon-bg-sweden';
+                else if (program.name === 'Poland') iconClass = 'icon-bg-poland';
+                else if (program.name === 'Czech Republic' || program.name === 'Finland') iconClass = 'icon-bg-finland'; // Teal for both
+                else if (program.name === 'Latvia') iconClass = 'icon-bg-latvia';
+                else if (program.name === 'Serbia') iconClass = 'icon-bg-serbia';
+                else if (program.name === 'North Macedonia') iconClass = 'icon-bg-macedonia';
+                else if (program.name === 'Albania') iconClass = 'icon-bg-czech'; // Using Czech/Teal for Albania too, as it's a tertiary color
+
+                // Use the modern-card style with accent border
+                return `
+                    <a href="${program.link}" class="modern-card p-6 flex flex-col h-full group cursor-pointer rounded-2xl reveal-item border-l-4 border-${program.accent}/50 hover:border-${program.accent} shadow-md" style="transition-delay: ${index * 50}ms">
+                        
+                        <div class="flex items-center gap-4 mb-4">
+                            <!-- Icon/Flag Container -->
+                            <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl font-bold border border-white/20 shadow-md ${iconClass}">
+                                <i class="fa-solid ${program.icon}"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white group-hover:text-${program.accent} transition-colors">${program.flag} ${program.name}</h3>
+                        </div>
+                        
+                        <p class="text-sm text-gray-400 mb-6 flex-grow leading-relaxed">${program.summary}</p>
+
+                        <!-- Highlights Section -->
+                        <div class="space-y-2 text-sm mb-6">
+                            ${program.highlights.map(h => `
+                                <div class="flex items-center gap-2 text-gray-300">
+                                    <i class="fa-solid fa-circle-check text-xs text-${program.accent}"></i>
+                                    <span>${h}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <!-- CTA Button -->
+                        <button class="w-full relative group overflow-hidden rounded-lg bg-${program.accent} text-white font-bold px-4 py-3 transition-all hover:scale-[1.01] shadow-[0_5px_15px_rgba(0,0,0,0.2)]">
+                             <span class="relative z-10">View Details</span>
+                             <div class="absolute inset-0 bg-${program.accent_hover} transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                        </button>
+                    </a>
+                `;
+            }).join('');
+            
+            // Trigger animation check
+            checkScroll();
+        }
+
+        // --- SCROLL ANIMATION ---
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 }; 
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        function checkScroll() {
+            document.querySelectorAll('.reveal-item').forEach(el => {
+                if (!el.classList.contains('active')) {
+                    observer.observe(el);
+                }
+            });
+        }
+        window.addEventListener('scroll', checkScroll);
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProgramCards();
+            checkScroll(); // Initial check to reveal elements already in view
+        });
+    </script>
+</body>
+</html>

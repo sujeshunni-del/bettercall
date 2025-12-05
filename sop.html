@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP | Immigration Case Management</title>
+    <meta name="description" content="Standard Operating Procedure for Consultant & Documentation Team.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        'deep-space': '#050B14',
+                        'space-indigo': '#1C2B4C', 
+                        'brand-blue': '#3B82F6',      
+                        'brand-purple': '#8B5CF6',     
+                        'brand-gold': '#FFD700',
+                        'brand-white': '#FFFFFF',
+                        'vfs-teal': '#14B8A6',
+                        'phase-green': '#22c55e',
+                        'phase-orange': '#f97316',
+                        'phase-red': '#ef4444',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050B14;
+            color: #E2E8F0;
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        /* Glass Components */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+            transition: all 0.3s ease;
+        }
+        .glass-panel:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sidebar Active State */
+        .nav-link.active {
+            color: #3B82F6;
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3B82F6;
+        }
+
+        /* Accordion Styles */
+        .accordion-content {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .accordion-item.active .accordion-content {
+            opacity: 1;
+        }
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Ambient Background */
+        .ambient-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+        }
+        .orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #3B82F6; }
+        .orb-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #8B5CF6; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050B14; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        
+        .sticky-sidebar {
+            position: sticky;
+            top: 6rem;
+            max-height: calc(100vh - 8rem);
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col relative">
+
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#050B14]/80 backdrop-blur-xl border-b border-white/5">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 bg-space-indigo rounded-xl border border-white/10 flex items-center justify-center text-brand-white font-bold text-lg shadow-lg">
+                    <span>BC</span>
+                </div>
+                <div class="block leading-tight"> 
+                    <h1 class="font-bold text-white text-lg tracking-wide">BETTER CALL</h1>
+                    <p class="text-[10px] font-bold text-brand-gold uppercase tracking-[0.2em]">Immigration</p>
+                </div>
+            </a>
+            <div class="flex gap-4">
+                <a href="#" class="text-sm font-medium text-white hover:text-brand-blue transition">Operations</a>
+                <a href="#" class="text-sm font-medium text-gray-400 hover:text-white transition">Consultants</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-24 pb-20">
+        
+        <section class="container mx-auto px-4 mb-12">
+            <div class="max-w-4xl mx-auto text-center">
+                <span class="text-brand-blue font-bold tracking-[0.2em] text-xs uppercase mb-4 block">Internal Documentation</span>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">Standard Operating Procedure</h1>
+                [cite_start]<p class="text-gray-400 text-lg mb-8">Consultant & Documentation Team Workflow: Lead Generation to Deployment[cite: 1, 2].</p>
+                
+                <div class="relative max-w-2xl mx-auto group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-gold rounded-full opacity-30 group-hover:opacity-60 blur transition duration-500"></div>
+                    <div class="relative bg-[#0B1221] rounded-full flex items-center p-2 border border-white/10">
+                        <i class="fa-solid fa-search text-gray-500 ml-4"></i>
+                        <input type="text" id="help-search" placeholder="Search for 'Setmore', 'Assessment Set', 'Visa Packet'..." class="w-full bg-transparent border-none focus:ring-0 text-white px-4 py-2 placeholder-gray-500 outline-none">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row gap-8">
+                
+                <aside class="hidden lg:block w-1/4">
+                    <div class="glass-panel rounded-2xl p-4 sticky-sidebar custom-scrollbar">
+                        <h3 class="text-white font-bold mb-4 px-3 uppercase tracking-widest text-xs">Phases</h3>
+                        <nav class="space-y-1" id="toc-nav">
+                            </nav>
+                    </div>
+                </aside>
+
+                <div class="w-full lg:w-3/4 space-y-8" id="content-feed">
+                    
+                    <div class="help-section" id="intro">
+                        <div class="glass-panel rounded-2xl p-6 md:p-8 border-l-4 border-brand-blue">
+                            <h2 class="text-2xl font-bold text-white mb-2">Objective</h2>
+                            <p class="text-gray-400 leading-relaxed">
+                                [cite_start]To standardize the workflow from lead generation to deployment, ensuring high conversion rates, accurate documentation, and strict adherence to payment milestones[cite: 3].
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="help-section" id="phase-1">
+                        <div class="glass-panel rounded-2xl p-6 md:p-8">
+                            <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-4">
+                                <div class="w-12 h-12 rounded-full bg-phase-green/20 flex items-center justify-center text-phase-green text-xl"><i class="fa-solid fa-users-viewfinder"></i></div>
+                                <h2 class="text-2xl font-bold text-white">Phase 1: Lead Acquisition & Triage</h2>
+                            </div>
+                            [cite_start]<p class="text-gray-400 mb-4"><strong>Goal:</strong> Capture inquiries from all channels and centralize them into the CRM[cite: 5].</p>
+                            
+                            <div class="space-y-3">
+                                <div class="accordion-item border border-white/5 rounded-xl overflow-hidden bg-white/5">
+                                    <button class="w-full flex justify-between items-center p-4 text-left font-semibold text-white hover:bg-white/5 transition" onclick="toggleAccordion(this)">
+                                        Step 1: Promotion & Inquiry Receipt
+                                        <i class="fa-solid fa-chevron-down accordion-icon text-sm text-gray-400"></i>
+                                    </button>
+                                    <div class="accordion-content">
+                                        <div class="p-4 pt-0 text-gray-400 text-sm leading-relaxed">
+                                            Marketing campaigns generate leads. [cite_start]Staff must monitor the following continuously[cite: 7]:
+                                            <ul class="list-disc list-inside mt-2 space-y-1 text-gray-300">
+                                                [cite_start]<li><strong class="text-phase-green">CRM (ClickUp):</strong> Check for automated leads[cite: 8]. </li>
+                                                [cite_start]<li><strong class="text-phase-green">WhatsApp API (Wati):</strong> Monitor automated messages[cite: 9].</li>
+                                                [cite_start]<li><strong>Direct Calls:</strong> Log details immediately[cite: 10].</li>
+                                                [cite_start]<li><strong>Personal WhatsApp:</strong> Transfer chat history to official system[cite: 11].</li>
+                                                [cite_start]<li><strong>Email:</strong> Monitor general inquiry inbox[cite: 12].</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item border border-white/5 rounded-xl overflow-hidden bg-white/5">
+                                    <button class="w-full flex justify-between items-center p-4 text-left font-semibold text-white hover:bg-white/5 transition" onclick="toggleAccordion(this)">
+                                        Step 2 & 3: Qualification & Assessment
+                                        <i class="fa-solid fa-chevron-down accordion-icon text-sm text-gray-400"></i>
+                                    </button>
+                                    <div class="accordion-content">
+                                        <div class="p-4 pt-0 text-gray-400 text-sm leading-relaxed">
+                                            <strong>Action:</strong> Engage immediately. [cite_start]Do not just say "Hello," ask specific questions[cite: 14].
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 mb-3">
+                                                <div class="bg-black/20 p-3 rounded">
+                                                    [cite_start]<strong class="text-brand-white">Analyze Profile[cite: 15]:</strong>
+                                                    <ul class="text-xs mt-1 space-y-1 text-gray-400">
+                                                        [cite_start]<li>• Qualification (Degree/Diploma) [cite: 16]</li>
+                                                        [cite_start]<li>• Skills (Trade/Professional) [cite: 17]</li>
+                                                        [cite_start]<li>• Experience (Years/Gaps) [cite: 18]</li>
+                                                        [cite_start]<li>• Budget (Financial Capability) [cite: 19]</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="bg-black/20 p-3 rounded">
+                                                    <strong class="text-brand-white">Preliminary Assessment:</strong>
+                                                    <p class="text-xs mt-1 text-gray-400">Suggest the most suitable country and position. [cite_start]Be realistic—if they don't meet criteria, advise honestly to save time[cite: 22, 24].</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section" id="phase-2">
+                        <div class="glass-panel rounded-2xl p-6 md:p-8">
+                            <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-4">
+                                <div class="w-12 h-12 rounded-full bg-brand-gold/20 flex items-center justify-center text-brand-gold text-xl"><i class="fa-solid fa-calendar-check"></i></div>
+                                <h2 class="text-2xl font-bold text-white">Phase 2: Consultation Appointment</h2>
+                            </div>
+                            [cite_start]<p class="text-gray-400 mb-4"><strong>Goal:</strong> Convert the lead into a signed client[cite: 26].</p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div class="p-4 border border-brand-gold/20 bg-brand-gold/5 rounded-xl">
+                                    [cite_start]<h4 class="text-brand-gold font-bold mb-2">Step 4: Booking [cite: 27]</h4>
+                                    [cite_start]<p class="text-sm text-gray-300">Use <strong class="text-white">Setmore</strong> to book slots[cite: 29]. </p>
+                                    <ul class="text-sm text-gray-400 mt-2 list-disc list-inside">
+                                        [cite_start]<li><strong>Local:</strong> In-office meeting[cite: 31].</li>
+                                        [cite_start]<li><strong>Overseas:</strong> Zoom/Google Meet/Video Call[cite: 32].</li>
+                                    </ul>
+                                </div>
+                                <div class="p-4 border border-brand-gold/20 bg-brand-gold/5 rounded-xl">
+                                    [cite_start]<h4 class="text-brand-gold font-bold mb-2">Step 6: Morning Routine [cite: 42]</h4>
+                                    <p class="text-sm text-gray-300">Every morning at <strong class="text-white">09:00 AM</strong>:</p>
+                                    <ul class="text-sm text-gray-400 mt-2 list-disc list-inside">
+                                        [cite_start]<li>Review Setmore schedule[cite: 44].</li>
+                                        [cite_start]<li>Message candidates to <strong>confirm attendance</strong>[cite: 45].</li>
+                                        [cite_start]<li>Organize desk and files[cite: 46].</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                                <h4 class="text-brand-white font-bold mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-triangle-exclamation text-brand-gold"></i> 
+                                    Step 5: Pre-Appointment Assessment Set
+                                </h4>
+                                [cite_start]<p class="text-sm text-gray-400 mb-3">You MUST collect these BEFORE the appointment[cite: 34]:</p>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                                    <div class="bg-black/40 p-2 rounded text-gray-300">1. [cite_start]Updated CV [cite: 36]</div>
+                                    <div class="bg-black/40 p-2 rounded text-gray-300">2. [cite_start]Passport (Full Scan) [cite: 37]</div>
+                                    <div class="bg-black/40 p-2 rounded text-gray-300">3. [cite_start]Degree/Diploma [cite: 38]</div>
+                                    <div class="bg-black/40 p-2 rounded text-gray-300">4. Exp. [cite_start]Certificates [cite: 39]</div>
+                                    <div class="bg-black/40 p-2 rounded text-gray-300">5. [cite_start]National IDs [cite: 41]</div>
+                                    <div class="bg-black/40 p-2 rounded text-brand-gold border border-brand-gold/30">
+                                        6. [cite_start]Photo (Digital 35x45mm, 300 DPI) [cite: 40]
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section" id="phase-3">
+                        <div class="glass-panel rounded-2xl p-6 md:p-8">
+                            <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-4">
+                                <div class="w-12 h-12 rounded-full bg-phase-orange/20 flex items-center justify-center text-phase-orange text-xl"><i class="fa-solid fa-handshake"></i></div>
+                                <h2 class="text-2xl font-bold text-white">Phase 3: Agreement & Onboarding</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="bg-white/5 rounded-xl p-4">
+                                    <span class="text-phase-orange font-bold text-lg block mb-1">Step 7: The Agreement</span>
+                                    <p class="text-sm text-gray-400 mb-3">Review documents. [cite_start]If eligible, sign the <strong>Client Contract</strong> immediately[cite: 52, 53].</p>
+                                    
+                                    <div class="bg-brand-blue/10 border-l-4 border-brand-blue p-3 rounded-r text-sm text-gray-300">
+                                        <strong>Mandatory:</strong> While paperwork is prepared, ask candidate to drop a Google Review.
+                                        <br>
+                                        [cite_start]<a href="https://g.page/r/CRUu6qbaj7R0EBM/review" target="_blank" class="text-brand-blue hover:underline mt-1 block">Click for Review Link [cite: 55]</a>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white/5 rounded-xl p-4">
+                                    <span class="text-phase-orange font-bold text-lg block mb-1">Step 8: Payment (Milestone 1)</span>
+                                    <ul class="list-disc list-inside text-sm text-gray-400">
+                                        [cite_start]<li>Explain payment breakdown clearly[cite: 57].</li>
+                                        [cite_start]<li>Collect Advance Amount[cite: 58].</li>
+                                        [cite_start]<li>Issue formal <strong>Payment Receipt</strong>[cite: 59].</li>
+                                        [cite_start]<li>Update ClickUp status to "Active Client"[cite: 60].</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section" id="phase-4">
+                        <div class="glass-panel rounded-2xl p-6 md:p-8">
+                            <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-4">
+                                <div class="w-12 h-12 rounded-full bg-brand-blue/20 flex items-center justify-center text-brand-blue text-xl"><i class="fa-solid fa-rocket"></i></div>
+                                <h2 class="text-2xl font-bold text-white">Phase 4: Documentation & Launch</h2>
+                            </div>
+
+                            [cite_start]<h3 class="text-white font-bold mb-2">Step 9: Client Education Checklist [cite: 64]</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div class="p-4 border border-white/10 rounded-xl bg-black/20">
+                                    <h4 class="text-brand-blue font-bold mb-2">Financials</h4>
+                                    <p class="text-sm text-gray-400">Bank statement maintenance. [cite_start]Explain minimum balance and tenure[cite: 65].</p>
+                                </div>
+                                <div class="p-4 border border-white/10 rounded-xl bg-black/20">
+                                    <h4 class="text-brand-blue font-bold mb-2">Legal & Civil</h4>
+                                    [cite_start]<p class="text-sm text-gray-400">Police Clearance (PCC), Marriage Certificates[cite: 66, 68].</p>
+                                </div>
+                                <div class="p-4 border border-white/10 rounded-xl bg-black/20">
+                                    <h4 class="text-brand-blue font-bold mb-2">Attestations</h4>
+                                    [cite_start]<p class="text-sm text-gray-400">Apostille, MOFA, or Notary affidavits[cite: 67].</p>
+                                </div>
+                                <div class="p-4 border border-white/10 rounded-xl bg-black/20">
+                                    <h4 class="text-brand-blue font-bold mb-2">Ongoing</h4>
+                                    [cite_start]<p class="text-sm text-gray-400">Update client weekly on status to maintain trust[cite: 69].</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-brand-blue/10 p-4 rounded-xl border border-brand-blue/20">
+                                <h3 class="text-white font-bold mb-2">Step 10: Work Permit Receipt (Milestone 2)</h3>
+                                <p class="text-sm text-gray-300">When the digital copy arrives:</p>
+                                <ol class="list-decimal list-inside text-sm text-gray-400 mt-2">
+                                    [cite_start]<li>Inform client immediately with enthusiasm[cite: 72].</li>
+                                    [cite_start]<li><strong>Collect Next Payment</strong>[cite: 73].</li>
+                                    [cite_start]<li>Prepare file for Visa Submission[cite: 74].</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section" id="phase-5">
+                        <div class="glass-panel rounded-2xl p-6 md:p-8">
+                            <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-4">
+                                <div class="w-12 h-12 rounded-full bg-brand-purple/20 flex items-center justify-center text-brand-purple text-xl"><i class="fa-solid fa-file-contract"></i></div>
+                                <h2 class="text-2xl font-bold text-white">Phase 5: Visa Submission</h2>
+                            </div>
+
+                            <div class="mb-6">
+                                <strong class="text-white block mb-2">Step 11: Booking Appointment</strong>
+                                <p class="text-sm text-gray-400">Book at VFS, BLS, or Consulate. [cite_start]Check availability daily if slots are scarce[cite: 78, 79].</p>
+                            </div>
+
+                            <div class="bg-white/5 rounded-xl p-6 mb-6">
+                                [cite_start]<strong class="text-brand-purple block text-lg mb-4">Step 12: The Visa Packet Checklist [cite: 81]</strong>
+                                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-y-2 text-sm text-gray-300">
+                                    [cite_start]<div><i class="fa-solid fa-check text-green-500 mr-2"></i> Application Form (Signed) [cite: 82]</div>
+                                    [cite_start]<div><i class="fa-solid fa-check text-green-500 mr-2"></i> Police Clearance (PCC) [cite: 87]</div>
+                                    [cite_start]<div><i class="fa-solid fa-check text-green-500 mr-2"></i> Cover Letter [cite: 83]</div>
+                                    [cite_start]<div><i class="fa-solid fa-check text-green-500 mr-2"></i> Edu & Exp Certificates [cite: 88]</div>
+                                    [cite_start]<div><i class="fa-solid fa-check text-green-500 mr-2"></i> Original Work Permit [cite: 84]</div>
+                                    [cite_start]<div><i class="fa-solid fa-check text-green-500 mr-2"></i> Photos (Spec dimensions) [cite: 89]</div>
+                                    [cite_start]<div><i class="fa-solid fa-check text-green-500 mr-2"></i> Employment Contract [cite: 85]</div>
+                                    [cite_start]<div><i class="fa-solid fa-check text-green-500 mr-2"></i> Travel Insurance [cite: 90]</div>
+                                    [cite_start]<div><i class="fa-solid fa-check text-green-500 mr-2"></i> Accommodation Proof [cite: 86]</div>
+                                    [cite_start]<div><i class="fa-solid fa-check text-green-500 mr-2"></i> Flight Itinerary [cite: 91]</div>
+                                </div>
+                            </div>
+
+                            <div>
+                                [cite_start]<strong class="text-white block mb-2">Step 13: Submission Day Briefing [cite: 93]</strong>
+                                <ul class="list-disc list-inside text-sm text-gray-400">
+                                    [cite_start]<li><strong>Procedure:</strong> Explain what happens inside VFS/BLS[cite: 95].</li>
+                                    [cite_start]<li><strong>Fees:</strong> Advise on cash/card for center fees[cite: 96].</li>
+                                    [cite_start]<li><strong>Dress Code:</strong> Formal/Smart-casual (No shorts)[cite: 97].</li>
+                                    [cite_start]<li><strong>Interview Prep:</strong> Prepare for questions on job/salary[cite: 98].</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section" id="phase-6">
+                        <div class="glass-panel rounded-2xl p-6 md:p-8">
+                            <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-4">
+                                <div class="w-12 h-12 rounded-full bg-phase-red/20 flex items-center justify-center text-phase-red text-xl"><i class="fa-solid fa-plane-departure"></i></div>
+                                <h2 class="text-2xl font-bold text-white">Phase 6: Post-Submission</h2>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-green-500/10 p-5 rounded-xl border border-green-500/20">
+                                    <h3 class="text-green-400 font-bold text-lg mb-3">Scenario A: Approved</h3>
+                                    <ul class="space-y-3 text-sm text-gray-300">
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-1 mt-1 text-green-500"></i>
+                                            [cite_start]<span>Receive stamped passport[cite: 103].</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-2 mt-1 text-green-500"></i>
+                                            [cite_start]<span><strong>Collect Final Payment (Milestone 3).</strong> Do not hand over passport until settled[cite: 104].</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-3 mt-1 text-green-500"></i>
+                                            [cite_start]<span>Conduct Pre-Departure Orientation (PDO)[cite: 106].</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-red-500/10 p-5 rounded-xl border border-red-500/20">
+                                    <h3 class="text-red-400 font-bold text-lg mb-3">Scenario B: Rejected</h3>
+                                    <ul class="space-y-3 text-sm text-gray-300">
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-circle-exclamation mt-1 text-red-500"></i>
+                                            [cite_start]<span>Analyze refusal letter immediately[cite: 108].</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-user-group mt-1 text-red-500"></i>
+                                            [cite_start]<span>Consult with Documentation Case Study Team[cite: 109].</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-rotate-right mt-1 text-red-500"></i>
+                                            [cite_start]<span>Formulate solution: Appeal or Re-apply [cite: 110-113].</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section" id="guidelines">
+                        <div class="glass-panel rounded-2xl p-6 md:p-8 bg-red-900/10 border border-red-500/30">
+                            <h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-triangle-exclamation text-brand-gold mr-2"></i> General Guidelines</h2>
+                            <ul class="space-y-4 text-sm text-gray-300">
+                                <li>
+                                    [cite_start]<strong class="text-brand-white">Payment Discipline:</strong> No file moves to the next stage without the corresponding payment clearing[cite: 116].
+                                </li>
+                                <li>
+                                    [cite_start]<strong class="text-brand-white">Documentation:</strong> All documents must be scanned in high resolution and uploaded to the server[cite: 117].
+                                </li>
+                                <li>
+                                    [cite_start]<strong class="text-brand-white">Responsiveness:</strong> Missed calls must be returned within 60 minutes[cite: 118].
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-[#050B14] border-t border-white/5 py-10 text-center text-gray-500 text-sm">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2025 Better Call Immigration. Internal Use Only.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Generate Sidebar Links Dynamically ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.help-section');
+            const navContainer = document.getElementById('toc-nav');
+
+            sections.forEach(section => {
+                const title = section.querySelector('h2').innerText;
+                const id = section.id;
+                
+                // Clean up title for sidebar
+                let shortTitle = title.replace(/Phase \d+:\s*/, '').replace('General Guidelines', 'Guidelines');
+                if(id === 'intro') shortTitle = 'Objective';
+
+                const link = document.createElement('a');
+                link.href = `#${id}`;
+                link.className = 'nav-link block px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-r border-l-2 border-transparent transition-all truncate';
+                link.innerText = shortTitle;
+                
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+
+                navContainer.appendChild(link);
+            });
+
+            // --- ScrollSpy ---
+            const observerOptions = { root: null, rootMargin: '-100px 0px -70% 0px', threshold: 0 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                        const activeLink = document.querySelector(`a[href="#${entry.target.id}"]`);
+                        if(activeLink) activeLink.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => observer.observe(section));
+
+            // --- Search Functionality ---
+            const searchInput = document.getElementById('help-search');
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                
+                sections.forEach(section => {
+                    const text = section.innerText.toLowerCase();
+                    if (text.includes(query)) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+
+            // --- Lenis Scroll ---
+            const lenis = new Lenis();
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+        });
+
+        // --- Accordion Logic ---
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const content = item.querySelector('.accordion-content');
+            
+            if (item.classList.contains('active')) {
+                item.classList.remove('active');
+                content.style.maxHeight = null;
+            } else {
+                item.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+    </script>
+</body>
+</html>

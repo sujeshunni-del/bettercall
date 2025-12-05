@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Italy Care Home & Professional Program | Better Call Immigration</title>
+    <meta name="description" content="Secure your future in Italy. Care Home & Professional jobs with guaranteed accommodation and Pay-Later facility.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'Noto Sans Malayalam', 'Noto Sans Tamil', 'Noto Sans Sinhala', 'sans-serif'],
+                    },
+                    colors: {
+                        'deep-space': '#050B14',
+                        'italy-green': '#009246',      
+                        'italy-red': '#CE2B37',     
+                        'brand-gold': '#FFD700',
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050B14;
+            color: #E2E8F0;
+            overflow-x: hidden;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* --- LENIS SMOOTH SCROLL CSS (CRITICAL FOR SCROLLING) --- */
+        html.lenis, html.lenis body { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
+
+        /* Language Specific Font Overrides */
+        body.lang-ml { font-family: 'Noto Sans Malayalam', 'Outfit', sans-serif; }
+        body.lang-ta { font-family: 'Noto Sans Tamil', 'Outfit', sans-serif; }
+        body.lang-si { font-family: 'Noto Sans Sinhala', 'Outfit', sans-serif; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .dropdown-glass {
+            background: rgba(15, 23, 42, 0.9); 
+            backdrop-filter: blur(24px);       
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Ambient Orbs */
+        .ambient-light { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; }
+        .orb-1 { top: -10%; left: -10%; width: 40vw; height: 40vw; background: #009246; }
+        .orb-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: #CE2B37; }
+
+        /* Job Card */
+        .job-card-grid {
+            background: linear-gradient(145deg, rgba(0, 146, 70, 0.05) 0%, rgba(206, 43, 55, 0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px; 
+            padding: 12px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 140px; 
+        }
+        .job-card-grid:hover {
+            background: rgba(0, 146, 70, 0.15);
+            border-color: #009246; 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 146, 70, 0.15);
+        }
+
+        /* Language Button Styles */
+        #lang-toggle-btn {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 24px;
+            border-radius: 9999px; /* Pill shape */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #lang-toggle-btn:hover, #lang-toggle-btn.active {
+            background: #009246;
+            border-color: #009246;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(0, 146, 70, 0.4);
+        }
+        #language-dropdown {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px) scale(0.95);
+            transform-origin: bottom left;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #language-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050B14; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        
+        /* Modal */
+        .modal-backdrop { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
+        .modal-content { background: #0F172A; border: 1px solid rgba(255, 255, 255, 0.1); }
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col relative" id="page-body">
+
+    <!-- Ambient Background -->
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <!-- Navigation (Injected via JS) -->
+    <div id="nav-placeholder"></div>
+
+    <main class="flex-grow w-full max-w-7xl mx-auto relative z-10 space-y-8 pt-24 pb-12 px-3 sm:px-6">
+
+        <!-- Hero Section -->
+        <header class="text-center space-y-4 animate-fade-in-up">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel border border-italy-green/30 text-white font-bold tracking-widest text-[9px] uppercase mb-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-italy-green animate-pulse"></span>
+                <span data-i18n="hero_badge">Top Opportunities</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-italy-red animate-pulse"></span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-none drop-shadow-[0_0_25px_rgba(0,146,70,0.3)]">
+                <span data-i18n="hero_title_1">Italy</span> <br>
+                <!-- MODIFIED: Changed from gradient to solid text-italy-green -->
+                <span class="text-italy-green" data-i18n="hero_title_2">Professional Program</span>
+            </h1>
+            
+            <p class="max-w-xl mx-auto text-sm md:text-lg text-gray-400 font-light leading-relaxed">
+                <span data-i18n="hero_subtitle_1">Secure your future in Europe.</span> 
+                <span class="text-white font-medium" data-i18n="hero_subtitle_2">Guaranteed Accommodation & Food</span> 
+                <span data-i18n="hero_subtitle_3">in 3-4 months.</span>
+            </p>
+        </header>
+
+        <!-- Search & Filter -->
+        <div id="job-search-section" class="sticky top-20 z-40 my-4">
+            <div class="glass-panel rounded-xl p-3 border border-white/10 shadow-2xl backdrop-blur-xl bg-[#0B1120]/80">
+                <div class="relative group">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg"></i>
+                    <input type="text" id="pageSearchInput" class="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-italy-green focus:bg-black/40 focus:outline-none transition-all" data-placeholder-i18n="search_placeholder" placeholder="Search positions..." onkeyup="filterPageJobs()">
+                </div>
+                <div class="mt-3 flex gap-2 overflow-x-auto hide-scrollbar pb-1" id="categoryChips">
+                    <!-- Chips Injected via JS -->
+                </div>
+            </div>
+            <div class="text-center mt-2"><p id="jobCountLabel" class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Loading...</p></div>
+        </div>
+
+        <!-- Jobs Grid -->
+        <div id="jobContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
+            <!-- Jobs Injected via JS -->
+        </div>
+
+        <!-- Timeline Section -->
+        <section id="process" class="py-8 relative">
+            <div class="container mx-auto px-2 relative z-10">
+                <div class="text-center mb-8">
+                    <span class="text-italy-green font-bold tracking-[0.2em] text-[10px] uppercase mb-2 block" data-i18n="process_kicker">Structured Path</span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-2" data-i18n="process_title">Application Process</h2>
+                </div>
+                <div class="max-w-3xl mx-auto">
+                    <div class="space-y-4 relative before:absolute before:inset-0 before:ml-4 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-white/10">
+                        <div id="timelineContainer">
+                            <!-- Timeline Injected via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Package -->
+        <section class="py-8 relative z-20">
+            <div class="container mx-auto px-2">
+                <div class="max-w-4xl mx-auto">
+                    <div class="relative group rounded-2xl p-[1px] bg-gradient-to-br from-italy-green via-white to-italy-red">
+                        <div class="bg-[#0B132B] rounded-[15px] relative overflow-hidden">
+                            <div class="flex flex-col lg:flex-row">
+                                <div class="p-6 md:p-8 lg:w-3/5 border-b lg:border-b-0 lg:border-r border-white/5">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <span class="w-10 h-10 rounded-full bg-italy-green/20 flex items-center justify-center text-italy-green"><i class="fa-solid fa-hand-holding-dollar text-lg"></i></span>
+                                        <div>
+                                            <h3 class="text-xl font-bold text-white" data-i18n="package_title">Pay Later Offer</h3>
+                                            <p class="text-[10px] text-gray-400 uppercase tracking-widest" data-i18n="package_subtitle">Pay majority after Visa</p>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5"><div class="mt-0.5 text-green-400 text-xs"><i class="fa-solid fa-circle-check"></i></div><div><span class="block text-white font-bold text-sm" data-i18n="inc_accom">Accommodation Provided</span></div></div>
+                                        <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5"><div class="mt-0.5 text-green-400 text-xs"><i class="fa-solid fa-circle-check"></i></div><div><span class="block text-white font-bold text-sm" data-i18n="inc_food">Food Available</span></div></div>
+                                        <div class="flex items-center justify-between gap-3 p-3 rounded-lg bg-gradient-to-r from-italy-green/20 to-transparent border border-italy-green/30">
+                                            <div class="flex items-center gap-2"><div class="text-italy-green text-xs"><i class="fa-solid fa-wallet"></i></div><span class="block text-white font-bold text-sm" data-i18n="inc_split">Sign-up Fee</span></div>
+                                            <span class="font-bold text-italy-green">€500</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-6 md:p-8 lg:w-2/5 flex flex-col justify-center items-center text-center bg-black/20">
+                                    <div class="mb-1 text-[10px] text-gray-400 uppercase tracking-widest" data-i18n="total_inv">Total Package</div>
+                                    <div class="text-5xl font-black text-white mb-1 tracking-tight">€6,000</div>
+                                    <div class="text-[10px] text-gray-500 mb-6 max-w-[180px]" data-i18n="price_note">Remaining €5,500 after Visa.</div>
+                                    <a href="https://bettercall.setmore.com/services/7fc6514e-af0c-4790-a85f-f3d4ab830491" target="_blank" class="w-full relative group overflow-hidden rounded-lg bg-italy-green px-6 py-4 transition-all duration-300 text-white font-bold text-base shadow-lg hover:shadow-green-500/40 hover:-translate-y-1">
+                                        <span class="relative z-10 flex items-center justify-center gap-2"><span data-i18n="start_process">Start Now</span> <i class="fa-solid fa-arrow-right"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <div class="text-center py-10">
+             <a href="https://bettercall.setmore.com/services/7fc6514e-af0c-4790-a85f-f3d4ab830491" target="_blank" class="inline-flex items-center gap-3 bg-gradient-to-r from-italy-green to-teal-600 text-white font-bold text-lg px-10 py-4 rounded-full shadow-[0_0_20px_rgba(0,146,70,0.4)] hover:shadow-[0_0_40px_rgba(0,146,70,0.6)] hover:scale-105 transition-all duration-300 group">
+                <span data-i18n="btn_apply_main">Apply Now</span>
+                <i class="fa-solid fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+            </a>
+        </div>
+
+    </main>
+
+    <!-- Language Selector Floating Button -->
+    <div class="fixed bottom-8 left-4 md:left-8 z-50">
+        <div class="relative">
+            <button id="lang-toggle-btn" onclick="toggleLanguageDropdown(event)" class="text-white flex items-center gap-3 shadow-2xl group" aria-label="Select Language">
+                <i class="fa-solid fa-globe text-xl text-italy-green group-hover:text-white transition-colors"></i>
+                <span class="font-bold text-sm uppercase tracking-wider" data-i18n="btn_language">Language</span>
+                <i class="fa-solid fa-chevron-up text-xs opacity-70 group-hover:-translate-y-0.5 transition-transform"></i>
+            </button>
+            
+            <div id="language-dropdown" class="absolute bottom-full left-0 mb-4 w-56 dropdown-glass rounded-xl p-2 flex flex-col gap-1 shadow-2xl z-50 max-h-[60vh] overflow-y-auto">
+                <button onclick="setLanguage('en');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-italy-green hover:text-white transition flex items-center justify-between group">
+                    <span>English</span> <span class="text-xs text-gray-500 group-hover:text-white/80">EN</span>
+                </button>
+                <button onclick="setLanguage('ml');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-italy-green hover:text-white transition flex items-center justify-between group font-['Noto_Sans_Malayalam']">
+                    <span>മലയാളം</span> <span class="text-xs text-gray-500 group-hover:text-white/80">ML</span>
+                </button>
+                <button onclick="setLanguage('hi');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-italy-green hover:text-white transition flex items-center justify-between group">
+                    <span>हिंदी</span> <span class="text-xs text-gray-500 group-hover:text-white/80">HI</span>
+                </button>
+                <button onclick="setLanguage('ta');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-italy-green hover:text-white transition flex items-center justify-between group font-['Noto_Sans_Tamil']">
+                    <span>தமிழ்</span> <span class="text-xs text-gray-500 group-hover:text-white/80">TA</span>
+                </button>
+                <button onclick="setLanguage('fil');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-italy-green hover:text-white transition flex items-center justify-between group">
+                    <span>Filipino</span> <span class="text-xs text-gray-500 group-hover:text-white/80">FIL</span>
+                </button>
+                <button onclick="setLanguage('si');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-italy-green hover:text-white transition flex items-center justify-between group font-['Noto_Sans_Sinhala']">
+                    <span>සිංහල</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SI</span>
+                </button>
+                <button onclick="setLanguage('sw');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-italy-green hover:text-white transition flex items-center justify-between group">
+                    <span>Swahili</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SW</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/971503666382" target="_blank" class="fixed bottom-8 right-4 md:right-8 z-50 bg-[#25D366] text-white w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-110 group animate-pulse">
+        <i class="fa-brands fa-whatsapp text-2xl md:text-4xl"></i>
+    </a>
+
+    <!-- Job Details Modal -->
+    <div id="jobModal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 modal-backdrop transition-opacity" onclick="closeModal()"></div>
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center">
+                <div class="relative transform overflow-hidden rounded-2xl modal-content text-left shadow-2xl transition-all w-full max-w-lg">
+                    
+                    <div class="bg-gradient-to-r from-italy-green to-green-900 px-6 py-6 relative">
+                        <button onclick="closeModal()" class="absolute top-4 right-4 text-white/50 hover:text-white transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+                        <h3 id="modalTitle" class="text-2xl font-bold text-white">Job Title</h3>
+                        <p id="modalDept" class="text-white/70 text-sm mt-1">Department</p>
+                    </div>
+
+                    <div class="p-6 space-y-6 max-h-[60vh] overflow-y-auto bg-[#0B1120]">
+                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5">
+                            <div>
+                                <p class="text-xs text-gray-500 font-bold uppercase mb-1" data-i18n="modal_salary_label">Monthly Salary</p>
+                                <div class="flex items-baseline gap-2">
+                                    <span id="modalEuro" class="text-xl font-bold text-white">€0</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs text-gray-500 font-bold uppercase mb-1" data-i18n="modal_exp_label">Experience</p>
+                                <span id="modalExp" class="text-sm font-semibold text-italy-green">Level</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xs font-bold text-white uppercase tracking-widest mb-3" data-i18n="modal_req_title">Candidate Requirements & Documents</h4>
+                            <div id="modalDocs" class="grid grid-cols-1 gap-3 text-sm">
+                                <!-- Docs injected via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 border-t border-white/10 bg-white/5 flex flex-col sm:flex-row gap-3">
+                        <a href="https://bettercall.setmore.com/services/7fc6514e-af0c-4790-a85f-f3d4ab830491" target="_blank" class="w-full bg-italy-green text-white text-center font-bold py-3 rounded-xl hover:bg-green-700 transition shadow-lg shadow-green-600/30" data-i18n="btn_apply">Apply Now</a>
+                        <button onclick="closeModal()" class="w-full sm:w-auto px-6 py-3 rounded-xl border border-white/10 text-white hover:bg-white/5 transition font-semibold" data-i18n="btn_close">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // --- TRANSLATION DATA ---
+        const translations = {
+            en: {
+                btn_language: "Language",
+                hero_badge: "Top Opportunities", hero_title_1: "Italy", hero_title_2: "Professional Program",
+                hero_subtitle_1: "Secure your future in Europe.", hero_subtitle_2: "Guaranteed Accommodation & Food", hero_subtitle_3: "in 3-4 months.",
+                search_placeholder: "Search positions...",
+                process_kicker: "Structured Path", process_title: "Application Process",
+                step_1: "Assessment", step_2: "Registration", step_3: "Conditional Offer", step_4: "Visa Filing", step_5: "Visa Approval", step_6: "Final Payment", step_7: "Travel",
+                step_desc_1: "Document check & Eligibility.", step_desc_2: "Sign-up & File Opening.", step_desc_3: "Selection confirmation.", step_desc_4: "Submission to Embassy.", step_desc_5: "Passport Stamping.", step_desc_6: "Pay remaining balance.", step_desc_7: "Flight to Italy.",
+                package_title: "Pay Later Offer", package_subtitle: "Pay majority after Visa",
+                inc_accom: "Accommodation Provided", inc_food: "Food Available", inc_split: "Sign-up Fee",
+                total_inv: "Total Package", price_note: "Remaining €5,500 after Visa.", start_process: "Start Now",
+                btn_apply_main: "Apply Now", btn_apply: "Apply Now", btn_close: "Close",
+                modal_salary_label: "Monthly Salary", modal_exp_label: "Experience", modal_req_title: "Requirements & Documents",
+                
+                // Job Categories
+                cat_all: "All", cat_healthcare: "Healthcare", cat_corporate: "Corporate", cat_sales: "Sales", cat_technical: "Technical", cat_logistics: "Logistics",
+                
+                // Job Titles & Depts
+                job_care_home: "Care Home Assistant", job_nursing_asst: "Nursing Assistant", job_elderly: "Elderly Care Staff", job_health_supp: "Healthcare Support",
+                job_clerk: "Office Clerk / Receptionist", job_accountant: "Accountant", job_manager: "Manager", job_hr: "HR Assistant", job_admin: "Administrative Asst",
+                job_front_office: "Front Office Executive", job_secretary: "Secretary / PA", job_doc_controller: "Document Controller",
+                job_sales_exec: "Sales & Marketing Exec", job_bd_exec: "Business Development", job_cust_serv: "Customer Service", job_call_centre: "Call Centre Exec",
+                job_it_prof: "IT Professional", job_engineer: "Engineer", job_proj_coord: "Project Coordinator", job_data_entry: "Data Entry Operator",
+                job_logistics: "Logistics Coordinator", job_store: "Store Supervisor", job_purchase: "Procurement Asst", job_bank: "Finance Executive",
+                
+                dept_healthcare: "Healthcare", dept_corporate: "Corporate & Office", dept_sales: "Sales & Marketing", dept_technical: "Technical & Eng", dept_logistics: "Operations & Logistics",
+
+                // Documents
+                doc_passport: "Valid passport scan (All pages).", doc_cv: "Professional format CV.", doc_photo: "35x45mm white background.", 
+                doc_edu: "10th & 12th Certificates.", doc_pcc: "Police Clearance Certificate.", doc_video: "Brief introduction video."
+            },
+            ml: {
+                btn_language: "ഭാഷ",
+                hero_badge: "മികച്ച അവസരങ്ങൾ", hero_title_1: "ഇറ്റലി", hero_title_2: "പ്രൊഫഷണൽ പ്രോഗ്രാം",
+                hero_subtitle_1: "യൂറോപ്പിൽ നിങ്ങളുടെ ഭാവി സുരക്ഷിതമാക്കൂ.", hero_subtitle_2: "താമസവും ഭക്ഷണവും ഉറപ്പ്", hero_subtitle_3: "3-4 മാസത്തിനുള്ളിൽ.",
+                search_placeholder: "ജോലികൾ തിരയുക...",
+                process_kicker: "അപേക്ഷാ രീതി", process_title: "അപേക്ഷാ നടപടികൾ",
+                step_1: "യോഗ്യതാ പരിശോധന", step_2: "രജിസ്ട്രേഷൻ", step_3: "ഓഫർ ലെറ്റർ", step_4: "വിസ ഫയലിംഗ്", step_5: "വിസ അംഗീകാരം", step_6: "ഫൈനൽ പേയ്‌മെന്റ്", step_7: "യാത്ര",
+                step_desc_1: "രേഖകളും യോഗ്യതയും പരിശോധിക്കൽ.", step_desc_2: "ഫയൽ ഓപ്പണിംഗ്.", step_desc_3: "സെലക്ഷൻ ഉറപ്പാക്കൽ.", step_desc_4: "എംബസിയിൽ സമർപ്പിക്കൽ.", step_desc_5: "പാസ്‌പോർട്ട് സ്റ്റാമ്പിംഗ്.", step_desc_6: "ബാക്കി തുക അടയ്ക്കുക.", step_desc_7: "ഇറ്റലിയിലേക്കുള്ള യാത്ര.",
+                package_title: "പേ ലേറ്റർ ഓഫർ", package_subtitle: "വിസയ്ക്ക് ശേഷം പണം നൽകാം",
+                inc_accom: "താമസം സൗജന്യം", inc_food: "ഭക്ഷണം ലഭ്യമാണ്", inc_split: "രജിസ്ട്രേഷൻ ഫീസ്",
+                total_inv: "ആകെ പാക്കേജ്", price_note: "ബാക്കി €5,500 വിസയ്ക്ക് ശേഷം.", start_process: "തുടങ്ങാം",
+                btn_apply_main: "അപേക്ഷിക്കൂ", btn_apply: "അപേക്ഷിക്കൂ", btn_close: "ക്ലോസ്",
+                modal_salary_label: "പ്രതിമാസ ശമ്പളം", modal_exp_label: "പരിചയസമ്പത്ത്", modal_req_title: "ആവശ്യമായ രേഖകൾ",
+                
+                cat_all: "എല്ലാം", cat_healthcare: "ഹെൽത്ത് കെയർ", cat_corporate: "കോർപ്പറേറ്റ്", cat_sales: "സെയിൽസ്", cat_technical: "ടെക്നിക്കൽ", cat_logistics: "ലോജിസ്റ്റിക്സ്",
+
+                job_care_home: "കെയർ ഹോം അസിസ്റ്റന്റ്", job_nursing_asst: "നഴ്സിംഗ് അസിസ്റ്റന്റ്", job_elderly: "വയോജന പരിചരണം", job_health_supp: "ഹെൽത്ത് കെയർ സപ്പോർട്ട്",
+                job_clerk: "ഓഫീസ് ക്ലർക്ക് / റിസപ്ഷനിസ്റ്റ്", job_accountant: "അക്കൗണ്ടന്റ്", job_manager: "മാനേജർ", job_hr: "HR അസിസ്റ്റന്റ്", job_admin: "അഡ്മിനിസ്ട്രേറ്റീവ് അസിസ്റ്റന്റ്",
+                job_front_office: "ഫ്രണ്ട് ഓഫീസ് എക്സിക്യൂട്ടീവ്", job_secretary: "സെക്രട്ടറി / PA", job_doc_controller: "ഡോക്യുമെന്റ് കൺട്രോളർ",
+                job_sales_exec: "സെയിൽസ് & മാർക്കറ്റിംഗ്", job_bd_exec: "ബിസിനസ് ഡെവലപ്‌മെന്റ്", job_cust_serv: "കസ്റ്റമർ സർവീസ്", job_call_centre: "കോൾ സെന്റർ എക്സിക്യൂട്ടീവ്",
+                job_it_prof: "IT പ്രൊഫഷണൽ", job_engineer: "എഞ്ചിനീയർ", job_proj_coord: "പ്രോജക്റ്റ് കോർഡിനേറ്റർ", job_data_entry: "ഡാറ്റ എൻട്രി ഓപ്പറേറ്റർ",
+                job_logistics: "ലോജിസ്റ്റിക്സ് കോർഡിനേറ്റർ", job_store: "സ്റ്റോർ സൂപ്പർവൈസർ", job_purchase: "പർച്ചേസ് അസിസ്റ്റന്റ്", job_bank: "ഫിനാൻസ് എക്സിക്യൂട്ടീവ്",
+                
+                dept_healthcare: "ആരോഗ്യരംഗം", dept_corporate: "ഓഫീസ് & കോർപ്പറേറ്റ്", dept_sales: "സെയിൽസ്", dept_technical: "ടെക് & എഞ്ചിനീയറിംഗ്", dept_logistics: "ഓപ്പറേഷൻസ്",
+
+                doc_passport: "പാസ്‌പോർട്ട് പകർപ്പ്.", doc_cv: "യൂറോപ്യൻ ഫോർമാറ്റ് CV.", doc_photo: "ഫോട്ടോ (വൈറ്റ് ബാക്ക്ഗ്രൗണ്ട്).", 
+                doc_edu: "വിദ്യാഭ്യാസ സർട്ടിഫിക്കറ്റുകൾ.", doc_pcc: "പോലീസ് ക്ലിയറൻസ് (PCC).", doc_video: "ഇൻട്രൊഡക്ഷൻ വീഡിയോ."
+            },
+            hi: {
+                btn_language: "भाषा",
+                hero_badge: "शीर्ष अवसर", hero_title_1: "इटली", hero_title_2: "पेशेवर कार्यक्रम",
+                hero_subtitle_1: "यूरोप में अपना भविष्य सुरक्षित करें।", hero_subtitle_2: "आवास और भोजन की गारंटी", hero_subtitle_3: "3-4 महीनों में।",
+                search_placeholder: "नौकरियां खोजें...",
+                process_kicker: "प्रक्रिया", process_title: "आवेदन प्रक्रिया",
+                step_1: "मूल्यांकन", step_2: "पंजीकरण", step_3: "ऑफर लेटर", step_4: "वीज़ा फाइलिंग", step_5: "वीज़ा स्वीकृति", step_6: "अंतिम भुगतान", step_7: "यात्रा",
+                step_desc_1: "दस्तावेज़ और पात्रता जांच।", step_desc_2: "साइन-अप और फ़ाइल खोलना।", step_desc_3: "चयन की पुष्टि।", step_desc_4: "दूतावास में जमा करना।", step_desc_5: "पासपोर्ट स्टैम्पिंग।", step_desc_6: "शेष राशि का भुगतान करें।", step_desc_7: "इटली के लिए उड़ान।",
+                package_title: "बाद में भुगतान करें", package_subtitle: "वीज़ा के बाद भुगतान करें",
+                inc_accom: "आवास प्रदान किया गया", inc_food: "भोजन उपलब्ध", inc_split: "साइन-अप शुल्क",
+                total_inv: "कुल पैकेज", price_note: "वीज़ा के बाद शेष €5,500।", start_process: "शुरू करें",
+                btn_apply_main: "आवेदन करें", btn_apply: "आवेदन करें", btn_close: "बंद करें",
+                modal_salary_label: "मासिक वेतन", modal_exp_label: "अनुभव", modal_req_title: "आवश्यकताएँ और दस्तावेज़",
+                
+                cat_all: "सभी", cat_healthcare: "स्वास्थ्य", cat_corporate: "कॉर्पोरेट", cat_sales: "बिक्री", cat_technical: "तकनीकी", cat_logistics: "लॉजिस्टिक्स",
+                
+                job_care_home: "केयर होम असिस्टेंट", job_nursing_asst: "नर्सिंग असिस्टेंट", job_elderly: "बुजुर्ग देखभाल", job_health_supp: "हेल्थकेयर सपोर्ट",
+                job_clerk: "ऑफिस क्लर्क / रिसेप्शनिस्ट", job_accountant: "अकाउंटेंट", job_manager: "मैनेजर", job_hr: "HR असिस्टेंट", job_admin: "प्रशासनिक सहायक",
+                
+                dept_healthcare: "स्वास्थ्य देखभाल", dept_corporate: "कॉर्पोरेट", dept_sales: "बिक्री और विपणन", dept_technical: "तकनीकी", dept_logistics: "संचालन",
+
+                doc_passport: "वैध पासपोर्ट स्कैन।", doc_cv: "प्रोफेशनल CV।", doc_photo: "डिजिटल फोटो।", 
+                doc_edu: "शिक्षा प्रमाण पत्र।", doc_pcc: "पुलिस क्लीयरेंस (PCC)।", doc_video: "परिचय वीडियो।"
+            },
+            ta: {
+                btn_language: "மொழி",
+                hero_badge: "சிறந்த வாய்ப்புகள்", hero_title_1: "இத்தாலி", hero_title_2: "தொழில்முறை திட்டம்",
+                hero_subtitle_1: "ஐரோப்பாவில் உங்கள் எதிர்காலம்.", hero_subtitle_2: "தங்குமிடம் & உணவு உத்தரவாதம்", hero_subtitle_3: "3-4 மாதங்களில்.",
+                search_placeholder: "வேலைகளைத் தேடுங்கள்...",
+                process_kicker: "வழிமுறை", process_title: "விண்ணப்ப செயல்முறை",
+                step_1: "மதிப்பீடு", step_2: "பதிவு", step_3: "சலுகை கடிதம்", step_4: "விசா தாக்கல்", step_5: "விசா ஒப்புதல்", step_6: "இறுதி கட்டணம்", step_7: "பயணம்",
+                step_desc_1: "ஆவணச் சரிபார்ப்பு.", step_desc_2: "கோப்பு திறப்பு.", step_desc_3: "தேர்வு உறுதிப்படுத்தல்.", step_desc_4: "தூதரகத்தில் சமர்ப்பித்தல்.", step_desc_5: "கடவுச்சீட்டு முத்திரை.", step_desc_6: "மீதமுள்ள கட்டணம்.", step_desc_7: "இத்தாலி பயணம்.",
+                package_title: "Pay Later சலுகை", package_subtitle: "விசாவிற்குப் பிறகு பணம்",
+                inc_accom: "தங்குமிடம் இலவசம்", inc_food: "உணவு கிடைக்கிறது", inc_split: "பதிவு கட்டணம்",
+                total_inv: "மொத்த தொகுப்பு", price_note: "மீதமுள்ள €5,500 விசாவிற்குப் பிறகு.", start_process: "தொடங்கவும்",
+                btn_apply_main: "விண்ணப்பிக்கவும்", btn_apply: "விண்ணப்பிக்கவும்", btn_close: "மூடு",
+                modal_salary_label: "மாத சம்பளம்", modal_exp_label: "அனுபவம்", modal_req_title: "தேவையான ஆவணங்கள்",
+                
+                cat_all: "அனைத்தும்", cat_healthcare: "சுகாதாரம்", cat_corporate: "கார்ப்பரேட்", cat_sales: "விற்பனை", cat_technical: "தொழில்நுட்பம்", cat_logistics: "லாஜிஸ்டிக்ஸ்",
+                
+                job_care_home: "கேர் ஹோம் உதவியாளர்", job_nursing_asst: "நர்சிங் உதவியாளர்", job_health_supp: "சுகாதார ஆதரவு",
+                job_clerk: "அலுவலக எழுத்தர்", job_accountant: "கணக்காளர்", job_manager: "மேலாளர்",
+                
+                dept_healthcare: "சுகாதாரம்", dept_corporate: "அலுவலகம்", dept_sales: "விற்பனை", dept_technical: "பொறியியல்", dept_logistics: "செயல்பாடுகள்",
+
+                doc_passport: "கடவுச்சீட்டு நகல்.", doc_cv: "தொழில்முறை CV.", doc_photo: "புகைப்படம்.", 
+                doc_edu: "கல்விச் சான்றிதழ்கள்.", doc_pcc: "காவல் துறை சான்றிதழ்.", doc_video: "அறிமுக வீடியோ."
+            },
+            fil: {
+                btn_language: "Wika",
+                hero_badge: "Mga Oportunidad", hero_title_1: "Italya", hero_title_2: "Propesyonal na Programa",
+                hero_subtitle_1: "Siguraduhin ang kinabukasan sa Europa.", hero_subtitle_2: "Libreng Tirahan at Pagkain", hero_subtitle_3: "sa 3-4 na buwan.",
+                search_placeholder: "Maghanap ng trabaho...",
+                process_kicker: "Proseso", process_title: "Proseso ng Pag-apply",
+                step_1: "Pagsusuri", step_2: "Pagpaparehistro", step_3: "Offer Letter", step_4: "Visa Filing", step_5: "Visa Approval", step_6: "Huling Bayad", step_7: "Paglalakbay",
+                step_desc_1: "Pagsusuri ng Dokumento.", step_desc_2: "Pagbubukas ng File.", step_desc_3: "Kumpirmasyon.", step_desc_4: "Pagsusumite sa Embahada.", step_desc_5: "Tatakan ng Pasaporte.", step_desc_6: "Bayaran ang balanse.", step_desc_7: "Lipad pa-Italya.",
+                package_title: "Pay Later Offer", package_subtitle: "Magbayad pagkatapos ng Visa",
+                inc_accom: "May tirahan", inc_food: "May pagkain", inc_split: "Sign-up Fee",
+                total_inv: "Kabuuang Package", price_note: "Ang natitirang €5,500 pagkatapos ng Visa.", start_process: "Magsimula",
+                btn_apply_main: "Mag-apply", btn_apply: "Mag-apply", btn_close: "Isara",
+                modal_salary_label: "Buwanang Sahod", modal_exp_label: "Karanasan", modal_req_title: "Mga Dokumento",
+                
+                cat_all: "Lahat", cat_healthcare: "Kalusugan", cat_corporate: "Opisina", cat_sales: "Sales", cat_technical: "Teknikal", cat_logistics: "Logistics",
+                
+                job_care_home: "Care Home Assistant", job_nursing_asst: "Nursing Assistant", job_health_supp: "Healthcare Support",
+                job_clerk: "Office Clerk", job_accountant: "Accountant", job_manager: "Manager",
+                
+                dept_healthcare: "Kalusugan", dept_corporate: "Opisina", dept_sales: "Sales & Marketing", dept_technical: "Teknikal", dept_logistics: "Logistics",
+
+                doc_passport: "Valid Passport.", doc_cv: "Professional CV.", doc_photo: "Litrato.", 
+                doc_edu: "Sertipiko ng Edukasyon.", doc_pcc: "Police Clearance.", doc_video: "Intro Video."
+            },
+            si: {
+                btn_language: "භාෂාව",
+                hero_badge: "ඉහළම අවස්ථා", hero_title_1: "ඉතාලිය", hero_title_2: "වෘත්තීය වැඩසටහන",
+                hero_subtitle_1: "යුරෝපයේ ඔබේ අනාගතය.", hero_subtitle_2: "නවාතැන් සහ ආහාර සහතිකයි", hero_subtitle_3: "මාස 3-4 ක් තුළ.",
+                search_placeholder: "රැකියා සොයන්න...",
+                process_kicker: "ක්‍රමවේදය", process_title: "අයදුම් කිරීමේ ක්‍රියාවලිය",
+                step_1: "ඇගයීම", step_2: "ලියාපදිංචිය", step_3: "Offer Letter", step_4: "වීසා ගොනු කිරීම", step_5: "වීසා අනුමැතිය", step_6: "අවසාන ගෙවීම", step_7: "ගමන් කිරීම",
+                package_title: "Pay Later දීමනාව", package_subtitle: "වීසා ලැබීමෙන් පසු ගෙවන්න",
+                inc_accom: "නවාතැන් පහසුකම්", inc_food: "ආහාර ලබා ගත හැක", inc_split: "ලියාපදිංචි ගාස්තුව",
+                total_inv: "සම්පූර්ණ පැකේජය", price_note: "ඉතිරි €5,500 වීසා ලැබීමෙන් පසු.", start_process: "දැන් අරඹන්න",
+                btn_apply_main: "අයදුම් කරන්න", btn_apply: "අයදුම් කරන්න", btn_close: "වසන්න",
+                modal_salary_label: "මාසික වැටුප", modal_exp_label: "පළපුරුද්ද", modal_req_title: "අවශ්‍ය ලේඛන",
+                
+                cat_all: "සියල්ල", cat_healthcare: "සෞඛ්‍ය", cat_corporate: "ආයතනික", cat_sales: "විකුණුම්", cat_technical: "තාක්ෂණික", cat_logistics: "ලොජිස්ටික්ස්",
+                
+                job_care_home: "Care Home සහායක", job_nursing_asst: "හෙද සහායක", job_health_supp: "සෞඛ්‍ය සහායක",
+                job_clerk: "කාර්යාල ලිපිකරු", job_accountant: "ගණකාධිකාරී", job_manager: "කළමනාකරු",
+                
+                dept_healthcare: "සෞඛ්‍ය", dept_corporate: "ආයතනික", dept_sales: "විකුණුම්", dept_technical: "ඉංජිනේරු", dept_logistics: "මෙහෙයුම්",
+
+                doc_passport: "වලංගු ගමන් බලපත්‍රය.", doc_cv: "වෘත්තීය CV.", doc_photo: "ඡායාරූපය.", 
+                doc_edu: "අධ්‍යාපන සහතික.", doc_pcc: "පොලිස් වාර්තාව.", doc_video: "හැඳින්වීමේ වීඩියෝව."
+            },
+            sw: {
+                btn_language: "Lugha",
+                hero_badge: "Fursa Bora", hero_title_1: "Italia", hero_title_2: "Programu ya Kitaalamu",
+                hero_subtitle_1: "Linda maisha yako ya baadaye Ulaya.", hero_subtitle_2: "Malazi na Chakula", hero_subtitle_3: "ndani ya miezi 3-4.",
+                search_placeholder: "Tafuta kazi...",
+                process_kicker: "Mchakato", process_title: "Mchakato wa Maombi",
+                step_1: "Tathmini", step_2: "Usajili", step_3: "Barua ya Ofa", step_4: "Visa", step_5: "Kuidhinishwa", step_6: "Malipo ya Mwisho", step_7: "Kusafiri",
+                package_title: "Lipa Baadaye", package_subtitle: "Lipa baada ya Visa",
+                inc_accom: "Malazi", inc_food: "Chakula", inc_split: "Ada ya kujiunga",
+                total_inv: "Jumla", price_note: "€5,500 iliyobaki baada ya Visa.", start_process: "Anza Sasa",
+                btn_apply_main: "Tuma Maombi", btn_apply: "Tuma Maombi", btn_close: "Funga",
+                modal_salary_label: "Mshahara", modal_exp_label: "Uzoefu", modal_req_title: "Mahitaji",
+                
+                cat_all: "Yote", cat_healthcare: "Afya", cat_corporate: "Shirika", cat_sales: "Mauzo", cat_technical: "Teknolojia", cat_logistics: "Usafirishaji",
+                
+                job_care_home: "Msaidizi wa Nyumbani", job_nursing_asst: "Msaidizi wa Muuguzi", job_health_supp: "Msaada wa Afya",
+                job_clerk: "Karani wa Ofisi", job_accountant: "Mhasibu", job_manager: "Meneja",
+                
+                dept_healthcare: "Afya", dept_corporate: "Ofisi", dept_sales: "Mauzo", dept_technical: "Uhandisi", dept_logistics: "Uendeshaji",
+
+                doc_passport: "Pasipoti halali.", doc_cv: "CV ya Kitaalamu.", doc_photo: "Picha ya Dijiti.", 
+                doc_edu: "Vyeti vya Elimu.", doc_pcc: "Cheti cha Polisi.", doc_video: "Video ya Utangulizi."
+            }
+        };
+
+        // --- DATA WITH I18N KEYS ---
+        const jobsData = [
+            // Healthcare
+            { i18n_id: "job_care_home", i18n_dept: "dept_healthcare", cat: "Healthcare", euro: "€1,200 - €1,600", exp: "Entry Level", icon: "fa-solid fa-user-nurse" },
+            { i18n_id: "job_nursing_asst", i18n_dept: "dept_healthcare", cat: "Healthcare", euro: "€1,200 - €1,600", exp: "Entry Level", icon: "fa-solid fa-hospital-user" },
+            { i18n_id: "job_elderly", i18n_dept: "dept_healthcare", cat: "Healthcare", euro: "€1,200 - €1,600", exp: "Entry Level", icon: "fa-solid fa-hand-holding-heart" },
+            { i18n_id: "job_health_supp", i18n_dept: "dept_healthcare", cat: "Healthcare", euro: "€1,200 - €1,600", exp: "Entry Level", icon: "fa-solid fa-crutch" },
+
+            // Corporate
+            { i18n_id: "job_clerk", i18n_dept: "dept_corporate", cat: "Corporate", euro: "€1,500 - €2,000", exp: "3-5 Years", icon: "fa-solid fa-clipboard-user" },
+            { i18n_id: "job_accountant", i18n_dept: "dept_corporate", cat: "Corporate", euro: "€1,800 - €2,500", exp: "3-5 Years", icon: "fa-solid fa-calculator" },
+            { i18n_id: "job_manager", i18n_dept: "dept_corporate", cat: "Corporate", euro: "€2,200 - €3,000", exp: "3-5 Years", icon: "fa-solid fa-user-tie" },
+            { i18n_id: "job_hr", i18n_dept: "dept_corporate", cat: "Corporate", euro: "€1,600 - €2,200", exp: "3-5 Years", icon: "fa-solid fa-users" },
+            
+            // Sales
+            { i18n_id: "job_sales_exec", i18n_dept: "dept_sales", cat: "Sales", euro: "€1,800 - €2,500", exp: "3-5 Years", icon: "fa-solid fa-bullhorn" },
+            { i18n_id: "job_bd_exec", i18n_dept: "dept_sales", cat: "Sales", euro: "€1,900 - €2,600", exp: "3-5 Years", icon: "fa-solid fa-chart-line" },
+            
+            // Tech
+            { i18n_id: "job_it_prof", i18n_dept: "dept_technical", cat: "Technical", euro: "€2,200 - €3,500", exp: "3-5 Years", icon: "fa-solid fa-laptop-code" },
+            { i18n_id: "job_engineer", i18n_dept: "dept_technical", cat: "Technical", euro: "€2,200 - €3,200", exp: "3-5 Years", icon: "fa-solid fa-helmet-safety" },
+
+            // Ops
+            { i18n_id: "job_logistics", i18n_dept: "dept_logistics", cat: "Logistics", euro: "€1,800 - €2,400", exp: "3-5 Years", icon: "fa-solid fa-truck-fast" },
+            { i18n_id: "job_store", i18n_dept: "dept_logistics", cat: "Logistics", euro: "€1,600 - €2,100", exp: "3-5 Years", icon: "fa-solid fa-boxes-stacked" },
+        ];
+
+        const documentsData = [
+            { i18n_id: "doc_passport", icon: "fa-solid fa-passport" },
+            { i18n_id: "doc_cv", icon: "fa-solid fa-file-lines" },
+            { i18n_id: "doc_photo", icon: "fa-solid fa-camera" },
+            { i18n_id: "doc_edu", icon: "fa-solid fa-graduation-cap" },
+            { i18n_id: "doc_pcc", icon: "fa-solid fa-shield-halved" },
+            { i18n_id: "doc_video", icon: "fa-solid fa-video" }
+        ];
+
+        const timelineData = [
+            { step: "1", key: "step_1", descKey: "step_desc_1", fee: "Free" },
+            { step: "2", key: "step_2", descKey: "step_desc_2", fee: "€500" },
+            { step: "3", key: "step_3", descKey: "step_desc_3", fee: "N/A" },
+            { step: "4", key: "step_4", descKey: "step_desc_4", fee: "N/A" },
+            { step: "5", key: "step_5", descKey: "step_desc_5", fee: "Success" },
+            { step: "6", key: "step_6", descKey: "step_desc_6", fee: "€5,500" },
+            { step: "7", key: "step_7", descKey: "step_desc_7", fee: "Logistics" }
+        ];
+
+        // --- GLOBAL STATE ---
+        let currentLang = 'en';
+        let currentFilter = 'All';
+
+        // --- NAV INJECTION ---
+        // Simplified nav for this demo
+        document.getElementById('nav-placeholder').innerHTML = `
+        <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-4">
+            <div class="glass-panel w-full max-w-7xl px-4 py-2 flex justify-between items-center rounded-full bg-[#0F172A]/80 backdrop-blur-xl">
+                <a href="#" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 bg-[#1C2B4C] rounded-full border border-white/10 flex items-center justify-center font-bold text-white">BC</div>
+                    <div><h1 class="font-bold text-white text-sm">BETTER CALL</h1><p class="text-[9px] text-brand-gold uppercase">Immigration</p></div>
+                </a>
+                <div class="hidden md:flex gap-6 text-sm font-medium text-white/80">
+                    <a href="#" class="hover:text-italy-green transition">Home</a>
+                    <a href="#" class="hover:text-italy-green transition">Programs</a>
+                    <a href="#" class="hover:text-italy-green transition">Services</a>
+                </div>
+                <a href="https://bettercall.setmore.com/services/7fc6514e-af0c-4790-a85f-f3d4ab830491" target="_blank" class="px-5 py-2 rounded-full bg-italy-green text-white text-xs font-bold uppercase tracking-wider hover:bg-green-700 transition">Book Now</a>
+            </div>
+        </nav>`;
+
+        // --- FUNCTIONS ---
+
+        function t(key) {
+            return translations[currentLang][key] || translations['en'][key] || key;
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // 1. Update Body Class for Fonts
+            document.body.className = `antialiased min-h-screen flex flex-col relative lang-${lang}`;
+
+            // 2. Update Static Text
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.innerText = t(key);
+            });
+            
+            // 3. Update Placeholders
+            document.querySelectorAll('[data-placeholder-i18n]').forEach(el => {
+                const key = el.getAttribute('data-placeholder-i18n');
+                el.placeholder = t(key);
+            });
+
+            // 4. Re-render Components
+            renderCategoryChips();
+            filterPageJobs(); // Re-renders jobs
+            renderTimeline();
+            
+            // 5. Close Dropdown
+            document.getElementById('language-dropdown').classList.remove('show');
+            document.getElementById('lang-toggle-btn').classList.remove('active');
+        }
+
+        function toggleLanguageDropdown(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('language-dropdown');
+            const btn = document.getElementById('lang-toggle-btn');
+            dropdown.classList.toggle('show');
+            btn.classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        window.onclick = function(e) {
+            if (!e.target.matches('#lang-toggle-btn') && !e.target.closest('#lang-toggle-btn')) {
+                document.getElementById('language-dropdown').classList.remove('show');
+                document.getElementById('lang-toggle-btn').classList.remove('active');
+            }
+        }
+
+        function renderCategoryChips() {
+            const categories = [
+                { id: "All", key: "cat_all" },
+                { id: "Healthcare", key: "cat_healthcare" },
+                { id: "Corporate", key: "cat_corporate" },
+                { id: "Sales", key: "cat_sales" },
+                { id: "Technical", key: "cat_technical" },
+                { id: "Logistics", key: "cat_logistics" }
+            ];
+            
+            const container = document.getElementById('categoryChips');
+            container.innerHTML = categories.map(cat => {
+                const isActive = currentFilter === cat.id;
+                const activeClass = "bg-italy-green text-white shadow-lg shadow-green-900/40";
+                const inactiveClass = "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white";
+                return `<button onclick="setCategory('${cat.id}')" class="px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all border border-transparent ${isActive ? activeClass : inactiveClass}">${t(cat.key)}</button>`;
+            }).join('');
+        }
+
+        function setCategory(catId) {
+            currentFilter = catId;
+            renderCategoryChips();
+            filterPageJobs();
+        }
+
+        function filterPageJobs() {
+            const query = document.getElementById('pageSearchInput').value.toLowerCase();
+            const container = document.getElementById('jobContainer');
+            
+            // Filter logic
+            const filtered = jobsData.filter(job => {
+                const title = t(job.i18n_id).toLowerCase();
+                const dept = t(job.i18n_dept).toLowerCase();
+                const matchesSearch = title.includes(query) || dept.includes(query);
+                const matchesCat = currentFilter === 'All' || job.cat === currentFilter;
+                return matchesSearch && matchesCat;
+            });
+
+            document.getElementById('jobCountLabel').innerText = `Showing ${filtered.length} positions`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-10 text-gray-500 italic">No jobs found.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map((job, index) => {
+                // Find original index for modal opening
+                const originalIndex = jobsData.indexOf(job);
+                return `
+                <div onclick="openJobModal(${originalIndex})" class="job-card-grid group">
+                    <div class="w-10 h-10 rounded-lg bg-italy-green/10 flex items-center justify-center text-italy-green border border-italy-green/20 mb-3 group-hover:scale-110 transition-transform">
+                        <i class="${job.icon} text-lg"></i>
+                    </div>
+                    <div class="mb-auto">
+                        <h4 class="text-sm md:text-base font-bold text-white group-hover:text-italy-green transition-colors leading-tight mb-2">${t(job.i18n_id)}</h4>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 bg-white/5 px-2 py-1 rounded">${t(job.i18n_dept)}</span>
+                    </div>
+                    <div class="flex items-end justify-between border-t border-white/5 pt-3 mt-3">
+                        <span class="text-xs font-bold text-white">${job.euro}</span>
+                        <div class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-italy-green group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = timelineData.map(item => `
+                <div class="relative pl-8 sm:pl-28 py-1 group">
+                    <div class="font-bold text-white mb-1 sm:mb-0 sm:absolute sm:left-0 sm:w-20 sm:text-right sm:top-1 text-sm text-italy-green">Step ${item.step}</div>
+                    <div class="absolute left-0 sm:left-0 sm:ml-4 -translate-x-1/2 top-2 w-4 h-4 rounded-full border-4 border-[#0B132B] bg-italy-red shadow-md z-10"></div>
+                    <div class="glass-panel p-4 rounded-xl border border-white/10 hover:border-italy-green/30 transition-all">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-white text-base">${t(item.key)}</h4>
+                            <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold border border-white/10 bg-white/5 text-italy-green">${item.fee}</span>
+                        </div>
+                        <p class="text-xs text-gray-400">${t(item.descKey)}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openJobModal(index) {
+            const job = jobsData[index];
+            document.getElementById('modalTitle').innerText = t(job.i18n_id);
+            document.getElementById('modalDept').innerText = t(job.i18n_dept);
+            document.getElementById('modalEuro').innerText = job.euro;
+            document.getElementById('modalExp').innerText = job.exp;
+
+            document.getElementById('modalDocs').innerHTML = documentsData.map(doc => `
+                <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5">
+                    <div class="mt-0.5 text-italy-green"><i class="${doc.icon}"></i></div>
+                    <div>
+                        <p class="text-xs text-gray-400">${t(doc.i18n_id)}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('jobModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('jobModal').classList.add('hidden');
+        }
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lenis Smooth Scroll
+            const lenis = new Lenis({ duration: 1.2, smooth: true });
+            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+            requestAnimationFrame(raf);
+
+            // Initial Render
+            renderCategoryChips();
+            renderTimeline();
+            filterPageJobs();
+        });
+
+    </script>
+</body>
+</html>

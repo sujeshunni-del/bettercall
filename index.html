@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Better Call Immigration | Global Mobility & Strategy</title>
+    <meta name="description" content="Premium strategic partner for global migration. Strategic visa and residency planning with transparent processes.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'Noto Sans Devanagari', 'Noto Sans Malayalam', 'Noto Sans Tamil', 'sans-serif'],
+                        serif: ['Outfit', 'sans-serif'], 
+                    },
+                    colors: {
+                        'deep-space': '#050B14',
+                        'space-indigo': '#1C2B4C', 
+                        'brand-blue': '#3B82F6',      
+                        'brand-purple': '#8B5CF6',     
+                        'brand-gold': '#FFD700',
+                        'brand-white': '#FFFFFF',
+                        'vfs-teal': '#14B8A6',
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shimmer': 'shimmer 2.5s linear infinite',
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050B14;
+            color: #E2E8F0;
+            overflow-x: hidden;
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px; /* Base font size increase */
+        }
+
+        /* --- LENIS SMOOTH SCROLL CSS --- */
+        html.lenis {
+            height: auto;
+        }
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+
+        /* Ambient Background */
+        .ambient-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            transform: translateZ(0); 
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.25;
+            will-change: transform; 
+        }
+        .orb-1 { top: -15%; left: -10%; width: 50vw; height: 50vw; background: #3B82F6; animation: float 14s infinite; }
+        .orb-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #8B5CF6; animation: float 16s infinite reverse; }
+        .orb-3 { top: 40%; left: 30%; width: 35vw; height: 35vw; background: #FFD700; opacity: 0.15; animation: float 20s infinite; }
+
+        /* Glass Components */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        }
+        .dropdown-glass {
+            background: rgba(15, 23, 42, 0.7); 
+            backdrop-filter: blur(24px);       
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+        }
+        .floating-nav {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            transform: translateZ(0); 
+        }
+        .floating-nav.scrolled {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+        }
+        .gold-border-gradient {
+            position: relative;
+            background: rgba(20, 20, 30, 0.6);
+            border-radius: 1.5rem;
+            z-index: 1;
+        }
+        .gold-border-gradient::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: 1.5rem;
+            padding: 1px;
+            background: linear-gradient(45deg, #3B82F6, #8B5CF6, #FFD700); 
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
+        }
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .group:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        /* Smooth Scroll Reveal Classes */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(40px); /* Reduced distance */
+            transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1), transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-item.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        #search-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        #search-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        #search-container {
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #search-overlay.active #search-container {
+            transform: scale(1);
+        }
+        /* Highlight Class for Search Matches */
+        .text-highlight {
+            color: #3B82F6;
+            font-weight: 700;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 2px;
+            padding: 0 1px;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050B14; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* --- WAVE TEXT ANIMATION --- */
+        .wave-text-container {
+            display: inline-flex;
+            flex-wrap: nowrap; /* Prevent wrapping to keep one line */
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+            min-height: 1.2em;
+            /* UPDATED: Increased lower bound clamp for Mobile Visibility */
+            font-size: clamp(5rem, 13vw, 10rem); 
+            width: 100%;
+            padding: 0 5px;
+            white-space: nowrap; /* Force one line */
+        }
+        .wave-char {
+            display: inline-block;
+            /* Changed from infinite to forwards to prevent double animation loop */
+            animation: waveAnim 2s ease-in-out forwards; 
+            transform-origin: bottom center;
+            opacity: 0;
+            animation-fill-mode: forwards;
+            white-space: pre; 
+        }
+        /* Refined wave for big text appearance */
+        @keyframes waveAnim {
+            0% { transform: translateY(40px) scale(0.5) rotateX(90deg); opacity: 0; filter: blur(10px); }
+            40% { transform: translateY(-20px) scale(1.1) rotateX(0deg); opacity: 1; filter: blur(0px); }
+            60% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        /* --- JOB WARP ANIMATION --- */
+        #job-warp-layer {
+            position: absolute;
+            /* Positioned directly under the "Leap" text, adjusted for compactness */
+            top: 45%; 
+            left: 0;
+            width: 100%;
+            height: 55%; /* Covers bottom half */
+            pointer-events: none;
+            perspective: 800px;
+            overflow: hidden;
+            z-index: 0; 
+            /* Fade edges: blend into space */
+            mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+        }
+        .job-warp-item {
+            position: absolute;
+            top: 0; 
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-weight: 700; 
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0;
+            will-change: transform, opacity;
+            animation: jobFly 7s linear infinite;
+            font-size: 16px; /* Slightly larger base */
+            text-shadow: 0 0 5px currentColor; /* Slight glow */
+        }
+        @keyframes jobFly {
+            0% {
+                transform: translateX(-50%) translateZ(-1500px) translateY(-100px) scale(0.1);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.1;
+            }
+            40% {
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateX(-50%) translateZ(600px) translateY(200px) scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* --- FLOATING LANGUAGE BUTTON (ALBANIA.HTML STYLE) --- */
+        .lang-fab-new {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 50;
+        }
+        .lang-toggle-btn {
+            background: #050B14;
+            background: rgba(5, 11, 20, 0.7); /* Match albania.html button background */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #E2E8F0;
+            padding: 0.75rem 1.25rem;
+            border-radius: 9999px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .lang-toggle-btn:hover {
+            background: rgba(5, 11, 20, 0.9);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+        .lang-toggle-btn.active .fa-chevron-up {
+            transform: rotate(180deg);
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            margin-bottom: 1rem;
+            width: 12rem;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            padding: 0.5rem;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.9);
+            transform-origin: bottom left; 
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .lang-toggle-btn.active + .language-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+        .lang-option {
+            padding: 0.5rem 1rem;
+            color: #e2e8f0;
+            font-size: 0.875rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: left;
+        }
+        .lang-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #3B82F6;
+        }
+        .lang-option.active {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3B82F6;
+            font-weight: 600;
+        }
+        /* End New FAB Styles */
+
+        /* Removed old FAB pulse keyframes as they are no longer used */
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col relative" id="page-body">
+
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <main class="flex-grow">
+        
+        <header class="relative min-h-[90vh] flex flex-col items-center justify-center pt-32 pb-10 overflow-hidden z-20">
+            
+            <div id="job-warp-layer" class="hidden md:block"></div>
+
+            <div class="container mx-auto px-4 relative z-10 text-center flex flex-col items-center justify-center h-full">
+                
+                <div class="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-panel border border-brand-blue/30 text-brand-blue font-bold tracking-widest text-sm uppercase mb-8 animate-fade-in-up">
+                    <span class="w-2.5 h-2.5 rounded-full bg-brand-blue animate-pulse"></span>
+                    <span data-i18n="hero_badge">Premium Visa & Residency Strategy</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-brand-purple animate-pulse"></span>
+                </div>
+
+                <div class="mb-0 reveal-item w-full flex flex-col items-center" style="animation-delay: 0.1s;">
+                    
+                    <div class="relative w-full flex justify-center items-center min-h-[140px] md:min-h-[160px]">
+                        <h1 class="font-black tracking-tighter wave-text-container leading-none uppercase" id="country-wave-target" style="text-shadow: 0 0 40px rgba(59,130,246,0.3);">
+                            </h1>
+                    </div>
+                    
+                    <!-- Updated Subtitle: Smaller and strictly one line on mobile -->
+                    <h2 data-i18n="hero_subtitle" class="text-[10px] md:text-2xl font-medium text-brand-gold tracking-[0.2em] md:tracking-[0.8em] uppercase mt-4 opacity-80 border-t border-b border-white/10 py-3 px-6 md:px-16 inline-block backdrop-blur-sm relative z-20 whitespace-nowrap">
+                        Leap in to the Future
+                    </h2>
+
+                </div>
+
+                <!-- Updated Search Bar: Sized like a button on mobile, simplified text -->
+                <div class="w-full sm:w-auto max-w-xs md:max-w-xl mx-auto mb-6 md:mb-12 mt-12 md:mt-24 reveal-item" style="animation-delay: 0.25s;">
+                    <div onclick="toggleSearch()" class="group relative cursor-text transform hover:-translate-y-1 transition-transform duration-300">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-gold rounded-full opacity-30 group-hover:opacity-60 blur transition duration-500"></div>
+                        
+                        <div class="relative flex items-center bg-[#0B1221] border border-white/10 rounded-full px-6 py-4 md:p-4 shadow-2xl justify-center md:justify-start">
+                            <div class="mr-3 md:pl-4 md:pr-4 text-brand-gold">
+                                <i class="fa-solid fa-magnifying-glass text-xl md:text-2xl"></i>
+                            </div>
+                            <div class="text-center md:text-left md:flex-1">
+                                <span class="text-gray-500 text-sm md:text-lg font-light group-hover:text-gray-300 transition-colors">
+                                    <span data-i18n="search_placeholder_text">Search Jobs, Countries</span>
+                                    <span class="hidden md:inline">
+                                        <span data-i18n="or_text">or</span> <span data-i18n="visas_highlight" class="text-brand-purple font-medium">Visas</span>...
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="hidden md:flex items-center gap-2 bg-white/5 border border-white/5 rounded-full px-3 py-1.5 ml-auto">
+                                <span class="text-xs text-gray-500 font-mono">Cmd K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center reveal-item" style="animation-delay: 0.3s;">
+                    <a href="assessment.html" class="w-full sm:w-auto relative group overflow-hidden rounded-full bg-brand-blue px-12 py-5 transition-all duration-300 text-white font-bold hover:scale-105 shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:shadow-[0_0_50px_rgba(59,130,246,0.7)]">
+                        <span class="relative z-10 flex items-center justify-center gap-3 text-lg tracking-wide uppercase">
+                            <span data-i18n="btn_assessment">Start Assessment</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                    </a>
+                    
+                    <a href="book.html" class="w-full sm:w-auto glass-panel px-12 py-5 rounded-full font-semibold text-white hover:bg-white/10 border-white/10 transition-all flex items-center justify-center gap-3 group text-lg tracking-wide uppercase">
+                        <span data-i18n="btn_consultation">Book Consultation</span>
+                        <!-- Updated Icon to Calendar -->
+                        <i class="fa-solid fa-calendar-days text-brand-purple group-hover:scale-110 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <section id="programs" class="py-8 md:py-16 relative">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto text-center mb-8 md:mb-12 reveal-item">
+                    <span data-i18n="sec_dest_focus" class="text-brand-gold font-bold tracking-[0.2em] text-base uppercase mb-4 block">Destination Focus</span>
+                    <h2 data-i18n="sec_dest_title" class="text-5xl md:text-5xl font-bold text-white">Our Exclusive Mobility Programs</h2>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8">
+                    <!-- Netherlands -->
+                    <a href="netherlands.html" class="gold-border-gradient p-[1px] group block reveal-item" style="transition-delay: 100ms;">
+                        <div class="glass-panel h-full rounded-[1.6rem] p-4 md:p-10 relative overflow-hidden group-hover:bg-[#0B1120] transition-colors">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-brand-gold/10 rounded-full blur-[40px] pointer-events-none group-hover:bg-brand-gold/20 transition-all md:block hidden"></div>
+                            <div class="text-4xl md:text-8xl mb-6 md:hidden text-center">🇳🇱</div>
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇳🇱</div>
+                                <h3 data-i18n="country_netherlands" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">Netherlands</h3>
+                            </div>
+                            <span data-i18n="tag_high_skilled" class="inline-block bg-brand-gold/20 text-brand-gold text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">High Skilled</span>
+                            <p data-i18n="desc_netherlands" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">Top-tier opportunities for white-collar professionals. Excellent benefits.</p>
+                        </div>
+                    </a>
+                    
+                    <!-- Germany -->
+                    <a href="germany.html" class="group block reveal-item" style="transition-delay: 150ms;">
+                        <div class="glass-panel h-full rounded-3xl p-4 md:p-10 relative overflow-hidden">
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇩🇪</div>
+                                <h3 data-i18n="country_germany" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">Germany</h3>
+                            </div>
+                            <span data-i18n="tag_care_home" class="inline-block bg-white/10 text-gray-300 text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">Care Home</span>
+                            <p data-i18n="desc_germany" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">Europe's largest economy. Fast-track visa for skilled professionals.</p>
+                        </div>
+                    </a>
+                    
+                    <!-- Sweden -->
+                    <a href="sweden.html" class="group block reveal-item" style="transition-delay: 200ms;">
+                        <div class="glass-panel h-full rounded-3xl p-4 md:p-10 relative overflow-hidden">
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇸🇪</div>
+                                <h3 data-i18n="country_sweden" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">Sweden</h3>
+                            </div>
+                            <span data-i18n="tag_airport" class="inline-block bg-blue-500/20 text-blue-400 text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">Airport Jobs</span>
+                            <p data-i18n="desc_sweden" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">Exclusive airport contracts. Engineering & Hospitality roles.</p>
+                        </div>
+                    </a>
+                    <!-- Finland -->
+                    <a href="finland.html" class="group block reveal-item" style="transition-delay: 300ms;">
+                        <div class="glass-panel h-full rounded-3xl p-4 md:p-10 relative overflow-hidden">
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇫🇮</div>
+                                <h3 data-i18n="country_finland" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">Finland</h3>
+                            </div>
+                            <span data-i18n="tag_high_income" class="inline-block bg-purple-500/20 text-purple-400 text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">High Income</span>
+                            <p data-i18n="desc_finland" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">The happiest country in the world. Tech & Service roles.</p>
+                        </div>
+                    </a>
+                    <!-- Italy -->
+                    <a href="italy.html" class="group block reveal-item" style="transition-delay: 400ms;">
+                        <div class="glass-panel h-full rounded-3xl p-4 md:p-10 relative overflow-hidden">
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇮🇹</div>
+                                <h3 data-i18n="country_italy" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">Italy</h3>
+                            </div>
+                            <span data-i18n="tag_quota" class="inline-block bg-orange-500/20 text-orange-400 text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">Quota Visas</span>
+                            <p data-i18n="desc_italy" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">Seasonal and non-seasonal labor entry via Decreto Flussi.</p>
+                        </div>
+                    </a>
+                    <!-- France -->
+                    <a href="france.html" class="group block reveal-item">
+                        <div class="glass-panel h-full rounded-3xl p-4 md:p-10 relative overflow-hidden">
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇫🇷</div>
+                                <h3 data-i18n="country_france" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">France</h3>
+                            </div>
+                            <span data-i18n="tag_talent" class="inline-block bg-blue-600/20 text-blue-400 text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">Talent Passport</span>
+                            <p data-i18n="desc_france" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">Attracting highly skilled workers and investors.</p>
+                        </div>
+                    </a>
+                    <!-- Poland -->
+                    <a href="poland.html" class="group block reveal-item">
+                        <div class="glass-panel h-full rounded-3xl p-4 md:p-10 relative overflow-hidden">
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇵🇱</div>
+                                <h3 data-i18n="country_poland" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">Poland</h3>
+                            </div>
+                            <span data-i18n="tag_schengen" class="inline-block bg-red-500/20 text-red-400 text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">Schengen Hub</span>
+                            <p data-i18n="desc_poland" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">Manufacturing & Logistics Hub with stable pathways.</p>
+                        </div>
+                    </a>
+                    <!-- Czech Republic -->
+                    <a href="czech.html" class="group block reveal-item">
+                        <div class="glass-panel h-full rounded-3xl p-4 md:p-10 relative overflow-hidden">
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇨🇿</div>
+                                <h3 data-i18n="country_czech" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">Czech Republic</h3>
+                            </div>
+                            <span data-i18n="tag_industry" class="inline-block bg-blue-400/20 text-blue-300 text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">Industry</span>
+                            <p data-i18n="desc_czech" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">Automotive & Engineering heart of Central Europe.</p>
+                        </div>
+                    </a>
+                    <!-- Macedonia -->
+                    <a href="macedonia.html" class="group block reveal-item">
+                        <div class="glass-panel h-full rounded-3xl p-4 md:p-10 relative overflow-hidden">
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇲🇰</div>
+                                <h3 data-i18n="country_macedonia" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">Macedonia</h3>
+                            </div>
+                            <span data-i18n="tag_emerging" class="inline-block bg-yellow-500/20 text-yellow-400 text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">Emerging</span>
+                            <p data-i18n="desc_macedonia" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">Rapidly developing market with new opportunities.</p>
+                        </div>
+                    </a>
+                    <!-- Latvia -->
+                    <a href="latvia.html" class="group block reveal-item">
+                        <div class="glass-panel h-full rounded-3xl p-4 md:p-10 relative overflow-hidden">
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇱🇻</div>
+                                <h3 data-i18n="country_latvia" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">Latvia</h3>
+                            </div>
+                            <span data-i18n="tag_baltic" class="inline-block bg-red-500/20 text-red-300 text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">Baltic Jobs</span>
+                            <p data-i18n="desc_latvia" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">Growing demand in logistics, construction, and service sectors.</p>
+                        </div>
+                    </a>
+                    <!-- Serbia -->
+                    <a href="serbia.html" class="group block reveal-item">
+                        <div class="glass-panel h-full rounded-3xl p-4 md:p-10 relative overflow-hidden">
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇷🇸</div>
+                                <h3 data-i18n="country_serbia" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">Serbia</h3>
+                            </div>
+                            <span data-i18n="tag_construction" class="inline-block bg-blue-500/20 text-blue-300 text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">Construction</span>
+                            <p data-i18n="desc_serbia" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">High demand for skilled trades and infrastructure projects.</p>
+                        </div>
+                    </a>
+                    <!-- Albania -->
+                    <a href="albania.html" class="group block reveal-item">
+                        <div class="glass-panel h-full rounded-3xl p-4 md:p-10 relative overflow-hidden">
+                            <div class="flex items-center gap-2 justify-center md:justify-start">
+                                <div class="text-4xl md:hidden block">🇦🇱</div>
+                                <h3 data-i18n="country_albania" class="text-xl md:text-3xl font-bold text-white mb-0 md:mb-0">Albania</h3>
+                            </div>
+                            <span data-i18n="tag_hospitality" class="inline-block bg-red-600/20 text-red-500 text-[10px] md:text-xs font-bold px-2 py-1 md:px-4 md:py-1.5 rounded mb-2 md:mb-5 uppercase">Hospitality</span>
+                            <p data-i18n="desc_albania" class="text-gray-400 text-xs md:text-base leading-relaxed hidden md:block">Booming tourism sector offering seasonal and long-term roles.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="core-services" class="py-8 md:py-16 relative z-20">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-8 md:mb-16 reveal-item">
+                    <span data-i18n="sec_expertise" class="text-brand-purple font-bold tracking-[0.2em] text-sm uppercase mb-4 block">Our Expertise</span>
+                    <h2 data-i18n="sec_service_suite" class="text-5xl md:text-6xl font-bold text-white">Comprehensive Service Suite</h2>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
+                    <!-- Visa Appointment -->
+                    <a href="vfs.html" class="glass-panel p-4 md:p-10 rounded-3xl group block reveal-item relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-vfs-teal/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="w-12 h-12 md:w-20 md:h-20 bg-vfs-teal/20 rounded-2xl flex items-center justify-center text-vfs-teal mb-4 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner shadow-vfs-teal/10 hidden md:flex"><i class="fa-solid fa-calendar-check text-2xl md:text-4xl"></i></div>
+                        <h3 data-i18n="serv_visa_appt" class="text-base md:text-3xl font-bold text-white mb-2 md:mb-4 group-hover:text-vfs-teal transition-colors">Visa Appointment</h3>
+                        <p data-i18n="desc_visa_appt" class="text-gray-400 text-xs md:text-lg mb-4 md:mb-8 leading-relaxed line-clamp-3 md:line-clamp-none hidden md:block">Securing VFS and embassy slots efficiently with our automated 24/7 monitoring systems.</p>
+                        <div class="flex items-center text-vfs-teal text-[10px] md:text-sm font-bold uppercase tracking-widest mt-auto"><span data-i18n="btn_book_slot">Book Slot</span><i class="fa-solid fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i></div>
+                    </a>
+                    <!-- Visa Documentation -->
+                    <a href="visa_documentation.html" class="glass-panel p-4 md:p-10 rounded-3xl group block reveal-item relative overflow-hidden" style="transition-delay: 100ms;">
+                        <div class="absolute inset-0 bg-gradient-to-br from-brand-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="w-12 h-12 md:w-20 md:h-20 bg-brand-blue/20 rounded-2xl flex items-center justify-center text-brand-blue mb-4 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner shadow-brand-blue/10 hidden md:flex"><i class="fa-solid fa-file-contract text-2xl md:text-4xl"></i></div>
+                        <h3 data-i18n="serv_visa_doc" class="text-base md:text-3xl font-bold text-white mb-2 md:mb-4 group-hover:text-brand-blue transition-colors">Visa Documentation</h3>
+                        <p data-i18n="desc_visa_doc" class="text-gray-400 text-xs md:text-lg mb-4 md:mb-8 leading-relaxed line-clamp-3 md:line-clamp-none hidden md:block">Comprehensive review, preparation, and legalization of your financial and civil documents.</p>
+                        <div class="flex items-center text-brand-blue text-[10px] md:text-sm font-bold uppercase tracking-widest mt-auto"><span data-i18n="btn_review_docs">Review Docs</span><i class="fa-solid fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i></div>
+                    </a>
+                    <!-- Travel Assistance -->
+                    <a href="travel_assistance.html" class="glass-panel p-4 md:p-10 rounded-3xl group block reveal-item relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-brand-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="w-12 h-12 md:w-20 md:h-20 bg-brand-gold/20 rounded-2xl flex items-center justify-center text-brand-gold mb-4 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner shadow-brand-gold/10 hidden md:flex"><i class="fa-solid fa-plane-departure text-2xl md:text-4xl"></i></div>
+                        <h3 data-i18n="serv_travel" class="text-base md:text-3xl font-bold text-white mb-2 md:mb-4 group-hover:text-brand-gold transition-colors">Travel Assistance</h3>
+                        <p data-i18n="desc_travel" class="text-gray-400 text-xs md:text-lg mb-4 md:mb-8 leading-relaxed line-clamp-3 md:line-clamp-none hidden md:block">Complete itinerary planning, flight reservations, and hotel bookings compliant with visa rules.</p>
+                        <div class="flex items-center text-brand-gold text-[10px] md:text-sm font-bold uppercase tracking-widest mt-auto"><span data-i18n="btn_plan_trip">Plan Trip</span><i class="fa-solid fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i></div>
+                    </a>
+                    <!-- Insurance -->
+                    <a href="insurance_assistance.html" class="glass-panel p-4 md:p-10 rounded-3xl group block reveal-item relative overflow-hidden" style="transition-delay: 100ms;">
+                        <div class="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="w-12 h-12 md:w-20 md:h-20 bg-red-500/20 rounded-2xl flex items-center justify-center text-red-400 mb-4 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner shadow-red-500/10 hidden md:flex"><i class="fa-solid fa-shield-heart text-2xl md:text-4xl"></i></div>
+                        <h3 data-i18n="serv_insurance" class="text-base md:text-3xl font-bold text-white mb-2 md:mb-4 group-hover:text-red-400 transition-colors">Insurance</h3>
+                        <p data-i18n="desc_insurance" class="text-gray-400 text-xs md:text-lg mb-4 md:mb-8 leading-relaxed line-clamp-3 md:line-clamp-none hidden md:block">Mandatory Schengen travel insurance policies providing full medical coverage.</p>
+                        <div class="flex items-center text-red-400 text-[10px] md:text-sm font-bold uppercase tracking-widest mt-auto"><span data-i18n="btn_get_covered">Get Covered</span><i class="fa-solid fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i></div>
+                    </a>
+                    <!-- Medical Assistance -->
+                    <a href="medical_assistance.html" class="glass-panel p-4 md:p-10 rounded-3xl group block reveal-item relative overflow-hidden" style="transition-delay: 200ms;">
+                        <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="w-12 h-12 md:w-20 md:h-20 bg-green-500/20 rounded-2xl flex items-center justify-center text-green-400 mb-4 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner shadow-green-500/10 hidden md:flex"><i class="fa-solid fa-user-doctor text-2xl md:text-4xl"></i></div>
+                        <h3 data-i18n="serv_medical" class="text-base md:text-3xl font-bold text-white mb-2 md:mb-4 group-hover:text-green-400 transition-colors">Medical Assistance</h3>
+                        <p data-i18n="desc_medical" class="text-gray-400 text-xs md:text-lg mb-4 md:mb-8 leading-relaxed line-clamp-3 md:line-clamp-none hidden md:block">Guidance on required medical examinations and certifications for long-term residency.</p>
+                        <div class="flex items-center text-green-400 text-[10px] md:text-sm font-bold uppercase tracking-widest mt-auto"><span data-i18n="btn_view_req">View Requirements</span><i class="fa-solid fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i></div>
+                    </a>
+                     <!-- Corporate B2B Solution -->
+                     <a href="corporate_b2b.html" class="glass-panel p-4 md:p-10 rounded-3xl group block reveal-item relative overflow-hidden" style="transition-delay: 300ms;">
+                        <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="w-12 h-12 md:w-20 md:h-20 bg-brand-purple/20 rounded-2xl flex items-center justify-center text-brand-purple mb-4 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner shadow-brand-purple/10 hidden md:flex"><i class="fa-solid fa-handshake text-2xl md:text-4xl"></i></div>
+                        <h3 data-i18n="serv_corp" class="text-base md:text-3xl font-bold text-white mb-2 md:mb-4 group-hover:text-brand-purple transition-colors">Corporate B2B Solution</h3>
+                        <p data-i18n="desc_corp" class="text-gray-400 text-xs md:text-lg mb-4 md:mb-8 leading-relaxed line-clamp-3 md:line-clamp-none hidden md:block">Tailored mobility partnerships for businesses, streamlining employee relocation and visa processing.</p>
+                        <div class="flex items-center text-brand-purple text-[10px] md:text-sm font-bold uppercase tracking-widest mt-auto"><span data-i18n="btn_partner">Partner With Us</span><i class="fa-solid fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i></div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Updated Methodology Section: Compact 2x2 Grid on Mobile -->
+        <section id="process" class="py-8 md:py-16 relative">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto text-center mb-8 md:mb-16 reveal-item">
+                    <span data-i18n="sec_methodology" class="text-brand-blue font-bold tracking-[0.2em] text-sm uppercase mb-4 block">Methodology</span>
+                    <h2 data-i18n="sec_journey" class="text-3xl md:text-6xl font-bold text-white mb-6">A Proven 4-Step Journey</h2>
+                </div>
+
+                <!-- Changed to grid-cols-2 on mobile for compact layout -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-12">
+                    <div class="relative text-center lg:text-left reveal-item p-3 rounded-2xl bg-white/5 border border-white/5 md:bg-transparent md:border-none md:p-0">
+                        <div class="w-10 h-10 md:w-24 md:h-24 mx-auto lg:mx-0 mb-2 md:mb-8 rounded-full flex items-center justify-center text-brand-gold font-bold text-sm md:text-3xl border md:border-2 border-brand-gold bg-space-indigo">01</div>
+                        <h3 data-i18n="step_1_title" class="text-sm md:text-3xl font-bold text-white mb-1 md:mb-3">Assessment</h3>
+                        <p data-i18n="step_1_desc" class="text-[10px] md:text-lg text-gray-400 leading-tight">Evaluation of your profile against target country requirements.</p>
+                    </div>
+                    <div class="relative text-center lg:text-left reveal-item p-3 rounded-2xl bg-white/5 border border-white/5 md:bg-transparent md:border-none md:p-0" style="transition-delay: 150ms;">
+                        <div class="w-10 h-10 md:w-24 md:h-24 mx-auto lg:mx-0 mb-2 md:mb-8 rounded-full flex items-center justify-center text-brand-purple font-bold text-sm md:text-3xl border md:border-2 border-brand-purple bg-space-indigo">02</div>
+                        <h3 data-i18n="step_2_title" class="text-sm md:text-3xl font-bold text-white mb-1 md:mb-3">Documentation</h3>
+                        <p data-i18n="step_2_desc" class="text-[10px] md:text-lg text-gray-400 leading-tight">Collection, translation, and legalization of critical paperwork.</p>
+                    </div>
+                    <div class="relative text-center lg:text-left reveal-item p-3 rounded-2xl bg-white/5 border border-white/5 md:bg-transparent md:border-none md:p-0" style="transition-delay: 300ms;">
+                        <div class="w-10 h-10 md:w-24 md:h-24 mx-auto lg:mx-0 mb-2 md:mb-8 rounded-full flex items-center justify-center text-brand-blue font-bold text-sm md:text-3xl border md:border-2 border-brand-blue bg-space-indigo">03</div>
+                        <h3 data-i18n="step_3_title" class="text-sm md:text-3xl font-bold text-white mb-1 md:mb-3">Submission</h3>
+                        <p data-i18n="step_3_desc" class="text-[10px] md:text-lg text-gray-400 leading-tight">Liaison with foreign ministries to ensure timely processing.</p>
+                    </div>
+                    <div class="relative text-center lg:text-left reveal-item p-3 rounded-2xl bg-white/5 border border-white/5 md:bg-transparent md:border-none md:p-0" style="transition-delay: 450ms;">
+                        <div class="w-10 h-10 md:w-24 md:h-24 mx-auto lg:mx-0 mb-2 md:mb-8 rounded-full flex items-center justify-center text-green-400 font-bold text-sm md:text-3xl border md:border-2 border-green-400 bg-space-indigo">04</div>
+                        <h3 data-i18n="step_4_title" class="text-sm md:text-3xl font-bold text-white mb-1 md:mb-3">Settlement</h3>
+                        <p data-i18n="step_4_desc" class="text-[10px] md:text-lg text-gray-400 leading-tight">Post-arrival support, housing assistance, and local orientation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Updated Integrity Section: Compact on mobile -->
+        <section id="values" class="py-8 md:py-16 relative bg-transparent border-y border-white/5">
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-20 items-center">
+                    <div class="reveal-item">
+                        <span data-i18n="sec_integrity" class="text-brand-purple font-bold tracking-[0.2em] text-sm uppercase mb-4 block">Integrity & Excellence</span>
+                        <h2 class="text-3xl md:text-6xl font-bold text-white mb-6 md:mb-8 leading-tight">
+                            <span data-i18n="sec_standard_start">Standard in Global</span> <span data-i18n="sec_standard_end" class="text-brand-purple">Mobility</span>
+                        </h2>
+                        <p data-i18n="sec_standard_desc" class="text-gray-400 mb-8 md:mb-10 leading-relaxed text-lg md:text-xl font-light">
+                            Maximum success probability through absolute legal compliance and unprecedented client support.
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 md:gap-8">
+                            <div class="p-4 md:p-8 glass-panel rounded-3xl">
+                                <div class="text-2xl md:text-5xl font-bold text-brand-blue mb-2">98.5%</div>
+                                <div data-i18n="stat_approval" class="text-xs md:text-lg text-gray-300 font-semibold">Approval Rate</div>
+                            </div>
+                            <div class="p-4 md:p-8 glass-panel rounded-3xl">
+                                <div class="text-2xl md:text-5xl font-bold text-brand-gold mb-2">24/7</div>
+                                <div data-i18n="stat_support" class="text-xs md:text-lg text-gray-300 font-semibold">Dedicated Support</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3 md:space-y-8 reveal-item">
+                        <div class="flex flex-row items-center gap-3 md:gap-6 p-4 md:p-8 glass-panel rounded-3xl group hover:bg-white/5 transition duration-300">
+                            <div class="w-12 h-12 md:w-20 md:h-20 rounded-full bg-brand-blue/20 flex items-center justify-center text-brand-blue flex-shrink-0"><i class="fa-solid fa-lock text-xl md:text-3xl"></i></div>
+                            <div><h4 data-i18n="val_legal_title" class="text-white font-bold text-sm md:text-2xl mb-1 md:mb-2">Absolute Legal Certainty</h4><p data-i18n="val_legal_desc" class="text-gray-500 text-xs md:text-lg leading-tight">Every application is reviewed by licensed EU legal experts.</p></div>
+                        </div>
+                        <div class="flex flex-row items-center gap-3 md:gap-6 p-4 md:p-8 glass-panel rounded-3xl group hover:bg-white/5 transition duration-300">
+                            <div class="w-12 h-12 md:w-20 md:h-20 rounded-full bg-brand-gold/20 flex items-center justify-center text-brand-gold flex-shrink-0"><i class="fa-solid fa-money-bill text-xl md:text-3xl"></i></div>
+                            <div><h4 data-i18n="val_price_title" class="text-white font-bold text-sm md:text-2xl mb-1 md:mb-2">Transparent Pricing</h4><p data-i18n="val_price_desc" class="text-gray-500 text-xs md:text-lg leading-tight">Clear, upfront costs with no hidden fees.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Updated WhatsApp Icon: Smaller on mobile -->
+    <a href="https://wa.me/971503666382" target="_blank" class="fixed bottom-8 right-8 z-50 bg-[#25D366] text-white w-14 h-14 md:w-20 md:h-20 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-110 group animate-pulse" rel="noopener noreferrer">
+        <i class="fa-brands fa-whatsapp text-2xl md:text-4xl"></i>
+    </a>
+
+    <div class="lang-fab-new">
+        <div id="lang-toggle-btn" onclick="toggleLanguageDropdown(event)" class="lang-toggle-btn">
+            <i class="fa-solid fa-globe text-xl text-brand-gold transition-colors"></i>
+            <span class="font-bold text-sm uppercase tracking-wider hidden sm:block">Language</span>
+            <i class="fa-solid fa-chevron-up text-xs opacity-70 transition-transform duration-300"></i>
+        </div>
+        
+        <div id="language-dropdown" class="language-dropdown">
+            <button onclick="changeLanguage('en', this)" class="lang-option active">
+                <span>🇺🇸</span> English
+            </button>
+            <button onclick="changeLanguage('hi', this)" class="lang-option">
+                <span>🇮🇳</span> Hindi
+            </button>
+            <button onclick="changeLanguage('ml', this)" class="lang-option">
+                <span>🇮🇳</span> Malayalam
+            </button>
+            <button onclick="changeLanguage('ta', this)" class="lang-option">
+                <span>🇮🇳</span> Tamil
+            </button>
+             <button onclick="changeLanguage('sw', this)" class="lang-option">
+                <span>🌍</span> Swahili
+            </button>
+            <button onclick="changeLanguage('tl', this)" class="lang-option">
+                <span>🇵🇭</span> Tagalog
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- TRANSLATION ENGINE ---
+        const translations = {
+            en: {
+                nav_home: "Home",
+                nav_programs: "Programs",
+                nav_services: "Services",
+                nav_assessment: "Free Assessment",
+                nav_about: "About Us",
+                nav_book: "Book Now",
+                
+                hero_badge: "Premium Visa & Residency Strategy",
+                hero_subtitle: "Leap in to the Future",
+                // Updated Placeholder Text
+                search_placeholder_text: "Search Jobs, Countries",
+                jobs_highlight: "Jobs",
+                or_text: "or",
+                visas_highlight: "Visas",
+                btn_assessment: "Start Assessment",
+                btn_consultation: "Book Consultation",
+                
+                sec_dest_focus: "Destination Focus",
+                sec_dest_title: "Our Exclusive Mobility Programs",
+                
+                country_netherlands: "Netherlands",
+                tag_high_skilled: "High Skilled",
+                desc_netherlands: "Top-tier opportunities for white-collar professionals. Excellent benefits.",
+                
+                country_germany: "Germany",
+                tag_care_home: "Care Home",
+                desc_germany: "Europe's largest economy. Fast-track visa for skilled professionals.",
+                
+                country_sweden: "Sweden",
+                tag_airport: "Airport Jobs",
+                desc_sweden: "Exclusive airport contracts. Engineering & Hospitality roles.",
+
+                country_finland: "Finland",
+                tag_high_income: "High Income",
+                desc_finland: "The happiest country in the world. Tech & Service roles.",
+
+                country_italy: "Italy",
+                tag_quota: "Quota Visas",
+                desc_italy: "Seasonal and non-seasonal labor entry via Decreto Flussi.",
+
+                country_france: "France",
+                tag_talent: "Talent Passport",
+                desc_france: "Attracting highly skilled workers and investors.",
+
+                country_poland: "Poland",
+                tag_schengen: "Schengen Hub",
+                desc_poland: "Manufacturing & Logistics Hub with stable pathways.",
+
+                country_czech: "Czech Republic",
+                tag_industry: "Industry",
+                desc_czech: "Automotive & Engineering heart of Central Europe.",
+
+                country_macedonia: "Macedonia",
+                tag_emerging: "Emerging",
+                desc_macedonia: "Rapidly developing market with new opportunities.",
+
+                country_latvia: "Latvia",
+                tag_baltic: "Baltic Jobs",
+                desc_latvia: "Growing demand in logistics, construction, and service sectors.",
+
+                country_serbia: "Serbia",
+                tag_construction: "Construction",
+                desc_serbia: "High demand for skilled trades and infrastructure projects.",
+
+                country_albania: "Albania",
+                tag_hospitality: "Hospitality",
+                desc_albania: "Booming tourism sector offering seasonal and long-term roles.",
+
+                sec_expertise: "Our Expertise",
+                sec_service_suite: "Comprehensive Service Suite",
+                
+                serv_visa_appt: "Visa Appointment",
+                desc_visa_appt: "Securing VFS and embassy slots efficiently with our automated 24/7 monitoring systems.",
+                btn_book_slot: "Book Slot",
+
+                serv_visa_doc: "Visa Documentation",
+                desc_visa_doc: "Comprehensive review, preparation, and legalization of your financial and civil documents.",
+                btn_review_docs: "Review Docs",
+
+                serv_travel: "Travel Assistance",
+                desc_travel: "Complete itinerary planning, flight reservations, and hotel bookings compliant with visa rules.",
+                btn_plan_trip: "Plan Trip",
+
+                serv_insurance: "Insurance",
+                desc_insurance: "Mandatory Schengen travel insurance policies providing full medical coverage.",
+                btn_get_covered: "Get Covered",
+
+                serv_medical: "Medical Assistance",
+                desc_medical: "Guidance on required medical examinations and certifications for long-term residency.",
+                btn_view_req: "View Requirements",
+
+                serv_corp: "Corporate B2B Solution",
+                desc_corp: "Tailored mobility partnerships for businesses, streamlining employee relocation and visa processing.",
+                btn_partner: "Partner With Us",
+
+                sec_methodology: "Methodology",
+                sec_journey: "A Proven 4-Step Journey",
+                step_1_title: "Assessment",
+                step_1_desc: "Evaluation of your profile against target country requirements.",
+                step_2_title: "Documentation",
+                step_2_desc: "Collection, translation, and legalization of critical paperwork.",
+                step_3_title: "Submission",
+                step_3_desc: "Liaison with foreign ministries to ensure timely processing.",
+                step_4_title: "Settlement",
+                step_4_desc: "Post-arrival support, housing assistance, and local orientation.",
+
+                sec_integrity: "Integrity & Excellence",
+                sec_standard_start: "Standard in Global",
+                sec_standard_end: "Mobility",
+                sec_standard_desc: "Maximum success probability through absolute legal compliance and unprecedented client support.",
+                stat_approval: "Approval Rate",
+                stat_support: "Dedicated Support",
+
+                val_legal_title: "Absolute Legal Certainty",
+                val_legal_desc: "Every application is reviewed by licensed EU legal experts.",
+                val_price_title: "Transparent Pricing",
+                val_price_desc: "Clear, upfront costs with no hidden fees.",
+
+                footer_destinations: "Destinations",
+                footer_services: "Services",
+                footer_company: "Company",
+                footer_office: "Office",
+                footer_story: "Our Story",
+                footer_privacy: "Privacy Policy",
+                footer_terms: "Terms of Service",
+                footer_rights: "All rights reserved."
+            },
+            // ... [OTHER TRANSLATIONS REMAIN THE SAME BUT UPDATED PLACEHOLDERS SHOULD BE CHECKED IN REAL IMPLEMENTATION IF NEEDED] ...
+            tl: {
+                nav_home: "Home", nav_programs: "Mga Programa", nav_services: "Mga Serbisyo", nav_assessment: "Libreng Pagtatasa", nav_about: "Tungkol sa Amin", nav_book: "Mag-book Ngayon",
+                
+                hero_badge: "Premium Visa at Residency Strategy",
+                hero_subtitle: "Tumalon patungo sa Hinaharap",
+                search_placeholder_text: "Search Jobs, Countries", // Updated
+                jobs_highlight: "Mga Trabaho",
+                or_text: "o",
+                visas_highlight: "mga Visa",
+                btn_assessment: "Simulan ang Pagtatasa",
+                btn_consultation: "Mag-book ng Konsultasyon",
+                
+                // ... (rest of TL translation) ...
+                sec_dest_focus: "Pokus sa Destinasyon", sec_dest_title: "Ang Aming Eksklusibong mga Programa sa Mobility", country_netherlands: "Netherlands", tag_high_skilled: "High Skilled", desc_netherlands: "Mga oportunidad na top-tier para sa mga propesyonal. Mahusay na benepisyo.", country_germany: "Germany", tag_care_home: "Care Home", desc_germany: "Pinakamalaking ekonomiya sa Europa. Mabilis na visa para sa mga skilled professionals.", country_sweden: "Sweden", tag_airport: "Trabaho sa Paliparan", desc_sweden: "Eksklusibong kontrata sa paliparan. Engineering at Hospitality roles.", country_finland: "Finland", tag_high_income: "Mataas na Kita", desc_finland: "Ang pinakamasayang bansa sa mundo. Tech at Service roles.", country_italy: "Italy", tag_quota: "Quota Visas", desc_italy: "Papasok na manggagawa (seasonal at non-seasonal) gamit ang Decreto Flussi.", country_france: "France", tag_talent: "Talent Passport", desc_france: "Umaakit ng mga manggagawang may mataas na kasanayan at mga mamumuhunan.", country_poland: "Poland", tag_schengen: "Schengen Hub", desc_poland: "Sentro ng Paggawa at Logistik na may matatag na daan.", country_czech: "Czech Republic", tag_industry: "Industriya", desc_czech: "Puso ng Automotive at Engineering sa Gitnang Europa.", country_macedonia: "Macedonia", tag_emerging: "Umuusbong", desc_macedonia: "Mabilis na umuunlad na merkado na may bagong oportunidad.", country_latvia: "Latvia", tag_baltic: "Trabaho sa Baltic", desc_latvia: "Lumalaking pangangailangan sa logistik, konstruksyon, at serbisyo.", country_serbia: "Serbia", tag_construction: "Konstruksyon", desc_serbia: "Mataas na pangangailangan para sa skilled trades at imprastraktura.", country_albania: "Albania", tag_hospitality: "Hospitality", desc_albania: "Lumalagong turismo na nag-aalok ng seasonal at pangmatagalang trabaho.", sec_expertise: "Ang Aming Ekspertise", sec_service_suite: "Komprehensibong Serbisyo", serv_visa_appt: "Appointment sa Visa", desc_visa_appt: "Mabilis na pagkuha ng VFS at embassy slots gamit ang aming 24/7 monitoring.", btn_book_slot: "Mag-book ng Slot", serv_visa_doc: "Dokumentasyon sa Visa", desc_visa_doc: "Pagsusuri, paghahanda, at legalisasyon ng iyong mga dokumento.", btn_review_docs: "Suriin ang Docs", serv_travel: "Tulong sa Paglalakbay", desc_travel: "Planong itinerary, flight, at hotel booking na sumusunod sa visa rules.", btn_plan_trip: "Planuhin ang Biyahe", serv_insurance: "Insurance", desc_insurance: "Mandatory na Schengen travel insurance na may buong medical coverage.", btn_get_covered: "Kumuha ng Cover", serv_medical: "Tulong Medikal", desc_medical: "Gabay sa mga medical exam at sertipikasyon para sa residency.", btn_view_req: "Tingnan ang Requirements", serv_corp: "Solusyon sa Corporate B2B", desc_corp: "Partnership para sa negosyo, pinapadali ang relocation at visa ng empleyado.", btn_partner: "Makipag-partner sa Amin", sec_methodology: "Metodolohiya", sec_journey: "Subok na 4-Hakbang na Paglalakbay", step_1_title: "Pagtatasa", step_1_desc: "Ebalwasyon ng iyong profile laban sa requirements ng bansa.", step_2_title: "Dokumentasyon", step_2_desc: "Koleksyon, pagsasalin, at legalisasyon ng mga dokumento.", step_3_title: "Pagsusumite", step_3_desc: "Pakikipag-ugnayan sa foreign ministries para sa mabilis na proseso.", step_4_title: "Paninirahan", step_4_desc: "Suporta pagdating, tulong sa pabahay, at oryentasyon.", sec_integrity: "Integridad at Kahusayan", sec_standard_start: "Pamantayan sa Global", sec_standard_end: "Mobility", sec_standard_desc: "Mataas na tsansa ng tagumpay sa pamamagitan ng legal compliance at suporta.", stat_approval: "Rate ng Pag-apruba", stat_support: "Dedikadong Suporta", val_legal_title: "Ganap na Legal na Katiyakan", val_legal_desc: "Bawat aplikasyon ay sinusuri ng mga lisensyadong eksperto sa batas ng EU.", val_price_title: "Malinaw na Presyo", val_price_desc: "Malinaw na gastos na walang nakatagong bayarin.", footer_destinations: "Mga Destinasyon", footer_services: "Mga Serbisyo", footer_company: "Kumpanya", footer_office: "Opisina", footer_story: "Aming Kwento", footer_privacy: "Patakaran sa Privacy", footer_terms: "Mga Tuntunin ng Serbisyo", footer_rights: "Nakalaan ang lahat ng karapatan."
+            },
+            hi: {
+                nav_home: "होम", nav_programs: "कार्यक्रम", nav_services: "सेवाएं", nav_assessment: "निःशुल्क मूल्यांकन", nav_about: "हमारे बारे में", nav_book: "अभी बुक करें",
+                
+                hero_badge: "प्रीमियम वीज़ा और रेजीडेंसी रणनीति",
+                hero_subtitle: "भविष्य की ओर एक कदम",
+                search_placeholder_text: "खोजने के लिए टाइप करें",
+                // ... (rest of HI translation) ...
+                jobs_highlight: "नौकरियां", or_text: "या", visas_highlight: "वीज़ा", btn_assessment: "मूल्यांकन शुरू करें", btn_consultation: "परामर्श बुक करें", sec_dest_focus: "गंतव्य फोकस", sec_dest_title: "हमारे विशेष मोबिलिटी कार्यक्रम", country_netherlands: "नीदरलैंड", tag_high_skilled: "उच्च कुशल", desc_netherlands: "सफेदपोश पेशेवरों के लिए शीर्ष स्तरीय अवसर। उत्कृष्ट लाभ।", country_germany: "जर्मनी", tag_care_home: "केयर होम", desc_germany: "यूरोप की सबसे बड़ी अर्थव्यवस्था। कुशल पेशेवरों के लिए फास्ट-ट्रैक वीज़ा।", country_sweden: "स्वीडन", tag_airport: "हवाई अड्डे की नौकरियां", desc_sweden: "विशेष हवाई अड्डे के अनुबंध। इंजीनियरिंग और आतिथ्य भूमिकाएं।", country_finland: "फिनलैंड", tag_high_income: "उच्च आय", desc_finland: "दुनिया का सबसे खुशहाल देश। टेक और सर्विस रोल।", country_italy: "इटली", tag_quota: "कोटा वीज़ा", desc_italy: "डेक्रेटो फ्लुसी के माध्यम से मौसमी और गैर-मौसमी श्रम प्रवेश।", country_france: "फ्रांस", tag_talent: "टैलेंट पासपोर्ट", desc_france: "अत्यधिक कुशल श्रमिकों और निवेशकों को आकर्षित करना।", country_poland: "पोलैंड", tag_schengen: "शेंगेन हब", desc_poland: "स्थिर रास्तों के साथ विनिर्माण और रसद हब।", country_czech: "चेक गणराज्य", tag_industry: "उद्योग", desc_czech: "मध्य यूरोप का ऑटोमोटिव और इंजीनियरिंग दिल।", country_macedonia: "मैसिडोनिया", tag_emerging: "उभरता हुआ", desc_macedonia: "नए अवसरों के साथ तेजी से विकसित हो रहा बाजार।", country_latvia: "लातविया", tag_baltic: "बाल्टिक नौकरियां", desc_latvia: "रसद, निर्माण और सेवा क्षेत्रों में बढ़ती मांग।", country_serbia: "सर्बिया", tag_construction: "निर्माण", desc_serbia: "कुशल ट्रेडों और बुनियादी ढांचा परियोजनाओं के लिए उच्च मांग।", country_albania: "अल्बानिया", tag_hospitality: "आतिथ्य", desc_albania: "पर्यटन क्षेत्र में मौसमी और दीर्घकालिक भूमिकाएं।", sec_expertise: "हमारी विशेषज्ञता", sec_service_suite: "व्यापक सेवा सूट", serv_visa_appt: "वीज़ा अपॉइंटमेंट", desc_visa_appt: "हमारी स्वचालित 24/7 निगरानी प्रणालियों के साथ वीएफएस और दूतावास स्लॉट सुरक्षित करना।", btn_book_slot: "स्लॉट बुक करें", serv_visa_doc: "वीज़ा दस्तावेज़ीकरण", desc_visa_doc: "आपके वित्तीय और नागरिक दस्तावेजों की व्यापक समीक्षा, तैयारी और वैधीकरण।", btn_review_docs: "दस्तावेजों की समीक्षा", serv_travel: "यात्रा सहायता", desc_travel: "वीज़ा नियमों के अनुरूप पूर्ण यात्रा कार्यक्रम योजना, उड़ान आरक्षण और होटल बुकिंग।", btn_plan_trip: "यात्रा की योजना", serv_insurance: "बीमा", desc_insurance: "पूर्ण चिकित्सा कवरेज प्रदान करने वाली अनिवार्य शेंगेन यात्रा बीमा पॉलिसी।", btn_get_covered: "कवर प्राप्त करें", serv_medical: "चिकित्सा सहायता", desc_medical: "दीर्घकालिक निवास के लिए आवश्यक चिकित्सा परीक्षाओं और प्रमाणपत्रों पर मार्गदर्शन।", btn_view_req: "आवश्यकताएं देखें", serv_corp: "कॉर्पोरेट B2B समाधान", desc_corp: "व्यवसायों के लिए सिलवाया गया मोबिलिटी साझेदारी, कर्मचारी स्थानांतरण और वीज़ा प्रसंस्करण को सुव्यवस्थित करना।", btn_partner: "हमारे साथ भागीदार", sec_methodology: "कार्यप्रणाली", sec_journey: "एक सिद्ध 4-चरणीय यात्रा", step_1_title: "मूल्यांकन", step_1_desc: "लक्ष्य देश की आवश्यकताओं के खिलाफ आपकी प्रोफ़ाइल का मूल्यांकन।", step_2_title: "दस्तावेज़ीकरण", step_2_desc: "महत्वपूर्ण कागजी कार्रवाई का संग्रह, अनुवाद और वैधीकरण।", step_3_title: "प्रस्तुतीकरण", step_3_desc: "समय पर प्रसंस्करण सुनिश्चित करने के लिए विदेशी मंत्रालयों के साथ संपर्क।", step_4_title: "निपटान", step_4_desc: "आगमन के बाद सहायता, आवास सहायता और स्थानीय अभिविन्यास।", sec_integrity: "ईमानदारी और उत्कृष्टता", sec_standard_start: "वैश्विक में मानक", sec_standard_end: "मोबिलिटी", sec_standard_desc: "पूर्ण कानूनी अनुपालन और अभूतपूर्व ग्राहक सहायता के माध्यम से अधिकतम सफलता की संभावना।", stat_approval: "अनुमोदन दर", stat_support: "समर्पित समर्थन", val_legal_title: "पूर्ण कानूनी निश्चितता", val_legal_desc: "हर आवेदन की समीक्षा लाइसेंस प्राप्त यूरोपीय संघ के कानूनी विशेषज्ञों द्वारा की जाती है।", val_price_title: "पारदर्शी मूल्य निर्धारण", val_price_desc: "बिना किसी छिपी हुई फीस के स्पष्ट, अग्रिम लागत।", footer_destinations: "गंतव्य", footer_services: "सेवाएं", footer_company: "कंपनी", footer_office: "कार्यालय", footer_story: "हमारी कहानी", footer_privacy: "गोपनीयता नीति", footer_terms: "सेवा की शर्तें", footer_rights: "सर्वाधिकार सुरक्षित।"
+            },
+            ml: {
+                nav_home: "ഹോം", nav_programs: "പ്രോഗ്രാമുകൾ", nav_services: "സേവനങ്ങൾ", nav_assessment: "സൗജന്യ വിലയിരുത്തൽ", nav_about: "ഞങ്ങളെ കുറിച്ച്", nav_book: "ബുക്ക് നൗ",
+                
+                hero_badge: "പ്രീമിയം വിസ & റെസിഡൻസി സ്ട്രാറ്റജി",
+                hero_subtitle: "ഭാവിയിലേക്ക് ഒരു കുതിച്ചുചാട്ടം",
+                search_placeholder_text: "തിരയാൻ ടൈപ്പ് ചെയ്യുക",
+                // ... (rest of ML translation) ...
+                jobs_highlight: "ജോലികൾ", or_text: "അല്ലെങ്കിൽ", visas_highlight: "വിസകൾ", btn_assessment: "വിലയിരുത്തൽ ആരംഭിക്കുക", btn_consultation: "കൺസൾട്ടേഷൻ ബുക്ക് ചെയ്യുക", sec_dest_focus: "ഡെസ്റ്റിനേഷൻ ഫോക്കസ്", sec_dest_title: "ഞങ്ങളുടെ എക്സ്ക്ലൂസീവ് മൊബിലിറ്റി പ്രോഗ്രാമുകൾ", country_netherlands: "നെതർലാൻഡ്സ്", tag_high_skilled: "ഹൈ സ്കിൽഡ്", desc_netherlands: "വൈറ്റ് കോളർ പ്രൊഫഷണലുകൾക്കുള്ള മികച്ച അവസരങ്ങൾ. മികച്ച ആനുകൂല്യങ്ങൾ.", country_germany: "ജർമ്മനി", tag_care_home: "കെയർ ഹോം", desc_germany: "യൂറോപ്പിലെ ഏറ്റവും വലിയ സമ്പദ്‌വ്യവസ്ഥ. വിദഗ്ദ്ധരായ പ്രൊഫഷണലുകൾക്ക് ഫാസ്റ്റ് ട്രാക്ക് വിസ.", country_sweden: "സ്വീഡൻ", tag_airport: "എയർപോർട്ട് ജോലികൾ", desc_sweden: "എക്സ്ക്ലൂസീവ് എയർപോർട്ട് കരാറുകൾ. എഞ്ചിനീയറിംഗ് & ഹോസ്പിറ്റാലിറ്റി റോളുകൾ.", country_finland: "ഫിൻലാൻഡ്", tag_high_income: "ഉയർന്ന വരുമാനം", desc_finland: "ലോകത്തിലെ ഏറ്റവും സന്തോഷമുള്ള രാജ്യം. ടെക് & സർവീസ് റോളുകൾ.", country_italy: "ഇറ്റലി", tag_quota: "ക്വോട്ട വിസകൾ", desc_italy: "ഡിക്രീറ്റോ ഫ്ലൂസി വഴിയുള്ള സീസണൽ, നോൺ-സീസണൽ ലേബർ എൻട്രി.", country_france: "ഫ്രാൻസ്", tag_talent: "ടാലന്റ് പാസ്‌പോർട്ട്", desc_france: "ഉയർന്ന വൈദഗ്ധ്യമുള്ള തൊഴിലാളികളെയും നിക്ഷേപകരെയും ആകർഷിക്കുന്നു.", country_poland: "പോളണ്ട്", tag_schengen: "ഷെഞ്ചൻ ഹബ്", desc_poland: "മാനുഫാക്ചറിംഗ് & ലോജിസ്റ്റിക്സ് ഹബ്.", country_czech: "ചെക്ക് റിപ്പബ്ലിക്", tag_industry: "വ്യവസായം", desc_czech: "മധ്യ യൂറോപ്പിന്റെ ഓട്ടോമോട്ടീവ് & എഞ്ചിനീയറിംഗ് ഹൃദയം.", country_macedonia: "മാസിഡോണിയ", tag_emerging: "വളർന്നുവരുന്ന", desc_macedonia: "പുതിയ അവസരങ്ങളുമായി അതിവേഗം വികസിക്കുന്ന വിപണി.", country_latvia: "ലാത്വിയ", tag_baltic: "ബാൾട്ടിക് ജോലികൾ", desc_latvia: "ലോജിസ്റ്റിക്സ്, നിർമ്മാണം, സേവന മേഖലകളിൽ വർദ്ധിച്ചുവരുന്ന ആവശ്യം.", country_serbia: "സെർബിയ", tag_construction: "നിർമ്മാണം", desc_serbia: "വിദഗ്ദ്ധ ട്രേഡുകൾക്കും ഇൻഫ്രാസ്ട്രക്ചർ പ്രോജക്റ്റുകൾക്കും ഉയർന്ന ഡിമാൻഡ്.", country_albania: "അൽബാനിയ", tag_hospitality: "ഹോസ്പിറ്റാലിറ്റി", desc_albania: "സീസണൽ, ദീർഘകാല റോളുകൾ വാഗ്ദാനം ചെയ്യുന്ന ടൂറിസം മേഖല.", sec_expertise: "ഞങ്ങളുടെ വൈദഗ്ധ്യം", sec_service_suite: "സമഗ്ര സേവന സ്യൂട്ട്", serv_visa_appt: "വിസ അപ്പോയിന്റ്മെന്റ്", desc_visa_appt: "ഞങ്ങളുടെ ഓട്ടോമേറ്റഡ് 24/7 മോണിറ്ററിംഗ് സിസ്റ്റങ്ങൾ ഉപയോഗിച്ച് വിഎഫ്എസ്, എംബസി സ്ലോട്ടുകൾ സുരക്ഷിതമാക്കുന്നു.", btn_book_slot: "സ്ലോട്ട് ബുക്ക് ചെയ്യുക", serv_visa_doc: "വിസ ഡോക്യുമെന്റേഷൻ", desc_visa_doc: "നിങ്ങളുടെ സാമ്പത്തിക, സിവിൽ രേഖകളുടെ സമഗ്രമായ അവലോകനം, തയ്യാറെടുപ്പ്, നിയമവിധേയമാക്കൽ.", btn_review_docs: "ഡോക്സ് അവലോകനം", serv_travel: "യാത്രാ സഹായം", desc_travel: "വിസ നിയമങ്ങൾക്ക് അനുസൃതമായ യാത്ര പ്ലാനിംഗ്, ഫ്ലൈറ്റ് റിസർവേഷനുകൾ, ഹോട്ടൽ ബുക്കിംഗുകൾ.", btn_plan_trip: "യാത്ര പ്ലാൻ", serv_insurance: "ഇൻഷുറൻസ്", desc_insurance: "പൂർണ്ണ മെഡിക്കൽ കവറേജ് നൽകുന്ന നിർബന്ധിത ഷെഞ്ചൻ ട്രാവൽ ഇൻഷുറൻസ് പോളിസികൾ.", btn_get_covered: "കവർ നേടുക", serv_medical: "മെഡിക്കൽ സഹായം", desc_medical: "ദീർഘകാല താമസത്തിന് ആവശ്യമായ മെഡിക്കൽ പരിശോധനകളിലും സർട്ടിഫിക്കേഷനുകളിലും മാർഗ്ഗനിർദ്ദേശം.", btn_view_req: "ആവശ്യകതകൾ കാണുക", serv_corp: "കോർപ്പറേറ്റ് B2B സൊല്യൂഷൻ", desc_corp: "ബിസിനസ്സുകൾക്കുള്ള മൊബിലിറ്റി പങ്കാളിത്തം, ജീവനക്കാരുടെ റീലൊക്കേഷൻ, വിസ പ്രോസസ്സിംഗ് ലഘൂകരിക്കുന്നു.", btn_partner: "പങ്കാളിയാകൂ", sec_methodology: "രീതിശാസ്ത്രം", sec_journey: "തെളിയിക്കപ്പെട്ട 4-ഘട്ട യാത്ര", step_1_title: "വിലയിരുത്തൽ", step_1_desc: "ടാർഗെറ്റ് രാജ്യ ആവശ്യകതകൾക്കെതിരായ നിങ്ങളുടെ പ്രൊഫൈലിന്റെ വിലയിരുത്തൽ.", step_2_title: "ഡോക്യുമെന്റേഷൻ", step_2_desc: "നിർണായക രേഖകളുടെ ശേഖരണം, വിവർത്തനം, നിയമവിധേയമാക്കൽ.", step_3_title: "സമർപ്പണം", step_3_desc: "കൃത്യസമയത്ത് പ്രോസസ്സിംഗ് ഉറപ്പാക്കാൻ വിദേശ മന്ത്രാലയങ്ങളുമായുള്ള ബന്ധം.", step_4_title: "സെറ്റിൽമെന്റ്", step_4_desc: "എത്തിയതിനുശേഷമുള്ള പിന്തുണ, ഭവന സഹായം, പ്രാദേശിക ഓറിയന്റേഷൻ.", sec_integrity: "വിശ്വാസ്യത & മികവ്", sec_standard_start: "ഗ്ലോബൽ", sec_standard_end: "മൊബിലിറ്റി സ്റ്റാൻഡേർഡ്", sec_standard_desc: "പൂർണ്ണ നിയമപരമായ അനുസരണത്തിലൂടെയും അഭൂതപൂർവമായ ക്ലയന്റ് പിന്തുണയിലൂടെയും പരമാവധി വിജയ സാധ്യത.", stat_approval: "അംഗീകാര നിരക്ക്", stat_support: "പ്രത്യേക പിന്തുണ", val_legal_title: "പൂർണ്ണ നിയമപരമായ ഉറപ്പ്", val_legal_desc: "ഓരോ അപേക്ഷയും ലൈസൻസുള്ള EU നിയമ വിദഗ്ധർ അവലോകനം ചെയ്യുന്നു.", val_price_title: "സുതാര്യമായ വിലനിർണ്ണയം", val_price_desc: "മറഞ്ഞിരിക്കുന്ന ഫീസുകളില്ലാതെ വ്യക്തമായ, മുൻകൂർ ചെലവുകൾ.", footer_destinations: "ഡെസ്റ്റിനേഷൻസ്", footer_services: "സേവനങ്ങൾ", footer_company: "കമ്പനി", footer_office: "ഓഫീസ്", footer_story: "ഞങ്ങളുടെ കഥ", footer_privacy: "സ്വകാര്യത നയം", footer_terms: "സേവന നിബന്ധനകൾ", footer_rights: "എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം."
+            },
+            ta: {
+                nav_home: "முகப்பு", nav_programs: "திட்டங்கள்", nav_services: "சேவைகள்", nav_assessment: "இலவச மதிப்பீடு", nav_about: "எங்களை பற்றி", nav_book: "இப்போதே பதிவு செய்யவும்",
+                
+                hero_badge: "பிரீமியம் விசா & குடியிருப்பு உத்தி",
+                hero_subtitle: "எதிர்காலத்தை நோக்கி ஒரு பாய்ச்சல்",
+                search_placeholder_text: "தேட தட்டச்சு செய்யவும்",
+                // ... (rest of TA translation) ...
+                jobs_highlight: "வேலைகள்", or_text: "அல்லது", visas_highlight: "விசாக்கள்", btn_assessment: "மதிப்பீட்டைத் தொடங்கவும்", btn_consultation: "ஆலோசனையை பதிவு செய்யவும்", sec_dest_focus: "இலக்கு கவனம்", sec_dest_title: "எங்கள் பிரத்யேக மொபிலிட்டி திட்டங்கள்", country_netherlands: "நெதர்லாந்து", tag_high_skilled: "உயர் திறன்", desc_netherlands: "வெள்ளை காலர் நிபுணர்களுக்கான சிறந்த வாய்ப்புகள். சிறந்த நன்மைகள்.", country_germany: "ஜெர்மனி", tag_care_home: "கேர் ஹோம்", desc_germany: "ஐரோப்பாவின் மிகப்பெரிய பொருளாதாரம். திறமையான நிபுணர்களுக்கான ஃபாஸ்ட் டிராக் விசா.", country_sweden: "ஸ்வீடன்", tag_airport: "விமான நிலைய வேலைகள்", desc_sweden: "பிரத்யேக விமான நிலைய ஒப்பந்தங்கள். பொறியியல் & விருந்தோம்பல் பணிகள்.", country_finland: "பின்லாந்து", tag_high_income: "உயர் வருமானம்", desc_finland: "உலகின் மகிழ்ச்சியான நாடு. தொழில்நுட்பம் & சேவை பணிகள்.", country_italy: "இத்தாலி", tag_quota: "கோட்டா விசாக்கள்", desc_italy: "டெக்ரெட்டோ ஃப்ளூசி வழியாக பருவகால மற்றும் பருவகால அல்லாத தொழிலாளர் நுழைவு.", country_france: "பிரான்ஸ்", tag_talent: "டேலண்ட் பாஸ்போர்ட்", desc_france: "அதிக திறன் வாய்ந்த தொழிலாளர்கள் மற்றும் முதலீட்டாளர்களை ஈர்த்தல்.", country_poland: "போலந்து", tag_schengen: "ஷெங்கன் மையம்", desc_poland: "நிலையான பாதைகளுடன் உற்பத்தி & தளவாட மையம்.", country_czech: "செக் குடியரசு", tag_industry: "தொழிற்துறை", desc_czech: "மத்திய ஐரோப்பாவின் வாகனம் & பொறியியல் இதயம்.", country_macedonia: "மாசிடோனியா", tag_emerging: "வளர்ந்து வரும்", desc_macedonia: "புதிய வாய்ப்புகளுடன் வேகமாக வளரும் சந்தை.", country_latvia: "லாட்வியா", tag_baltic: "பால்டிக் வேலைகள்", desc_latvia: "தளவாடங்கள், கட்டுமானம் மற்றும் சேவைத் துறைகளில் வளர்ந்து வரும் தேவை.", country_serbia: "செர்பியா", tag_construction: "கட்டுமானம்", desc_serbia: "திறமையான வர்த்தகங்கள் மற்றும் உள்கட்டமைப்பு திட்டங்களுக்கு அதிக தேவை.", country_albania: "அல்பேனியா", tag_hospitality: "விருந்தோம்பல்", desc_albania: "சுற்றுலாத் துறை பருவகால மற்றும் நீண்ட கால பணிகளை வழங்குகிறது.", sec_expertise: "எங்கள் நிபுணத்துவம்", sec_service_suite: "விரிவான சேவை தொகுப்பு", serv_visa_appt: "விசா நியமனம்", desc_visa_appt: "எங்கள் தானியங்கி 24/7 கண்காணிப்பு அமைப்புகளுடன் VFS மற்றும் தூதரக இடங்களை திறம்பட பாதுகாத்தல்.", btn_book_slot: "ஸ்லாட்டை பதிவு செய்யவும்", serv_visa_doc: "விசா ஆவணங்கள்", desc_visa_doc: "உங்கள் நிதி மற்றும் சிவில் ஆவணங்களின் விரிவான மதிப்பாய்வு, தயாரிப்பு மற்றும் சட்டப்பூர்வமாக்கல்.", btn_review_docs: "ஆவணங்களை மதிப்பாய்வு செய்யவும்", serv_travel: "பயண உதவி", desc_travel: "விசா விதிகளுக்கு இணங்க முழு பயணத் திட்டம், விமான முன்பதிவுகள் மற்றும் ஹோட்டல் முன்பதிவுகள்.", btn_plan_trip: "பயணத் திட்டம்", serv_insurance: "காப்பீடு", desc_insurance: "முழு மருத்துவ காப்பீட்டை வழங்கும் கட்டாய ஷெங்கன் பயண காப்பீட்டுக் கொள்கைகள்.", btn_get_covered: "காப்பீடு பெறவும்", serv_medical: "மருத்துவ உதவி", desc_medical: "நீண்ட கால வசிப்பிடத்திற்கு தேவையான மருத்துவ பரிசோதனைகள் மற்றும் சான்றிதழ்கள் குறித்த வழிகாட்டுதல்.", btn_view_req: "தேவைகளைப் பார்க்கவும்", serv_corp: "கார்ப்பரேட் B2B தீர்வு", desc_corp: "வணிகங்களுக்கான மொபிலிட்டி கூட்டாண்மை, பணியாளர் இடமாற்றம் மற்றும் விசா செயலாக்கத்தை எளிதாக்குதல்.", btn_partner: "எங்களுடன் இணையுங்கள்", sec_methodology: "முறை", sec_journey: "நிரூபிக்கப்பட்ட 4-படி பயணம்", step_1_title: "மதிப்பீடு", step_1_desc: "இலக்கு நாட்டின் தேவைகளுக்கு எதிராக உங்கள் சுயவிவரத்தின் மதிப்பீடு.", step_2_title: "ஆவணப்படுத்தல்", step_2_desc: "முக்கியமான ஆவணங்களின் சேகரிப்பு, மொழிபெயர்ப்பு மற்றும் சட்டப்பூர்வமாக்கல்.", step_3_title: "சமர்ப்பிப்பு", step_3_desc: "சரியான நேரத்தில் செயலாக்கத்தை உறுதி செய்ய வெளியுறவு அமைச்சகங்களுடன் தொடர்பு.", step_4_title: "குடியேற்றம்", step_4_desc: "வருகைக்குப் பிந்தைய ஆதரவு, வீட்டு உதவி மற்றும் உள்ளூர் நோக்குநிலை.", sec_integrity: "நேர்மை & சிறப்பு", sec_standard_start: "உலகளாவிய", sec_standard_end: "மொபிலிட்டி தரநிலை", sec_standard_desc: "முழுமையான சட்ட இணக்கம் மற்றும் முன்னோடியில்லாத வாடிக்கையாளர் ஆதரவு மூலம் அதிகபட்ச வெற்றி வாய்ப்பு.", stat_approval: "ஒப்புதல் விகிதம்", stat_support: "அர்ப்பணிப்பு ஆதரவு", val_legal_title: "முழுமையான சட்ட உறுதி", val_legal_desc: "ஒவ்வொரு விண்ணப்பமும் உரிமம் பெற்ற ஐரோப்பிய ஒன்றிய சட்ட நிபுணர்களால் மதிப்பாய்வு செய்யப்படுகிறது.", val_price_title: "வெளிப்படையான விலை", val_price_desc: "மறைக்கப்பட்ட கட்டணங்கள் இல்லாமல் தெளிவான, வெளிப்படையான செலவுகள்.", footer_destinations: "இலக்குகள்", footer_services: "சேவைகள்", footer_company: "நிறுவனம்", footer_office: "அலுவலகம்", footer_story: "எங்கள் கதை", footer_privacy: "தனியுரிமைக் கொள்கை", footer_terms: "சேவை விதிமுறைகள்", footer_rights: "அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை."
+            },
+            sw: {
+                nav_home: "Nyumbani", nav_programs: "Programu", nav_services: "Huduma", nav_assessment: "Tathmini ya Bure", nav_about: "Kutuhusu", nav_book: "Weka Nafasi",
+                
+                hero_badge: "Mkakati wa Visa na Ukazi wa Kulipiwa",
+                hero_subtitle: "Rukia Katika Wakati Ujao",
+                search_placeholder_text: "Anza kuandika kutafuta",
+                // ... (rest of SW translation) ...
+                jobs_highlight: "Kazi", or_text: "au", visas_highlight: "Visa", btn_assessment: "Anza Tathmini", btn_consultation: "Weka Ushauri", sec_dest_focus: "Lengo la Marudio", sec_dest_title: "Programu Zetu za Kipekee za Uhamaji", country_netherlands: "Uholanzi", tag_high_skilled: "Ujuzi wa Juu", desc_netherlands: "Fursa za kiwango cha juu kwa wataalamu. Faida bora.", country_germany: "Ujerumani", tag_care_home: "Huduma za Nyumbani", desc_germany: "Uchumi mkubwa zaidi barani Ulaya. Visa ya haraka kwa wataalamu wenye ujuzi.", country_sweden: "Uswidi", tag_airport: "Kazi za Uwanja wa Ndege", desc_sweden: "Mikataba ya kipekee ya uwanja wa ndege. Uhandisi na Ukarimu.", country_finland: "Ufini", tag_high_income: "Mapato ya Juu", desc_finland: "Nchi yenye furaha zaidi duniani. Kazi za Teknolojia na Huduma.", country_italy: "Italia", tag_quota: "Visa za Kiwango", desc_italy: "Kuingia kwa wafanyikazi wa msimu na wasio wa msimu kupitia Decreto Flussi.", country_france: "Ufaransa", tag_talent: "Pasipoti ya Kipaji", desc_france: "Kuvutia wafanyikazi wenye ujuzi wa juu na wawekezaji.", country_poland: "Poland", tag_schengen: "Kituo cha Schengen", desc_poland: "Kituo cha Uzalishaji na Usafirishaji chenye njia thabiti.", country_czech: "Jamhuri ya Czech", tag_industry: "Viwanda", desc_czech: "Moyo wa Magari na Uhandisi wa Ulaya ya Kati.", country_macedonia: "Masedonia", tag_emerging: "Inayoibuka", desc_macedonia: "Soko linalokua kwa kasi na fursa mpya.", country_latvia: "Latvia", tag_baltic: "Kazi za Baltic", desc_latvia: "Mahitaji yanayokua katika sekta za usafirishaji, ujenzi, na huduma.", country_serbia: "Serbia", tag_construction: "Ujenzi", desc_serbia: "Mahitaji makubwa ya biashara zenye ujuzi na miradi ya miundombinu.", country_albania: "Albania", tag_hospitality: "Ukarimu", desc_albania: "Sekta ya utalii inayostawi inayotoa majukumu ya msimu na ya muda mrefu.", sec_expertise: "Utaalam Wetu", sec_service_suite: "Huduma Kamili", serv_visa_appt: "Uteuzi wa Visa", desc_visa_appt: "Kupata nafasi za VFS na ubalozi kwa ufanisi na mifumo yetu ya ufuatiliaji ya 24/7.", btn_book_slot: "Weka Nafasi", serv_visa_doc: "Nyaraka za Visa", desc_visa_doc: "Uhakiki kamili, maandalizi, na kuhalalisha nyaraka zako za kifedha na kiraia.", btn_review_docs: "Kagua Nyaraka", serv_travel: "Msaada wa Kusafiri", desc_travel: "Upangaji kamili wa safari, uhifadhi wa ndege, na hoteli kulingana na sheria za visa.", btn_plan_trip: "Panga Safari", serv_insurance: "Bima", desc_insurance: "Sera za bima ya kusafiri ya Schengen inayotoa huduma kamili ya matibabu.", btn_get_covered: "Pata Bima", serv_medical: "Msaada wa Matibabu", desc_medical: "Mwongozo juu ya mitihani ya matibabu inayohitajika na vyeti kwa ukazi wa muda mrefu.", btn_view_req: "Angalia Mahitaji", serv_corp: "Suluhisho la B2B la Kampuni", desc_corp: "Ushirikiano wa uhamaji kwa biashara, kurahisisha uhamisho wa wafanyikazi na usindikaji wa visa.", btn_partner: "Shirikiana Nasi", sec_methodology: "Mbinu", sec_journey: "Safari Iliyothibitishwa ya Hatua 4", step_1_title: "Tathmini", step_1_desc: "Tathmini ya wasifu wako dhidi ya mahitaji ya nchi lengwa.", step_2_title: "Nyaraka", step_2_desc: "Ukusanyaji, tafsiri, na kuhalalisha makaratasi muhimu.", step_3_title: "Uwasilishaji", step_3_desc: "Mawasiliano na wizara za kigeni ili kuhakikisha usindikaji kwa wakati.", step_4_title: "Makazi", step_4_desc: "Msaada wa baada ya kuwasili, msaada wa nyumba, na mwelekeo wa ndani.", sec_integrity: "Uadilifu & Ubora", sec_standard_start: "Kiwango cha Kimataifa cha", sec_standard_end: "Uhamaji", sec_standard_desc: "Uwezekano wa juu wa mafanikio kupitia kufuata sheria kikamilifu na msaada wa mteja usio na kifani.", stat_approval: "Kiwango cha Idhini", stat_support: "Msaada Uliojitolea", val_legal_title: "Uhakika Kamili wa Kisheria", val_legal_desc: "Kila maombi inakaguliwa na wataalam wa kisheria wa EU walio na leseni.", val_price_title: "Bei ya Uwazi", val_price_desc: "Gharama wazi, za mapema bila ada zilizofichwa.", footer_destinations: "Vituo", footer_services: "Huduma", footer_company: "Kampuni", footer_office: "Ofisi", footer_story: "Hadithi Yetu", footer_privacy: "Sera ya Faragha", footer_terms: "Masharti ya Huduma", footer_rights: "Haki zote zimehifadhiwa."
+            }
+        };
+
+        // --- NEW LANGUAGE LOGIC (from albania.html) ---
+        let currentLang = 'en';
+
+        function toggleLanguageDropdown(event) {
+            const button = document.getElementById('lang-toggle-btn');
+            const isActive = button.classList.toggle('active');
+            event.stopPropagation();
+            if (!isActive) {
+                 document.removeEventListener('click', closeLanguageDropdown);
+            } else {
+                 // Slight delay to ensure click event doesn't immediately close the menu
+                 setTimeout(() => { 
+                    document.addEventListener('click', closeLanguageDropdown);
+                 }, 10);
+            }
+        }
+
+        function closeLanguageDropdown(event) {
+            const dropdown = document.getElementById('language-dropdown');
+            const button = document.getElementById('lang-toggle-btn');
+            // Check if click was outside the button and the dropdown
+            if (dropdown && button && !dropdown.contains(event.target) && !button.contains(event.target)) {
+                button.classList.remove('active');
+                document.removeEventListener('click', closeLanguageDropdown);
+            }
+        }
+
+        function changeLanguage(lang, element) {
+            currentLang = lang;
+            // Update UI Selection
+            document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
+            if(element) element.classList.add('active');
+
+            // Set current dictionary
+            const dict = translations[lang];
+            if (!dict) return;
+
+            // Update elements with data-i18n attributes
+            const i18nElements = document.querySelectorAll('[data-i18n]');
+            
+            i18nElements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    // Handle input placeholders specifically
+                    if (el.tagName === 'INPUT') {
+                        el.placeholder = dict[key];
+                    } else {
+                        // For fade effect
+                        el.style.opacity = '0';
+                        setTimeout(() => {
+                            el.innerHTML = dict[key]; // Use innerHTML to allow for <br> tags in subtitle
+                            el.style.opacity = '1';
+                        }, 200);
+                    }
+                }
+            });
+
+            // Update fonts for Indian languages
+            if (['hi', 'ml', 'ta'].includes(lang)) {
+                if (lang === 'hi') document.body.style.fontFamily = "'Noto Sans Devanagari', sans-serif";
+                if (lang === 'ml') document.body.style.fontFamily = "'Noto Sans Malayalam', sans-serif";
+                if (lang === 'ta') document.body.style.fontFamily = "'Noto Sans Tamil', sans-serif";
+            } else {
+                document.body.style.fontFamily = "'Outfit', sans-serif";
+            }
+
+            // Close menu
+            document.getElementById('lang-toggle-btn').classList.remove('active');
+            document.removeEventListener('click', closeLanguageDropdown);
+        }
+        // --- END NEW LANGUAGE LOGIC ---
+
+
+        // --- LENIS SMOOTH SCROLL INITIALIZATION (Defined BEFORE usage) ---
+        function initSmoothScroll() {
+            if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing
+                    direction: 'vertical',
+                    gestureDirection: 'vertical',
+                    smooth: true,
+                    mouseMultiplier: 1,
+                    smoothTouch: false,
+                    touchMultiplier: 2,
+                });
+
+                function raf(time) {
+                    lenis.raf(time);
+                    requestAnimationFrame(raf);
+                }
+
+                requestAnimationFrame(raf);
+            } else {
+                console.warn('Lenis not loaded');
+            }
+        }
+
+        // NOTE: Updated GLOBAL_HEADER with data-i18n tags for translation support
+        const GLOBAL_HEADER = `
+        <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
+            <div class="floating-nav w-full max-w-7xl px-4 py-4 md:px-3 md:py-3 flex justify-between items-center transition-all duration-300" id="navbar">
+                <a href="#home" class="flex items-center gap-3 md:gap-4 group px-2 md:px-4">
+                    <div class="w-14 h-14 md:w-12 md:h-12 bg-space-indigo rounded-full border border-white/10 flex items-center justify-center text-brand-white font-bold text-2xl md:text-xl shadow-2xl glass-panel overflow-hidden p-1 flex-shrink-0">
+                        <span class="relative z-10 text-brand-white">BC</span>
+                    </div>
+                    <div class="block leading-tight"> 
+                        <h1 class="font-bold text-white text-xl md:text-xl tracking-wide whitespace-nowrap">BETTER CALL</h1>
+                        <p class="text-xs md:text-xs font-bold text-brand-gold uppercase tracking-[0.2em] md:tracking-[0.2em]">Immigration</p>
+                    </div>
+                </a>
+                <div class="hidden lg:flex items-center gap-2">
+                    <a href="#home" data-i18n="nav_home" class="px-5 py-2.5 text-base text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">Home</a>
+                    <div class="relative group">
+                        <button data-i18n="nav_programs" class="px-5 py-2.5 text-base text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5 flex items-center gap-1">Programs <svg class="w-4 h-4 text-gray-400 group-hover:text-brand-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                        <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-72 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50 max-h-[80vh] overflow-y-auto hide-scrollbar">
+                            <a href="sweden.html" data-i18n="country_sweden" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-blue-400 hover:bg-blue-500/20 transition block">Sweden</a>
+                            <a href="finland.html" data-i18n="country_finland" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-purple-400 hover:bg-purple-500/20 transition block">Finland</a>
+                            <a href="netherlands.html" data-i18n="country_netherlands" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-brand-gold hover:bg-brand-gold/20 transition block">Netherlands</a>
+                            <a href="germany.html" data-i18n="country_germany" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-brand-gold hover:bg-brand-gold/20 transition block">Germany</a>
+                            <a href="italy.html" data-i18n="country_italy" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-orange-400 hover:bg-orange-500/20 transition block">Italy</a>
+                            <a href="france.html" data-i18n="country_france" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-blue-500 hover:bg-blue-600/20 transition block">France</a>
+                            <a href="poland.html" data-i18n="country_poland" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-400 hover:bg-red-500/20 transition block">Poland</a>
+                            <a href="czech.html" data-i18n="country_czech" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-blue-300 hover:bg-blue-400/20 transition block">Czech Republic</a>
+                            <a href="latvia.html" data-i18n="country_latvia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-300 hover:bg-red-500/20 transition block">Latvia</a>
+                            <a href="serbia.html" data-i18n="country_serbia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-blue-300 hover:bg-blue-500/20 transition block">Serbia</a>
+                            <a href="macedonia.html" data-i18n="country_macedonia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-yellow-400 hover:bg-yellow-500/20 transition block">Macedonia</a>
+                            <a href="albania.html" data-i18n="country_albania" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-500 hover:bg-red-600/20 transition block">Albania</a>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <button data-i18n="nav_services" class="px-5 py-2.5 text-base text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5 flex items-center gap-1">Services <svg class="w-4 h-4 text-gray-400 group-hover:text-brand-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                        <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-72 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50">
+                            <a href="vfs.html" data-i18n="serv_visa_appt" class="px-4 py-3 rounded-xl text-base text-vfs-teal font-medium hover:bg-vfs-teal/10 transition block">Visa Appointment</a>
+                            <a href="visa_documentation.html" data-i18n="serv_visa_doc" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Visa Documentation</a>
+                            <a href="travel_assistance.html" data-i18n="serv_travel" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Travel Assistance</a>
+                            <a href="insurance_assistance.html" data-i18n="serv_insurance" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Insurance Assistance</a>
+                            <a href="medical_assistance.html" data-i18n="serv_medical" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Medical Assistance</a>
+                            <a href="corporate_b2b.html" data-i18n="serv_corp" class="px-4 py-3 rounded-xl text-base text-brand-purple font-bold hover:text-white hover:bg-brand-purple/20 transition block">Corporate B2B Solution</a>
+                        </div>
+                    </div>
+                    <a href="assessment.html" data-i18n="nav_assessment" class="px-5 py-2.5 text-base text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">Free Assessment</a>
+                    <a href="about.html" data-i18n="nav_about" class="px-5 py-2.5 text-base text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">About Us</a>
+                </div>
+                <div class="flex items-center gap-4 sm:gap-3 px-2">
+                    <button onclick="toggleSearch()" class="group p-3 rounded-full hover:bg-white/10 transition-all duration-300 relative" aria-label="Search">
+                        <i class="fa-solid fa-magnifying-glass text-white/70 group-hover:text-brand-blue text-3xl md:text-xl"></i>
+                        <span class="hidden lg:inline-flex absolute -bottom-8 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md px-2 py-0.5 rounded text-[10px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/5">Cmd + K</span>
+                    </button>
+                    <button class="lg:hidden p-3 text-white hover:text-brand-blue transition rounded-full hover:bg-white/5" onclick="toggleMobileMenu()">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <a href="book.html" class="hidden sm:flex group relative px-8 py-3 rounded-full bg-brand-blue text-white font-bold text-base overflow-hidden transition-all hover:scale-105 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]">
+                        <span data-i18n="nav_book" class="relative z-10 group-hover:text-white transition-colors">Book Now</span>
+                        <div class="absolute inset-0 bg-brand-purple transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                    </a>
+                </div>
+            </div>
+            <div id="mobileMenu" class="fixed inset-0 bg-[#0B132B]/98 backdrop-blur-3xl z-[60] transform translate-y-full transition-transform duration-500 flex flex-col items-center justify-start pt-32 pb-10 overflow-y-auto">
+                <button class="absolute top-8 right-8 text-white/50 hover:text-white text-4xl transition" onclick="toggleMobileMenu()">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <a href="#home" data-i18n="nav_home" onclick="toggleMobileMenu()" class="text-4xl font-light text-white hover:text-brand-blue mb-8">Home</a>
+                <div class="w-full px-8 space-y-10">
+                    <div class="text-center">
+                        <p data-i18n="footer_destinations" class="text-brand-gold text-sm uppercase tracking-widest mb-6 font-bold opacity-70">Destinations</p>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <a href="sweden.html" data-i18n="country_sweden" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">SWEDEN</a>
+                            <a href="finland.html" data-i18n="country_finland" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">FINLAND</a>
+                            <a href="germany.html" data-i18n="country_germany" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">GERMANY</a>
+                            <a href="italy.html" data-i18n="country_italy" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">ITALY</a>
+                            <a href="france.html" data-i18n="country_france" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">FRANCE</a>
+                            <a href="netherlands.html" data-i18n="country_netherlands" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">NETHERLANDS</a>
+                            <a href="poland.html" data-i18n="country_poland" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">POLAND</a>
+                            <a href="czech.html" data-i18n="country_czech" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">CZECHIA</a>
+                            <a href="latvia.html" data-i18n="country_latvia" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">LATVIA</a>
+                            <a href="serbia.html" data-i18n="country_serbia" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">SERBIA</a>
+                            <a href="macedonia.html" data-i18n="country_macedonia" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">MACEDONIA</a>
+                            <a href="albania.html" data-i18n="country_albania" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">ALBANIA</a>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p data-i18n="nav_services" class="text-brand-gold text-sm uppercase tracking-widest mb-6 font-bold opacity-70">Services</p>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <a href="vfs.html" data-i18n="serv_visa_appt" class="px-5 py-3 bg-white/5 rounded-xl text-base text-vfs-teal font-medium">Visa Appointment</a>
+                            <a href="visa_documentation.html" data-i18n="serv_visa_doc" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">Visa Documentation</a>
+                            <a href="travel_assistance.html" data-i18n="serv_travel" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">Travel Assistance</a>
+                            <a href="insurance_assistance.html" data-i18n="serv_insurance" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">Insurance</a>
+                            <a href="medical_assistance.html" data-i18n="serv_medical" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">Medical Assistance</a>
+                            <a href="corporate_b2b.html" data-i18n="serv_corp" class="px-5 py-3 bg-white/5 rounded-xl text-base text-brand-purple font-bold">Corporate B2B Solution</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-5 items-center w-full px-8 pb-12 mt-8">
+                    <a href="assessment.html" onclick="toggleMobileMenu()" data-i18n="nav_assessment" class="w-full max-w-xs text-center text-xl font-bold text-white bg-brand-blue px-8 py-5 rounded-full shadow-lg hover:scale-105 transition-transform">Free Assessment</a>
+                    <a href="book.html" onclick="toggleMobileMenu()" data-i18n="btn_consultation" class="w-full max-w-xs text-center text-xl font-bold text-deep-space bg-brand-gold px-8 py-5 rounded-full shadow-xl hover:scale-105 transition-transform">Book Consultation</a>
+                </div>
+            </div>
+        </div>
+        <div id="search-overlay" class="fixed inset-0 z-[100] bg-deep-space/80 backdrop-blur-xl flex items-start justify-center pt-24 px-4">
+            <div class="absolute inset-0 cursor-default" onclick="toggleSearch()"></div>
+            <div id="search-container" class="w-full max-w-3xl relative z-10 bg-[#0F172A]/90 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh]">
+                <div class="flex items-center p-3 md:p-6 border-b border-white/5">
+                    <i class="fa-solid fa-magnifying-glass text-brand-blue text-lg md:text-2xl mr-3 md:mr-4"></i>
+                    <input type="text" id="global-search-input" data-i18n="search_placeholder_text" placeholder="Search Jobs, Countries" class="bg-transparent border-none outline-none text-base md:text-2xl text-white placeholder-gray-500 w-full font-light" autocomplete="off">
+                    <button onclick="toggleSearch()" class="text-gray-500 hover:text-white transition p-2"><span class="text-sm uppercase font-bold tracking-wider border border-white/10 rounded px-2 py-1">ESC</span></button>
+                </div>
+                <div id="search-results" class="overflow-y-auto p-4 custom-scrollbar">
+                    <div id="search-default" class="p-4">
+                        <p class="text-sm font-bold text-brand-gold uppercase tracking-widest mb-4 opacity-70">Quick Access</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <a href="germany.html" class="flex items-center gap-4 p-4 rounded-xl hover:bg-white/5 transition group"><span class="text-3xl">🇩🇪</span><div class="flex flex-col"><span data-i18n="country_germany" class="text-white text-base font-medium group-hover:text-brand-blue transition">Germany</span><span data-i18n="tag_care_home" class="text-sm text-gray-500">Care Home & Specialist Visas</span></div></a>
+                            <a href="assessment.html" class="flex items-center gap-4 p-4 rounded-xl hover:bg-white/5 transition group"><div class="w-10 h-10 rounded-full bg-brand-blue/20 text-brand-blue flex items-center justify-center text-sm"><i class="fa-solid fa-clipboard-check"></i></div><div class="flex flex-col"><span data-i18n="nav_assessment" class="text-white text-base font-medium group-hover:text-brand-blue transition">Free Assessment</span><span class="text-sm text-gray-500">Check your eligibility instantly</span></div></a>
+                        </div>
+                    </div>
+                    <div id="dynamic-results" class="hidden flex-col gap-2"></div>
+                    <div id="no-results" class="hidden p-10 text-center"><i class="fa-solid fa-circle-question text-gray-600 text-4xl mb-4"></i><p class="text-gray-400 text-base">No results found for your query.</p></div>
+                </div>
+                <div class="bg-black/20 p-4 text-xs text-gray-500 flex justify-between items-center px-6"><div class="flex gap-6"><span class="hidden sm:inline">Use <strong class="text-gray-400">↑</strong> <strong class="text-gray-400">↓</strong> to navigate</span><span class="hidden sm:inline"><strong class="text-gray-400">Enter</strong> to select</span></div><span>Better Call Search</span></div>
+            </div>
+        </div>
+        `;
+
+        const GLOBAL_FOOTER = `
+        <footer class="bg-transparent border-t border-white/5 relative z-10 backdrop-blur-sm">
+            <div class="container mx-auto px-4 py-12 md:py-24">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 md:gap-16 mb-8 md:mb-20">
+                    <div class="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col items-center md:items-start text-center md:text-left">
+                        <a href="#home" class="flex items-center gap-5 group mb-4 md:mb-8 w-fit">
+                            <div class="w-16 h-16 bg-space-indigo rounded-2xl border border-white/10 flex items-center justify-center text-brand-white font-bold text-2xl shadow-2xl glass-panel p-1">
+                                <span class="relative z-10">BC</span>
+                            </div>
+                            <div class="block text-left">
+                                <h4 class="font-bold text-white text-xl tracking-wide">BETTER CALL</h4><p class="text-xs font-bold text-brand-gold uppercase tracking-[0.3em]">Immigration</p>
+                            </div>
+                        </a>
+                        <p data-i18n="sec_standard_desc" class="text-base leading-relaxed max-w-sm mb-6 md:mb-10 font-light text-gray-500">Defining the industry benchmark for professionalism, absolute transparency, and sustained client success in global migration.</p>
+                        <div class="flex gap-5">
+                            <a href="https://wa.me/971503666382" class="w-14 h-14 rounded-full glass-panel hover:bg-brand-blue hover:text-white flex items-center justify-center transition-all duration-300" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp text-2xl"></i></a>
+                            <a href="https://www.instagram.com/the_better_call" class="w-14 h-14 rounded-full glass-panel hover:bg-brand-purple hover:text-white flex items-center justify-center transition-all duration-300" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram text-2xl"></i></a>
+                            <a href="mailto:admin@thebettercall.com" class="w-14 h-14 rounded-full glass-panel hover:bg-brand-gold hover:text-white flex items-center justify-center transition-all duration-300"><i class="fa-solid fa-envelope text-2xl"></i></a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 data-i18n="footer_destinations" class="text-white font-bold mb-8 text-base uppercase tracking-widest">Destinations</h4>
+                        <ul class="space-y-5 text-base font-light">
+                            <li><a href="germany.html" data-i18n="country_germany" class="hover:text-brand-blue transition-colors">Germany</a></li>
+                            <li><a href="sweden.html" data-i18n="country_sweden" class="hover:text-brand-blue transition-colors">Sweden</a></li>
+                            <li><a href="finland.html" data-i18n="country_finland" class="hover:text-brand-blue transition-colors">Finland</a></li>
+                            <li><a href="italy.html" data-i18n="country_italy" class="hover:text-brand-blue transition-colors">Italy</a></li>
+                            <li><a href="france.html" data-i18n="country_france" class="hover:text-brand-blue transition-colors">France</a></li>
+                            <li><a href="poland.html" data-i18n="country_poland" class="hover:text-brand-blue transition-colors">Poland</a></li>
+                        </ul>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 data-i18n="footer_services" class="text-white font-bold mb-8 text-base uppercase tracking-widest">Services</h4>
+                        <ul class="space-y-5 text-base font-light">
+                            <li><a href="vfs.html" data-i18n="serv_visa_appt" class="hover:text-brand-blue transition-colors">Visa Appointment</a></li>
+                            <li><a href="visa_documentation.html" data-i18n="serv_visa_doc" class="hover:text-brand-blue transition-colors">Documentation</a></li>
+                            <li><a href="travel_assistance.html" data-i18n="serv_travel" class="hover:text-brand-blue transition-colors">Travel Assistance</a></li>
+                            <li><a href="insurance_assistance.html" data-i18n="serv_insurance" class="hover:text-brand-blue transition-colors">Insurance</a></li>
+                            <li><a href="medical_assistance.html" data-i18n="serv_medical" class="hover:text-brand-blue transition-colors">Medical</a></li>
+                        </ul>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 data-i18n="footer_company" class="text-white font-bold mb-8 text-base uppercase tracking-widest">Company</h4>
+                        <ul class="space-y-5 text-base font-light">
+                            <li><a href="about.html" data-i18n="footer_story" class="hover:text-brand-blue transition-colors">Our Story</a></li>
+                            <li><a href="assessment.html" data-i18n="nav_assessment" class="hover:text-brand-blue transition-colors">Free Assessment</a></li>
+                        </ul>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 data-i18n="footer_office" class="text-white font-bold mb-8 text-base uppercase tracking-widest">Office</h4>
+                        <ul class="space-y-5 text-base font-light">
+                            <li class="flex items-start gap-4"><i class="fa-solid fa-location-dot text-brand-gold mt-1"></i><span>R320-12th Floor<br>Dubai Healthcare City<br>UAE</span></li>
+                            <li class="flex items-center gap-4"><i class="fa-solid fa-phone text-brand-gold"></i><span>+971 50 366 6382</span></li>
+                            <li class="flex items-center gap-4"><i class="fa-solid fa-envelope text-brand-gold"></i><span>admin@thebettercall.com</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-white/5 pt-10 text-center text-sm text-gray-600 font-light flex flex-col md:flex-row justify-between items-center">
+                    <p>&copy; 2025 Better Call Immigration. <span data-i18n="footer_rights">All rights reserved.</span></p>
+                    <div class="flex gap-8 mt-6 md:mt-0"><a href="#" data-i18n="footer_privacy" class="hover:text-white transition">Privacy Policy</a><a href="#" data-i18n="footer_terms" class="hover:text-white transition">Terms of Service</a></div>
+                </div>
+            </div>
+        </footer>
+        `;
+
+        // 1. INJECT UNIVERSAL COMPONENTS
+        document.body.insertAdjacentHTML('afterbegin', GLOBAL_HEADER);
+        document.body.insertAdjacentHTML('beforeend', GLOBAL_FOOTER);
+
+        // 2. SCRIPTS & LOGIC
+        // Navbar Scroll Effect
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const nav = document.getElementById('navbar');
+                    if (window.scrollY > 20) {
+                        nav.classList.add('scrolled');
+                    } else {
+                        nav.classList.remove('scrolled');
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu.classList.contains('translate-y-full')) {
+                menu.classList.remove('translate-y-full');
+            } else {
+                menu.classList.add('translate-y-full');
+            }
+        }
+
+        // Reveal Animations
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 }; 
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+
+        // --- LENIS SMOOTH SCROLL INITIALIZATION ---
+        // (Function defined earlier)
+
+        // --- UNIVERSAL SEARCH LOGIC ---
+        const searchData = [
+            // --- GERMANY (Healthcare) ---
+            { title: "Registered Nurse", type: "Job", url: "germany.html", icon: "👩‍⚕️", keywords: "health, medical, care home, germany, hospital, nurse" },
+            { title: "Software Engineer", type: "Job", url: "germany.html", icon: "💻", keywords: "developer, coding, tech, germany, blue card" },
+
+            // --- SERBIA (Construction, Logistics, Service) ---
+            { title: "Truck Driver", type: "Job", url: "serbia.html", icon: "🚛", keywords: "logistics, transport, driver, serbia" },
+            { title: "Delivery Driver (Local)", type: "Job", url: "serbia.html", icon: "🏍️", keywords: "logistics, delivery, bike, serbia" },
+            { title: "Warehouse Staff", type: "Job", url: "serbia.html", icon: "📦", keywords: "logistics, warehouse, packing, serbia" },
+            { title: "Certified Welder", type: "Job", url: "serbia.html", icon: "👨‍🏭", keywords: "construction, trades, welder, serbia" },
+            { title: "Automotive Mechanic", type: "Job", url: "serbia.html", icon: "🔧", keywords: "trades, mechanic, auto, serbia" },
+            { title: "Agriculture Worker", type: "Job", url: "serbia.html", icon: "🌾", keywords: "agriculture, farm, serbia" },
+            { title: "Professional Cook", type: "Job", url: "serbia.html", icon: "👨‍🍳", keywords: "service, cook, chef, serbia" },
+            { title: "Hospitality Staff", type: "Job", url: "serbia.html", icon: "🛎️", keywords: "service, hotel, waiter, serbia" },
+
+            // --- POLAND (Manufacturing, Logistics, Construction, Agriculture) ---
+            { title: "Production Line Worker", type: "Job", url: "poland.html", icon: "🏭", keywords: "manufacturing, factory, poland" },
+            { title: "Quality Control (QC)", type: "Job", url: "poland.html", icon: "🔍", keywords: "manufacturing, qc, poland" },
+            { title: "Packaging Staff", type: "Job", url: "poland.html", icon: "📦", keywords: "manufacturing, packing, poland" },
+            { title: "Assembly Operator", type: "Job", url: "poland.html", icon: "⚙️", keywords: "manufacturing, assembly, poland" },
+            { title: "Machine Operator", type: "Job", url: "poland.html", icon: "🤖", keywords: "manufacturing, machine, poland" },
+            { title: "Picker / Packer", type: "Job", url: "poland.html", icon: "🛒", keywords: "logistics, warehouse, poland" },
+            { title: "Forklift Operator", type: "Job", url: "poland.html", icon: "🚜", keywords: "logistics, forklift, poland" },
+            { title: "Warehouse Assistant", type: "Job", url: "poland.html", icon: "📋", keywords: "logistics, warehouse, poland" },
+            { title: "Inventory Clerk", type: "Job", url: "poland.html", icon: "📝", keywords: "logistics, admin, poland" },
+            { title: "Welder (Certified)", type: "Job", url: "poland.html", icon: "🔥", keywords: "construction, welder, poland" },
+            { title: "Electrician", type: "Job", url: "poland.html", icon: "⚡", keywords: "construction, electrician, poland" },
+            { title: "Mason / Plasterer", type: "Job", url: "poland.html", icon: "🧱", keywords: "construction, mason, poland" },
+            { title: "General Laborer", type: "Job", url: "poland.html", icon: "🔨", keywords: "construction, labor, poland" },
+            { title: "Scaffolder", type: "Job", url: "poland.html", icon: "🏗️", keywords: "construction, scaffold, poland" },
+            { title: "Harvesting Worker", type: "Job", url: "poland.html", icon: "🌾", keywords: "agriculture, harvest, poland" },
+            { title: "Greenhouse Worker", type: "Job", url: "poland.html", icon: "🌱", keywords: "agriculture, greenhouse, poland" },
+            { title: "Poultry Farm Hand", type: "Job", url: "poland.html", icon: "🐔", keywords: "agriculture, farm, poultry, poland" },
+
+            // --- NETHERLANDS (Corporate, Sales, Tech, Ops) ---
+            { title: "Office Clerk / Receptionist", type: "Job", url: "netherlands.html", icon: "💼", keywords: "corporate, office, admin, netherlands" },
+            { title: "Accountant", type: "Job", url: "netherlands.html", icon: "📊", keywords: "corporate, finance, netherlands" },
+            { title: "Manager", type: "Job", url: "netherlands.html", icon: "👔", keywords: "corporate, management, netherlands" },
+            { title: "HR Assistant / Executive", type: "Job", url: "netherlands.html", icon: "👥", keywords: "corporate, hr, netherlands" },
+            { title: "Administrative Assistant", type: "Job", url: "netherlands.html", icon: "📂", keywords: "corporate, admin, netherlands" },
+            { title: "Front Office Executive", type: "Job", url: "netherlands.html", icon: "🆔", keywords: "corporate, front office, netherlands" },
+            { title: "Secretary / PA", type: "Job", url: "netherlands.html", icon: "📅", keywords: "corporate, secretary, netherlands" },
+            { title: "Document Controller", type: "Job", url: "netherlands.html", icon: "📑", keywords: "corporate, document, netherlands" },
+            { title: "Sales & Marketing Exec", type: "Job", url: "netherlands.html", icon: "📢", keywords: "sales, marketing, netherlands" },
+            { title: "Business Dev Exec", type: "Job", url: "netherlands.html", icon: "📈", keywords: "sales, business, netherlands" },
+            { title: "Customer Service Exec", type: "Job", url: "netherlands.html", icon: "🎧", keywords: "sales, service, netherlands" },
+            { title: "Call Centre Executive", type: "Job", url: "netherlands.html", icon: "📞", keywords: "sales, call center, netherlands" },
+            { title: "IT Professional", type: "Job", url: "netherlands.html", icon: "💻", keywords: "tech, it, netherlands" },
+            { title: "Engineer", type: "Job", url: "netherlands.html", icon: "👷", keywords: "tech, engineer, netherlands" },
+            { title: "Project Coordinator", type: "Job", url: "netherlands.html", icon: "📋", keywords: "tech, project, netherlands" },
+            { title: "Data Entry Operator", type: "Job", url: "netherlands.html", icon: "⌨️", keywords: "tech, data, netherlands" },
+            { title: "Logistics Coordinator", type: "Job", url: "netherlands.html", icon: "🚚", keywords: "ops, logistics, netherlands" },
+            { title: "Store Supervisor", type: "Job", url: "netherlands.html", icon: "🏬", keywords: "ops, store, netherlands" },
+            { title: "Procurement Assistant", type: "Job", url: "netherlands.html", icon: "🛒", keywords: "ops, purchase, netherlands" },
+            { title: "Finance Executive", type: "Job", url: "netherlands.html", icon: "🏦", keywords: "ops, finance, netherlands" },
+
+            // --- LATVIA (Construction, Mfg, Logistics, IT, Health, Hospitality) ---
+            { title: "Welder / Fitter", type: "Job", url: "latvia.html", icon: "🔥", keywords: "construction, welder, latvia" },
+            { title: "Electrician", type: "Job", url: "latvia.html", icon: "⚡", keywords: "construction, electrician, latvia" },
+            { title: "Bricklayer / Mason", type: "Job", url: "latvia.html", icon: "🧱", keywords: "construction, mason, latvia" },
+            { title: "CNC Operator", type: "Job", url: "latvia.html", icon: "⚙️", keywords: "manufacturing, cnc, latvia" },
+            { title: "Aircraft Mechanic", type: "Job", url: "latvia.html", icon: "✈️", keywords: "manufacturing, mechanic, latvia" },
+            { title: "Truck Driver (Code 95)", type: "Job", url: "latvia.html", icon: "🚛", keywords: "logistics, driver, latvia" },
+            { title: "Warehouse Packer", type: "Job", url: "latvia.html", icon: "📦", keywords: "logistics, packer, latvia" },
+            { title: "Software Developer", type: "Job", url: "latvia.html", icon: "💻", keywords: "it, developer, latvia" },
+            { title: "IT Systems Analyst", type: "Job", url: "latvia.html", icon: "📊", keywords: "it, analyst, latvia" },
+            { title: "Specialist Doctor", type: "Job", url: "latvia.html", icon: "👨‍⚕️", keywords: "healthcare, doctor, latvia" },
+            { title: "Chef / Cook", type: "Job", url: "latvia.html", icon: "👨‍🍳", keywords: "hospitality, chef, latvia" },
+
+            // --- MACEDONIA (Trades, Mfg, Hospitality, Agriculture) ---
+            { title: "Welder", type: "Job", url: "macedonia.html", icon: "🔥", keywords: "trades, welder, macedonia" },
+            { title: "Electrician", type: "Job", url: "macedonia.html", icon: "⚡", keywords: "trades, electrician, macedonia" },
+            { title: "Plumber", type: "Job", url: "macedonia.html", icon: "🚰", keywords: "trades, plumber, macedonia" },
+            { title: "Mason", type: "Job", url: "macedonia.html", icon: "🧱", keywords: "trades, mason, macedonia" },
+            { title: "Machine Operator", type: "Job", url: "macedonia.html", icon: "⚙️", keywords: "manufacturing, machine, macedonia" },
+            { title: "Assembly Worker", type: "Job", url: "macedonia.html", icon: "🔧", keywords: "manufacturing, assembly, macedonia" },
+            { title: "Chef / Cook", type: "Job", url: "macedonia.html", icon: "👨‍🍳", keywords: "hospitality, chef, macedonia" },
+            { title: "Hotel Staff", type: "Job", url: "macedonia.html", icon: "🛎️", keywords: "hospitality, hotel, macedonia" },
+            { title: "General Laborer", type: "Job", url: "macedonia.html", icon: "💪", keywords: "agriculture, labor, macedonia" },
+
+            // --- CROATIA (Logistics, Construction) ---
+            { title: "Ready-Mix Truck Driver", type: "Job", url: "croatia.html", icon: "🚛", keywords: "logistics, driver, croatia" },
+            { title: "Shuttering Carpenter", type: "Job", url: "croatia.html", icon: "🔨", keywords: "construction, carpenter, croatia" },
+            { title: "Mason", type: "Job", url: "croatia.html", icon: "🧱", keywords: "construction, mason, croatia" },
+            { title: "Ceramic Mason", type: "Job", url: "croatia.html", icon: "⬛", keywords: "construction, ceramic, croatia" },
+            { title: "Plumber", type: "Job", url: "croatia.html", icon: "🚰", keywords: "construction, plumber, croatia" },
+            { title: "Gypsum Board Worker", type: "Job", url: "croatia.html", icon: "🏗️", keywords: "construction, gypsum, croatia" },
+            { title: "Grinder", type: "Job", url: "croatia.html", icon: "⚙️", keywords: "construction, grinder, croatia" },
+            { title: "Facade Worker", type: "Job", url: "croatia.html", icon: "🏢", keywords: "construction, facade, croatia" },
+
+            // --- FINLAND (Supermarket, Farm, Workshop, Catering) ---
+            { title: "Sales Supervisor", type: "Job", url: "finland.html", icon: "👔", keywords: "supermarket, sales, finland" },
+            { title: "System Engineer", type: "Job", url: "finland.html", icon: "💻", keywords: "supermarket, it, finland" },
+            { title: "Data Entry Operator", type: "Job", url: "finland.html", icon: "⌨️", keywords: "supermarket, data, finland" },
+            { title: "Accountant", type: "Job", url: "finland.html", icon: "📊", keywords: "supermarket, finance, finland" },
+            { title: "Sales Workers", type: "Job", url: "finland.html", icon: "🛍️", keywords: "supermarket, sales, finland" },
+            { title: "Office Clerk", type: "Job", url: "finland.html", icon: "📎", keywords: "supermarket, admin, finland" },
+            { title: "Security Guard", type: "Job", url: "finland.html", icon: "👮", keywords: "supermarket, security, finland" },
+            { title: "Forklift Operator", type: "Job", url: "finland.html", icon: "🚜", keywords: "supermarket, forklift, finland" },
+            { title: "Poultry Farm Worker", type: "Job", url: "finland.html", icon: "🐔", keywords: "farm, poultry, finland" },
+            { title: "Dairy Farm Worker", type: "Job", url: "finland.html", icon: "🐄", keywords: "farm, dairy, finland" },
+            { title: "Veterinary Technician", type: "Job", url: "finland.html", icon: "⚕️", keywords: "farm, vet, finland" },
+            { title: "Agriculture Farm Supervisor", type: "Job", url: "finland.html", icon: "🌾", keywords: "agriculture, supervisor, finland" },
+            { title: "Tractor Driver", type: "Job", url: "finland.html", icon: "🚜", keywords: "agriculture, driver, finland" },
+            { title: "Harvester Operator", type: "Job", url: "finland.html", icon: "🚜", keywords: "agriculture, harvester, finland" },
+            { title: "Chief Cook", type: "Job", url: "finland.html", icon: "👨‍🍳", keywords: "catering, chef, finland" },
+            { title: "Pastry Chef", type: "Job", url: "finland.html", icon: "🍰", keywords: "catering, pastry, finland" },
+            { title: "Waiter/Waitress", type: "Job", url: "finland.html", icon: "🍽️", keywords: "catering, waiter, finland" },
+
+            // --- SWEDEN (Civil, Workshop, Catering, Maint, Cargo, Hospital) ---
+            { title: "Civil Engineer", type: "Job", url: "sweden.html", icon: "👷", keywords: "civil, engineer, sweden" },
+            { title: "Land Surveyor", type: "Job", url: "sweden.html", icon: "🗺️", keywords: "civil, surveyor, sweden" },
+            { title: "Welder", type: "Job", url: "sweden.html", icon: "🔥", keywords: "civil, welder, sweden" },
+            { title: "Scaffolder", type: "Job", url: "sweden.html", icon: "🏗️", keywords: "civil, scaffolder, sweden" },
+            { title: "Excavator Operator", type: "Job", url: "sweden.html", icon: "🚜", keywords: "civil, excavator, sweden" },
+            { title: "Tower Crane Operator", type: "Job", url: "sweden.html", icon: "🏗️", keywords: "civil, crane, sweden" },
+            { title: "Mechanical Engineer", type: "Job", url: "sweden.html", icon: "⚙️", keywords: "workshop, mechanic, sweden" },
+            { title: "Diesel Mechanic", type: "Job", url: "sweden.html", icon: "🔧", keywords: "workshop, diesel, sweden" },
+            { title: "Electrical Engineer", type: "Job", url: "sweden.html", icon: "⚡", keywords: "workshop, electrical, sweden" },
+            { title: "Auto Electrician", type: "Job", url: "sweden.html", icon: "🚗", keywords: "workshop, auto, sweden" },
+            { title: "Chief Cook", type: "Job", url: "sweden.html", icon: "👨‍🍳", keywords: "catering, cook, sweden" },
+            { title: "Pastry Chef", type: "Job", url: "sweden.html", icon: "🍰", keywords: "catering, pastry, sweden" },
+            { title: "Driver Light Duty", type: "Job", url: "sweden.html", icon: "🚗", keywords: "maintenance, driver, sweden" },
+            { title: "Security Guard", type: "Job", url: "sweden.html", icon: "👮", keywords: "maintenance, security, sweden" },
+            { title: "Data Entry Operator", type: "Job", url: "sweden.html", icon: "⌨️", keywords: "cargo, data, sweden" },
+            { title: "Head Nurse", type: "Job", url: "sweden.html", icon: "👩‍⚕️", keywords: "hospital, nurse, sweden" },
+            { title: "Radiology Tech", type: "Job", url: "sweden.html", icon: "🩻", keywords: "hospital, radiology, sweden" },
+            { title: "Pharmacist", type: "Job", url: "sweden.html", icon: "💊", keywords: "hospital, pharmacy, sweden" },
+
+            // --- ALBANIA (Hospitality, Construction, Logistics) ---
+            { title: "Construction Worker", type: "Job", url: "albania.html", icon: "🧱", keywords: "albania, blue collar, build, mason" },
+            { title: "Truck Driver", type: "Job", url: "albania.html", icon: "🚛", keywords: "albania, logistics, transport, driver" },
+            { title: "Welder", type: "Job", url: "albania.html", icon: "🔥", keywords: "albania, skilled trade, metal" },
+            { title: "Hotel Staff", type: "Job", url: "albania.html", icon: "🛎️", keywords: "albania, hospitality, room service, housekeeping" },
+            { title: "Warehouse Packer", type: "Job", url: "albania.html", icon: "📦", keywords: "albania, logistics, packing" },
+            { title: "Farm Worker", type: "Job", url: "albania.html", icon: "🌾", keywords: "albania, agriculture, farm" },
+            { title: "Butcher", type: "Job", url: "albania.html", icon: "🔪", keywords: "albania, food processing" },
+
+            // --- CZECH REPUBLIC (Manufacturing, Technical, Logistics) ---
+            { title: "Production Line Worker", type: "Job", url: "czech.html", icon: "🏭", keywords: "czech, factory, manufacturing, unskilled" },
+            { title: "Warehouse Staff", type: "Job", url: "czech.html", icon: "📦", keywords: "czech, logistics, warehouse" },
+            { title: "Construction Helper", type: "Job", url: "czech.html", icon: "🧱", keywords: "czech, construction, helper" },
+            { title: "Welder (Certified)", type: "Job", url: "czech.html", icon: "🔥", keywords: "czech, skilled trade, welder" },
+            { title: "CNC Operator", type: "Job", url: "czech.html", icon: "⚙️", keywords: "czech, technical, cnc" },
+            { title: "Auto Electrician", type: "Job", url: "czech.html", icon: "⚡", keywords: "czech, automotive, electrician" },
+            { title: "Automotive Technician", type: "Job", url: "czech.html", icon: "🔧", keywords: "czech, automotive, mechanic" },
+            { title: "Heavy Goods Driver", type: "Job", url: "czech.html", icon: "🚛", keywords: "czech, logistics, truck driver" },
+            { title: "Software Developer", type: "Job", url: "czech.html", icon: "💻", keywords: "czech, tech, it, developer" },
+
+            // --- FRANCE ---
+            { title: "Care Home Job", type: "Job", url: "france.html", icon: "👩‍⚕️", keywords: "france, nurse, healthcare, elderly care" },
+
+            // --- ITALY ---
+            { title: "Care Home Job", type: "Job", url: "italy.html", icon: "👩‍⚕️", keywords: "italy, nurse, healthcare, elderly care" },
+
+            // --- COUNTRIES ---
+            { title: "Germany", type: "Country", url: "germany.html", icon: "🇩🇪", keywords: "care home, nurse, doctor, blue card, visa" },
+            { title: "Sweden", type: "Country", url: "sweden.html", icon: "🇸🇪", keywords: "airport, engineering, hospitality, north" },
+            { title: "Finland", type: "Country", url: "finland.html", icon: "🇫🇮", keywords: "tech, service, happy, north, seasonal" },
+            { title: "Italy", type: "Country", url: "italy.html", icon: "🇮🇹", keywords: "decreto flussi, seasonal, non-seasonal, construction" },
+            { title: "France", type: "Country", url: "france.html", icon: "🇫🇷", keywords: "talent passport, tech, investor, paris" },
+            { title: "Poland", type: "Country", url: "poland.html", icon: "🇵🇱", keywords: "logistics, manufacturing, schengen, work permit" },
+            { title: "Czech Republic", type: "Country", url: "czech.html", icon: "🇨🇿", keywords: "automotive, engineering, prague, factory" },
+            { title: "Latvia", type: "Country", url: "latvia.html", icon: "🇱🇻", keywords: "baltic, logistics, construction, riga" },
+            { title: "Serbia", type: "Country", url: "serbia.html", icon: "🇷🇸", keywords: "construction, trades, infrastructure, belgrade" },
+            { title: "Macedonia", type: "Country", url: "macedonia.html", icon: "🇲🇰", keywords: "emerging, development, skopje" },
+            { title: "Albania", type: "Country", url: "albania.html", icon: "🇦🇱", keywords: "tourism, hospitality, hotels, tirana" },
+            { title: "Croatia", type: "Country", url: "croatia.html", icon: "🇭🇷", keywords: "coastal, tourism, construction, eu" },
+            { title: "Netherlands", type: "Country", url: "netherlands.html", icon: "🇳🇱", keywords: "tech, high skilled, amsterdam, corporate" },
+            
+            // --- SERVICES ---
+            { title: "Visa Appointment", type: "Service", url: "vfs.html", icon: "📅", keywords: "vfs, embassy, slot, booking, date" },
+            { title: "Visa Documentation", type: "Service", url: "visa_documentation.html", icon: "📄", keywords: "legalization, apostille, translation, civil documents" },
+            { title: "Travel Assistance", type: "Service", url: "travel_assistance.html", icon: "✈️", keywords: "flight, hotel, itinerary, booking, reservation" },
+            { title: "Insurance", type: "Service", url: "insurance_assistance.html", icon: "🛡️", keywords: "medical, health, schengen, coverage, policy" },
+            { title: "Medical Assistance", type: "Service", url: "medical_assistance.html", icon: "🩺", keywords: "exam, checkup, doctor, certificate, health" },
+            { title: "Corporate B2B Solutions", type: "Service", url: "corporate_b2b.html", icon: "🏢", keywords: "business, bulk visa, hr, audit, compliance" },
+            
+            // --- TOOLS ---
+            { title: "Free Assessment", type: "Tool", url: "assessment.html", icon: "📝", keywords: "check, eligibility, qualify, start" },
+            { title: "Book Consultation", type: "Tool", url: "book.html", icon: "📞", keywords: "call, meeting, talk, expert, lawyer" }
+        ];
+
+        // Search Variables (Initialized after DOM injection)
+        let searchOverlay, searchInput, searchResults, defaultResults, dynamicResults, noResults;
+
+        function initSearchElements() {
+             searchOverlay = document.getElementById('search-overlay');
+             searchInput = document.getElementById('global-search-input');
+             searchResults = document.getElementById('search-results');
+             defaultResults = document.getElementById('search-default');
+             dynamicResults = document.getElementById('dynamic-results');
+             noResults = document.getElementById('no-results');
+
+            if(searchInput) {
+                 searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    if (query.length === 0) {
+                        defaultResults.classList.remove('hidden');
+                        dynamicResults.classList.add('hidden');
+                        noResults.classList.add('hidden');
+                        return;
+                    }
+                    const filtered = searchData.filter(item => 
+                        item.title.toLowerCase().includes(query) || 
+                        item.keywords.toLowerCase().includes(query) ||
+                        item.type.toLowerCase().includes(query)
+                    );
+                    renderResults(filtered, query);
+                });
+            }
+        }
+        
+        // Call this immediately to bind to the injected elements
+        initSearchElements();
+
+        function toggleSearch() {
+            if(!searchOverlay) initSearchElements(); // Safety check
+            const isActive = searchOverlay.classList.contains('active');
+            if (isActive) {
+                searchOverlay.classList.remove('active');
+                document.body.style.overflow = ''; 
+            } else {
+                searchOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; 
+                setTimeout(() => searchInput.focus(), 100);
+            }
+        }
+
+        // Helper to highlight matching text
+        function highlightMatch(text, query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="text-highlight">$1</span>');
+        }
+
+        function renderResults(results, query) {
+            defaultResults.classList.add('hidden');
+            dynamicResults.innerHTML = '';
+            
+            if (results.length === 0) {
+                dynamicResults.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            dynamicResults.classList.remove('hidden');
+
+            results.forEach((result, index) => {
+                const div = document.createElement('a');
+                div.href = result.url;
+                div.className = "flex items-center gap-4 p-4 rounded-xl hover:bg-white/10 transition duration-200 group border border-transparent hover:border-white/5 animate-fade-in-up";
+                div.style.animationDelay = `${index * 50}ms`;
+                
+                let typeColor = "text-gray-500";
+                if(result.type === "Country") typeColor = "text-brand-gold";
+                if(result.type === "Service") typeColor = "text-brand-blue";
+                if(result.type === "Tool") typeColor = "text-brand-purple";
+                if(result.type === "Job") typeColor = "text-vfs-teal";
+
+                // Apply highlighting
+                const highlightedTitle = highlightMatch(result.title, query);
+                const highlightedKeywords = highlightMatch(result.keywords, query);
+
+                div.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-xl shadow-inner">${result.icon}</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-white font-medium group-hover:text-brand-blue transition">${highlightedTitle}</h4>
+                            <span class="text-[10px] uppercase font-bold tracking-wider ${typeColor} bg-white/5 px-2 py-0.5 rounded border border-white/5">${result.type}</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-0.5 truncate">${highlightedKeywords}</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-gray-600 group-hover:text-white transition transform group-hover:translate-x-1"></i>
+                `;
+                dynamicResults.appendChild(div);
+            });
+        }
+
+        // Keyboard Shortcut
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                toggleSearch();
+            }
+            if (e.key === 'Escape' && searchOverlay && searchOverlay.classList.contains('active')) {
+                toggleSearch();
+            }
+        });
+
+        /* --- WAVE TEXT ANIMATION LOGIC --- */
+        class WaveWriter {
+            constructor(el, words, interval = 4000) {
+                this.el = el;
+                this.words = words;
+                this.interval = interval;
+                this.loopNum = 0;
+                // Creative Palette: Gold, Blue, Purple, Teal, Hot Pink, Cyan
+                this.colors = ['#FFD700', '#3B82F6', '#8B5CF6', '#14B8A6', '#F472B6', '#22D3EE']; 
+                
+                // Start
+                this.cycle();
+            }
+
+            cycle() {
+                // Get current word
+                const currentWord = this.words[this.loopNum % this.words.length];
+                const currentColor = this.colors[this.loopNum % this.colors.length];
+                
+                // Build HTML with individual spans for wave effect
+                let html = '';
+                // Split by characters
+                const chars = currentWord.split('');
+                chars.forEach((char, index) => {
+                    // Add delay based on index for wave effect
+                    // Using inline-block is crucial for transform
+                    html += `<span class="wave-char" style="animation-delay: ${index * 0.08}s; color: ${currentColor};">${char === ' ' ? '&nbsp;' : char}</span>`;
+                });
+                
+                this.el.innerHTML = html;
+                
+                // Next word index
+                this.loopNum++;
+                
+                // Loop
+                setTimeout(() => this.cycle(), this.interval);
+            }
+        }
+        
+        // --- JOB WARP ANIMATION LOGIC ---
+        function initJobWarp() {
+            const container = document.getElementById('job-warp-layer');
+            if(!container) return;
+
+            // Jobs extracted from Electrician.txt
+            const jobs = [
+                "Electrician", "Plumber", "Welder", "Carpenter", "Bricklayer", "Painter", 
+                "Construction Worker", "HVAC Technician", "Mechanic", "Forklift Operator", 
+                "Warehouse Worker", "Factory Worker", "Heavy Equipment Operator", "Road Worker", 
+                "Miner", "Shipyard Worker", "Crane Operator", "Steelworker", "Textile Worker", 
+                "Assembly Line Worker", "Industrial Painter", "Machinist", "Roofer", "Glazier", 
+                "Sheet Metal Worker", "Insulation Installer", "Elevator Installer", "Ironworker", 
+                "Diesel Mechanic", "Maintenance Technician", "Landscaper", "Cable Installer", 
+                "Postal Worker", "Security Guard", "Janitor", "Upholsterer", "Locksmith", 
+                "Tile Setter", "Cabinetmaker", "Boiler Operator", "Concrete Finisher", "Quarry Worker", 
+                "Packer", "Meat Processor", "Baker", "Fisherman", "Sales Supervisor", "Cam Supervisor", 
+                "Transport Supervisor", "Laundry Supervisor", "System Engineer", "System Operator", 
+                "Data Entry Operator", "Accountant", "Sales Workers", "Office Clerk", "Office Assistant", 
+                "Store Keeper", "Time Keeper", "Laundry Worker", "Tanker Driver", "Bus Driver", 
+                "Light Duty Driver", "Packing Helper", "Trolley Helper", "Loading Worker", "Cleaning Helper", 
+                "Cashier", "Hair Stylist", "Tailor", "CCTV Technician", "Alarm Technician", 
+                "Fire Alarm Technician", "Air Conditioning Tech", "Electrical Supervisor", 
+                "High Voltage Tech", "Electrical Engineer", "Fire & Safety Officer", "Safety Engineer", 
+                "RO Water Technician", "Poultry Farm Worker", "Dairy Farm Worker", "Veterinary Technician", 
+                "Butcher", "Agriculture Supervisor", "Tractor Driver", "Harvester Operator", 
+                "Sprayer Operator", "Pump Mechanic", "Hydraulic Mechanic", "Generator Mechanic", 
+                "Auto Electrician", "Spray Painter", "Mechanical Engineer", "Battery Mechanic", 
+                "Fuel Station Operator", "Tire Man", "Liner", "Roller Operator", "Glass Cutter", 
+                "Civil Engineer", "Land Surveyor", "Civil Site Supervisor", "Construction Safety Officer", 
+                "Fabricator", "Scaffolder", "RCC Fitter", "Concrete Mix Operator", "Dozer Operator", 
+                "Excavator Operator", "Tower Crane Operator", "Mobile Crane Operator", "Grader Operator", 
+                "Steel Fixer", "Chief Cook", "Continental Cook", "Head Chef", "Pastry Chef", "Sous Chef", 
+                "Kitchen Helper", "Chef de Partie", "Catering Supervisor", "Restaurant Supervisor", 
+                "Steward Supervisor", "Dishwasher", "Barista", "Pizza Chef", "Housekeeping Worker", 
+                "Laundry Supervisor", "Food Quality Inspector", "Waiter/Waitress", "Nurse", "Head Nurse", 
+                "Lab Technician", "X-Ray Technician", "Pharmacist", "Ambulance Driver", "Ward Assistant", 
+                "Sweeper", "General Practitioner", "Surgeon", "Dentist", "Physiotherapist", "Radiographer", 
+                "Paramedic", "Midwife", "Occupational Therapist", "Speech Therapist", "Psychiatrist", 
+                "Psychologist", "Cardiologist", "Dermatologist", "Pediatrician", "Anesthetist"
+            ];
+
+            // CREATIVE COLOR PALETTE FOR JOB WARP (Professional/Site Theme)
+            // Reduced brightness to sit in background
+            const colors = [
+                'rgba(255, 215, 0, 0.7)', // Gold
+                'rgba(59, 130, 246, 0.7)', // Blue
+                'rgba(139, 92, 246, 0.7)', // Purple
+                'rgba(20, 184, 166, 0.7)', // Teal
+                'rgba(255, 255, 255, 0.5)'  // White
+            ];
+
+            // Create items continuously
+            setInterval(() => {
+                if(document.hidden) return; // Save resources
+                
+                const job = jobs[Math.floor(Math.random() * jobs.length)];
+                const el = document.createElement('div');
+                el.textContent = job;
+                el.className = 'job-warp-item';
+                
+                // Randomize position slightly off-center start
+                const startX = (Math.random() - 0.5) * 80; // Wider spread
+                
+                el.style.color = colors[Math.floor(Math.random() * colors.length)];
+                // Randomize font size slightly
+                el.style.fontSize = Math.floor(Math.random() * 10 + 12) + 'px'; // 12-22px
+                
+                // Randomize animation duration for depth effect
+                const duration = Math.random() * 4 + 6; // 6-10s slower
+                el.style.animationDuration = duration + 's';
+                
+                // Adjust starting horizontal position for variety
+                el.style.left = (50 + startX) + '%';
+                
+                container.appendChild(el);
+                
+                // Cleanup
+                setTimeout(() => {
+                    if(el.parentNode) el.parentNode.removeChild(el);
+                }, duration * 1000);
+
+            }, 250); // Spawn frequency
+        }
+
+        window.onload = function() {
+            // Country Wave Writer
+            var elements = document.getElementById('country-wave-target');
+            var countries = [
+                "AUSTRIA", "CZECHIA", "DENMARK", "ESTONIA", 
+                "FINLAND", "FRANCE", "GERMANY", "GREECE", 
+                "HUNGARY", "ITALY", "LATVIA", "LITHUANIA", 
+                "MALTA", "NETHERLANDS", "NORWAY", "POLAND", 
+                "PORTUGAL", "SLOVAKIA", "SLOVENIA", "SPAIN", 
+                "SWEDEN", "CROATIA", "BULGARIA", "ALBANIA", 
+                "BELARUS", "MONTENEGRO", "MACEDONIA", 
+                "ROMANIA", "RUSSIA", "SERBIA", "TURKEY", 
+                "UKRAINE", "CYPRUS", "UK"
+            ];
+            
+            if (elements) {
+                // Increased delay to 4000ms to allow wave animation to fully play out comfortably
+                new WaveWriter(elements, countries, 4000); 
+            }
+            
+            // Start Job Warp
+            initJobWarp();
+
+            // Initialize Smooth Scroll (after load to ensure library is ready)
+            initSmoothScroll();
+            initSearchElements(); // Also ensure search is ready
+        };
+    </script>
+</body>
+</html>

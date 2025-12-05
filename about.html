@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Better Call Immigration</title>
+    <meta name="description" content="Strategic partner for global migration. Orchestrating complex immigration solutions for individuals and enterprises.">
+    
+    <!-- Fonts: Outfit (Sans Serif) Only -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Tailwind (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    
+    <!-- Config - GLOBAL THEME -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        serif: ['Outfit', 'sans-serif'], 
+                    },
+                    colors: {
+                        'deep-space': '#050B14',
+                        'space-indigo': '#1C2B4C', 
+                        'brand-blue': '#3B82F6',      
+                        'brand-purple': '#8B5CF6',     
+                        'brand-gold': '#FFD700',
+                        'brand-white': '#FFFFFF',
+                        'vfs-teal': '#14B8A6',
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shimmer': 'shimmer 2.5s linear infinite',
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- INTERNAL STYLES (Matched to index.html) -->
+    <style>
+        /* --- GLOBAL SETTINGS --- */
+        body {
+            background-color: #050B14;
+            color: #E2E8F0;
+            overflow-x: hidden;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* --- LENIS SMOOTH SCROLL --- */
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
+
+        /* --- AMBIENT LIGHTING --- */
+        .ambient-light {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden; transform: translateZ(0);
+        }
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(100px);
+            opacity: 0.25; will-change: transform;
+        }
+        .orb-1 { top: -15%; left: -10%; width: 50vw; height: 50vw; background: #3B82F6; animation: float 14s infinite; }
+        .orb-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #8B5CF6; animation: float 16s infinite reverse; }
+        .orb-3 { top: 40%; left: 30%; width: 35vw; height: 35vw; background: #FFD700; opacity: 0.15; animation: float 20s infinite; }
+
+        /* --- GLASS COMPONENTS --- */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        }
+        .dropdown-glass {
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+        }
+        .floating-nav {
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease; transform: translateZ(0);
+        }
+        .floating-nav.scrolled {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+        }
+        .gold-border-gradient {
+            position: relative; background: rgba(20, 20, 30, 0.6);
+            border-radius: 1.5rem; z-index: 1;
+        }
+        .gold-border-gradient::before {
+            content: ""; position: absolute; inset: -1px; border-radius: 1.5rem; padding: 1px;
+            background: linear-gradient(45deg, #3B82F6, #8B5CF6, #FFD700);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude; z-index: -1;
+        }
+        .dropdown-menu {
+            opacity: 0; visibility: hidden; transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .group:hover .dropdown-menu {
+            opacity: 1; visibility: visible; transform: translateY(0);
+        }
+
+        /* --- ANIMATION UTILITIES --- */
+        .reveal-item {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1), transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-item.active { opacity: 1; transform: translateY(0); }
+
+        #search-overlay { opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+        #search-overlay.active { opacity: 1; visibility: visible; }
+        #search-container { transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        #search-overlay.active #search-container { transform: scale(1); }
+        .text-highlight { color: #3B82F6; font-weight: 700; background: rgba(59, 130, 246, 0.1); border-radius: 2px; padding: 0 1px; }
+        
+        .text-gradient-hero {
+            background: linear-gradient(to right, #FFD700, #8B5CF6, #3B82F6); 
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 2.5s linear infinite;
+        }
+
+        /* Scrollbars */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050B14; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col relative" id="page-body">
+
+    <!-- Ambient Background -->
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- HEADER (Injected by Script) -->
+    <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container"></nav>
+
+    <!-- Search Overlay -->
+    <div id="search-overlay" class="fixed inset-0 z-[100] bg-deep-space/80 backdrop-blur-xl flex items-start justify-center pt-24 px-4">
+        <div class="absolute inset-0 cursor-default" onclick="toggleSearch()"></div>
+        <div id="search-container" class="w-full max-w-3xl relative z-10 bg-[#0F172A]/90 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh]">
+            <div class="flex items-center p-6 border-b border-white/5">
+                <i class="fa-solid fa-magnifying-glass text-brand-blue text-xl mr-4"></i>
+                <input type="text" id="global-search-input" placeholder="Search countries, jobs, or services..." class="bg-transparent border-none outline-none text-xl text-white placeholder-gray-500 w-full font-light" autocomplete="off">
+                <button onclick="toggleSearch()" class="text-gray-500 hover:text-white transition p-2"><span class="text-xs uppercase font-bold tracking-wider border border-white/10 rounded px-2 py-1">ESC</span></button>
+            </div>
+            <div id="search-results" class="overflow-y-auto p-2 custom-scrollbar">
+                <div id="search-default" class="p-4">
+                    <p class="text-xs font-bold text-brand-gold uppercase tracking-widest mb-3 opacity-70">Quick Access</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <a href="germany.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition group"><span class="text-2xl">🇩🇪</span><div class="flex flex-col"><span class="text-white text-sm font-medium group-hover:text-brand-blue transition">Germany</span><span class="text-xs text-gray-500">Care Home & Specialist Visas</span></div></a>
+                        <a href="assessment.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition group"><div class="w-8 h-8 rounded-full bg-brand-blue/20 text-brand-blue flex items-center justify-center text-xs"><i class="fa-solid fa-clipboard-check"></i></div><div class="flex flex-col"><span class="text-white text-sm font-medium group-hover:text-brand-blue transition">Free Assessment</span><span class="text-xs text-gray-500">Check your eligibility instantly</span></div></a>
+                    </div>
+                </div>
+                <div id="dynamic-results" class="hidden flex-col gap-1"></div>
+                <div id="no-results" class="hidden p-8 text-center"><i class="fa-solid fa-circle-question text-gray-600 text-3xl mb-3"></i><p class="text-gray-400 text-sm">No results found for your query.</p></div>
+            </div>
+            <div class="bg-black/20 p-3 text-[10px] text-gray-500 flex justify-between items-center px-6"><div class="flex gap-4"><span class="hidden sm:inline">Use <strong class="text-gray-400">↑</strong> <strong class="text-gray-400">↓</strong> to navigate</span><span class="hidden sm:inline"><strong class="text-gray-400">Enter</strong> to select</span></div><span>Better Call Search</span></div>
+        </div>
+    </div>
+
+    <!-- MAIN PAGE CONTENT -->
+    <main class="flex-grow pt-32 pb-20">
+        
+        <!-- Hero Section -->
+        <header class="relative pt-12 pb-20 overflow-hidden">
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <div class="inline-flex items-center gap-3 glass-panel px-6 py-2.5 rounded-full mb-10 opacity-0 animate-fade-in-up" style="animation-delay: 0.1s;">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-pulse absolute inline-flex h-full w-full rounded-full bg-brand-purple opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-purple"></span>
+                    </span>
+                    <span class="text-gray-300 text-xs font-semibold uppercase tracking-widest">Our Global Mobility Consultancy</span>
+                </div>
+
+                <h1 class="text-5xl md:text-8xl font-extrabold mb-8 leading-[1.05] tracking-tight text-white reveal-item" style="animation-delay: 0.2s;">
+                    Our Story: <br>
+                    <span class="text-gradient-hero font-extrabold">Integrity & Excellence</span>
+                </h1>
+
+                <p class="text-lg md:text-xl text-gray-400 max-w-4xl mx-auto mb-14 font-light leading-relaxed reveal-item" style="animation-delay: 0.3s;">
+                    We are dedicated to defining the industry benchmark for professionalism, absolute transparency, and sustained client success in the complex world of global migration.
+                </p>
+            </div>
+        </header>
+
+        <!-- Executive Summary -->
+        <section id="about" class="py-20 relative">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="reveal-item">
+                        <span class="text-brand-gold font-bold tracking-[0.2em] text-xs uppercase mb-4 block">Who We Are</span>
+                        <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Executive Summary</h2>
+                        <div class="space-y-6 text-gray-300 text-lg font-light leading-relaxed">
+                            <p>
+                                Better Call Immigration is a specialized global mobility consultancy serving as the premier strategic partner for comprehensive immigration, residency, and citizenship solutions. Headquartered in Dubai, UAE, our expertise spans key economic regions including Canada, Europe (Schengen), Australia, the UK, the USA, and New Zealand.
+                            </p>
+                            <p>
+                                We meticulously orchestrate complex processes—from initial needs assessment and employment authorization to high-net-worth investment migration. Our mission is to ensure a secure, seamless, and fully compliant long-term transition for every client.
+                            </p>
+                        </div>
+                        
+                        <div class="mt-10 flex gap-6">
+                            <div class="glass-panel px-6 py-4 rounded-xl text-center shadow-lg hover:shadow-xl transition-all">
+                                <span class="block text-3xl font-bold text-brand-purple">HQ</span>
+                                <span class="text-xs text-gray-500 uppercase tracking-widest mt-1">Dubai, UAE</span>
+                            </div>
+                            <div class="glass-panel px-6 py-4 rounded-xl text-center shadow-lg hover:shadow-xl transition-all">
+                                <span class="block text-3xl font-bold text-brand-blue">Global</span>
+                                <span class="text-xs text-gray-500 uppercase tracking-widest mt-1">Operations</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative reveal-item" style="transition-delay: 200ms;">
+                        <div class="relative rounded-3xl overflow-hidden glass-panel p-4">
+                            <div class="w-full h-96 bg-space-indigo/50 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                                 <!-- Abstract visual representation -->
+                                 <div class="absolute inset-0 bg-gradient-to-br from-brand-blue/20 via-transparent to-brand-purple/20"></div>
+                                 <i class="fa-solid fa-building text-6xl text-white/10"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission & Vision -->
+        <section class="py-24 relative border-y border-white/5 z-20">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Mission Card -->
+                    <div class="glass-panel p-10 rounded-3xl reveal-item">
+                        <div class="w-16 h-16 bg-brand-gold/20 rounded-xl flex items-center justify-center text-brand-gold text-3xl mb-6 shadow-inner shadow-brand-gold/10">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-4">Our Mission</h3>
+                        <p class="text-gray-400 leading-relaxed font-light text-lg">
+                            To demystify and strategically secure the journey of global migration. We are dedicated to enabling our clients to successfully realize their international mobility goals through compliant, effective, and ethically impeccable procedures.
+                        </p>
+                    </div>
+
+                    <!-- Vision Card -->
+                    <div class="glass-panel p-10 rounded-3xl reveal-item" style="transition-delay: 150ms;">
+                        <div class="w-16 h-16 bg-brand-purple/20 rounded-xl flex items-center justify-center text-brand-purple text-3xl mb-6 shadow-inner shadow-brand-purple/10">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-4">Our Vision</h3>
+                        <p class="text-gray-400 leading-relaxed font-light text-lg">
+                            To be recognized as the foremost global authority in complex immigration and investment migration solutions, defining the industry benchmark for professionalism, absolute transparency, and sustained client success.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comprehensive Services -->
+        <section id="services" class="py-32 relative">
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="text-center mb-16 reveal-item">
+                    <span class="text-brand-purple font-bold tracking-[0.2em] text-xs uppercase mb-4 block">What We Do</span>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Service Verticals</h2>
+                    <p class="text-gray-400 mt-4 max-w-2xl mx-auto text-lg">Precision-driven, end-to-end management across our primary service areas.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Service Item 1 -->
+                    <div class="glass-panel p-8 rounded-3xl group reveal-item">
+                        <div class="w-14 h-14 mb-6 bg-brand-purple/20 rounded-xl flex items-center justify-center text-brand-purple text-3xl"><i class="fa-solid fa-briefcase"></i></div>
+                        <div><h4 class="text-xl font-bold text-white mb-3">Employment Authorization</h4>
+                            <p class="text-sm text-gray-400 leading-relaxed">Orchestrating work permits for skilled professionals. Includes employer liaising and contract management.</p>
+                        </div>
+                    </div>
+                    <!-- Service Item 2 -->
+                    <div class="glass-panel p-8 rounded-3xl group reveal-item" style="transition-delay: 100ms;">
+                        <div class="w-14 h-14 mb-6 bg-brand-blue/20 rounded-xl flex items-center justify-center text-brand-blue text-3xl"><i class="fa-solid fa-passport"></i></div>
+                        <div><h4 class="text-xl font-bold text-white mb-3">Citizenship & PR</h4>
+                            <p class="text-sm text-gray-400 leading-relaxed">Strategic consultation for permanent status via economic contribution or skilled migration pathways.</p>
+                        </div>
+                    </div>
+                    <!-- Service Item 3 -->
+                    <div class="glass-panel p-8 rounded-3xl group reveal-item" style="transition-delay: 200ms;">
+                        <div class="w-14 h-14 mb-6 bg-brand-gold/20 rounded-xl flex items-center justify-center text-brand-gold text-3xl"><i class="fa-solid fa-sack-dollar"></i></div>
+                        <div><h4 class="text-xl font-bold text-white mb-3">Investment Migration</h4>
+                            <p class="text-sm text-gray-400 leading-relaxed">Bespoke services for HNWIs pursuing residency through capital investment in real estate or bonds.</p>
+                        </div>
+                    </div>
+                    <!-- Service Item 4 -->
+                    <div class="glass-panel p-8 rounded-3xl group reveal-item" style="transition-delay: 300ms;">
+                        <div class="w-14 h-14 mb-6 bg-vfs-teal/20 rounded-xl flex items-center justify-center text-vfs-teal text-3xl"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <div><h4 class="text-xl font-bold text-white mb-3">Academic Mobility</h4>
+                            <p class="text-sm text-gray-400 leading-relaxed">Managing study visas and university admissions to facilitate international education.</p>
+                        </div>
+                    </div>
+
+                    <!-- Service Item 5 -->
+                    <div class="glass-panel p-8 rounded-3xl group reveal-item">
+                        <div class="w-14 h-14 mb-6 bg-brand-purple/20 rounded-xl flex items-center justify-center text-brand-purple text-3xl"><i class="fa-solid fa-person-walking-luggage"></i></div>
+                        <div><h4 class="text-xl font-bold text-white mb-3">Visitor Entry</h4>
+                            <p class="text-sm text-gray-400 leading-relaxed">Expert advisory for tourist and business visas, focusing on application strength.</p>
+                        </div>
+                    </div>
+
+                    <!-- Service Item 6 -->
+                    <div class="glass-panel p-8 rounded-3xl group reveal-item" style="transition-delay: 100ms;">
+                        <div class="w-14 h-14 mb-6 bg-brand-blue/20 rounded-xl flex items-center justify-center text-brand-blue text-3xl"><i class="fa-solid fa-bell-concierge"></i></div>
+                        <div><h4 class="text-xl font-bold text-white mb-3">Post-Issuance Concierge</h4>
+                            <p class="text-sm text-gray-400 leading-relaxed">Logistical transition support including travel planning, housing coordination, and registration.</p>
+                        </div>
+                    </div>
+
+                    <!-- Service Item 7 -->
+                    <div class="glass-panel p-8 rounded-3xl group reveal-item" style="transition-delay: 200ms;">
+                        <div class="w-14 h-14 mb-6 bg-brand-gold/20 rounded-xl flex items-center justify-center text-brand-gold text-3xl"><i class="fa-solid fa-handshake"></i></div>
+                        <div><h4 class="text-xl font-bold text-white mb-3">B2B Partnerships</h4>
+                            <p class="text-sm text-gray-400 leading-relaxed">High-level collaboration with corporate HR departments for bulk visa processing and audits.</p>
+                        </div>
+                    </div>
+
+                    <!-- Service Item 8 -->
+                    <div class="glass-panel p-8 rounded-3xl group reveal-item" style="transition-delay: 300ms;">
+                        <div class="w-14 h-14 mb-6 bg-vfs-teal/20 rounded-xl flex items-center justify-center text-vfs-teal text-3xl"><i class="fa-solid fa-balance-scale"></i></div>
+                        <div><h4 class="text-xl font-bold text-white mb-3">Regulatory Compliance</h4>
+                            <p class="text-sm text-gray-400 leading-relaxed">Continuous legal oversight, forensic documentation auditing, and proactive case management.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Better Call Advantage -->
+        <section class="py-24 relative border-t border-b border-brand-purple/20 overflow-hidden">
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="text-center mb-16 reveal-item">
+                    <span class="text-brand-gold font-bold tracking-[0.2em] text-xs uppercase mb-4 block">Our Unfair Edge</span>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">The Better Call Advantage</h2>
+                    <p class="text-gray-400 text-lg">Proactive Risk Mitigation. Uncompromising Compliance. Coordinated Execution.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Advantage 1 -->
+                    <div class="glass-panel p-8 rounded-3xl reveal-item">
+                        <div class="w-8 h-8 text-brand-gold mb-4"><i class="fa-solid fa-chart-line"></i></div>
+                        <h3 class="text-xl font-bold text-white mb-3">Predictive Analytics</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">We identify potential application vulnerabilities early, enabling comprehensive remedial action to minimize refusal risk.</p>
+                    </div>
+                    <!-- Advantage 2 -->
+                    <div class="glass-panel p-8 rounded-3xl reveal-item" style="transition-delay: 100ms;">
+                        <div class="w-8 h-8 text-brand-purple mb-4"><i class="fa-solid fa-gavel"></i></div>
+                        <h3 class="text-xl font-bold text-white mb-3">Regulated Guidance</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Direct association with licensed immigration professionals guarantees all advice is current and legally compliant.</p>
+                    </div>
+                    <!-- Advantage 3 -->
+                    <div class="glass-panel p-8 rounded-3xl reveal-item" style="transition-delay: 200ms;">
+                        <div class="w-8 h-8 text-brand-blue mb-4"><i class="fa-solid fa-globe"></i></div>
+                        <h3 class="text-xl font-bold text-white mb-3">Global Insight</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Leveraging a wide-reaching network with deep, localized market knowledge in both source and destination countries.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-32 relative">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    
+                    <!-- Contact Info -->
+                    <div class="reveal-item">
+                        <span class="text-brand-gold font-bold tracking-[0.2em] text-xs uppercase mb-4 block">Get in Touch</span>
+                        <h2 class="text-4xl md:text-5xl font-bold text-white mb-8">Visit Our Headquarters</h2>
+                        
+                        <div class="space-y-8">
+                            <div class="flex items-start gap-5">
+                                <div class="w-12 h-12 glass-panel rounded-full flex items-center justify-center text-brand-gold shrink-0">
+                                    <i class="fa-solid fa-location-dot text-xl"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-white text-xl">Address</h5>
+                                    <p class="text-gray-400 text-sm mt-1">R320-12th Floor, Office no.14<br>Sheikh Rashid Rd, Oud Metha<br>Dubai Healthcare City, Dubai - UAE</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-5">
+                                <div class="w-12 h-12 glass-panel rounded-full flex items-center justify-center text-brand-purple shrink-0">
+                                    <i class="fa-solid fa-phone text-xl"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-white text-xl">Phone & WhatsApp</h5>
+                                    <p class="text-gray-400 text-sm mt-1 space-y-1">
+                                        <a href="tel:+971503666382" class="hover:text-brand-purple block transition">+971 50 366 6382</a>
+                                        <a href="https://wa.me/971503666382" target="_blank" class="hover:text-brand-purple block transition text-green-400 font-semibold" rel="noopener noreferrer">
+                                            <i class="fa-brands fa-whatsapp text-sm mr-2"></i>
+                                            +971 50 366 6382
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-5">
+                                <div class="w-12 h-12 glass-panel rounded-full flex items-center justify-center text-brand-blue shrink-0">
+                                    <i class="fa-solid fa-envelope text-xl"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-white text-xl">Email</h5>
+                                    <a href="mailto:admin@thebettercall.com" class="text-gray-400 text-sm mt-1 hover:text-brand-blue transition">admin@thebettercall.com</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-10">
+                            <a href="book.html" class="inline-flex items-center group relative px-10 py-4 rounded-full bg-brand-blue text-brand-white font-bold text-lg overflow-hidden transition-all hover:scale-105 shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:shadow-[0_0_40px_rgba(59,130,246,0.8)]">
+                                <span class="relative z-10 group-hover:text-brand-white transition-colors">Schedule a Consultation</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Map Placeholder -->
+                    <div class="glass-panel rounded-3xl overflow-hidden min-h-[400px] reveal-item" style="transition-delay: 200ms;">
+                       <!-- Apply dark theme map filter for consistency -->
+                       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3609.483762767315!2d55.32157627605809!3d25.22741963073697!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5d36007a02f9%3A0x9c29299e00771e24!2sDubai%20Healthcare%20City!5e0!3m2!1sen!2sae!4v1700000000000!5m2!1sen!2sae" width="100%" height="100%" style="border:0; filter: grayscale(100%) invert(92%) contrast(83%);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/971503666382" target="_blank" class="fixed bottom-8 right-8 z-50 bg-[#25D366] text-white w-16 h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-110 group animate-pulse" rel="noopener noreferrer">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <!-- FOOTER (Injected by Script) -->
+    <div id="footer-container"></div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // --- 1. SMOOTH SCROLL ---
+        function initSmoothScroll() {
+            if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+                    direction: 'vertical',
+                    gestureDirection: 'vertical',
+                    smooth: true,
+                    mouseMultiplier: 1,
+                    smoothTouch: false,
+                    touchMultiplier: 2,
+                });
+                function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+                requestAnimationFrame(raf);
+            }
+        }
+
+        // --- 2. GLOBAL COMPONENTS ---
+        const GLOBAL_HEADER = `
+        <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
+            <div class="floating-nav w-full max-w-7xl px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
+                <a href="index.html" class="flex items-center gap-2 md:gap-3 group px-2 md:px-4">
+                    <div class="w-8 h-8 md:w-10 md:h-10 bg-space-indigo rounded-full border border-white/10 flex items-center justify-center text-brand-white font-bold text-base md:text-lg shadow-2xl glass-panel overflow-hidden p-1 flex-shrink-0">
+                        <span class="relative z-10 text-brand-white">BC</span>
+                    </div>
+                    <div class="block leading-tight"> 
+                        <h1 class="font-bold text-white text-xs md:text-sm tracking-wide whitespace-nowrap">BETTER CALL</h1>
+                        <p class="text-[8px] md:text-[9px] font-bold text-brand-gold uppercase tracking-[0.2em] md:tracking-[0.2em]">Immigration</p>
+                    </div>
+                </a>
+                <div class="hidden lg:flex items-center gap-1">
+                    <a href="index.html" class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">Home</a>
+                    <div class="relative group">
+                        <button class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5 flex items-center gap-1">Programs <svg class="w-3 h-3 text-gray-400 group-hover:text-brand-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                        <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50 max-h-[80vh] overflow-y-auto hide-scrollbar">
+                            <a href="sweden.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-400 hover:bg-blue-500/20 transition block">Sweden</a>
+                            <a href="finland.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-purple-400 hover:bg-purple-500/20 transition block">Finland</a>
+                            <a href="netherlands.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-brand-gold hover:bg-brand-gold/20 transition block">Netherlands</a>
+                            <a href="germany.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-brand-gold hover:bg-brand-gold/20 transition block">Germany</a>
+                            <a href="italy.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-orange-400 hover:bg-orange-500/20 transition block">Italy</a>
+                            <a href="france.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-500 hover:bg-blue-600/20 transition block">France</a>
+                            <a href="poland.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-400 hover:bg-red-500/20 transition block">Poland</a>
+                            <a href="czech.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-300 hover:bg-blue-400/20 transition block">Czech Republic</a>
+                            <a href="latvia.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-300 hover:bg-red-500/20 transition block">Latvia</a>
+                            <a href="serbia.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-300 hover:bg-blue-500/20 transition block">Serbia</a>
+                            <a href="macedonia.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-yellow-400 hover:bg-yellow-500/20 transition block">Macedonia</a>
+                            <a href="albania.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-500 hover:bg-red-600/20 transition block">Albania</a>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <button class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5 flex items-center gap-1">Services <svg class="w-3 h-3 text-gray-400 group-hover:text-brand-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                        <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50">
+                            <a href="vfs.html" class="px-4 py-2.5 rounded-xl text-sm text-vfs-teal font-medium hover:bg-vfs-teal/10 transition block">Visa Appointment</a>
+                            <a href="visa_documentation.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Visa Documentation</a>
+                            <a href="travel_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Travel Assistance</a>
+                            <a href="insurance_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Insurance Assistance</a>
+                            <a href="medical_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Medical Assistance</a>
+                        </div>
+                    </div>
+                    <a href="assessment.html" class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">Free Assessment</a>
+                    <a href="about.html" class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">About Us</a>
+                </div>
+                <div class="flex items-center gap-2 sm:gap-3 px-2">
+                    <button onclick="toggleSearch()" class="group p-2.5 rounded-full hover:bg-white/10 transition-all duration-300 relative" aria-label="Search">
+                        <i class="fa-solid fa-magnifying-glass text-white/70 group-hover:text-brand-blue text-lg"></i>
+                        <span class="hidden lg:inline-flex absolute -bottom-8 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md px-2 py-0.5 rounded text-[10px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/5">Cmd + K</span>
+                    </button>
+                    <button class="lg:hidden p-2 text-white hover:text-brand-blue transition rounded-full hover:bg-white/5" onclick="toggleMobileMenu()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <a href="book.html" class="hidden sm:flex group relative px-6 py-2.5 rounded-full bg-brand-blue text-white font-bold text-sm overflow-hidden transition-all hover:scale-105 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]">
+                        <span class="relative z-10 group-hover:text-white transition-colors">Book Now</span>
+                        <div class="absolute inset-0 bg-brand-purple transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                    </a>
+                </div>
+            </div>
+            <div id="mobileMenu" class="fixed inset-0 bg-[#0B132B]/98 backdrop-blur-3xl z-[60] transform translate-y-full transition-transform duration-500 flex flex-col items-center justify-start pt-32 pb-10 overflow-y-auto">
+                <button class="absolute top-6 right-6 text-white/50 hover:text-white text-3xl transition" onclick="toggleMobileMenu()">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <a href="index.html" onclick="toggleMobileMenu()" class="text-3xl font-light text-white hover:text-brand-blue mb-8">Home</a>
+                <div class="w-full px-8 space-y-8">
+                    <div class="text-center">
+                        <p class="text-brand-gold text-xs uppercase tracking-widest mb-4 font-bold opacity-70">Destinations</p>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <a href="sweden.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">SWEDEN</a>
+                            <a href="finland.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">FINLAND</a>
+                            <a href="germany.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">GERMANY</a>
+                            <a href="italy.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">ITALY</a>
+                            <a href="france.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">FRANCE</a>
+                            <a href="netherlands.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">NETHERLANDS</a>
+                            <a href="poland.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">POLAND</a>
+                            <a href="czech.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">CZECHIA</a>
+                            <a href="latvia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">LATVIA</a>
+                            <a href="serbia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">SERBIA</a>
+                            <a href="macedonia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">MACEDONIA</a>
+                            <a href="albania.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">ALBANIA</a>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-brand-gold text-xs uppercase tracking-widest mb-4 font-bold opacity-70">Services</p>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <a href="vfs.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-vfs-teal font-medium">Visa Appointment</a>
+                            <a href="visa_documentation.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Visa Documentation</a>
+                            <a href="travel_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Travel Assistance</a>
+                            <a href="insurance_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Insurance</a>
+                            <a href="medical_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Medical Assistance</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4 items-center w-full px-8 pb-10">
+                    <a href="assessment.html" onclick="toggleMobileMenu()" class="w-full max-w-xs text-center text-lg font-bold text-white bg-brand-blue px-8 py-4 rounded-full shadow-lg hover:scale-105 transition-transform">Free Assessment</a>
+                    <a href="book.html" onclick="toggleMobileMenu()" class="w-full max-w-xs text-center text-lg font-bold text-deep-space bg-brand-gold px-8 py-4 rounded-full shadow-xl hover:scale-105 transition-transform">Book Consultation</a>
+                </div>
+            </div>
+        </nav>
+        `;
+
+        const GLOBAL_FOOTER = `
+        <footer class="bg-transparent border-t border-white/5 relative z-10 backdrop-blur-sm">
+            <div class="container mx-auto px-4 py-20">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 md:gap-12 mb-12 md:mb-16">
+                    <div class="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col items-center md:items-start text-center md:text-left">
+                        <a href="index.html" class="flex items-center gap-4 group mb-6 w-fit">
+                            <div class="w-12 h-12 bg-space-indigo rounded-xl border border-white/10 flex items-center justify-center text-brand-white font-bold text-xl shadow-2xl glass-panel p-1">
+                                <span class="relative z-10 text-brand-white">BC</span>
+                            </div>
+                            <div class="block text-left">
+                                <h4 class="font-bold text-white text-lg tracking-wide">BETTER CALL</h4><p class="text-[10px] font-bold text-brand-gold uppercase tracking-[0.3em]">Immigration</p>
+                            </div>
+                        </a>
+                        <p class="text-sm leading-relaxed max-w-sm mb-8 font-light text-gray-500">Defining the industry benchmark for professionalism, absolute transparency, and sustained client success in global migration.</p>
+                        <div class="flex gap-4">
+                            <a href="#" class="w-12 h-12 rounded-full glass-panel hover:bg-brand-blue hover:text-white flex items-center justify-center transition-all duration-300"><i class="fa-brands fa-whatsapp text-xl"></i></a>
+                            <a href="#" class="w-12 h-12 rounded-full glass-panel hover:bg-brand-purple hover:text-white flex items-center justify-center transition-all duration-300"><i class="fa-brands fa-instagram text-xl"></i></a>
+                            <a href="mailto:admin@thebettercall.com" class="w-12 h-12 rounded-full glass-panel hover:bg-brand-gold hover:text-white flex items-center justify-center transition-all duration-300"><i class="fa-solid fa-envelope text-xl"></i></a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest">Destinations</h4>
+                        <ul class="space-y-4 text-sm font-light">
+                            <li><a href="germany.html" class="hover:text-brand-blue transition-colors">Germany</a></li>
+                            <li><a href="sweden.html" class="hover:text-brand-blue transition-colors">Sweden</a></li>
+                            <li><a href="netherlands.html" class="hover:text-brand-blue transition-colors">Netherlands</a></li>
+                        </ul>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest">Company</h4>
+                        <ul class="space-y-4 text-sm font-light">
+                            <li><a href="about.html" class="hover:text-brand-blue transition-colors">About Us</a></li>
+                            <li><a href="assessment.html" class="hover:text-brand-blue transition-colors">Assessment</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-white/5 pt-8 text-center text-xs text-gray-600 font-light">
+                    <p>&copy; 2025 Better Call Immigration. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+        `;
+
+        // Inject Components
+        document.getElementById('navbar-container').innerHTML = GLOBAL_HEADER;
+        document.getElementById('footer-container').innerHTML = GLOBAL_FOOTER;
+
+        // --- 3. SEARCH LOGIC (Copied from index.html) ---
+        const searchData = [
+            { title: "Germany", type: "Country", url: "germany.html", icon: "🇩🇪", keywords: "care home, nurse, blue card" },
+            { title: "Sweden", type: "Country", url: "sweden.html", icon: "🇸🇪", keywords: "airport, engineering" },
+            { title: "Netherlands", type: "Country", url: "netherlands.html", icon: "🇳🇱", keywords: "high skilled, tech" },
+            { title: "Visa Appointment", type: "Service", url: "vfs.html", icon: "📅", keywords: "vfs, embassy" },
+            { title: "Free Assessment", type: "Tool", url: "assessment.html", icon: "📝", keywords: "check eligibility" }
+        ];
+
+        let searchOverlay, searchInput, searchResults, defaultResults, dynamicResults, noResults;
+
+        function initSearchElements() {
+            searchOverlay = document.getElementById('search-overlay');
+            searchInput = document.getElementById('global-search-input');
+            searchResults = document.getElementById('search-results');
+            defaultResults = document.getElementById('search-default');
+            dynamicResults = document.getElementById('dynamic-results');
+            noResults = document.getElementById('no-results');
+
+            if(searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    if (query.length === 0) {
+                        defaultResults.classList.remove('hidden');
+                        dynamicResults.classList.add('hidden');
+                        noResults.classList.add('hidden');
+                        return;
+                    }
+                    const filtered = searchData.filter(item => 
+                        item.title.toLowerCase().includes(query) || 
+                        item.keywords.toLowerCase().includes(query)
+                    );
+                    renderResults(filtered, query);
+                });
+            }
+        }
+
+        function toggleSearch() {
+            if(!searchOverlay) initSearchElements();
+            const isActive = searchOverlay.classList.contains('active');
+            if (isActive) {
+                searchOverlay.classList.remove('active');
+                document.body.style.overflow = ''; 
+            } else {
+                searchOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; 
+                setTimeout(() => searchInput.focus(), 100);
+            }
+        }
+
+        function renderResults(results, query) {
+            defaultResults.classList.add('hidden');
+            dynamicResults.innerHTML = '';
+            if (results.length === 0) {
+                dynamicResults.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+            dynamicResults.classList.remove('hidden');
+            results.forEach((result, index) => {
+                const div = document.createElement('a');
+                div.href = result.url;
+                div.className = "flex items-center gap-4 p-4 rounded-xl hover:bg-white/10 transition duration-200 group border border-transparent hover:border-white/5 animate-fade-in-up";
+                div.style.animationDelay = `${index * 50}ms`;
+                div.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-xl shadow-inner">${result.icon}</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-white font-medium group-hover:text-brand-blue transition">${result.title}</h4>
+                            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-500 bg-white/5 px-2 py-0.5 rounded border border-white/5">${result.type}</span>
+                        </div>
+                    </div>
+                `;
+                dynamicResults.appendChild(div);
+            });
+        }
+
+        // --- 4. MOBILE MENU ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if(menu) menu.classList.toggle('translate-y-full');
+        }
+
+        // --- 5. INITIALIZATION ---
+        window.onload = function() {
+            initSmoothScroll();
+            initSearchElements();
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+
+            // Navbar Scroll
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const nav = document.getElementById('navbar');
+                        if (nav && window.scrollY > 20) {
+                            nav.classList.add('scrolled');
+                        } else if (nav) {
+                            nav.classList.remove('scrolled');
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            // Keyboard Shortcuts
+            document.addEventListener('keydown', (e) => {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); toggleSearch(); }
+                if (e.key === 'Escape' && searchOverlay && searchOverlay.classList.contains('active')) toggleSearch();
+            });
+        };
+    </script>
+</body>
+</html>
