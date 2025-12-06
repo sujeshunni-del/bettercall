@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eunice Kingoo - Digital Business Card</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-gold': '#D4AF37',
+                        'brand-gold-light': '#F9E69D',
+                        'brand-navy': '#0F172A',
+                        'brand-indigo': '#3F51B5',
+                        'glass-border': 'rgba(255, 255, 255, 0.2)',
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'shine': 'shine 3s linear infinite',
+                        'tilt': 'tilt 10s infinite linear',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        shine: {
+                            '0%': { backgroundPosition: '200% center' },
+                            '100%': { backgroundPosition: '-200% center' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0F172A;
+            color: #E2E8F0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: 'Outfit', sans-serif;
+            perspective: 1000px;
+        }
+
+        /* --- FLUID BACKGROUND --- */
+        .fluid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: #0F172A;
+            overflow: hidden;
+        }
+        
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.6;
+            mix-blend-mode: screen;
+            animation: blob 15s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #3F51B5; animation-delay: 0s; } /* Indigo */
+        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #D4AF37; animation-delay: -5s; opacity: 0.4; } /* Gold */
+        .blob-3 { top: 40%; left: 40%; width: 40vw; height: 40vw; background: #E91E63; animation-delay: -10s; opacity: 0.4; } /* Pink */
+        .blob-4 { bottom: 10%; left: 10%; width: 30vw; height: 30vw; background: #00BCD4; animation-delay: -7s; opacity: 0.5; } /* Cyan */
+
+        /* --- 3D GLASS CARD --- */
+        .glass-card-container {
+            transform-style: preserve-3d;
+            transition: transform 0.1s;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.4); /* Darker, clearer glass */
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Iridescent Shine on Card */
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            transform: skewX(-25deg);
+            animation: shine 6s infinite;
+            pointer-events: none;
+        }
+
+        /* --- 3D BUTTONS --- */
+        .btn-3d {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 4px 6px rgba(0,0,0,0.2), 
+                inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+        }
+        .btn-3d:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 15px 25px rgba(0,0,0,0.3), 
+                inset 0 1px 0 rgba(255,255,255,0.4),
+                0 0 20px rgba(212, 175, 55, 0.2); /* Gold glow */
+        }
+        .btn-3d:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        /* --- TEXT EFFECTS --- */
+        .text-gradient-gold {
+            background: linear-gradient(to right, #D4AF37, #FFF5D6, #D4AF37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 3s linear infinite reverse;
+            font-weight: 800;
+        }
+
+        /* Profile Image Glow */
+        .profile-glow {
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3), inset 0 0 20px rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center py-6 px-4">
+
+    <!-- Fluid Background -->
+    <div class="fluid-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+    </div>
+
+    <!-- 3D Card Container -->
+    <main class="w-full max-w-md glass-panel glass-card-container rounded-[2.5rem] relative z-10 animate-fade-in-up">
+        
+        <!-- Header / Cover Area -->
+        <div class="h-40 relative bg-gradient-to-br from-brand-indigo/30 via-transparent to-brand-gold/10 overflow-hidden">
+             <!-- Abstract Shapes -->
+             <div class="absolute top-[-50%] left-[-20%] w-[150%] h-[200%] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 rotate-12"></div>
+             <div class="absolute top-0 right-0 w-32 h-32 bg-brand-gold blur-[60px] opacity-30"></div>
+             
+             <!-- Logo -->
+             <div class="absolute top-6 right-6 bg-white/10 backdrop-blur-xl p-2.5 rounded-2xl border border-white/30 shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:scale-105 transition-transform group">
+                <div class="absolute inset-0 bg-white/20 blur-md rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
+                <img src="https://github.com/sujeshunni-del/bettercall/blob/282b4bde45f0a20256156a40c444f0674dab9b80/Bettercall%20Logo%20SVG%2003.svg?raw=true" 
+                     alt="Better Call Logo" 
+                     class="h-10 w-auto object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.6)] relative z-10">
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="px-6 pb-8 relative z-20">
+            <!-- Profile Image (Floating) -->
+            <div class="relative -mt-20 mb-6 flex justify-center perspective-500">
+                <div class="w-36 h-36 rounded-full p-1 profile-glow relative z-10 animate-float">
+                    <div class="w-full h-full rounded-full overflow-hidden border-4 border-[#0F172A]">
+                        <img src="https://github.com/sujeshunni-del/bettercall/blob/65eae9ae21f198b71cf70ab0222759ae65c61ad4/WhatsApp%20Image%202025-12-06%20at%2017.36.47.jpeg?raw=true" 
+                             alt="Eunice Kingoo" 
+                             class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                             onerror="this.src='https://ui-avatars.com/api/?name=Eunice+Kingoo&background=1C2B4C&color=D4AF37&size=256'">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Name & Title -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-black text-white tracking-tight mb-2 drop-shadow-lg">Eunice Kingoo</h1>
+                <div class="inline-block px-5 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-lg">
+                    <p class="text-gradient-gold text-sm uppercase tracking-[0.2em] font-bold">Immigration Advisor</p>
+                </div>
+            </div>
+
+            <!-- 3D Action Buttons (Grid) -->
+            <div class="grid grid-cols-4 gap-4 mb-8">
+                <a href="tel:+971542632323" class="flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 btn-3d rounded-2xl flex items-center justify-center text-cyan-400 group-hover:text-white group-hover:bg-cyan-500/20">
+                        <i class="fas fa-phone text-2xl drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-cyan-400 transition-colors">Call</span>
+                </a>
+                
+                <a href="https://wa.me/971542632323" target="_blank" class="flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 btn-3d rounded-2xl flex items-center justify-center text-green-400 group-hover:text-white group-hover:bg-green-500/20">
+                        <i class="fab fa-whatsapp text-3xl drop-shadow-[0_0_10px_rgba(74,222,128,0.5)]"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-green-400 transition-colors">Chat</span>
+                </a>
+
+                <a href="mailto:Eunice@thebettercall.com" class="flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 btn-3d rounded-2xl flex items-center justify-center text-purple-400 group-hover:text-white group-hover:bg-purple-500/20">
+                        <i class="fas fa-envelope text-2xl drop-shadow-[0_0_10px_rgba(192,132,252,0.5)]"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-purple-400 transition-colors">Email</span>
+                </a>
+
+                <a href="https://maps.google.com/?q=Better+Call+Immigration+Dubai+Healthcare+City" target="_blank" class="flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 btn-3d rounded-2xl flex items-center justify-center text-pink-400 group-hover:text-white group-hover:bg-pink-500/20">
+                        <i class="fas fa-map-location-dot text-2xl drop-shadow-[0_0_10px_rgba(244,114,182,0.5)]"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-pink-400 transition-colors">Map</span>
+                </a>
+            </div>
+
+            <!-- Major CTA -->
+            <div class="space-y-4 mb-8">
+                <a href="https://bettercall.setmore.com/eunice" target="_blank" class="relative block w-full group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-brand-gold via-yellow-400 to-brand-gold rounded-xl blur opacity-40 group-hover:opacity-75 transition-opacity duration-300 animate-pulse"></div>
+                    <div class="relative bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#B8860B] text-white py-4 rounded-xl flex items-center justify-center gap-3 border border-white/20 shadow-2xl transform group-hover:-translate-y-1 transition-all duration-300">
+                        <span class="font-extrabold text-lg uppercase tracking-wide text-shadow">Book Appointment</span>
+                        <i class="far fa-calendar-check text-xl animate-bounce"></i>
+                    </div>
+                </a>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="https://bettercall.online/programs" target="_blank" class="btn-3d py-4 rounded-xl flex items-center justify-center gap-2 group">
+                        <i class="fas fa-passport text-blue-400 group-hover:text-white transition-colors"></i>
+                        <span class="font-bold text-sm text-gray-200 group-hover:text-white">Programs</span>
+                    </a>
+                    <a href="https://bettercall.online/services" target="_blank" class="btn-3d py-4 rounded-xl flex items-center justify-center gap-2 group">
+                        <i class="fas fa-briefcase text-brand-gold group-hover:text-white transition-colors"></i>
+                        <span class="font-bold text-sm text-gray-200 group-hover:text-white">Services</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Details Card -->
+            <div class="bg-gradient-to-br from-white/10 to-transparent rounded-2xl p-6 mb-6 border border-white/10 backdrop-blur-md shadow-inner relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-brand-gold/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-brand-gold/20 transition-colors"></div>
+                
+                <div class="flex items-start gap-4 mb-5 relative z-10">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-indigo to-blue-900 flex items-center justify-center text-white shadow-lg border border-white/20">
+                         <i class="fas fa-building text-lg"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-extrabold text-white uppercase tracking-wide drop-shadow-md">Better Call Immigration</p>
+                        <p class="text-xs text-blue-200 mt-1 font-medium">Dubai Healthcare City, UAE</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start gap-4 relative z-10">
+                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-gold to-yellow-700 flex items-center justify-center text-white shadow-lg border border-white/20">
+                         <i class="fas fa-map-marked-alt text-lg"></i>
+                    </div>
+                    <p class="text-sm text-gray-200 leading-relaxed font-light">
+                        R320, 12th Floor, Office 14<br>
+                        Sheikh Rashid Rd, Oud Metha
+                    </p>
+                </div>
+                
+                <!-- Mini Links -->
+                <div class="mt-6 pt-4 border-t border-white/10 flex justify-between relative z-10">
+                    <a href="http://www.thebettercall.com" target="_blank" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-brand-gold transition-colors flex items-center gap-1"><i class="fas fa-globe"></i> Website</a>
+                    <a href="mailto:admin@thebettercall.com" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-brand-gold transition-colors flex items-center gap-1"><i class="fas fa-user-shield"></i> Admin</a>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="flex flex-col items-center gap-4">
+                <button onclick="downloadVCard()" class="w-full py-4 rounded-xl border border-brand-gold/50 text-brand-gold font-bold bg-brand-gold/5 hover:bg-brand-gold hover:text-brand-navy transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(212,175,55,0.1)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] group">
+                    <i class="fas fa-address-card text-xl group-hover:scale-110 transition-transform"></i>
+                    Save to Contacts
+                </button>
+                
+                <button onclick="shareCard()" class="text-gray-500 text-xs font-bold uppercase tracking-[0.2em] hover:text-white transition-colors flex items-center gap-2 hover:scale-105 transform duration-200">
+                    <i class="fas fa-share-nodes"></i> Share Card
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript for vCard Generation -->
+    <script>
+        // Subtle 3D Tilt Effect on Mouse Move
+        const card = document.querySelector('.glass-card-container');
+        document.addEventListener('mousemove', (e) => {
+            if(window.innerWidth > 768) { // Only on desktop
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            }
+        });
+
+        function downloadVCard() {
+            const vCardData = [
+                'BEGIN:VCARD',
+                'VERSION:3.0',
+                'FN:Eunice Kingoo',
+                'N:Kingoo;Eunice;;;',
+                'ORG:Better Call Immigration',
+                'TITLE:Immigration Advisor',
+                'TEL;TYPE=CELL:+971542632323',
+                'TEL;TYPE=WORK:+971561322255',
+                'EMAIL;TYPE=WORK:Eunice@thebettercall.com',
+                'EMAIL;TYPE=OTHER:admin@thebettercall.com',
+                'URL:http://www.thebettercall.com',
+                'ADR;TYPE=WORK:;;R320 12th Floor Office 14 Sheikh Rashid Rd;Dubai;Dubai Healthcare City;;UAE',
+                'NOTE:Appointment Link: https://bettercall.setmore.com/eunice',
+                'END:VCARD'
+            ].join('\n');
+
+            const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'Eunice_Kingoo.vcf');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        async function shareCard() {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'Eunice Kingoo - Immigration Advisor',
+                        text: 'Connect with Eunice Kingoo at Better Call Immigration.',
+                        url: window.location.href
+                    });
+                } catch (err) {
+                    console.log('Error sharing:', err);
+                }
+            } else {
+                const dummy = document.createElement('input');
+                document.body.appendChild(dummy);
+                dummy.value = window.location.href;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+                alert('Link copied to clipboard!');
+            }
+        }
+    </script>
+</body>
+</html>
