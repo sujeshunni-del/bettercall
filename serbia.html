@@ -8,17 +8,12 @@
     
     <link rel="canonical" href="/serbia.html"/>
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Sinhala:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
     
@@ -27,23 +22,35 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Outfit', 'Noto Sans', 'Noto Sans Malayalam', 'Noto Sans Tamil', 'Noto Sans Sinhala', 'sans-serif'],
+                        sans: ['Outfit', 'Noto Sans Devanagari', 'Noto Sans Malayalam', 'Noto Sans Tamil', 'Noto Sans Sinhala', 'sans-serif'],
+                        serif: ['Outfit', 'sans-serif'], 
                     },
                     colors: {
                         'deep-space': '#050B14',
                         'space-indigo': '#1C2B4C', 
-                        'serbia-red': '#CC0000', // Preserved for Pricing/Header
-                        'poland-red': '#DC143C', // Used for Poland-style elements
-                        'accent-lime': '#D9FF00', // Preserved for Pricing
+                        'brand-blue': '#3B82F6',      
+                        'brand-purple': '#8B5CF6',     
                         'brand-gold': '#FFD700',
                         'brand-white': '#FFFFFF',
-                        'brand-blue': '#3B82F6',
                         'vfs-teal': '#14B8A6',
+                        'serbia-red': '#CC0000', // Specific for Serbia Page
+                        'accent-lime': '#D9FF00', // Specific for Pricing
                     },
                     animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shimmer': 'shimmer 2.5s linear infinite',
                         'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                     },
                     keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        },
                         fadeInUp: {
                             '0%': { opacity: '0', transform: 'translateY(40px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
@@ -60,16 +67,30 @@
             color: #E2E8F0;
             overflow-x: hidden;
             font-family: 'Outfit', sans-serif;
+            font-size: 16px;
         }
 
         /* --- LENIS SMOOTH SCROLL CSS --- */
-        html.lenis, html.lenis body { height: auto; }
+        html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
         .lenis.lenis-stopped { overflow: hidden; }
         .lenis.lenis-scrolling iframe { pointer-events: none; }
 
-        /* Glass Panel (Shared Style) */
+        /* Ambient Background (Serbia Colors) */
+        .ambient-light {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+            transform: translateZ(0); 
+        }
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; will-change: transform; 
+        }
+        .orb-1 { top: -15%; left: -10%; width: 50vw; height: 50vw; background: #CC0000; animation: float 14s infinite; }
+        .orb-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #0033A0; animation: float 16s infinite reverse; }
+        .orb-3 { top: 40%; left: 30%; width: 35vw; height: 35vw; background: #FFD700; opacity: 0.15; animation: float 20s infinite; }
+
+        /* Glass Components */
         .glass-panel {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(16px);
@@ -78,15 +99,19 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        }
         .dropdown-glass {
-            background: rgba(15, 23, 42, 0.9); 
+            background: rgba(15, 23, 42, 0.7); 
             backdrop-filter: blur(24px);       
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
         }
-        
-        /* Floating Nav */
         .floating-nav {
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(20px);
@@ -95,33 +120,24 @@
             border-radius: 100px;
             box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
+            transform: translateZ(0); 
         }
         .floating-nav.scrolled {
             background: rgba(15, 23, 42, 0.9);
             border-color: rgba(255, 255, 255, 0.15);
             box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
         }
-        
-        /* Dropdown Menu Animations */
         .dropdown-menu {
-            opacity: 0;
-            visibility: hidden;
+            opacity: 0; visibility: hidden;
             transform: translateY(10px);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .group:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
+            opacity: 1; visibility: visible;
             transform: translateY(0);
         }
-
-        /* Ambient Orbs - Adapted for Serbia (Red/Blue/Gold) */
-        .ambient-light { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; }
-        .orb-1 { top: -10%; left: -10%; width: 40vw; height: 40vw; background: #CC0000; } /* Serbia Red */
-        .orb-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: #0033A0; } /* Serbia Blue */
-
-        /* Job Card - Poland Style (Redesigned) */
+        
+        /* Job Cards Specific Style */
         .job-card-grid {
             background: linear-gradient(145deg, rgba(204, 0, 0, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
             backdrop-filter: blur(10px);
@@ -143,42 +159,63 @@
             box-shadow: 0 8px 15px rgba(204, 0, 0, 0.15);
         }
 
-        /* Language Button Styles */
-        #lang-toggle-btn {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 10px 24px;
-            border-radius: 9999px; /* Pill shape */
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Search Overlay */
+        #search-overlay {
+            opacity: 0; visibility: hidden;
+            transition: all 0.3s ease;
         }
-        #lang-toggle-btn:hover, #lang-toggle-btn.active {
-            background: #CC0000;
-            border-color: #CC0000;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(204, 0, 0, 0.4);
+        #search-overlay.active {
+            opacity: 1; visibility: visible;
         }
-        #language-dropdown {
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px) scale(0.95);
-            transform-origin: bottom left;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        #search-container {
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        #language-dropdown.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
+        #search-overlay.active #search-container {
+            transform: scale(1);
         }
-
-        /* Custom Scrollbar */
+        .text-highlight {
+            color: #3B82F6; font-weight: 700;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 2px; padding: 0 1px;
+        }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #050B14; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-        
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
+
+        /* Floating Language Button (Template Style) */
+        .lang-fab-new { position: fixed; bottom: 2rem; left: 2rem; z-index: 50; }
+        .lang-toggle-btn {
+            background: rgba(5, 11, 20, 0.7);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #E2E8F0; padding: 0.75rem 1.25rem;
+            border-radius: 9999px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex; align-items: center; gap: 0.75rem;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .lang-toggle-btn:hover { background: rgba(5, 11, 20, 0.9); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); }
+        .lang-toggle-btn.active .fa-chevron-up { transform: rotate(180deg); }
+        .language-dropdown {
+            position: absolute; bottom: 100%; left: 0; margin-bottom: 1rem; width: 12rem;
+            background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px); padding: 0.5rem; border-radius: 1rem;
+            display: flex; flex-direction: column; gap: 0.5rem;
+            opacity: 0; visibility: hidden; transform: scale(0.9); transform-origin: bottom left; 
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .lang-toggle-btn.active + .language-dropdown { opacity: 1; visibility: visible; transform: scale(1); }
+        .lang-option {
+            padding: 0.5rem 1rem; color: #e2e8f0; font-size: 0.875rem;
+            border-radius: 0.5rem; cursor: pointer; transition: background 0.2s;
+            display: flex; align-items: center; gap: 0.5rem; text-align: left;
+        }
+        .lang-option:hover { background: rgba(255, 255, 255, 0.1); color: #3B82F6; }
+        .lang-option.active { background: rgba(59, 130, 246, 0.2); color: #3B82F6; font-weight: 600; }
+
         /* Modal */
         .modal-backdrop { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); }
         .modal-content { background: #0F172A; border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -186,314 +223,194 @@
 </head>
 <body class="antialiased min-h-screen flex flex-col relative" id="page-body">
 
-    <!-- Ambient Background -->
     <div class="ambient-light">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
 
-    <!-- Navigation (Preserved from Serbia) -->
-    <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
-        <div class="floating-nav w-full max-w-7xl px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
-            <a href="index.html" class="flex items-center gap-2 md:gap-3 group px-2 md:px-4">
-                <div class="w-8 h-8 md:w-10 md:h-10 bg-space-indigo rounded-full border border-white/10 flex items-center justify-center text-brand-white font-bold text-base md:text-lg shadow-2xl glass-panel overflow-hidden p-1 flex-shrink-0">
-                    <span class="relative z-10 text-brand-white">BC</span>
-                </div>
-                <div class="block leading-tight"> 
-                    <h1 class="font-bold text-white text-xs md:text-sm tracking-wide whitespace-nowrap">BETTER CALL</h1>
-                    <p class="text-[8px] md:text-[9px] font-bold text-brand-gold uppercase tracking-[0.2em] md:tracking-[0.2em]">Immigration</p>
-                </div>
-            </a>
-            <div class="hidden lg:flex items-center gap-1">
-                <a href="index.html" class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5" data-i18n="nav_home">Home</a>
-                <div class="relative group">
-                    <button class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5 flex items-center gap-1"><span data-i18n="nav_programs">Programs</span> <svg class="w-3 h-3 text-gray-400 group-hover:text-brand-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
-                    <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50 max-h-[80vh] overflow-y-auto hide-scrollbar">
-                        <a href="sweden.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-400 hover:bg-blue-500/20 transition block">Sweden</a>
-                        <a href="finland.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-purple-400 hover:bg-purple-500/20 transition block">Finland</a>
-                        <a href="netherlands.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-brand-gold hover:bg-brand-gold/20 transition block">Netherlands</a>
-                        <a href="germany.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-brand-gold hover:bg-brand-gold/20 transition block">Germany</a>
-                        <a href="italy.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-orange-400 hover:bg-orange-500/20 transition block">Italy</a>
-                        <a href="france.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-500 hover:bg-blue-600/20 transition block">France</a>
-                        <a href="poland.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-400 hover:bg-red-500/20 transition block">Poland</a>
-                        <a href="czech.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-blue-300 hover:bg-blue-400/20 transition block">Czech Republic</a>
-                        <a href="latvia.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-300 hover:bg-red-500/20 transition block">Latvia</a>
-                        <a href="serbia.html" class="px-4 py-2.5 rounded-xl text-sm text-white bg-serbia-red/20 border border-serbia-red/30 transition block">Serbia</a>
-                        <a href="macedonia.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-yellow-400 hover:bg-yellow-500/20 transition block">Macedonia</a>
-                        <a href="albania.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-red-500 hover:bg-red-600/20 transition block">Albania</a>
-                    </div>
-                </div>
-                <div class="relative group">
-                    <button class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5 flex items-center gap-1"><span data-i18n="nav_services">Services</span> <svg class="w-3 h-3 text-gray-400 group-hover:text-brand-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
-                    <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50">
-                        <a href="vfs.html" class="px-4 py-2.5 rounded-xl text-sm text-vfs-teal font-medium hover:bg-vfs-teal/10 transition block">Visa Appointment</a>
-                        <a href="visa_documentation.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Visa Documentation</a>
-                        <a href="travel_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Travel Assistance</a>
-                        <a href="insurance_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Insurance</a>
-                        <a href="medical_assistance.html" class="px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Medical Assistance</a>
-                    </div>
-                </div>
-                <a href="assessment.html" class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5" data-i18n="nav_assess">Free Assessment</a>
-                <a href="about.html" class="px-4 py-2 text-sm text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5" data-i18n="nav_about">About Us</a>
-            </div>
-            <div class="flex items-center gap-2 sm:gap-3 px-2">
-                <button class="lg:hidden p-2 text-white hover:text-brand-blue transition rounded-full hover:bg-white/5" onclick="toggleMobileMenu()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </button>
-                <a href="book.html" class="hidden sm:flex group relative px-6 py-2.5 rounded-full bg-serbia-red text-white font-bold text-sm overflow-hidden transition-all hover:scale-105 shadow-[0_0_20px_rgba(204,0,0,0.4)] hover:shadow-[0_0_30px_rgba(204,0,0,0.6)]">
-                    <span class="relative z-10 group-hover:text-white transition-colors" data-i18n="nav_book">Book Now</span>
-                </a>
-            </div>
-        </div>
-        <div id="mobileMenu" class="fixed inset-0 bg-[#0B132B]/98 backdrop-blur-3xl z-[60] transform translate-y-full transition-transform duration-500 flex flex-col items-center justify-start pt-32 pb-10 space-y-8 overflow-y-auto">
-            <button class="absolute top-6 right-6 text-white/50 hover:text-white text-3xl transition" onclick="toggleMobileMenu()">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <a href="index.html" onclick="toggleMobileMenu()" class="text-3xl font-light text-white hover:text-brand-blue" data-i18n="nav_home">Home</a>
-            <div class="w-full px-8 space-y-8">
-                <div class="text-center">
-                    <p class="text-brand-gold text-xs uppercase tracking-widest mb-4 font-bold opacity-70" data-i18n="footer_dest">Destinations</p>
-                    <div class="flex flex-wrap justify-center gap-3">
-                        <a href="sweden.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Sweden</a>
-                        <a href="finland.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Finland</a>
-                        <a href="germany.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Germany</a>
-                        <a href="italy.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Italy</a>
-                        <a href="france.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">France</a>
-                        <a href="poland.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Poland</a>
-                        <a href="czech.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Czech Republic</a>
-                        <a href="latvia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Latvia</a>
-                        <a href="serbia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Serbia</a>
-                        <a href="macedonia.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Macedonia</a>
-                        <a href="albania.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Albania</a>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <p class="text-brand-gold text-xs uppercase tracking-widest mb-4 font-bold opacity-70" data-i18n="footer_serv">Services</p>
-                    <div class="flex flex-wrap justify-center gap-3">
-                        <a href="vfs.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-vfs-teal font-medium">Visa Appointment</a>
-                        <a href="visa_documentation.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Visa Documentation</a>
-                        <a href="travel_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Travel Assistance</a>
-                        <a href="insurance_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Insurance</a>
-                        <a href="medical_assistance.html" class="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300">Medical</a>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col gap-4 items-center w-full px-8">
-                <a href="assessment.html" onclick="toggleMobileMenu()" class="w-full max-w-xs text-center text-lg font-bold text-white bg-brand-blue px-8 py-4 rounded-full shadow-lg hover:scale-105 transition-transform" data-i18n="nav_assess">Free Assessment</a>
-                <a href="book.html" onclick="toggleMobileMenu()" class="w-full max-w-xs text-center text-lg font-bold text-deep-space bg-brand-gold px-8 py-4 rounded-full shadow-xl hover:scale-105 transition-transform" data-i18n="nav_book">Book Consultation</a>
-            </div>
-        </div>
-    </nav>
-    
-    <main class="flex-grow w-full max-w-7xl mx-auto relative z-10 space-y-8 pt-24 pb-12 px-3 sm:px-6">
-
-        <!-- Hero Section (Preserved from Serbia) -->
-        <header class="relative min-h-[50vh] flex flex-col items-center justify-center pt-10 pb-16 overflow-hidden">
-            <div class="container mx-auto px-4 relative z-10 text-center">
-                
-                <!-- Badge -->
-                <div class="inline-flex items-center gap-2 px-6 py-2 rounded-full glass-panel border border-serbia-red/30 text-gray-300 font-bold tracking-widest text-xs md:text-sm uppercase mb-8 animate-fade-in-up">
-                    <span class="w-2 h-2 rounded-full bg-serbia-red animate-pulse"></span>
-                    <span data-i18n="hero_badge">Europe's Rising Economy</span>
-                </div>
-
-                <!-- Main Heading -->
-                <h1 class="text-5xl md:text-8xl font-black text-white mb-6 leading-[1.1] animate-fade-in-up" style="animation-delay: 0.1s;">
-                    <span data-i18n="hero_title_1">Secure Your Future in</span> <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-serbia-red via-brand-gold to-brand-blue relative inline-block">
-                        <span data-i18n="hero_title_2">SERBIA</span>
-                    </span>
-                </h1>
-                
-                <!-- Subtitle -->
-                <p class="text-lg md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 font-light animate-fade-in-up leading-relaxed" style="animation-delay: 0.2s;" data-i18n="hero_subtitle">
-                    A strategic hub in Southeast Europe offering a 3-year renewable Single Permit. Enjoy high quality of life, low living costs, and a direct pathway to permanent residency.
-                </p>
-
-                <!-- Buttons -->
-                <div class="flex flex-col sm:flex-row gap-5 justify-center items-center animate-fade-in-up" style="animation-delay: 0.3s;">
-                    <a href="#jobs" class="w-full sm:w-auto relative group overflow-hidden rounded-full bg-serbia-red px-10 py-4 transition-all duration-300 text-white font-bold text-lg hover:scale-105 shadow-[0_0_30px_rgba(204,0,0,0.4)] hover:shadow-[0_0_50px_rgba(204,0,0,0.6)]">
-                        <span class="relative z-10 flex items-center justify-center gap-3">
-                            <span data-i18n="btn_explore">Explore Careers</span> <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                        </span>
-                        <div class="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-                    </a>
+    <main class="flex-grow pt-32 pb-16">
+        
+        <div class="container mx-auto px-4 relative z-10">
+            
+            <header class="relative min-h-[50vh] flex flex-col items-center justify-center pt-10 pb-16 overflow-hidden">
+                <div class="container mx-auto px-4 relative z-10 text-center">
                     
-                    <a href="#process" class="w-full sm:w-auto glass-panel px-10 py-4 rounded-full font-bold text-white text-lg hover:bg-white/10 border-white/10 transition-all flex items-center justify-center gap-3 group">
-                        <span data-i18n="btn_roadmap">See Roadmap</span> <i class="fa-solid fa-list-check text-brand-gold group-hover:scale-110 transition-transform"></i>
-                    </a>
+                    <div class="inline-flex items-center gap-2 px-6 py-2 rounded-full glass-panel border border-serbia-red/30 text-gray-300 font-bold tracking-widest text-xs md:text-sm uppercase mb-8 animate-fade-in-up">
+                        <span class="w-2 h-2 rounded-full bg-serbia-red animate-pulse"></span>
+                        <span data-i18n="hero_badge">Europe's Rising Economy</span>
+                    </div>
+    
+                    <h1 class="text-5xl md:text-8xl font-black text-white mb-6 leading-[1.1] animate-fade-in-up" style="animation-delay: 0.1s;">
+                        <span data-i18n="hero_title_1">Secure Your Future in</span> <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-serbia-red via-brand-gold to-brand-blue relative inline-block">
+                            <span data-i18n="hero_title_2">SERBIA</span>
+                        </span>
+                    </h1>
+                    
+                    <p class="text-lg md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 font-light animate-fade-in-up leading-relaxed" style="animation-delay: 0.2s;" data-i18n="hero_subtitle">
+                        A strategic hub in Southeast Europe offering a 3-year renewable Single Permit. Enjoy high quality of life, low living costs, and a direct pathway to permanent residency.
+                    </p>
+    
+                    <div class="flex flex-col sm:flex-row gap-5 justify-center items-center animate-fade-in-up" style="animation-delay: 0.3s;">
+                        <a href="#jobs" class="w-full sm:w-auto relative group overflow-hidden rounded-full bg-serbia-red px-10 py-4 transition-all duration-300 text-white font-bold text-lg hover:scale-105 shadow-[0_0_30px_rgba(204,0,0,0.4)] hover:shadow-[0_0_50px_rgba(204,0,0,0.6)]">
+                            <span class="relative z-10 flex items-center justify-center gap-3">
+                                <span data-i18n="btn_explore">Explore Careers</span> <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+                            <div class="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                        </a>
+                        
+                        <a href="#process" class="w-full sm:w-auto glass-panel px-10 py-4 rounded-full font-bold text-white text-lg hover:bg-white/10 border-white/10 transition-all flex items-center justify-center gap-3 group">
+                            <span data-i18n="btn_roadmap">See Roadmap</span> <i class="fa-solid fa-list-check text-brand-gold group-hover:scale-110 transition-transform"></i>
+                        </a>
+                    </div>
                 </div>
+            </header>
+    
+            <div id="job-search-section" class="sticky top-20 z-40 my-4 mb-10 max-w-7xl mx-auto" id="jobs">
+                <div class="glass-panel rounded-xl p-3 border border-white/10 shadow-2xl backdrop-blur-xl bg-[#0B1120]/80">
+                    <div class="relative group">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg"></i>
+                        <input type="text" id="pageSearchInput" class="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-serbia-red focus:bg-black/40 focus:outline-none transition-all" data-placeholder-i18n="search_placeholder" placeholder="Filter jobs (e.g. Driver, Welder)..." onkeyup="filterPageJobs()">
+                    </div>
+                    <div class="mt-3 flex gap-2 overflow-x-auto hide-scrollbar pb-1" id="categoryChips">
+                        </div>
+                </div>
+                <div class="text-center mt-2"><p id="jobCountLabel" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Loading...</p></div>
             </div>
-        </header>
-
-        <!-- Search & Filter (Poland Style) -->
-        <div id="job-search-section" class="sticky top-20 z-40 my-4" id="jobs">
-            <div class="glass-panel rounded-xl p-3 border border-white/10 shadow-2xl backdrop-blur-xl bg-[#0B1120]/80">
-                <div class="relative group">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg"></i>
-                    <input type="text" id="pageSearchInput" class="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-serbia-red focus:bg-black/40 focus:outline-none transition-all" data-placeholder-i18n="search_placeholder" placeholder="Filter jobs (e.g. Driver, Welder)..." onkeyup="filterPageJobs()">
+    
+            <div id="jobContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4 max-w-7xl mx-auto">
                 </div>
-                <div class="mt-3 flex gap-2 overflow-x-auto hide-scrollbar pb-1" id="categoryChips">
-                    <!-- Chips Injected via JS -->
-                </div>
-            </div>
-            <div class="text-center mt-2"><p id="jobCountLabel" class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Loading...</p></div>
-        </div>
-
-        <!-- Jobs Grid (Poland Style) -->
-        <div id="jobContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
-            <!-- Jobs Injected via JS -->
-        </div>
-
-        <!-- Timeline Section (Poland Style) -->
-        <section id="process" class="py-8 relative">
-            <div class="container mx-auto px-2 relative z-10">
-                <div class="text-center mb-8">
-                    <span class="text-serbia-red font-bold tracking-[0.2em] text-[10px] uppercase mb-2 block" data-i18n="process_kicker">Transparency First</span>
-                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-2" data-i18n="process_title">Application Roadmap</h2>
-                </div>
-                <div class="max-w-3xl mx-auto">
-                    <div class="space-y-4 relative before:absolute before:inset-0 before:ml-4 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-white/10">
-                        <div id="timelineContainer">
-                            <!-- Timeline Injected via JS -->
+    
+            <section id="process" class="py-16 relative mt-16">
+                <div class="container mx-auto px-2 relative z-10">
+                    <div class="text-center mb-12">
+                        <span class="text-serbia-red font-bold tracking-[0.2em] text-sm uppercase mb-2 block" data-i18n="process_kicker">Transparency First</span>
+                        <h2 class="text-3xl md:text-5xl font-bold text-white mb-2" data-i18n="process_title">Application Roadmap</h2>
+                    </div>
+                    <div class="max-w-3xl mx-auto">
+                        <div class="space-y-4 relative before:absolute before:inset-0 before:ml-4 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-white/10">
+                            <div id="timelineContainer">
+                                </div>
                         </div>
                     </div>
                 </div>
+            </section>
+    
+            <div class="max-w-7xl mx-auto pt-16 border-t border-white/5" id="pricing">
+                <h3 class="text-3xl font-bold text-center text-white mb-12 reveal-item" data-i18n="pricing_title">Flexible Payment Plans</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <div class="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col reveal-item group border-t-4 border-t-accent-lime" style="transition-delay: 0ms;">
+                        <div class="absolute top-4 right-4 bg-accent-lime/20 text-accent-lime text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">Best Value</div>
+                        <h4 class="text-xl font-bold text-white mb-2" data-i18n="plan_1_name">One Shot</h4>
+                        
+                        <div class="text-4xl font-bold text-serbia-red mb-1">€ 2,400</div>
+                        <div class="text-xs text-gray-500 mb-6 font-mono">Total inc. VAT</div>
+    
+                        <ul class="space-y-3 text-sm text-gray-300 mb-8 flex-grow">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-accent-lime mr-2"></span><span data-i18n="plan_signup">At Sign-up:</span> <span class="font-bold ml-auto">€ 2,400</span></li>
+                        </ul>
+                        
+                        <button onclick="window.open('https://bettercall.setmore.com/services/6898efcb-8076-4e67-83b1-0e798a202405', '_blank')" class="w-full py-4 rounded-xl bg-white/5 hover:bg-accent-lime hover:text-deep-space text-white font-bold transition-all duration-300 border border-white/10 hover:border-accent-lime uppercase tracking-wide" data-i18n="btn_select">
+                            Select Plan
+                        </button>
+                    </div>
+    
+                    <div class="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col reveal-item group border-t-4 border-t-serbia-red" style="transition-delay: 100ms;">
+                        <h4 class="text-xl font-bold text-white mb-2" data-i18n="plan_2_name">2 Installments</h4>
+                        
+                        <div class="text-4xl font-bold text-white mb-1">€ 2,700</div>
+                        <div class="text-xs text-gray-500 mb-6 font-mono">Total inc. VAT</div>
+    
+                        <ul class="space-y-3 text-sm text-gray-300 mb-8 flex-grow">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_signup">At Sign-up:</span> <span class="font-bold ml-auto">€ 1,400</span></li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_permit">Work Permit:</span> <span class="font-bold ml-auto">€ 1,300</span></li>
+                        </ul>
+                        
+                        <button onclick="window.open('https://bettercall.setmore.com/services/6898efcb-8076-4e67-83b1-0e798a202405', '_blank')" class="w-full py-4 rounded-xl bg-white/5 hover:bg-serbia-red hover:text-white text-white font-bold transition-all duration-300 border border-white/10 hover:border-serbia-red uppercase tracking-wide" data-i18n="btn_select">
+                            Select Plan
+                        </button>
+                    </div>
+    
+                    <div class="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col reveal-item group border-t-4 border-t-serbia-red" style="transition-delay: 200ms;">
+                        <h4 class="text-xl font-bold text-white mb-2" data-i18n="plan_3_name">3 Installments</h4>
+                        
+                        <div class="text-4xl font-bold text-white mb-1">€ 3,000</div>
+                        <div class="text-xs text-gray-500 mb-6 font-mono">Total inc. VAT</div>
+    
+                        <ul class="space-y-3 text-sm text-gray-300 mb-8 flex-grow">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_signup">At Sign-up:</span> <span class="font-bold ml-auto">€ 1,200</span></li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_permit">Work Permit:</span> <span class="font-bold ml-auto">€ 1,100</span></li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_submit">Submission:</span> <span class="font-bold ml-auto">€ 700</span></li>
+                        </ul>
+                        
+                        <button onclick="window.open('https://bettercall.setmore.com/services/6898efcb-8076-4e67-83b1-0e798a202405', '_blank')" class="w-full py-4 rounded-xl bg-white/5 hover:bg-serbia-red hover:text-white text-white font-bold transition-all duration-300 border border-white/10 hover:border-serbia-red uppercase tracking-wide" data-i18n="btn_select">
+                            Select Plan
+                        </button>
+                    </div>
+    
+                    <div class="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col reveal-item group border-t-4 border-t-serbia-red shadow-[0_0_30px_rgba(204,0,0,0.1)]" style="transition-delay: 300ms;">
+                        <div class="absolute top-4 right-4 bg-serbia-red/20 text-serbia-red text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">Lowest Deposit</div>
+                        <h4 class="text-xl font-bold text-white mb-2" data-i18n="plan_4_name">4 Installments</h4>
+                        
+                        <div class="text-4xl font-bold text-white mb-1">€ 3,200</div>
+                        <div class="text-xs text-gray-500 mb-6 font-mono">Total inc. VAT</div>
+    
+                        <ul class="space-y-3 text-sm text-gray-300 mb-8 flex-grow">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_signup">At Sign-up:</span> <span class="font-bold ml-auto text-serbia-red">€ 500</span></li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_permit">Work Permit:</span> <span class="font-bold ml-auto">€ 800</span></li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_submit">Submission:</span> <span class="font-bold ml-auto">€ 1,200</span></li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_after">After Visa:</span> <span class="font-bold ml-auto">€ 700</span></li>
+                        </ul>
+                        
+                        <button onclick="window.open('https://bettercall.setmore.com/services/6898efcb-8076-4e67-83b1-0e798a202405', '_blank')" class="w-full py-4 rounded-xl bg-serbia-red text-white font-bold transition-all duration-300 hover:scale-105 shadow-lg shadow-serbia-red/30 uppercase tracking-wide" data-i18n="btn_select">
+                            Select Plan
+                        </button>
+                    </div>
+    
+                </div>
             </div>
-        </section>
 
-        <!-- Pricing Section (Preserved from Serbia) -->
-        <div class="max-w-7xl mx-auto pt-10 border-t border-white/5" id="pricing">
-            <h3 class="text-3xl font-bold text-center text-white mb-12 reveal-item" data-i18n="pricing_title">Flexible Payment Plans</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <!-- Plan 1 -->
-                <div class="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col reveal-item group border-t-4 border-t-accent-lime" style="transition-delay: 0ms;">
-                    <div class="absolute top-4 right-4 bg-accent-lime/20 text-accent-lime text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">Best Value</div>
-                    <h4 class="text-xl font-bold text-white mb-2" data-i18n="plan_1_name">One Shot</h4>
-                    
-                    <div class="text-4xl font-bold text-serbia-red mb-1">€ 2,400</div>
-                    <div class="text-xs text-gray-500 mb-6 font-mono">Total inc. VAT</div>
-
-                    <ul class="space-y-3 text-sm text-gray-300 mb-8 flex-grow">
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-accent-lime mr-2"></span><span data-i18n="plan_signup">At Sign-up:</span> <span class="font-bold ml-auto">€ 2,400</span></li>
-                    </ul>
-                    
-                    <button onclick="window.open('https://bettercall.setmore.com/services/6898efcb-8076-4e67-83b1-0e798a202405', '_blank')" class="w-full py-4 rounded-xl bg-white/5 hover:bg-accent-lime hover:text-deep-space text-white font-bold transition-all duration-300 border border-white/10 hover:border-accent-lime uppercase tracking-wide" data-i18n="btn_select">
-                        Select Plan
-                    </button>
-                </div>
-
-                <!-- Plan 2 -->
-                <div class="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col reveal-item group border-t-4 border-t-serbia-red" style="transition-delay: 100ms;">
-                    <h4 class="text-xl font-bold text-white mb-2" data-i18n="plan_2_name">2 Installments</h4>
-                    
-                    <div class="text-4xl font-bold text-white mb-1">€ 2,700</div>
-                    <div class="text-xs text-gray-500 mb-6 font-mono">Total inc. VAT</div>
-
-                    <ul class="space-y-3 text-sm text-gray-300 mb-8 flex-grow">
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_signup">At Sign-up:</span> <span class="font-bold ml-auto">€ 1,400</span></li>
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_permit">Work Permit:</span> <span class="font-bold ml-auto">€ 1,300</span></li>
-                    </ul>
-                    
-                    <button onclick="window.open('https://bettercall.setmore.com/services/6898efcb-8076-4e67-83b1-0e798a202405', '_blank')" class="w-full py-4 rounded-xl bg-white/5 hover:bg-serbia-red hover:text-white text-white font-bold transition-all duration-300 border border-white/10 hover:border-serbia-red uppercase tracking-wide" data-i18n="btn_select">
-                        Select Plan
-                    </button>
-                </div>
-
-                <!-- Plan 3 -->
-                <div class="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col reveal-item group border-t-4 border-t-serbia-red" style="transition-delay: 200ms;">
-                    <h4 class="text-xl font-bold text-white mb-2" data-i18n="plan_3_name">3 Installments</h4>
-                    
-                    <div class="text-4xl font-bold text-white mb-1">€ 3,000</div>
-                    <div class="text-xs text-gray-500 mb-6 font-mono">Total inc. VAT</div>
-
-                    <ul class="space-y-3 text-sm text-gray-300 mb-8 flex-grow">
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_signup">At Sign-up:</span> <span class="font-bold ml-auto">€ 1,200</span></li>
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_permit">Work Permit:</span> <span class="font-bold ml-auto">€ 1,100</span></li>
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_submit">Submission:</span> <span class="font-bold ml-auto">€ 700</span></li>
-                    </ul>
-                    
-                    <button onclick="window.open('https://bettercall.setmore.com/services/6898efcb-8076-4e67-83b1-0e798a202405', '_blank')" class="w-full py-4 rounded-xl bg-white/5 hover:bg-serbia-red hover:text-white text-white font-bold transition-all duration-300 border border-white/10 hover:border-serbia-red uppercase tracking-wide" data-i18n="btn_select">
-                        Select Plan
-                    </button>
-                </div>
-
-                <!-- Plan 4 -->
-                <div class="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col reveal-item group border-t-4 border-t-serbia-red shadow-[0_0_30px_rgba(204,0,0,0.1)]" style="transition-delay: 300ms;">
-                    <div class="absolute top-4 right-4 bg-serbia-red/20 text-serbia-red text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">Lowest Deposit</div>
-                    <h4 class="text-xl font-bold text-white mb-2" data-i18n="plan_4_name">4 Installments</h4>
-                    
-                    <div class="text-4xl font-bold text-white mb-1">€ 3,200</div>
-                    <div class="text-xs text-gray-500 mb-6 font-mono">Total inc. VAT</div>
-
-                    <ul class="space-y-3 text-sm text-gray-300 mb-8 flex-grow">
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_signup">At Sign-up:</span> <span class="font-bold ml-auto text-serbia-red">€ 500</span></li>
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_permit">Work Permit:</span> <span class="font-bold ml-auto">€ 800</span></li>
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_submit">Submission:</span> <span class="font-bold ml-auto">€ 1,200</span></li>
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-serbia-red mr-2"></span><span data-i18n="plan_after">After Visa:</span> <span class="font-bold ml-auto">€ 700</span></li>
-                    </ul>
-                    
-                    <button onclick="window.open('https://bettercall.setmore.com/services/6898efcb-8076-4e67-83b1-0e798a202405', '_blank')" class="w-full py-4 rounded-xl bg-serbia-red text-white font-bold transition-all duration-300 hover:scale-105 shadow-lg shadow-serbia-red/30 uppercase tracking-wide" data-i18n="btn_select">
-                        Select Plan
-                    </button>
-                </div>
-
-            </div>
         </div>
-
     </main>
 
-    <!-- Language Selector Floating Button -->
-    <div class="fixed bottom-8 left-4 md:left-8 z-50">
-        <div class="relative">
-            <button id="lang-toggle-btn" onclick="toggleLanguageDropdown(event)" class="text-white flex items-center gap-3 shadow-2xl group" aria-label="Select Language">
-                <i class="fa-solid fa-globe text-xl text-serbia-red group-hover:text-white transition-colors"></i>
-                <span class="font-bold text-sm uppercase tracking-wider hidden sm:block" data-i18n="btn_language">Language</span>
-                <i class="fa-solid fa-chevron-up text-xs opacity-70 group-hover:-translate-y-0.5 transition-transform"></i>
-            </button>
-            
-            <div id="language-dropdown" class="absolute bottom-full left-0 mb-4 w-56 dropdown-glass rounded-xl p-2 flex flex-col gap-1 shadow-2xl z-50 max-h-[60vh] overflow-y-auto">
-                <button onclick="setLanguage('en');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-serbia-red hover:text-white transition flex items-center justify-between group">
-                    <span>English</span> <span class="text-xs text-gray-500 group-hover:text-white/80">EN</span>
-                </button>
-                <button onclick="setLanguage('ml');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-serbia-red hover:text-white transition flex items-center justify-between group font-['Noto_Sans_Malayalam']">
-                    <span>മലയാളം</span> <span class="text-xs text-gray-500 group-hover:text-white/80">ML</span>
-                </button>
-                <button onclick="setLanguage('hi');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-serbia-red hover:text-white transition flex items-center justify-between group">
-                    <span>हिंदी</span> <span class="text-xs text-gray-500 group-hover:text-white/80">HI</span>
-                </button>
-                <button onclick="setLanguage('ta');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-serbia-red hover:text-white transition flex items-center justify-between group font-['Noto_Sans_Tamil']">
-                    <span>தமிழ்</span> <span class="text-xs text-gray-500 group-hover:text-white/80">TA</span>
-                </button>
-                <button onclick="setLanguage('fil');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-serbia-red hover:text-white transition flex items-center justify-between group">
-                    <span>Filipino</span> <span class="text-xs text-gray-500 group-hover:text-white/80">FIL</span>
-                </button>
-                <button onclick="setLanguage('si');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-serbia-red hover:text-white transition flex items-center justify-between group font-['Noto_Sans_Sinhala']">
-                    <span>සිංහල</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SI</span>
-                </button>
-                <button onclick="setLanguage('sw');" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-serbia-red hover:text-white transition flex items-center justify-between group">
-                    <span>Swahili</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SW</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Floating Apply Button -->
-    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs px-2 sm:px-4 flex justify-center pointer-events-none">
-        <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1558/91ROR9EQUJNVPS08FU" target="_blank" class="pointer-events-auto relative group bg-gradient-to-r from-serbia-red to-red-600 text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full shadow-[0_0_30px_rgba(204,0,0,0.5)] hover:shadow-[0_0_50px_rgba(204,0,0,0.8)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 overflow-hidden flex items-center gap-2 md:gap-3 border border-white/20">
-            <span class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-            <span class="relative z-10 text-sm md:text-lg tracking-widest uppercase whitespace-nowrap" data-i18n="modal_apply">Apply Now</span>
-            <i class="fa-solid fa-paper-plane relative z-10 group-hover:translate-x-1 transition-transform text-sm md:text-base"></i>
-        </a>
-    </div>
-
-    <!-- WhatsApp Button -->
-    <a href="https://wa.me/971503666382" target="_blank" class="fixed bottom-8 right-4 md:right-8 z-50 bg-[#25D366] text-white w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-110 group animate-pulse">
+    <a href="https://wa.me/971503666382" target="_blank" class="fixed bottom-8 right-8 z-50 bg-[#25D366] text-white w-14 h-14 md:w-20 md:h-20 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-110 group animate-pulse" rel="noopener noreferrer">
         <i class="fa-brands fa-whatsapp text-2xl md:text-4xl"></i>
     </a>
 
-    <!-- Job Details Modal (Poland Style) -->
+    <div class="lang-fab-new">
+        <div id="lang-toggle-btn" onclick="toggleLanguageDropdown(event)" class="lang-toggle-btn">
+            <i class="fa-solid fa-globe text-xl text-brand-gold transition-colors"></i>
+            <span class="font-bold text-sm uppercase tracking-wider hidden sm:block">Language</span>
+            <i class="fa-solid fa-chevron-up text-xs opacity-70 transition-transform duration-300"></i>
+        </div>
+        
+        <div id="language-dropdown" class="language-dropdown">
+            <button onclick="setLanguage('en', this);" class="lang-option active">
+                <span>English</span> <span class="text-xs text-gray-500 group-hover:text-white/80">EN</span>
+            </button>
+            <button onclick="setLanguage('ml', this);" class="lang-option font-['Noto_Sans_Malayalam']">
+                <span>മലയാളം</span> <span class="text-xs text-gray-500 group-hover:text-white/80">ML</span>
+            </button>
+            <button onclick="setLanguage('hi', this);" class="lang-option">
+                <span>हिंदी</span> <span class="text-xs text-gray-500 group-hover:text-white/80">HI</span>
+            </button>
+            <button onclick="setLanguage('ta', this);" class="lang-option font-['Noto_Sans_Tamil']">
+                <span>தமிழ்</span> <span class="text-xs text-gray-500 group-hover:text-white/80">TA</span>
+            </button>
+            <button onclick="setLanguage('tl', this);" class="lang-option">
+                <span>Filipino</span> <span class="text-xs text-gray-500 group-hover:text-white/80">TL</span>
+            </button>
+            <button onclick="setLanguage('si', this);" class="lang-option font-['Noto_Sans_Sinhala']">
+                <span>සිංහල</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SI</span>
+            </button>
+            <button onclick="setLanguage('sw', this);" class="lang-option">
+                <span>Swahili</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SW</span>
+            </button>
+        </div>
+    </div>
+
     <div id="jobModal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="fixed inset-0 modal-backdrop transition-opacity" onclick="closeModal()"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
@@ -523,8 +440,7 @@
                         <div>
                             <h4 class="text-xs font-bold text-white uppercase tracking-widest mb-3" data-i18n="modal_checklist">Application Checklist</h4>
                             <div id="modalDocs" class="grid grid-cols-1 gap-3 text-sm">
-                                <!-- Docs injected via JS -->
-                            </div>
+                                </div>
                         </div>
                     </div>
 
@@ -538,74 +454,488 @@
         </div>
     </div>
 
-    <!-- Footer (Preserved from Serbia) -->
-    <footer class="bg-transparent border-t border-white/5 relative z-10 backdrop-blur-sm mt-auto">
-        <div class="container mx-auto px-4 py-20">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 md:gap-12 mb-12 md:mb-16">
-                <div class="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col items-center md:items-start text-center md:text-left">
-                    <a href="index.html" class="flex items-center gap-4 group mb-6 w-fit">
-                        <div class="w-12 h-12 bg-space-indigo rounded-xl border border-white/10 flex items-center justify-center text-brand-white font-bold text-xl shadow-2xl glass-panel p-1">
-                            <span class="relative z-10">BC</span>
+    <script>
+        // --- TRANSLATION DATA (MERGED: Global + Serbia Specific) ---
+        const translations = {
+            en: {
+                // Template Global Keys
+                nav_home: "Home", nav_programs: "Programs", nav_services: "Services", nav_assessment: "Free Assessment", nav_about: "About Us", nav_book: "Book Now",
+                search_placeholder_text: "Search Jobs, Countries",
+                footer_destinations: "Destinations", footer_services: "Services", footer_company: "Company", footer_office: "Office", footer_story: "Our Story", footer_privacy: "Privacy Policy", footer_terms: "Terms of Service", footer_rights: "All rights reserved.",
+                country_sweden: "Sweden", country_finland: "Finland", country_netherlands: "Netherlands", country_germany: "Germany", country_italy: "Italy", country_france: "France", country_poland: "Poland", country_czech: "Czech Republic", country_latvia: "Latvia", country_croatia: "Croatia", country_serbia: "Serbia", country_macedonia: "Macedonia", country_albania: "Albania",
+                serv_visa_appt: "Visa Appointment", serv_visa_doc: "Visa Documentation", serv_travel: "Travel Assistance", serv_insurance: "Insurance", serv_medical: "Medical Assistance", serv_corp: "Corporate B2B Solution",
+                btn_consultation: "Book Consultation",
+                
+                // Serbia Specific Keys
+                hero_title_1: "Secure Your Future in",
+                hero_title_2: "SERBIA",
+                hero_badge: "Europe's Rising Economy",
+                hero_subtitle: "A strategic hub in Southeast Europe offering a 3-year renewable Single Permit. Enjoy high quality of life, low living costs, and a direct pathway to permanent residency.",
+                search_placeholder: "Filter jobs (e.g. Driver, Welder)...",
+                btn_explore: "Explore Careers", btn_roadmap: "See Roadmap",
+                
+                process_kicker: "Transparency First",
+                process_title: "Application Roadmap",
+                
+                pricing_title: "Flexible Payment Plans",
+                plan_1_name: "One Shot", plan_2_name: "2 Installments", plan_3_name: "3 Installments", plan_4_name: "4 Installments",
+                plan_signup: "At Sign-up:", plan_permit: "Work Permit:", plan_submit: "Submission:", plan_after: "After Visa:", btn_select: "Select Plan",
+                
+                modal_salary: "Monthly Gross Salary",
+                modal_checklist: "Application Checklist",
+                modal_apply: "Apply Now",
+                modal_close: "Close",
+                stat_2_label: "Cost of Living",
+                
+                cat_all: "All Jobs", cat_logi: "Logistics", cat_cons: "Skilled Trades", cat_agri: "Agriculture", cat_serv: "Service",
+                
+                job_truck: "Truck Driver", job_delivery: "Delivery Driver", job_warehouse: "Warehouse Staff", job_welder: "Certified Welder",
+                job_mechanic: "Automotive Mechanic", job_agri: "Agriculture Worker", job_cook: "Professional Cook", job_hospitality: "Hospitality Staff",
+
+                step_1_title: "Sign-up & Assessment", step_1_desc: "Submit passport, CV, and initial deposit.",
+                step_2_title: "Job Offer & Contract", step_2_desc: "Employer secures offer & Labor Market Test.",
+                step_3_title: "Work Permit Approval", step_3_desc: "Official authorization from National Employment Service.",
+                step_4_title: "Single Permit Submission", step_4_desc: "Submit joint application at Police/Ministry.",
+                step_5_title: "Arrival & Residence", step_5_desc: "Enter Serbia, receive 3-year Single Permit card.",
+
+                doc_cv: "Detailed CV / Resume", doc_passport: "Passport Scan", doc_exp: "Experience Certificates", doc_pcc: "Police Clearance (PCC)"
+            },
+            tl: {
+                nav_home: "Home", nav_programs: "Mga Programa", nav_services: "Mga Serbisyo", nav_assessment: "Libreng Pagtatasa", nav_about: "Tungkol sa Amin", nav_book: "Mag-book Ngayon",
+                search_placeholder_text: "Maghanap ng Trabaho, Bansa",
+                footer_destinations: "Mga Destinasyon", footer_services: "Mga Serbisyo", footer_company: "Kumpanya", footer_office: "Opisina", footer_story: "Aming Kwento", footer_privacy: "Patakaran sa Privacy", footer_terms: "Mga Tuntunin ng Serbisyo", footer_rights: "Nakalaan ang lahat ng karapatan.",
+                country_sweden: "Sweden", country_finland: "Finland", country_netherlands: "Netherlands", country_germany: "Germany", country_italy: "Italy", country_france: "France", country_poland: "Poland", country_czech: "Czech Republic", country_latvia: "Latvia", country_croatia: "Croatia", country_serbia: "Serbia", country_macedonia: "Macedonia", country_albania: "Albania",
+                serv_visa_appt: "Appointment sa Visa", serv_visa_doc: "Dokumentasyon sa Visa", serv_travel: "Tulong sa Paglalakbay", serv_insurance: "Insurance", serv_medical: "Tulong Medikal", serv_corp: "Solusyon sa Corporate B2B",
+                btn_consultation: "Mag-book ng Konsultasyon",
+
+                // Serbia Specific
+                hero_title_1: "Secure Your Future in",
+                hero_title_2: "SERBIA",
+                search_placeholder: "Maghanap ng trabaho...",
+                btn_explore: "Maghanap ng Trabaho", btn_roadmap: "Tingnan ang Roadmap",
+                pricing_title: "Mga Plano sa Pagbabayad",
+                plan_signup: "Sa Pag-sign up:", plan_permit: "Work Permit:", plan_submit: "Pagsusumite:", plan_after: "Pagkatapos ng Visa:", btn_select: "Pumili ng Plano",
+                modal_salary: "Buwanang Sahod", modal_checklist: "Listahan ng Kinakailangan", modal_apply: "Mag-apply Ngayon", modal_close: "Isara"
+            },
+            hi: {
+                nav_home: "होम", nav_programs: "कार्यक्रम", nav_services: "सेवाएं", nav_assessment: "निःशुल्क मूल्यांकन", nav_about: "हमारे बारे में", nav_book: "अभी बुक करें",
+                search_placeholder_text: "नौकरियां, देश खोजें",
+                footer_destinations: "गंतव्य", footer_services: "सेवाएं", footer_company: "कंपनी", footer_office: "कार्यालय", footer_story: "हमारी कहानी", footer_privacy: "गोपनीयता नीति", footer_terms: "सेवा की शर्तें", footer_rights: "सर्वाधिकार सुरक्षित।",
+                country_sweden: "स्वीडन", country_finland: "फिनलैंड", country_netherlands: "नीदरलैंड", country_germany: "जर्मनी", country_italy: "इटली", country_france: "फ्रांस", country_poland: "पोलैंड", country_czech: "चेक गणराज्य", country_latvia: "लातविया", country_croatia: "क्रोएशिया", country_serbia: "सर्बिया", country_macedonia: "मैसिडोनिया", country_albania: "अल्बानिया",
+                serv_visa_appt: "वीज़ा अपॉइंटमेंट", serv_visa_doc: "वीज़ा दस्तावेज़ीकरण", serv_travel: "यात्रा सहायता", serv_insurance: "बीमा", serv_medical: "चिकित्सा सहायता", serv_corp: "कॉर्पोरेट B2B समाधान",
+                btn_consultation: "परामर्श बुक करें",
+
+                // Serbia Specific
+                hero_title_1: "भविष्य सुरक्षित करें",
+                hero_title_2: "सर्बिया में",
+                hero_badge: "यूरोप की उभरती अर्थव्यवस्था",
+                hero_subtitle: "3 साल का नवीकरणीय एकल परमिट। उच्च जीवन स्तर, कम रहने की लागत।",
+                search_placeholder: "नौकरियां खोजें...",
+                btn_explore: "करियर खोजें", btn_roadmap: "रोडमैप देखें",
+
+                process_kicker: "पारदर्शिता पहले",
+                process_title: "आवेदन रोडमैप",
+
+                pricing_title: "भुगतान योजनाएं",
+                plan_1_name: "एक बार में", plan_2_name: "2 किश्तें", plan_3_name: "3 किश्तें", plan_4_name: "4 किश्तें",
+                plan_signup: "साइन-अप पर:", plan_permit: "वर्क परमिट:", plan_submit: "जमा करना:", plan_after: "वीज़ा के बाद:", btn_select: "चुनें",
+
+                modal_salary: "मासिक वेतन",
+                modal_checklist: "आवश्यक दस्तावेज",
+                modal_apply: "अभी आवेदन करें",
+                modal_close: "बंद करें",
+                stat_2_label: "जीवन यापन की लागत",
+
+                cat_all: "सभी नौकरियां", cat_logi: "लॉजिस्टिक्स", cat_cons: "कुशल ट्रेड", cat_agri: "कृषि", cat_serv: "सेवा",
+                job_truck: "ट्रक चालक", job_delivery: "डिलीवरी ड्राइवर", job_warehouse: "गोदाम कर्मचारी", job_welder: "वेल्डर",
+                job_mechanic: "मैकेनिक", job_agri: "कृषि कार्यकर्ता", job_cook: "रसोइया", job_hospitality: "आतिथ्य कर्मचारी",
+
+                step_1_title: "साइन-अप", step_1_desc: "पासपोर्ट, सीवी जमा करें।",
+                step_2_title: "नौकरी की पेशकश", step_2_desc: "नियोक्ता प्रस्ताव सुरक्षित करता है।",
+                step_3_title: "वर्क परमिट", step_3_desc: "आधिकारिक प्राधिकरण।",
+                step_4_title: "जमा करना", step_4_desc: "संयुक्त आवेदन जमा करें।",
+                step_5_title: "आगमन", step_5_desc: "सर्बिया में प्रवेश करें।",
+                doc_cv: "सीवी / बायोडाटा", doc_passport: "पासपोर्ट स्कैन", doc_exp: "अनुभव प्रमाण पत्र", doc_pcc: "पुलिस क्लीयरेंस"
+            },
+            ml: {
+                nav_home: "ഹോം", nav_programs: "പ്രോഗ്രാമുകൾ", nav_services: "സേവനങ്ങൾ", nav_assessment: "സൗജന്യ വിലയിരുത്തൽ", nav_about: "ഞങ്ങളെ കുറിച്ച്", nav_book: "ബുക്ക് നൗ",
+                search_placeholder_text: "ജോലികൾ, രാജ്യങ്ങൾ തിരയുക",
+                footer_destinations: "ഡെസ്റ്റിനേഷൻസ്", footer_services: "സേവനങ്ങൾ", footer_company: "കമ്പനി", footer_office: "ഓഫീസ്", footer_story: "ഞങ്ങളുടെ കഥ", footer_privacy: "സ്വകാര്യത നയം", footer_terms: "സേവന നിബന്ധനകൾ", footer_rights: "എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം.",
+                country_sweden: "സ്വീഡൻ", country_finland: "ഫിൻലാൻഡ്", country_netherlands: "നെതർലാൻഡ്സ്", country_germany: "ജർമ്മനി", country_italy: "ഇറ്റലി", country_france: "ഫ്രാൻസ്", country_poland: "പോളണ്ട്", country_czech: "ചെക്ക് റിപ്പബ്ലിക്", country_latvia: "ലാത്വിയ", country_croatia: "ക്രൊയേഷ്യ", country_serbia: "സെർബിയ", country_macedonia: "മാസിഡോണിയ", country_albania: "അൽബാനിയ",
+                serv_visa_appt: "വിസ അപ്പോയിന്റ്മെന്റ്", serv_visa_doc: "വിസ ഡോക്യുമെന്റേഷൻ", serv_travel: "യാത്രാ സഹായം", serv_insurance: "ഇൻഷുറൻസ്", serv_medical: "മെഡിക്കൽ സഹായം", serv_corp: "കോർപ്പറേറ്റ് B2B സൊല്യൂഷൻ",
+                btn_consultation: "കൺസൾട്ടേഷൻ ബുക്ക് ചെയ്യുക",
+
+                // Serbia Specific
+                hero_title_1: "ഭാവി സുരക്ഷിതമാക്കൂ",
+                hero_title_2: "സെർബിയയിൽ",
+                hero_badge: "വളരുന്ന സമ്പദ്‌വ്യവസ്ഥ",
+                hero_subtitle: "തെക്കുകിഴക്കൻ യൂറോപ്പിലെ തന്ത്രപ്രധാനമായ ഹബ്ബ്. 3 വർഷത്തെ പുതുക്കാവുന്ന സിംഗിൾ പെർമിറ്റ്, കുറഞ്ഞ ജീവിതച്ചെലവ്.",
+                search_placeholder: "ജോലികൾ തിരയുക...",
+                btn_explore: "ജോലികൾ കാണുക", btn_roadmap: "റോഡ്മാപ്പ്",
+
+                process_kicker: "സുതാര്യത",
+                process_title: "അപേക്ഷാ ഘട്ടങ്ങൾ",
+
+                pricing_title: "പേയ്മെന്റ് പ്ലാനുകൾ",
+                plan_1_name: "ഒറ്റത്തവണ", plan_2_name: "2 തവണകൾ", plan_3_name: "3 തവണകൾ", plan_4_name: "4 തവണകൾ",
+                plan_signup: "രജിസ്റ്റർ ചെയ്യുമ്പോൾ:", plan_permit: "വർക്ക് പെർമിറ്റ്:", plan_submit: "സമർപ്പിക്കുമ്പോൾ:", plan_after: "വിസയ്ക്ക് ശേഷം:", btn_select: "തിരഞ്ഞെടുക്കുക",
+                
+                modal_salary: "പ്രതിമാസ ശമ്പളം",
+                modal_checklist: "ആവശ്യമായ രേഖകൾ",
+                modal_apply: "അപേക്ഷിക്കുക",
+                modal_close: "അടയ്ക്കുക",
+                stat_2_label: "ജീവിതച്ചെലവ്",
+                
+                cat_all: "എല്ലാ ജോലികളും", cat_logi: "ലോജിസ്റ്റിക്സ്", cat_cons: "സ്കിൽഡ് ട്രേഡ്സ്", cat_agri: "അഗ്രികൾച്ചർ", cat_serv: "സർവീസ്",
+                job_truck: "ട്രക്ക് ഡ്രൈവർ", job_delivery: "ഡെലിവറി ഡ്രൈവർ", job_warehouse: "വെയർഹൗസ് സ്റ്റാഫ്", job_welder: "വെൽഡർ",
+                job_mechanic: "മെക്കാനിക്", job_agri: "അഗ്രികൾച്ചർ വർക്കർ", job_cook: "കുക്ക്", job_hospitality: "ഹോസ്പിറ്റാലിറ്റി സ്റ്റാഫ്",
+
+                step_1_title: "രജിസ്ട്രേഷൻ", step_1_desc: "പാസ്‌പോർട്ട്, സിവി എന്നിവ സമർപ്പിക്കുക.",
+                step_2_title: "ജോലി ഓഫർ", step_2_desc: "തൊഴിലുടമയിൽ നിന്ന് ഓഫർ ലെറ്റർ.",
+                step_3_title: "വർക്ക് പെർമിറ്റ്", step_3_desc: "എംപ്ലോയ്മെന്റ് സർവീസിൽ നിന്നുള്ള അനുമതി.",
+                step_4_title: "പെർമിറ്റ് സമർപ്പണം", step_4_desc: "പോലീസിൽ അപേക്ഷ സമർപ്പിക്കുക.",
+                step_5_title: "താമസം", step_5_desc: "സെർബിയയിൽ എത്തി 3 വർഷത്തെ കാർഡ് നേടുക.",
+                doc_cv: "ബയോഡാറ്റ (CV)", doc_passport: "പാസ്‌പോർട്ട് സ്കാൻ", doc_exp: "പ്രവൃത്തിപരിചയ സർട്ടിഫിക്കറ്റുകൾ", doc_pcc: "പോലീസ് ക്ലിയറൻസ്"
+            },
+            ta: {
+                nav_home: "முகப்பு", nav_programs: "திட்டங்கள்", nav_services: "சேவைகள்", nav_assessment: "இலவச மதிப்பீடு", nav_about: "எங்களை பற்றி", nav_book: "இப்போதே பதிவு செய்யவும்",
+                search_placeholder_text: "வேலைகள், நாடுகளைத் தேடவும்",
+                footer_destinations: "இலக்குகள்", footer_services: "சேவைகள்", footer_company: "நிறுவனம்", footer_office: "அலுவலகம்", footer_story: "எங்கள் கதை", footer_privacy: "தனியுரிமைக் கொள்கை", footer_terms: "சேவை விதிமுறைகள்", footer_rights: "அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.",
+                country_sweden: "ஸ்வீடன்", country_finland: "பின்லாந்து", country_netherlands: "நெதர்லாந்து", country_germany: "ஜெர்மனி", country_italy: "இத்தாலி", country_france: "பிரான்ஸ்", country_poland: "போலந்து", country_czech: "செக் குடியரசு", country_latvia: "லாட்வியா", country_croatia: "குரோஷியா", country_serbia: "செர்பியா", country_macedonia: "மாசிடோனியா", country_albania: "அல்பேனியா",
+                serv_visa_appt: "விசா நியமனம்", serv_visa_doc: "விசா ஆவணங்கள்", serv_travel: "பயண உதவி", serv_insurance: "காப்பீடு", serv_medical: "மருத்துவ உதவி", serv_corp: "கார்ப்பரேட் B2B தீர்வு",
+                btn_consultation: "ஆலோசனையை பதிவு செய்யவும்",
+
+                // Serbia Specific
+                hero_title_1: "எதிர்காலத்தை உறுதி செய்யுங்கள்",
+                hero_title_2: "செர்பியாவில்",
+                modal_salary: "மாத சம்பளம்", modal_apply: "விண்ணப்பிக்கவும்", modal_close: "மூடு"
+            },
+            sw: {
+                nav_home: "Nyumbani", nav_programs: "Programu", nav_services: "Huduma", nav_assessment: "Tathmini ya Bure", nav_about: "Kutuhusu", nav_book: "Weka Nafasi",
+                search_placeholder_text: "Tafuta Kazi, Nchi",
+                footer_destinations: "Vituo", footer_services: "Huduma", footer_company: "Kampuni", footer_office: "Ofisi", footer_story: "Hadithi Yetu", footer_privacy: "Sera ya Faragha", footer_terms: "Masharti ya Huduma", footer_rights: "Haki zote zimehifadhiwa.",
+                country_sweden: "Uswidi", country_finland: "Ufini", country_netherlands: "Uholanzi", country_germany: "Ujerumani", country_italy: "Italia", country_france: "Ufaransa", country_poland: "Poland", country_czech: "Jamhuri ya Czech", country_latvia: "Latvia", country_croatia: "Kroatia", country_serbia: "Serbia", country_macedonia: "Masedonia", country_albania: "Albania",
+                serv_visa_appt: "Uteuzi wa Visa", serv_visa_doc: "Nyaraka za Visa", serv_travel: "Msaada wa Kusafiri", serv_insurance: "Bima", serv_medical: "Msaada wa Matibabu", serv_corp: "Suluhisho la B2B la Kampuni",
+                btn_consultation: "Weka Ushauri",
+
+                // Serbia Specific
+                hero_title_1: "Salama Baadaye Yako",
+                hero_title_2: "SERBIA",
+                modal_salary: "Mshahara wa Mwezi", modal_apply: "Tuma Maombi", modal_close: "Funga"
+            },
+            si: {
+                nav_home: "මුල් පිටුව", nav_programs: "වැඩසටහන්", nav_services: "සේවාවන්", nav_assessment: "නොමිලේ ඇගයීම", nav_about: "අප ගැන", nav_book: "වෙන් කරවා ගන්න",
+                search_placeholder_text: "රැකියා, රටවල් සොයන්න",
+                footer_destinations: "ගමනාන්ත", footer_services: "සේවාවන්", footer_company: "සමාගම", footer_office: "කාර්යාලය", footer_story: "අපේ කතාව", footer_privacy: "රහස්‍යතා ප්‍රතිපත්තිය", footer_terms: "සේවා කොන්දේසි", footer_rights: "සියලුම හිමිකම් ඇවිරිණි.",
+                country_sweden: "ස්වීඩනය", country_finland: "ෆින්ලන්තය", country_netherlands: "නෙදර්ලන්තය", country_germany: "ජර්මනිය", country_italy: "ඉතාලිය", country_france: "ප්‍රංශය", country_poland: "පෝලන්තය", country_czech: "චෙක් ජනරජය", country_latvia: "ලැට්වියාව", country_croatia: "ක්‍රොඒෂියාව", country_serbia: "සර්බියාව", country_macedonia: "මැසිඩෝනියාව", country_albania: "ඇල්බේනියාව",
+                serv_visa_appt: "වීසා හමුවීම", serv_visa_doc: "වීසා ලියකියවිලි", serv_travel: "සංචාරක සහාය", serv_insurance: "රක්ෂණය", serv_medical: "වෛද්‍ය සහාය", serv_corp: "ආයතනික B2B විසඳුම",
+                btn_consultation: "උපදේශනයක් වෙන්කරන්න",
+
+                // Serbia Specific
+                hero_title_1: "ඔබගේ අනාගතය සුරක්ෂිත කරන්න",
+                hero_title_2: "සර්බියාවේ",
+                modal_salary: "මාසික වැටුප", modal_apply: "අයදුම් කරන්න", modal_close: "වසන්න"
+            }
+        };
+
+        // --- LANGUAGE SWITCHER LOGIC ---
+        let currentLang = 'en';
+
+        function toggleLanguageDropdown(event) {
+            const button = document.getElementById('lang-toggle-btn');
+            const isActive = button.classList.toggle('active');
+            event.stopPropagation();
+            if (!isActive) {
+                 document.removeEventListener('click', closeLanguageDropdown);
+            } else {
+                 setTimeout(() => { 
+                    document.addEventListener('click', closeLanguageDropdown);
+                 }, 10);
+            }
+        }
+
+        function closeLanguageDropdown(event) {
+            const dropdown = document.getElementById('language-dropdown');
+            const button = document.getElementById('lang-toggle-btn');
+            if (dropdown && button && !dropdown.contains(event.target) && !button.contains(event.target)) {
+                button.classList.remove('active');
+                document.removeEventListener('click', closeLanguageDropdown);
+            }
+        }
+
+        // Helper for Serbia Translation
+        function t(key) {
+            const dict = translations[currentLang] || translations['en'];
+            return dict[key] || translations['en'][key] || key;
+        }
+
+        function setLanguage(lang, element) {
+            currentLang = lang;
+            
+            // Toggle UI Active State
+            if(element) {
+                document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
+                element.classList.add('active');
+            }
+
+            const dict = translations[lang];
+            if (!dict) return;
+
+            // Global i18n
+            const i18nElements = document.querySelectorAll('[data-i18n]');
+            i18nElements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t(key)) {
+                    if (el.tagName === 'INPUT') {
+                        el.placeholder = t(key);
+                    } else {
+                        // Simple Fade Effect
+                        el.style.opacity = '0';
+                        setTimeout(() => {
+                            el.innerHTML = t(key);
+                            el.style.opacity = '1';
+                        }, 200);
+                    }
+                }
+            });
+
+             // Placeholders
+            document.querySelectorAll('[data-placeholder-i18n]').forEach(el => {
+                const key = el.getAttribute('data-placeholder-i18n');
+                if(t(key)) el.placeholder = t(key);
+            });
+
+            // Font Families
+            if (['hi', 'ml', 'ta', 'si'].includes(lang)) {
+                if (lang === 'hi') document.body.style.fontFamily = "'Noto Sans Devanagari', sans-serif";
+                if (lang === 'ml') document.body.style.fontFamily = "'Noto Sans Malayalam', sans-serif";
+                if (lang === 'ta') document.body.style.fontFamily = "'Noto Sans Tamil', sans-serif";
+                if (lang === 'si') document.body.style.fontFamily = "'Noto Sans Sinhala', sans-serif";
+            } else {
+                document.body.style.fontFamily = "'Outfit', sans-serif";
+            }
+
+            // Re-render Serbia Specific Components
+            renderCategoryChips();
+            filterPageJobs();
+            renderTimeline();
+
+            // Close Dropdown
+            document.getElementById('lang-toggle-btn').classList.remove('active');
+            document.removeEventListener('click', closeLanguageDropdown);
+        }
+
+        // --- LENIS SMOOTH SCROLL ---
+        function initSmoothScroll() {
+            if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    direction: 'vertical',
+                    gestureDirection: 'vertical',
+                    smooth: true,
+                    mouseMultiplier: 1,
+                    smoothTouch: false,
+                    touchMultiplier: 2,
+                });
+                function raf(time) {
+                    lenis.raf(time);
+                    requestAnimationFrame(raf);
+                }
+                requestAnimationFrame(raf);
+            }
+        }
+
+        // --- HEADER & FOOTER INJECTION (FROM TEMPLATE) ---
+        const GLOBAL_HEADER = `
+        <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
+            <div class="floating-nav w-full max-w-7xl px-4 py-4 md:px-3 md:py-3 flex justify-between items-center transition-all duration-300" id="navbar">
+                <a href="index.html" class="flex items-center gap-3 md:gap-4 group px-2 md:px-4">
+                    <div class="w-14 h-14 md:w-12 md:h-12 rounded-full flex items-center justify-center glass-panel overflow-hidden p-1 flex-shrink-0 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] hover:scale-110 border border-white/10 bg-white/5 backdrop-blur-md">
+                        <img src="https://raw.githubusercontent.com/thebettercall/app/9ca2db3d96700f0412c9f2f420422ed1ccfb52bb/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                    </div>
+                    <div class="block leading-tight"> 
+                        <h1 class="font-bold text-white text-xl md:text-xl tracking-wide whitespace-nowrap">BETTER CALL</h1>
+                        <p class="text-xs md:text-xs font-bold text-brand-gold uppercase tracking-[0.2em] md:tracking-[0.2em]">Immigration</p>
+                    </div>
+                </a>
+                <div class="hidden lg:flex items-center gap-2">
+                    <a href="index.html" data-i18n="nav_home" class="px-5 py-2.5 text-base text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">Home</a>
+                    <div class="relative group">
+                        <button data-i18n="nav_programs" class="px-5 py-2.5 text-base text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5 flex items-center gap-1">Programs <svg class="w-4 h-4 text-gray-400 group-hover:text-brand-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                        <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-72 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50 max-h-[80vh] overflow-y-auto hide-scrollbar">
+                            <a href="sweden.html" data-i18n="country_sweden" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-blue-400 hover:bg-blue-500/20 transition block">Sweden</a>
+                            <a href="finland.html" data-i18n="country_finland" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-purple-400 hover:bg-purple-500/20 transition block">Finland</a>
+                            <a href="netherlands.html" data-i18n="country_netherlands" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-brand-gold hover:bg-brand-gold/20 transition block">Netherlands</a>
+                            <a href="germany.html" data-i18n="country_germany" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-brand-gold hover:bg-brand-gold/20 transition block">Germany</a>
+                            <a href="italy.html" data-i18n="country_italy" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-orange-400 hover:bg-orange-500/20 transition block">Italy</a>
+                            <a href="france.html" data-i18n="country_france" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-blue-500 hover:bg-blue-600/20 transition block">France</a>
+                            <a href="poland.html" data-i18n="country_poland" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-400 hover:bg-red-500/20 transition block">Poland</a>
+                            <a href="czech.html" data-i18n="country_czech" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-blue-300 hover:bg-blue-400/20 transition block">Czech Republic</a>
+                            <a href="latvia.html" data-i18n="country_latvia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-300 hover:bg-red-500/20 transition block">Latvia</a>
+							<a href="croatia.html" data-i18n="country_croatia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-300 hover:bg-red-500/20 transition block">Croatia</a>
+                            <a href="serbia.html" data-i18n="country_serbia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-blue-300 hover:bg-blue-500/20 transition block">Serbia</a>
+                            <a href="macedonia.html" data-i18n="country_macedonia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-yellow-400 hover:bg-yellow-500/20 transition block">Macedonia</a>
+                            <a href="albania.html" data-i18n="country_albania" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-500 hover:bg-red-600/20 transition block">Albania</a>
                         </div>
-                        <div class="block text-left">
-                            <h4 class="font-bold text-white text-lg tracking-wide">BETTER CALL</h4><p class="text-[10px] font-bold text-brand-gold uppercase tracking-[0.3em]">Immigration</p>
+                    </div>
+                    <div class="relative group">
+                        <button data-i18n="nav_services" class="px-5 py-2.5 text-base text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5 flex items-center gap-1">Services <svg class="w-4 h-4 text-gray-400 group-hover:text-brand-blue transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                        <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-72 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50">
+                            <a href="vfs.html" data-i18n="serv_visa_appt" class="px-4 py-3 rounded-xl text-base text-vfs-teal font-medium hover:bg-vfs-teal/10 transition block">Visa Appointment</a>
+                            <a href="visa_documentation.html" data-i18n="serv_visa_doc" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Visa Documentation</a>
+                            <a href="travel_assistance.html" data-i18n="serv_travel" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Travel Assistance</a>
+                            <a href="insurance_assistance.html" data-i18n="serv_insurance" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Insurance Assistance</a>
+                            <a href="medical_assistance.html" data-i18n="serv_medical" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-white hover:bg-brand-blue/20 transition block">Medical Assistance</a>
+                            <a href="corporate_b2b.html" data-i18n="serv_corp" class="px-4 py-3 rounded-xl text-base text-brand-purple font-bold hover:text-white hover:bg-brand-purple/20 transition block">Corporate B2B Solution</a>
                         </div>
+                    </div>
+                    <a href="assessment.html" data-i18n="nav_assessment" class="px-5 py-2.5 text-base text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">Free Assessment</a>
+                    <a href="about.html" data-i18n="nav_about" class="px-5 py-2.5 text-base text-white hover:text-brand-blue font-medium transition rounded-full hover:bg-white/5">About Us</a>
+                </div>
+                <div class="flex items-center gap-4 sm:gap-3 px-2">
+                    <button onclick="toggleSearch()" class="group p-3 rounded-full hover:bg-white/10 transition-all duration-300 relative" aria-label="Search">
+                        <i class="fa-solid fa-magnifying-glass text-white/70 group-hover:text-brand-blue text-3xl md:text-xl"></i>
+                        <span class="hidden lg:inline-flex absolute -bottom-8 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md px-2 py-0.5 rounded text-[10px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/5">Cmd + K</span>
+                    </button>
+                    <button class="lg:hidden p-3 text-white hover:text-brand-blue transition rounded-full hover:bg-white/5" onclick="toggleMobileMenu()">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <a href="book.html" class="hidden sm:flex group relative px-8 py-3 rounded-full bg-brand-blue text-white font-bold text-base overflow-hidden transition-all hover:scale-105 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]">
+                        <span data-i18n="nav_book" class="relative z-10 group-hover:text-white transition-colors">Book Now</span>
+                        <div class="absolute inset-0 bg-brand-purple transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
                     </a>
-                    <p class="text-sm leading-relaxed max-w-sm mb-8 font-light text-gray-500">Defining the industry benchmark for professionalism, absolute transparency, and sustained client success in global migration.</p>
-                    <div class="flex gap-4">
-                        <a href="https://wa.me/971503666382" class="w-12 h-12 rounded-full glass-panel hover:bg-brand-blue hover:text-white flex items-center justify-center transition-all duration-300" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp text-xl"></i></a>
-                        <a href="https://www.instagram.com/the_better_call" class="w-12 h-12 rounded-full glass-panel hover:bg-brand-purple hover:text-white flex items-center justify-center transition-all duration-300" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram text-xl"></i></a>
-                        <a href="mailto:admin@thebettercall.com" class="w-12 h-12 rounded-full glass-panel hover:bg-brand-gold hover:text-white flex items-center justify-center transition-all duration-300"><i class="fa-solid fa-envelope text-xl"></i></a>
+                </div>
+            </div>
+            <div id="mobileMenu" class="fixed inset-0 bg-[#0B132B]/98 backdrop-blur-3xl z-[60] transform translate-y-full transition-transform duration-500 flex flex-col items-center justify-start pt-32 pb-10 overflow-y-auto">
+                <button class="absolute top-8 right-8 text-white/50 hover:text-white text-4xl transition" onclick="toggleMobileMenu()">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <a href="index.html" onclick="toggleMobileMenu()" class="text-4xl font-light text-white hover:text-brand-blue mb-8"><i class="fa-solid fa-house"></i></a>
+                <div class="w-full px-8 space-y-10">
+                    <div class="text-center">
+                        <p data-i18n="footer_destinations" class="text-brand-gold text-sm uppercase tracking-widest mb-6 font-bold opacity-70">Destinations</p>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <a href="sweden.html" data-i18n="country_sweden" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">SWEDEN</a>
+                            <a href="finland.html" data-i18n="country_finland" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">FINLAND</a>
+                            <a href="germany.html" data-i18n="country_germany" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">GERMANY</a>
+                            <a href="italy.html" data-i18n="country_italy" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">ITALY</a>
+                            <a href="france.html" data-i18n="country_france" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">FRANCE</a>
+                            <a href="netherlands.html" data-i18n="country_netherlands" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">NETHERLANDS</a>
+                            <a href="poland.html" data-i18n="country_poland" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">POLAND</a>
+                            <a href="czech.html" data-i18n="country_czech" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">CZECHIA</a>
+                            <a href="latvia.html" data-i18n="country_latvia" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">LATVIA</a>
+							<a href="croatia.html" data-i18n="country_croatia" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">CROATIA</a>
+                            <a href="serbia.html" data-i18n="country_serbia" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">SERBIA</a>
+                            <a href="macedonia.html" data-i18n="country_macedonia" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">MACEDONIA</a>
+                            <a href="albania.html" data-i18n="country_albania" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">ALBANIA</a>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p data-i18n="nav_services" class="text-brand-gold text-sm uppercase tracking-widest mb-6 font-bold opacity-70">Services</p>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <a href="vfs.html" data-i18n="serv_visa_appt" class="px-5 py-3 bg-white/5 rounded-xl text-base text-vfs-teal font-medium">Visa Appointment</a>
+                            <a href="visa_documentation.html" data-i18n="serv_visa_doc" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">Visa Documentation</a>
+                            <a href="travel_assistance.html" data-i18n="serv_travel" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">Travel Assistance</a>
+                            <a href="insurance_assistance.html" data-i18n="serv_insurance" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">Insurance</a>
+                            <a href="medical_assistance.html" data-i18n="serv_medical" class="px-5 py-3 bg-white/5 rounded-xl text-base text-gray-300">Medical Assistance</a>
+                            <a href="corporate_b2b.html" data-i18n="serv_corp" class="px-5 py-3 bg-white/5 rounded-xl text-base text-brand-purple font-bold">Corporate B2B Solution</a>
+                        </div>
                     </div>
                 </div>
-                <div class="hidden md:block">
-                    <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest" data-i18n="footer_dest">Destinations</h4>
-                    <ul class="space-y-4 text-sm font-light">
-                        <li><a href="germany.html" class="hover:text-brand-blue transition-colors">Germany</a></li>
-                        <li><a href="sweden.html" class="hover:text-brand-blue transition-colors">Sweden</a></li>
-                        <li><a href="finland.html" class="hover:text-brand-blue transition-colors">Finland</a></li>
-                        <li><a href="italy.html" class="hover:text-brand-blue transition-colors">Italy</a></li>
-                        <li><a href="france.html" class="hover:text-brand-blue transition-colors">France</a></li>
-                        <li><a href="poland.html" class="hover:text-brand-blue transition-colors">Poland</a></li>
-                    </ul>
+                <div class="flex flex-col gap-5 items-center w-full px-8 pb-12 mt-8">
+                    <a href="assessment.html" onclick="toggleMobileMenu()" data-i18n="nav_assessment" class="w-full max-w-xs text-center text-xl font-bold text-white bg-brand-blue px-8 py-5 rounded-full shadow-lg hover:scale-105 transition-transform">Free Assessment</a>
+                    <a href="book.html" onclick="toggleMobileMenu()" data-i18n="btn_consultation" class="w-full max-w-xs text-center text-xl font-bold text-deep-space bg-brand-gold px-8 py-5 rounded-full shadow-xl hover:scale-105 transition-transform">Book Consultation</a>
                 </div>
-                <div class="hidden md:block">
-                    <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest" data-i18n="footer_serv">Services</h4>
-                    <ul class="space-y-4 text-sm font-light">
-                        <li><a href="vfs.html" class="hover:text-brand-blue transition-colors">Visa Appointment</a></li>
-                        <li><a href="visa_documentation.html" class="hover:text-brand-blue transition-colors">Documentation</a></li>
-                        <li><a href="travel_assistance.html" class="hover:text-brand-blue transition-colors">Travel Assistance</a></li>
-                        <li><a href="insurance_assistance.html" class="hover:text-brand-blue transition-colors">Insurance</a></li>
-                        <li><a href="medical_assistance.html" class="hover:text-brand-blue transition-colors">Medical</a></li>
-                    </ul>
-                </div>
-                <div class="hidden md:block">
-                    <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest" data-i18n="footer_comp">Company</h4>
-                    <ul class="space-y-4 text-sm font-light">
-                        <li><a href="about.html" class="hover:text-brand-blue transition-colors">Our Story</a></li>
-                        <li><a href="assessment.html" class="hover:text-brand-blue transition-colors">Free Assessment</a></li>
-                    </ul>
-                </div>
-                <div class="hidden md:block">
-                    <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest" data-i18n="footer_off">Office</h4>
-                    <ul class="space-y-4 text-sm font-light">
-                        <li class="flex items-start gap-3"><i class="fa-solid fa-location-dot text-brand-gold mt-1"></i><span>R320-12th Floor<br>Dubai Healthcare City<br>UAE</span></li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-phone text-brand-gold"></i><span>+971 50 366 6382</span></li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-envelope text-brand-gold"></i><span>admin@thebettercall.com</span></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-white/5 pt-8 text-center text-xs text-gray-600 font-light flex flex-col md:flex-row justify-between items-center">
-                <p>&copy; 2025 Better Call Immigration. All rights reserved.</p>
-                <div class="flex gap-6 mt-4 md:mt-0"><a href="#" class="hover:text-white transition">Privacy Policy</a><a href="#" class="hover:text-white transition">Terms of Service</a></div>
             </div>
         </div>
-    </footer>
+        <div id="search-overlay" class="fixed inset-0 z-[100] bg-deep-space/80 backdrop-blur-xl flex items-start justify-center pt-24 px-4">
+            <div class="absolute inset-0 cursor-default" onclick="toggleSearch()"></div>
+            <div id="search-container" class="w-full max-w-3xl relative z-10 bg-[#0F172A]/90 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh]">
+                <div class="flex items-center p-3 md:p-6 border-b border-white/5">
+                    <i class="fa-solid fa-magnifying-glass text-brand-blue text-lg md:text-2xl mr-3 md:mr-4"></i>
+                    <input type="text" id="global-search-input" data-i18n="search_placeholder_text" placeholder="Search Jobs, Countries" class="bg-transparent border-none outline-none text-base md:text-2xl text-white placeholder-gray-500 w-full font-light" autocomplete="off">
+                    <button onclick="toggleSearch()" class="text-gray-500 hover:text-white transition p-2"><span class="text-sm uppercase font-bold tracking-wider border border-white/10 rounded px-2 py-1">ESC</span></button>
+                </div>
+                <div id="search-results" class="overflow-y-auto p-4 custom-scrollbar">
+                    <div id="dynamic-results" class="hidden flex-col gap-2"></div>
+                    <div id="no-results" class="hidden p-10 text-center"><i class="fa-solid fa-circle-question text-gray-600 text-4xl mb-4"></i><p class="text-gray-400 text-base">No results found for your query.</p></div>
+                </div>
+                <div class="bg-black/20 p-4 text-xs text-gray-500 flex justify-between items-center px-6"><div class="flex gap-6"><span class="hidden sm:inline">Use <strong class="text-gray-400">↑</strong> <strong class="text-gray-400">↓</strong> to navigate</span><span class="hidden sm:inline"><strong class="text-gray-400">Enter</strong> to select</span></div><span>Better Call Search</span></div>
+            </div>
+        </div>
+        `;
 
-    <!-- Scripts -->
-    <script>
-        // --- DATA ---
-        // Serbia Job Data Mapped to Poland Structure
+        const GLOBAL_FOOTER = `
+        <footer class="bg-transparent border-t border-white/5 relative z-10 backdrop-blur-sm">
+            <div class="container mx-auto px-4 py-12 md:py-24">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 md:gap-16 mb-8 md:mb-20">
+                    <div class="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col items-center md:items-start text-center md:text-left">
+                        <a href="index.html" class="flex items-center gap-5 group mb-4 md:mb-8 w-fit">
+                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center glass-panel p-2 transition-all duration-500 hover:shadow-[0_0_40px_rgba(139,92,246,0.5)] hover:scale-105 border border-white/10 bg-white/5 backdrop-blur-md">
+                                <img src="https://raw.githubusercontent.com/thebettercall/app/9ca2db3d96700f0412c9f2f420422ed1ccfb52bb/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                            </div>
+                            <div class="block text-left">
+                                <h4 class="font-bold text-white text-xl tracking-wide">BETTER CALL</h4><p class="text-xs font-bold text-brand-gold uppercase tracking-[0.3em]">Immigration</p>
+                            </div>
+                        </a>
+                        <p data-i18n="sec_standard_desc" class="text-base leading-relaxed max-w-sm mb-6 md:mb-10 font-light text-gray-500">Defining the industry benchmark for professionalism, absolute transparency, and sustained client success in global migration.</p>
+                        <div class="flex gap-5">
+                            <a href="https://wa.me/971503666382" class="w-14 h-14 rounded-full glass-panel hover:bg-brand-blue hover:text-white flex items-center justify-center transition-all duration-300" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp text-2xl"></i></a>
+                            <a href="https://www.instagram.com/the_better_call" class="w-14 h-14 rounded-full glass-panel hover:bg-brand-purple hover:text-white flex items-center justify-center transition-all duration-300" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram text-2xl"></i></a>
+                            <a href="mailto:admin@thebettercall.com" class="w-14 h-14 rounded-full glass-panel hover:bg-brand-gold hover:text-white flex items-center justify-center transition-all duration-300"><i class="fa-solid fa-envelope text-2xl"></i></a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 data-i18n="footer_destinations" class="text-white font-bold mb-8 text-base uppercase tracking-widest">Destinations</h4>
+                        <ul class="space-y-5 text-base font-light">
+                            <li><a href="germany.html" data-i18n="country_germany" class="hover:text-brand-blue transition-colors">Germany</a></li>
+                            <li><a href="sweden.html" data-i18n="country_sweden" class="hover:text-brand-blue transition-colors">Sweden</a></li>
+                            <li><a href="finland.html" data-i18n="country_finland" class="hover:text-brand-blue transition-colors">Finland</a></li>
+                            <li><a href="italy.html" data-i18n="country_italy" class="hover:text-brand-blue transition-colors">Italy</a></li>
+                            <li><a href="france.html" data-i18n="country_france" class="hover:text-brand-blue transition-colors">France</a></li>
+                            <li><a href="poland.html" data-i18n="country_poland" class="hover:text-brand-blue transition-colors">Poland</a></li>
+                        </ul>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 data-i18n="footer_services" class="text-white font-bold mb-8 text-base uppercase tracking-widest">Services</h4>
+                        <ul class="space-y-5 text-base font-light">
+                            <li><a href="vfs.html" data-i18n="serv_visa_appt" class="hover:text-brand-blue transition-colors">Visa Appointment</a></li>
+                            <li><a href="visa_documentation.html" data-i18n="serv_visa_doc" class="hover:text-brand-blue transition-colors">Documentation</a></li>
+                            <li><a href="travel_assistance.html" data-i18n="serv_travel" class="hover:text-brand-blue transition-colors">Travel Assistance</a></li>
+                            <li><a href="insurance_assistance.html" data-i18n="serv_insurance" class="hover:text-brand-blue transition-colors">Insurance</a></li>
+                            <li><a href="medical_assistance.html" data-i18n="serv_medical" class="hover:text-brand-blue transition-colors">Medical</a></li>
+                        </ul>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 data-i18n="footer_company" class="text-white font-bold mb-8 text-base uppercase tracking-widest">Company</h4>
+                        <ul class="space-y-5 text-base font-light">
+                            <li><a href="about.html" data-i18n="footer_story" class="hover:text-brand-blue transition-colors">Our Story</a></li>
+                            <li><a href="assessment.html" data-i18n="nav_assessment" class="hover:text-brand-blue transition-colors">Free Assessment</a></li>
+                        </ul>
+                    </div>
+                    <div class="hidden md:block">
+                        <h4 data-i18n="footer_office" class="text-white font-bold mb-8 text-base uppercase tracking-widest">Office</h4>
+                        <ul class="space-y-5 text-base font-light">
+                            <li class="flex items-start gap-4"><i class="fa-solid fa-location-dot text-brand-gold mt-1"></i><span>R320-12th Floor<br>Dubai Healthcare City<br>UAE</span></li>
+                            <li class="flex items-center gap-4"><i class="fa-solid fa-phone text-brand-gold"></i><span>+971 50 366 6382</span></li>
+                            <li class="flex items-center gap-4"><i class="fa-solid fa-envelope text-brand-gold"></i><span>admin@thebettercall.com</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-white/5 pt-10 text-center text-sm text-gray-600 font-light flex flex-col md:flex-row justify-between items-center">
+                    <p>&copy; 2025 Better Call Immigration. <span data-i18n="footer_rights">All rights reserved.</span></p>
+                    <div class="flex gap-8 mt-6 md:mt-0"><a href="#" data-i18n="footer_privacy" class="hover:text-white transition">Privacy Policy</a><a href="#" data-i18n="footer_terms" class="hover:text-white transition">Terms of Service</a></div>
+                </div>
+            </div>
+        </footer>
+        `;
+
+        // Inject Nav and Footer
+        document.body.insertAdjacentHTML('afterbegin', GLOBAL_HEADER);
+        document.body.insertAdjacentHTML('beforeend', GLOBAL_FOOTER);
+
+        // --- SERBIA SPECIFIC DATA & LOGIC ---
         const jobsData = [
             { i18n_id: "job_truck", i18n_dept: "cat_logi", cat: "Logistics", euro: "€800 - €1,500", exp: "High Demand", icon: "fa-solid fa-truck" },
             { i18n_id: "job_delivery", i18n_dept: "cat_logi", cat: "Logistics", euro: "€800 - €1,200", exp: "Local", icon: "fa-solid fa-motorcycle" },
@@ -632,218 +962,7 @@
             { step: "5", key: "step_5_title", descKey: "step_5_desc", fee: "Arrival" }
         ];
 
-        // --- TRANSLATION DATA ---
-        const translations = {
-            en: {
-                btn_language: "Language",
-                hero_title_1: "Secure Your Future in",
-                hero_title_2: "SERBIA",
-                hero_subtitle: "A strategic hub in Southeast Europe offering a 3-year renewable Single Permit. Enjoy high quality of life, low living costs, and a direct pathway to permanent residency.",
-                search_placeholder: "Filter jobs (e.g. Driver, Welder)...",
-                
-                process_kicker: "Transparency First",
-                process_title: "Application Roadmap",
-                
-                pricing_title: "Flexible Payment Plans",
-                plan_1_name: "One Shot", plan_2_name: "2 Installments", plan_3_name: "3 Installments", plan_4_name: "4 Installments",
-                plan_signup: "At Sign-up:", plan_permit: "Work Permit:", plan_submit: "Submission:", plan_after: "After Visa:", btn_select: "Select Plan",
-                
-                modal_salary: "Monthly Gross Salary",
-                modal_checklist: "Application Checklist",
-                modal_apply: "Apply Now",
-                modal_close: "Close",
-                
-                cat_all: "All Jobs",
-                cat_logi: "Logistics",
-                cat_cons: "Skilled Trades",
-                cat_agri: "Agriculture",
-                cat_serv: "Service",
-                
-                job_truck: "Truck Driver", job_delivery: "Delivery Driver", job_warehouse: "Warehouse Staff", job_welder: "Certified Welder",
-                job_mechanic: "Automotive Mechanic", job_agri: "Agriculture Worker", job_cook: "Professional Cook", job_hospitality: "Hospitality Staff",
-
-                step_1_title: "Sign-up & Assessment", step_1_desc: "Submit passport, CV, and initial deposit.",
-                step_2_title: "Job Offer & Contract", step_2_desc: "Employer secures offer & Labor Market Test.",
-                step_3_title: "Work Permit Approval", step_3_desc: "Official authorization from National Employment Service.",
-                step_4_title: "Single Permit Submission", step_4_desc: "Submit joint application at Police/Ministry.",
-                step_5_title: "Arrival & Residence", step_5_desc: "Enter Serbia, receive 3-year Single Permit card.",
-
-                doc_cv: "Detailed CV / Resume", doc_passport: "Passport Scan", doc_exp: "Experience Certificates", doc_pcc: "Police Clearance (PCC)",
-                
-                stat_2_label: "Cost of Living",
-                
-                nav_home: "Home", nav_programs: "Programs", nav_services: "Services", nav_assess: "Free Assessment", nav_about: "About Us", nav_book: "Book Now",
-                footer_dest: "Destinations", footer_serv: "Services", footer_comp: "Company", footer_off: "Office",
-            },
-            ml: {
-                btn_language: "ഭാഷ",
-                hero_title_1: "ഭാവി സുരക്ഷിതമാക്കൂ",
-                hero_title_2: "സെർബിയയിൽ",
-                hero_subtitle: "തെക്കുകിഴക്കൻ യൂറോപ്പിലെ തന്ത്രപ്രധാനമായ ഹബ്ബ്. 3 വർഷത്തെ പുതുക്കാവുന്ന സിംഗിൾ പെർമിറ്റ്, കുറഞ്ഞ ജീവിതച്ചെലവ്.",
-                search_placeholder: "ജോലികൾ തിരയുക...",
-
-                process_kicker: "സുതാര്യത",
-                process_title: "അപേക്ഷാ ഘട്ടങ്ങൾ",
-
-                pricing_title: "പേയ്മെന്റ് പ്ലാനുകൾ",
-                plan_1_name: "ഒറ്റത്തവണ", plan_2_name: "2 തവണകൾ", plan_3_name: "3 തവണകൾ", plan_4_name: "4 തവണകൾ",
-                plan_signup: "രജിസ്റ്റർ ചെയ്യുമ്പോൾ:", plan_permit: "വർക്ക് പെർമിറ്റ്:", plan_submit: "സമർപ്പിക്കുമ്പോൾ:", plan_after: "വിസയ്ക്ക് ശേഷം:", btn_select: "തിരഞ്ഞെടുക്കുക",
-                
-                modal_salary: "പ്രതിമാസ ശമ്പളം",
-                modal_checklist: "ആവശ്യമായ രേഖകൾ",
-                modal_apply: "അപേക്ഷിക്കുക",
-                modal_close: "അടയ്ക്കുക",
-                
-                cat_all: "എല്ലാ ജോലികളും",
-                cat_logi: "ലോജിസ്റ്റിക്സ്",
-                cat_cons: "സ്കിൽഡ് ട്രേഡ്സ്",
-                cat_agri: "അഗ്രികൾച്ചർ",
-                cat_serv: "സർവീസ്",
-
-                job_truck: "ട്രക്ക് ഡ്രൈവർ", job_delivery: "ഡെലിവറി ഡ്രൈവർ", job_warehouse: "വെയർഹൗസ് സ്റ്റാഫ്", job_welder: "വെൽഡർ",
-                job_mechanic: "മെക്കാനിക്", job_agri: "അഗ്രികൾച്ചർ വർക്കർ", job_cook: "കുക്ക്", job_hospitality: "ഹോസ്പിറ്റാലിറ്റി സ്റ്റാഫ്",
-
-                step_1_title: "രജിസ്ട്രേഷൻ", step_1_desc: "പാസ്‌പോർട്ട്, സിവി എന്നിവ സമർപ്പിക്കുക.",
-                step_2_title: "ജോലി ഓഫർ", step_2_desc: "തൊഴിലുടമയിൽ നിന്ന് ഓഫർ ലെറ്റർ.",
-                step_3_title: "വർക്ക് പെർമിറ്റ്", step_3_desc: "എംപ്ലോയ്മെന്റ് സർവീസിൽ നിന്നുള്ള അനുമതി.",
-                step_4_title: "പെർമിറ്റ് സമർപ്പണം", step_4_desc: "പോലീസിൽ അപേക്ഷ സമർപ്പിക്കുക.",
-                step_5_title: "താമസം", step_5_desc: "സെർബിയയിൽ എത്തി 3 വർഷത്തെ കാർഡ് നേടുക.",
-
-                doc_cv: "ബയോഡാറ്റ (CV)", doc_passport: "പാസ്‌പോർട്ട് സ്കാൻ", doc_exp: "പ്രവൃത്തിപരിചയ സർട്ടിഫിക്കറ്റുകൾ", doc_pcc: "പോലീസ് ക്ലിയറൻസ്",
-                
-                stat_2_label: "ജീവിതച്ചെലവ്",
-                nav_home: "ഹോം", nav_programs: "പ്രോഗ്രാമുകൾ", nav_services: "സേവനങ്ങൾ", nav_assess: "സൗജന്യ മൂല്യനിർണ്ണയം", nav_about: "ഞങ്ങളെക്കുറിച്ച്", nav_book: "ഇപ്പോൾ ബുക്ക് ചെയ്യുക",
-                footer_dest: "ലക്ഷ്യസ്ഥാനങ്ങൾ", footer_serv: "സേവനങ്ങൾ", footer_comp: "കമ്പനി", footer_off: "ഓഫീസ്",
-            },
-            hi: {
-                btn_language: "भाषा",
-                hero_title_1: "भविष्य सुरक्षित करें",
-                hero_title_2: "सर्बिया में",
-                hero_subtitle: "3 साल का नवीकरणीय एकल परमिट। उच्च जीवन स्तर, कम रहने की लागत।",
-                search_placeholder: "नौकरियां खोजें...",
-
-                process_kicker: "पारदर्शिता पहले",
-                process_title: "आवेदन रोडमैप",
-
-                pricing_title: "भुगतान योजनाएं",
-                plan_1_name: "एक बार में", plan_2_name: "2 किश्तें", plan_3_name: "3 किश्तें", plan_4_name: "4 किश्तें",
-                plan_signup: "साइन-अप पर:", plan_permit: "वर्क परमिट:", plan_submit: "जमा करना:", plan_after: "वीज़ा के बाद:", btn_select: "चुनें",
-
-                modal_salary: "मासिक वेतन",
-                modal_checklist: "आवश्यक दस्तावेज",
-                modal_apply: "अभी आवेदन करें",
-                modal_close: "बंद करें",
-
-                cat_all: "सभी नौकरियां",
-                cat_logi: "लॉजिस्टिक्स",
-                cat_cons: "कुशल ट्रेड",
-                cat_agri: "कृषि",
-                cat_serv: "सेवा",
-
-                job_truck: "ट्रक चालक", job_delivery: "डिलीवरी ड्राइवर", job_warehouse: "गोदाम कर्मचारी", job_welder: "वेल्डर",
-                job_mechanic: "मैकेनिक", job_agri: "कृषि कार्यकर्ता", job_cook: "रसोइया", job_hospitality: "आतिथ्य कर्मचारी",
-
-                step_1_title: "साइन-अप", step_1_desc: "पासपोर्ट, सीवी जमा करें।",
-                step_2_title: "नौकरी की पेशकश", step_2_desc: "नियोक्ता प्रस्ताव सुरक्षित करता है।",
-                step_3_title: "वर्क परमिट", step_3_desc: "आधिकारिक प्राधिकरण।",
-                step_4_title: "जमा करना", step_4_desc: "संयुक्त आवेदन जमा करें।",
-                step_5_title: "आगमन", step_5_desc: "सर्बिया में प्रवेश करें।",
-
-                doc_cv: "सीवी / बायोडाटा", doc_passport: "पासपोर्ट स्कैन", doc_exp: "अनुभव प्रमाण पत्र", doc_pcc: "पुलिस क्लीयरेंस",
-                
-                stat_2_label: "जीवन यापन की लागत",
-                nav_home: "होम", nav_programs: "कार्यक्रम", nav_services: "सेवाएं", nav_assess: "निःशुल्क मूल्यांकन", nav_about: "हमारे बारे में", nav_book: "अभी बुक करें",
-                footer_dest: "गंतव्य", footer_serv: "सेवाएं", footer_comp: "कंपनी", footer_off: "कार्यालय",
-            }
-        };
-
-        // --- GLOBAL STATE ---
-        let currentLang = 'en';
         let currentFilter = 'All';
-        let ticking = false;
-
-        // --- FUNCTIONS ---
-        
-        // Scroll Listener for Navbar
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const nav = document.getElementById('navbar');
-                    if(nav) {
-                        if (window.scrollY > 20) {
-                            nav.classList.add('scrolled');
-                        } else {
-                            nav.classList.remove('scrolled');
-                        }
-                    }
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-        
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            if (menu.classList.contains('translate-y-full')) {
-                menu.classList.remove('translate-y-full');
-            } else {
-                menu.classList.add('translate-y-full');
-            }
-        }
-
-        function t(key) {
-            const langData = translations[currentLang];
-            const enData = translations['en'];
-            if (langData && langData[key]) {
-                return langData[key];
-            } else if (enData && enData[key]) {
-                return enData[key];
-            } else {
-                return key;
-            }
-        }
-
-        function setLanguage(lang) {
-            currentLang = lang;
-            
-            document.body.className = `antialiased min-h-screen flex flex-col relative lang-${lang}`;
-
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if(t(key)) el.innerText = t(key);
-            });
-            
-            document.querySelectorAll('[data-placeholder-i18n]').forEach(el => {
-                const key = el.getAttribute('data-placeholder-i18n');
-                if(t(key)) el.placeholder = t(key);
-            });
-
-            renderCategoryChips();
-            filterPageJobs();
-            renderTimeline();
-            
-            const dropdown = document.getElementById('language-dropdown');
-            const btn = document.getElementById('lang-toggle-btn');
-            if(dropdown) dropdown.classList.remove('show');
-            if(btn) btn.classList.remove('active');
-        }
-
-        function toggleLanguageDropdown(e) {
-            e.stopPropagation();
-            const dropdown = document.getElementById('language-dropdown');
-            const btn = document.getElementById('lang-toggle-btn');
-            dropdown.classList.toggle('show');
-            btn.classList.toggle('active');
-        }
-
-        window.onclick = function(e) {
-            if (!e.target.matches('#lang-toggle-btn') && !e.target.closest('#lang-toggle-btn')) {
-                const dropdown = document.getElementById('language-dropdown');
-                const btn = document.getElementById('lang-toggle-btn');
-                if(dropdown) dropdown.classList.remove('show');
-                if(btn) btn.classList.remove('active');
-            }
-        }
 
         function renderCategoryChips() {
             const categories = [
@@ -855,6 +974,7 @@
             ];
             
             const container = document.getElementById('categoryChips');
+            if(!container) return;
             container.innerHTML = categories.map(cat => {
                 const isActive = currentFilter === cat.id;
                 const activeClass = "bg-serbia-red text-white shadow-lg shadow-red-900/40";
@@ -870,7 +990,9 @@
         }
 
         function filterPageJobs() {
-            const query = document.getElementById('pageSearchInput').value.toLowerCase();
+            const input = document.getElementById('pageSearchInput');
+            if(!input) return;
+            const query = input.value.toLowerCase();
             const container = document.getElementById('jobContainer');
             
             const filtered = jobsData.filter(job => {
@@ -911,6 +1033,7 @@
 
         function renderTimeline() {
             const container = document.getElementById('timelineContainer');
+            if(!container) return;
             container.innerHTML = timelineData.map(item => `
                 <div class="relative pl-8 sm:pl-28 py-1 group">
                     <div class="font-bold text-white mb-1 sm:mb-0 sm:absolute sm:left-0 sm:w-20 sm:text-right sm:top-1 text-sm text-serbia-red">Step ${item.step}</div>
@@ -949,41 +1072,160 @@
             document.getElementById('jobModal').classList.add('hidden');
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Safe Lenis Init
-            if (typeof Lenis !== 'undefined') {
-                const lenis = new Lenis({ duration: 1.2, smooth: true });
-                function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-                requestAnimationFrame(raf);
-            } else {
-                document.documentElement.style.scrollBehavior = 'smooth'; 
+        // --- GLOBAL EVENT LISTENERS (SCROLL) ---
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const nav = document.getElementById('navbar');
+                    if (nav && window.scrollY > 20) {
+                        nav.classList.add('scrolled');
+                    } else if(nav) {
+                        nav.classList.remove('scrolled');
+                    }
+                    ticking = false;
+                });
+                ticking = true;
             }
+        });
 
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu.classList.contains('translate-y-full')) {
+                menu.classList.remove('translate-y-full');
+            } else {
+                menu.classList.add('translate-y-full');
+            }
+        }
+
+        // --- SEARCH LOGIC (Global) ---
+        // Basic Search Data Array (Needed for global search header functionality)
+        const searchData = [
+            { title: "Registered Nurse", type: "Job", url: "germany.html", icon: "👩‍⚕️", keywords: "health, medical, care home, germany, hospital, nurse" },
+            { title: "Truck Driver", type: "Job", url: "serbia.html", icon: "🚛", keywords: "logistics, drive, serbia, transport" },
+            { title: "Serbia", type: "Country", url: "serbia.html", icon: "🇷🇸", keywords: "balkan, europe, visa, work permit" },
+            { title: "Visa Appointment", type: "Service", url: "vfs.html", icon: "📅", keywords: "vfs, embassy, slot, booking, date" },
+            { title: "Free Assessment", type: "Tool", url: "assessment.html", icon: "📝", keywords: "check, eligibility, qualify, start" }
+        ];
+
+        let searchOverlay, searchInput, searchResults, dynamicResults, noResults;
+
+        function initSearchElements() {
+             searchOverlay = document.getElementById('search-overlay');
+             searchInput = document.getElementById('global-search-input');
+             searchResults = document.getElementById('search-results');
+             dynamicResults = document.getElementById('dynamic-results');
+             noResults = document.getElementById('no-results');
+
+            if(searchInput) {
+                 searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    if (query.length === 0) {
+                        dynamicResults.classList.add('hidden');
+                        noResults.classList.add('hidden');
+                        return;
+                    }
+                    const filtered = searchData.filter(item => 
+                        item.title.toLowerCase().includes(query) || 
+                        item.keywords.toLowerCase().includes(query) ||
+                        item.type.toLowerCase().includes(query)
+                    );
+                    renderResults(filtered, query);
+                });
+            }
+        }
+        
+        function toggleSearch() {
+            if(!searchOverlay) initSearchElements();
+            const isActive = searchOverlay.classList.contains('active');
+            if (isActive) {
+                searchOverlay.classList.remove('active');
+                document.body.style.overflow = ''; 
+            } else {
+                searchOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; 
+                setTimeout(() => searchInput.focus(), 100);
+            }
+        }
+
+        function highlightMatch(text, query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="text-highlight">$1</span>');
+        }
+
+        function renderResults(results, query) {
+            dynamicResults.innerHTML = '';
+            if (results.length === 0) {
+                dynamicResults.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+            dynamicResults.classList.remove('hidden');
+
+            results.forEach((result, index) => {
+                const div = document.createElement('a');
+                div.href = result.url;
+                div.className = "flex items-center gap-4 p-4 rounded-xl hover:bg-white/10 transition duration-200 group border border-transparent hover:border-white/5 animate-fade-in-up";
+                div.style.animationDelay = `${index * 50}ms`;
+                
+                let typeColor = "text-gray-500";
+                if(result.type === "Country") typeColor = "text-brand-gold";
+                if(result.type === "Service") typeColor = "text-brand-blue";
+                if(result.type === "Tool") typeColor = "text-brand-purple";
+                if(result.type === "Job") typeColor = "text-vfs-teal";
+
+                const highlightedTitle = highlightMatch(result.title, query);
+                const highlightedKeywords = highlightMatch(result.keywords, query);
+
+                div.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-xl shadow-inner">${result.icon}</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-white font-medium group-hover:text-brand-blue transition">${highlightedTitle}</h4>
+                            <span class="text-[10px] uppercase font-bold tracking-wider ${typeColor} bg-white/5 px-2 py-0.5 rounded border border-white/5">${result.type}</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-0.5 truncate">${highlightedKeywords}</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-gray-600 group-hover:text-white transition transform group-hover:translate-x-1"></i>
+                `;
+                dynamicResults.appendChild(div);
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                toggleSearch();
+            }
+            if (e.key === 'Escape' && searchOverlay && searchOverlay.classList.contains('active')) {
+                toggleSearch();
+            }
+        });
+
+        // --- INIT ---
+        window.onload = function() {
+            initSmoothScroll();
+            initSearchElements();
+            
+            // Serbia Specific Inits
             renderCategoryChips();
             renderTimeline();
             filterPageJobs();
             
-            // Re-trigger animations for Pricing since we kept old HTML
-            const observer = new IntersectionObserver((entries) => {
+            // Re-trigger animations
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 }; 
+            const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('active'); // Ensure 'active' triggers opacity 1 if CSS supports it
-                        // Or manually adding animation classes if needed, 
-                        // but Serbia pricing used .reveal-item which depends on specific CSS not present in Poland base.
-                        // We'll add a simple fade-in fallback.
-                        entry.target.style.opacity = 1;
-                        entry.target.style.transform = 'translateY(0)';
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
                     }
                 });
-            });
-            document.querySelectorAll('.reveal-item').forEach(el => {
-                el.style.opacity = 0;
-                el.style.transform = 'translateY(20px)';
-                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                observer.observe(el);
-            });
-        });
-
+            }, observerOptions);
+            document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+        };
     </script>
 </body>
 </html>
