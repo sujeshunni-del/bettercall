@@ -6,22 +6,25 @@
     <title>Croatia Program | Better Call Immigration</title>
     <meta name="description" content="Work in Croatia. Opportunities for skilled workers with Gulf experience.">
     
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
     
+    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
+    <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
     
+    <!-- Tailwind Configuration -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Outfit', 'Noto Sans Devanagari', 'Noto Sans Malayalam', 'Noto Sans Tamil', 'sans-serif'],
+                        sans: ['Outfit', 'Noto Sans Devanagari', 'Noto Sans Malayalam', 'Noto Sans Tamil', 'Noto Sans Sinhala', 'sans-serif'],
                         serif: ['Outfit', 'sans-serif'], 
                     },
                     colors: {
@@ -32,7 +35,6 @@
                         'brand-gold': '#FFD700',
                         'brand-white': '#FFFFFF',
                         'vfs-teal': '#14B8A6',
-                        // Croatia Specific Accents (Red/Blue)
                         'croatia-red': '#FF0000',
                         'croatia-blue': '#171796',
                     },
@@ -61,6 +63,7 @@
         }
     </script>
 
+    <!-- Custom CSS -->
     <style>
         body {
             background-color: #050B14;
@@ -70,33 +73,29 @@
             font-size: 16px;
         }
 
-        /* --- LENIS SMOOTH SCROLL CSS --- */
+        /* Lenis Smooth Scroll */
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
         .lenis.lenis-stopped { overflow: hidden; }
         .lenis.lenis-scrolling iframe { pointer-events: none; }
 
-        /* Ambient Background */
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050B14; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Background Ambience */
         .ambient-light {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-            transform: translateZ(0); 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden; transform: translateZ(0); 
         }
         .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.25;
-            will-change: transform; 
+            position: absolute; border-radius: 50%; filter: blur(100px);
+            opacity: 0.25; will-change: transform; 
         }
-        /* Croatia Colors (Red/Blue/White) */
         .orb-1 { top: -15%; left: -10%; width: 50vw; height: 50vw; background: #FF0000; animation: float 14s infinite; opacity: 0.15; }
         .orb-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #171796; animation: float 16s infinite reverse; opacity: 0.15; }
         .orb-3 { top: 40%; left: 30%; width: 35vw; height: 35vw; background: #FFFFFF; opacity: 0.05; animation: float 20s infinite; }
@@ -104,8 +103,7 @@
         /* Glass Components */
         .glass-panel {
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -117,144 +115,103 @@
             box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
         }
         .dropdown-glass {
-            background: rgba(15, 23, 42, 0.7); 
-            backdrop-filter: blur(24px);       
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
         }
+        
+        /* Navigation */
         .floating-nav {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 100px;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 100px;
             box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-            transform: translateZ(0); 
+            transition: all 0.3s ease; transform: translateZ(0); 
         }
         .floating-nav.scrolled {
-            background: rgba(15, 23, 42, 0.9);
-            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(15, 23, 42, 0.9); border-color: rgba(255, 255, 255, 0.15);
             box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
         }
         .dropdown-menu {
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
+            opacity: 0; visibility: hidden; transform: translateY(10px);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .group:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        
+        .group:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
         /* Search Components */
-        #search-overlay {
-            opacity: 0; visibility: hidden; transition: all 0.3s ease;
-        }
+        #search-overlay { opacity: 0; visibility: hidden; transition: all 0.3s ease; }
         #search-overlay.active { opacity: 1; visibility: visible; }
-        #search-container {
-            transform: scale(0.95);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        #search-container { transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         #search-overlay.active #search-container { transform: scale(1); }
         .text-highlight {
-            color: #3B82F6;
-            font-weight: 700;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 2px;
-            padding: 0 1px;
+            color: #3B82F6; font-weight: 700; background: rgba(59, 130, 246, 0.1);
+            border-radius: 2px; padding: 0 1px;
         }
+        .search-glow:focus-within { box-shadow: 0 0 30px rgba(255, 0, 0, 0.3); }
 
-        /* Gold Gradient Border for Best Value Card (Croatia Specific) */
+        /* Cards & Borders */
         .gold-border-gradient {
-            position: relative;
-            background: rgba(20, 20, 30, 0.6);
-            border-radius: 1rem;
-            z-index: 1;
+            position: relative; background: rgba(20, 20, 30, 0.6); border-radius: 1rem; z-index: 1;
         }
         .gold-border-gradient::before {
-            content: "";
-            position: absolute;
-            inset: -1px;
-            border-radius: 1rem;
-            padding: 1px;
+            content: ""; position: absolute; inset: -1px; border-radius: 1rem; padding: 1px;
             background: linear-gradient(45deg, #FF0000, #FFD700, #171796); 
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            z-index: -1;
+            -webkit-mask-composite: xor; mask-composite: exclude; z-index: -1;
         }
 
-        /* Smooth Scroll Reveal Classes */
-        .reveal-item {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1), transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform;
-        }
-        .reveal-item.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050B14; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Floating Language Button (From Template) */
+        /* Language Fab */
         .lang-fab-new { position: fixed; bottom: 2rem; left: 2rem; z-index: 50; }
         .lang-toggle-btn {
-            background: rgba(5, 11, 20, 0.7);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            background: rgba(5, 11, 20, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1); color: #E2E8F0;
-            padding: 0.75rem 1.25rem; border-radius: 9999px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            display: flex; align-items: center; gap: 0.75rem; cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 0.75rem 1.25rem; border-radius: 9999px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex; align-items: center; gap: 0.75rem; cursor: pointer; transition: all 0.3s ease;
         }
         .lang-toggle-btn:hover { background: rgba(5, 11, 20, 0.9); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); }
         .lang-toggle-btn.active .fa-chevron-up { transform: rotate(180deg); }
-        
         .language-dropdown {
             position: absolute; bottom: 100%; left: 0; margin-bottom: 1rem; width: 12rem;
             background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(16px); padding: 0.5rem; border-radius: 1rem;
-            display: flex; flex-direction: column; gap: 0.5rem;
-            opacity: 0; visibility: hidden; transform: scale(0.9); transform-origin: bottom left; 
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex; flex-direction: column; gap: 0.5rem; opacity: 0; visibility: hidden;
+            transform: scale(0.9); transform-origin: bottom left; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .lang-toggle-btn.active + .language-dropdown { opacity: 1; visibility: visible; transform: scale(1); }
+        
         .lang-option {
-            padding: 0.5rem 1rem; color: #e2e8f0; font-size: 0.875rem;
-            border-radius: 0.5rem; cursor: pointer; transition: background 0.2s;
-            display: flex; align-items: center; gap: 0.5rem; text-align: left;
+            padding: 0.75rem 1rem; color: #e2e8f0; font-size: 0.875rem; border-radius: 0.5rem; 
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; 
+            justify-content: space-between; gap: 0.5rem; text-align: left; width: 100%;
         }
         .lang-option:hover { background: rgba(255, 255, 255, 0.1); color: #3B82F6; }
         .lang-option.active { background: rgba(59, 130, 246, 0.2); color: #3B82F6; font-weight: 600; }
 
-        /* --- MODAL STYLES --- */
-        .modal-backdrop {
-            background: rgba(5, 11, 20, 0.85);
-            backdrop-filter: blur(12px);
+        /* Mobile Elements */
+        .lang-option-mobile, .dest-option-mobile {
+            width: 100%; text-align: left; padding: 0.75rem; border-radius: 1rem; 
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #E2E8F0; font-size: 0.75rem; font-weight: 700;
+            display: flex; align-items: center; gap: 0.5rem; transition: background 0.3s;
         }
-        .modal-content {
-            background: #0F172A;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .lang-option-mobile:hover, .dest-option-mobile:hover {
+            background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);
         }
+
+        /* Modal */
+        .modal-backdrop { background: rgba(5, 11, 20, 0.85); backdrop-filter: blur(12px); }
+        .modal-content { background: #0F172A; border: 1px solid rgba(255, 255, 255, 0.1); }
         
-        /* Search Animation */
-        .search-glow:focus-within {
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        /* Reveal Animations */
+        .reveal-item {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1), transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
         }
+        .reveal-item.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col relative" id="page-body">
 
+    <!-- Background -->
     <div class="ambient-light">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -262,7 +219,7 @@
     </div>
 
     <main class="flex-grow">
-        
+        <!-- Hero Section -->
         <header class="relative min-h-[70vh] flex flex-col items-center justify-center pt-32 pb-8 overflow-hidden z-20">
             <div class="container mx-auto px-4 relative z-10 text-center flex flex-col items-center justify-center h-full">
                 
@@ -288,7 +245,6 @@
                             <i class="fa-solid fa-arrow-down group-hover:translate-y-1 transition-transform"></i>
                         </span>
                     </a>
-                    
                     <a href="#process" class="w-full sm:w-auto glass-panel px-10 py-4 rounded-full font-bold text-white text-lg hover:bg-white/10 border-white/10 transition-all flex items-center justify-center gap-3 group tracking-wide uppercase">
                         <span data-i18n="btn_req">Process & Plans</span>
                         <i class="fa-solid fa-list-check text-brand-gold group-hover:scale-110 transition-transform"></i>
@@ -297,28 +253,28 @@
             </div>
         </header>
 
+        <!-- Category Filter -->
         <div id="category-filter-section" class="py-6 pt-12 relative z-20">
             <div class="container mx-auto px-4">
                 <div class="max-w-7xl mx-auto mb-6">
                     <h3 class="text-xl md:text-2xl font-bold text-white mb-4 text-center" data-i18n="select_department">Select Job Department</h3>
                 </div>
                 <div class="flex overflow-x-auto justify-center gap-3 max-w-7xl mx-auto pb-4 md:pb-0 hide-scrollbar snap-x px-1" id="categoryButtons">
-                    </div>
+                    <!-- Injected by JS -->
+                </div>
             </div>
         </div>
         
+        <!-- Job Search -->
         <div class="py-6 relative z-30">
             <div class="container mx-auto px-4">
                 <div class="max-w-2xl mx-auto relative group">
                     <div class="absolute inset-0 bg-gradient-to-r from-croatia-red via-white to-croatia-blue rounded-full blur opacity-20 group-hover:opacity-40 transition duration-700"></div>
-                    
                     <div class="relative glass-panel rounded-full flex items-center px-6 py-4 shadow-2xl border border-white/10 search-glow transition-all duration-300 bg-[#0B132B]/60 backdrop-blur-xl">
                         <i class="fa-solid fa-magnifying-glass text-croatia-red text-xl mr-4 group-focus-within:scale-110 transition-transform"></i>
                         <input type="text" id="jobSearchInput" placeholder="Search positions (e.g. Driver, Mason, Welder)..." 
                             class="bg-transparent border-none outline-none text-white w-full text-lg placeholder-gray-500 font-medium focus:ring-0"
-                            autocomplete="off"
-                            onkeyup="handleSearch(this.value)">
-                        
+                            autocomplete="off" onkeyup="handleSearch(this.value)">
                         <div class="hidden group-focus-within:block absolute right-6">
                              <span class="relative flex h-3 w-3">
                               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-croatia-red opacity-75"></span>
@@ -331,13 +287,16 @@
             </div>
         </div>
 
+        <!-- Job Listings -->
         <section id="jobs" class="py-12 relative z-20">
             <div class="container mx-auto px-4 relative z-10">
                 <div id="jobContainer" class="flex flex-col gap-16 max-w-7xl mx-auto">
-                    </div>
+                    <!-- Injected by JS -->
+                </div>
             </div>
         </section>
 
+        <!-- Process Timeline -->
         <section id="process" class="py-20 relative bg-transparent border-t border-white/5">
             <div class="container mx-auto px-4">
                 <div class="max-w-4xl mx-auto text-center mb-20 reveal-item">
@@ -345,13 +304,15 @@
                     <h2 class="text-4xl md:text-6xl font-bold text-white mb-4" data-i18n="section_process_title">Your Journey</h2>
                     <p class="text-xl text-gray-400" data-i18n="section_process_subtitle">Standard processing time: 3 - 4 months.</p>
                 </div>
-
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 relative">
-                    <div id="timelineContainer" class="col-span-1 lg:col-span-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+                    <div id="timelineContainer" class="col-span-1 lg:col-span-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Injected by JS -->
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- Pricing Plans -->
         <section id="pricing" class="py-20 relative z-20 bg-[#0B1120]/50 backdrop-blur-sm border-t border-white/5">
             <div class="container mx-auto px-4">
                 <div class="max-w-3xl mx-auto text-center mb-16 reveal-item">
@@ -360,7 +321,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    
+                    <!-- Plan 1 -->
                     <div class="gold-border-gradient p-[1px] reveal-item transform transition-all duration-300 hover:-translate-y-2">
                          <div class="bg-[#0B1120] rounded-2xl p-5 md:p-8 h-full flex flex-col relative overflow-hidden">
                             <div class="absolute top-0 right-0 w-32 h-32 bg-croatia-red/20 rounded-full blur-[50px] pointer-events-none"></div>
@@ -377,7 +338,7 @@
                             <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1178/ONKRVGY7PR82ILGLC1" class="block text-center w-full bg-croatia-red text-white font-bold py-4 rounded-xl hover:bg-red-700 transition-all shadow-lg shadow-red-500/20 uppercase tracking-wide text-sm">Select Plan</a>
                         </div>
                     </div>
-
+                    <!-- Plan 2 -->
                     <div class="glass-panel p-5 md:p-8 rounded-2xl flex flex-col reveal-item transform transition-all duration-300 hover:-translate-y-2 hover:border-croatia-blue/30" style="transition-delay: 100ms;">
                         <h4 class="text-lg md:text-xl font-bold text-white mb-4">2 Installments</h4>
                         <div class="text-3xl md:text-4xl font-bold text-white mb-2">€ 2,700</div>
@@ -388,7 +349,7 @@
                         </ul>
                         <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1178/ONKRVGY7PR82ILGLC1" class="block text-center w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl transition border border-white/10 uppercase tracking-wide text-sm">Select Plan</a>
                     </div>
-
+                    <!-- Plan 3 -->
                     <div class="glass-panel p-5 md:p-8 rounded-2xl flex flex-col reveal-item transform transition-all duration-300 hover:-translate-y-2 hover:border-croatia-blue/30" style="transition-delay: 200ms;">
                         <h4 class="text-lg md:text-xl font-bold text-white mb-4">3 Installments</h4>
                         <div class="text-3xl md:text-4xl font-bold text-white mb-2">€ 3,000</div>
@@ -400,7 +361,7 @@
                         </ul>
                         <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1178/ONKRVGY7PR82ILGLC1" class="block text-center w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl transition border border-white/10 uppercase tracking-wide text-sm">Select Plan</a>
                     </div>
-
+                    <!-- Plan 4 -->
                     <div class="glass-panel p-5 md:p-8 rounded-2xl flex flex-col reveal-item transform transition-all duration-300 hover:-translate-y-2 hover:border-croatia-blue/30" style="transition-delay: 300ms;">
                         <div class="flex justify-between items-start mb-6">
                             <h4 class="text-lg md:text-xl font-bold text-white">4 Installments</h4>
@@ -416,45 +377,31 @@
                         </ul>
                         <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1178/ONKRVGY7PR82ILGLC1" class="block text-center w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl transition border border-white/10 uppercase tracking-wide text-sm">Select Plan</a>
                     </div>
-
                 </div>
             </div>
         </section>
-
     </main>
     
-    <div class="lang-fab-new">
+    <!-- DESKTOP Floating Language -->
+    <div class="lang-fab-new hidden md:block">
         <div id="lang-toggle-btn" onclick="toggleLanguageDropdown(event)" class="lang-toggle-btn">
             <i class="fa-solid fa-globe text-xl text-brand-gold transition-colors"></i>
             <span class="font-bold text-sm uppercase tracking-wider hidden sm:block">Language</span>
             <i class="fa-solid fa-chevron-up text-xs opacity-70 transition-transform duration-300"></i>
         </div>
         <div id="language-dropdown" class="language-dropdown">
-            <button onclick="setLanguage('en', this);" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-albania-red hover:text-white transition flex items-center justify-between group">
-                    <span>English</span> <span class="text-xs text-gray-500 group-hover:text-white/80">EN</span>
-                </button>
-                <button onclick="setLanguage('ml', this);" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-albania-red hover:text-white transition flex items-center justify-between group font-['Noto_Sans_Malayalam']">
-                    <span>മലയാളം</span> <span class="text-xs text-gray-500 group-hover:text-white/80">ML</span>
-                </button>
-                <button onclick="setLanguage('hi', this);" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-albania-red hover:text-white transition flex items-center justify-between group">
-                    <span>हिंदी</span> <span class="text-xs text-gray-500 group-hover:text-white/80">HI</span>
-                </button>
-                <button onclick="setLanguage('ta', this);" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-albania-red hover:text-white transition flex items-center justify-between group font-['Noto_Sans_Tamil']">
-                    <span>தமிழ்</span> <span class="text-xs text-gray-500 group-hover:text-white/80">TA</span>
-                </button>
-                <button onclick="setLanguage('fil', this);" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-albania-red hover:text-white transition flex items-center justify-between group">
-                    <span>Filipino</span> <span class="text-xs text-gray-500 group-hover:text-white/80">FIL</span>
-                </button>
-                <button onclick="setLanguage('si', this);" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-albania-red hover:text-white transition flex items-center justify-between group font-['Noto_Sans_Sinhala']">
-                    <span>සිංහල</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SI</span>
-                </button>
-                <button onclick="setLanguage('sw', this);" class="px-4 py-3 rounded-lg text-sm text-white hover:bg-albania-red hover:text-white transition flex items-center justify-between group">
-                    <span>Swahili</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SW</span>
-                </button>
+            <button onclick="setLanguage('en', this);" class="lang-option active"><span>English</span> <span class="text-xs text-gray-500 group-hover:text-white/80">EN</span></button>
+            <button onclick="setLanguage('ml', this);" class="lang-option font-['Noto_Sans_Malayalam']"><span>മലയാളം</span> <span class="text-xs text-gray-500 group-hover:text-white/80">ML</span></button>
+            <button onclick="setLanguage('hi', this);" class="lang-option"><span>हिंदी</span> <span class="text-xs text-gray-500 group-hover:text-white/80">HI</span></button>
+            <button onclick="setLanguage('ta', this);" class="lang-option font-['Noto_Sans_Tamil']"><span>தமிழ்</span> <span class="text-xs text-gray-500 group-hover:text-white/80">TA</span></button>
+            <button onclick="setLanguage('fil', this);" class="lang-option"><span>Filipino</span> <span class="text-xs text-gray-500 group-hover:text-white/80">FIL</span></button>
+            <button onclick="setLanguage('si', this);" class="lang-option font-['Noto_Sans_Sinhala']"><span>සිංහල</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SI</span></button>
+            <button onclick="setLanguage('sw', this);" class="lang-option"><span>Swahili</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SW</span></button>
         </div>
     </div>
 
-    <div class="fixed bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs px-4 sm:px-0 flex justify-center pointer-events-none">
+    <!-- DESKTOP Apply Button -->
+    <div class="fixed bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs px-4 sm:px-0 justify-center pointer-events-none hidden md:flex">
         <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1178/ONKRVGY7PR82ILGLC1" class="pointer-events-auto relative group bg-gradient-to-r from-croatia-red to-croatia-blue text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full shadow-[0_0_30px_rgba(255,0,0,0.5)] hover:shadow-[0_0_50px_rgba(255,0,0,0.8)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 overflow-hidden flex items-center gap-3 border border-white/20">
             <span class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
             <span class="relative z-10 text-sm md:text-lg tracking-widest uppercase" data-i18n="modal_apply">Apply Now</span>
@@ -463,18 +410,85 @@
         </a>
     </div>
 
-    <div class="fixed bottom-8 right-8 z-50">
+    <!-- DESKTOP Whatsapp -->
+    <div class="fixed bottom-8 right-8 z-50 hidden md:block">
         <a href="https://wa.me/971503666382" target="_blank" class="bg-[#25D366] text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-110 group animate-pulse" rel="noopener noreferrer">
             <i class="fa-brands fa-whatsapp text-3xl md:text-4xl"></i>
         </a>
     </div>
+    
+    <!-- MOBILE DOCK -->
+    <div class="fixed bottom-6 left-4 right-4 z-50 md:hidden animate-fade-in-up">
+        <div class="glass-panel !bg-[#0F172A]/90 backdrop-blur-2xl p-2 rounded-full shadow-2xl border border-white/10 flex justify-between items-center gap-2 relative z-50">
+            <a href="index.html" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-3 rounded-full hover:bg-blue-500/10 text-gray-400 hover:text-blue-400 transition-all active:scale-95">
+                <i class="fa-solid fa-house text-lg mb-0.5 text-blue-400 transition-colors"></i>
+                <span class="text-[8px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Home</span>
+            </a>
+            <button onclick="toggleMobileLanguage()" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-3 rounded-full hover:bg-purple-500/10 text-gray-400 hover:text-purple-400 transition-all active:scale-95">
+                <i class="fa-solid fa-language text-lg mb-0.5 text-purple-400"></i>
+                <span class="text-[8px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Lang</span>
+            </button>
+            <button onclick="toggleMobileDestinations()" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-3 rounded-full hover:bg-amber-500/10 text-gray-400 hover:text-amber-400 transition-all active:scale-95">
+                <i class="fa-solid fa-earth-europe text-lg mb-0.5 text-amber-400"></i>
+                <span class="text-[8px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Explore</span>
+            </button>
+            <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1178/ONKRVGY7PR82ILGLC1" target="_blank" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-3 rounded-full bg-gradient-to-b from-croatia-red to-red-700 text-white shadow-lg shadow-red-900/40 transition-all active:scale-95 hover:brightness-110">
+                <i class="fa-solid fa-paper-plane text-lg mb-0.5"></i>
+                <span class="text-[8px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Apply</span>
+            </a>
+            <a href="https://wa.me/971503666382" target="_blank" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-3 rounded-full bg-gradient-to-b from-green-500 to-green-700 text-white shadow-lg shadow-green-900/40 transition-all active:scale-95 hover:brightness-110">
+                <i class="fa-brands fa-whatsapp text-xl mb-0.5"></i>
+                <span class="text-[8px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Chat</span>
+            </a>
+        </div>
 
+        <!-- Mobile Language Menu -->
+        <div id="mobile-language-menu" class="absolute bottom-[calc(100%+16px)] left-0 w-full p-4 rounded-[2rem] bg-[#0F172A]/95 backdrop-blur-xl border border-white/10 shadow-2xl opacity-0 invisible transition-all duration-300 transform translate-y-10 origin-bottom z-40">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-white/10">
+                <span class="text-sm font-bold text-white uppercase tracking-widest pl-2">Select Language</span>
+                <button onclick="toggleMobileLanguage()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="grid grid-cols-1 gap-2 max-h-[40vh] overflow-y-auto custom-scrollbar">
+                <button onclick="setLanguage('en', this); toggleMobileLanguage()" class="lang-option group active"><span>English</span> <span class="text-xs text-gray-500 group-hover:text-white/80">EN</span></button>
+                <button onclick="setLanguage('ml', this); toggleMobileLanguage()" class="lang-option group font-['Noto_Sans_Malayalam']"><span>മലയാളം</span> <span class="text-xs text-gray-500 group-hover:text-white/80">ML</span></button>
+                <button onclick="setLanguage('hi', this); toggleMobileLanguage()" class="lang-option group"><span>हिंदी</span> <span class="text-xs text-gray-500 group-hover:text-white/80">HI</span></button>
+                <button onclick="setLanguage('ta', this); toggleMobileLanguage()" class="lang-option group font-['Noto_Sans_Tamil']"><span>தமிழ்</span> <span class="text-xs text-gray-500 group-hover:text-white/80">TA</span></button>
+                <button onclick="setLanguage('si', this); toggleMobileLanguage()" class="lang-option group font-['Noto_Sans_Sinhala']"><span>සිංහල</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SI</span></button>
+                <button onclick="setLanguage('fil', this); toggleMobileLanguage()" class="lang-option group"><span>Filipino</span> <span class="text-xs text-gray-500 group-hover:text-white/80">FIL</span></button>
+                <button onclick="setLanguage('sw', this); toggleMobileLanguage()" class="lang-option group"><span>Swahili</span> <span class="text-xs text-gray-500 group-hover:text-white/80">SW</span></button>
+            </div>
+        </div>
+
+        <!-- Mobile Destinations Menu -->
+        <div id="mobile-destinations-menu" class="absolute bottom-[calc(100%+16px)] left-0 w-full p-4 rounded-[2rem] bg-[#0F172A]/95 backdrop-blur-xl border border-white/10 shadow-2xl opacity-0 invisible transition-all duration-300 transform translate-y-10 origin-bottom z-40">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-white/10">
+                <span class="text-sm font-bold text-white uppercase tracking-widest pl-2">Select Country</span>
+                <button onclick="toggleMobileDestinations()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="grid grid-cols-1 gap-3 max-h-[40vh] overflow-y-auto custom-scrollbar">
+                <a href="germany.html" class="dest-option-mobile"><span class="text-xl">🇩🇪</span> <span class="text-xs font-bold text-gray-300">Germany</span></a>
+                <a href="sweden.html" class="dest-option-mobile"><span class="text-xl">🇸🇪</span> <span class="text-xs font-bold text-gray-300">Sweden</span></a>
+                <a href="finland.html" class="dest-option-mobile"><span class="text-xl">🇫🇮</span> <span class="text-xs font-bold text-gray-300">Finland</span></a>
+                <a href="italy.html" class="dest-option-mobile"><span class="text-xl">🇮🇹</span> <span class="text-xs font-bold text-gray-300">Italy</span></a>
+                <a href="france.html" class="dest-option-mobile"><span class="text-xl">🇫🇷</span> <span class="text-xs font-bold text-gray-300">France</span></a>
+                <a href="netherlands.html" class="dest-option-mobile"><span class="text-xl">🇳🇱</span> <span class="text-xs font-bold text-gray-300">Netherlands</span></a>
+                <a href="poland.html" class="dest-option-mobile"><span class="text-xl">🇵🇱</span> <span class="text-xs font-bold text-gray-300">Poland</span></a>
+                <a href="czech.html" class="dest-option-mobile"><span class="text-xl">🇨🇿</span> <span class="text-xs font-bold text-gray-300">Czech Republic</span></a>
+                <a href="latvia.html" class="dest-option-mobile"><span class="text-xl">🇱🇻</span> <span class="text-xs font-bold text-gray-300">Latvia</span></a>
+                <a href="croatia.html" class="dest-option-mobile border-croatia-red/50 bg-croatia-red/10"><span class="text-xl">🇭🇷</span> <span class="text-xs font-bold text-croatia-red">Croatia</span></a>
+                <a href="serbia.html" class="dest-option-mobile"><span class="text-xl">🇷🇸</span> <span class="text-xs font-bold text-gray-300">Serbia</span></a>
+                <a href="macedonia.html" class="dest-option-mobile"><span class="text-xl">🇲🇰</span> <span class="text-xs font-bold text-gray-300">Macedonia</span></a>
+                <a href="albania.html" class="dest-option-mobile"><span class="text-xl">🇦🇱</span> <span class="text-xs font-bold text-gray-300">Albania</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Details Modal -->
     <div id="jobModal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="fixed inset-0 modal-backdrop transition-opacity" onclick="closeModal()"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
                 <div class="relative transform overflow-hidden rounded-3xl modal-content text-left shadow-2xl transition-all w-full max-w-2xl border border-croatia-red/30">
-                    
                     <div class="bg-gradient-to-r from-croatia-red to-[#001F4D] px-8 py-8 border-b border-white/10 relative">
                         <button onclick="closeModal()" class="absolute top-6 right-6 text-white/70 hover:text-white transition bg-white/10 rounded-full w-10 h-10 flex items-center justify-center hover:bg-white/20"><i class="fa-solid fa-xmark text-xl"></i></button>
                         <div class="flex gap-6 items-center">
@@ -485,7 +499,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="px-8 py-8 bg-[#0B1120] text-gray-300 max-h-[60vh] overflow-y-auto custom-scrollbar">
                         <div class="flex items-center justify-between p-6 bg-white/5 rounded-2xl mb-8 border border-white/5">
                             <div>
@@ -497,12 +510,10 @@
                                 <span id="modalExp" class="text-lg font-semibold text-brand-gold"></span>
                             </div>
                         </div>
-
                          <div class="bg-red-900/20 p-4 rounded-xl border border-red-500/20 mb-8">
                             <span class="block text-croatia-red text-xs uppercase mb-2 font-bold" data-i18n="modal_critical">Critical Requirement</span>
                             <span class="text-white text-lg font-bold flex items-center gap-3"><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="modal_gulf_exp">Must have Gulf Experience</span></span>
                         </div>
-
                         <div class="mb-8">
                             <h4 class="text-sm font-bold text-brand-blue uppercase tracking-widest mb-4" data-i18n="modal_benefits">Benefits</h4>
                             <div class="grid grid-cols-2 gap-4 text-base text-gray-300">
@@ -512,14 +523,11 @@
                                 <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg text-lg md:text-base"><i class="fa-solid fa-briefcase-medical text-croatia-blue text-xl"></i> <span data-i18n="benefit_med">Medical Ins.</span></div>
                             </div>
                         </div>
-
                         <div>
                             <h4 class="text-sm font-bold text-brand-blue uppercase tracking-widest mb-4" data-i18n="modal_docs">Required Documents</h4>
-                            <div id="modalDocs" class="space-y-3">
-                                </div>
+                            <div id="modalDocs" class="space-y-3"></div>
                         </div>
                     </div>
-
                     <div class="bg-black/30 px-8 py-6 flex flex-col sm:flex-row gap-4 border-t border-white/10">
                          <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1178/ONKRVGY7PR82ILGLC1" class="w-full text-center bg-croatia-red hover:bg-red-700 text-white font-bold text-lg py-4 rounded-xl transition shadow-lg shadow-red-500/20 uppercase tracking-wide" data-i18n="modal_apply">Apply Now</a>
                     </div>
@@ -528,8 +536,11 @@
         </div>
     </div>
 
+    <!-- MAIN LOGIC -->
     <script>
-        // --- TRANSLATION DATA ---
+        /* -------------------------------------------------------------------------- */
+        /* 1. DATA CONSTANTS                                                          */
+        /* -------------------------------------------------------------------------- */
         const translations = {
             en: {
                 nav_home: "Home", nav_programs: "Programs", nav_services: "Services", nav_assessment: "Free Assessment", nav_about: "About Us", nav_book: "Book Now",
@@ -537,18 +548,13 @@
                 footer_destinations: "Destinations", footer_services: "Services", footer_company: "Company", footer_office: "Office",
                 footer_story: "Our Story", footer_privacy: "Privacy Policy", footer_terms: "Terms of Service", footer_rights: "All rights reserved.",
                 hero_badge: "Gulf Experience Required",
-                hero_title_1: "We Are Hiring in",
-                hero_title_2: "CROATIA",
+                hero_title_1: "We Are Hiring in", hero_title_2: "CROATIA",
                 hero_subtitle: "Excellent opportunities for skilled workers in Construction & Logistics. <br class='hidden md:block'>Food & Accommodation provided by the company. ",
-                btn_view_jobs: "View Positions",
-                btn_req: "Process & Plans",
+                btn_view_jobs: "View Positions", btn_req: "Process & Plans",
                 select_department: "Select Job Department",
                 cat_all: "All Jobs", cat_logistics: "Logistics", cat_construction: "Construction",
-                section_process_badge: "Process",
-                section_process_title: "Your Journey",
-                section_process_subtitle: "Standard processing time: 3 - 4 months.",
-                section_pricing_badge: "Investment",
-                section_pricing_title: "Transparent Pricing",
+                section_process_badge: "Process", section_process_title: "Your Journey", section_process_subtitle: "Standard processing time: 3 - 4 months.",
+                section_pricing_badge: "Investment", section_pricing_title: "Transparent Pricing",
                 modal_salary: "Monthly Salary", modal_experience: "Experience", modal_benefits: "Benefits", modal_critical: "Critical Requirement", modal_gulf_exp: "Must have Gulf Experience", modal_docs: "Required Documents", modal_apply: "Apply Now",
                 benefit_acc: "Accommodation", benefit_food: "Food Provided", benefit_air: "Transport", benefit_med: "Medical Ins.",
                 step_01_title: "Registration", step_01_desc: "Submit Passport, Photo, CV, and Experience Certificate.",
@@ -565,18 +571,13 @@
                 footer_destinations: "गंतव्य", footer_services: "सेवाएं", footer_company: "कंपनी", footer_office: "कार्यालय",
                 footer_story: "हमारी कहानी", footer_privacy: "गोपनीयता नीति", footer_terms: "सेवा की शर्तें", footer_rights: "सर्वाधिकार सुरक्षित।",
                 hero_badge: "गल्फ अनुभव आवश्यक",
-                hero_title_1: "हम भर्ती कर रहे हैं",
-                hero_title_2: "क्रोएशिया",
+                hero_title_1: "हम भर्ती कर रहे हैं", hero_title_2: "क्रोएशिया",
                 hero_subtitle: "कुशल श्रमिकों के लिए उत्कृष्ट अवसर। <br class='hidden md:block'>कंपनी द्वारा भोजन और आवास प्रदान किया गया।",
-                btn_view_jobs: "नौकरियां देखें",
-                btn_req: "प्रक्रिया और योजनाएं",
+                btn_view_jobs: "नौकरियां देखें", btn_req: "प्रक्रिया और योजनाएं",
                 select_department: "नौकरी विभाग चुनें",
                 cat_all: "सभी नौकरियां", cat_logistics: "लॉजिस्टिक्स", cat_construction: "निर्माण",
-                section_process_badge: "प्रक्रिया",
-                section_process_title: "आपकी यात्रा",
-                section_process_subtitle: "मानक प्रसंस्करण समय: 3 - 4 महीने।",
-                section_pricing_badge: "निवेश",
-                section_pricing_title: "पारदर्शी मूल्य निर्धारण",
+                section_process_badge: "प्रक्रिया", section_process_title: "आपकी यात्रा", section_process_subtitle: "मानक प्रसंस्करण समय: 3 - 4 महीने।",
+                section_pricing_badge: "निवेश", section_pricing_title: "पारदर्शी मूल्य निर्धारण",
                 modal_salary: "वेतन दर", modal_experience: "अनुभव", modal_benefits: "लाभ", modal_critical: "महत्वपूर्ण आवश्यकता", modal_gulf_exp: "गल्फ अनुभव होना चाहिए", modal_docs: "आवश्यक दस्तावेज", modal_apply: "अभी आवेदन करें",
                 benefit_acc: "आवास", benefit_food: "भोजन उपलब्ध", benefit_air: "परिवहन", benefit_med: "चिकित्सा बीमा",
                 step_01_title: "पंजीकरण", step_01_desc: "पासपोर्ट, फोटो, सीवी और अनुभव प्रमाण पत्र जमा करें।",
@@ -593,18 +594,13 @@
                 footer_destinations: "ലക്ഷ്യസ്ഥാനങ്ങൾ", footer_services: "സേവനങ്ങൾ", footer_company: "കമ്പനി", footer_office: "ഓഫീസ്",
                 footer_story: "ഞങ്ങളുടെ കഥ", footer_privacy: "സ്വകാര്യതാ നയം", footer_terms: "സേവന നിബന്ധനകൾ", footer_rights: "എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം.",
                 hero_badge: "ഗൾഫ് പരിചയം നിർബന്ധം",
-                hero_title_1: "ഞങ്ങൾ റിക്രൂട്ട് ചെയ്യുന്നു",
-                hero_title_2: "ക്രൊയേഷ്യ",
+                hero_title_1: "ഞങ്ങൾ റിക്രൂട്ട് ചെയ്യുന്നു", hero_title_2: "ക്രൊയേഷ്യ",
                 hero_subtitle: "വിദഗ്ധ തൊഴിലാളികൾക്ക് മികച്ച അവസരങ്ങൾ. <br class='hidden md:block'>ഭക്ഷണവും താമസവും കമ്പനി നൽകുന്നു.",
-                btn_view_jobs: "തൊഴിലുകൾ കാണുക",
-                btn_req: "പ്രക്രിയ",
+                btn_view_jobs: "തൊഴിലുകൾ കാണുക", btn_req: "പ്രക്രിയ",
                 select_department: "തൊഴിൽ വിഭാഗം തിരഞ്ഞെടുക്കുക",
                 cat_all: "എല്ലാ ജോലികളും", cat_logistics: "ലോജിസ്റ്റിക്സ്", cat_construction: "നിർമ്മാണം",
-                section_process_badge: "നടപടിക്രമം",
-                section_process_title: "നിങ്ങളുടെ യാത്ര",
-                section_process_subtitle: "സാധാരണ സമയം: 3 - 4 മാസം.",
-                section_pricing_badge: "നിക്ഷേപം",
-                section_pricing_title: "വിലവിവരങ്ങൾ",
+                section_process_badge: "നടപടിക്രമം", section_process_title: "നിങ്ങളുടെ യാത്ര", section_process_subtitle: "സാധാരണ സമയം: 3 - 4 മാസം.",
+                section_pricing_badge: "നിക്ഷേപം", section_pricing_title: "വിലവിവരങ്ങൾ",
                 modal_salary: "ശമ്പളം", modal_experience: "പരിചയം", modal_benefits: "ആനുകൂല്യങ്ങൾ", modal_critical: "പ്രധാന നിർദ്ദേശം", modal_gulf_exp: "ഗൾഫ് പരിചയം ഉണ്ടായിരിക്കണം", modal_docs: "ആവശ്യമായ രേഖകൾ", modal_apply: "അപേക്ഷിക്കുക",
                 benefit_acc: "താമസം", benefit_food: "ഭക്ഷണം", benefit_air: "യാത്ര", benefit_med: "മെഡിക്കൽ ഇൻഷുറൻസ്",
                 step_01_title: "രജിസ്ട്രേഷൻ", step_01_desc: "പാസ്‌പോർട്ട്, ഫോട്ടോ, സിവി, പ്രവൃത്തിപരിചയ സർട്ടിഫിക്കറ്റ് എന്നിവ നൽകുക.",
@@ -621,18 +617,13 @@
                 footer_destinations: "இடங்கள்", footer_services: "சேவைகள்", footer_company: "நிறுவனம்", footer_office: "அலுவலகம்",
                 footer_story: "எங்கள் கதை", footer_privacy: "தனியுரிமைக் கொள்கை", footer_terms: "சேவை விதிமுறைகள்", footer_rights: "அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.",
                 hero_badge: "வளைகுடா அனுபவம் தேவை",
-                hero_title_1: "நாங்கள் வேலைக்கு அமர்த்துகிறோம்",
-                hero_title_2: "குரோஷியா",
+                hero_title_1: "நாங்கள் வேலைக்கு அமர்த்துகிறோம்", hero_title_2: "குரோஷியா",
                 hero_subtitle: "திறமையான தொழிலாளர்களுக்கு சிறந்த வாய்ப்புகள். <br class='hidden md:block'>உணவு மற்றும் தங்குமிடம் நிறுவனத்தால் வழங்கப்படுகிறது.",
-                btn_view_jobs: "வேலைகள்",
-                btn_req: "முறை",
+                btn_view_jobs: "வேலைகள்", btn_req: "முறை",
                 select_department: "வேலைத் துறையைத் தேர்ந்தெடுக்கவும்",
                 cat_all: "எல்லா வேலைகளும்", cat_logistics: "லாஜிஸ்டிக்ஸ்", cat_construction: "கட்டுமானம்",
-                section_process_badge: "முறை",
-                section_process_title: "உங்கள் பயணம்",
-                section_process_subtitle: "செயலாக்க நேரம்: 3 - 4 மாதங்கள்.",
-                section_pricing_badge: "முதலீடு",
-                section_pricing_title: "வெளிப்படையான விலை",
+                section_process_badge: "முறை", section_process_title: "உங்கள் பயணம்", section_process_subtitle: "செயலாக்க நேரம்: 3 - 4 மாதங்கள்.",
+                section_pricing_badge: "முதலீடு", section_pricing_title: "வெளிப்படையான விலை",
                 modal_salary: "சம்பளம்", modal_experience: "அனுபவம்", modal_benefits: "நன்மைகள்", modal_critical: "முக்கிய தேவை", modal_gulf_exp: "வளைகுடா அனுபவம் இருக்க வேண்டும்", modal_docs: "தேவையான ஆவணங்கள்", modal_apply: "விண்ணப்பிக்கவும்",
                 benefit_acc: "தங்குமிடம்", benefit_food: "உணவு", benefit_air: "போக்குவரத்து", benefit_med: "மருத்துவ காப்பீடு",
                 step_01_title: "பதிவு", step_01_desc: "பாஸ்போர்ட் மற்றும் அனுபவச் சான்றிதழைச் சமர்ப்பிக்கவும்.",
@@ -649,18 +640,13 @@
                 footer_destinations: "Mga Destinasyon", footer_services: "Mga Serbisyo", footer_company: "Kumpanya", footer_office: "Opisina",
                 footer_story: "Ang Aming Kwento", footer_privacy: "Patakaran sa Privacy", footer_terms: "Mga Tuntunin ng Serbisyo", footer_rights: "Lahat ng karapatan ay nakalaan.",
                 hero_badge: "Kailangan ng Gulf Experience",
-                hero_title_1: "Naghahanap kami sa",
-                hero_title_2: "CROATIA",
+                hero_title_1: "Naghahanap kami sa", hero_title_2: "CROATIA",
                 hero_subtitle: "Magagandang oportunidad para sa mga skilled workers. <br class='hidden md:block'>Pagkain at tirahan sagot ng kumpanya.",
-                btn_view_jobs: "Tingnan ang Trabaho",
-                btn_req: "Proseso",
+                btn_view_jobs: "Tingnan ang Trabaho", btn_req: "Proseso",
                 select_department: "Piliin ang Departamento",
                 cat_all: "Lahat", cat_logistics: "Logistics", cat_construction: "Construction",
-                section_process_badge: "Proseso",
-                section_process_title: "Ang Iyong Paglalakbay",
-                section_process_subtitle: "Oras ng pagproseso: 3 - 4 na buwan.",
-                section_pricing_badge: "Pamumuhunan",
-                section_pricing_title: "Presyo",
+                section_process_badge: "Proseso", section_process_title: "Ang Iyong Paglalakbay", section_process_subtitle: "Oras ng pagproseso: 3 - 4 na buwan.",
+                section_pricing_badge: "Pamumuhunan", section_pricing_title: "Presyo",
                 modal_salary: "Sahod", modal_experience: "Karanasan", modal_benefits: "Benepisyo", modal_critical: "Mahalagang Kinakailangan", modal_gulf_exp: "Dapat may Gulf Experience", modal_docs: "Mga Dokumento", modal_apply: "Mag-apply",
                 benefit_acc: "Tirahan", benefit_food: "Pagkain", benefit_air: "Transportasyon", benefit_med: "Medical Ins.",
                 step_01_title: "Rehistrasyon", step_01_desc: "Isubmit ang Passport, Larawan, CV, and Sertipiko ng Karanasan.",
@@ -677,18 +663,13 @@
                 footer_destinations: "ගමනාන්ත", footer_services: "සේවා", footer_company: "සමාගම", footer_office: "කාර්යාලය",
                 footer_story: "අපගේ කතාව", footer_privacy: "රහස්‍යතා ප්‍රතිපත්තිය", footer_terms: "සේවා කොන්දේසි", footer_rights: "සියලුම හිමිකම් ඇවිරිණි.",
                 hero_badge: "ගල්ෆ් පළපුරුද්ද අත්‍යවශ්‍යයි",
-                hero_title_1: "අපි බඳවා ගන්නෙමු",
-                hero_title_2: "ක්‍රොඒෂියාව",
+                hero_title_1: "අපි බඳවා ගන්නෙමු", hero_title_2: "ක්‍රොඒෂියාව",
                 hero_subtitle: "පුහුණු ශ්‍රමිකයින් සඳහා විශිෂ්ට අවස්ථා. <br class='hidden md:block'>ආහාර සහ නවාතැන් පහසුකම් සමාගම විසින් සපයනු ලැබේ.",
-                btn_view_jobs: "තනතුරු බලන්න",
-                btn_req: "ක්‍රියාවලිය",
+                btn_view_jobs: "තනතුරු බලන්න", btn_req: "ක්‍රියාවලිය",
                 select_department: "රැකියා අංශය තෝරන්න",
                 cat_all: "සියල්ල", cat_logistics: "ලොජිස්ටික්ස්", cat_construction: "ඉදිකිරීම්",
-                section_process_badge: "ක්‍රියාවලිය",
-                section_process_title: "ඔබේ ගමන",
-                section_process_subtitle: "සම්මත සැකසුම් කාලය: මාස 3 - 4.",
-                section_pricing_badge: "ආයෝජනය",
-                section_pricing_title: "මිල ගණන්",
+                section_process_badge: "ක්‍රියාවලිය", section_process_title: "ඔබේ ගමන", section_process_subtitle: "සම්මත සැකසුම් කාලය: මාස 3 - 4.",
+                section_pricing_badge: "ආයෝජනය", section_pricing_title: "මිල ගණන්",
                 modal_salary: "වැටුප", modal_experience: "පළපුරුද්ද", modal_benefits: "ප්‍රතිලාභ", modal_critical: "වැදගත් අවශ්‍යතාවය", modal_gulf_exp: "ගල්ෆ් පළපුරුද්ද තිබිය යුතුය", modal_docs: "ලිපිලේඛන", modal_apply: "අයදුම් කරන්න",
                 benefit_acc: "නවාතැන්", benefit_food: "ආහාර", benefit_air: "ප්‍රවාහන", benefit_med: "වෛද්‍ය රක්ෂණ",
                 step_01_title: "ලියාපදිංචිය", step_01_desc: "විදේශ ගමන් බලපත්‍රය සහ පළපුරුදු සහතිකය ඉදිරිපත් කරන්න.",
@@ -705,18 +686,13 @@
                 footer_destinations: "Vituo", footer_services: "Huduma", footer_company: "Kampuni", footer_office: "Ofisi",
                 footer_story: "Hadithi Yetu", footer_privacy: "Sera ya Faragha", footer_terms: "Masharti ya Huduma", footer_rights: "Haki zote zimehifadhiwa.",
                 hero_badge: "Uzoefu wa Ghuba Unahitajika",
-                hero_title_1: "Tunaboresha Kazi",
-                hero_title_2: "CROATIA",
+                hero_title_1: "Tunaboresha Kazi", hero_title_2: "CROATIA",
                 hero_subtitle: "Nafasi nzuri kwa wafanyakazi wenye ujuzi. <br class='hidden md:block'>Chakula na Malazi hutolewa na kampuni.",
-                btn_view_jobs: "Angalia Nafasi",
-                btn_req: "Mchakato",
+                btn_view_jobs: "Angalia Nafasi", btn_req: "Mchakato",
                 select_department: "Chagua Idara ya Kazi",
                 cat_all: "Kazi Zote", cat_logistics: "Usafirishaji", cat_construction: "Ujenzi",
-                section_process_badge: "Mchakato",
-                section_process_title: "Safari Yako",
-                section_process_subtitle: "Muda wa kawaida: Miezi 3 - 4.",
-                section_pricing_badge: "Uwekezaji",
-                section_pricing_title: "Bei",
+                section_process_badge: "Mchakato", section_process_title: "Safari Yako", section_process_subtitle: "Muda wa kawaida: Miezi 3 - 4.",
+                section_pricing_badge: "Uwekezaji", section_pricing_title: "Bei",
                 modal_salary: "Mshahara", modal_experience: "Uzoefu", modal_benefits: "Faida", modal_critical: "Sharti Muhimu", modal_gulf_exp: "Lazima uwe na Uzoefu wa Ghuba", modal_docs: "Nyaraka", modal_apply: "Omba Sasa",
                 benefit_acc: "Malazi", benefit_food: "Chakula", benefit_air: "Usafiri", benefit_med: "Bima ya Matibabu",
                 step_01_title: "Usajili", step_01_desc: "Wasilisha Pasipoti, Picha, na Cheti cha Uzoefu.",
@@ -729,7 +705,48 @@
             }
         };
 
-        // --- GLOBAL HEADER COMPONENT (FROM TEMPLATE) ---
+        const jobsData = [
+            { title: "Ready-Mix Truck Driver", titleKey: "job_driver", dept: "Logistics", salary: "€1,700 / Month", icon: "fa-solid fa-truck-moving" },
+            { title: "Shuttering Carpenter", titleKey: "job_carpenter", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-hammer" },
+            { title: "Mason", titleKey: "job_mason", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-trowel-bricks" },
+            { title: "Ceramic Mason", titleKey: "job_ceramic", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-layer-group" },
+            { title: "Plumber", titleKey: "job_plumber", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-faucet-drip" },
+            { title: "Gypsum Board Worker", titleKey: "job_gypsum", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-border-all" },
+            { title: "Grinder", titleKey: "job_grinder", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-gears" },
+            { title: "Facade Worker", titleKey: "job_facade", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-paint-roller" }
+        ];
+
+        const documentsData = [
+            { title: "Passport Scan", desc: "Front & Back Color Scans. Minimum 6 months validity.", icon: "fa-solid fa-passport" },
+            { title: "Passport Size Photo", desc: "White background, recent photo.", icon: "fa-solid fa-camera" },
+            { title: "Europass CV", desc: "Must be in standard Europass format.", icon: "fa-regular fa-file-lines" },
+            { title: "Work Experience Certificate", desc: "Mandatory Gulf Experience proof.", icon: "fa-solid fa-briefcase" },
+            { title: "Working Video", desc: "Video showing you performing your trade.", icon: "fa-solid fa-video" },
+            { title: "Introduction Video", desc: "Self-introduction in English.", icon: "fa-solid fa-user-check" }
+        ];
+
+        const timelineData = [
+            { step: "01", key: "step_01", title: "Registration", desc: "Submit Passport, Photo, CV, and Experience Certificate.", fee: "Initial" },
+            { step: "02", key: "step_02", title: "Work Permit", desc: "Employer applies for work authorization in Croatia.", fee: "Processing" },
+            { step: "03", key: "step_03", title: "Visa Application", desc: "Submission to Croatian Embassy with Work Permit.", fee: "Visa Fee" },
+            { step: "04", key: "step_04", title: "Travel", desc: "Visa stamping and flight to Croatia.", fee: "Final" }
+        ];
+
+        const searchData = [
+            { title: "Germany", type: "Country", url: "germany.html", icon: "🇩🇪", keywords: "care home, nurse, doctor, blue card, visa" },
+            { title: "Netherlands", type: "Country", url: "netherlands.html", icon: "🇳🇱", keywords: "tech, high skilled, amsterdam, corporate" },
+            { title: "Sweden", type: "Country", url: "sweden.html", icon: "🇸🇪", keywords: "airport, engineering, hospitality, north" },
+            { title: "Finland", type: "Country", url: "finland.html", icon: "🇫🇮", keywords: "tech, service, happy, north, seasonal" },
+            { title: "Poland", type: "Country", url: "poland.html", icon: "🇵🇱", keywords: "logistics, manufacturing, schengen, work permit" },
+            { title: "Croatia", type: "Country", url: "croatia.html", icon: "🇭🇷", keywords: "construction, logistics, truck driver, mason" },
+            { title: "Visa Appointment", type: "Service", url: "vfs.html", icon: "📅", keywords: "vfs, embassy, slot, booking" },
+            { title: "Registered Nurse", type: "Job", url: "germany.html", icon: "👩‍⚕️", keywords: "health, medical, care home, germany" },
+            { title: "Truck Driver", type: "Job", url: "croatia.html", icon: "🚛", keywords: "logistics, transport, driver, croatia" }
+        ];
+
+        /* -------------------------------------------------------------------------- */
+        /* 2. COMPONENTS (HEADER & FOOTER)                                            */
+        /* -------------------------------------------------------------------------- */
         const GLOBAL_HEADER = `
         <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
             <div class="floating-nav w-full max-w-7xl px-4 py-4 md:px-3 md:py-3 flex justify-between items-center transition-all duration-300" id="navbar">
@@ -756,7 +773,7 @@
                             <a href="poland.html" data-i18n="country_poland" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-400 hover:bg-red-500/20 transition block">Poland</a>
                             <a href="czech.html" data-i18n="country_czech" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-blue-300 hover:bg-blue-400/20 transition block">Czech Republic</a>
                             <a href="latvia.html" data-i18n="country_latvia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-300 hover:bg-red-500/20 transition block">Latvia</a>
-							<a href="croatia.html" data-i18n="country_croatia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-300 hover:bg-red-500/20 transition block">Croatia</a>
+                            <a href="croatia.html" data-i18n="country_croatia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-300 hover:bg-red-500/20 transition block">Croatia</a>
                             <a href="serbia.html" data-i18n="country_serbia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-blue-300 hover:bg-blue-500/20 transition block">Serbia</a>
                             <a href="macedonia.html" data-i18n="country_macedonia" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-yellow-400 hover:bg-yellow-500/20 transition block">Macedonia</a>
                             <a href="albania.html" data-i18n="country_albania" class="px-4 py-3 rounded-xl text-base text-gray-300 hover:text-red-500 hover:bg-red-600/20 transition block">Albania</a>
@@ -781,7 +798,7 @@
                         <i class="fa-solid fa-magnifying-glass text-white/70 group-hover:text-brand-blue text-3xl md:text-xl"></i>
                         <span class="hidden lg:inline-flex absolute -bottom-8 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md px-2 py-0.5 rounded text-[10px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/5">Cmd + K</span>
                     </button>
-                    <button class="lg:hidden p-3 text-white hover:text-brand-blue transition rounded-full hover:bg-white/5" onclick="toggleMobileMenu()">
+                    <button class="hidden md:block lg:hidden p-3 text-white hover:text-brand-blue transition rounded-full hover:bg-white/5" onclick="toggleMobileMenu()">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
                     <a href="book.html" class="hidden sm:flex group relative px-8 py-3 rounded-full bg-brand-blue text-white font-bold text-base overflow-hidden transition-all hover:scale-105 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]">
@@ -849,9 +866,8 @@
         </div>
         `;
 
-        // --- GLOBAL FOOTER COMPONENT (FROM TEMPLATE) ---
         const GLOBAL_FOOTER = `
-        <footer class="bg-transparent border-t border-white/5 relative z-10 backdrop-blur-sm">
+        <footer class="bg-transparent border-t border-white/5 relative z-10 backdrop-blur-sm hidden md:block">
             <div class="container mx-auto px-4 py-12 md:py-24">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 md:gap-16 mb-8 md:mb-20">
                     <div class="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col items-center md:items-start text-center md:text-left">
@@ -915,58 +931,239 @@
         </footer>
         `;
 
-        // 1. INJECT UNIVERSAL COMPONENTS
+        // Inject Components
         document.body.insertAdjacentHTML('afterbegin', GLOBAL_HEADER);
         document.body.insertAdjacentHTML('beforeend', GLOBAL_FOOTER);
 
-        // --- SPECIFIC JOB DATA (Mapped from Croatia Content) ---
-        const jobsData = [
-            // A. Logistics Department
-            { title: "Ready-Mix Truck Driver", titleKey: "job_driver", dept: "Logistics", salary: "€1,700 / Month", icon: "fa-solid fa-truck-moving" },
-            
-            // B. Construction Department
-            { title: "Shuttering Carpenter", titleKey: "job_carpenter", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-hammer" },
-            { title: "Mason", titleKey: "job_mason", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-trowel-bricks" },
-            { title: "Ceramic Mason", titleKey: "job_ceramic", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-layer-group" },
-            { title: "Plumber", titleKey: "job_plumber", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-faucet-drip" },
-            { title: "Gypsum Board Worker", titleKey: "job_gypsum", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-border-all" },
-            { title: "Grinder", titleKey: "job_grinder", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-gears" },
-            { title: "Facade Worker", titleKey: "job_facade", dept: "Construction", salary: "€6 / Hour", icon: "fa-solid fa-paint-roller" }
-        ];
-
-        const documentsData = [
-            { title: "Passport Scan", desc: "Front & Back Color Scans. Minimum 6 months validity.", icon: "fa-solid fa-passport" },
-            { title: "Passport Size Photo", desc: "White background, recent photo.", icon: "fa-solid fa-camera" },
-            { title: "Europass CV", desc: "Must be in standard Europass format.", icon: "fa-regular fa-file-lines" },
-            { title: "Work Experience Certificate", desc: "Mandatory Gulf Experience proof.", icon: "fa-solid fa-briefcase" },
-            { title: "Working Video", desc: "Video showing you performing your trade.", icon: "fa-solid fa-video" },
-            { title: "Introduction Video", desc: "Self-introduction in English.", icon: "fa-solid fa-user-check" }
-        ];
-
-        const timelineData = [
-            { step: "01", key: "step_01", title: "Registration", desc: "Submit Passport, Photo, CV, and Experience Certificate.", fee: "Initial" },
-            { step: "02", key: "step_02", title: "Work Permit", desc: "Employer applies for work authorization in Croatia.", fee: "Processing" },
-            { step: "03", key: "step_03", title: "Visa Application", desc: "Submission to Croatian Embassy with Work Permit.", fee: "Visa Fee" },
-            { step: "04", key: "step_04", title: "Travel", desc: "Visa stamping and flight to Croatia.", fee: "Final" }
-        ];
-
         /* -------------------------------------------------------------------------- */
-        /* 4. SEARCH LOGIC & DATA (From Template)                                     */
+        /* 3. APP STATE & VARIABLES                                                   */
         /* -------------------------------------------------------------------------- */
-        const searchData = [
-            { title: "Germany", type: "Country", url: "germany.html", icon: "🇩🇪", keywords: "care home, nurse, doctor, blue card, visa" },
-            { title: "Netherlands", type: "Country", url: "netherlands.html", icon: "🇳🇱", keywords: "tech, high skilled, amsterdam, corporate" },
-            { title: "Sweden", type: "Country", url: "sweden.html", icon: "🇸🇪", keywords: "airport, engineering, hospitality, north" },
-            { title: "Finland", type: "Country", url: "finland.html", icon: "🇫🇮", keywords: "tech, service, happy, north, seasonal" },
-            { title: "Poland", type: "Country", url: "poland.html", icon: "🇵🇱", keywords: "logistics, manufacturing, schengen, work permit" },
-            { title: "Croatia", type: "Country", url: "croatia.html", icon: "🇭🇷", keywords: "construction, logistics, truck driver, mason" },
-            { title: "Visa Appointment", type: "Service", url: "vfs.html", icon: "📅", keywords: "vfs, embassy, slot, booking" },
-            { title: "Registered Nurse", type: "Job", url: "germany.html", icon: "👩‍⚕️", keywords: "health, medical, care home, germany" },
-            { title: "Truck Driver", type: "Job", url: "croatia.html", icon: "🚛", keywords: "logistics, transport, driver, croatia" },
-        ];
-
+        let currentCategory = 'All';
+        let currentLang = 'en';
+        let currentSearchTerm = '';
         let searchOverlay, searchInput, searchResults, defaultResults, dynamicResults, noResults;
 
+        /* -------------------------------------------------------------------------- */
+        /* 4. RENDER LOGIC                                                            */
+        /* -------------------------------------------------------------------------- */
+        function renderJobs(data) {
+            const container = document.getElementById('jobContainer');
+            const countLabel = document.getElementById('jobCount');
+            const t = translations[currentLang] || translations['en'];
+            
+            if (!container) return;
+            container.innerHTML = "";
+
+            let filteredData = data;
+            if (currentCategory !== 'All') {
+                filteredData = filteredData.filter(job => job.dept === currentCategory);
+            }
+            if (currentSearchTerm.trim() !== '') {
+                const term = currentSearchTerm.toLowerCase();
+                filteredData = filteredData.filter(job => 
+                    (t[job.titleKey] || job.title).toLowerCase().includes(term) || 
+                    job.dept.toLowerCase().includes(term)
+                );
+            }
+
+            const grouped = filteredData.reduce((acc, job) => {
+                acc[job.dept] = acc[job.dept] || [];
+                acc[job.dept].push(job);
+                return acc;
+            }, {});
+
+            let totalShown = 0;
+
+            if (Object.keys(grouped).length === 0) {
+                 container.innerHTML = `
+                    <div class="text-center py-20 animate-fade-in-up">
+                        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-magnifying-glass text-4xl text-white/20"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">No positions found</h3>
+                        <p class="text-gray-400">Try adjusting your search or category filter.</p>
+                        <button onclick="clearFilters()" class="mt-6 text-croatia-blue font-bold hover:underline">Clear all filters</button>
+                    </div>`;
+                 countLabel.innerText = "0 positions found";
+                 return;
+            }
+
+            for (const [dept, jobs] of Object.entries(grouped)) {
+                const section = document.createElement('div');
+                section.className = "reveal-item";
+                const header = `<h3 class="text-2xl md:text-3xl font-bold text-white mb-8 pl-4 border-l-8 border-croatia-red flex flex-col md:flex-row md:items-baseline gap-2">${dept} <span class="text-base font-normal text-gray-400">(${jobs.length} Positions)</span></h3>`;
+                let gridHTML = `<div class="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">`;
+                
+                jobs.forEach(job => {
+                    const globalIndex = jobsData.findIndex(j => j.title === job.title && j.dept === job.dept);
+                    const displayTitle = t[job.titleKey] || job.title;
+                    gridHTML += `
+                        <div onclick="openJobModal(${globalIndex})" class="glass-panel p-3 sm:p-5 rounded-2xl flex flex-col items-start justify-between cursor-pointer group hover:bg-white/5 transition-all relative overflow-hidden h-full">
+                            <div class="absolute inset-0 bg-gradient-to-r from-croatia-red/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="flex items-start gap-2 sm:gap-4 relative z-10 w-full">
+                                <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-croatia-red/10 flex items-center justify-center text-croatia-red border border-croatia-red/20 shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-black/30"><i class="${job.icon} text-xl sm:text-2xl"></i></div>
+                                <div class="flex-grow min-w-0">
+                                    <h4 class="text-sm sm:text-xl md:text-lg font-bold text-white group-hover:text-brand-blue transition-colors mb-1 leading-tight">${displayTitle}</h4>
+                                    <span class="text-gray-300 md:text-gray-400 text-xs sm:text-base font-medium flex items-center gap-1"><i class="fa-solid fa-check text-green-500"></i> Gulf Exp</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 relative z-10 w-full text-left">
+                                <span class="inline-block bg-brand-gold/10 border border-brand-gold/30 text-brand-gold font-bold px-2 py-0.5 rounded-lg text-sm sm:text-lg md:text-base tracking-wide whitespace-nowrap">${job.salary}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                gridHTML += `</div>`;
+                section.innerHTML = header + gridHTML;
+                container.appendChild(section);
+                totalShown += jobs.length;
+            }
+            
+            if (currentSearchTerm) {
+                 countLabel.innerText = `Found ${totalShown} result${totalShown !== 1 ? 's' : ''} for "${currentSearchTerm}"`;
+            } else {
+                 countLabel.innerText = `Showing ${totalShown} positions in ${currentCategory === 'All' ? 'all departments' : currentCategory}`;
+            }
+            checkScroll();
+        }
+
+        function renderCategoryButtons() {
+            const categories = ["All", "Logistics", "Construction"];
+            const container = document.getElementById('categoryButtons');
+            const t = translations[currentLang] || translations['en'];
+            const catKeys = { "All": "cat_all", "Logistics": "cat_logistics", "Construction": "cat_construction" };
+
+            if(container) {
+                container.innerHTML = categories.map(cat => {
+                    const isActive = currentCategory === cat;
+                    const activeClass = isActive 
+                        ? "bg-croatia-red text-white border-croatia-red shadow-lg shadow-croatia-red/30" 
+                        : "bg-white/5 text-gray-400 border-white/10 hover:bg-white/10";
+                    return `<button onclick="selectCategory('${cat}')" class="px-6 py-3 rounded-xl text-sm md:text-base font-bold transition-all border flex items-center justify-center text-center h-full min-w-[120px] flex-shrink-0 snap-center whitespace-nowrap ${activeClass}">${t[catKeys[cat]] || cat}</button>`;
+                }).join('');
+            }
+        }
+
+        function renderTimeline() {
+            const t = translations[currentLang] || translations['en'];
+            const timelineEl = document.getElementById('timelineContainer');
+            if (!timelineEl) return;
+
+            timelineEl.innerHTML = timelineData.map((item, index) => {
+                const title = t[item.key + "_title"] || item.title;
+                const desc = t[item.key + "_desc"] || item.desc;
+                return `
+                <div class="relative pl-8 sm:pl-0 pt-2 sm:pt-16 group reveal-item" style="transition-delay: ${index * 50}ms">
+                     <div class="hidden sm:block absolute top-0 left-0 w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                        <div class="h-full bg-croatia-red origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+                     </div>
+                    <div class="font-bold text-white mb-2 sm:mb-4 sm:absolute sm:top-4 text-2xl sm:text-4xl text-white/10 group-hover:text-croatia-red transition-colors">${item.step}</div>
+                    <div class="absolute left-0 top-3 sm:top-[-6px] w-4 h-4 rounded-full border-2 border-deep-space bg-croatia-red shadow-[0_0_10px_rgba(255,0,0,0.5)] z-10"></div>
+                    <div class="glass-panel p-4 sm:p-6 rounded-2xl hover:border-croatia-red/30 transition-all border border-white/10 h-full flex flex-col justify-between">
+                        <div><h4 class="font-bold text-white text-lg sm:text-xl mb-2">${title}</h4><p class="text-base text-gray-400 mb-4">${desc}</p></div>
+                        <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-bold border border-white/10 bg-white/5 text-gray-300 w-fit">${item.fee}</span>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /* 5. INTERACTION & UTILS                                                     */
+        /* -------------------------------------------------------------------------- */
+        function selectCategory(category) {
+            currentCategory = category;
+            renderCategoryButtons();
+            renderJobs(jobsData);
+        }
+        
+        function handleSearch(val) {
+            currentSearchTerm = val;
+            renderJobs(jobsData);
+        }
+        
+        function clearFilters() {
+            currentCategory = 'All';
+            currentSearchTerm = '';
+            document.getElementById('jobSearchInput').value = '';
+            renderCategoryButtons();
+            renderJobs(jobsData);
+        }
+
+        // Language Handling
+        function toggleLanguageDropdown(event) {
+            const button = document.getElementById('lang-toggle-btn');
+            const isActive = button.classList.toggle('active');
+            event.stopPropagation();
+            if (!isActive) document.removeEventListener('click', closeLanguageDropdown);
+            else setTimeout(() => document.addEventListener('click', closeLanguageDropdown), 10);
+        }
+
+        function closeLanguageDropdown(event) {
+            const dropdown = document.getElementById('language-dropdown');
+            const button = document.getElementById('lang-toggle-btn');
+            if (dropdown && button && !dropdown.contains(event.target) && !button.contains(event.target)) {
+                button.classList.remove('active');
+                document.removeEventListener('click', closeLanguageDropdown);
+            }
+        }
+
+        function setLanguage(langCode, element) {
+            currentLang = langCode;
+            document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
+            if(element) element.classList.add('active');
+            
+            // Font Logic
+             if (['hi', 'ml', 'ta', 'si', 'fil'].includes(langCode)) {
+                if (langCode === 'hi') document.body.style.fontFamily = "'Noto Sans Devanagari', sans-serif";
+                if (langCode === 'ml') document.body.style.fontFamily = "'Noto Sans Malayalam', sans-serif";
+                if (langCode === 'ta') document.body.style.fontFamily = "'Noto Sans Tamil', sans-serif";
+                if (langCode === 'si') document.body.style.fontFamily = "'Noto Sans Sinhala', sans-serif";
+            } else {
+                document.body.style.fontFamily = "'Outfit', sans-serif";
+            }
+
+            const t = translations[langCode] || translations['en'];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) {
+                    if (el.tagName === 'INPUT') el.placeholder = t[key];
+                    else el.innerHTML = t[key];
+                }
+            });
+
+            renderCategoryButtons();
+            renderJobs(jobsData);
+            renderTimeline();
+            
+            document.getElementById('lang-toggle-btn').classList.remove('active');
+            document.removeEventListener('click', closeLanguageDropdown);
+        }
+
+        // Mobile Nav Logic
+        function toggleMobileDestinations() {
+            const menu = document.getElementById('mobile-destinations-menu');
+            const langMenu = document.getElementById('mobile-language-menu');
+            if (langMenu) langMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
+            menu.classList.toggle('invisible');
+            menu.classList.toggle('opacity-0');
+            menu.classList.toggle('translate-y-10');
+        }
+
+        function toggleMobileLanguage() {
+            const menu = document.getElementById('mobile-language-menu');
+            const destMenu = document.getElementById('mobile-destinations-menu');
+            if (destMenu) destMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
+            menu.classList.toggle('invisible');
+            menu.classList.toggle('opacity-0');
+            menu.classList.toggle('translate-y-10');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('translate-y-full');
+        }
+
+        // Search Logic
         function initSearchElements() {
              searchOverlay = document.getElementById('search-overlay');
              searchInput = document.getElementById('global-search-input');
@@ -1054,296 +1251,18 @@
             });
         }
 
-        /* -------------------------------------------------------------------------- */
-        /* PAGE SPECIFIC LOGIC & RENDERING                                            */
-        /* -------------------------------------------------------------------------- */
-        let currentCategory = 'All';
-        let currentLang = 'en';
-        let currentSearchTerm = '';
-
-        // --- RENDER FUNCTIONS ---
-        function renderJobs(data) {
-            const container = document.getElementById('jobContainer');
-            const countLabel = document.getElementById('jobCount');
-            const t = translations[currentLang] || translations['en'];
-            
-            if (!container) return;
-            container.innerHTML = "";
-
-            // 1. Start with All Data
-            let filteredData = data;
-            
-            // 2. Filter by Category
-            if (currentCategory !== 'All') {
-                filteredData = filteredData.filter(job => job.dept === currentCategory);
-            }
-            
-            // 3. Filter by Search Term
-            if (currentSearchTerm.trim() !== '') {
-                const term = currentSearchTerm.toLowerCase();
-                filteredData = filteredData.filter(job => 
-                    (t[job.titleKey] || job.title).toLowerCase().includes(term) || 
-                    job.dept.toLowerCase().includes(term)
-                );
-            }
-            
-            // 4. Group all *filtered* data by Department
-            const grouped = filteredData.reduce((acc, job) => {
-                acc[job.dept] = acc[job.dept] || [];
-                acc[job.dept].push(job);
-                return acc;
-            }, {});
-
-            let totalShown = 0;
-
-            if (Object.keys(grouped).length === 0) {
-                 container.innerHTML = `
-                    <div class="text-center py-20 animate-fade-in-up">
-                        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i class="fa-solid fa-magnifying-glass text-4xl text-white/20"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2">No positions found</h3>
-                        <p class="text-gray-400">Try adjusting your search or category filter.</p>
-                        <button onclick="clearFilters()" class="mt-6 text-croatia-blue font-bold hover:underline">Clear all filters</button>
-                    </div>`;
-                 countLabel.innerText = "0 positions found";
-                 return;
-            }
-
-            // 5. Iterate and Render Sections
-            for (const [dept, jobs] of Object.entries(grouped)) {
-                const deptDisplay = dept; 
-                const section = document.createElement('div');
-                section.className = "reveal-item";
-                
-                const header = `<h3 class="text-2xl md:text-3xl font-bold text-white mb-8 pl-4 border-l-8 border-croatia-red flex flex-col md:flex-row md:items-baseline gap-2">${deptDisplay} <span class="text-base font-normal text-gray-400">(${jobs.length} Positions)</span></h3>`;
-                
-                let gridHTML = `<div class="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">`;
-                
-                const renderCard = (job) => {
-                    const globalIndex = jobsData.findIndex(j => j.title === job.title && j.dept === job.dept);
-                    const displayTitle = t[job.titleKey] || job.title;
-                    
-                    return `
-                        <div onclick="openJobModal(${globalIndex})" class="glass-panel p-3 sm:p-5 rounded-2xl flex flex-col items-start justify-between cursor-pointer group hover:bg-white/5 transition-all relative overflow-hidden h-full">
-                            <div class="absolute inset-0 bg-gradient-to-r from-croatia-red/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="flex items-start gap-2 sm:gap-4 relative z-10 w-full">
-                                <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-croatia-red/10 flex items-center justify-center text-croatia-red border border-croatia-red/20 shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-black/30">
-                                    <i class="${job.icon} text-xl sm:text-2xl"></i>
-                                </div>
-                                <div class="flex-grow min-w-0">
-                                    <h4 class="text-sm sm:text-xl md:text-lg font-bold text-white group-hover:text-brand-blue transition-colors mb-1 leading-tight">${displayTitle}</h4>
-                                    <span class="text-gray-300 md:text-gray-400 text-xs sm:text-base font-medium flex items-center gap-1"><i class="fa-solid fa-check text-green-500"></i> Gulf Exp</span>
-                                </div>
-                            </div>
-                            <div class="mt-4 relative z-10 w-full text-left">
-                                <span class="inline-block bg-brand-gold/10 border border-brand-gold/30 text-brand-gold font-bold px-2 py-0.5 rounded-lg text-sm sm:text-lg md:text-base tracking-wide whitespace-nowrap">${job.salary}</span>
-                            </div>
-                        </div>
-                    `;
-                };
-
-                jobs.forEach(job => gridHTML += renderCard(job));
-                gridHTML += `</div>`;
-                section.innerHTML = header + gridHTML;
-                container.appendChild(section);
-                totalShown += jobs.length;
-            }
-            
-            if (currentSearchTerm) {
-                 countLabel.innerText = `Found ${totalShown} result${totalShown !== 1 ? 's' : ''} for "${currentSearchTerm}"`;
-            } else {
-                 countLabel.innerText = `Showing ${totalShown} positions in ${currentCategory === 'All' ? 'all departments' : currentCategory}`;
-            }
-            
-            checkScroll();
-        }
-
-        function selectCategory(category) {
-            currentCategory = category;
-            renderCategoryButtons();
-            renderJobs(jobsData);
-        }
-        
-        function handleSearch(val) {
-            currentSearchTerm = val;
-            renderJobs(jobsData);
-        }
-        
-        function clearFilters() {
-            currentCategory = 'All';
-            currentSearchTerm = '';
-            document.getElementById('jobSearchInput').value = '';
-            renderCategoryButtons();
-            renderJobs(jobsData);
-        }
-
-        function renderCategoryButtons() {
-            const categories = ["All", "Logistics", "Construction"];
-            const container = document.getElementById('categoryButtons');
-            const t = translations[currentLang] || translations['en'];
-            const catKeys = { "All": "cat_all", "Logistics": "cat_logistics", "Construction": "cat_construction" };
-
-            if(container) {
-                container.innerHTML = categories.map(cat => {
-                    const isActive = currentCategory === cat;
-                    const activeClass = isActive 
-                        ? "bg-croatia-red text-white border-croatia-red shadow-lg shadow-croatia-red/30" 
-                        : "bg-white/5 text-gray-400 border-white/10 hover:bg-white/10";
-                    
-                    const translatedName = t[catKeys[cat]] || cat;
-
-                    return `
-                    <button onclick="selectCategory('${cat}')" 
-                        class="px-6 py-3 rounded-xl text-sm md:text-base font-bold transition-all border flex items-center justify-center text-center h-full min-w-[120px] flex-shrink-0 snap-center whitespace-nowrap ${activeClass}">
-                        ${translatedName}
-                    </button>
-                `}).join('');
-            }
-        }
-
-        function renderTimeline() {
-            const t = translations[currentLang] || translations['en'];
-            const timelineEl = document.getElementById('timelineContainer');
-            if (!timelineEl) return;
-
-            timelineEl.innerHTML = timelineData.map((item, index) => {
-                const title = t[item.key + "_title"] || item.title;
-                const desc = t[item.key + "_desc"] || item.desc;
-                
-                return `
-                <div class="relative pl-8 sm:pl-0 pt-2 sm:pt-16 group reveal-item" style="transition-delay: ${index * 50}ms">
-                     <div class="hidden sm:block absolute top-0 left-0 w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                        <div class="h-full bg-croatia-red origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
-                     </div>
-                    <div class="font-bold text-white mb-2 sm:mb-4 sm:absolute sm:top-4 text-2xl sm:text-4xl text-white/10 group-hover:text-croatia-red transition-colors">${item.step}</div>
-                    <div class="absolute left-0 top-3 sm:top-[-6px] w-4 h-4 rounded-full border-2 border-deep-space bg-croatia-red shadow-[0_0_10px_rgba(255,0,0,0.5)] z-10"></div>
-                    <div class="glass-panel p-4 sm:p-6 rounded-2xl hover:border-croatia-red/30 transition-all border border-white/10 h-full flex flex-col justify-between">
-                        <div>
-                            <h4 class="font-bold text-white text-lg sm:text-xl mb-2">${title}</h4>
-                            <p class="text-base text-gray-400 mb-4">${desc}</p>
-                        </div>
-                        <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-bold border border-white/10 bg-white/5 text-gray-300 w-fit">${item.fee}</span>
-                    </div>
-                </div>
-            `}).join('');
-        }
-
-        // --- LANGUAGE & FONT LOGIC (Combined) ---
-        function toggleLanguageDropdown(event) {
-            const button = document.getElementById('lang-toggle-btn');
-            const isActive = button.classList.toggle('active');
-            event.stopPropagation();
-            if (!isActive) {
-                 document.removeEventListener('click', closeLanguageDropdown);
-            } else {
-                 setTimeout(() => { 
-                    document.addEventListener('click', closeLanguageDropdown);
-                 }, 10);
-            }
-        }
-
-        function closeLanguageDropdown(event) {
-            const dropdown = document.getElementById('language-dropdown');
-            const button = document.getElementById('lang-toggle-btn');
-            if (dropdown && button && !dropdown.contains(event.target) && !button.contains(event.target)) {
-                button.classList.remove('active');
-                document.removeEventListener('click', closeLanguageDropdown);
-            }
-        }
-
-        function setLanguage(langCode, element) {
-            currentLang = langCode;
-            
-            // 1. Update UI Active State
-            document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
-            if(element) element.classList.add('active');
-            
-            // 2. Font Update
-             if (['hi', 'ml', 'ta', 'si', 'fil'].includes(langCode)) {
-                if (langCode === 'hi') document.body.style.fontFamily = "'Noto Sans Devanagari', sans-serif";
-                if (langCode === 'ml') document.body.style.fontFamily = "'Noto Sans Malayalam', sans-serif";
-                if (langCode === 'ta') document.body.style.fontFamily = "'Noto Sans Tamil', sans-serif";
-                // Add Sinhala etc if font loaded
-            } else {
-                document.body.style.fontFamily = "'Outfit', sans-serif";
-            }
-
-            // 3. Update Text Content
-            const t = translations[langCode] || translations['en'];
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key]) {
-                    if (el.tagName === 'INPUT') el.placeholder = t[key];
-                    else el.innerHTML = t[key];
-                }
-            });
-
-            // 4. Re-render Page Specifics
-            renderCategoryButtons();
-            renderJobs(jobsData);
-            renderTimeline();
-            
-            document.getElementById('lang-toggle-btn').classList.remove('active');
-            document.removeEventListener('click', closeLanguageDropdown);
-        }
-
-        // --- CORE UI LOGIC ---
-        let ticking = false;
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const nav = document.getElementById('navbar');
-                    if (nav) {
-                        if (window.scrollY > 20) nav.classList.add('scrolled');
-                        else nav.classList.remove('scrolled');
-                    }
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-        
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('translate-y-full');
-        }
-        
-        // Reveal Animations
-        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 }; 
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        function checkScroll() {
-            document.querySelectorAll('.reveal-item').forEach(el => {
-                if (!el.classList.contains('active')) {
-                    observer.observe(el);
-                }
-            });
-        }
-        window.addEventListener('scroll', checkScroll);
-
-        // Job Modal Logic
+        // Modal Logic
         function openJobModal(index) {
             const job = jobsData[index];
             if(!job) return;
-            
             const t = translations[currentLang] || translations['en'];
-            const displayTitle = t[job.titleKey] || job.title;
-
-            document.getElementById('modalTitle').innerText = displayTitle;
+            
+            document.getElementById('modalTitle').innerText = t[job.titleKey] || job.title;
             document.getElementById('modalDept').innerText = job.dept;
             document.getElementById('modalSalary').innerText = job.salary;
             document.getElementById('modalExp').innerText = "Gulf Exp Required";
             document.getElementById('modalIcon').innerHTML = `<i class="${job.icon}"></i>`;
             
-            // Inject Documents
             const docsList = document.getElementById('modalDocs');
             docsList.innerHTML = documentsData.map(doc => `
                 <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-croatia-red/30 transition-colors">
@@ -1360,34 +1279,75 @@
         }
 
         function closeModal() {
-            const modal = document.getElementById('jobModal');
-            modal.classList.add('hidden');
+            document.getElementById('jobModal').classList.add('hidden');
             document.body.style.overflow = '';
         }
 
-        // Keyboard Shortcuts
+        /* -------------------------------------------------------------------------- */
+        /* 6. INITIALIZATION                                                          */
+        /* -------------------------------------------------------------------------- */
+        
+        // Scroll Observer
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 }; 
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        function checkScroll() {
+            document.querySelectorAll('.reveal-item').forEach(el => {
+                if (!el.classList.contains('active')) observer.observe(el);
+            });
+        }
+
+        // Navbar Scroll
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const nav = document.getElementById('navbar');
+                    if (nav) {
+                        if (window.scrollY > 20) nav.classList.add('scrolled');
+                        else nav.classList.remove('scrolled');
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+            checkScroll();
+        });
+
+        // Event Listeners
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                if (document.getElementById('jobModal') && !document.getElementById('jobModal').classList.contains('hidden')) closeModal();
-                if (document.getElementById('lang-toggle-btn') && document.getElementById('lang-toggle-btn').classList.contains('active')) {
-                    document.getElementById('lang-toggle-btn').classList.remove('active');
-                }
-                 // Close search if open
+                if (!document.getElementById('jobModal').classList.contains('hidden')) closeModal();
+                if (document.getElementById('lang-toggle-btn').classList.contains('active')) document.getElementById('lang-toggle-btn').classList.remove('active');
                 const searchOverlay = document.getElementById('search-overlay');
-                if (searchOverlay && !searchOverlay.classList.contains('hidden')) {
-                    toggleSearch();
-                }
+                if (searchOverlay && !searchOverlay.classList.contains('hidden')) toggleSearch();
             }
-            // Cmd+K to open search
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                 e.preventDefault();
                 toggleSearch();
             }
         });
 
-        // Initialize Page
+        // Click outside handler for mobile menus
+        document.addEventListener('click', function(event) {
+            const destMenu = document.getElementById('mobile-destinations-menu');
+            const langMenu = document.getElementById('mobile-language-menu');
+            const destBtn = event.target.closest('button[onclick="toggleMobileDestinations()"]');
+            const langBtn = event.target.closest('button[onclick="toggleMobileLanguage()"]');
+            
+            if (destMenu && !destMenu.classList.contains('invisible') && !destMenu.contains(event.target) && !destBtn) toggleMobileDestinations();
+            if (langMenu && !langMenu.classList.contains('invisible') && !langMenu.contains(event.target) && !langBtn && !event.target.closest('.lang-option-mobile')) toggleMobileLanguage();
+        });
+
+        // Main Init
         document.addEventListener('DOMContentLoaded', () => {
-             // Smooth Scroll
             if (typeof Lenis !== 'undefined') {
                 const lenis = new Lenis({
                     duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
