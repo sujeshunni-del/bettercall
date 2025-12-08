@@ -739,6 +739,10 @@
         const CLICKUP_API_KEY = "pk_260468481_DGN3UIQ1QIOC3C2V3M3UG9XFE8SCXXCH"; 
         const CLICKUP_LIST_ID = "901813907839"; 
         
+        // ----------------------------------------------------
+        //  CLICKUP CUSTOM FIELD IDs
+        //  Updated Config to match user request (name = task name, others fields)
+        // ----------------------------------------------------
         const CLICKUP_FIELDS = {
             "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",  
             "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115", 
@@ -753,10 +757,11 @@
             "PASSPORT NUMBER": "b8798515-8962-40a7-a8cd-2685f9fd676c",
             "PASSPORT EXPIRY": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", 
             "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
-            // "EMAIL": "replace_with_email_field_id", // UNCOMMENT AND ADD ID
-            // "PRESENT COUNTRY": "replace_with_country_field_id" // UNCOMMENT AND ADD ID
+            "EMAIL": "replace_with_email_field_id", // UNCOMMENTED AND READY FOR ID
+            "PRESENT COUNTRY": "replace_with_country_field_id" // UNCOMMENTED AND READY FOR ID
         };
 
+        // SALARY DATA (New Logic Engine)
         const salaryDb = {
             "Netherlands": { u: "€1,800 - €2,400", s: "€3,200 - €4,500" },
             "Germany": { u: "€1,600 - €2,200", s: "€3,500 - €5,000" },
@@ -774,6 +779,7 @@
         };
 
         const jobMasterList = [
+            // --- UNSKILLED ---
             {r:"Agriculture Farm Supervisor",type:"U",c:"Croatia"},{r:"Agriculture Farm Workers",type:"U",c:"Serbia"},
             {r:"Agriculture Worker",type:"U",c:"Poland"},{r:"Assembly Operator",type:"U",c:"Poland"},
             {r:"Assembly Worker",type:"U",c:"Macedonia"},{r:"Assistant Chef",type:"U",c:"Finland"},
@@ -789,6 +795,8 @@
             {r:"Packaging Staff",type:"U",c:"Poland"},{r:"Packing Helper",type:"U",c:"Finland"},
             {r:"Production Line Worker",type:"U",c:"Czech Republic"},{r:"Store Keeper",type:"U",c:"Sweden"},
             {r:"Warehouse Staff",type:"U",c:"Serbia"},{r:"Warehouse Packer",type:"U",c:"Latvia"},
+
+            // --- SKILLED ---
             {r:"Accountant",type:"S",c:"Netherlands"},{r:"Administrative Assistant",type:"S",c:"Netherlands"},
             {r:"Agriculture Farm Supervisor",type:"S",c:"Croatia"},{r:"Agriculture Farm Workers",type:"S",c:"Serbia"},
             {r:"Agriculture Field Officer",type:"S",c:"Netherlands"},{r:"Agriculture Pharmacist Technician",type:"S",c:"Netherlands"},
@@ -1061,6 +1069,7 @@
             
             // Populate Countries
             populateCountryDropdowns();
+            getClickUpFields(); // Logs fields to console for debugging
 
             flatpickr("#dob", {
                 dateFormat: "d/m/Y",
@@ -1535,6 +1544,28 @@
             return null;
         }
 
+        // HELPER TO FETCH FIELD IDS FOR USER (Restored for Debugging)
+        async function getClickUpFields() {
+            if(!CLICKUP_API_KEY || CLICKUP_API_KEY.length < 10) return;
+            console.log("%c Fetching ClickUp Fields... ", "background: #222; color: #bada55");
+            
+            try {
+                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, {
+                    method: 'GET',
+                    headers: { 'Authorization': CLICKUP_API_KEY }
+                });
+                const data = await res.json();
+                
+                if(data.fields) {
+                    console.group("YOUR CLICKUP FIELD IDs (Copy these into the code!)");
+                    data.fields.forEach(f => {
+                        console.log(`"${f.name}": "${f.id}",  // Type: ${f.type}`);
+                    });
+                    console.groupEnd();
+                }
+            } catch(e) { console.error("Could not fetch fields", e); }
+        }
+
         async function saveData() {
             // 1. Gather all data points
             const ref = document.getElementById('refId').innerText;
@@ -1547,7 +1578,7 @@
             const nationality = document.getElementById('nationality').value;
             const state = document.getElementById('state') ? document.getElementById('state').value : '';
             
-            // Clean phone numbers: REMOVE SPACES/DASHES FOR CLICKUP SAVING
+            // Clean phone numbers
             const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
             const whatsapp = cleanPhoneNumber(document.getElementById('whatsapp').value);
             
@@ -1584,7 +1615,7 @@
                 return option ? option.id : null; // Return UUID or null
             };
 
-            // Helper to push only if ID exists in config
+            // UPDATED ADD FIELD FUNCTION (Handles Dropdown Failures)
             const addField = (key, val, isDropdown = false) => {
                 if (CLICKUP_FIELDS[key] && val !== null && val !== "") {
                     let finalValue = val;
@@ -1596,8 +1627,10 @@
                              const index = field.type_config.options.findIndex(o => o.id === optionId);
                              if(index > -1) finalValue = index; 
                         } else {
-                           console.warn(`ClickUp Dropdown Mismatch: '${val}' not found in field '${key}'. Skipping to prevent error.`);
-                           return; 
+                           // FALLBACK: If dropdown option not found, send as text string.
+                           // This allows saving even if dropdown options are not synced perfectly.
+                           console.warn(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Attempting to save as text.`);
+                           finalValue = val; 
                         }
                     }
                     
@@ -1613,11 +1646,13 @@
             addField("AGE", age);
             addField("EMAIL", email);
             
-            // Dropdowns (Pass true as 3rd argument)
+            // IMPORTANT: Changed isDropdown to FALSE for robustness unless you are 100% sure options exist
+            // If these fields are set to "Text" in ClickUp, they will save correctly.
+            // If they are set to "Dropdown" in ClickUp, ensure options match exactly or they may fail.
             addField("QUALIFICATION", qualification, true); 
-            addField("PROFESSION", role, true);             
-            addField("NATIONALITY", nationality, true);     
-            addField("PRESENT COUNTRY", presentCountry, true);     
+            addField("PROFESSION", role, false);  // Changed to False (Send as Text)           
+            addField("NATIONALITY", nationality, false); // Changed to False (Send as Text)    
+            addField("PRESENT COUNTRY", presentCountry, false); // Changed to False (Send as Text)    
             
             addField("STATE", state);
             addField("EXPERIENCE", exp);
