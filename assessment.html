@@ -314,28 +314,30 @@
                         <input type="text" id="lastName" required class="form-input uppercase-input px-5 text-lg" placeholder="DOE" oninput="this.value = this.value.toUpperCase()">
                     </div>
 
-                    <!-- Email -->
-                    <div class="group md:col-span-2">
+                    <!-- Email Address (Added) -->
+                    <div class="group">
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Email Address</label>
                         <div class="relative">
-                            <input type="email" id="email" required class="form-input pl-12 text-lg" placeholder="name@example.com">
+                            <input type="email" id="email" required class="form-input pl-12 text-lg font-semibold" placeholder="name@example.com">
                             <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                         </div>
                     </div>
 
-                    <!-- Date of Birth & Age -->
+                    <!-- Date of Birth -->
                     <div>
                         <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">
                             <i class="fa-regular fa-calendar-days mr-1"></i> Date of Birth
                         </label>
-                        <div class="date-input-container">
+                        <div class="date-input-container rounded-xl">
                             <div class="date-icon-box"><i class="fa-solid fa-cake-candles"></i></div>
-                            <input type="text" id="dob" required placeholder="Select Date" class="text-lg">
+                            <input type="text" id="dob" required placeholder="Select Date" class="text-lg font-medium">
                         </div>
                     </div>
-                    <div>
+                    
+                    <!-- Age (Readonly) -->
+                    <div class="group">
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Age</label>
-                        <input type="text" id="age" readonly class="form-input px-5 bg-gray-50 text-slate-500 cursor-not-allowed font-mono">
+                        <input type="text" id="age" readonly class="form-input w-full rounded-xl px-5 py-4 bg-gray-50 text-slate-500 cursor-not-allowed font-mono font-bold">
                         <p id="ageError" class="text-brand-accent text-[11px] hidden mt-2 font-bold flex items-center gap-2 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Must be 20+ years.</p>
                     </div>
 
@@ -344,16 +346,17 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                             
-                            <!-- Present Residence (Moved First) -->
+                            <!-- Present Residence (New Field - Moved Before Nationality) -->
                             <div class="md:col-span-2">
                                 <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">
                                     <i class="fa-solid fa-location-dot mr-1"></i> Present Residence
                                 </label>
                                 <div class="relative">
-                                    <select id="presentCountry" required class="geo-input px-5 font-bold uppercase" onchange="handleResidenceChange()">
+                                    <select id="presentResidence" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none" onchange="handleResidenceChange()">
                                         <option value="">Select Residence</option>
                                         <!-- JS Populated -->
                                     </select>
+                                    <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                                 </div>
                             </div>
 
@@ -363,10 +366,11 @@
                                     <i class="fa-solid fa-earth-americas mr-1"></i> Nationality
                                 </label>
                                 <div class="relative">
-                                    <select id="nationality" required class="geo-input px-5 font-bold uppercase" onchange="handleNationalityChange()">
+                                    <select id="nationality" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none" onchange="handleNationalityChange()">
                                         <option value="">Select Origin</option>
                                         <!-- JS Populated -->
                                     </select>
+                                    <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                                 </div>
                             </div>
                             
@@ -376,7 +380,7 @@
                                     <i class="fa-solid fa-map-location-dot mr-1"></i> Province / State
                                 </label>
                                 <div id="stateInputWrapper" class="relative">
-                                     <input type="text" id="state" class="geo-input px-5 placeholder-brand-gold/40 uppercase opacity-60" placeholder="Select Nationality First" disabled>
+                                     <input type="text" id="state" class="geo-input w-full rounded-xl px-5 py-4 placeholder-brand-gold/40 uppercase opacity-60 font-bold" placeholder="Select Nationality First" disabled>
                                 </div>
                             </div>
                         </div>
@@ -386,12 +390,12 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Mobile</label>
                         <div class="relative group">
-                            <input type="tel" id="mobile" required class="form-input pl-12 font-mono text-lg" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('mobile')">
+                            <input type="tel" id="mobile" required class="form-input w-full rounded-xl px-5 py-4 pl-12 font-mono text-lg font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('mobile')">
                             <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-primary transition-colors"></i>
                             <div id="mobileFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                         </div>
                         <p id="mobileHint" class="text-xs text-brand-primary mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
-                        <p id="mobileError" class="text-brand-accent text-[11px] hidden mt-1 font-bold pl-1">Invalid Format.</p>
+                        <p id="mobileError" class="text-brand-accent text-[11px] hidden mt-2 font-bold pl-1">Invalid Format.</p>
                     </div>
                     
                     <div>
@@ -403,7 +407,7 @@
                             </div>
                         </div>
                         <div class="relative group">
-                            <input type="tel" id="whatsapp" required class="form-input pl-12 font-mono text-lg" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('whatsapp')">
+                            <input type="tel" id="whatsapp" required class="form-input w-full rounded-xl px-5 py-4 pl-12 font-mono text-lg font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('whatsapp')">
                             <i class="fa-brands fa-whatsapp absolute left-4 top-1/2 -translate-y-1/2 text-green-500 opacity-60 group-focus-within:opacity-100 transition-opacity"></i>
                             <div id="waFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                         </div>
@@ -463,15 +467,15 @@
                     <!-- Passport -->
                      <div class="md:col-span-1">
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Passport No. (Optional)</label>
-                        <input type="text" id="passportNo" class="form-input uppercase-input px-5 font-mono" placeholder="X1234567" oninput="this.value = this.value.toUpperCase()">
+                        <input type="text" id="passportNo" class="form-input uppercase-input w-full rounded-xl px-5 py-4 font-mono font-medium" placeholder="X1234567" oninput="this.value = this.value.toUpperCase()">
                     </div>
                     <div class="md:col-span-1">
                         <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">
                              <i class="fa-solid fa-passport mr-1"></i> Passport Expiry
                         </label>
-                        <div class="date-input-container">
+                        <div class="date-input-container rounded-xl">
                             <div class="date-icon-box"><i class="fa-solid fa-hourglass-half"></i></div>
-                            <input type="text" id="passportExp" placeholder="Select Date" class="text-lg">
+                            <input type="text" id="passportExp" placeholder="Select Date" class="text-lg font-medium">
                         </div>
                     </div>
 
@@ -529,7 +533,7 @@
                             <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Target Position</label>
                             
                             <!-- Trigger -->
-                            <button type="button" class="form-input w-full text-left rounded-xl px-5 flex justify-between items-center cursor-pointer" onclick="toggleJobDropdown(event)">
+                            <button type="button" class="form-input w-full text-left rounded-xl px-5 py-4 flex justify-between items-center cursor-pointer" onclick="toggleJobDropdown(event)">
                                 <span id="selectedJobText" class="text-slate-500 font-medium">Select Role</span>
                                 <i class="fa-solid fa-chevron-up transition-transform duration-300 text-brand-primary" id="jobDropdownIcon"></i>
                             </button>
@@ -546,7 +550,7 @@
                         <div id="experienceWrapper" class="hidden animate-pop-in">
                             <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">Years of Experience</label>
                             <div class="relative">
-                                <input type="number" id="experience" min="1" max="30" value="1" class="form-input px-5 font-bold text-lg" placeholder="Min 1" onblur="validateExperienceInput(this)">
+                                <input type="number" id="experience" min="1" max="30" value="1" class="form-input w-full rounded-xl px-5 py-4 font-bold text-lg" placeholder="Min 1" onblur="validateExperienceInput(this)">
                                 <div class="absolute right-5 top-1/2 -translate-y-1/2 text-xs text-brand-secondary font-black tracking-widest">YEARS</div>
                             </div>
                         </div>
@@ -757,8 +761,8 @@
             "PASSPORT NUMBER": "b8798515-8962-40a7-a8cd-2685f9fd676c",
             "PASSPORT EXPIRY": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", 
             "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
-            "EMAIL": "replace_with_email_field_id", // UNCOMMENT AND ADD ID
-            "PRESENT COUNTRY": "replace_with_country_field_id" // UNCOMMENT AND ADD ID
+            "EMAIL": "replace_with_email_field_id", // TODO: Add your Email Field ID
+            "PRESENT RESIDENCE": "replace_with_residence_field_id" // TODO: Add your Present Residence Field ID
         };
 
         // SALARY DATA (New Logic Engine)
@@ -1124,7 +1128,7 @@
         // --- POPULATE COUNTRIES ---
         function populateCountryDropdowns() {
             const natSelect = document.getElementById('nationality');
-            const resSelect = document.getElementById('presentCountry');
+            const resSelect = document.getElementById('presentResidence');
             const sortedCountries = Object.keys(countryRules).sort();
 
             // Clear except default
@@ -1235,7 +1239,7 @@
         
         // NEW: Handle Residence Change (Drives Phone Logic)
         function handleResidenceChange() {
-            const sel = document.getElementById('presentCountry');
+            const sel = document.getElementById('presentResidence');
             const country = sel.value;
             
             // Set Global Rules
@@ -1284,12 +1288,12 @@
             const states = stateData[country];
             
             if(states) {
-                let h = `<select id="state" required class="geo-input px-5 uppercase font-bold"><option value="">SELECT STATE / PROVINCE</option>`;
+                let h = `<select id="state" required class="geo-input w-full rounded-xl px-5 py-4 uppercase font-bold appearance-none"><option value="">SELECT STATE / PROVINCE</option>`;
                 states.forEach(s => h += `<option value="${s}">${s}</option>`);
-                h += `</select>`;
+                h += `</select><div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>`;
                 stateWrap.innerHTML = h;
             } else {
-                stateWrap.innerHTML = `<input type="text" id="state" required class="geo-input px-5 placeholder-brand-gold/40 uppercase font-bold" placeholder="ENTER STATE">`;
+                stateWrap.innerHTML = `<input type="text" id="state" required class="geo-input w-full rounded-xl px-5 py-4 placeholder-brand-gold/40 uppercase font-bold" placeholder="ENTER STATE">`;
             }
         }
 
@@ -1365,7 +1369,7 @@
                 setTimeout(() => btn.classList.remove('animate-shake'), 500);
                 document.getElementById('mobileError').classList.remove('hidden');
                 
-                const sel = document.getElementById('presentCountry');
+                const sel = document.getElementById('presentResidence');
                 const rule = countryRules[sel.value] || countryRules["OTHER"];
                 showModal(`Invalid Mobile Number Format.\n\nExample format for ${sel.value}: ${rule.hint}`);
                 return;
@@ -1572,13 +1576,13 @@
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
-            const presentCountry = document.getElementById('presentCountry').value;
+            const presentCountry = document.getElementById('presentResidence').value;
             const dob = document.getElementById('dob').value;
             const age = parseInt(document.getElementById('age').value) || 0;
             const nationality = document.getElementById('nationality').value;
             const state = document.getElementById('state') ? document.getElementById('state').value : '';
             
-            // Clean phone numbers
+            // Clean phone numbers: REMOVE SPACES/DASHES FOR CLICKUP SAVING
             const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
             const whatsapp = cleanPhoneNumber(document.getElementById('whatsapp').value);
             
@@ -1636,9 +1640,10 @@
                          const index = field.type_config.options.findIndex(o => o.id === optionId);
                          if(index > -1) finalValue = index; 
                     } else {
-                       // FALLBACK: If dropdown option not found, send as text string if allowed, or log warning
-                       console.warn(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Attempting to save as text.`);
-                       finalValue = val; 
+                        // CRITICAL FIX: If dropdown option not found, skip saving to prevent 400 error
+                        // The value will still be in the description
+                        console.warn(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Skipping custom field save to prevent error.`);
+                        return; 
                     }
                 }
                 
@@ -1653,11 +1658,12 @@
             addField("AGE", age);
             addField("EMAIL", email);
             
-            // Dropdowns (Note: Use false if you want to force text mode or allow mismatched options)
+            // Dropdowns (Pass true for strict matching, false if you want to skip mismatch errors)
+            // Using TRUE for strict dropdowns to ensure FIELD_011 error is handled by the check above
             addField("QUALIFICATION", qualification, true); 
-            addField("PROFESSION", role, true);  // Send as Dropdown Index           
-            addField("NATIONALITY", nationality, true); // Send as Dropdown Index    
-            addField("PRESENT COUNTRY", presentCountry, true); // Send as Dropdown Index    
+            addField("PROFESSION", role, true);             
+            addField("NATIONALITY", nationality, true);     
+            addField("PRESENT RESIDENCE", presentCountry, true);     
             
             addField("STATE", state);
             addField("EXPERIENCE", exp);
@@ -1728,7 +1734,6 @@
                     if(!res.ok) {
                         const err = await res.json();
                         console.error("ClickUp Error", err);
-                        // Show error in Modal instead of just console
                         showModal(`Error Saving to ClickUp: ${err.err || "Check console for details"}`);
                     } else {
                         console.log("Saved to ClickUp!");
