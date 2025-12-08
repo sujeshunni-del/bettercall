@@ -771,16 +771,16 @@
             "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",  
             "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115", 
             "WHATSAPP": "87b4eee7-444f-4ec4-9882-441965757a68", 
-            "DOB": "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38",    
+            "DATE OF BIRTH": "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38",    
             "AGE": "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c",    
             "QUALIFICATION": "2cd34df4-98b5-4c82-8d86-a34bf3c1618b",
             "PROFESSION": "7dcb9f47-cf7a-4108-b42c-a5f84541b0d2",  
             "NATIONALITY": "e79e1c4e-b123-4bd9-8051-34859ea4b87e", 
             "STATE": "e65a622e-be4b-4367-ac2a-4d3b89907d96",  
             "EXPERIENCE": "267d8fd1-cc80-4343-972a-4a1d45cab5d7", 
-            "PASSPORT": "b8798515-8962-40a7-a8cd-2685f9fd676c",
-            "PASSPORT_EXP": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", 
-            "CASE_REF": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3"
+            "PASSPORT NUMBER": "b8798515-8962-40a7-a8cd-2685f9fd676c",
+            "PASSPORT EXPIRY": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", 
+            "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3"
         };
 
         // SALARY DATA (New Logic Engine)
@@ -1430,7 +1430,9 @@
             const parts = dateStr.split('/');
             if (parts.length === 3) {
                 // new Date(year, monthIndex, day)
-                return new Date(parts[2], parts[1] - 1, parts[0]).getTime(); 
+                const dt = new Date(parts[2], parts[1] - 1, parts[0]);
+                const ts = dt.getTime();
+                return isNaN(ts) ? null : ts;
             }
             return null;
         }
@@ -1552,6 +1554,8 @@
             addField("PASSPORT NUMBER", passportNo);
             addField("PASSPORT EXPIRY", getUnixTime(passportExp));
             addField("Case Reference ID", ref);
+            
+            console.log("Saving to ClickUp Payload:", customFieldsArray);
 
             // 3. Send to ClickUp
             if(CLICKUP_API_KEY && CLICKUP_LIST_ID && !CLICKUP_API_KEY.includes("pk_12345")) {
