@@ -21,9 +21,12 @@
     <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS (Warning Suppressed) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // Suppress Tailwind CDN warning for cleaner console
+        console.warn = function() {}; 
+
         tailwind.config = {
             theme: {
                 extend: {
@@ -750,6 +753,9 @@
     </div>
 
     <script>
+        // Suppress Tailwind CDN warning for cleaner console
+        console.warn = function() {}; 
+
         // ==========================================
         //  CONFIGURATION AREA
         // ==========================================
@@ -760,10 +766,9 @@
         // ----------------------------------------------------
         //  CLICKUP CUSTOM FIELD IDs
         //  Updated Config to match user request (name = task name, others fields)
-        //  Paste IDs from console into the empty strings ""
         // ----------------------------------------------------
         const CLICKUP_FIELDS = {
-            "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",       // Short Text
+            "SURNAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",       // Short Text
             "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115",         // Phone
             "WHATSAPP": "87b4eee7-444f-4ec4-9882-441965757a68",       // Phone
             "DATE OF BIRTH": "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38",  // Date
@@ -1132,6 +1137,12 @@
             }
         }
 
+        function cleanPhoneNumber(phoneStr) {
+            if(!phoneStr) return null;
+            // Remove all spaces, dashes, etc. Keep only + and digits
+            return phoneStr.replace(/[^0-9+]/g, '');
+        }
+
         function validatePhone(id) {
             const el = document.getElementById(id);
             const feedback = id === 'mobile' ? document.getElementById('mobileFeedback') : document.getElementById('waFeedback');
@@ -1454,8 +1465,11 @@
             const age = parseInt(document.getElementById('age').value) || 0;
             const nationality = document.getElementById('nationality').value;
             const state = document.getElementById('state') ? document.getElementById('state').value : '';
-            const mobile = document.getElementById('mobile').value;
-            const whatsapp = document.getElementById('whatsapp').value;
+            
+            // Clean phone numbers
+            const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
+            const whatsapp = cleanPhoneNumber(document.getElementById('whatsapp').value);
+            
             const qualification = document.querySelector('input[name="qualification"]:checked')?.value || '';
             const passportNo = document.getElementById('passportNo').value;
             const passportExp = document.getElementById('passportExp').value;
@@ -1469,11 +1483,15 @@
             // Helper to push only if ID exists in config
             const addField = (key, val) => {
                 if (CLICKUP_FIELDS[key] && val !== null && val !== "") {
+                    // For dropdowns, ClickUp sometimes needs the index (int) or the UUID of the option,
+                    // but sending the exact text label usually works if "Add custom field options" is enabled in List settings.
+                    // If strict validation fails, we might need to fetch option IDs. 
+                    // However, most integrations work with value matching.
                     customFieldsArray.push({ "id": CLICKUP_FIELDS[key], "value": val });
                 }
             };
 
-            // Map Data to Configured IDs (Field IDs from user provided list)
+            // Map Data to Configured IDs
             addField("SUR NAME", lastName);
             addField("MOBILE", mobile);
             addField("WHATSAPP", whatsapp);
