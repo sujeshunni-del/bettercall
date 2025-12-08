@@ -16,9 +16,9 @@
     <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Flatpickr (Stylish Date Picker) -->
+    <!-- Flatpickr (Stylish Date Picker - Light Theme) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <!-- Tailwind CSS (Warning Suppressed) -->
@@ -31,30 +31,30 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-dark': '#0a0a0a',
-                        'brand-primary': '#00f2ff', /* Cyan Neon */
-                        'brand-secondary': '#7000ff', /* Deep Violet */
-                        'brand-accent': '#ff0055', /* Hot Pink */
-                        'brand-gold': '#ffd700',
-                        'glass-surface': 'rgba(255, 255, 255, 0.03)',
-                        'glass-border': 'rgba(255, 255, 255, 0.08)',
-                        'glass-highlight': 'rgba(255, 255, 255, 0.15)',
+                        'brand-dark': '#ffffff',
+                        'brand-primary': '#2563eb', /* Royal Blue */
+                        'brand-secondary': '#7c3aed', /* Vibrant Violet */
+                        'brand-accent': '#f43f5e', /* Rose */
+                        'brand-gold': '#d97706', /* Amber */
+                        'glass-surface': 'rgba(255, 255, 255, 0.65)',
+                        'glass-border': 'rgba(255, 255, 255, 0.4)',
+                        'glass-highlight': 'rgba(255, 255, 255, 0.8)',
                     },
                     fontFamily: {
                         sans: ['Outfit', 'sans-serif'],
                         barcode: ['"Libre Barcode 39 Text"', 'cursive'],
                     },
                     boxShadow: {
-                        'neon-blue': '0 0 20px rgba(0, 242, 255, 0.3)',
-                        'neon-pink': '0 0 20px rgba(255, 0, 85, 0.3)',
-                        'glass-lg': '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
+                        'soft-xl': '0 20px 40px -10px rgba(0, 0, 0, 0.08)',
+                        'soft-inner': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'glow-primary': '0 0 20px rgba(37, 99, 235, 0.2)',
+                        'glass-lg': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
                     },
                     animation: {
-                        'blob': 'blob 10s infinite',
+                        'blob': 'blob 15s infinite',
                         'float': 'float 6s ease-in-out infinite',
                         'slide-up-fade': 'slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'pop-in': 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
-                        'shimmer': 'shimmer 2s linear infinite',
                     },
                     keyframes: {
                         blob: {
@@ -68,16 +68,12 @@
                             '50%': { transform: 'translateY(-10px)' }
                         },
                         slideUpFade: {
-                            '0%': { transform: 'translateY(40px)', opacity: '0' },
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
                             '100%': { transform: 'translateY(0)', opacity: '1' }
                         },
                         popIn: {
                             '0%': { transform: 'scale(0.9)', opacity: '0' },
                             '100%': { transform: 'scale(1)', opacity: '1' }
-                        },
-                        shimmer: {
-                            '0%': { backgroundPosition: '-1000px 0' },
-                            '100%': { backgroundPosition: '1000px 0' }
                         }
                     }
                 }
@@ -88,14 +84,14 @@
     <style>
         /* BASE & BACKGROUND */
         body {
-            background-color: #050505;
-            color: #e2e8f0;
+            background-color: #f8fafc;
+            color: #1e293b;
             font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Ambient Orbs Background */
+        /* Ambient Orbs Background (Vibrant Light Theme) */
         .ambient-light {
             position: fixed;
             top: 0;
@@ -104,152 +100,149 @@
             height: 100vh;
             z-index: -1;
             overflow: hidden;
-            background: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
+            background: linear-gradient(135deg, #f0f9ff 0%, #eef2ff 100%);
         }
         .orb {
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.4;
-            animation: blob 20s infinite alternate;
+            opacity: 0.6;
+            animation: blob 25s infinite alternate;
         }
-        .orb-1 { width: 600px; height: 600px; background: #7000ff; top: -100px; left: -100px; animation-delay: 0s; }
-        .orb-2 { width: 500px; height: 500px; background: #00f2ff; bottom: -100px; right: -100px; animation-delay: -5s; }
-        .orb-3 { width: 400px; height: 400px; background: #ff0055; top: 40%; left: 40%; animation-delay: -10s; opacity: 0.2; }
+        .orb-1 { width: 800px; height: 800px; background: #e0e7ff; top: -200px; left: -200px; animation-delay: 0s; mix-blend-mode: multiply;}
+        .orb-2 { width: 600px; height: 600px; background: #dbeafe; bottom: -100px; right: -100px; animation-delay: -5s; mix-blend-mode: multiply;}
+        .orb-3 { width: 500px; height: 500px; background: #fae8ff; top: 30%; right: 20%; animation-delay: -10s; opacity: 0.5; mix-blend-mode: multiply;}
 
-        /* GLASSMORPHISM 2.0 PANEL */
+        /* GLASSMORPHISM PANEL (Clean Pro) */
         .glass-panel {
-            background: rgba(20, 20, 20, 0.4);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
             position: relative;
-            overflow: visible; 
-        }
-        /* Shine effect on top edge */
-        .glass-panel::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
         }
 
-        /* INPUTS */
-        .form-input {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(4px);
+        /* INPUTS (Clean White - Uniform) */
+        .form-input, .date-input-container, .geo-input {
+            height: 3.5rem; /* Uniform Height */
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #1e293b;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border-radius: 0.75rem;
+            width: 100%;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
         }
-        .form-input:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.03);
+        .form-input::placeholder, .date-input-container input::placeholder { color: #94a3b8; font-weight: 400; }
+        
+        .form-input:hover, .date-input-container:hover, .geo-input:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
         }
-        .form-input:focus {
-            border-color: #00f2ff;
-            background: rgba(0, 242, 255, 0.05);
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+        .form-input:focus, .geo-input:focus {
+            border-color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
             outline: none;
         }
 
-        /* SPECIAL GEOGRAPHY INPUTS */
-        .geo-input {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, rgba(0, 0, 0, 0.2) 100%);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            color: #ffd700;
-        }
-        .geo-input:focus {
-            border-color: #ffd700;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
-        }
-        .geo-input option {
-            background-color: #1a1a1a;
-            color: #ffd700;
-        }
-
-        /* DATE PICKER WRAPPER */
+        /* Specific Date Input Fixes */
         .date-input-container {
             display: flex;
             align-items: center;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
             overflow: hidden;
+            padding: 0;
         }
-        .date-input-container:hover {
-            border-color: #7000ff;
-            box-shadow: 0 0 10px rgba(112, 0, 255, 0.2);
+        .date-input-container:hover { border-color: #cbd5e1; }
+        .date-input-container:focus-within {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
         }
         .date-icon-box {
-            padding: 0 1rem;
-            color: #7000ff;
-            background: rgba(112, 0, 255, 0.1);
+            padding: 0 1.25rem;
+            color: #7c3aed;
+            background: #f5f3ff;
             height: 100%;
             display: flex;
             align-items: center;
-            border-right: 1px solid rgba(112, 0, 255, 0.2);
+            border-right: 1px solid #ede9fe;
         }
         .date-input-container input {
             background: transparent;
             border: none;
-            color: white;
+            color: #1e293b;
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0 1rem;
+            height: 100%;
             outline: none;
+            font-weight: 600;
+        }
+
+        /* DROPDOWN ARROW FIX */
+        select.geo-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
         }
 
         /* UTILS */
         .uppercase-input { text-transform: uppercase; }
-        .valid-field { border-color: #00ff88 !important; box-shadow: 0 0 10px rgba(0, 255, 136, 0.2) !important; }
-        .invalid-field { border-color: #ff0055 !important; box-shadow: 0 0 10px rgba(255, 0, 85, 0.2) !important; }
+        .valid-field { border-color: #10b981 !important; background-color: #ecfdf5 !important; }
+        .invalid-field { border-color: #f43f5e !important; background-color: #fff1f2 !important; }
 
         /* CATEGORY CARDS */
         .category-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
         .category-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
+            border-color: #2563eb;
         }
         .category-card.active {
-            background: linear-gradient(135deg, rgba(0, 242, 255, 0.1) 0%, rgba(112, 0, 255, 0.1) 100%);
-            border-color: #00f2ff;
-            box-shadow: 0 10px 30px rgba(0, 242, 255, 0.15);
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+            border-color: #2563eb;
+            box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.15);
+            position: relative;
+        }
+        .category-card.active::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            border: 2px solid #2563eb;
+            pointer-events: none;
         }
 
         /* DROPDOWN SCROLLBAR */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #00f2ff; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* CIRCULAR PROGRESS */
-        .circular-chart { display: block; margin: 0 auto; max-width: 100%; max-height: 250px; }
-        .circle-bg { fill: none; stroke: rgba(255, 255, 255, 0.05); stroke-width: 2.5; }
-        .circle { fill: none; stroke-width: 2.5; stroke-linecap: round; animation: progress 1.5s ease-out forwards; }
-        @keyframes progress { 0% { stroke-dasharray: 0 100; } }
-        .percentage { fill: #fff; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.5em; text-anchor: middle; }
-
         /* BUTTON GRADIENTS */
         .btn-gradient {
             background-size: 200% auto;
-            background-image: linear-gradient(to right, #00f2ff 0%, #7000ff 51%, #00f2ff 100%);
+            background-image: linear-gradient(to right, #2563eb 0%, #7c3aed 51%, #2563eb 100%);
             transition: 0.5s;
         }
-        .btn-gradient:hover { background-position: right center; }
+        .btn-gradient:hover { background-position: right center; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4); }
 
         /* CUSTOM MODAL */
         #messageModal { backdrop-filter: blur(8px); }
         .modal-content {
-            background: rgba(20, 20, 20, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
     </style>
 </head>
@@ -263,16 +256,16 @@
     </div>
 
     <!-- Header -->
-    <nav class="fixed w-full z-50 transition-all duration-300 backdrop-blur-md bg-black/20 border-b border-white/5">
+    <nav class="fixed w-full z-50 transition-all duration-300 backdrop-blur-md bg-white/70 border-b border-gray-100/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white font-bold text-2xl shadow-neon-blue animate-float">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-brand-primary/20 animate-float">
                         <i class="fa-solid fa-plane-departure transform -rotate-12"></i>
                     </div>
                     <div>
-                        <h1 class="font-bold text-2xl tracking-tighter text-white">Better Call <span class="text-brand-primary drop-shadow-[0_0_10px_rgba(0,242,255,0.5)]">Immigration</span></h1>
-                        <p class="text-[10px] text-brand-primary uppercase tracking-[0.2em] font-semibold opacity-80">Global Assessment Portal</p>
+                        <h1 class="font-bold text-2xl tracking-tight text-slate-900">Better Call <span class="text-brand-primary">Immigration</span></h1>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-semibold">Global Assessment Portal</p>
                     </div>
                 </div>
             </div>
@@ -283,22 +276,22 @@
     <main class="flex-grow pt-32 pb-12 px-4 relative z-10">
         <div class="max-w-6xl mx-auto">
             
-            <!-- Progress Steps (Glowing Nodes) -->
+            <!-- Progress Steps (Clean Nodes) -->
             <div class="mb-16 relative">
                 <!-- Connecting Line -->
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-0.5 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-0.5 bg-gray-200"></div>
                 
                 <div class="flex items-center justify-center gap-16 relative z-10">
                     <!-- Step 1 -->
                     <div id="step-1-indicator" class="flex flex-col items-center gap-3 transition-all duration-500">
-                        <div class="w-12 h-12 rounded-full bg-brand-dark border-2 border-brand-primary shadow-neon-blue flex items-center justify-center text-brand-primary text-lg font-bold">1</div>
-                        <span class="font-medium text-sm text-brand-primary tracking-widest uppercase text-shadow-glow">Profile</span>
+                        <div class="w-12 h-12 rounded-full bg-white border-4 border-brand-primary shadow-lg flex items-center justify-center text-brand-primary text-lg font-bold">1</div>
+                        <span class="font-bold text-sm text-brand-primary tracking-widest uppercase">Profile</span>
                     </div>
                     
                     <!-- Step 2 -->
-                    <div id="step-2-indicator" class="flex flex-col items-center gap-3 transition-all duration-500 opacity-50 grayscale">
-                        <div class="w-12 h-12 rounded-full bg-brand-dark border-2 border-white/20 flex items-center justify-center text-white text-lg font-bold">2</div>
-                        <span class="font-medium text-sm text-gray-400 tracking-widest uppercase">Report</span>
+                    <div id="step-2-indicator" class="flex flex-col items-center gap-3 transition-all duration-500 opacity-40 grayscale">
+                        <div class="w-12 h-12 rounded-full bg-white border-4 border-gray-200 flex items-center justify-center text-gray-400 text-lg font-bold">2</div>
+                        <span class="font-bold text-sm text-gray-400 tracking-widest uppercase">Report</span>
                     </div>
                 </div>
             </div>
@@ -306,19 +299,28 @@
             <!-- TAB 1: Personal Details -->
             <div id="tab-1" class="glass-panel rounded-3xl p-8 md:p-12 animate-slide-up-fade max-w-4xl mx-auto">
                 <div class="mb-10 text-center">
-                    <h2 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500 mb-3">Begin Your Journey</h2>
-                    <p class="text-gray-400 text-sm tracking-wide">Enter details as per your official documents.</p>
+                    <h2 class="text-4xl font-black text-slate-900 mb-3 tracking-tight">Begin Your Journey</h2>
+                    <p class="text-slate-500 text-sm tracking-wide font-medium">Enter details as per your official documents.</p>
                 </div>
 
                 <form id="personalForm" class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Name & Surname -->
                     <div class="group">
                         <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Given Name</label>
-                        <input type="text" id="firstName" required class="form-input uppercase-input w-full rounded-xl px-5 py-4 text-lg font-medium" placeholder="JOHN" oninput="this.value = this.value.toUpperCase()">
+                        <input type="text" id="firstName" required class="form-input uppercase-input px-5 text-lg" placeholder="JOHN" oninput="this.value = this.value.toUpperCase()">
                     </div>
                     <div class="group">
                         <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Surname</label>
-                        <input type="text" id="lastName" required class="form-input uppercase-input w-full rounded-xl px-5 py-4 text-lg font-medium" placeholder="DOE" oninput="this.value = this.value.toUpperCase()">
+                        <input type="text" id="lastName" required class="form-input uppercase-input px-5 text-lg" placeholder="DOE" oninput="this.value = this.value.toUpperCase()">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="group md:col-span-2">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Email Address</label>
+                        <div class="relative">
+                            <input type="email" id="email" required class="form-input pl-12 text-lg" placeholder="name@example.com">
+                            <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        </div>
                     </div>
 
                     <!-- Date of Birth & Age -->
@@ -326,52 +328,55 @@
                         <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">
                             <i class="fa-regular fa-calendar-days mr-1"></i> Date of Birth
                         </label>
-                        <div class="date-input-container rounded-xl">
+                        <div class="date-input-container">
                             <div class="date-icon-box"><i class="fa-solid fa-cake-candles"></i></div>
                             <input type="text" id="dob" required placeholder="Select Date" class="text-lg">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 ml-1">Age</label>
-                        <input type="text" id="age" readonly class="form-input w-full rounded-xl px-5 py-4 bg-white/5 text-gray-400 cursor-not-allowed font-mono">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Age</label>
+                        <input type="text" id="age" readonly class="form-input px-5 bg-gray-50 text-slate-500 cursor-not-allowed font-mono">
                         <p id="ageError" class="text-brand-accent text-[11px] hidden mt-2 font-bold flex items-center gap-2 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Must be 20+ years.</p>
                     </div>
 
-                    <!-- GEOGRAPHY SECTION (Gold Styled) -->
-                    <div class="md:col-span-2 relative p-6 rounded-2xl border border-brand-gold/30 bg-gradient-to-br from-brand-gold/5 to-transparent overflow-hidden">
-                        <!-- Decorative bg element -->
-                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-gold/20 blur-3xl rounded-full"></div>
+                    <!-- GEOGRAPHY SECTION (Gold Styled - Modern) -->
+                    <div class="md:col-span-2 relative p-8 rounded-2xl border border-brand-gold/20 bg-gradient-to-br from-amber-50 to-white overflow-hidden shadow-sm">
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                            
+                            <!-- Present Residence (Moved First) -->
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">
+                                    <i class="fa-solid fa-location-dot mr-1"></i> Present Residence
+                                </label>
+                                <div class="relative">
+                                    <select id="presentCountry" required class="geo-input px-5 font-bold uppercase" onchange="handleResidenceChange()">
+                                        <option value="">Select Residence</option>
+                                        <!-- JS Populated -->
+                                    </select>
+                                </div>
+                            </div>
+
                             <!-- Nationality -->
                             <div>
-                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1 drop-shadow-sm">
+                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">
                                     <i class="fa-solid fa-earth-americas mr-1"></i> Nationality
                                 </label>
                                 <div class="relative">
-                                    <select id="nationality" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none" onchange="handleNationalityChange()">
+                                    <select id="nationality" required class="geo-input px-5 font-bold uppercase" onchange="handleNationalityChange()">
                                         <option value="">Select Origin</option>
-                                        <option value="INDIA" data-code="+91">India</option>
-                                        <option value="PAKISTAN" data-code="+92">Pakistan</option>
-                                        <option value="NEPAL" data-code="+977">Nepal</option>
-                                        <option value="SRILANKA" data-code="+94">Sri Lanka</option>
-                                        <option value="BANGLADESH" data-code="+880">Bangladesh</option>
-                                        <option value="PHILIPPINES" data-code="+63">Philippines</option>
-                                        <option value="EGYPT" data-code="+20">Egypt</option>
-                                        <option value="AFRICA" data-code="+234">Africa (Region)</option>
-                                        <option value="OTHER" data-code="">Other</option>
+                                        <!-- JS Populated -->
                                     </select>
-                                    <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                                 </div>
                             </div>
                             
                             <!-- State -->
                             <div id="stateContainer">
-                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1 drop-shadow-sm">
+                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">
                                     <i class="fa-solid fa-map-location-dot mr-1"></i> Province / State
                                 </label>
                                 <div id="stateInputWrapper" class="relative">
-                                     <input type="text" id="state" class="geo-input w-full rounded-xl px-5 py-4 placeholder-brand-gold/40 uppercase opacity-60" placeholder="Select Nationality First" disabled>
+                                     <input type="text" id="state" class="geo-input px-5 placeholder-brand-gold/40 uppercase opacity-60" placeholder="Select Nationality First" disabled>
                                 </div>
                             </div>
                         </div>
@@ -379,75 +384,77 @@
 
                     <!-- Contact -->
                     <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">Mobile</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Mobile</label>
                         <div class="relative group">
-                            <input type="tel" id="mobile" required class="form-input w-full rounded-xl px-5 py-4 pl-12 font-mono text-lg" placeholder="+91..." oninput="validatePhone('mobile')">
-                            <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-brand-primary opacity-60 group-focus-within:opacity-100 transition-opacity"></i>
+                            <input type="tel" id="mobile" required class="form-input pl-12 font-mono text-lg" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('mobile')">
+                            <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-primary transition-colors"></i>
                             <div id="mobileFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                         </div>
-                        <p id="mobileError" class="text-brand-accent text-[11px] hidden mt-2 font-bold pl-1">Invalid Format.</p>
+                        <p id="mobileHint" class="text-xs text-brand-primary mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
+                        <p id="mobileError" class="text-brand-accent text-[11px] hidden mt-1 font-bold pl-1">Invalid Format.</p>
                     </div>
                     
                     <div>
                         <div class="flex justify-between items-center mb-3">
-                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">WhatsApp</label>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">WhatsApp</label>
                             <div class="flex items-center gap-2">
-                                <input type="checkbox" id="sameAsMobile" class="w-4 h-4 rounded border-gray-600 text-brand-primary focus:ring-brand-primary bg-white/5 accent-brand-primary cursor-pointer">
-                                <label for="sameAsMobile" class="text-[10px] text-gray-500 cursor-pointer select-none font-bold uppercase tracking-wider">Same as Mobile</label>
+                                <input type="checkbox" id="sameAsMobile" class="w-4 h-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary cursor-pointer">
+                                <label for="sameAsMobile" class="text-[10px] text-slate-500 cursor-pointer select-none font-bold uppercase tracking-wider">Same as Mobile</label>
                             </div>
                         </div>
                         <div class="relative group">
-                            <input type="tel" id="whatsapp" required class="form-input w-full rounded-xl px-5 py-4 pl-12 font-mono text-lg" placeholder="+91..." oninput="validatePhone('whatsapp')">
-                            <i class="fa-brands fa-whatsapp absolute left-4 top-1/2 -translate-y-1/2 text-green-400 opacity-60 group-focus-within:opacity-100 transition-opacity"></i>
+                            <input type="tel" id="whatsapp" required class="form-input pl-12 font-mono text-lg" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('whatsapp')">
+                            <i class="fa-brands fa-whatsapp absolute left-4 top-1/2 -translate-y-1/2 text-green-500 opacity-60 group-focus-within:opacity-100 transition-opacity"></i>
                             <div id="waFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                         </div>
+                        <p id="waHint" class="text-xs text-brand-secondary mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
                     </div>
 
                     <!-- Qualifications -->
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 ml-1">Education Level</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 ml-1">Education Level</label>
                         <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
                             <!-- Helper for cleaner HTML repetition -->
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="UNDER 10 TH" class="peer sr-only" required>
-                                <div class="h-full rounded-xl border border-white/10 bg-white/5 p-4 flex flex-col items-center justify-center text-center gap-2 hover:bg-white/10 peer-checked:bg-brand-primary/10 peer-checked:border-brand-primary peer-checked:shadow-neon-blue transition-all">
-                                    <i class="fa-solid fa-school text-xl text-gray-500 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-gray-400 peer-checked:text-white">Under 10th</span>
+                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-school text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Under 10th</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="SCHOOL" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-white/10 bg-white/5 p-4 flex flex-col items-center justify-center text-center gap-2 hover:bg-white/10 peer-checked:bg-brand-primary/10 peer-checked:border-brand-primary peer-checked:shadow-neon-blue transition-all">
-                                    <i class="fa-solid fa-book-open text-xl text-gray-500 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-gray-400 peer-checked:text-white">School</span>
+                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-book-open text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">School</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="PLUS TWO" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-white/10 bg-white/5 p-4 flex flex-col items-center justify-center text-center gap-2 hover:bg-white/10 peer-checked:bg-brand-primary/10 peer-checked:border-brand-primary peer-checked:shadow-neon-blue transition-all">
-                                    <i class="fa-solid fa-graduation-cap text-xl text-gray-500 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-gray-400 peer-checked:text-white">Plus Two</span>
+                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-graduation-cap text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Plus Two</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="DIPLOMA" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-white/10 bg-white/5 p-4 flex flex-col items-center justify-center text-center gap-2 hover:bg-white/10 peer-checked:bg-brand-primary/10 peer-checked:border-brand-primary peer-checked:shadow-neon-blue transition-all">
-                                    <i class="fa-solid fa-scroll text-xl text-gray-500 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-gray-400 peer-checked:text-white">Diploma</span>
+                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-scroll text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Diploma</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="BACHELOR" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-white/10 bg-white/5 p-4 flex flex-col items-center justify-center text-center gap-2 hover:bg-white/10 peer-checked:bg-brand-primary/10 peer-checked:border-brand-primary peer-checked:shadow-neon-blue transition-all">
-                                    <i class="fa-solid fa-user-graduate text-xl text-gray-500 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-gray-400 peer-checked:text-white">Bachelor</span>
+                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-user-graduate text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Bachelor</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="MASTER" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-white/10 bg-white/5 p-4 flex flex-col items-center justify-center text-center gap-2 hover:bg-white/10 peer-checked:bg-brand-primary/10 peer-checked:border-brand-primary peer-checked:shadow-neon-blue transition-all">
-                                    <i class="fa-solid fa-medal text-xl text-gray-500 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-gray-400 peer-checked:text-white">Master</span>
+                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-medal text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Master</span>
                                 </div>
                             </label>
                         </div>
@@ -455,21 +462,21 @@
                     
                     <!-- Passport -->
                      <div class="md:col-span-1">
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">Passport No. (Optional)</label>
-                        <input type="text" id="passportNo" class="form-input uppercase-input w-full rounded-xl px-5 py-4 font-mono" placeholder="X1234567" oninput="this.value = this.value.toUpperCase()">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Passport No. (Optional)</label>
+                        <input type="text" id="passportNo" class="form-input uppercase-input px-5 font-mono" placeholder="X1234567" oninput="this.value = this.value.toUpperCase()">
                     </div>
                     <div class="md:col-span-1">
                         <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">
                              <i class="fa-solid fa-passport mr-1"></i> Passport Expiry
                         </label>
-                        <div class="date-input-container rounded-xl">
+                        <div class="date-input-container">
                             <div class="date-icon-box"><i class="fa-solid fa-hourglass-half"></i></div>
                             <input type="text" id="passportExp" placeholder="Select Date" class="text-lg">
                         </div>
                     </div>
 
                     <div class="md:col-span-2 mt-8 flex justify-end">
-                        <button type="button" onclick="goToStep2()" id="nextBtn" class="btn-gradient text-white font-bold py-4 px-12 rounded-xl shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center gap-3">
+                        <button type="button" onclick="goToStep2()" id="nextBtn" class="btn-gradient text-white font-bold py-4 px-12 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center gap-3">
                             <span class="tracking-wider">NEXT STEP</span>
                             <i class="fa-solid fa-arrow-right-long"></i>
                         </button>
@@ -483,31 +490,31 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 max-w-4xl mx-auto">
                     <!-- UNSKILLED OPTION -->
                     <div id="cardUnskilled" onclick="setSkillMode('Unskilled')" class="category-card rounded-3xl p-8 flex items-center gap-6 cursor-pointer relative overflow-hidden">
-                        <div class="w-16 h-16 rounded-2xl bg-brand-primary/20 text-brand-primary flex items-center justify-center text-3xl shadow-neon-blue">
+                        <div class="w-16 h-16 rounded-2xl bg-blue-50 text-brand-primary flex items-center justify-center text-3xl shadow-sm">
                             <i class="fa-solid fa-hands-holding-circle"></i>
                         </div>
                         <div class="z-10">
-                            <h3 class="text-xl font-bold text-white mb-1">General / Unskilled</h3>
-                            <p class="text-xs text-gray-400 tracking-wide">Factory, Agriculture, Warehouse</p>
+                            <h3 class="text-xl font-bold text-slate-800 mb-1">General / Unskilled</h3>
+                            <p class="text-xs text-slate-500 tracking-wide font-medium">Factory, Agriculture, Warehouse</p>
                         </div>
                         <div class="ml-auto z-10">
-                            <div class="w-8 h-8 rounded-full border-2 border-gray-600 flex items-center justify-center transition-all" id="checkUnskilled">
-                                <div class="w-4 h-4 rounded-full bg-brand-primary hidden shadow-[0_0_10px_#00f2ff]"></div>
+                            <div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkUnskilled">
+                                <div class="w-4 h-4 rounded-full bg-brand-primary hidden shadow-lg"></div>
                             </div>
                         </div>
                     </div>
                     <!-- SKILLED OPTION -->
                     <div id="cardSkilled" onclick="setSkillMode('Skilled')" class="category-card rounded-3xl p-8 flex items-center gap-6 cursor-pointer relative overflow-hidden">
-                        <div class="w-16 h-16 rounded-2xl bg-brand-secondary/20 text-brand-secondary flex items-center justify-center text-3xl shadow-[0_0_20px_rgba(112,0,255,0.3)]">
+                        <div class="w-16 h-16 rounded-2xl bg-purple-50 text-brand-secondary flex items-center justify-center text-3xl shadow-sm">
                             <i class="fa-solid fa-user-tie"></i>
                         </div>
                         <div class="z-10">
-                            <h3 class="text-xl font-bold text-white mb-1">Skilled Professional</h3>
-                            <p class="text-xs text-gray-400 tracking-wide">Engineer, IT, Medical, Trades</p>
+                            <h3 class="text-xl font-bold text-slate-800 mb-1">Skilled Professional</h3>
+                            <p class="text-xs text-slate-500 tracking-wide font-medium">Engineer, IT, Medical, Trades</p>
                         </div>
                         <div class="ml-auto z-10">
-                            <div class="w-8 h-8 rounded-full border-2 border-gray-600 flex items-center justify-center transition-all" id="checkSkilled">
-                                <div class="w-4 h-4 rounded-full bg-brand-secondary hidden shadow-[0_0_10px_#7000ff]"></div>
+                            <div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkSkilled">
+                                <div class="w-4 h-4 rounded-full bg-brand-secondary hidden shadow-lg"></div>
                             </div>
                         </div>
                     </div>
@@ -522,13 +529,13 @@
                             <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Target Position</label>
                             
                             <!-- Trigger -->
-                            <button type="button" class="form-input w-full text-left rounded-xl px-5 py-4 flex justify-between items-center cursor-pointer" onclick="toggleJobDropdown(event)">
-                                <span id="selectedJobText" class="text-gray-400 font-medium">Select Role</span>
+                            <button type="button" class="form-input w-full text-left rounded-xl px-5 flex justify-between items-center cursor-pointer" onclick="toggleJobDropdown(event)">
+                                <span id="selectedJobText" class="text-slate-500 font-medium">Select Role</span>
                                 <i class="fa-solid fa-chevron-up transition-transform duration-300 text-brand-primary" id="jobDropdownIcon"></i>
                             </button>
 
                             <!-- Drop Down List -->
-                            <div id="jobDropdownList" class="hidden absolute top-full left-0 w-full mt-2 bg-[#0f0f0f] border border-brand-primary/30 rounded-2xl shadow-neon-blue max-h-80 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
+                            <div id="jobDropdownList" class="hidden absolute top-full left-0 w-full mt-2 bg-white border border-gray-200 rounded-2xl shadow-xl max-h-80 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
                                 <!-- JS Injected -->
                             </div>
                             
@@ -539,13 +546,13 @@
                         <div id="experienceWrapper" class="hidden animate-pop-in">
                             <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">Years of Experience</label>
                             <div class="relative">
-                                <input type="number" id="experience" min="1" max="30" value="1" class="form-input w-full rounded-xl px-5 py-4 font-bold text-lg" placeholder="Min 1" onblur="validateExperienceInput(this)">
+                                <input type="number" id="experience" min="1" max="30" value="1" class="form-input px-5 font-bold text-lg" placeholder="Min 1" onblur="validateExperienceInput(this)">
                                 <div class="absolute right-5 top-1/2 -translate-y-1/2 text-xs text-brand-secondary font-black tracking-widest">YEARS</div>
                             </div>
                         </div>
 
                         <div class="md:col-span-2 flex justify-end mt-4">
-                             <button onclick="generateReport()" class="w-full md:w-auto btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg flex items-center justify-center gap-3 group">
+                             <button onclick="generateReport()" class="w-full md:w-auto btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group">
                                 <i class="fa-solid fa-wand-magic-sparkles group-hover:rotate-12 transition-transform"></i> 
                                 <span>GENERATE ANALYSIS</span>
                             </button>
@@ -553,164 +560,133 @@
                     </div>
                 </div>
 
-                <!-- 3. REPORT DASHBOARD -->
+                <!-- 3. REPORT DASHBOARD (Redesigned Professional Reality) -->
                 <div id="reportContainer" class="hidden max-w-5xl mx-auto">
                     <div class="glass-panel p-1 rounded-3xl animate-slide-up-fade">
-                        <div class="bg-black/40 rounded-[22px] p-8 md:p-12 relative overflow-hidden">
-                            
-                            <!-- Authentic "Stamp" -->
-                            <div class="absolute top-10 right-10 rotate-12 opacity-20 pointer-events-none border-4 border-green-500 rounded px-4 py-2 text-green-500 font-black text-4xl uppercase tracking-widest">
-                                APPROVED
-                            </div>
+                        <div class="bg-white rounded-[22px] p-8 md:p-12 relative overflow-hidden shadow-sm">
+                             <!-- Top decorative bar -->
+                             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-brand-primary to-brand-secondary"></div>
 
-                            <!-- Report Header -->
-                            <div class="flex flex-wrap justify-between items-start border-b border-white/10 pb-6 mb-8 gap-6 relative z-10">
+                             <!-- Header Section -->
+                             <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-gray-100 pb-8 mb-8 gap-6">
                                 <div>
-                                    <h2 class="text-3xl font-black text-white tracking-wide mb-2"><span class="text-brand-primary">AI</span> STRATEGIC REPORT</h2>
-                                    <p class="text-xs text-brand-gold uppercase tracking-[0.3em] font-bold">Confidential Assessment</p>
+                                    <div class="flex items-center gap-3 mb-2">
+                                         <div class="w-8 h-8 rounded bg-blue-50 text-brand-primary flex items-center justify-center">
+                                            <i class="fa-solid fa-layer-group"></i>
+                                         </div>
+                                         <span class="text-xs font-bold text-slate-400 tracking-widest uppercase">Immigration Strategy Unit</span>
+                                    </div>
+                                    <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Assessment Report</h2>
+                                    <p class="text-sm text-slate-500 font-medium mt-1">AI-Generated Analysis for Global Mobility</p>
                                 </div>
-                                <div class="text-right">
-                                    <div class="font-barcode text-5xl text-gray-500 opacity-50 mb-1" id="barcodeRef"></div>
-                                    <div class="inline-block bg-white/5 px-4 py-2 rounded-lg text-xs font-mono text-brand-primary border border-brand-primary/30 shadow-[0_0_10px_rgba(0,242,255,0.1)]">CASE ID: <span id="refId"></span></div>
-                                    <div class="text-[10px] text-gray-500 mt-2 uppercase tracking-wider" id="reportDate"></div>
+                                <div class="text-left md:text-right">
+                                    <div class="font-barcode text-4xl text-slate-300 mb-1" id="barcodeRef"></div>
+                                    <div class="text-xs font-mono text-slate-400">REF: <span id="refId" class="text-slate-600 font-bold"></span></div>
+                                    <div class="text-xs font-mono text-slate-400">DATE: <span id="reportDate"></span></div>
                                 </div>
-                            </div>
+                             </div>
 
-                            <!-- User Identity Strip (ENHANCED) -->
-                            <div class="flex flex-col md:flex-row items-start md:items-center gap-6 mb-10 bg-white/5 p-6 rounded-2xl border border-white/5 hover:border-brand-primary/30 transition-colors relative">
-                                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center font-bold text-3xl text-white shadow-lg shrink-0" id="avatarInitial"></div>
-                                
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-4 w-full">
-                                    <!-- Name -->
-                                    <div class="col-span-2 md:col-span-1">
-                                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Candidate Name</div>
-                                        <h3 class="text-xl font-bold text-white truncate" id="reportName"></h3>
+                             <!-- Candidate Profile Grid (No Overlap - Professional Layout) -->
+                             <div class="bg-slate-50 rounded-2xl p-6 mb-10 border border-gray-100">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                                    <!-- Avatar -->
+                                    <div class="md:col-span-2 flex justify-center md:justify-start">
+                                        <div class="w-20 h-20 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center text-3xl font-bold text-brand-primary" id="avatarInitial"></div>
                                     </div>
                                     
-                                    <!-- Profession -->
-                                    <div class="col-span-2 md:col-span-1">
-                                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Profession</div>
-                                        <div class="flex items-center gap-2 text-brand-primary font-medium truncate">
-                                            <i class="fa-solid fa-user-tag text-xs"></i> <span id="reportRole"></span>
+                                    <!-- Details -->
+                                    <div class="md:col-span-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                        <div class="overflow-hidden">
+                                            <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Candidate</p>
+                                            <h3 class="text-lg font-bold text-slate-900 leading-tight break-words" id="reportName"></h3>
                                         </div>
-                                    </div>
-
-                                    <!-- Qualification -->
-                                    <div class="col-span-1">
-                                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Qualification</div>
-                                        <div class="text-white font-medium truncate" id="reportQualification"></div>
-                                    </div>
-
-                                    <!-- Experience -->
-                                    <div class="col-span-1">
-                                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Experience</div>
-                                        <div class="flex items-center gap-2">
-                                            <span class="bg-brand-secondary/20 border border-brand-secondary/50 px-3 py-0.5 rounded-full text-white text-sm font-bold shadow-[0_0_10px_rgba(112,0,255,0.3)]">
-                                                <span id="reportExp"></span>
-                                            </span>
+                                        <div class="overflow-hidden">
+                                             <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Profession</p>
+                                             <div class="text-sm font-semibold text-brand-primary leading-tight break-words" id="reportRole"></div>
+                                        </div>
+                                        <div class="overflow-hidden">
+                                             <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Qualification</p>
+                                             <div class="text-sm font-semibold text-slate-700 leading-tight break-words" id="reportQualification"></div>
+                                        </div>
+                                         <div class="overflow-hidden">
+                                             <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Experience</p>
+                                             <div class="text-sm font-bold text-slate-900" id="reportExp"></div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                             </div>
 
-                            <!-- Main Intelligence Grid -->
-                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
-                                
-                                <!-- Hero Match Card -->
-                                <div class="lg:col-span-2 rounded-3xl p-1 bg-gradient-to-br from-brand-primary via-brand-secondary to-transparent">
-                                    <div class="h-full bg-[#0a0a0a] rounded-[22px] p-8 relative overflow-hidden flex flex-col justify-between">
-                                        <!-- Background Glow -->
-                                        <div class="absolute top-0 right-0 w-64 h-64 bg-brand-primary/10 blur-[80px] rounded-full pointer-events-none"></div>
+                             <!-- Main Recommendation Area -->
+                             <div class="flex flex-col lg:flex-row gap-8">
+                                <!-- Left: The Country Match -->
+                                <div class="lg:w-2/3">
+                                    <div class="h-full rounded-2xl border border-gray-200 bg-white shadow-sm p-1 relative overflow-hidden group">
+                                        <div class="absolute top-0 right-0 w-32 h-32 bg-brand-primary/5 rounded-full blur-3xl -mr-10 -mt-10"></div>
                                         
-                                        <div class="relative z-10">
-                                            <div class="flex justify-between items-start mb-6">
-                                                <div class="flex items-center gap-3">
-                                                    <i class="fa-solid fa-crown text-brand-gold text-2xl drop-shadow-md"></i>
-                                                    <h4 class="text-xs font-bold text-brand-primary uppercase tracking-widest">Primary Recommendation</h4>
-                                                </div>
-                                                <div class="bg-brand-primary/10 px-3 py-1 rounded border border-brand-primary/20 text-brand-primary text-xs font-bold">
-                                                    HIGH PROBABILITY
-                                                </div>
-                                            </div>
-
-                                            <div class="mb-6">
-                                                <h1 class="text-5xl font-black text-white mb-2 tracking-tight" id="topMatchCountry">Country</h1>
-                                                <div class="text-lg text-gray-400 font-light flex items-center gap-2">
-                                                    <span id="topMatchRole" class="text-white">Role</span>
-                                                    <span class="text-gray-600">|</span>
-                                                    <span class="text-brand-gold font-bold" id="mainSalaryRange">€0 - €0 / Month</span>
-                                                </div>
+                                        <div class="p-6 md:p-8 relative z-10">
+                                            <div class="flex items-center justify-between mb-6">
+                                                <span class="bg-green-50 text-green-600 border border-green-100 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-2">
+                                                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Top Recommendation
+                                                </span>
+                                                <i class="fa-solid fa-medal text-brand-gold text-2xl"></i>
                                             </div>
                                             
-                                            <!-- Stats -->
-                                            <div class="grid grid-cols-3 gap-4 mb-6">
-                                                <div class="bg-white/5 p-4 rounded-xl border border-white/5 text-center">
-                                                    <div class="text-[9px] text-gray-500 uppercase font-black mb-1">Success Rate</div>
-                                                    <div class="text-lg font-bold text-green-400">98%</div>
+                                            <h2 class="text-5xl font-black text-slate-900 mb-2 tracking-tight" id="topMatchCountry"></h2>
+                                            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500 mb-8">
+                                                <span class="flex items-center gap-2"><i class="fa-solid fa-briefcase text-brand-primary"></i> <span id="topMatchRole_2"></span></span>
+                                                <span class="hidden sm:inline text-gray-300">|</span>
+                                                <span class="flex items-center gap-2 text-slate-700 font-bold"><i class="fa-solid fa-wallet text-brand-secondary"></i> <span id="mainSalaryRange"></span></span>
+                                            </div>
+
+                                            <!-- Metrics Bar (Replacing Circular Gauge) -->
+                                            <div class="bg-slate-50 rounded-xl p-5 border border-gray-100 mb-6">
+                                                <div class="flex justify-between items-end mb-2">
+                                                    <span class="text-xs font-bold text-slate-700">Match Probability</span>
+                                                    <span class="text-xl font-black text-brand-primary">98%</span>
                                                 </div>
-                                                <div class="bg-white/5 p-4 rounded-xl border border-white/5 text-center">
-                                                    <div class="text-[9px] text-gray-500 uppercase font-black mb-1">Processing</div>
-                                                    <div class="text-lg font-bold text-white">3-5 Mo.</div>
+                                                <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                    <div class="h-full bg-gradient-to-r from-brand-primary to-brand-secondary w-[98%] rounded-full shadow-[0_0_10px_rgba(37,99,235,0.3)]"></div>
                                                 </div>
-                                                <div class="bg-white/5 p-4 rounded-xl border border-white/5 text-center">
-                                                    <div class="text-[9px] text-gray-500 uppercase font-black mb-1">Visa Type</div>
-                                                    <div class="text-lg font-bold text-brand-primary">Work</div>
+                                                <div class="flex justify-between mt-3 text-[10px] text-slate-400 font-medium uppercase tracking-wider">
+                                                    <span>Visa: Work Permit (D-Type)</span>
+                                                    <span>Processing: 3-5 Months</span>
                                                 </div>
                                             </div>
 
-                                            <!-- Analysis Text -->
-                                            <div class="pt-6 border-t border-white/10">
-                                                <h5 class="text-xs font-bold text-white mb-3 flex items-center gap-2">
-                                                    <i class="fa-solid fa-microchip text-brand-secondary"></i> AI ANALYSIS
-                                                </h5>
-                                                <p class="text-sm text-gray-400 leading-relaxed italic" id="aiReasoning">
-                                                    Processing data...
-                                                </p>
+                                            <div class="prose prose-sm text-slate-500 leading-relaxed">
+                                                <p id="aiReasoning" class="italic border-l-4 border-brand-primary pl-4 py-1">AI Reasoning loading...</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Action Sidebar -->
-                                <div class="flex flex-col gap-6">
-                                    <!-- Score Gauge -->
-                                    <div class="bg-white/5 rounded-3xl p-8 flex flex-col items-center justify-center border border-white/5 relative overflow-hidden flex-1">
-                                        <svg viewBox="0 0 36 36" class="circular-chart w-32 h-32">
-                                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                            <path class="circle text-brand-gold drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]" stroke-dasharray="92, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke="currentColor" />
-                                            <text x="18" y="20.35" class="percentage text-[0.4em]">9.2</text>
-                                        </svg>
-                                        <div class="text-xs font-bold text-brand-gold mt-4 uppercase tracking-widest text-center">Eligibility<br>Index</div>
+                                <!-- Right: CTA & Alternatives -->
+                                <div class="lg:w-1/3 flex flex-col gap-6">
+                                     <!-- CTA -->
+                                    <div class="bg-slate-900 rounded-2xl p-6 text-white relative overflow-hidden text-center shadow-lg">
+                                        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
+                                         <div class="absolute bottom-0 right-0 text-9xl opacity-5 transform translate-x-10 translate-y-10">
+                                            <i class="fa-regular fa-paper-plane"></i>
+                                         </div>
+                                        <div class="relative z-10">
+                                            <h4 class="text-lg font-bold mb-2">Ready to Proceed?</h4>
+                                            <p class="text-slate-400 text-xs mb-6 px-2">Secure your consultation slot to discuss this profile with our experts.</p>
+                                            <button id="mainActionBtn" class="w-full bg-brand-primary hover:bg-brand-secondary text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-brand-primary/30 flex items-center justify-center gap-2 group">
+                                                <span>BOOK CONSULTATION</span>
+                                                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                                            </button>
+                                        </div>
                                     </div>
 
-                                    <!-- CTA -->
-                                    <button id="mainActionBtn" class="bg-white hover:bg-brand-primary text-black font-black py-5 rounded-2xl transition-all shadow-lg flex items-center justify-center gap-2 group relative overflow-hidden">
-                                        <span class="relative z-10">BOOK CONSULT</span>
-                                        <i class="fa-solid fa-arrow-right relative z-10 group-hover:translate-x-1 transition-transform"></i>
-                                        <div class="absolute inset-0 bg-brand-primary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-                                    </button>
-                                    
-                                    <!-- NEW: Download Record Button -->
-                                    <button onclick="downloadRecord()" class="bg-brand-dark/50 hover:bg-white/10 text-gray-400 hover:text-white font-bold py-3 rounded-2xl border border-white/10 transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-widest">
-                                        <i class="fa-solid fa-download"></i> Download Data (Excel)
-                                    </button>
+                                    <!-- Alternatives List -->
+                                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Strategic Alternatives</h4>
+                                        <div class="flex flex-col gap-3" id="altMatchesGrid">
+                                             <!-- Items -->
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <!-- Alternatives -->
-                            <div>
-                                <h4 class="text-xs font-black text-gray-500 uppercase mb-6 tracking-widest flex items-center gap-2">
-                                    <i class="fa-solid fa-network-wired"></i> Strategic Alternatives
-                                </h4>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="altMatchesGrid">
-                                    <!-- JS Injected Items -->
-                                </div>
-                            </div>
-                            
-                            <!-- Footer -->
-                            <div class="mt-10 text-[10px] text-gray-600 text-center border-t border-white/5 pt-6 font-mono">
-                                GENERATED BY BETTER CALL IMMIGRATION AI ENGINE v2.0
-                            </div>
+                             </div>
                         </div>
                     </div>
                 </div>
@@ -719,34 +695,34 @@
         </div>
     </main>
     
-    <footer class="border-t border-white/5 bg-black/40 py-8 mt-auto backdrop-blur-sm relative z-10">
+    <footer class="border-t border-gray-200/60 bg-white/50 py-8 mt-auto backdrop-blur-sm relative z-10">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-gray-500 text-xs">© 2024 Better Call Immigration. Designed for the Future.</p>
+            <p class="text-slate-400 text-xs">© 2024 Better Call Immigration. Designed for the Future.</p>
         </div>
     </footer>
 
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-8 right-8 transform translate-y-32 opacity-0 transition-all duration-500 z-50">
-        <div class="glass-panel border-l-4 border-brand-primary text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4">
-            <div class="w-8 h-8 rounded-full bg-brand-primary/20 flex items-center justify-center text-brand-primary">
+        <div class="glass-panel border-l-4 border-brand-primary text-slate-800 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 bg-white">
+            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-brand-primary">
                 <i class="fa-solid fa-check"></i>
             </div>
             <div>
                 <h4 class="font-bold text-sm">Success</h4>
-                <span class="text-xs text-gray-400" id="toastMsg">Assessment Saved Securely</span>
+                <span class="text-xs text-slate-500" id="toastMsg">Assessment Saved Securely</span>
             </div>
         </div>
     </div>
 
     <!-- Custom Modal for Errors (Replaces Alert) -->
-    <div id="messageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/50 opacity-0 transition-opacity duration-300">
+    <div id="messageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/40 opacity-0 transition-opacity duration-300">
         <div class="modal-content w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center">
-            <div class="w-12 h-12 rounded-full bg-brand-accent/20 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4 shadow-[0_0_15px_rgba(255,0,85,0.4)]">
+            <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
                 <i class="fa-solid fa-circle-exclamation"></i>
             </div>
-            <h3 class="text-xl font-bold text-white mb-2">Attention Needed</h3>
-            <p id="modalText" class="text-gray-400 text-sm mb-6">Please check your inputs.</p>
-            <button onclick="closeModal()" class="w-full bg-brand-accent hover:bg-red-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Attention Needed</h3>
+            <p id="modalText" class="text-slate-500 text-sm mb-6">Please check your inputs.</p>
+            <button onclick="closeModal()" class="w-full bg-brand-accent hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
                 UNDERSTOOD
             </button>
         </div>
@@ -763,10 +739,6 @@
         const CLICKUP_API_KEY = "pk_260468481_DGN3UIQ1QIOC3C2V3M3UG9XFE8SCXXCH"; 
         const CLICKUP_LIST_ID = "901813907839"; 
         
-        // ----------------------------------------------------
-        //  CLICKUP CUSTOM FIELD IDs
-        //  Updated Config to match user request (name = task name, others fields)
-        // ----------------------------------------------------
         const CLICKUP_FIELDS = {
             "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",  
             "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115", 
@@ -780,10 +752,11 @@
             "EXPERIENCE": "267d8fd1-cc80-4343-972a-4a1d45cab5d7", 
             "PASSPORT NUMBER": "b8798515-8962-40a7-a8cd-2685f9fd676c",
             "PASSPORT EXPIRY": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", 
-            "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3"
+            "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
+            "EMAIL": "replace_with_email_field_id",
+            "PRESENT COUNTRY": "replace_with_country_field_id"
         };
 
-        // SALARY DATA (New Logic Engine)
         const salaryDb = {
             "Netherlands": { u: "€1,800 - €2,400", s: "€3,200 - €4,500" },
             "Germany": { u: "€1,600 - €2,200", s: "€3,500 - €5,000" },
@@ -801,7 +774,6 @@
         };
 
         const jobMasterList = [
-            // --- UNSKILLED ---
             {r:"Agriculture Farm Supervisor",type:"U",c:"Croatia"},{r:"Agriculture Farm Workers",type:"U",c:"Serbia"},
             {r:"Agriculture Worker",type:"U",c:"Poland"},{r:"Assembly Operator",type:"U",c:"Poland"},
             {r:"Assembly Worker",type:"U",c:"Macedonia"},{r:"Assistant Chef",type:"U",c:"Finland"},
@@ -817,8 +789,6 @@
             {r:"Packaging Staff",type:"U",c:"Poland"},{r:"Packing Helper",type:"U",c:"Finland"},
             {r:"Production Line Worker",type:"U",c:"Czech Republic"},{r:"Store Keeper",type:"U",c:"Sweden"},
             {r:"Warehouse Staff",type:"U",c:"Serbia"},{r:"Warehouse Packer",type:"U",c:"Latvia"},
-
-            // --- SKILLED ---
             {r:"Accountant",type:"S",c:"Netherlands"},{r:"Administrative Assistant",type:"S",c:"Netherlands"},
             {r:"Agriculture Farm Supervisor",type:"S",c:"Croatia"},{r:"Agriculture Farm Workers",type:"S",c:"Serbia"},
             {r:"Agriculture Field Officer",type:"S",c:"Netherlands"},{r:"Agriculture Pharmacist Technician",type:"S",c:"Netherlands"},
@@ -951,16 +921,113 @@
             "AFRICA": ["Lagos (Nigeria)", "Abuja (Nigeria)", "Kano (Nigeria)", "Gauteng (SA)", "Western Cape (SA)", "Nairobi (Kenya)", "Accra (Ghana)", "Addis Ababa (Ethiopia)", "Cairo (Egypt)", "Casablanca (Morocco)", "Other"]
         };
         
-        // --- NEW PHONE RULES (STRICT REGEX) ---
+        // --- NEW PHONE RULES (COMPREHENSIVE) ---
         const countryRules = {
-            "INDIA": { regex: /^(\+91[- ]?)?[6-9]\d{9}$/, hint: "+91 9876543210" },
-            "PAKISTAN": { regex: /^(\+92[- ]?)?3\d{2}[- ]?\d{7}$/, hint: "+92 300 1234567" },
-            "NEPAL": { regex: /^(\+977[- ]?)?(98|97)\d{8}$/, hint: "+977 9812345678" },
-            "SRILANKA": { regex: /^(\+94[- ]?)?7\d{8}$/, hint: "+94 77 1234567" },
-            "BANGLADESH": { regex: /^(\+880[- ]?)?1\d{9}$/, hint: "+880 1712345678" },
-            "PHILIPPINES": { regex: /^(\+63[- ]?)?9\d{9}$/, hint: "+63 912 345 6789" },
-            "EGYPT": { regex: /^(\+20[- ]?)?1(0|1|2|5)\d{8}$/, hint: "+20 10 1234 5678" },
-            "AFRICA": { regex: /^\+?\d{10,15}$/, hint: "+234..." },
+            "AFGHANISTAN": { regex: /^(\+93)\d{9}$/, hint: "+93 123456789" },
+            "ALGERIA": { regex: /^(\+213)\d{8,9}$/, hint: "+213 123456789" },
+            "ANGOLA": { regex: /^(\+244)\d{9}$/, hint: "+244 123456789" },
+            "ARMENIA": { regex: /^(\+374)\d{6,8}$/, hint: "+374 12345678" },
+            "AZERBAIJAN": { regex: /^(\+994)\d{9,10}$/, hint: "+994 123456789" },
+            "BAHRAIN": { regex: /^(\+973)\d{8}$/, hint: "+973 12345678" },
+            "BANGLADESH": { regex: /^(\+880)1\d{9}$/, hint: "+880 1712345678" },
+            "BENIN": { regex: /^(\+229)\d{8}$/, hint: "+229 12345678" },
+            "BHUTAN": { regex: /^(\+975)\d{7,8}$/, hint: "+975 17123456" },
+            "BOTSWANA": { regex: /^(\+267)\d{7,8}$/, hint: "+267 1234567" },
+            "BRUNEI": { regex: /^(\+673)\d{7}$/, hint: "+673 1234567" },
+            "BURKINA FASO": { regex: /^(\+226)\d{8}$/, hint: "+226 12345678" },
+            "BURUNDI": { regex: /^(\+257)\d{8}$/, hint: "+257 12345678" },
+            "CAMBODIA": { regex: /^(\+855)\d{8,9}$/, hint: "+855 123456789" },
+            "CAMEROON": { regex: /^(\+237)\d{8,9}$/, hint: "+237 123456789" },
+            "CAPE VERDE": { regex: /^(\+238)\d{7}$/, hint: "+238 1234567" },
+            "CENTRAL AFRICAN REPUBLIC": { regex: /^(\+236)\d{8}$/, hint: "+236 12345678" },
+            "CHAD": { regex: /^(\+235)\d{8}$/, hint: "+235 12345678" },
+            "CHINA": { regex: /^(\+86)\d{9,11}$/, hint: "+86 13800138000" },
+            "COMOROS": { regex: /^(\+269)\d{7}$/, hint: "+269 1234567" },
+            "CONGO (DRC)": { regex: /^(\+243)\d{9}$/, hint: "+243 123456789" },
+            "CONGO (REPUBLIC)": { regex: /^(\+242)\d{7,9}$/, hint: "+242 123456789" },
+            "CYPRUS": { regex: /^(\+357)\d{8}$/, hint: "+357 12345678" },
+            "DJIBOUTI": { regex: /^(\+253)\d{8}$/, hint: "+253 12345678" },
+            "EGYPT": { regex: /^(\+20)[1][0,1,2,5]\d{8}$/, hint: "+20 1012345678" },
+            "EQUATORIAL GUINEA": { regex: /^(\+240)\d{9}$/, hint: "+240 123456789" },
+            "ERITREA": { regex: /^(\+291)\d{7}$/, hint: "+291 1234567" },
+            "ESWATINI": { regex: /^(\+268)\d{8}$/, hint: "+268 12345678" },
+            "ETHIOPIA": { regex: /^(\+251)\d{9}$/, hint: "+251 123456789" },
+            "GABON": { regex: /^(\+241)\d{7,8}$/, hint: "+241 12345678" },
+            "GAMBIA": { regex: /^(\+220)\d{7}$/, hint: "+220 1234567" },
+            "GEORGIA": { regex: /^(\+995)\d{8,9}$/, hint: "+995 123456789" },
+            "GHANA": { regex: /^(\+233)\d{9}$/, hint: "+233 123456789" },
+            "GUINEA": { regex: /^(\+224)\d{8,9}$/, hint: "+224 123456789" },
+            "GUINEA-BISSAU": { regex: /^(\+245)\d{7}$/, hint: "+245 1234567" },
+            "HONG KONG": { regex: /^(\+852)\d{8}$/, hint: "+852 12345678" },
+            "INDIA": { regex: /^(\+91)[6-9]\d{9}$/, hint: "+91 9876543210" },
+            "INDONESIA": { regex: /^(\+62)\d{9,11}$/, hint: "+62 8123456789" },
+            "IRAN": { regex: /^(\+98)\d{10}$/, hint: "+98 9123456789" },
+            "IRAQ": { regex: /^(\+964)\d{9,10}$/, hint: "+964 7501234567" },
+            "ISRAEL": { regex: /^(\+972)\d{8,9}$/, hint: "+972 501234567" },
+            "IVORY COAST": { regex: /^(\+225)\d{8,10}$/, hint: "+225 01234567" },
+            "JAPAN": { regex: /^(\+81)\d{9,10}$/, hint: "+81 9012345678" },
+            "JORDAN": { regex: /^(\+962)\d{8,9}$/, hint: "+962 791234567" },
+            "KAZAKHSTAN": { regex: /^(\+7)\d{10}$/, hint: "+7 7012345678" },
+            "KENYA": { regex: /^(\+254)\d{9}$/, hint: "+254 712345678" },
+            "KUWAIT": { regex: /^(\+965)\d{8}$/, hint: "+965 12345678" },
+            "KYRGYZSTAN": { regex: /^(\+996)\d{9}$/, hint: "+996 555123456" },
+            "LAOS": { regex: /^(\+856)\d{9}$/, hint: "+856 2012345678" },
+            "LEBANON": { regex: /^(\+961)\d{7,8}$/, hint: "+961 3123456" },
+            "LESOTHO": { regex: /^(\+266)\d{8}$/, hint: "+266 12345678" },
+            "LIBERIA": { regex: /^(\+231)\d{7,8}$/, hint: "+231 77123456" },
+            "LIBYA": { regex: /^(\+218)\d{8,9}$/, hint: "+218 911234567" },
+            "MACAU": { regex: /^(\+853)\d{8}$/, hint: "+853 66123456" },
+            "MADAGASCAR": { regex: /^(\+261)\d{9}$/, hint: "+261 341234567" },
+            "MALAWI": { regex: /^(\+265)\d{9}$/, hint: "+265 881234567" },
+            "MALAYSIA": { regex: /^(\+60)\d{8,10}$/, hint: "+60 123456789" },
+            "MALDIVES": { regex: /^(\+960)\d{7}$/, hint: "+960 7123456" },
+            "MALI": { regex: /^(\+223)\d{8}$/, hint: "+223 12345678" },
+            "MAURITANIA": { regex: /^(\+222)\d{8}$/, hint: "+222 12345678" },
+            "MAURITIUS": { regex: /^(\+230)\d{7,8}$/, hint: "+230 51234567" },
+            "MONGOLIA": { regex: /^(\+976)\d{8}$/, hint: "+976 99123456" },
+            "MOROCCO": { regex: /^(\+212)\d{9}$/, hint: "+212 612345678" },
+            "MOZAMBIQUE": { regex: /^(\+258)\d{8,9}$/, hint: "+258 841234567" },
+            "MYANMAR (BURMA)": { regex: /^(\+95)\d{7,10}$/, hint: "+95 912345678" },
+            "NAMIBIA": { regex: /^(\+264)\d{8}$/, hint: "+264 811234567" },
+            "NEPAL": { regex: /^(\+977)(97|98)\d{8}$/, hint: "+977 9812345678" },
+            "NIGER": { regex: /^(\+227)\d{8}$/, hint: "+227 99123456" },
+            "NIGERIA": { regex: /^(\+234)\d{10}$/, hint: "+234 8012345678" },
+            "NORTH KOREA": { regex: /^(\+850)\d{6,10}$/, hint: "+850 191234567" },
+            "OMAN": { regex: /^(\+968)\d{8}$/, hint: "+968 91234567" },
+            "PAKISTAN": { regex: /^(\+92)3\d{2}\d{7}$/, hint: "+92 3001234567" },
+            "PALESTINE": { regex: /^(\+970|\+972)\d{8,9}$/, hint: "+970 591234567" },
+            "PHILIPPINES": { regex: /^(\+63)9\d{9}$/, hint: "+63 9123456789" },
+            "QATAR": { regex: /^(\+974)\d{8}$/, hint: "+974 33123456" },
+            "RWANDA": { regex: /^(\+250)\d{9}$/, hint: "+250 781234567" },
+            "SAO TOME & PRINCIPE": { regex: /^(\+239)\d{7}$/, hint: "+239 9912345" },
+            "SAUDI ARABIA": { regex: /^(\+966)\d{9}$/, hint: "+966 501234567" },
+            "SENEGAL": { regex: /^(\+221)\d{8}$/, hint: "+221 771234567" },
+            "SEYCHELLES": { regex: /^(\+248)\d{7}$/, hint: "+248 2123456" },
+            "SIERRA LEONE": { regex: /^(\+232)\d{8}$/, hint: "+232 76123456" },
+            "SINGAPORE": { regex: /^(\+65)\d{8}$/, hint: "+65 81234567" },
+            "SOMALIA": { regex: /^(\+252)\d{7,9}$/, hint: "+252 612345678" },
+            "SOUTH AFRICA": { regex: /^(\+27)\d{9}$/, hint: "+27 821234567" },
+            "SOUTH KOREA": { regex: /^(\+82)\d{8,9}$/, hint: "+82 1012345678" },
+            "SOUTH SUDAN": { regex: /^(\+211)\d{7,9}$/, hint: "+211 912345678" },
+            "SRI LANKA": { regex: /^(\+94)7\d{8}$/, hint: "+94 771234567" },
+            "SUDAN": { regex: /^(\+249)\d{9}$/, hint: "+249 912345678" },
+            "SYRIA": { regex: /^(\+963)\d{8,9}$/, hint: "+963 931234567" },
+            "TAIWAN": { regex: /^(\+886)\d{9}$/, hint: "+886 912345678" },
+            "TAJIKISTAN": { regex: /^(\+992)\d{9}$/, hint: "+992 901234567" },
+            "TANZANIA": { regex: /^(\+255)\d{9}$/, hint: "+255 712345678" },
+            "THAILAND": { regex: /^(\+66)\d{8,9}$/, hint: "+66 812345678" },
+            "TIMOR-LESTE": { regex: /^(\+670)\d{7}$/, hint: "+670 77123456" },
+            "TOGO": { regex: /^(\+228)\d{8}$/, hint: "+228 90123456" },
+            "TUNISIA": { regex: /^(\+216)\d{8}$/, hint: "+216 20123456" },
+            "TURKEY": { regex: /^(\+90)\d{10}$/, hint: "+90 5321234567" },
+            "TURKMENISTAN": { regex: /^(\+993)\d{8}$/, hint: "+993 61234567" },
+            "UAE": { regex: /^(\+971)\d{8,9}$/, hint: "+971 501234567" },
+            "UGANDA": { regex: /^(\+256)\d{9}$/, hint: "+256 771234567" },
+            "UZBEKISTAN": { regex: /^(\+998)\d{9}$/, hint: "+998 901234567" },
+            "VIETNAM": { regex: /^(\+84)\d{8,9}$/, hint: "+84 901234567" },
+            "YEMEN": { regex: /^(\+967)\d{7,9}$/, hint: "+967 712345678" },
+            "ZAMBIA": { regex: /^(\+260)\d{9}$/, hint: "+260 971234567" },
+            "ZIMBABWE": { regex: /^(\+263)\d{9,10}$/, hint: "+263 771234567" },
             "OTHER": { regex: /^\+?\d{8,15}$/, hint: "+" }
         };
 
@@ -992,13 +1059,13 @@
             document.getElementById('refId').innerText = rId;
             document.getElementById('barcodeRef').innerText = "*" + rId + "*";
             
-            // Helper to print Custom Field IDs for user to copy
-            getClickUpFields();
+            // Populate Countries
+            populateCountryDropdowns();
 
             flatpickr("#dob", {
                 dateFormat: "d/m/Y",
                 disableMobile: false, 
-                theme: "dark",
+                theme: "airbnb", // Changed to light theme
                 onChange: function(selectedDates) {
                     if(selectedDates.length > 0) {
                         const age = new Date(Date.now() - selectedDates[0].getTime()).getUTCFullYear() - 1970;
@@ -1018,7 +1085,7 @@
             flatpickr("#passportExp", {
                 dateFormat: "d/m/Y",
                 disableMobile: false, 
-                theme: "dark"
+                theme: "airbnb" // Changed to light theme
             });
             
             document.addEventListener('click', function(event) {
@@ -1030,7 +1097,7 @@
                 }
             });
             
-            // Trigger initial country check
+            // Trigger initial country check (using Default or First)
             handleNationalityChange();
         };
 
@@ -1045,6 +1112,39 @@
             });
         }
 
+        // --- POPULATE COUNTRIES ---
+        function populateCountryDropdowns() {
+            const natSelect = document.getElementById('nationality');
+            const resSelect = document.getElementById('presentCountry');
+            const sortedCountries = Object.keys(countryRules).sort();
+
+            // Clear except default
+            natSelect.innerHTML = '<option value="">Select Origin</option>';
+            resSelect.innerHTML = '<option value="">Select Residence</option>';
+
+            sortedCountries.forEach(c => {
+                if(c === 'OTHER') return;
+                const opt1 = document.createElement('option');
+                opt1.value = c;
+                opt1.text = c;
+                natSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = c;
+                opt2.text = c;
+                resSelect.appendChild(opt2);
+            });
+            
+            // Add Other
+            const other = document.createElement('option');
+            other.value = "OTHER"; other.text = "Other";
+            natSelect.appendChild(other);
+            
+            const other2 = document.createElement('option');
+            other2.value = "OTHER"; other2.text = "Other";
+            resSelect.appendChild(other2.cloneNode(true));
+        }
+
         // --- NEW DROPDOWN & EXPERIENCE LOGIC ---
 
         function toggleJobDropdown(e) {
@@ -1057,8 +1157,8 @@
         function selectJob(jobRole) {
             document.getElementById('currentJob').value = jobRole;
             document.getElementById('selectedJobText').innerText = jobRole;
-            document.getElementById('selectedJobText').classList.remove('text-gray-400');
-            document.getElementById('selectedJobText').classList.add('text-white');
+            document.getElementById('selectedJobText').classList.remove('text-slate-500');
+            document.getElementById('selectedJobText').classList.add('text-slate-900');
             
             // Close dropdown
             document.getElementById('jobDropdownList').classList.add('hidden');
@@ -1073,13 +1173,13 @@
             const roles = jobMasterList.filter(j => j.type === typeCode).map(j => j.r).sort();
             
             if(roles.length === 0) {
-                listContainer.innerHTML = '<div class="px-4 py-3 text-sm text-gray-500">No roles available</div>';
+                listContainer.innerHTML = '<div class="px-4 py-3 text-sm text-slate-500">No roles available</div>';
                 return;
             }
 
             roles.forEach(r => {
                 const div = document.createElement('div');
-                div.className = "px-5 py-4 text-sm text-gray-300 hover:bg-brand-primary/20 hover:text-white cursor-pointer border-b border-white/5 last:border-0 transition-colors font-medium";
+                div.className = "px-5 py-4 text-sm text-slate-700 hover:bg-blue-50 hover:text-brand-primary cursor-pointer border-b border-gray-100 last:border-0 transition-colors font-medium";
                 div.innerText = r;
                 div.onclick = function() { selectJob(r); };
                 listContainer.appendChild(div);
@@ -1088,7 +1188,7 @@
             // Reset selection display
             document.getElementById('currentJob').value = "";
             document.getElementById('selectedJobText').innerText = "Select Role";
-            document.getElementById('selectedJobText').classList.add('text-gray-400');
+            document.getElementById('selectedJobText').classList.add('text-slate-500');
         }
 
         function validateExperienceInput(el) {
@@ -1123,10 +1223,11 @@
         // ----------------------------------------
 
         // GEOGRAPHY & VALIDATION LOGIC
-        function handleNationalityChange() {
-            const sel = document.getElementById('nationality');
+        
+        // NEW: Handle Residence Change (Drives Phone Logic)
+        function handleResidenceChange() {
+            const sel = document.getElementById('presentCountry');
             const country = sel.value;
-            const code = sel.options[sel.selectedIndex].getAttribute('data-code');
             
             // Set Global Rules
             const rule = countryRules[country] || countryRules["OTHER"];
@@ -1135,33 +1236,69 @@
             const mob = document.getElementById('mobile');
             const wa = document.getElementById('whatsapp');
             
-            // Only set placeholder or value if empty to avoid annoying user
-            if(mob.value === "") mob.value = code + " ";
-            if(wa.value === "") wa.value = code + " ";
-            mob.placeholder = rule.hint;
-            wa.placeholder = rule.hint;
+            // Extract code from hint (first part)
+            // e.g. "+93 123..." -> "+93 "
+            const parts = rule.hint.split(' ');
+            const code = parts[0] + " "; 
             
+            // Update fields with code
+            mob.value = code;
+            wa.value = code;
+            
+            // Update Hints Text
+            const mHint = document.getElementById('mobileHint');
+            const wHint = document.getElementById('waHint');
+            
+            if(country) {
+                mHint.innerText = "Format: " + rule.hint;
+                wHint.innerText = "Format: " + rule.hint;
+                mHint.classList.remove('opacity-0');
+                wHint.classList.remove('opacity-0');
+            } else {
+                mHint.classList.add('opacity-0');
+                wHint.classList.add('opacity-0');
+            }
+            
+            // Reset validation states
             document.getElementById('mobileError').classList.add('hidden');
             mob.classList.remove('invalid-field', 'valid-field');
+            wa.classList.remove('invalid-field', 'valid-field');
             document.getElementById('mobileFeedback').innerHTML = '';
+            document.getElementById('waFeedback').innerHTML = '';
+        }
 
+        // Handle Nationality Change (Only drives State logic now)
+        function handleNationalityChange() {
+            const sel = document.getElementById('nationality');
+            const country = sel.value;
             const stateWrap = document.getElementById('stateInputWrapper');
             const states = stateData[country];
+            
             if(states) {
-                let h = `<select id="state" required class="geo-input w-full rounded-xl px-5 py-4 uppercase font-bold appearance-none"><option value="">SELECT STATE / PROVINCE</option>`;
+                let h = `<select id="state" required class="geo-input px-5 uppercase font-bold"><option value="">SELECT STATE / PROVINCE</option>`;
                 states.forEach(s => h += `<option value="${s}">${s}</option>`);
-                h += `</select><div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>`;
+                h += `</select>`;
                 stateWrap.innerHTML = h;
             } else {
-                stateWrap.innerHTML = `<input type="text" id="state" required class="geo-input w-full rounded-xl px-5 py-4 placeholder-brand-gold/40 uppercase font-bold" placeholder="ENTER STATE">`;
+                stateWrap.innerHTML = `<input type="text" id="state" required class="geo-input px-5 placeholder-brand-gold/40 uppercase font-bold" placeholder="ENTER STATE">`;
             }
         }
 
         function cleanPhoneNumber(phoneStr) {
             if(!phoneStr) return null;
-            // Remove all spaces, dashes, etc. Keep only + and digits for CLICKUP E.164
-            // This fixes the saving error
             return phoneStr.replace(/[^0-9+]/g, '');
+        }
+        
+        // NEW: Enforce Numeric Input (allow + only at start)
+        function enforcePhoneInput(el) {
+            // Allow + at start, then only digits and spaces
+            let val = el.value;
+            if(!val.startsWith('+')) {
+                 // If user deleted +, put it back if we have a residence rule
+                 // Ideally, we just filter chars. 
+            }
+            // Replace any char that is NOT 0-9, space, or +
+            el.value = val.replace(/[^0-9+ ]/g, '');
         }
 
         function validatePhone(id) {
@@ -1169,10 +1306,10 @@
             const feedback = id === 'mobile' ? document.getElementById('mobileFeedback') : document.getElementById('waFeedback');
             const errorMsg = document.getElementById('mobileError');
             
-            const rawVal = el.value.trim();
+            // Clean spaces for regex check
+            const rawVal = el.value.replace(/\s/g, '');
 
             if (!currentPhoneRegex) {
-                 // Fallback
                  el.classList.remove('invalid-field');
                  return;
             }
@@ -1183,14 +1320,14 @@
             if (isValid) {
                 el.classList.remove('invalid-field');
                 el.classList.add('valid-field');
-                feedback.innerHTML = '<i class="fa-solid fa-circle-check text-[#00ff88] drop-shadow-[0_0_5px_rgba(0,255,136,0.5)]"></i>';
+                feedback.innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i>';
                 if(id==='mobile') errorMsg.classList.add('hidden');
             } else {
                 el.classList.remove('valid-field');
-                // Only show error style if length is substantial to avoid red box while typing first char
+                // Only show error style if length is substantial
                 if(rawVal.length > 4) {
                     el.classList.add('invalid-field');
-                    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark text-[#ff0055]"></i>';
+                    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
                 } else {
                      feedback.innerHTML = '';
                 }
@@ -1199,7 +1336,6 @@
 
         function goToStep2() {
             const age = parseInt(document.getElementById('age').value);
-            // UPDATED: Age eligibility logic (20-50)
             if(isNaN(age) || age < 20 || age > 50) { 
                 const ageField = document.getElementById('age');
                 ageField.classList.add('invalid-field', 'animate-pulse');
@@ -1210,7 +1346,9 @@
             
             // STRICT PHONE VALIDATION CHECK BEFORE NEXT
             const mEl = document.getElementById('mobile');
-            const rawVal = mEl.value.trim();
+            // Check regex against cleaned value (no spaces)
+            const rawVal = mEl.value.replace(/\s/g, '');
+            
             if(currentPhoneRegex && !currentPhoneRegex.test(rawVal)) {
                 mEl.classList.add('invalid-field');
                 const btn = document.getElementById('nextBtn');
@@ -1218,9 +1356,9 @@
                 setTimeout(() => btn.classList.remove('animate-shake'), 500);
                 document.getElementById('mobileError').classList.remove('hidden');
                 
-                const sel = document.getElementById('nationality');
+                const sel = document.getElementById('presentCountry');
                 const rule = countryRules[sel.value] || countryRules["OTHER"];
-                showModal(`Invalid Mobile Number Format.\n\nExample format for ${sel.options[sel.selectedIndex].text}: ${rule.hint}`);
+                showModal(`Invalid Mobile Number Format.\n\nExample format for ${sel.value}: ${rule.hint}`);
                 return;
             }
 
@@ -1234,11 +1372,11 @@
             // Visual Update for Steps
             const s1 = document.getElementById('step-1-indicator');
             const s2 = document.getElementById('step-2-indicator');
-            s1.classList.add('opacity-50', 'grayscale');
-            s2.classList.remove('opacity-50', 'grayscale');
-            s2.querySelector('div').classList.add('border-brand-primary', 'shadow-neon-blue', 'text-brand-primary');
-            s2.querySelector('div').classList.remove('border-white/20', 'text-white');
-            s2.querySelector('span').classList.add('text-brand-primary', 'text-shadow-glow');
+            s1.classList.add('opacity-40', 'grayscale');
+            s2.classList.remove('opacity-40', 'grayscale');
+            s2.querySelector('div').classList.add('border-brand-primary', 'text-brand-primary');
+            s2.querySelector('div').classList.remove('border-gray-200', 'text-gray-400');
+            s2.querySelector('span').classList.add('text-brand-primary');
 
             const name = document.getElementById('firstName').value + " " + document.getElementById('lastName').value;
             document.getElementById('reportName').innerText = name;
@@ -1260,17 +1398,17 @@
             uCard.classList.remove('active'); sCard.classList.remove('active');
             uCheck.querySelector('div').classList.add('hidden');
             sCheck.querySelector('div').classList.add('hidden');
-            uCheck.className = "w-8 h-8 rounded-full border-2 border-gray-600 flex items-center justify-center transition-all";
-            sCheck.className = "w-8 h-8 rounded-full border-2 border-gray-600 flex items-center justify-center transition-all";
+            uCheck.className = "w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all";
+            sCheck.className = "w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all";
 
             if (mode === 'Unskilled') {
                 uCard.classList.add('active');
-                uCheck.className = "w-8 h-8 rounded-full border-brand-primary flex items-center justify-center bg-brand-primary/20 shadow-neon-blue";
+                uCheck.className = "w-8 h-8 rounded-full border-brand-primary flex items-center justify-center bg-blue-100 shadow-sm";
                 uCheck.querySelector('div').classList.remove('hidden');
                 expWrap.classList.add('hidden');
             } else {
                 sCard.classList.add('active');
-                sCheck.className = "w-8 h-8 rounded-full border-brand-secondary flex items-center justify-center bg-brand-secondary/20 shadow-[0_0_15px_rgba(112,0,255,0.4)]";
+                sCheck.className = "w-8 h-8 rounded-full border-brand-secondary flex items-center justify-center bg-purple-100 shadow-sm";
                 sCheck.querySelector('div').classList.remove('hidden');
                 expWrap.classList.remove('hidden');
             }
@@ -1310,10 +1448,15 @@
             const jobData = jobMasterList.find(j => j.r === role);
             
             // Populate Data
-            document.getElementById('topMatchRole').innerText = role;
             document.getElementById('topMatchCountry').innerText = jobData.c;
             document.getElementById('reportRole').innerText = role;
             document.getElementById('reportQualification').innerText = qual;
+            
+            // Update the NEW role display (topMatchRole_2) and existing elements
+            // We use topMatchRole_2 for the redesigned Hero Card
+            if(document.getElementById('topMatchRole_2')) {
+                document.getElementById('topMatchRole_2').innerText = role;
+            }
             
             // SALARY POPULATION
             const salaryText = getSalary(jobData.c, currentMode);
@@ -1345,7 +1488,7 @@
             const others = jobMasterList.filter(j => j.type === jobData.type && j.c !== jobData.c).sort(() => 0.5 - Math.random()).slice(0, 3);
             others.forEach(o => {
                 const div = document.createElement('div');
-                div.className = "flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/5 hover:bg-white/10 hover:border-brand-primary/30 transition-all cursor-pointer group";
+                div.className = "flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-gray-100 hover:bg-white hover:border-brand-primary/30 transition-all cursor-pointer group shadow-sm hover:shadow-md";
                 
                 const altTargetPage = countryPageMap[o.c];
                 const altTargetUrl = altTargetPage ? altTargetPage : 'https://bettercallimmigration.com/appointment';
@@ -1356,16 +1499,16 @@
 
                 div.innerHTML = `
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-lg bg-black/40 flex items-center justify-center text-xl shadow-inner border border-white/5">${getFlag(o.c)}</div>
+                        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-xl shadow-sm border border-gray-100">${getFlag(o.c)}</div>
                         <div class="flex-grow">
                             <div class="flex justify-between items-center">
-                                <div class="text-sm font-bold text-gray-200 group-hover:text-white transition tracking-wide">${o.c}</div>
-                                <div class="text-[10px] text-green-400 font-bold bg-green-900/20 px-2 py-0.5 rounded">${altSal}</div>
+                                <div class="text-sm font-bold text-slate-700 group-hover:text-brand-primary transition tracking-wide">${o.c}</div>
+                                <div class="text-[10px] text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded border border-green-100">${altSal}</div>
                             </div>
-                            <div class="text-[10px] text-gray-500 uppercase">${o.r}</div>
+                            <div class="text-[10px] text-slate-400 uppercase font-medium mt-1">${o.r}</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-chevron-right text-gray-700 text-xs group-hover:text-brand-primary transition-colors ml-2"></i>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs group-hover:text-brand-primary transition-colors ml-2"></i>
                 `;
                 grid.appendChild(div);
             });
@@ -1377,59 +1520,6 @@
         function getFlag(c) {
             const m = { "Sweden": "🇸🇪", "Finland": "🇫🇮", "Netherlands": "🇳🇱", "Germany": "🇩🇪", "Czech Republic": "🇨🇿", "Poland": "🇵🇱", "France": "🇫🇷", "Italy": "🇮🇹", "Latvia": "🇱🇻", "Croatia": "🇭🇷", "Serbia": "🇷🇸", "Albania": "🇦🇱", "Macedonia": "🇲🇰" };
             return m[c] || "🇪🇺";
-        }
-
-        // UPDATED: Download Record Feature (CSV EXCEL COMPATIBLE)
-        function downloadRecord() {
-            // 1. Gather all data points
-            const ref = document.getElementById('refId').innerText;
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const dob = document.getElementById('dob').value;
-            const age = document.getElementById('age').value;
-            const nationality = document.getElementById('nationality').value;
-            
-            // Handle State (might be input or select)
-            const stateEl = document.getElementById('state');
-            const state = stateEl ? stateEl.value : '';
-
-            const mobile = document.getElementById('mobile').value;
-            const whatsapp = document.getElementById('whatsapp').value;
-            
-            // Radio button for qualification
-            const qualEl = document.querySelector('input[name="qualification"]:checked');
-            const qualification = qualEl ? qualEl.value : '';
-
-            const passportNo = document.getElementById('passportNo').value;
-            const passportExp = document.getElementById('passportExp').value;
-            
-            const role = document.getElementById('currentJob').value;
-            const exp = document.getElementById('experience').value;
-            const type = currentMode; // Variable from wider scope
-            const country = document.getElementById('topMatchCountry').innerText;
-            const date = new Date().toLocaleDateString();
-
-            // 2. Create CSV Content (Excel compatible)
-            // BOM for Excel to read UTF-8 correctly
-            const bom = "\uFEFF"; 
-            const headers = ["Ref ID", "First Name", "Last Name", "DOB", "Age", "Nationality", "State", "Mobile", "WhatsApp", "Qualification", "Passport No", "Passport Exp", "Role", "Experience", "Type", "Target Country", "Date"];
-            const values = [ref, firstName, lastName, dob, age, nationality, state, mobile, whatsapp, qualification, passportNo, passportExp, role, exp, type, country, date];
-
-            // Helper to escape commas in data
-            const escapeCsv = (str) => `"${String(str).replace(/"/g, '""')}"`;
-            
-            const csvContent = bom + headers.join(",") + "\n" + values.map(escapeCsv).join(",");
-
-            // 3. Trigger Download
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Assessment_${ref}_FullData.csv`; // Changed extension to .csv
-            document.body.appendChild(a); // Append for Firefox support
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
         }
 
         // Helper to convert date string DD/MM/YYYY to Unix Timestamp (ms) for ClickUp
@@ -1445,33 +1535,13 @@
             return null;
         }
 
-        // HELPER TO FETCH FIELD IDS FOR USER
-        async function getClickUpFields() {
-            if(!CLICKUP_API_KEY || CLICKUP_API_KEY.length < 10) return;
-            console.log("%c Fetching ClickUp Fields... ", "background: #222; color: #bada55");
-            
-            try {
-                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, {
-                    method: 'GET',
-                    headers: { 'Authorization': CLICKUP_API_KEY }
-                });
-                const data = await res.json();
-                
-                if(data.fields) {
-                    console.group("YOUR CLICKUP FIELD IDs (Copy these into the code!)");
-                    data.fields.forEach(f => {
-                        console.log(`"${f.name}": "${f.id}",  // Type: ${f.type}`);
-                    });
-                    console.groupEnd();
-                }
-            } catch(e) { console.error("Could not fetch fields", e); }
-        }
-
         async function saveData() {
             // 1. Gather all data points
             const ref = document.getElementById('refId').innerText;
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const presentCountry = document.getElementById('presentCountry').value;
             const dob = document.getElementById('dob').value;
             const age = parseInt(document.getElementById('age').value) || 0;
             const nationality = document.getElementById('nationality').value;
@@ -1541,11 +1611,13 @@
             addField("WHATSAPP", whatsapp);
             addField("DATE OF BIRTH", getUnixTime(dob));
             addField("AGE", age);
+            addField("EMAIL", email);
             
             // Dropdowns (Pass true as 3rd argument)
             addField("QUALIFICATION", qualification, true); 
             addField("PROFESSION", role, true);             
             addField("NATIONALITY", nationality, true);     
+            addField("PRESENT COUNTRY", presentCountry, true);     
             
             addField("STATE", state);
             addField("EXPERIENCE", exp);
@@ -1570,7 +1642,9 @@
 **Last Name:** ${lastName}
 **Date of Birth:** ${dob}
 **Age:** ${age}
+**Email:** ${email}
 **Nationality:** ${nationality}
+**Present Residence:** ${presentCountry}
 **State/Province:** ${state}
 
 **CONTACT INFO**
