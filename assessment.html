@@ -757,8 +757,8 @@
             "PASSPORT NUMBER": "b8798515-8962-40a7-a8cd-2685f9fd676c",
             "PASSPORT EXPIRY": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", 
             "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
-            "EMAIL": "replace_with_email_field_id", // UNCOMMENTED AND READY FOR ID
-            "PRESENT COUNTRY": "replace_with_country_field_id" // UNCOMMENTED AND READY FOR ID
+            "EMAIL": "replace_with_email_field_id",
+            "PRESENT COUNTRY": "replace_with_country_field_id"
         };
 
         // SALARY DATA (New Logic Engine)
@@ -1615,27 +1615,34 @@
                 return option ? option.id : null; // Return UUID or null
             };
 
-            // UPDATED ADD FIELD FUNCTION (Handles Dropdown Failures)
+            // UPDATED ADD FIELD FUNCTION (Handles Dropdown Failures and Placeholder IDs)
             const addField = (key, val, isDropdown = false) => {
-                if (CLICKUP_FIELDS[key] && val !== null && val !== "") {
-                    let finalValue = val;
-                    
-                    if (isDropdown) {
-                        const optionId = getOptionId(CLICKUP_FIELDS[key], val);
-                        if (optionId !== null) {
-                             const field = fieldDefinitions.find(f => f.id === CLICKUP_FIELDS[key]);
-                             const index = field.type_config.options.findIndex(o => o.id === optionId);
-                             if(index > -1) finalValue = index; 
-                        } else {
-                           // FALLBACK: If dropdown option not found, send as text string.
-                           // This allows saving even if dropdown options are not synced perfectly.
-                           console.warn(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Attempting to save as text.`);
-                           finalValue = val; 
-                        }
+                const fieldId = CLICKUP_FIELDS[key];
+                
+                // VALIDATION: Skip if ID is missing, placeholder, or value is empty
+                if (!fieldId || fieldId.includes('replace_with') || val === null || val === "") {
+                    if(fieldId && fieldId.includes('replace_with')) {
+                        console.warn(`Skipping field '${key}': Placeholder ID detected. Please update CLICKUP_FIELDS in the code.`);
                     }
-                    
-                    customFieldsArray.push({ "id": CLICKUP_FIELDS[key], "value": finalValue });
+                    return;
                 }
+
+                let finalValue = val;
+                
+                if (isDropdown) {
+                    const optionId = getOptionId(fieldId, val);
+                    if (optionId !== null) {
+                         const field = fieldDefinitions.find(f => f.id === fieldId);
+                         const index = field.type_config.options.findIndex(o => o.id === optionId);
+                         if(index > -1) finalValue = index; 
+                    } else {
+                       // FALLBACK: If dropdown option not found, send as text string if allowed, or log warning
+                       console.warn(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Attempting to save as text.`);
+                       finalValue = val; 
+                    }
+                }
+                
+                customFieldsArray.push({ "id": fieldId, "value": finalValue });
             };
 
             // Map Data to Configured IDs
@@ -1646,13 +1653,11 @@
             addField("AGE", age);
             addField("EMAIL", email);
             
-            // IMPORTANT: Changed isDropdown to FALSE for robustness unless you are 100% sure options exist
-            // If these fields are set to "Text" in ClickUp, they will save correctly.
-            // If they are set to "Dropdown" in ClickUp, ensure options match exactly or they may fail.
+            // Dropdowns (Note: Use false if you want to force text mode or allow mismatched options)
             addField("QUALIFICATION", qualification, true); 
-            addField("PROFESSION", role, false);  // Changed to False (Send as Text)           
-            addField("NATIONALITY", nationality, false); // Changed to False (Send as Text)    
-            addField("PRESENT COUNTRY", presentCountry, false); // Changed to False (Send as Text)    
+            addField("PROFESSION", role, false);  // Send as Text           
+            addField("NATIONALITY", nationality, false); // Send as Text    
+            addField("PRESENT COUNTRY", presentCountry, false); // Send as Text    
             
             addField("STATE", state);
             addField("EXPERIENCE", exp);
@@ -1723,18 +1728,22 @@
                     if(!res.ok) {
                         const err = await res.json();
                         console.error("ClickUp Error", err);
+                        // Show error in Modal instead of just console
+                        showModal(`Error Saving to ClickUp: ${err.err || "Check console for details"}`);
                     } else {
                         console.log("Saved to ClickUp!");
+                        // 4. Show Toast only on success
+                        showToast();
                     }
                 } catch(e) { 
                     console.error("ClickUp Connection Error", e);
+                    showModal("Network Error: Could not connect to ClickUp.");
                 }
             } else {
                 console.log("ClickUp Integration: Key not configured.");
+                // Show Success Toast anyway for demo purposes if key is missing
+                showToast();
             }
-
-            // 4. Show Toast
-            showToast();
         }
 
         function showToast() {
