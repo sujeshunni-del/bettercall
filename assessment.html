@@ -686,6 +686,11 @@
                                         <i class="fa-solid fa-arrow-right relative z-10 group-hover:translate-x-1 transition-transform"></i>
                                         <div class="absolute inset-0 bg-brand-primary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
                                     </button>
+                                    
+                                    <!-- NEW: Download Record Button -->
+                                    <button onclick="downloadRecord()" class="bg-brand-dark/50 hover:bg-white/10 text-gray-400 hover:text-white font-bold py-3 rounded-2xl border border-white/10 transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-widest">
+                                        <i class="fa-solid fa-download"></i> Download Data (Excel)
+                                    </button>
                                 </div>
                             </div>
 
@@ -745,11 +750,33 @@
     </div>
 
     <script>
-        // CONFIG
-        // To enable ClickUp integration, replace these empty strings with your actual keys.
-        // API Key starts with "pk_..."
-        const CLICKUP_API_KEY = ""; 
-        const CLICKUP_LIST_ID = "90182075750"; // Updated from user link
+        // ==========================================
+        //  CONFIGURATION AREA
+        // ==========================================
+        
+        const CLICKUP_API_KEY = "pk_260468481_DGN3UIQ1QIOC3C2V3M3UG9XFE8SCXXCH"; 
+        const CLICKUP_LIST_ID = "901813907839"; 
+        
+        // ----------------------------------------------------
+        //  CLICKUP CUSTOM FIELD IDs
+        //  Updated Config to match user request (name = task name, others fields)
+        //  Paste IDs from console into the empty strings ""
+        // ----------------------------------------------------
+        const CLICKUP_FIELDS = {
+            "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",       // Short Text
+            "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115",         // Phone
+            "WHATSAPP": "87b4eee7-444f-4ec4-9882-441965757a68",       // Phone
+            "DATE OF BIRTH": "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38",  // Date
+            "AGE": "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c",            // Number
+            "QUALIFICATION": "2cd34df4-98b5-4c82-8d86-a34bf3c1618b",  // Dropdown
+            "PROFESSION": "7dcb9f47-cf7a-4108-b42c-a5f84541b0d2",     // Dropdown
+            "NATIONALITY": "e79e1c4e-b123-4bd9-8051-34859ea4b87e",    // Dropdown
+            "STATE": "e65a622e-be4b-4367-ac2a-4d3b89907d96",          // Short Text
+            "EXPERIENCE": "267d8fd1-cc80-4343-972a-4a1d45cab5d7",     // Number
+            "PASSPORT NUMBER": "b8798515-8962-40a7-a8cd-2685f9fd676c",// Short Text
+            "PASSPORT EXPIRY": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738",// Date
+            "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3"// Short Text
+        };
 
         // SALARY DATA (New Logic Engine)
         const salaryDb = {
@@ -947,6 +974,9 @@
             document.getElementById('refId').innerText = rId;
             document.getElementById('barcodeRef').innerText = "*" + rId + "*";
             
+            // Helper to print Custom Field IDs for user to copy
+            getClickUpFields();
+
             flatpickr("#dob", {
                 dateFormat: "d/m/Y",
                 disableMobile: false, 
@@ -1320,7 +1350,8 @@
                 grid.appendChild(div);
             });
 
-            saveToClickUp();
+            // saveData() is called here
+            saveData();
         }
 
         function getFlag(c) {
@@ -1328,34 +1359,206 @@
             return m[c] || "🇪🇺";
         }
 
-        async function saveToClickUp() {
-            // 1. Check for missing or placeholder keys
-            if(!CLICKUP_API_KEY || !CLICKUP_LIST_ID || CLICKUP_API_KEY.includes("pk_12345")) { 
-                console.log("ClickUp integration skipped: Credentials not configured. Showing demo toast.");
-                showToast(); // Reuse toast logic
-                return; 
-            }
+        // UPDATED: Download Record Feature (CSV EXCEL COMPATIBLE)
+        function downloadRecord() {
+            // 1. Gather all data points
+            const ref = document.getElementById('refId').innerText;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const dob = document.getElementById('dob').value;
+            const age = document.getElementById('age').value;
+            const nationality = document.getElementById('nationality').value;
             
-            const payload = {
-                name: document.getElementById('firstName').value + " " + document.getElementById('lastName').value,
-                description: `**PROFILE**\nName: ${document.getElementById('firstName').value} ${document.getElementById('lastName').value}\nAge: ${document.getElementById('age').value}\nNationality: ${document.getElementById('nationality').value}\nMobile: ${document.getElementById('mobile').value}\n\n**ASSESSMENT**\nRef: ${document.getElementById('refId').innerText}\nRole: ${document.getElementById('currentJob').value}\nType: ${currentMode}\nExp: ${document.getElementById('experience').value}\nResult: ${document.getElementById('topMatchCountry').innerText}`
+            // Handle State (might be input or select)
+            const stateEl = document.getElementById('state');
+            const state = stateEl ? stateEl.value : '';
+
+            const mobile = document.getElementById('mobile').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            
+            // Radio button for qualification
+            const qualEl = document.querySelector('input[name="qualification"]:checked');
+            const qualification = qualEl ? qualEl.value : '';
+
+            const passportNo = document.getElementById('passportNo').value;
+            const passportExp = document.getElementById('passportExp').value;
+            
+            const role = document.getElementById('currentJob').value;
+            const exp = document.getElementById('experience').value;
+            const type = currentMode; // Variable from wider scope
+            const country = document.getElementById('topMatchCountry').innerText;
+            const date = new Date().toLocaleDateString();
+
+            // 2. Create CSV Content (Excel compatible)
+            // BOM for Excel to read UTF-8 correctly
+            const bom = "\uFEFF"; 
+            const headers = ["Ref ID", "First Name", "Last Name", "DOB", "Age", "Nationality", "State", "Mobile", "WhatsApp", "Qualification", "Passport No", "Passport Exp", "Role", "Experience", "Type", "Target Country", "Date"];
+            const values = [ref, firstName, lastName, dob, age, nationality, state, mobile, whatsapp, qualification, passportNo, passportExp, role, exp, type, country, date];
+
+            // Helper to escape commas in data
+            const escapeCsv = (str) => `"${String(str).replace(/"/g, '""')}"`;
+            
+            const csvContent = bom + headers.join(",") + "\n" + values.map(escapeCsv).join(",");
+
+            // 3. Trigger Download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Assessment_${ref}_FullData.csv`; // Changed extension to .csv
+            document.body.appendChild(a); // Append for Firefox support
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Helper to convert date string DD/MM/YYYY to Unix Timestamp (ms) for ClickUp
+        function getUnixTime(dateStr) {
+            if (!dateStr) return null;
+            const parts = dateStr.split('/');
+            if (parts.length === 3) {
+                // new Date(year, monthIndex, day)
+                return new Date(parts[2], parts[1] - 1, parts[0]).getTime(); 
+            }
+            return null;
+        }
+
+        // HELPER TO FETCH FIELD IDS FOR USER
+        async function getClickUpFields() {
+            if(!CLICKUP_API_KEY || CLICKUP_API_KEY.length < 10) return;
+            console.log("%c Fetching ClickUp Fields... ", "background: #222; color: #bada55");
+            
+            try {
+                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, {
+                    method: 'GET',
+                    headers: { 'Authorization': CLICKUP_API_KEY }
+                });
+                const data = await res.json();
+                
+                if(data.fields) {
+                    console.group("YOUR CLICKUP FIELD IDs (Copy these into the code!)");
+                    data.fields.forEach(f => {
+                        console.log(`"${f.name}": "${f.id}",  // Type: ${f.type}`);
+                    });
+                    console.groupEnd();
+                }
+            } catch(e) { console.error("Could not fetch fields", e); }
+        }
+
+        async function saveData() {
+            // 1. Gather all data points
+            const ref = document.getElementById('refId').innerText;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const dob = document.getElementById('dob').value;
+            const age = parseInt(document.getElementById('age').value) || 0;
+            const nationality = document.getElementById('nationality').value;
+            const state = document.getElementById('state') ? document.getElementById('state').value : '';
+            const mobile = document.getElementById('mobile').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            const qualification = document.querySelector('input[name="qualification"]:checked')?.value || '';
+            const passportNo = document.getElementById('passportNo').value;
+            const passportExp = document.getElementById('passportExp').value;
+            const role = document.getElementById('currentJob').value;
+            const exp = parseInt(document.getElementById('experience').value) || 0;
+            const resultCountry = document.getElementById('topMatchCountry').innerText;
+
+            // 2. Prepare Custom Fields Array for ClickUp
+            const customFieldsArray = [];
+
+            // Helper to push only if ID exists in config
+            const addField = (key, val) => {
+                if (CLICKUP_FIELDS[key] && val !== null && val !== "") {
+                    customFieldsArray.push({ "id": CLICKUP_FIELDS[key], "value": val });
+                }
             };
 
-            try {
-                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
-                    method: 'POST',
-                    headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+            // Map Data to Configured IDs (Field IDs from user provided list)
+            addField("SUR NAME", lastName);
+            addField("MOBILE", mobile);
+            addField("WHATSAPP", whatsapp);
+            addField("DATE OF BIRTH", getUnixTime(dob));
+            addField("AGE", age);
+            addField("QUALIFICATION", qualification); 
+            addField("PROFESSION", role);             
+            addField("NATIONALITY", nationality);     
+            addField("STATE", state);
+            addField("EXPERIENCE", exp);
+            addField("PASSPORT NUMBER", passportNo);
+            addField("PASSPORT EXPIRY", getUnixTime(passportExp));
+            addField("Case Reference ID", ref);
 
-                if(res.ok) {
-                    showToast();
-                } else {
-                    console.error("ClickUp Error", res.status);
+            // 3. Send to ClickUp
+            if(CLICKUP_API_KEY && CLICKUP_LIST_ID && !CLICKUP_API_KEY.includes("pk_12345")) {
+                
+                // --- FULL DESCRIPTION LOGIC RESTORED HERE ---
+                const fullDescription = `**FULL CANDIDATE PROFILE**
+--------------------------------------------------
+**CASE REFERENCE:** ${ref}
+**DATE:** ${new Date().toLocaleDateString()}
+
+**PERSONAL DETAILS**
+--------------------------------------------------
+**First Name:** ${firstName}
+**Last Name:** ${lastName}
+**Date of Birth:** ${dob}
+**Age:** ${age}
+**Nationality:** ${nationality}
+**State/Province:** ${state}
+
+**CONTACT INFO**
+--------------------------------------------------
+**Mobile:** ${mobile}
+**WhatsApp:** ${whatsapp}
+
+**PROFESSIONAL PROFILE**
+--------------------------------------------------
+**Target Role:** ${role}
+**Category:** ${currentMode}
+**Experience:** ${exp} Years
+**Qualification:** ${qualification}
+
+**TRAVEL DOCS**
+--------------------------------------------------
+**Passport No:** ${passportNo || "N/A"}
+**Expiry:** ${passportExp || "N/A"}
+
+**ASSESSMENT RESULT**
+--------------------------------------------------
+**Primary Recommendation:** ${resultCountry}
+**Est. Salary:** ${getSalary(resultCountry, currentMode)}
+
+--------------------------------------------------
+*Verified by Better Call Immigration AI*`;
+
+                const clickUpPayload = {
+                    name: firstName + " " + lastName, // Main Task Name - Full Name for clarity
+                    description: fullDescription, // Full text description as requested
+                    custom_fields: customFieldsArray
+                };
+
+                try {
+                    const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+                        method: 'POST',
+                        headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                        body: JSON.stringify(clickUpPayload)
+                    });
+
+                    if(!res.ok) {
+                        const err = await res.json();
+                        console.error("ClickUp Error", err);
+                    } else {
+                        console.log("Saved to ClickUp!");
+                    }
+                } catch(e) { 
+                    console.error("ClickUp Connection Error", e);
                 }
-            } catch(e) { 
-                console.error("Connection Error (CORS)", e);
+            } else {
+                console.log("ClickUp Integration: Key not configured.");
             }
+
+            // 4. Show Toast
+            showToast();
         }
 
         function showToast() {
