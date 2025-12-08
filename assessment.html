@@ -1128,12 +1128,12 @@
             const stateWrap = document.getElementById('stateInputWrapper');
             const states = stateData[country];
             if(states) {
-                let h = `<select id="state" class="geo-input w-full rounded-xl px-5 py-4 uppercase font-bold appearance-none"><option value="">SELECT STATE / PROVINCE</option>`;
+                let h = `<select id="state" required class="geo-input w-full rounded-xl px-5 py-4 uppercase font-bold appearance-none"><option value="">SELECT STATE / PROVINCE</option>`;
                 states.forEach(s => h += `<option value="${s}">${s}</option>`);
                 h += `</select><div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>`;
                 stateWrap.innerHTML = h;
             } else {
-                stateWrap.innerHTML = `<input type="text" id="state" class="geo-input w-full rounded-xl px-5 py-4 placeholder-brand-gold/40 uppercase font-bold" placeholder="ENTER STATE">`;
+                stateWrap.innerHTML = `<input type="text" id="state" required class="geo-input w-full rounded-xl px-5 py-4 placeholder-brand-gold/40 uppercase font-bold" placeholder="ENTER STATE">`;
             }
         }
 
@@ -1183,11 +1183,12 @@
 
         function goToStep2() {
             const age = parseInt(document.getElementById('age').value);
-            if(age < 20 || isNaN(age)) { 
+            // UPDATED: Age eligibility logic (20-50)
+            if(isNaN(age) || age < 20 || age > 50) { 
                 const ageField = document.getElementById('age');
                 ageField.classList.add('invalid-field', 'animate-pulse');
                 setTimeout(() => ageField.classList.remove('animate-pulse'), 500);
-                showModal("Age must be at least 20 years old to proceed."); 
+                showModal("Sorry, you are not eligible for the immigration process. (Age requirement: 20-50)"); 
                 return; 
             }
             
@@ -1596,8 +1597,8 @@
 *Verified by Better Call Immigration AI*`;
 
                 const clickUpPayload = {
-                    name: firstName + " " + lastName, // Main Task Name - Full Name for clarity
-                    description: fullDescription, // Full text description as requested
+                    name: firstName, // UPDATED: Main Task Name is NOW ONLY FIRST NAME
+                    description: fullDescription, 
                     custom_fields: customFieldsArray
                 };
 
