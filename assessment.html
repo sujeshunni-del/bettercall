@@ -351,15 +351,15 @@
                                 <div class="relative">
                                     <select id="nationality" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none" onchange="handleNationalityChange()">
                                         <option value="">Select Origin</option>
-                                        <option value="INDIAN" data-code="+91" data-len="10">India</option>
-                                        <option value="PAKISTAN" data-code="+92" data-len="10">Pakistan</option>
-                                        <option value="NEPAL" data-code="+977" data-len="10">Nepal</option>
-                                        <option value="SRILANKA" data-code="+94" data-len="9">Sri Lanka</option>
-                                        <option value="BANGLADESH" data-code="+880" data-len="10">Bangladesh</option>
-                                        <option value="PHILIPPINES" data-code="+63" data-len="10">Philippines</option>
-                                        <option value="EGYPT" data-code="+20" data-len="10">Egypt</option>
-                                        <option value="AFRICA" data-code="+234" data-len="10">Africa (Region)</option>
-                                        <option value="OTHER" data-code="" data-len="0">Other</option>
+                                        <option value="INDIA" data-code="+91">India</option>
+                                        <option value="PAKISTAN" data-code="+92">Pakistan</option>
+                                        <option value="NEPAL" data-code="+977">Nepal</option>
+                                        <option value="SRILANKA" data-code="+94">Sri Lanka</option>
+                                        <option value="BANGLADESH" data-code="+880">Bangladesh</option>
+                                        <option value="PHILIPPINES" data-code="+63">Philippines</option>
+                                        <option value="EGYPT" data-code="+20">Egypt</option>
+                                        <option value="AFRICA" data-code="+234">Africa (Region)</option>
+                                        <option value="OTHER" data-code="">Other</option>
                                     </select>
                                     <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                                 </div>
@@ -941,7 +941,7 @@
         ];
 
         const stateData = {
-            "INDIAN": ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi", "Chandigarh"],
+            "INDIA": ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi", "Chandigarh"],
             "PAKISTAN": ["Punjab", "Sindh", "Khyber Pakhtunkhwa", "Balochistan", "Islamabad", "Gilgit-Baltistan", "Azad Kashmir"],
             "NEPAL": ["Province 1", "Madhesh", "Bagmati", "Gandaki", "Lumbini", "Karnali", "Sudurpashchim"],
             "SRILANKA": ["Central", "Eastern", "North Central", "Northern", "North Western", "Sabaragamuwa", "Southern", "Uva", "Western"],
@@ -949,6 +949,19 @@
             "PHILIPPINES": ["Metro Manila", "Cordillera (CAR)", "Ilocos", "Cagayan Valley", "Central Luzon", "Calabarzon", "Mimaropa", "Bicol", "Western Visayas", "Central Visayas", "Eastern Visayas", "Zamboanga", "Northern Mindanao", "Davao", "Soccsksargen", "Caraga", "Bangsamoro"],
             "EGYPT": ["Cairo", "Alexandria", "Giza", "Dakahlia", "Red Sea", "Beheira", "Faiyum", "Gharbia", "Ismailia", "Menofia", "Minya", "Qalyubia", "New Valley", "Sharqia", "Suez", "Aswan", "Assiut", "Beni Suef", "Port Said", "Damietta", "Kafr El Sheikh", "Matrouh", "Luxor", "Qena", "North Sinai", "South Sinai", "Sohag"],
             "AFRICA": ["Lagos (Nigeria)", "Abuja (Nigeria)", "Kano (Nigeria)", "Gauteng (SA)", "Western Cape (SA)", "Nairobi (Kenya)", "Accra (Ghana)", "Addis Ababa (Ethiopia)", "Cairo (Egypt)", "Casablanca (Morocco)", "Other"]
+        };
+        
+        // --- NEW PHONE RULES (STRICT REGEX) ---
+        const countryRules = {
+            "INDIA": { regex: /^(\+91[- ]?)?[6-9]\d{9}$/, hint: "+91 9876543210" },
+            "PAKISTAN": { regex: /^(\+92[- ]?)?3\d{2}[- ]?\d{7}$/, hint: "+92 300 1234567" },
+            "NEPAL": { regex: /^(\+977[- ]?)?(98|97)\d{8}$/, hint: "+977 9812345678" },
+            "SRILANKA": { regex: /^(\+94[- ]?)?7\d{8}$/, hint: "+94 77 1234567" },
+            "BANGLADESH": { regex: /^(\+880[- ]?)?1\d{9}$/, hint: "+880 1712345678" },
+            "PHILIPPINES": { regex: /^(\+63[- ]?)?9\d{9}$/, hint: "+63 912 345 6789" },
+            "EGYPT": { regex: /^(\+20[- ]?)?1(0|1|2|5)\d{8}$/, hint: "+20 10 1234 5678" },
+            "AFRICA": { regex: /^\+?\d{10,15}$/, hint: "+234..." },
+            "OTHER": { regex: /^\+?\d{8,15}$/, hint: "+" }
         };
 
         const countryPageMap = {
@@ -968,7 +981,7 @@
         };
 
         let currentMode = 'Unskilled';
-        let requiredPhoneLength = 0;
+        let currentPhoneRegex = null;
 
         // INIT
         window.onload = function() {
@@ -1016,6 +1029,9 @@
                     document.getElementById('jobDropdownIcon').classList.remove('rotate-180');
                 }
             });
+            
+            // Trigger initial country check
+            handleNationalityChange();
         };
 
         function setupListeners() {
@@ -1109,17 +1125,21 @@
         // GEOGRAPHY & VALIDATION LOGIC
         function handleNationalityChange() {
             const sel = document.getElementById('nationality');
-            const code = sel.options[sel.selectedIndex].getAttribute('data-code');
-            const len = parseInt(sel.options[sel.selectedIndex].getAttribute('data-len'));
             const country = sel.value;
+            const code = sel.options[sel.selectedIndex].getAttribute('data-code');
             
-            requiredPhoneLength = len; 
+            // Set Global Rules
+            const rule = countryRules[country] || countryRules["OTHER"];
+            currentPhoneRegex = rule.regex;
 
             const mob = document.getElementById('mobile');
             const wa = document.getElementById('whatsapp');
             
-            mob.value = code + " ";
-            wa.value = code + " ";
+            // Only set placeholder or value if empty to avoid annoying user
+            if(mob.value === "") mob.value = code + " ";
+            if(wa.value === "") wa.value = code + " ";
+            mob.placeholder = rule.hint;
+            wa.placeholder = rule.hint;
             
             document.getElementById('mobileError').classList.add('hidden');
             mob.classList.remove('invalid-field', 'valid-field');
@@ -1139,7 +1159,8 @@
 
         function cleanPhoneNumber(phoneStr) {
             if(!phoneStr) return null;
-            // Remove all spaces, dashes, etc. Keep only + and digits
+            // Remove all spaces, dashes, etc. Keep only + and digits for CLICKUP E.164
+            // This fixes the saving error
             return phoneStr.replace(/[^0-9+]/g, '');
         }
 
@@ -1147,36 +1168,31 @@
             const el = document.getElementById(id);
             const feedback = id === 'mobile' ? document.getElementById('mobileFeedback') : document.getElementById('waFeedback');
             const errorMsg = document.getElementById('mobileError');
-            const rawInput = el.value.replace(/[^0-9]/g, '');
-            const sel = document.getElementById('nationality');
-            const code = sel.options[sel.selectedIndex].getAttribute('data-code') || "";
-            const codeDigits = code.replace(/[^0-9]/g, '');
+            
+            const rawVal = el.value.trim();
 
-            let userNumber = "";
-            if (rawInput.startsWith(codeDigits)) {
-                userNumber = rawInput.substring(codeDigits.length);
-            } else {
-                userNumber = rawInput; 
-            }
-
-            if (requiredPhoneLength === 0) {
+            if (!currentPhoneRegex) {
+                 // Fallback
                  el.classList.remove('invalid-field');
-                 feedback.innerHTML = '';
                  return;
             }
 
-            if (userNumber.length === requiredPhoneLength) {
+            // TEST REGEX
+            const isValid = currentPhoneRegex.test(rawVal);
+
+            if (isValid) {
                 el.classList.remove('invalid-field');
                 el.classList.add('valid-field');
                 feedback.innerHTML = '<i class="fa-solid fa-circle-check text-[#00ff88] drop-shadow-[0_0_5px_rgba(0,255,136,0.5)]"></i>';
                 if(id==='mobile') errorMsg.classList.add('hidden');
             } else {
                 el.classList.remove('valid-field');
-                if(userNumber.length > requiredPhoneLength) {
+                // Only show error style if length is substantial to avoid red box while typing first char
+                if(rawVal.length > 4) {
                     el.classList.add('invalid-field');
                     feedback.innerHTML = '<i class="fa-solid fa-circle-xmark text-[#ff0055]"></i>';
                 } else {
-                     feedback.innerHTML = `<span class="text-gray-500 font-mono">${userNumber.length}/${requiredPhoneLength}</span>`;
+                     feedback.innerHTML = '';
                 }
             }
         }
@@ -1192,28 +1208,20 @@
                 return; 
             }
             
-            if(requiredPhoneLength > 0) {
-                const mEl = document.getElementById('mobile');
-                const rawInput = mEl.value.replace(/[^0-9]/g, '');
-                const sel = document.getElementById('nationality');
-                const code = sel.options[sel.selectedIndex].getAttribute('data-code') || "";
-                const codeDigits = code.replace(/[^0-9]/g, '');
+            // STRICT PHONE VALIDATION CHECK BEFORE NEXT
+            const mEl = document.getElementById('mobile');
+            const rawVal = mEl.value.trim();
+            if(currentPhoneRegex && !currentPhoneRegex.test(rawVal)) {
+                mEl.classList.add('invalid-field');
+                const btn = document.getElementById('nextBtn');
+                btn.classList.add('animate-shake');
+                setTimeout(() => btn.classList.remove('animate-shake'), 500);
+                document.getElementById('mobileError').classList.remove('hidden');
                 
-                let isValid = false;
-                if (rawInput.startsWith(codeDigits)) {
-                    const remainder = rawInput.substring(codeDigits.length);
-                    if (remainder.length === requiredPhoneLength) isValid = true;
-                }
-
-                if(!isValid) {
-                    mEl.classList.add('invalid-field');
-                    const btn = document.getElementById('nextBtn');
-                    btn.classList.add('animate-shake');
-                    setTimeout(() => btn.classList.remove('animate-shake'), 500);
-                    document.getElementById('mobileError').classList.remove('hidden');
-                    showModal(`Invalid Mobile Number.\n\nFor ${sel.options[sel.selectedIndex].text}, ensure country code is present and followed by exactly ${requiredPhoneLength} digits.`);
-                    return;
-                }
+                const sel = document.getElementById('nationality');
+                const rule = countryRules[sel.value] || countryRules["OTHER"];
+                showModal(`Invalid Mobile Number Format.\n\nExample format for ${sel.options[sel.selectedIndex].text}: ${rule.hint}`);
+                return;
             }
 
             if(!document.getElementById('personalForm').checkValidity()) {
@@ -1469,7 +1477,7 @@
             const nationality = document.getElementById('nationality').value;
             const state = document.getElementById('state') ? document.getElementById('state').value : '';
             
-            // Clean phone numbers
+            // Clean phone numbers: REMOVE SPACES/DASHES FOR CLICKUP SAVING
             const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
             const whatsapp = cleanPhoneNumber(document.getElementById('whatsapp').value);
             
@@ -1484,7 +1492,6 @@
             const customFieldsArray = [];
 
             // FETCH OPTION IDS FOR DROPDOWNS
-            // We need to fetch the field definitions from ClickUp first to get the option UUIDs
             let fieldDefinitions = [];
             try {
                 const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, {
@@ -1513,23 +1520,14 @@
                     let finalValue = val;
                     
                     if (isDropdown) {
-                        // For Dropdowns, we MUST send the Option UUID, not the text
                         const optionId = getOptionId(CLICKUP_FIELDS[key], val);
                         if (optionId !== null) {
-                            // If we found a matching option, use its UUID
-                            finalValue = optionId; // Send as integer index if that's what API wants, but usually UUID works for new API
-                            // Note: ClickUp API v2 sometimes wants index for dropdowns. 
-                            // Let's try sending the index first if UUID fails, but usually UUID is safer.
-                            // Actually, many integrations use the index (order in list). 
-                            // Let's stick to the official docs which say "value": index (integer) OR uuid.
-                             
-                             // Let's try finding the index as well just in case
                              const field = fieldDefinitions.find(f => f.id === CLICKUP_FIELDS[key]);
                              const index = field.type_config.options.findIndex(o => o.id === optionId);
-                             if(index > -1) finalValue = index; // Sending Index is often safer for older API versions
+                             if(index > -1) finalValue = index; 
                         } else {
                            console.warn(`ClickUp Dropdown Mismatch: '${val}' not found in field '${key}'. Skipping to prevent error.`);
-                           return; // Skip adding this field to prevent 400 Bad Request
+                           return; 
                         }
                     }
                     
@@ -1601,7 +1599,7 @@
 *Verified by Better Call Immigration AI*`;
 
                 const clickUpPayload = {
-                    name: firstName, // UPDATED: Main Task Name is NOW ONLY FIRST NAME
+                    name: firstName, 
                     description: fullDescription, 
                     custom_fields: customFieldsArray
                 };
