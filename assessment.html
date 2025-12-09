@@ -244,6 +244,16 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
+        
+        /* FILE UPLOAD ZONE */
+        .upload-zone {
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23CBD5E1FF' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+            transition: all 0.3s ease;
+        }
+        .upload-zone:hover {
+            background-color: #eff6ff;
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%232563EB' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -373,8 +383,6 @@
                                     <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                                 </div>
                             </div>
-                            
-                            <!-- State (REMOVED) -->
                         </div>
                     </div>
 
@@ -404,6 +412,16 @@
                             <div id="waFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                         </div>
                         <p id="waHint" class="text-xs text-brand-secondary mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
+                    </div>
+
+                    <!-- NEW ALTERNATIVE PHONE FIELD -->
+                    <div class="md:col-span-2">
+                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Alternative Phone (Optional)</label>
+                         <div class="relative group">
+                            <input type="tel" id="altPhone" class="form-input w-full rounded-xl px-5 py-4 pl-12 font-mono text-lg font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('altPhone')">
+                            <i class="fa-solid fa-phone-volume absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-gold transition-colors"></i>
+                            <div id="altPhoneFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
+                        </div>
                     </div>
 
                     <!-- Qualifications -->
@@ -468,6 +486,42 @@
                         <div class="date-input-container rounded-xl">
                             <div class="date-icon-box"><i class="fa-solid fa-hourglass-half"></i></div>
                             <input type="text" id="passportExp" placeholder="Select Date" class="text-lg font-medium">
+                        </div>
+                    </div>
+
+                    <!-- NEW CV UPLOAD SECTION -->
+                    <div class="md:col-span-2 mt-4 bg-gradient-to-br from-white to-blue-50/50 rounded-2xl border border-blue-100 p-6 shadow-sm relative overflow-hidden">
+                        <!-- Decorative bg elem -->
+                        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-brand-primary/5 rounded-full blur-2xl pointer-events-none"></div>
+
+                        <label class="block text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-file-circle-question text-brand-primary"></i>
+                            Do you have a CV / Resume for better assessment?
+                        </label>
+                        
+                        <div class="flex gap-6 mb-4 relative z-10">
+                            <label class="flex items-center gap-2 cursor-pointer group">
+                                <input type="radio" name="hasCv" value="yes" class="peer sr-only" onchange="toggleCvUpload(true)">
+                                <div class="px-6 py-2 rounded-full border border-gray-200 bg-white text-slate-500 font-bold peer-checked:bg-brand-primary peer-checked:text-white peer-checked:border-brand-primary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-primary/40">Yes</div>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer group">
+                                <input type="radio" name="hasCv" value="no" class="peer sr-only" onchange="toggleCvUpload(false)" checked>
+                                <div class="px-6 py-2 rounded-full border border-gray-200 bg-white text-slate-500 font-bold peer-checked:bg-brand-secondary peer-checked:text-white peer-checked:border-brand-secondary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-secondary/40">No</div>
+                            </label>
+                        </div>
+                        
+                        <div id="cvUploadContainer" class="hidden animate-pop-in relative z-10">
+                            <div class="upload-zone rounded-xl p-8 text-center cursor-pointer relative group">
+                                <input type="file" id="cvFile" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept=".pdf,.doc,.docx" onchange="handleFileSelect(this)">
+                                
+                                <div class="transition-transform duration-300 group-hover:-translate-y-1">
+                                    <div class="w-12 h-12 rounded-full bg-white text-brand-primary shadow-md flex items-center justify-center mx-auto mb-3 text-xl group-hover:text-white group-hover:bg-brand-primary transition-colors">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                                    </div>
+                                    <p class="text-sm font-bold text-slate-700" id="fileNameDisplay">Tap here to upload CV</p>
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">PDF, DOC, DOCX (Max 5MB)</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -737,24 +791,24 @@
         
         // ----------------------------------------------------
         //  CLICKUP CUSTOM FIELD IDs
-        //  'STATE' field removed per user request.
+        //  Updated with specific IDs from user log.
         // ----------------------------------------------------
         const CLICKUP_FIELDS = {
             "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",  
             "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115", 
             "WHATSAPP": "87b4eee7-444f-4ec4-9882-441965757a68", 
+            "PHONE": "8efe7c3f-70cc-46d4-b6db-1324e5071b29", // Alternative Phone
             "DATE OF BIRTH": "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38",    
             "AGE": "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c",    
             "QUALIFICATION": "2cd34df4-98b5-4c82-8d86-a34bf3c1618b",
-            "JOB ROLE": "7dcb9f47-cf7a-4108-b42c-a5f84541b0d2", // Updated Field ID
+            "JOB ROLE": "5e3fdff6-e1ea-4ca3-8ce5-190f2ce09082", // Updated Field ID from Log
             "NATIONALITY": "e79e1c4e-b123-4bd9-8051-34859ea4b87e", 
-            // "STATE": "e65a622e-be4b-4367-ac2a-4d3b89907d96", // REMOVED
             "EXPERIENCE": "267d8fd1-cc80-4343-972a-4a1d45cab5d7", 
             "PASSPORT NUMBER": "b8798515-8962-40a7-a8cd-2685f9fd676c",
             "PASSPORT EXPIRY": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", 
             "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
             "EMAIL": "2e18821e-1c19-4de5-afb8-77ff11ee6327", 
-            "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5"
+            "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5" // Dropdown ID
         };
 
         // SALARY DATA
@@ -1015,8 +1069,6 @@
             {r:"WORKSHOP HELPER",type:"U",c:"Latvia"}
         ];
 
-        // REMOVED: stateData object is no longer needed
-
         // --- NEW PHONE RULES (COMPREHENSIVE) ---
         const countryRules = {
             "AFGHANISTAN": { regex: /^(\+93)\d{9}$/, hint: "+93 123456789" },
@@ -1157,7 +1209,7 @@
             
             // Populate Countries
             populateCountryDropdowns();
-            getClickUpFields(); // Logs fields to console for debugging
+            // getClickUpFields(); // Disabled for production
 
             flatpickr("#dob", {
                 dateFormat: "d/m/Y",
@@ -1207,6 +1259,37 @@
                     validatePhone('whatsapp');
                 }
             });
+        }
+        
+        // --- NEW CV UPLOAD LOGIC ---
+        function toggleCvUpload(show) {
+            const container = document.getElementById('cvUploadContainer');
+            if(show) {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+                // Clear file if they toggle to NO
+                document.getElementById('cvFile').value = '';
+                document.getElementById('fileNameDisplay').innerText = "Tap here to upload CV";
+            }
+        }
+        
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            const display = document.getElementById('fileNameDisplay');
+            if(file) {
+                if(file.size > 5 * 1024 * 1024) { // 5MB limit
+                    showModal("File size exceeds 5MB limit.");
+                    input.value = '';
+                    display.innerText = "Tap here to upload CV";
+                    return;
+                }
+                display.innerText = file.name;
+                display.classList.add('text-brand-primary');
+            } else {
+                display.innerText = "Tap here to upload CV";
+                display.classList.remove('text-brand-primary');
+            }
         }
 
         // --- POPULATE COUNTRIES ---
@@ -1332,6 +1415,7 @@
 
             const mob = document.getElementById('mobile');
             const wa = document.getElementById('whatsapp');
+            const alt = document.getElementById('altPhone'); // New Field
             
             // Extract code from hint (first part)
             // e.g. "+93 123..." -> "+93 "
@@ -1341,6 +1425,7 @@
             // Update fields with code
             mob.value = code;
             wa.value = code;
+            alt.value = code;
             
             // Update Hints Text
             const mHint = document.getElementById('mobileHint');
@@ -1360,11 +1445,12 @@
             document.getElementById('mobileError').classList.add('hidden');
             mob.classList.remove('invalid-field', 'valid-field');
             wa.classList.remove('invalid-field', 'valid-field');
+            alt.classList.remove('invalid-field', 'valid-field');
+            
             document.getElementById('mobileFeedback').innerHTML = '';
             document.getElementById('waFeedback').innerHTML = '';
+            document.getElementById('altPhoneFeedback').innerHTML = '';
         }
-
-        // REMOVED: handleNationalityChange() is no longer needed
 
         function cleanPhoneNumber(phoneStr) {
             if(!phoneStr) return null;
@@ -1385,7 +1471,11 @@
 
         function validatePhone(id) {
             const el = document.getElementById(id);
-            const feedback = id === 'mobile' ? document.getElementById('mobileFeedback') : document.getElementById('waFeedback');
+            let feedback;
+            if(id === 'mobile') feedback = document.getElementById('mobileFeedback');
+            else if(id === 'whatsapp') feedback = document.getElementById('waFeedback');
+            else feedback = document.getElementById('altPhoneFeedback');
+            
             const errorMsg = document.getElementById('mobileError');
             
             // Clean spaces for regex check
@@ -1617,28 +1707,6 @@
             return null;
         }
 
-        // HELPER TO FETCH FIELD IDS FOR USER (Restored for Debugging)
-        async function getClickUpFields() {
-            if(!CLICKUP_API_KEY || CLICKUP_API_KEY.length < 10) return;
-            console.log("%c Fetching ClickUp Fields... ", "background: #222; color: #bada55");
-            
-            try {
-                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, {
-                    method: 'GET',
-                    headers: { 'Authorization': CLICKUP_API_KEY }
-                });
-                const data = await res.json();
-                
-                if(data.fields) {
-                    console.group("YOUR CLICKUP FIELD IDs (Copy these into the code!)");
-                    data.fields.forEach(f => {
-                        console.log(`"${f.name}": "${f.id}",  // Type: ${f.type}`);
-                    });
-                    console.groupEnd();
-                }
-            } catch(e) { console.error("Could not fetch fields", e); }
-        }
-
         async function saveData() {
             // 1. Gather all data points
             const ref = document.getElementById('refId').innerText;
@@ -1649,11 +1717,11 @@
             const dob = document.getElementById('dob').value;
             const age = parseInt(document.getElementById('age').value) || 0;
             const nationality = document.getElementById('nationality').value;
-            // const state = document.getElementById('state') ? document.getElementById('state').value : ''; // REMOVED
             
             // Clean phone numbers: REMOVE SPACES/DASHES FOR CLICKUP SAVING
             const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
             const whatsapp = cleanPhoneNumber(document.getElementById('whatsapp').value);
+            const altPhone = cleanPhoneNumber(document.getElementById('altPhone').value); // New Field
             
             const qualification = document.querySelector('input[name="qualification"]:checked')?.value || '';
             const passportNo = document.getElementById('passportNo').value;
@@ -1719,8 +1787,6 @@
                     }
                 } else {
                     // Fallback if we couldn't fetch definitions (e.g. network error)
-                    // We assume it's a simple text field to be safe. 
-                    // If it's actually a dropdown, this might fail, but we have no way to know indices without definitions.
                     console.log(`Field definition not found for ${key}, sending as raw value.`);
                 }
                 
@@ -1728,10 +1794,10 @@
             };
 
             // Map Data to Configured IDs
-            // No longer need to pass 'true/false' for dropdowns. The code detects it.
             addField("SUR NAME", lastName);
             addField("MOBILE", mobile);
             addField("WHATSAPP", whatsapp);
+            addField("PHONE", altPhone); // Mapped new field
             addField("DATE OF BIRTH", getUnixTime(dob));
             addField("AGE", age);
             addField("EMAIL", email);
@@ -1741,7 +1807,6 @@
             addField("NATIONALITY", nationality);     
             addField("PRESENT RESIDENCE", presentCountry);     
             
-            // addField("STATE", state); // REMOVED
             addField("EXPERIENCE", exp);
             addField("PASSPORT NUMBER", passportNo);
             addField("PASSPORT EXPIRY", getUnixTime(passportExp));
@@ -1752,7 +1817,6 @@
             // 3. Send to ClickUp
             if(CLICKUP_API_KEY && CLICKUP_LIST_ID && !CLICKUP_API_KEY.includes("pk_12345")) {
                 
-                // --- FULL DESCRIPTION LOGIC RESTORED HERE ---
                 const fullDescription = `**FULL CANDIDATE PROFILE**
 --------------------------------------------------
 **CASE REFERENCE:** ${ref}
@@ -1767,12 +1831,12 @@
 **Email:** ${email}
 **Nationality:** ${nationality}
 **Present Residence:** ${presentCountry}
-${/* **State/Province:** ${state} REMOVED */ ''}
 
 **CONTACT INFO**
 --------------------------------------------------
 **Mobile:** ${mobile}
 **WhatsApp:** ${whatsapp}
+**Alt Phone:** ${altPhone || "N/A"}
 
 **PROFESSIONAL PROFILE**
 --------------------------------------------------
@@ -1801,6 +1865,7 @@ ${/* **State/Province:** ${state} REMOVED */ ''}
                 };
 
                 try {
+                    // A. Create Task
                     const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
                         method: 'POST',
                         headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
@@ -1812,7 +1877,32 @@ ${/* **State/Province:** ${state} REMOVED */ ''}
                         console.error("ClickUp Error", err);
                         showModal(`Error Saving to ClickUp: ${err.err || "Check console for details"}`);
                     } else {
-                        console.log("Saved to ClickUp!");
+                        const taskData = await res.json();
+                        console.log("Saved to ClickUp! Task ID:", taskData.id);
+                        
+                        // B. Upload File (If selected)
+                        const cvFile = document.getElementById('cvFile').files[0];
+                        if (cvFile && taskData.id) {
+                            try {
+                                console.log("Uploading CV...");
+                                const formData = new FormData();
+                                formData.append("attachment", cvFile);
+                                formData.append("filename", cvFile.name);
+
+                                const uploadRes = await fetch(`https://api.clickup.com/api/v2/task/${taskData.id}/attachment`, {
+                                    method: 'POST',
+                                    headers: { 'Authorization': CLICKUP_API_KEY }, // No Content-Type (Browser sets boundary)
+                                    body: formData
+                                });
+                                
+                                if(uploadRes.ok) console.log("CV Uploaded Successfully");
+                                else console.error("CV Upload Failed", await uploadRes.json());
+                                
+                            } catch(uploadErr) {
+                                console.error("File Upload Network Error", uploadErr);
+                            }
+                        }
+
                         // 4. Show Toast only on success
                         showToast();
                     }
