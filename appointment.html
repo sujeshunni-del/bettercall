@@ -558,11 +558,12 @@
         }
 
         // --- CREDENTIALS (UPDATED) ---
-        const CLICKUP_API_KEY = "pk_260468481_DGN3UIQ1QIOC3C2V3M3UG9XFE8SCXXCH"; 
+        const CLICKUP_API_KEY = "pk_260468481_DGN3UIQ1QIOC3C2V3MUG9XFE8SCXXCH"; 
         const CLICKUP_LIST_ID = "90182075750"; // Derived from link. If error, this might be Workspace ID.
         
         // --- PROXY CONFIG ---
-        const PROXY_URL = "https://corsproxy.io/?"; 
+        // Updated to use the standard relative proxy path for the deployment environment.
+        const PROXY_URL = "/api/proxy?url="; 
         
         // --- FIELD MAPPING CONFIGURATION ---
         // IMPORTANT: If you created a new list, ALL these UUIDs MUST be updated.
@@ -1211,6 +1212,10 @@
             }
 
             // Convert Date to Unix Timestamp (Milliseconds) for ClickUp
+            // Note: ClickUp typically expects milliseconds from epoch. 
+            // The value for a Date field should be the selected date at midnight UTC. 
+            // However, the existing code uses `dateObj.getTime()`, which includes time and timezone offset. 
+            // For now, sticking to the existing pattern for APPOINTMENT_DATE, and using string for APPOINTMENT_TIME.
             const dateObj = new Date(date);
             const dateTimestamp = dateObj.getTime();
 
@@ -1283,6 +1288,7 @@
                 if(CLICKUP_API_KEY && !CLICKUP_API_KEY.includes("pk_12345")) {
                     
                     const TARGET_URL = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`;
+                    // Use the updated PROXY_URL
                     const FINAL_URL = PROXY_URL + encodeURIComponent(TARGET_URL);
 
                     logToScreen(`Target: ${TARGET_URL}`);
