@@ -334,19 +334,6 @@
                             <div class="absolute right-5 top-11 text-slate-400 pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                         </div>
 
-                         <!-- CV Upload -->
-                        <div class="bg-blue-50/50 rounded-xl border border-blue-100 p-6 flex flex-col md:flex-row items-center gap-6">
-                            <div class="flex-grow">
-                                <label class="text-sm font-bold text-slate-700 block mb-1">Upload CV / Resume</label>
-                                <p class="text-xs text-slate-500">Optional but recommended for faster assessment.</p>
-                            </div>
-                            <div class="relative group cursor-pointer">
-                                <input type="file" id="cvFile" class="hidden" onchange="updateFileName(this)">
-                                <label for="cvFile" class="bg-white border border-brand-primary text-brand-primary font-bold py-3 px-6 rounded-lg shadow-sm hover:bg-brand-primary hover:text-white transition-all cursor-pointer flex items-center gap-2">
-                                    <i class="fa-solid fa-cloud-arrow-up"></i> <span id="fileNameDisplay">Choose File</span>
-                                </label>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="w-full h-px bg-gray-200"></div>
@@ -952,10 +939,6 @@
             sel.add(new Option("Other", "Other"));
         }
 
-        function updateFileName(input) {
-            if(input.files[0]) document.getElementById('fileNameDisplay').innerText = input.files[0].name;
-        }
-
         // --- TIME SLOT GENERATOR ---
         function generateTimeSlots(dateStr) {
             const grid = document.getElementById('timeSlotGrid');
@@ -1071,16 +1054,7 @@
                     
                     if(res.ok) {
                         const data = await res.json();
-                        // Upload File if exists
-                        const file = document.getElementById('cvFile').files[0];
-                        if(file) {
-                            const formData = new FormData();
-                            formData.append("attachment", file);
-                            formData.append("filename", file.name);
-                            await fetch(`https://api.clickup.com/api/v2/task/${data.id}/attachment`, {
-                                method: 'POST', headers: { 'Authorization': CLICKUP_API_KEY }, body: formData
-                            });
-                        }
+                        // CV Upload logic removed
                     } else {
                         console.error(await res.json());
                     }
