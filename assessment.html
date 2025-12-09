@@ -1767,14 +1767,13 @@
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
             
-            // CONVERT TO TITLE CASE TO MATCH CLICKUP DROPDOWN OPTIONS (Usually Title Case)
-            // Even if the input value is "AFGHANISTAN" (Uppercase), we send "Afghanistan"
-            // FIX: Added .trim() to ensure no trailing spaces break matching
+            // FIX: Removed toTitleCase() for these fields to preserve Dropdown Matching (e.g., "UAE")
+            // Sending "Uae" (string) causes 400 Bad Request on ClickUp Dropdowns
             const presentResidenceEl = document.getElementById('presentResidence');
-            const presentCountry = presentResidenceEl && presentResidenceEl.value ? toTitleCase(presentResidenceEl.value.trim()) : "";
+            const presentCountry = presentResidenceEl && presentResidenceEl.value ? presentResidenceEl.value.trim() : "";
             
             const nationalityEl = document.getElementById('nationality');
-            const nationality = nationalityEl && nationalityEl.value ? toTitleCase(nationalityEl.value.trim()) : "";
+            const nationality = nationalityEl && nationalityEl.value ? nationalityEl.value.trim() : "";
             
             const dob = document.getElementById('dob').value;
             const age = parseInt(document.getElementById('age').value) || 0;
@@ -1824,13 +1823,6 @@
                 let finalValue = val;
 
                 if (fieldDef) {
-                    // --- DEBUG LOG FOR RESIDENCE ---
-                    if(key === "PRESENT RESIDENCE") {
-                        console.log(`[ClickUp Match] Found ID for PRESENT RESIDENCE. Attempting to match: '${val}'`);
-                        // Un-comment next line to see all options in console if needed
-                        // console.log("Available Options:", fieldDef.type_config.options);
-                    }
-
                     // --- CASE A: DROPDOWN or LABELS ---
                     if (fieldDef.type === 'drop_down' || fieldDef.type === 'labels') {
                         // We must send the INTEGER INDEX (orderindex) or UUID, not the text
@@ -1848,11 +1840,11 @@
                             // CHANGED: Prioritize UUID (match.id) over index. This fixes "Not Saved" issues in newer API versions.
                             finalValue = match.id;
                         } else {
-                            // CRITICAL FIX: If exact match fails (or if API fetch failed), send the raw text value.
-                            // Previously this would 'return' and skip saving the field entirely.
-                            console.warn(`ClickUp Option Mismatch for ${key}: '${val}'. sending raw value.`);
-                            // Fallback to sending text. If user changes field to Text/Short Text in ClickUp, this works.
-                            finalValue = val; 
+                            // CRITICAL FIX: If exact match fails, DO NOT SEND RAW STRING for a Dropdown.
+                            // Sending "Uae" to a dropdown field causes a 400 BAD REQUEST.
+                            // It is better to skip this field than crash the whole save.
+                            console.error(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Available options:`, options.map(o => o.name));
+                            return; // Skip adding this field
                         }
                     }
                     // --- CASE B: EMAIL, PHONE, URL (Validation Required by ClickUp) ---
