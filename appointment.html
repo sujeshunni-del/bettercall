@@ -1087,7 +1087,10 @@
                 if(CLICKUP_API_KEY && !CLICKUP_API_KEY.includes("pk_12345")) {
                     const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
                         method: 'POST',
-                        headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Authorization': CLICKUP_API_KEY.trim(), 
+                            'Content-Type': 'application/json' 
+                        },
                         body: JSON.stringify(payload)
                     });
                     
