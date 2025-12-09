@@ -185,6 +185,7 @@
         }
         .debug-log { margin-bottom: 4px; border-bottom: 1px solid #333; padding-bottom: 2px; }
         .debug-error { color: #ff5555; }
+        .debug-warn { color: #ffcc00; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -491,7 +492,7 @@
     <footer class="border-t border-gray-200/60 bg-white/50 py-8 mt-auto backdrop-blur-sm relative z-10">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-slate-400 text-xs">© 2024 Better Call Immigration. Designed for the Future.</p>
-            <button onclick="document.getElementById('debugConsole').style.display = document.getElementById('debugConsole').style.display === 'none' ? 'block' : 'none'" class="mt-4 text-[10px] text-gray-400 underline">Toggle Debug Console</button>
+            <button onclick="toggleDebug()" class="mt-4 text-[10px] text-gray-400 underline">Toggle Debug Console</button>
         </div>
     </footer>
 
@@ -519,14 +520,19 @@
     <!-- On-screen Console -->
     <div id="debugConsole">
         <div><strong>Debug Console (CORS Proxy Enabled)</strong></div>
+        <div class="text-xs text-gray-500 mt-1 mb-2 border-b border-gray-700 pb-2">
+            ClickUp API Check: <span id="apiStatus">Pending...</span>
+        </div>
     </div>
 
     <script>
         // --- CUSTOM LOGGER FOR ON-SCREEN CONSOLE ---
-        function logToScreen(msg, isError = false) {
+        function logToScreen(msg, type = 'info') {
             const c = document.getElementById('debugConsole');
             const d = document.createElement('div');
-            d.className = isError ? 'debug-log debug-error' : 'debug-log';
+            d.className = 'debug-log';
+            if (type === 'error') d.className += ' debug-error';
+            if (type === 'warn') d.className += ' debug-warn';
             
             // Handle objects
             if (typeof msg === 'object') {
@@ -538,19 +544,34 @@
             c.scrollTop = c.scrollHeight;
             
             // Also log to real console
-            if(isError) console.error(msg); else console.log(msg);
+            if(type === 'error') console.error(msg); else console.log(msg);
         }
 
-        // CONFIG
+        function toggleDebug() {
+            const el = document.getElementById('debugConsole');
+            const isHidden = el.style.display === 'none';
+            el.style.display = isHidden ? 'block' : 'none';
+            if(isHidden) {
+                // When opening, try to fetch fields to help user debug
+                checkClickUpConnection();
+            }
+        }
+
+        // --- CREDENTIALS (UPDATED) ---
         const CLICKUP_API_KEY = "pk_260468481_DGN3UIQ1QIOC3C2V3M3UG9XFE8SCXXCH"; 
-        const CLICKUP_LIST_ID = "90182075750"; 
+        const CLICKUP_LIST_ID = "90182075750"; // Derived from link. If error, this might be Workspace ID.
         
-        // --- ADDED MISSING CLICKUP_FIELDS DEFINITION ---
+        // --- PROXY CONFIG ---
+        const PROXY_URL = "https://corsproxy.io/?"; 
+        
+        // --- FIELD MAPPING CONFIGURATION ---
+        // IMPORTANT: If you created a new list, ALL these UUIDs MUST be updated.
+        // Use the Debug Console to find the correct IDs for your new list.
         const CLICKUP_FIELDS = {
             "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",  
             "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115", 
             "WHATSAPP": "87b4eee7-444f-4ec4-9882-441965757a68", 
-            "PHONE": "8efe7c3f-70cc-46d4-b6db-1324e5071b29", // Alternative Phone
+            "PHONE": "8efe7c3f-70cc-46d4-b6db-1324e5071b29", 
             "DATE OF BIRTH": "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38",    
             "AGE": "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c",    
             "QUALIFICATION": "2cd34df4-98b5-4c82-8d86-a34bf3c1618b",
@@ -558,8 +579,56 @@
             "NATIONALITY": "e79e1c4e-b123-4bd9-8051-34859ea4b87e", 
             "EXPERIENCE": "267d8fd1-cc80-4343-972a-4a1d45cab5d7", 
             "EMAIL": "2e18821e-1c19-4de5-afb8-77ff11ee6327", 
-            "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5"
+            "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5",
+            // Consolidating Appointment Fields Here
+            "APPOINTMENT_DATE": "a4a8197d-eb13-4e90-ad56-d56108137e2e", 
+            "APPOINTMENT_TIME": "584f279f-8f78-4e2b-ac91-ccf2c4e48b00",
+            "CONSULTATION_MODE": "03414f61-a879-4d14-bee0-7186a3de27d5"
         };
+
+        // --- DEBUG: CHECK FIELDS ---
+        async function checkClickUpConnection() {
+            logToScreen("Checking ClickUp List Connection...");
+            const statusSpan = document.getElementById('apiStatus');
+            statusSpan.innerText = "Connecting...";
+            statusSpan.className = "text-yellow-400";
+
+            try {
+                // Attempt to get list fields to verify ID
+                const TARGET_URL = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`;
+                const FINAL_URL = PROXY_URL + encodeURIComponent(TARGET_URL);
+                
+                const res = await fetch(FINAL_URL, {
+                    method: 'GET',
+                    headers: { 'Authorization': CLICKUP_API_KEY.trim() }
+                });
+
+                if(res.ok) {
+                    const data = await res.json();
+                    statusSpan.innerText = "Connected ✅";
+                    statusSpan.className = "text-green-400";
+                    logToScreen(`Success! Found ${data.fields.length} Custom Fields.`);
+                    logToScreen("--- AVAILABLE FIELDS (Use these IDs in Config) ---");
+                    data.fields.forEach(f => {
+                        logToScreen(`"${f.name.toUpperCase()}": "${f.id}"`);
+                    });
+                    logToScreen("------------------------------------------------");
+                } else {
+                    statusSpan.innerText = "Error ❌";
+                    statusSpan.className = "text-red-400";
+                    const err = await res.json();
+                    logToScreen("Connection Failed. Check LIST ID.", 'error');
+                    logToScreen(err, 'error');
+                    if(res.status === 404) {
+                        logToScreen("CRITICAL: The ID '90182075750' might be a WORKSPACE ID, not a LIST ID. Please find the correct List ID.", 'warn');
+                    }
+                }
+            } catch(e) {
+                statusSpan.innerText = "Network Error";
+                logToScreen(e.message, 'error');
+            }
+        }
+
 
         // --- FIXED E.164 COMPLIANT REGEX RULES (FULL LIST) ---
         const countryRules = {
@@ -949,6 +1018,9 @@
                     generateTimeSlots(dateStr);
                 }
             });
+            
+            // Check API on load
+            // checkClickUpConnection(); // Optional: Uncomment to check automatically
         };
 
         // --- CORE FUNCTIONS ---
@@ -1142,17 +1214,16 @@
             const dateObj = new Date(date);
             const dateTimestamp = dateObj.getTime();
 
-            // 1. Prepare Base Custom Fields (Date, Time, Mode)
-            const finalCustomFields = [
-                { "id": "a4a8197d-eb13-4e90-ad56-d56108137e2e", "value": dateTimestamp }, // Date
-                { "id": "584f279f-8f78-4e2b-ac91-ccf2c4e48b00", "value": selectedTimeSlot }, // Time
-                { "id": "03414f61-a879-4d14-bee0-7186a3de27d5", "value": selectedConsultationMode } // Mode
-            ];
+            // 1. Prepare Base Custom Fields
+            const finalCustomFields = [];
 
             // 2. Helper to add mapped fields from CLICKUP_FIELDS config
             const addField = (key, val) => {
                 const fieldId = CLICKUP_FIELDS[key];
-                if (!fieldId || val === null || val === "") return;
+                if (!fieldId || val === null || val === "") {
+                    // console.warn("Skipping field", key, val);
+                    return;
+                }
                 
                 // Avoid duplicates if IDs overlap
                 if(finalCustomFields.some(f => f.id === fieldId)) return;
@@ -1160,7 +1231,7 @@
                 finalCustomFields.push({ "id": fieldId, "value": val });
             };
 
-            // 3. Map Form Data to ClickUp Fields
+            // 3. Map Form Data to ClickUp Fields using CENTRALIZED CONFIG
             addField("SUR NAME", ln);
             addField("MOBILE", cleanMobile);
             addField("EMAIL", em);
@@ -1171,6 +1242,11 @@
             addField("JOB ROLE", role);
             addField("WHATSAPP", cleanWA); 
             addField("PHONE", cleanAlt); // Alternative Phone
+            
+            // Add Consolidated Fields
+            addField("APPOINTMENT_DATE", dateTimestamp);
+            addField("APPOINTMENT_TIME", selectedTimeSlot);
+            addField("CONSULTATION_MODE", selectedConsultationMode);
 
             // ClickUp Payload
             const payload = {
@@ -1201,13 +1277,11 @@
             const btn = document.getElementById('submitBtn');
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
             
-            logToScreen("Initiating ClickUp API Call via Proxy...");
+            logToScreen("Initiating ClickUp API Call...");
 
             try {
                 if(CLICKUP_API_KEY && !CLICKUP_API_KEY.includes("pk_12345")) {
                     
-                    // --- CORS PROXY FIX START ---
-                    const PROXY_URL = "https://corsproxy.io/?"; 
                     const TARGET_URL = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`;
                     const FINAL_URL = PROXY_URL + encodeURIComponent(TARGET_URL);
 
@@ -1221,7 +1295,6 @@
                         },
                         body: JSON.stringify(payload)
                     });
-                    // --- CORS PROXY FIX END ---
                     
                     if(res.ok) {
                         const data = await res.json();
@@ -1233,9 +1306,16 @@
                         setTimeout(() => location.reload(), 3000);
                     } else {
                         const err = await res.json();
-                        logToScreen(err, true);
+                        logToScreen(err, 'error');
                         console.error(err);
-                        throw new Error(`ClickUp Error: ${JSON.stringify(err)}`);
+                        
+                        let errorMsg = `ClickUp Error: ${JSON.stringify(err)}`;
+                        if(res.status === 404) {
+                            errorMsg = "Error 404: List not found. The ID '" + CLICKUP_LIST_ID + "' might be incorrect or is a Workspace ID.";
+                            showModal(errorMsg);
+                        } else {
+                            throw new Error(errorMsg);
+                        }
                     }
                 } else {
                     throw new Error("Invalid API Key");
@@ -1243,7 +1323,7 @@
                 
             } catch(e) {
                 console.error(e);
-                logToScreen(e.message, true);
+                logToScreen(e.message, 'error');
                 showModal("Connection Error: " + e.message);
             } finally {
                 btn.innerHTML = '<span>CONFIRM APPOINTMENT</span><i class="fa-solid fa-calendar-check"></i>';
