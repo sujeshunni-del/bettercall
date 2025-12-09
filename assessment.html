@@ -43,14 +43,14 @@
                         'brand-accent': '#f43f5e', 
                         'brand-gold': '#d97706',
                         glass: { border: 'rgba(255, 255, 255, 0.4)', surface: 'rgba(255, 255, 255, 0.1)' },
-                        mat: { red: '#FF1744', indigo: '#3D5AFE', teal: '#00E5FF', yellow: '#FFEA00', pink: '#F50057', blue: '#2979FF', lightGreen: '#00E676', amber: '#FFC400', purple: '#D500F9', deepOrange: '#FF3D00' },
                     },
                     animation: {
                         'blob': 'blob 20s infinite alternate',
                         'float': 'float 6s ease-in-out infinite',
                         'slide-up-fade': 'slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'pop-in': 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
-                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards'
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both'
                     },
                     keyframes: {
                         blob: {
@@ -74,6 +74,12 @@
                         fadeInUp: {
                             '0%': { opacity: '0', transform: 'translateY(20px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        shake: {
+                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
                         }
                     }
                 }
@@ -171,15 +177,186 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* MOBILE DOCK MENU ITEMS (Light Theme) */
-        .lang-option-mobile, .dest-option-mobile {
-            width: 100%; text-align: left; padding: 0.75rem; border-radius: 1rem; 
-            background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.6);
-            color: #1e293b; font-size: 0.75rem; font-weight: 700;
-            display: flex; align-items: center; gap: 0.5rem; transition: background 0.3s;
+        /* BOOKING SPECIFIC - NEW 3D ADVISOR CARDS */
+        .advisor-3d-card {
+            position: relative;
+            height: 140px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            overflow: visible;
         }
-        .lang-option-mobile:hover, .dest-option-mobile:hover {
-            background: #eff6ff; border-color: #2563eb; color: #2563eb;
+        
+        .advisor-3d-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: linear-gradient(120deg, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+            z-index: 0;
+            opacity: 0.8;
+        }
+
+        .advisor-3d-card.selected {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(124, 58, 237, 0.05));
+            border-color: #2563eb;
+            box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.2), 0 0 0 2px #2563eb;
+        }
+
+        .advisor-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding: 0 20px;
+            gap: 16px;
+            transform: translateZ(20px);
+        }
+
+        .advisor-image-wrapper {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+            border: 2px solid #fff;
+            box-shadow: 0 10px 20px rgba(244, 63, 94, 0.15), inset 0 2px 4px rgba(255,255,255,0.8);
+            transform: translateZ(30px);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .advisor-3d-card:hover .advisor-image-wrapper {
+            transform: translateZ(50px) scale(1.1);
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+        }
+
+        .advisor-icon {
+            font-size: 32px;
+            color: #e11d48;
+            filter: drop-shadow(0 4px 6px rgba(225, 29, 72, 0.2));
+            transition: all 0.3s ease;
+        }
+
+        .advisor-badge {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 20;
+        }
+
+        .advisor-info {
+            flex-grow: 1;
+            transform: translateZ(25px);
+        }
+
+        .advisor-role {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .advisor-name {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .advisor-langs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .lang-pill {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 100px;
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            color: #64748b;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .check-3d {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 24px;
+            height: 24px;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            opacity: 0;
+            transform: translateZ(20px) scale(0);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        .advisor-3d-card.selected .check-3d {
+            opacity: 1;
+            transform: translateZ(30px) scale(1);
+        }
+
+        .method-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+        .method-card.selected {
+            border-color: #7c3aed;
+            background: #f5f3ff;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+        }
+        .time-slot {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .time-slot:hover:not(.disabled) {
+            background-color: #eff6ff;
+            color: #2563eb;
+        }
+        .time-slot.selected {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+        .time-slot.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #f1f5f9;
         }
     </style>
 </head>
@@ -221,15 +398,22 @@
             
             <!-- Progress Steps -->
             <div class="mb-16 relative">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-0.5 bg-white/30"></div>
-                <div class="flex items-center justify-center gap-16 relative z-10">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-0.5 bg-white/30"></div>
+                <div class="flex items-center justify-center gap-10 md:gap-24 relative z-10">
+                    <!-- Step 1 -->
                     <div id="step-1-indicator" class="flex flex-col items-center gap-3 transition-all duration-500">
-                        <div class="w-12 h-12 rounded-full bg-white/80 backdrop-blur border-4 border-brand-primary shadow-lg flex items-center justify-center text-brand-primary text-lg font-bold">1</div>
-                        <span class="font-bold text-sm text-brand-primary tracking-widest uppercase">Identity</span>
+                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 backdrop-blur border-4 border-brand-primary shadow-lg flex items-center justify-center text-brand-primary text-base md:text-lg font-bold">1</div>
+                        <span class="font-bold text-[10px] md:text-sm text-brand-primary tracking-widest uppercase">Identity</span>
                     </div>
+                    <!-- Step 2 -->
                     <div id="step-2-indicator" class="flex flex-col items-center gap-3 transition-all duration-500 opacity-40 grayscale">
-                        <div class="w-12 h-12 rounded-full bg-white/40 border-4 border-gray-200 flex items-center justify-center text-gray-500 text-lg font-bold">2</div>
-                        <span class="font-bold text-sm text-slate-500 tracking-widest uppercase">Analysis</span>
+                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/40 border-4 border-gray-200 flex items-center justify-center text-gray-500 text-base md:text-lg font-bold">2</div>
+                        <span class="font-bold text-[10px] md:text-sm text-slate-500 tracking-widest uppercase">Analysis</span>
+                    </div>
+                    <!-- Step 3 -->
+                    <div id="step-3-indicator" class="flex flex-col items-center gap-3 transition-all duration-500 opacity-40 grayscale">
+                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/40 border-4 border-gray-200 flex items-center justify-center text-gray-500 text-base md:text-lg font-bold">3</div>
+                        <span class="font-bold text-[10px] md:text-sm text-slate-500 tracking-widest uppercase">Booking</span>
                     </div>
                 </div>
             </div>
@@ -526,7 +710,7 @@
                                             <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-3xl mb-4 border border-white/20 shadow-inner"><i class="fa-solid fa-headset text-white animate-pulse"></i></div>
                                             <h4 class="text-2xl font-black mb-2 tracking-tight">Executive Consultation</h4>
                                             <p class="text-blue-50 text-sm font-medium mb-6 leading-relaxed opacity-90 px-2">Transition from assessment to action. Secure a dedicated strategy session with our senior consultants.</p>
-                                            <button id="mainActionBtn" class="w-full bg-white text-brand-primary font-black py-4 px-6 rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-50 transition-all flex items-center justify-center gap-3 group/btn"><span class="tracking-wider text-sm">SCHEDULE STRATEGY CALL</span><i class="fa-solid fa-calendar-check text-lg group-hover/btn:scale-110 transition-transform"></i></button>
+                                            <button id="mainActionBtn" onclick="goToStep3()" class="w-full bg-white text-brand-primary font-black py-4 px-6 rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-50 transition-all flex items-center justify-center gap-3 group/btn"><span class="tracking-wider text-sm">SCHEDULE STRATEGY CALL</span><i class="fa-solid fa-calendar-check text-lg group-hover/btn:scale-110 transition-transform"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -534,8 +718,92 @@
                         </div>
                     </div>
                 </div>
-
             </div>
+
+            <!-- TAB 3: BOOKING -->
+            <div id="tab-3" class="hidden animate-slide-up-fade max-w-5xl mx-auto">
+                <div class="glass-card p-6 md:p-10">
+                    <div class="mb-8 text-center">
+                        <h2 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Finalize Appointment</h2>
+                        <p class="text-slate-500 text-sm tracking-wide font-medium">Select your advisor and preferred slot.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Left: Advisor Selection -->
+                        <div class="lg:col-span-2 space-y-8">
+                            
+                            <!-- 1. Advisor Grid -->
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">1. Select Your Immigration Advisor</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="advisorGrid">
+                                    <!-- Advisors injected via JS -->
+                                </div>
+                                <input type="hidden" id="selectedAdvisor">
+                            </div>
+
+                            <!-- 2. Method Selection -->
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">2. Consultation Method</h3>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="method-card p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('In-Person', this)">
+                                        <div class="w-10 h-10 rounded-full bg-blue-50 text-brand-primary flex items-center justify-center text-lg"><i class="fa-solid fa-building"></i></div>
+                                        <span class="text-xs font-bold text-slate-700">In-Person</span>
+                                        <span class="text-[9px] text-slate-400 font-medium">Visit Office</span>
+                                    </div>
+                                    <div class="method-card p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('Phone Call', this)">
+                                        <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-lg"><i class="fa-solid fa-phone"></i></div>
+                                        <span class="text-xs font-bold text-slate-700">Phone Call</span>
+                                        <span class="text-[9px] text-slate-400 font-medium">Direct Call</span>
+                                    </div>
+                                    <div class="method-card p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('Video Call', this)">
+                                        <div class="w-10 h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-lg"><i class="fa-solid fa-video"></i></div>
+                                        <span class="text-xs font-bold text-slate-700">Video Call</span>
+                                        <span class="text-[9px] text-slate-400 font-medium">Zoom / Meet</span>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="selectedMethod">
+                            </div>
+                        </div>
+
+                        <!-- Right: Date & Time -->
+                        <div class="bg-white/60 rounded-2xl border border-white/50 p-6 shadow-sm">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">3. Date & Time</h3>
+                            
+                            <!-- Date -->
+                            <div class="mb-6">
+                                <label class="block text-[10px] font-bold text-brand-primary uppercase mb-2">Select Date</label>
+                                <div class="relative">
+                                    <input type="text" id="bookingDate" class="form-input w-full rounded-xl px-4 text-sm font-bold text-center" placeholder="Pick a date">
+                                    <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"><i class="fa-regular fa-calendar"></i></div>
+                                </div>
+                            </div>
+
+                            <!-- Time Slots -->
+                            <div>
+                                <label class="block text-[10px] font-bold text-brand-primary uppercase mb-2">Select Time (GST)</label>
+                                <div class="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto custom-scrollbar p-1" id="timeSlotGrid">
+                                    <!-- JS Generated -->
+                                </div>
+                                <input type="hidden" id="selectedTime">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Confirmation -->
+                    <div class="mt-8 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="text-center md:text-left">
+                            <p class="text-sm font-bold text-slate-900">Ready to Book?</p>
+                            <p class="text-xs text-slate-500">Your selected advisor will confirm shortly.</p>
+                        </div>
+                        <button onclick="submitBooking()" class="btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center gap-3 w-full md:w-auto justify-center">
+                            <span>CONFIRM APPOINTMENT</span>
+                            <i class="fa-solid fa-check-circle"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </main>
     
@@ -552,39 +820,33 @@
         </div>
     </footer>
 
-    <!-- 3. MOBILE DOCK (5-Items, Serbia Style Layout, Light Theme) -->
+    <!-- MOBILE DOCK (UNCHANGED) -->
     <div class="fixed bottom-6 left-4 right-4 z-50 md:hidden animate-fade-in-up">
         <div class="glass-card !bg-white/90 backdrop-blur-xl p-1.5 rounded-full shadow-2xl border border-white/60 flex justify-between items-center gap-1 relative z-50">
-            
             <a href="index.html" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full hover:bg-blue-50 text-slate-500 hover:text-brand-primary transition-all active:scale-95">
                 <i class="fa-solid fa-house text-lg mb-0.5 transition-colors"></i>
                 <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Home</span>
             </a>
-
             <button onclick="toggleMobileLanguage()" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full hover:bg-purple-50 text-slate-500 hover:text-brand-secondary transition-all active:scale-95">
                 <i class="fa-solid fa-language text-lg mb-0.5 transition-colors"></i>
                 <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Lang</span>
             </button>
-
             <button onclick="toggleMobileDestinations()" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full hover:bg-yellow-50 text-slate-500 hover:text-brand-gold transition-all active:scale-95">
                 <i class="fa-solid fa-earth-europe text-lg mb-0.5 transition-colors"></i>
                 <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Explore</span>
             </button>
-
             <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1558/91ROR9EQUJNVPS08FU" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full bg-gradient-to-br from-brand-primary to-blue-600 text-white shadow-lg shadow-blue-500/30 transition-all active:scale-95">
                 <i class="fa-solid fa-paper-plane text-lg mb-0.5"></i>
                 <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Apply</span>
             </a>
-
             <a href="https://wa.me/971503666382" target="_blank" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow-lg shadow-green-500/30 transition-all active:scale-95">
                 <i class="fa-brands fa-whatsapp text-xl mb-0.5"></i>
                 <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Chat</span>
             </a>
         </div>
-
-        <!-- Language Popup Menu (Light Theme) -->
+        <!-- Menus remain same (Language/Destination) -->
         <div id="mobile-language-menu" class="absolute bottom-[calc(100%+16px)] left-0 w-full p-4 rounded-[2rem] bg-white/95 backdrop-blur-xl border border-white/60 shadow-2xl opacity-0 invisible transition-all duration-300 transform translate-y-10 origin-bottom z-40">
-            <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+             <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
                 <span class="text-sm font-bold text-slate-800 uppercase tracking-widest pl-2">Select Language</span>
                 <button onclick="toggleMobileLanguage()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
             </div>
@@ -598,15 +860,13 @@
                 <button onclick="setLanguage('sw', this); toggleMobileLanguage()" class="lang-option-mobile group"><span>Swahili</span> <span class="text-xs text-slate-400">SW</span></button>
             </div>
         </div>
-
-        <!-- Destinations Popup Menu (Light Theme) -->
         <div id="mobile-destinations-menu" class="absolute bottom-[calc(100%+16px)] left-0 w-full p-4 rounded-[2rem] bg-white/95 backdrop-blur-xl border border-white/60 shadow-2xl opacity-0 invisible transition-all duration-300 transform translate-y-10 origin-bottom z-40">
-            <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+             <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
                 <span class="text-sm font-bold text-slate-800 uppercase tracking-widest pl-2">Select Country</span>
                 <button onclick="toggleMobileDestinations()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="grid grid-cols-2 gap-3 max-h-[40vh] overflow-y-auto custom-scrollbar">
-                <a href="sweden.html" class="dest-option-mobile"><span class="text-xl">🇸🇪</span> <span class="text-xs font-bold text-slate-600">Sweden</span></a>
+                 <a href="sweden.html" class="dest-option-mobile"><span class="text-xl">🇸🇪</span> <span class="text-xs font-bold text-slate-600">Sweden</span></a>
                 <a href="finland.html" class="dest-option-mobile"><span class="text-xl">🇫🇮</span> <span class="text-xs font-bold text-slate-600">Finland</span></a>
                 <a href="netherlands.html" class="dest-option-mobile"><span class="text-xl">🇳🇱</span> <span class="text-xs font-bold text-slate-600">Netherlands</span></a>
                 <a href="germany.html" class="dest-option-mobile"><span class="text-xl">🇩🇪</span> <span class="text-xs font-bold text-slate-600">Germany</span></a>
@@ -631,7 +891,7 @@
             </div>
             <div>
                 <h4 class="font-bold text-sm">Success</h4>
-                <span class="text-xs text-slate-500" id="toastMsg">Profile Data Encrypted & Archived</span>
+                <span class="text-xs text-slate-500" id="toastMsg">Action Completed Successfully</span>
             </div>
         </div>
     </div>
@@ -656,9 +916,7 @@
             const menu = document.getElementById('mobile-destinations-menu');
             const langMenu = document.getElementById('mobile-language-menu');
             if (langMenu) langMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
-            
             if (menu) {
-                // Ensure centering logic relative to the dock container
                 menu.classList.toggle('invisible');
                 menu.classList.toggle('opacity-0');
                 menu.classList.toggle('translate-y-10');
@@ -669,7 +927,6 @@
             const menu = document.getElementById('mobile-language-menu');
             const destMenu = document.getElementById('mobile-destinations-menu');
             if (destMenu) destMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
-            
             if (menu) {
                 menu.classList.toggle('invisible');
                 menu.classList.toggle('opacity-0');
@@ -691,10 +948,7 @@
             }
         });
         
-        function setLanguage(lang, el) {
-            console.log("Language set to:", lang);
-            // Placeholder for actual translation logic
-        }
+        function setLanguage(lang, el) { console.log("Language set to:", lang); }
     
         // ==========================================
         //  CONFIGURATION AREA
@@ -702,7 +956,8 @@
         
         const CLICKUP_API_KEY = "pk_260468481_S4KLO3ZGV6P1PL1POHKXNS1LA5ISSG0P"; 
         const CLICKUP_LIST_ID = "901813907839"; 
-        
+        let globalTaskId = null; // Store created task ID for update
+
         // ----------------------------------------------------
         //  CLICKUP CUSTOM FIELD IDs
         // ----------------------------------------------------
@@ -721,7 +976,13 @@
             "PASSPORT EXPIRY": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", 
             "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
             "EMAIL": "2e18821e-1c19-4de5-afb8-77ff11ee6327", 
-            "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5"
+            "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5",
+            
+            // --- NEW BOOKING FIELDS ---
+            "ADVISOR": "a220503d-5a45-4f0b-b83d-6547a28ca0b5",
+            "BOOKING_DATE": "a4a8197d-eb13-4e90-ad56-d56108137e2e",
+            "BOOKING_TIME": "584f279f-8f78-4e2b-ac91-ccf2c4e48b00",
+            "BOOKING_TYPE": "03414f61-a879-4d14-bee0-7186a3de27d5"
         };
 
         // SALARY DATA
@@ -983,7 +1244,6 @@
         ];
 
         // --- FIXED E.164 COMPLIANT REGEX RULES ---
-        // Crucial for ClickUp API Validation
         const countryRules = {
             "AFGHANISTAN": { regex: /^\+93\d{9}$/, hint: "+93 700123456" },
             "ALBANIA": { regex: /^\+355\d{8,9}$/, hint: "+355 691234567" },
@@ -1094,53 +1354,41 @@
             "OTHER": { regex: /^\+\d{8,15}$/, hint: "+ [CountryCode][Number]" }
         };
 
-        const countryPageMap = {
-            "Croatia": "croatia",
-            "Czech Republic": "czech",
-            "Albania": "albania",
-            "Finland": "finland",
-            "France": "france",
-            "Germany": "germany",
-            "Italy": "italy",
-            "Latvia": "latvia",
-            "Macedonia": "macedonia",
-            "Netherlands": "netherlands",
-            "Poland": "poland",
-            "Sweden": "sweden",
-            "Serbia": "serbia"
-        };
+        const countryPageMap = { "Croatia": "croatia", "Czech Republic": "czech", "Albania": "albania", "Finland": "finland", "France": "france", "Germany": "germany", "Italy": "italy", "Latvia": "latvia", "Macedonia": "macedonia", "Netherlands": "netherlands", "Poland": "poland", "Sweden": "sweden", "Serbia": "serbia" };
+        
+        // ADVISOR DATA
+        const advisors = [
+            { name: "Benetta", country: "India", flag: "🇮🇳", lang: "Malayalam" },
+            { name: "Anjali", country: "India", flag: "🇮🇳", lang: "Malayalam, Hindi, English" },
+            { name: "Budhunpa", country: "Sri Lanka", flag: "🇱🇰", lang: "English, Sinhala" },
+            { name: "Roniee Lee", country: "Philippines", flag: "🇵🇭", lang: "English, Tagalog" },
+            { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Swahili" }
+        ];
 
         let currentMode = 'Unskilled';
         let currentPhoneRegex = null;
 
-        // INIT
         window.onload = function() {
             setSkillMode('Unskilled'); 
             setupListeners();
-            // Generate Random Case ID
+            // Case ID
             const rId = Math.random().toString(36).substr(2, 9).toUpperCase();
             document.getElementById('refId').innerText = rId;
             document.getElementById('barcodeRef').innerText = "*" + rId + "*";
             
-            // Populate Countries
             populateCountryDropdowns();
+            renderAdvisors();
+            renderTimeSlots();
             
-            // --- NEW: Set default values on load ---
+            // Defaults
             document.getElementById('presentResidence').value = "UAE";
-            toggleCvUpload(true); // Ensure CV upload section is visible
-            // ---------------------------------------
+            toggleCvUpload(true);
             
-            // Smooth Scroll
-             if (typeof Lenis !== 'undefined') {
-                const lenis = new Lenis({ duration: 1.2, smooth: true });
-                function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-                requestAnimationFrame(raf);
-            }
-
+            // Init Flatpickr for DOB
             flatpickr("#dob", {
                 dateFormat: "d/m/Y",
                 disableMobile: false, 
-                theme: "airbnb", // Changed to light theme
+                theme: "airbnb",
                 onChange: function(selectedDates) {
                     if(selectedDates.length > 0) {
                         const age = new Date(Date.now() - selectedDates[0].getTime()).getUTCFullYear() - 1970;
@@ -1157,23 +1405,28 @@
                 }
             });
             
-            flatpickr("#passportExp", {
+            // Init Flatpickr for Booking Date
+            flatpickr("#bookingDate", {
                 dateFormat: "d/m/Y",
-                disableMobile: false, 
-                theme: "airbnb" // Changed to light theme
+                minDate: "today",
+                disable: [
+                    function(date) {
+                        return (date.getDay() === 0); // Disable Sundays
+                    }
+                ],
+                theme: "airbnb"
             });
             
-            document.addEventListener('click', function(event) {
-                const dropdown = document.getElementById('customJobSelect');
-                const list = document.getElementById('jobDropdownList');
-                if (dropdown && !dropdown.contains(event.target)) {
-                    list.classList.add('hidden');
-                    document.getElementById('jobDropdownIcon').classList.remove('rotate-180');
-                }
-            });
+            flatpickr("#passportExp", { dateFormat: "d/m/Y", disableMobile: false, theme: "airbnb" });
             
-            // Initial call to set phone logic based on default/first residence option
             handleResidenceChange();
+            
+            // Smooth Scroll
+            if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({ duration: 1.2, smooth: true });
+                function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+                requestAnimationFrame(raf);
+            }
         };
 
         function setupListeners() {
@@ -1185,26 +1438,170 @@
                     validatePhone('whatsapp');
                 }
             });
+            document.addEventListener('click', function(event) {
+                const dropdown = document.getElementById('customJobSelect');
+                const list = document.getElementById('jobDropdownList');
+                if (dropdown && !dropdown.contains(event.target)) {
+                    list.classList.add('hidden');
+                    document.getElementById('jobDropdownIcon').classList.remove('rotate-180');
+                }
+            });
         }
         
-        // --- NEW CV UPLOAD LOGIC ---
+        // --- BOOKING UI LOGIC ---
+        function renderAdvisors() {
+            const grid = document.getElementById('advisorGrid');
+            grid.innerHTML = '';
+            // Make grid 1 col on mobile, 2 on md
+            grid.className = "grid grid-cols-1 md:grid-cols-2 gap-6"; 
+            
+            advisors.forEach(adv => {
+                const div = document.createElement('div');
+                div.className = "advisor-3d-card group"; 
+                div.onclick = () => selectAdvisor(adv.name, div);
+                
+                // 3D Tilt Attributes
+                div.setAttribute('data-tilt', '');
+                div.setAttribute('data-tilt-max', '10');
+                div.setAttribute('data-tilt-speed', '400');
+                div.setAttribute('data-tilt-glare', 'true');
+                div.setAttribute('data-tilt-max-glare', '0.2');
+                
+                div.innerHTML = `
+                    <div class="advisor-content">
+                        <div class="advisor-image-wrapper">
+                            <i class="fa-solid fa-headset advisor-icon"></i>
+                            <div class="advisor-badge">${adv.flag}</div>
+                        </div>
+                        <div class="advisor-info">
+                            <div class="advisor-role"><i class="fa-solid fa-circle-check text-brand-primary text-[10px]"></i> Online Support</div>
+                            <div class="advisor-name">${adv.name}</div>
+                            <div class="advisor-langs">
+                                ${adv.lang.split(',').map(l => `<span class="lang-pill">${l.trim()}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-3d">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+
+            // Initialize Tilt
+            if(typeof VanillaTilt !== 'undefined') {
+                VanillaTilt.init(document.querySelectorAll(".advisor-3d-card"), {
+                    max: 10,
+                    speed: 400,
+                    glare: true,
+                    "max-glare": 0.3,
+                    scale: 1.02
+                });
+            }
+        }
+
+        function selectAdvisor(name, el) {
+            document.getElementById('selectedAdvisor').value = name;
+            document.querySelectorAll('.advisor-3d-card').forEach(c => {
+                c.classList.remove('selected');
+            });
+            el.classList.add('selected');
+        }
+
+        function selectMethod(method, el) {
+            document.getElementById('selectedMethod').value = method;
+            document.querySelectorAll('.method-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function renderTimeSlots() {
+            const grid = document.getElementById('timeSlotGrid');
+            const startHour = 10;
+            const endHour = 19; // 7 PM
+            
+            for (let h = startHour; h < endHour; h++) {
+                for (let m = 0; m < 60; m += 15) {
+                    const timeStr = `${h > 12 ? h - 12 : h}:${m === 0 ? '00' : m} ${h >= 12 ? 'PM' : 'AM'}`;
+                    const btn = document.createElement('button');
+                    btn.className = "time-slot py-2 rounded-lg text-xs font-bold text-slate-600 bg-slate-50 border border-slate-100";
+                    btn.innerText = timeStr;
+                    btn.onclick = () => selectTime(timeStr, btn);
+                    grid.appendChild(btn);
+                }
+            }
+            // Add 7:00 PM
+            const btn = document.createElement('button');
+            btn.className = "time-slot py-2 rounded-lg text-xs font-bold text-slate-600 bg-slate-50 border border-slate-100";
+            btn.innerText = "7:00 PM";
+            btn.onclick = () => selectTime("7:00 PM", btn);
+            grid.appendChild(btn);
+        }
+
+        function selectTime(time, el) {
+            document.getElementById('selectedTime').value = time;
+            document.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        // --- NAVIGATION & FLOW ---
+        function goToStep2() {
+            const age = parseInt(document.getElementById('age').value);
+            if(isNaN(age) || age < 20 || age > 50) { 
+                showModal("Sorry, you are not eligible for the immigration process. (Age requirement: 20-50)"); return; 
+            }
+            const mEl = document.getElementById('mobile');
+            const rawVal = mEl.value.replace(/\s/g, '');
+            if(currentPhoneRegex && !currentPhoneRegex.test(rawVal)) {
+                showModal("Invalid Mobile Number Format."); return;
+            }
+            if(!document.getElementById('personalForm').checkValidity()) {
+                document.getElementById('personalForm').reportValidity(); return;
+            }
+
+            document.getElementById('tab-1').classList.add('hidden');
+            document.getElementById('tab-2').classList.remove('hidden');
+            
+            updateStepIndicator(2);
+            
+            const name = document.getElementById('firstName').value + " " + document.getElementById('lastName').value;
+            document.getElementById('reportName').innerText = name;
+            document.getElementById('avatarInitial').innerText = name.charAt(0);
+            document.getElementById('reportDate').innerText = new Date().toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function goToStep3() {
+            // Save Data FIRST (Create the Lead)
+            saveData(false); // false = don't show success toast yet
+            
+            document.getElementById('tab-2').classList.add('hidden');
+            document.getElementById('tab-3').classList.remove('hidden');
+            updateStepIndicator(3);
+        }
+
+        function updateStepIndicator(step) {
+            const s2 = document.getElementById('step-2-indicator');
+            const s3 = document.getElementById('step-3-indicator');
+            
+            if(step >= 2) {
+                s2.classList.remove('opacity-40', 'grayscale');
+                s2.querySelector('div').classList.add('border-brand-primary', 'text-brand-primary');
+                s2.querySelector('span').classList.add('text-brand-primary');
+            }
+            if(step >= 3) {
+                s3.classList.remove('opacity-40', 'grayscale');
+                s3.querySelector('div').classList.add('border-brand-primary', 'text-brand-primary');
+                s3.querySelector('span').classList.add('text-brand-primary');
+            }
+        }
+
+        // --- CORE FUNCTIONS (Job, Country, etc) ---
         function toggleCvUpload(show) {
             const container = document.getElementById('cvUploadContainer');
-            // Update Radio Button Status
-            const radioYes = document.querySelector('input[name="hasCv"][value="yes"]');
-            const radioNo = document.querySelector('input[name="hasCv"][value="no"]');
-
             if(show) {
                 container.classList.remove('hidden');
-                radioYes.checked = true;
-                radioNo.checked = false;
             } else {
                 container.classList.add('hidden');
-                radioYes.checked = false;
-                radioNo.checked = true;
-                // Clear file if they toggle to NO
                 document.getElementById('cvFile').value = '';
-                document.getElementById('fileNameDisplay').innerText = "Tap here to upload CV";
             }
         }
         
@@ -1212,54 +1609,47 @@
             const file = input.files[0];
             const display = document.getElementById('fileNameDisplay');
             if(file) {
-                if(file.size > 5 * 1024 * 1024) { // 5MB limit
-                    showModal("File size exceeds 5MB limit.");
-                    input.value = '';
-                    display.innerText = "Tap here to upload CV";
-                    return;
-                }
+                if(file.size > 5 * 1024 * 1024) { showModal("File size exceeds 5MB limit."); input.value = ''; return; }
                 display.innerText = file.name;
                 display.classList.add('text-brand-primary');
-            } else {
-                display.innerText = "Tap here to upload CV";
-                display.classList.remove('text-brand-primary');
             }
         }
 
-        // --- POPULATE COUNTRIES ---
         function populateCountryDropdowns() {
             const natSelect = document.getElementById('nationality');
             const resSelect = document.getElementById('presentResidence');
             const sortedCountries = Object.keys(countryRules).sort();
-
-            // Clear except default
+            
             natSelect.innerHTML = '<option value="">Select Origin</option>';
             resSelect.innerHTML = '<option value="">Select Residence</option>';
 
             sortedCountries.forEach(c => {
                 if(c === 'OTHER') return;
-                const opt1 = document.createElement('option');
-                opt1.value = c;
-                opt1.text = c;
-                natSelect.appendChild(opt1);
-
-                const opt2 = document.createElement('option');
-                opt2.value = c;
-                opt2.text = c;
-                resSelect.appendChild(opt2);
+                const opt = new Option(c, c);
+                natSelect.add(opt);
+                resSelect.add(opt.cloneNode(true));
             });
-            
-            // Add Other
-            const other = document.createElement('option');
-            other.value = "OTHER"; other.text = "Other";
-            natSelect.appendChild(other);
-            
-            const other2 = document.createElement('option');
-            other2.value = "OTHER"; other2.text = "Other";
-            resSelect.appendChild(other2.cloneNode(true));
+            natSelect.add(new Option("Other", "OTHER"));
+            resSelect.add(new Option("Other", "OTHER"));
         }
 
-        // --- NEW DROPDOWN & EXPERIENCE LOGIC ---
+        function handleResidenceChange() {
+            const sel = document.getElementById('presentResidence');
+            const country = sel.value;
+            const rule = countryRules[country] || countryRules["OTHER"];
+            currentPhoneRegex = rule.regex;
+
+            const parts = rule.hint.split(' ');
+            const code = parts[0] + " "; 
+            
+            ['mobile', 'whatsapp', 'altPhone'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el.value.length < 5) el.value = code;
+            });
+            
+            document.getElementById('mobileHint').innerText = "Format: " + rule.hint;
+            document.getElementById('mobileHint').classList.remove('opacity-0');
+        }
 
         function toggleJobDropdown(e) {
             const list = document.getElementById('jobDropdownList');
@@ -1273,24 +1663,16 @@
             document.getElementById('selectedJobText').innerText = jobRole;
             document.getElementById('selectedJobText').classList.remove('text-slate-500');
             document.getElementById('selectedJobText').classList.add('text-slate-900');
-            
-            // Close dropdown
             document.getElementById('jobDropdownList').classList.add('hidden');
             document.getElementById('jobDropdownIcon').classList.remove('rotate-180');
         }
 
         function populateDropdown(mode) {
             const listContainer = document.getElementById('jobDropdownList');
-            listContainer.innerHTML = ''; // Clear existing
-            
+            listContainer.innerHTML = '';
             const typeCode = mode === 'Unskilled' ? 'U' : 'S';
             const roles = jobMasterList.filter(j => j.type === typeCode).map(j => j.r).sort();
             
-            if(roles.length === 0) {
-                listContainer.innerHTML = '<div class="px-4 py-3 text-sm text-slate-500">No roles available</div>';
-                return;
-            }
-
             roles.forEach(r => {
                 const div = document.createElement('div');
                 div.className = "px-5 py-4 text-sm text-slate-700 hover:bg-blue-50 hover:text-brand-primary cursor-pointer border-b border-gray-100 last:border-0 transition-colors font-medium";
@@ -1298,212 +1680,8 @@
                 div.onclick = function() { selectJob(r); };
                 listContainer.appendChild(div);
             });
-            
-            // Reset selection display
             document.getElementById('currentJob').value = "";
             document.getElementById('selectedJobText').innerText = "Select Job Role";
-            document.getElementById('selectedJobText').classList.add('text-slate-500');
-        }
-
-        function validateExperienceInput(el) {
-            let val = parseInt(el.value);
-            if(isNaN(val) || val < 1) el.value = 1;
-            else if(val > 30) el.value = 30;
-        }
-
-        // --- CUSTOM MODAL LOGIC ---
-        function showModal(msg) {
-            const m = document.getElementById('messageModal');
-            document.getElementById('modalText').innerText = msg;
-            m.classList.remove('hidden');
-            // Trigger animation
-            setTimeout(() => {
-                m.classList.remove('opacity-0');
-                m.querySelector('.modal-content').classList.remove('scale-90');
-                m.querySelector('.modal-content').classList.add('scale-100');
-            }, 10);
-        }
-
-        function closeModal() {
-            const m = document.getElementById('messageModal');
-            m.classList.add('opacity-0');
-            m.querySelector('.modal-content').classList.add('scale-90');
-            m.querySelector('.modal-content').classList.remove('scale-100');
-            setTimeout(() => {
-                m.classList.add('hidden');
-            }, 300);
-        }
-
-        // ----------------------------------------
-
-        // GEOGRAPHY & VALIDATION LOGIC
-        
-        // Handle Residence Change (Drives Phone Logic)
-        function handleResidenceChange() {
-            const sel = document.getElementById('presentResidence');
-            const country = sel.value;
-            
-            // Set Global Rules
-            const rule = countryRules[country] || countryRules["OTHER"];
-            currentPhoneRegex = rule.regex;
-
-            const mob = document.getElementById('mobile');
-            const wa = document.getElementById('whatsapp');
-            const alt = document.getElementById('altPhone'); // New Field
-            
-            // Extract code from hint (first part)
-            // e.g. "+93 123..." -> "+93 "
-            const parts = rule.hint.split(' ');
-            const code = parts[0] + " "; 
-            
-            // Update fields with code IF empty or just a code
-            if(mob.value.length < 5) mob.value = code;
-            if(wa.value.length < 5) wa.value = code;
-            if(alt.value.length < 5) alt.value = code;
-            
-            // Update Hints Text
-            const mHint = document.getElementById('mobileHint');
-            const wHint = document.getElementById('waHint');
-            
-            if(country) {
-                mHint.innerText = "Format: " + rule.hint;
-                wHint.innerText = "Format: " + rule.hint;
-                mHint.classList.remove('opacity-0');
-                wHint.classList.remove('opacity-0');
-            } else {
-                mHint.classList.add('opacity-0');
-                wHint.classList.add('opacity-0');
-            }
-            
-            // Reset validation states
-            document.getElementById('mobileError').classList.add('hidden');
-            mob.classList.remove('invalid-field', 'valid-field');
-            wa.classList.remove('invalid-field', 'valid-field');
-            alt.classList.remove('invalid-field', 'valid-field');
-            
-            document.getElementById('mobileFeedback').innerHTML = '';
-            document.getElementById('waFeedback').innerHTML = '';
-            document.getElementById('altPhoneFeedback').innerHTML = '';
-        }
-
-        // --- IMPROVED PHONE CLEANING FOR CLICKUP API ---
-        function cleanPhoneNumber(phoneStr) {
-            if(!phoneStr) return null;
-            
-            // 1. Remove all non-numeric and non-plus chars
-            let cleaned = phoneStr.replace(/[^0-9+]/g, '');
-            
-            // 2. Handle "00" prefix common in Europe/Asia -> convert to +
-            if(cleaned.startsWith('00')) {
-                cleaned = '+' + cleaned.substring(2);
-            }
-            
-            // 3. Ensure it starts with + if it has digits
-            if(cleaned.length > 0 && !cleaned.startsWith('+')) {
-                cleaned = '+' + cleaned;
-            }
-
-            // 4. Final Safety: Return null if it's just "+" or empty
-            if(cleaned.length < 5) return null; 
-
-            return cleaned;
-        }
-        
-        // Enforce Numeric Input (allow + only at start)
-        function enforcePhoneInput(el) {
-            // Allow + at start, then only digits and spaces
-            let val = el.value;
-            // Replace any char that is NOT 0-9, space, or +
-            el.value = val.replace(/[^0-9+ ]/g, '');
-        }
-
-        function validatePhone(id) {
-            const el = document.getElementById(id);
-            let feedback;
-            if(id === 'mobile') feedback = document.getElementById('mobileFeedback');
-            else if(id === 'whatsapp') feedback = document.getElementById('waFeedback');
-            else feedback = document.getElementById('altPhoneFeedback');
-            
-            const errorMsg = document.getElementById('mobileError');
-            
-            // Clean spaces for regex check
-            const rawVal = el.value.replace(/\s/g, '');
-
-            if (!currentPhoneRegex) {
-                 el.classList.remove('invalid-field');
-                 return;
-            }
-
-            // TEST REGEX
-            const isValid = currentPhoneRegex.test(rawVal);
-
-            if (isValid) {
-                el.classList.remove('invalid-field');
-                el.classList.add('valid-field');
-                feedback.innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i>';
-                if(id==='mobile') errorMsg.classList.add('hidden');
-            } else {
-                el.classList.remove('valid-field');
-                // Only show error style if length is substantial
-                if(rawVal.length > 6) { // Increased threshold slightly
-                    el.classList.add('invalid-field');
-                    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
-                } else {
-                     feedback.innerHTML = '';
-                }
-            }
-        }
-
-        function goToStep2() {
-            const age = parseInt(document.getElementById('age').value);
-            if(isNaN(age) || age < 20 || age > 50) { 
-                const ageField = document.getElementById('age');
-                ageField.classList.add('invalid-field', 'animate-pulse');
-                setTimeout(() => ageField.classList.remove('animate-pulse'), 500);
-                showModal("Sorry, you are not eligible for the immigration process. (Age requirement: 20-50)"); 
-                return; 
-            }
-            
-            // STRICT PHONE VALIDATION CHECK BEFORE NEXT
-            const mEl = document.getElementById('mobile');
-            // Check regex against cleaned value (no spaces)
-            const rawVal = mEl.value.replace(/\s/g, '');
-            
-            if(currentPhoneRegex && !currentPhoneRegex.test(rawVal)) {
-                mEl.classList.add('invalid-field');
-                const btn = document.getElementById('nextBtn');
-                btn.classList.add('animate-shake');
-                setTimeout(() => btn.classList.remove('animate-shake'), 500);
-                document.getElementById('mobileError').classList.remove('hidden');
-                
-                const sel = document.getElementById('presentResidence');
-                const rule = countryRules[sel.value] || countryRules["OTHER"];
-                showModal(`Invalid Mobile Number Format.\n\nPlease follow the format for ${sel.value}:\n${rule.hint}`);
-                return;
-            }
-
-            if(!document.getElementById('personalForm').checkValidity()) {
-                document.getElementById('personalForm').reportValidity(); return;
-            }
-
-            document.getElementById('tab-1').classList.add('hidden');
-            document.getElementById('tab-2').classList.remove('hidden');
-            
-            // Visual Update for Steps
-            const s1 = document.getElementById('step-1-indicator');
-            const s2 = document.getElementById('step-2-indicator');
-            s1.classList.add('opacity-40', 'grayscale');
-            s2.classList.remove('opacity-40', 'grayscale');
-            s2.querySelector('div').classList.add('border-brand-primary', 'text-brand-primary');
-            s2.querySelector('div').classList.remove('border-gray-200', 'text-gray-500');
-            s2.querySelector('span').classList.add('text-brand-primary');
-
-            const name = document.getElementById('firstName').value + " " + document.getElementById('lastName').value;
-            document.getElementById('reportName').innerText = name;
-            document.getElementById('avatarInitial').innerText = name.charAt(0);
-            
-            const today = new Date();
-            document.getElementById('reportDate').innerText = today.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
 
         function setSkillMode(mode) {
@@ -1512,397 +1690,277 @@
             const sCard = document.getElementById('cardSkilled');
             const uCheck = document.getElementById('checkUnskilled');
             const sCheck = document.getElementById('checkSkilled');
-            const jobPanel = document.getElementById('jobDetailsPanel');
-            const expWrap = document.getElementById('experienceWrapper');
-
+            
             uCard.classList.remove('active'); sCard.classList.remove('active');
-            uCheck.querySelector('div').classList.add('hidden');
-            sCheck.querySelector('div').classList.add('hidden');
-            uCheck.className = "w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all";
-            sCheck.className = "w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all";
+            uCheck.querySelector('div').classList.add('hidden'); sCheck.querySelector('div').classList.add('hidden');
+            uCheck.className = sCheck.className = "w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all";
 
             if (mode === 'Unskilled') {
                 uCard.classList.add('active');
                 uCheck.className = "w-8 h-8 rounded-full border-brand-primary flex items-center justify-center bg-blue-100 shadow-sm";
                 uCheck.querySelector('div').classList.remove('hidden');
-                expWrap.classList.add('hidden');
+                document.getElementById('experienceWrapper').classList.add('hidden');
             } else {
                 sCard.classList.add('active');
                 sCheck.className = "w-8 h-8 rounded-full border-brand-secondary flex items-center justify-center bg-purple-100 shadow-sm";
                 sCheck.querySelector('div').classList.remove('hidden');
-                expWrap.classList.remove('hidden');
+                document.getElementById('experienceWrapper').classList.remove('hidden');
             }
-
-            jobPanel.classList.remove('hidden');
+            document.getElementById('jobDetailsPanel').classList.remove('hidden');
             populateDropdown(mode); 
-            document.getElementById('reportContainer').classList.add('hidden');
         }
 
-        function getSalary(countryCode, skillType) {
-            // Helper to safe-get salary or return default
-            const key = skillType === 'Unskilled' ? 'u' : 's';
-            const data = salaryDb[countryCode];
-            if(data) return data[key] + " / Month";
-            return "€800 - €2,000 / Month"; // Fallback
-        }
+        function getSalary(c, s) { const k=s==='Unskilled'?'u':'s'; return (salaryDb[c] && salaryDb[c][k]) ? salaryDb[c][k]+" / Month" : "€800 - €2,000 / Month"; }
 
         function generateReport() {
             const role = document.getElementById('currentJob').value;
             if(!role) { showModal("Please select a target position to continue."); return; }
-
-            const expEl = document.getElementById('experience');
             if(currentMode === 'Skilled') {
-                let val = parseInt(expEl.value);
-                if(isNaN(val) || val < 1) { showModal("Minimum 1 year of professional experience is required for Skilled Migration."); return; }
-                if(val > 30) { showModal("Experience cannot exceed 30 years."); return; }
+                const val = parseInt(document.getElementById('experience').value);
+                if(isNaN(val) || val < 1 || val > 30) { showModal("Valid experience (1-30 yrs) required for Skilled Migration."); return; }
             }
-
-            // Get Qualification
+            
             const qual = document.querySelector('input[name="qualification"]:checked').value;
-
             document.getElementById('reportContainer').classList.remove('hidden');
             setTimeout(() => { document.getElementById('reportContainer').scrollIntoView({ behavior: 'smooth' }); }, 100);
 
             const jobData = jobMasterList.find(j => j.r === role);
-            
-            // Populate Data
             document.getElementById('topMatchCountry').innerText = jobData.c;
             document.getElementById('reportRole').innerText = role;
             document.getElementById('reportQualification').innerText = qual;
-            
-            if(document.getElementById('topMatchRole_2')) {
-                document.getElementById('topMatchRole_2').innerText = role;
-            }
-            
-            // SALARY POPULATION
-            const salaryText = getSalary(jobData.c, currentMode);
-            document.getElementById('mainSalaryRange').innerText = salaryText;
+            document.getElementById('topMatchRole_2').innerText = role;
+            document.getElementById('mainSalaryRange').innerText = getSalary(jobData.c, currentMode);
 
-            // UPDATE MAIN BUTTON LINK
-            const mainBtn = document.getElementById('mainActionBtn');
-            const targetPage = countryPageMap[jobData.c];
-            const targetUrl = targetPage ? targetPage : 'https://bettercallimmigration.com/appointment';
-            mainBtn.onclick = function() {
-                 window.open(targetUrl, '_blank');
-            };
-            
-            // Generate Expert Text
+            // Generate Reason & Experience
             const reasoning = document.getElementById('aiReasoning');
-            let exp = "0";
+            let exp = currentMode === 'Unskilled' ? "Entry Level" : document.getElementById('experience').value + " Years";
+            document.getElementById('reportExp').innerText = exp;
+            
             if(currentMode === 'Unskilled') {
-                reasoning.innerText = `Based on current labor shortages in the ${jobData.c} general labor market, candidates applying for ${role} have a high success rate. No specific experience verification is typically required for this visa category, making it an excellent entry-level pathway for global mobility.`;
-                document.getElementById('reportExp').innerText = "Entry Level";
+                reasoning.innerText = `Based on current labor shortages in the ${jobData.c} general labor market, candidates applying for ${role} have a high success rate. No specific experience verification is typically required for this visa category.`;
             } else {
-                exp = document.getElementById('experience').value;
-                reasoning.innerText = `With ${exp} years of specialized experience as a ${role}, you meet the skilled migration criteria for ${jobData.c}. This pathway offers long-term residency options for qualified professionals in your sector, with high demand noted in major industrial regions.`;
-                document.getElementById('reportExp').innerText = exp + " Years";
+                reasoning.innerText = `With ${exp} of specialized experience as a ${role}, you meet the skilled migration criteria for ${jobData.c}. This pathway offers long-term residency options for qualified professionals.`;
             }
 
-            // Generate Alternatives
+            // Alternatives
             const grid = document.getElementById('altMatchesGrid');
             grid.innerHTML = '';
             const others = jobMasterList.filter(j => j.type === jobData.type && j.c !== jobData.c).sort(() => 0.5 - Math.random()).slice(0, 3);
             others.forEach(o => {
                 const div = document.createElement('div');
                 div.className = "flex items-center justify-between bg-slate-50/80 p-4 rounded-2xl border border-gray-100 hover:bg-white hover:border-brand-primary/30 transition-all cursor-pointer group shadow-sm hover:shadow-md";
-                
-                const altTargetPage = countryPageMap[o.c];
-                const altTargetUrl = altTargetPage ? altTargetPage : 'https://bettercallimmigration.com/appointment';
-                div.onclick = function() { window.open(altTargetUrl, '_blank'); };
-
-                // Get Alt Salary
-                const altSal = getSalary(o.c, currentMode);
-
                 div.innerHTML = `
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-xl">${getFlag(o.c)}</div>
+                        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-xl">🇪🇺</div>
                         <div class="flex-grow">
                             <div class="flex justify-between items-center">
                                 <div class="text-sm font-bold text-slate-700 group-hover:text-brand-primary transition tracking-wide">${o.c}</div>
-                                <div class="text-[10px] text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded border border-green-100">${altSal}</div>
+                                <div class="text-[10px] text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded border border-green-100">${getSalary(o.c, currentMode)}</div>
                             </div>
                             <div class="text-[10px] text-slate-400 uppercase font-medium mt-1">${o.r}</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs group-hover:text-brand-primary transition-colors ml-2"></i>
-                `;
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs group-hover:text-brand-primary transition-colors ml-2"></i>`;
+                div.onclick = function() { window.open(countryPageMap[o.c] || '#', '_blank'); };
                 grid.appendChild(div);
             });
-
-            // saveData() is called here
-            saveData();
         }
 
-        function getFlag(c) {
-            const m = { "Sweden": "🇸🇪", "Finland": "🇫🇮", "Netherlands": "🇳🇱", "Germany": "🇩🇪", "Czech Republic": "🇨🇿", "Poland": "🇵🇱", "France": "🇫🇷", "Italy": "🇮🇹", "Latvia": "🇱🇻", "Croatia": "🇭🇷", "Serbia": "🇷🇸", "Albania": "🇦🇱", "Macedonia": "🇲🇰", "UAE": "🇦🇪" }; 
-            return m[c] || "🇪🇺";
+        // --- VALIDATORS ---
+        function cleanPhoneNumber(phoneStr) {
+            if(!phoneStr) return null;
+            let cleaned = phoneStr.replace(/[^0-9+]/g, '');
+            if(cleaned.startsWith('00')) cleaned = '+' + cleaned.substring(2);
+            if(cleaned.length > 0 && !cleaned.startsWith('+')) cleaned = '+' + cleaned;
+            return cleaned.length < 5 ? null : cleaned;
         }
-
-        // Helper to convert date string DD/MM/YYYY to Unix Timestamp (ms)
+        function enforcePhoneInput(el) { el.value = el.value.replace(/[^0-9+ ]/g, ''); }
+        function validatePhone(id) {
+            const el = document.getElementById(id);
+            const rawVal = el.value.replace(/\s/g, '');
+            const feedback = document.getElementById(id === 'mobile' ? 'mobileFeedback' : id === 'whatsapp' ? 'waFeedback' : 'altPhoneFeedback');
+            if (!currentPhoneRegex) return;
+            if (currentPhoneRegex.test(rawVal)) {
+                el.classList.add('valid-field'); el.classList.remove('invalid-field');
+                feedback.innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i>';
+                if(id==='mobile') document.getElementById('mobileError').classList.add('hidden');
+            } else {
+                el.classList.remove('valid-field');
+                if(rawVal.length > 6) {
+                    el.classList.add('invalid-field');
+                    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
+                } else feedback.innerHTML = '';
+            }
+        }
         function getUnixTime(dateStr) {
             if (!dateStr) return null;
             const parts = dateStr.split('/');
-            if (parts.length === 3) {
-                // new Date(year, monthIndex, day)
-                const dt = new Date(parts[2], parts[1] - 1, parts[0]);
-                const ts = dt.getTime();
-                return isNaN(ts) ? null : ts;
-            }
-            return null;
+            return (parts.length === 3) ? new Date(parts[2], parts[1] - 1, parts[0]).getTime() : null;
+        }
+        function showModal(msg) {
+            const m = document.getElementById('messageModal');
+            document.getElementById('modalText').innerText = msg;
+            m.classList.remove('hidden');
+            setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
+        }
+        function closeModal() {
+            const m = document.getElementById('messageModal');
+            m.classList.add('opacity-0'); m.querySelector('.modal-content').classList.remove('scale-100');
+            setTimeout(() => m.classList.add('hidden'), 300);
+        }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            if(msg) document.getElementById('toastMsg').innerText = msg;
+            t.classList.remove('translate-y-32','opacity-0');
+            setTimeout(() => t.classList.add('translate-y-32','opacity-0'), 3000);
         }
 
-        // --- NEW HELPER FOR CASING ---
-        function toTitleCase(str) {
-            if (!str) return "";
-            return str.replace(
-                /\w\S*/g,
-                function(txt) {
-                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-                }
-            );
-        }
+        // --- CLICKUP INTEGRATION ---
 
-        async function saveData() {
-            // 1. Gather all data points
+        async function saveData(showSuccess = true) {
             const ref = document.getElementById('refId').innerText;
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
-            
-            const presentResidenceEl = document.getElementById('presentResidence');
-            const presentCountry = presentResidenceEl && presentResidenceEl.value ? presentResidenceEl.value.trim() : "";
-            
-            const nationalityEl = document.getElementById('nationality');
-            const nationality = nationalityEl && nationalityEl.value ? nationalityEl.value.trim() : "";
-            
-            const dob = document.getElementById('dob').value;
-            const age = parseInt(document.getElementById('age').value) || 0;
-            
-            // Clean phone numbers: REMOVE SPACES/DASHES FOR CLICKUP SAVING
             const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
-            const whatsapp = cleanPhoneNumber(document.getElementById('whatsapp').value);
-            const altPhone = cleanPhoneNumber(document.getElementById('altPhone').value); 
             
-            const qualification = document.querySelector('input[name="qualification"]:checked')?.value || '';
-            const passportNo = document.getElementById('passportNo').value;
-            const passportExp = document.getElementById('passportExp').value;
-            const role = document.getElementById('currentJob').value;
-            const exp = parseInt(document.getElementById('experience').value) || 0;
-            const resultCountry = document.getElementById('topMatchCountry').innerText;
-
-            const africanCountries = [
-                "ALGERIA", "ANGOLA", "BENIN", "BOTSWANA", "BURKINA FASO", "BURUNDI", 
-                "CAMEROON", "CAPE VERDE", "CENTRAL AFRICAN REPUBLIC", "CHAD", "COMOROS", 
-                "CONGO (DRC)", "CONGO (REPUBLIC)", "DJIBOUTI", "EQUATORIAL GUINEA", 
-                "ERITREA", "ESWATINI", "ETHIOPIA", "GABON", "GAMBIA", "GHANA", "GUINEA", 
-                "GUINEA-BISSAU", "IVORY COAST", "KENYA", "LESOTHO", "LIBERIA", "LIBYA", 
-                "MADAGASCAR", "MALAWI", "MALI", "MAURITANIA", "MAURITIUS", "MOROCCO", 
-                "MOZAMBIQUE", "NAMIBIA", "NIGER", "NIGERIA", "RWANDA", "SAO TOME & PRINCIPE", 
-                "SENEGAL", "SEYCHELLES", "SIERRA LEONE", "SOMALIA", "SOUTH AFRICA", 
-                "SOUTH SUDAN", "SUDAN", "TANZANIA", "TOGO", "TUNISIA", "UGANDA", "ZAMBIA", "ZIMBABWE"
+            // Gather Base Data
+            const customFieldsArray = [
+                { id: CLICKUP_FIELDS["SUR NAME"], value: document.getElementById('lastName').value },
+                { id: CLICKUP_FIELDS["MOBILE"], value: mobile },
+                { id: CLICKUP_FIELDS["WHATSAPP"], value: cleanPhoneNumber(document.getElementById('whatsapp').value) },
+                { id: CLICKUP_FIELDS["PHONE"], value: cleanPhoneNumber(document.getElementById('altPhone').value) },
+                { id: CLICKUP_FIELDS["DATE OF BIRTH"], value: getUnixTime(document.getElementById('dob').value) },
+                { id: CLICKUP_FIELDS["AGE"], value: parseInt(document.getElementById('age').value) },
+                { id: CLICKUP_FIELDS["EMAIL"], value: document.getElementById('email').value },
+                { id: CLICKUP_FIELDS["QUALIFICATION"], value: document.querySelector('input[name="qualification"]:checked')?.value },
+                { id: CLICKUP_FIELDS["JOB ROLE"], value: document.getElementById('currentJob').value },
+                { id: CLICKUP_FIELDS["EXPERIENCE"], value: parseInt(document.getElementById('experience').value) || 0 },
+                { id: CLICKUP_FIELDS["Case Reference ID"], value: ref }
             ];
-
-            // 2. Prepare Custom Fields Array for ClickUp
-            const customFieldsArray = [];
-
-            // FETCH OPTION IDS FOR DROPDOWNS
-            let fieldDefinitions = [];
+            
+            // Fetch definitions to handle Dropdowns (Nationality/Residence)
             try {
-                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, {
-                    method: 'GET',
-                    headers: { 'Authorization': CLICKUP_API_KEY }
-                });
-                const data = await res.json();
-                fieldDefinitions = data.fields || [];
-            } catch (e) {
-                console.error("Failed to fetch field definitions for Dropdown mapping", e);
-            }
-
-            const addField = (key, val) => {
-                const fieldId = CLICKUP_FIELDS[key];
+                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
+                const fieldDefs = (await res.json()).fields || [];
                 
-                if (!fieldId || fieldId.includes('replace_with') || val === null || val === "") {
-                    return;
-                }
-
-                // 2. Find Field Definition from API
-                const fieldDef = fieldDefinitions.find(f => f.id === fieldId);
-                let finalValue = val;
-
-                if (fieldDef) {
-                    if (fieldDef.type === 'drop_down' || fieldDef.type === 'labels') {
-                        const options = fieldDef.type_config.options;
-                        let match = options.find(o => o.name && o.name.toLowerCase().trim() === String(val).toLowerCase().trim());
-                        
-                        if (!match) {
-                             match = options.find(o => o.name && o.name.toLowerCase().replace(/[^a-z]/g, '') === String(val).toLowerCase().replace(/[^a-z]/g, ''));
-                        }
-
-                        if (!match && key === "NATIONALITY") {
-                            const upperVal = String(val).toUpperCase();
-                            if (africanCountries.includes(upperVal)) {
-                                match = options.find(o => o.name === "AFRICA (REGION)");
-                            } 
-                            else {
-                                match = options.find(o => o.name === "OTHER");
-                            }
-                        }
-
-                        if (match) {
-                            finalValue = match.id;
-                        } else {
-                            const otherOption = options.find(o => o.name === "OTHER");
-                            if(otherOption) {
-                                finalValue = otherOption.id;
-                            } else {
-                                return; // Skip adding this field
-                            }
-                        }
+                const addDropdown = (key, val) => {
+                    const fid = CLICKUP_FIELDS[key];
+                    const def = fieldDefs.find(f => f.id === fid);
+                    if(def && def.type === 'drop_down' && val) {
+                        const opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase()) 
+                                 || def.type_config.options.find(o => o.name === "OTHER");
+                        if(opt) customFieldsArray.push({ id: fid, value: opt.id });
                     }
-                    else if (fieldDef.type === 'email' || fieldDef.type === 'url' || fieldDef.type === 'phone') {
-                        finalValue = String(val); 
-                    }
-                    else {
-                        finalValue = val; 
-                    }
-                }
-                
-                customFieldsArray.push({ "id": fieldId, "value": finalValue });
+                };
+                addDropdown("NATIONALITY", document.getElementById('nationality').value);
+                addDropdown("PRESENT RESIDENCE", document.getElementById('presentResidence').value);
+            } catch(e) {}
+
+            const payload = {
+                name: document.getElementById('firstName').value,
+                description: `REF: ${ref}\nRole: ${document.getElementById('currentJob').value}`,
+                custom_fields: customFieldsArray
             };
 
-            // Map Data to Configured IDs
-            addField("SUR NAME", lastName);
-            
-            if(mobile) addField("MOBILE", mobile);
-            if(whatsapp) addField("WHATSAPP", whatsapp);
-            if(altPhone) addField("PHONE", altPhone); 
-            
-            addField("DATE OF BIRTH", getUnixTime(dob));
-            addField("AGE", age);
-            addField("EMAIL", email);
-            
-            addField("QUALIFICATION", qualification); 
-            addField("JOB ROLE", role);             
-            addField("NATIONALITY", nationality);     
-            
-            if(presentCountry) {
-                addField("PRESENT RESIDENCE", presentCountry);     
-            }
-            
-            addField("EXPERIENCE", exp);
-            addField("PASSPORT NUMBER", passportNo);
-            addField("PASSPORT EXPIRY", getUnixTime(passportExp));
-            addField("Case Reference ID", ref);
-            
-            console.log("Saving to ClickUp Payload:", customFieldsArray);
-
-            // 3. Send to ClickUp
-            if(CLICKUP_API_KEY && CLICKUP_LIST_ID && !CLICKUP_API_KEY.includes("pk_12345")) {
-                
-                const fullDescription = `**FULL CANDIDATE PROFILE**
---------------------------------------------------
-**CASE REFERENCE:** ${ref}
-**DATE:** ${new Date().toLocaleDateString()}
-
-**PERSONAL DETAILS**
---------------------------------------------------
-**First Name:** ${firstName}
-**Last Name:** ${lastName}
-**Date of Birth:** ${dob}
-**Age:** ${age}
-**Email:** ${email}
-**Nationality:** ${nationality}
-**Present Residence:** ${presentCountry}
-
-**CONTACT INFO**
---------------------------------------------------
-**Mobile:** ${mobile || "N/A"}
-**WhatsApp:** ${whatsapp || "N/A"}
-**Alt Phone:** ${altPhone || "N/A"}
-
-**PROFESSIONAL PROFILE**
---------------------------------------------------
-**Job Role:** ${role}
-**Category:** ${currentMode}
-**Experience:** ${exp} Years
-**Qualification:** ${qualification}
-
-**TRAVEL DOCS**
---------------------------------------------------
-**Passport No:** ${passportNo || "N/A"}
-**Expiry:** ${passportExp || "N/A"}
-
-**ASSESSMENT RESULT**
---------------------------------------------------
-**Primary Recommendation:** ${resultCountry}
-**Est. Salary:** ${getSalary(resultCountry, currentMode)}
-
---------------------------------------------------
-*Verified by Better Call Immigration AI*`;
-
-                const clickUpPayload = {
-                    name: firstName, 
-                    description: fullDescription, 
-                    custom_fields: customFieldsArray
-                };
-
+            // Send POST
+            if(CLICKUP_API_KEY && CLICKUP_LIST_ID) {
                 try {
-                    // A. Create Task
                     const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
                         method: 'POST',
                         headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                        body: JSON.stringify(clickUpPayload)
+                        body: JSON.stringify(payload)
                     });
-
-                    if(!res.ok) {
-                        const err = await res.json();
-                        console.error("ClickUp Error", err);
-                        showModal(`Error Saving to ClickUp: ${err.err || "Check console for details"}`);
-                    } else {
-                        const taskData = await res.json();
-                        console.log("Saved to ClickUp! Task ID:", taskData.id);
+                    if(res.ok) {
+                        const data = await res.json();
+                        globalTaskId = data.id; // STORE ID FOR UPDATE
                         
-                        // B. Upload File (If selected)
+                        // Upload CV
                         const cvFile = document.getElementById('cvFile').files[0];
-                        if (cvFile && taskData.id) {
-                            try {
-                                console.log("Uploading CV...");
-                                const formData = new FormData();
-                                formData.append("attachment", cvFile);
-                                formData.append("filename", cvFile.name);
-
-                                const uploadRes = await fetch(`https://api.clickup.com/api/v2/task/${taskData.id}/attachment`, {
-                                    method: 'POST',
-                                    headers: { 'Authorization': CLICKUP_API_KEY }, // No Content-Type (Browser sets boundary)
-                                    body: formData
-                                });
-                                
-                                if(uploadRes.ok) console.log("CV Uploaded Successfully");
-                                else console.error("CV Upload Failed", await uploadRes.json());
-                                
-                            } catch(uploadErr) {
-                                console.error("File Upload Network Error", uploadErr);
-                            }
+                        if (cvFile) {
+                            const formData = new FormData();
+                            formData.append("attachment", cvFile);
+                            formData.append("filename", cvFile.name);
+                            await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/attachment`, {
+                                method: 'POST', headers: { 'Authorization': CLICKUP_API_KEY }, body: formData
+                            });
                         }
-
-                        // 4. Show Toast only on success
-                        showToast();
+                        if(showSuccess) showToast("Profile Created");
                     }
-                } catch(e) { 
-                    console.error("ClickUp Connection Error", e);
-                    showModal("Network Error: Could not connect to ClickUp.");
-                }
-            } else {
-                console.log("ClickUp Integration: Key not configured.");
-                // Show Success Toast anyway for demo purposes if key is missing
-                showToast();
+                } catch(e) { console.error(e); }
             }
         }
 
-        function showToast() {
-            const t = document.getElementById('toast');
-            t.classList.remove('translate-y-32','opacity-0');
-            setTimeout(() => t.classList.add('translate-y-32','opacity-0'), 3000);
+        async function submitBooking() {
+            const advisor = document.getElementById('selectedAdvisor').value;
+            const method = document.getElementById('selectedMethod').value;
+            const date = document.getElementById('bookingDate').value;
+            const time = document.getElementById('selectedTime').value;
+
+            if(!advisor || !method || !date || !time) {
+                showModal("Please select Advisor, Method, Date and Time to confirm."); return;
+            }
+
+            // Prepare Update Payload
+            // Note: For dropdowns/labels, usually need UUIDs, but here passing values and hoping ClickUp matches or fields are Text.
+            // Given complexity of field types without API lookup, we map best effort.
+            const updateFields = [
+                { id: CLICKUP_FIELDS["BOOKING_DATE"], value: getUnixTime(date) },
+                { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time } // Assuming Text Field
+            ];
+
+            // For Advisor & Type (likely dropdowns), we try to fetch definitions again or just send value if API allows
+            // To ensure reliability, we will try to find the option IDs.
+            try {
+                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
+                const fieldDefs = (await res.json()).fields || [];
+
+                const mapDropdown = (fid, val) => {
+                    const def = fieldDefs.find(f => f.id === fid);
+                    if(def && (def.type === 'drop_down' || def.type === 'labels')) {
+                        // Loose matching
+                        const opt = def.type_config.options.find(o => o.name.toLowerCase().includes(val.toLowerCase().split(' ')[0]));
+                        if(opt) return { id: fid, value: opt.id };
+                    }
+                    return { id: fid, value: val }; // Fallback to text
+                };
+
+                updateFields.push(mapDropdown(CLICKUP_FIELDS["ADVISOR"], advisor));
+                updateFields.push(mapDropdown(CLICKUP_FIELDS["BOOKING_TYPE"], method));
+
+            } catch(e) {
+                // Fallback if fetch fails
+                updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: advisor });
+                updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
+            }
+
+            // Add Description Update
+            const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nMethod: ${method}\nDate: ${date}\nTime: ${time}`;
+
+            if(globalTaskId && CLICKUP_API_KEY) {
+                try {
+                    // Update Custom Fields
+                    for (let f of updateFields) {
+                        await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${f.id}`, {
+                            method: 'POST',
+                            headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ value: f.value })
+                        });
+                    }
+                    // Append Comment/Desc (Optional, but good for visibility)
+                    await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/comment`, {
+                        method: 'POST',
+                        headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ comment_text: desc })
+                    });
+
+                    showToast("Appointment Confirmed! We will contact you shortly.");
+                    // Disable button
+                    document.querySelector('button[onclick="submitBooking()"]').disabled = true;
+                    document.querySelector('button[onclick="submitBooking()"]').innerHTML = 'BOOKED <i class="fa-solid fa-check"></i>';
+                } catch(e) {
+                    showModal("Connection Error. Please contact support.");
+                }
+            } else {
+                showToast("Booking simulated (No API Key or Task ID)");
+            }
         }
     </script>
 </body>
