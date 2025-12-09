@@ -1790,6 +1790,20 @@
             const exp = parseInt(document.getElementById('experience').value) || 0;
             const resultCountry = document.getElementById('topMatchCountry').innerText;
 
+            // Define African countries for mapping to "AFRICA (REGION)"
+            // EGYPT is excluded as it has its own category
+            const africanCountries = [
+                "ALGERIA", "ANGOLA", "BENIN", "BOTSWANA", "BURKINA FASO", "BURUNDI", 
+                "CAMEROON", "CAPE VERDE", "CENTRAL AFRICAN REPUBLIC", "CHAD", "COMOROS", 
+                "CONGO (DRC)", "CONGO (REPUBLIC)", "DJIBOUTI", "EQUATORIAL GUINEA", 
+                "ERITREA", "ESWATINI", "ETHIOPIA", "GABON", "GAMBIA", "GHANA", "GUINEA", 
+                "GUINEA-BISSAU", "IVORY COAST", "KENYA", "LESOTHO", "LIBERIA", "LIBYA", 
+                "MADAGASCAR", "MALAWI", "MALI", "MAURITANIA", "MAURITIUS", "MOROCCO", 
+                "MOZAMBIQUE", "NAMIBIA", "NIGER", "NIGERIA", "RWANDA", "SAO TOME & PRINCIPE", 
+                "SENEGAL", "SEYCHELLES", "SIERRA LEONE", "SOMALIA", "SOUTH AFRICA", 
+                "SOUTH SUDAN", "SUDAN", "TANZANIA", "TOGO", "TUNISIA", "UGANDA", "ZAMBIA", "ZIMBABWE"
+            ];
+
             // 2. Prepare Custom Fields Array for ClickUp
             const customFieldsArray = [];
 
@@ -1828,23 +1842,45 @@
                         // We must send the INTEGER INDEX (orderindex) or UUID, not the text
                         const options = fieldDef.type_config.options;
                         
-                        // Try strict match first (trimmed)
+                        // 1. Try Strict Match
                         let match = options.find(o => o.name && o.name.toLowerCase().trim() === String(val).toLowerCase().trim());
                         
-                        // If strict match fails, try fuzzy match (if user sent spaces or minor chars)
+                        // 2. Try Fuzzy Match (if user sent spaces or minor chars)
                         if (!match) {
                              match = options.find(o => o.name && o.name.toLowerCase().replace(/[^a-z]/g, '') === String(val).toLowerCase().replace(/[^a-z]/g, ''));
+                        }
+
+                        // 3. LOGIC FIX: Handle NATIONALITY Mappings if no direct match
+                        if (!match && key === "NATIONALITY") {
+                            const upperVal = String(val).toUpperCase();
+                            
+                            // A. Check for Africa Region
+                            if (africanCountries.includes(upperVal)) {
+                                match = options.find(o => o.name === "AFRICA (REGION)");
+                            } 
+                            // B. Fallback to "OTHER" for any other unmatched country
+                            else {
+                                match = options.find(o => o.name === "OTHER");
+                            }
+                            
+                            if (match) {
+                                console.log(`Mapped '${val}' to '${match.name}' for ClickUp compatibility.`);
+                            }
                         }
 
                         if (match) {
                             // CHANGED: Prioritize UUID (match.id) over index. This fixes "Not Saved" issues in newer API versions.
                             finalValue = match.id;
                         } else {
-                            // CRITICAL FIX: If exact match fails, DO NOT SEND RAW STRING for a Dropdown.
-                            // Sending "Uae" to a dropdown field causes a 400 BAD REQUEST.
-                            // It is better to skip this field than crash the whole save.
-                            console.error(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Available options:`, options.map(o => o.name));
-                            return; // Skip adding this field
+                            // CRITICAL FIX: If exact match fails, fallback to OTHER if possible, or skip
+                            const otherOption = options.find(o => o.name === "OTHER");
+                            if(otherOption) {
+                                console.warn(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Falling back to OTHER.`);
+                                finalValue = otherOption.id;
+                            } else {
+                                console.error(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Available options:`, options.map(o => o.name));
+                                return; // Skip adding this field
+                            }
                         }
                     }
                     // --- CASE B: EMAIL, PHONE, URL (Validation Required by ClickUp) ---
