@@ -989,6 +989,11 @@
             const role = document.getElementById('jobRoleSelect').value;
             const date = document.getElementById('appointmentDate').value;
             const age = parseInt(document.getElementById('age').value);
+            
+            // Get other values safely
+            const nationality = document.getElementById('nationality').value;
+            const residence = document.getElementById('presentResidence').value;
+            const qual = document.getElementById('qualificationSelect').value;
 
             if(!fn || !ln || !em || !role) { showModal("Please fill all required fields."); return; }
             if(isNaN(age) || age < 20) { showModal("Minimum age requirement is 20 years."); return; }
@@ -1005,6 +1010,38 @@
             const dateObj = new Date(date);
             const dateTimestamp = dateObj.getTime();
 
+            // 1. Prepare Base Custom Fields (Date, Time, Mode)
+            const finalCustomFields = [
+                { "id": "a4a8197d-eb13-4e90-ad56-d56108137e2e", "value": dateTimestamp }, // Date
+                { "id": "584f279f-8f78-4e2b-ac91-ccf2c4e48b00", "value": selectedTimeSlot }, // Time
+                { "id": "03414f61-a879-4d14-bee0-7186a3de27d5", "value": selectedConsultationMode } // Mode
+            ];
+
+            // 2. Helper to add mapped fields from CLICKUP_FIELDS config
+            const addField = (key, val) => {
+                const fieldId = CLICKUP_FIELDS[key];
+                if (!fieldId || val === null || val === "") return;
+                
+                // Avoid duplicates if IDs overlap
+                if(finalCustomFields.some(f => f.id === fieldId)) return;
+
+                finalCustomFields.push({ "id": fieldId, "value": val });
+            };
+
+            // 3. Map Form Data to ClickUp Fields
+            // Note: Ensure these IDs exist on your new list: 90182075750
+            addField("SUR NAME", ln);
+            addField("MOBILE", cleanPhone);
+            addField("EMAIL", em);
+            addField("AGE", age);
+            addField("NATIONALITY", nationality);
+            addField("PRESENT RESIDENCE", residence);
+            addField("QUALIFICATION", qual);
+            addField("JOB ROLE", role);
+            
+            // Clean/Formatted Phone for WhatsApp field if needed
+            addField("WHATSAPP", cleanPhone); 
+
             // ClickUp Payload
             const payload = {
                 name: `${fn} ${ln}`,
@@ -1020,25 +1057,11 @@
 **Email:** ${em}
 **Mobile:** ${mo}
 **Age:** ${age}
-**Nationality:** ${document.getElementById('nationality').value}
-**Residence:** ${document.getElementById('presentResidence').value}
-**Qualification:** ${document.getElementById('qualificationSelect').value}
+**Nationality:** ${nationality}
+**Residence:** ${residence}
+**Qualification:** ${qual}
 `,
-                // ADDED CUSTOM FIELDS FOR DATE AND TIME AND MODE
-                custom_fields: [
-                    {
-                        "id": "a4a8197d-eb13-4e90-ad56-d56108137e2e", // DATE OF APPOINTMENT
-                        "value": dateTimestamp
-                    },
-                    {
-                        "id": "584f279f-8f78-4e2b-ac91-ccf2c4e48b00", // TIME
-                        "value": selectedTimeSlot
-                    },
-                    {
-                        "id": "03414f61-a879-4d14-bee0-7186a3de27d5", // CONSULTATION MODE
-                        "value": selectedConsultationMode
-                    }
-                ]
+                custom_fields: finalCustomFields
             };
 
             const btn = document.getElementById('submitBtn');
@@ -1055,8 +1078,11 @@
                     if(res.ok) {
                         const data = await res.json();
                         // CV Upload logic removed
+                        console.log("Task Created:", data.id);
                     } else {
-                        console.error(await res.json());
+                        const err = await res.json();
+                        console.error(err);
+                        throw new Error(`ClickUp Error: ${JSON.stringify(err)}`);
                     }
                 }
                 
@@ -1066,7 +1092,7 @@
 
             } catch(e) {
                 console.error(e);
-                showModal("Connection Error. Please try again.");
+                showModal("Connection Error: " + e.message);
             } finally {
                 btn.innerHTML = '<span>CONFIRM APPOINTMENT</span><i class="fa-solid fa-calendar-check"></i>';
             }
