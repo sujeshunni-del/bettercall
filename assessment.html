@@ -1770,7 +1770,8 @@
                         const match = options.find(o => o.name && o.name.toLowerCase() === String(val).toLowerCase());
                         
                         if (match) {
-                            finalValue = match.orderindex !== undefined ? match.orderindex : match.id;
+                            // CHANGED: Prioritize UUID (match.id) over index. This fixes "Not Saved" issues in newer API versions.
+                            finalValue = match.id;
                         } else {
                             console.warn(`ClickUp Dropdown Mismatch for '${key}' (${val}). Field is '${fieldDef.type}'. Option not found in ClickUp list. Skipping field to prevent 400 Error.`);
                             return; // STOP: Sending text to a dropdown field causes API Error 400
