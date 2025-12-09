@@ -314,7 +314,7 @@
                         <input type="text" id="lastName" required class="form-input uppercase-input px-5 text-lg" placeholder="DOE" oninput="this.value = this.value.toUpperCase()">
                     </div>
 
-                    <!-- Email Address (Added) -->
+                    <!-- Email Address -->
                     <div class="group">
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Email Address</label>
                         <div class="relative">
@@ -346,7 +346,7 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                             
-                            <!-- Present Residence (New Field - Moved Before Nationality) -->
+                            <!-- Present Residence (Moved First) -->
                             <div class="md:col-span-2">
                                 <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">
                                     <i class="fa-solid fa-location-dot mr-1"></i> Present Residence
@@ -530,11 +530,11 @@
                         
                         <!-- STYLISH DROP DOWN -->
                         <div class="relative group" id="customJobSelect">
-                            <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Target Position</label>
+                            <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Job Role</label>
                             
                             <!-- Trigger -->
                             <button type="button" class="form-input w-full text-left rounded-xl px-5 py-4 flex justify-between items-center cursor-pointer" onclick="toggleJobDropdown(event)">
-                                <span id="selectedJobText" class="text-slate-500 font-medium">Select Role</span>
+                                <span id="selectedJobText" class="text-slate-500 font-medium">Select Job Role</span>
                                 <i class="fa-solid fa-chevron-up transition-transform duration-300 text-brand-primary" id="jobDropdownIcon"></i>
                             </button>
 
@@ -605,7 +605,7 @@
                                             <h3 class="text-lg font-bold text-slate-900 leading-tight break-words" id="reportName"></h3>
                                         </div>
                                         <div class="overflow-hidden">
-                                             <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Profession</p>
+                                             <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Job Role</p>
                                              <div class="text-sm font-semibold text-brand-primary leading-tight break-words" id="reportRole"></div>
                                         </div>
                                         <div class="overflow-hidden">
@@ -754,18 +754,18 @@
             "DATE OF BIRTH": "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38",    
             "AGE": "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c",    
             "QUALIFICATION": "2cd34df4-98b5-4c82-8d86-a34bf3c1618b",
-            "PROFESSION": "7dcb9f47-cf7a-4108-b42c-a5f84541b0d2",  
+            "JOB ROLE": "7dcb9f47-cf7a-4108-b42c-a5f84541b0d2", // Updated from PROFESSION
             "NATIONALITY": "e79e1c4e-b123-4bd9-8051-34859ea4b87e", 
             "STATE": "e65a622e-be4b-4367-ac2a-4d3b89907d96",  
             "EXPERIENCE": "267d8fd1-cc80-4343-972a-4a1d45cab5d7", 
             "PASSPORT NUMBER": "b8798515-8962-40a7-a8cd-2685f9fd676c",
             "PASSPORT EXPIRY": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", 
             "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
-            "EMAIL": "replace_with_email_field_id", // TODO: Add your Email Field ID
-            "PRESENT RESIDENCE": "replace_with_residence_field_id" // TODO: Add your Present Residence Field ID
+            "EMAIL": "replace_with_email_field_id", // TODO: Update with actual ID
+            "PRESENT RESIDENCE": "replace_with_residence_field_id" // TODO: Update with actual ID
         };
 
-        // SALARY DATA (New Logic Engine)
+        // SALARY DATA
         const salaryDb = {
             "Netherlands": { u: "€1,800 - €2,400", s: "€3,200 - €4,500" },
             "Germany": { u: "€1,600 - €2,200", s: "€3,500 - €5,000" },
@@ -782,144 +782,247 @@
             "Albania": { u: "€400 - €650", s: "€700 - €1,200" }
         };
 
+        // UPDATED JOB MASTER LIST (Categorized & Mapped)
+        // Format: { r: "ROLE NAME", type: "S" (Skilled) or "U" (Unskilled), c: "Default Country" }
+        // Default Country assignments allow the report logic to work correctly
         const jobMasterList = [
-            // --- UNSKILLED ---
-            {r:"Agriculture Farm Supervisor",type:"U",c:"Croatia"},{r:"Agriculture Farm Workers",type:"U",c:"Serbia"},
-            {r:"Agriculture Worker",type:"U",c:"Poland"},{r:"Assembly Operator",type:"U",c:"Poland"},
-            {r:"Assembly Worker",type:"U",c:"Macedonia"},{r:"Assistant Chef",type:"U",c:"Finland"},
-            {r:"Assistant Cook",type:"U",c:"Finland"},{r:"Cleaner",type:"U",c:"Finland"},
-            {r:"Cleaning Helper",type:"U",c:"Finland"},{r:"Construction Helper",type:"U",c:"Czech Republic"},
-            {r:"Construction Worker",type:"U",c:"Croatia"},{r:"Dairy Farm Worker",type:"U",c:"Croatia"},
-            {r:"Delivery Driver",type:"U",c:"Serbia"},{r:"Dishwasher",type:"U",c:"Finland"},
-            {r:"Egg Packer",type:"U",c:"Poland"},{r:"Factory Worker",type:"U",c:"Poland"},
-            {r:"Farm Worker",type:"U",c:"Albania"},{r:"Food Packing Worker",type:"U",c:"Poland"},
-            {r:"General Laborer",type:"U",c:"Poland"},{r:"Harvesting Worker",type:"U",c:"Poland"},
-            {r:"Housekeeping Worker",type:"U",c:"Finland"},{r:"Kitchen Helper",type:"U",c:"Finland"},
-            {r:"Laundry Worker",type:"U",c:"Finland"},{r:"Loading Unloading Workers",type:"U",c:"Sweden"},
-            {r:"Packaging Staff",type:"U",c:"Poland"},{r:"Packing Helper",type:"U",c:"Finland"},
-            {r:"Production Line Worker",type:"U",c:"Czech Republic"},{r:"Store Keeper",type:"U",c:"Sweden"},
-            {r:"Warehouse Staff",type:"U",c:"Serbia"},{r:"Warehouse Packer",type:"U",c:"Latvia"},
-
-            // --- SKILLED ---
-            {r:"Accountant",type:"S",c:"Netherlands"},{r:"Administrative Assistant",type:"S",c:"Netherlands"},
-            {r:"Agriculture Farm Supervisor",type:"S",c:"Croatia"},{r:"Agriculture Farm Workers",type:"S",c:"Serbia"},
-            {r:"Agriculture Field Officer",type:"S",c:"Netherlands"},{r:"Agriculture Pharmacist Technician",type:"S",c:"Netherlands"},
-            {r:"Agriculture Worker",type:"S",c:"Poland"},{r:"Agriculture Workers",type:"S",c:"Serbia"},
-            {r:"Air Conditioning Technician",type:"S",c:"Croatia"},{r:"Aircraft Cleaning Worker",type:"S",c:"Sweden"},
-            {r:"Aircraft Mechanic",type:"S",c:"Latvia"},{r:"Alarm Technician",type:"S",c:"Sweden"},
-            {r:"Ambulance Driver",type:"S",c:"Sweden"},{r:"Assembly Operator",type:"S",c:"Poland"},
-            {r:"Assembly Worker",type:"S",c:"Macedonia"},{r:"Assistant Chef",type:"S",c:"Finland"},
-            {r:"Assistant Cook",type:"S",c:"Finland"},{r:"Assistant Laboratory Technician",type:"S",c:"Sweden"},
-            {r:"Assistant Nurse",type:"S",c:"Sweden"},{r:"Assistant Pharmacist",type:"S",c:"Sweden"},
-            {r:"Auto Air Conditioning Technician",type:"S",c:"Czech Republic"},{r:"Auto Electrician",type:"S",c:"Czech Republic"},
-            {r:"Auto Spray Painter",type:"S",c:"Czech Republic"},{r:"Automotive Mechanic",type:"S",c:"Serbia"},
-            {r:"Automotive Technician",type:"S",c:"Czech Republic"},{r:"Baker/Pastry Chef",type:"S",c:"Finland"},
-            {r:"Bank Assistant / Finance Executive",type:"S",c:"Germany"},{r:"Bar Supervisor",type:"S",c:"Finland"},
-            {r:"Barista",type:"S",c:"Finland"},{r:"Bartender / Barman",type:"S",c:"Finland"},
-            {r:"Battery Mechanic",type:"S",c:"Poland"},{r:"Bricklayer / Mason",type:"S",c:"Latvia"},
-            {r:"Business Development",type:"S",c:"Italy"},{r:"Business Development Executive",type:"S",c:"Netherlands"},
-            {r:"Butcher",type:"S",c:"Croatia"},{r:"CCTV Technician",type:"S",c:"Sweden"},
-            {r:"CNC Operator",type:"S",c:"Czech Republic"},{r:"Call Centre Executive",type:"S",c:"Netherlands"},
-            {r:"Cam Supervisor",type:"S",c:"Finland"},{r:"Captain",type:"S",c:"Finland"},
-            {r:"Captain (ship/flight related)",type:"S",c:"Finland"},{r:"Care Home Assistant",type:"S",c:"Italy"},
-            {r:"Care Home Jobs",type:"S",c:"Germany"},{r:"Carpenter Joinery Furniture",type:"S",c:"Croatia"},
-            {r:"Carpenter Shuttering",type:"S",c:"Croatia"},{r:"Cashier",type:"S",c:"Finland"},
-            {r:"Cashier (Duty-Free)",type:"S",c:"Finland"},{r:"Catering Supervisor",type:"S",c:"Finland"},
-            {r:"Certified Welder",type:"S",c:"Serbia"},{r:"Chapathi / Parotta Maker",type:"S",c:"Finland"},
-            {r:"Chef / Cook",type:"S",c:"Macedonia"},{r:"Chef de Partie",type:"S",c:"Finland"},
-            {r:"Chief Cook",type:"S",c:"Finland"},{r:"Chief Laboratory Technician",type:"S",c:"Sweden"},
-            {r:"Chief Pharmacist",type:"S",c:"Sweden"},{r:"Civil Draughtsman",type:"S",c:"Sweden"},
-            {r:"Civil Engineer",type:"S",c:"Sweden"},{r:"Civil Site Supervisor",type:"S",c:"Sweden"},
-            {r:"Cleaning Helper",type:"S",c:"Finland"},{r:"Cleaning Jobs",type:"S",c:"Finland"},
-            {r:"Commis Chef",type:"S",c:"Finland"},{r:"Commis I, II*",type:"S",c:"Finland"},
-            {r:"Commis III",type:"S",c:"Finland"},{r:"Computer Operator",type:"S",c:"Sweden"},
-            {r:"Concrete Mix Operator",type:"S",c:"Sweden"},{r:"Construction Helper",type:"S",c:"Czech Republic"},
-            {r:"Construction Helpers",type:"S",c:"Czech Republic"},{r:"Construction Safety Engineer",type:"S",c:"Sweden"},
-            {r:"Construction Safety Officer",type:"S",c:"Sweden"},{r:"Construction Worker",type:"S",c:"Croatia"},
-            {r:"Continental Cook",type:"S",c:"Serbia"},{r:"Customer Service Executive",type:"S",c:"Netherlands"},
-            {r:"Dairy Farm Supervisor",type:"S",c:"Netherlands"},{r:"Dairy Farm Worker",type:"S",c:"Croatia"},
-            {r:"Data Entry Operator",type:"S",c:"Sweden"},{r:"Delivery Driver",type:"S",c:"Serbia"},
-            {r:"Diesel / Petrol Mechanic",type:"S",c:"Sweden"},{r:"Diesel Mechanical Technician",type:"S",c:"Sweden"},
-            {r:"Dishwasher",type:"S",c:"Finland"},{r:"Document Controller",type:"S",c:"Netherlands"},
-            {r:"Dozer Operator",type:"S",c:"Sweden"},{r:"Driver Light Duty",type:"S",c:"Finland"},
-            {r:"Egg Collector",type:"S",c:"Poland"},{r:"Egg Packer",type:"S",c:"Poland"},
-            {r:"Elderly Care Staff",type:"S",c:"Italy"},{r:"Electrical Draughtsman",type:"S",c:"Sweden"},
-            {r:"Electrical Engineer",type:"S",c:"Sweden"},{r:"Electrical Supervisor",type:"S",c:"Sweden"},
-            {r:"Electrical Technician High Voltage",type:"S",c:"Sweden"},{r:"Electrician",type:"S",c:"Poland"},
-            {r:"Electrician (Certified)",type:"S",c:"Latvia"},{r:"Engineer",type:"S",c:"Netherlands"},
-            {r:"Engineer (Various Disciplines)",type:"S",c:"Netherlands"},{r:"Excavator Operator",type:"S",c:"Sweden"},
-            {r:"F & B Supervisor",type:"S",c:"Finland"},{r:"Fabricator",type:"S",c:"Sweden"},
-            {r:"Farm Worker",type:"S",c:"Albania"},{r:"Fire & Safety Officer",type:"S",c:"Sweden"},
-            {r:"Fire Alarm Technician",type:"S",c:"Sweden"},{r:"Food & Beverage Staff",type:"S",c:"Finland"},
-            {r:"Food & Beverage Supervisor",type:"S",c:"Finland"},{r:"Food Packing Worker",type:"S",c:"Poland"},
-            {r:"Food Quality Inspection Officer",type:"S",c:"Finland"},{r:"Food Quality Inspector",type:"S",c:"Finland"},
-            {r:"Food and Beverage",type:"S",c:"Finland"},{r:"Forklift Operator",type:"S",c:"Poland"},
-            {r:"Front Office Executive",type:"S",c:"Netherlands"},{r:"Fuel Station Operator",type:"S",c:"Poland"},
-            {r:"Fuel Station Worker",type:"S",c:"Poland"},{r:"General Laborer",type:"S",c:"Poland"},
-            {r:"Generator Mechanic",type:"S",c:"Sweden"},{r:"Glass Cutter",type:"S",c:"Poland"},
-            {r:"Grader Operator",type:"S",c:"Sweden"},{r:"Greenhouse Worker",type:"S",c:"Netherlands"},
-            {r:"HR Assistant",type:"S",c:"Italy"},{r:"HR Assistant / Executive",type:"S",c:"Netherlands"},
-            {r:"Hair Stylist (Barber)",type:"S",c:"Croatia"},{r:"Harvester Machine Mechanic",type:"S",c:"Poland"},
-            {r:"Harvester Machine Operator",type:"S",c:"Poland"},{r:"Harvesting Worker",type:"S",c:"Poland"},
-            {r:"Head Chef",type:"S",c:"Finland"},{r:"Head Nurse",type:"S",c:"Sweden"},
-            {r:"Health & Safety Officer",type:"S",c:"Finland"},{r:"Health and Safety Officer",type:"S",c:"Finland"},
-            {r:"Healthcare Support",type:"S",c:"Italy"},{r:"Heavy Goods Driver (C+E)",type:"S",c:"Czech Republic"},
-            {r:"Hospitality Staff",type:"S",c:"Serbia"},{r:"Hotel & Hospitality Jobs",type:"S",c:"Macedonia"},
-            {r:"Hotel Staff",type:"S",c:"Macedonia"},{r:"Housekeeping Supervisor",type:"S",c:"Finland"},
-            {r:"Housekeeping Worker",type:"S",c:"Finland"},{r:"Hydraulic Mechanic",type:"S",c:"Sweden"},
-            {r:"IT Professional",type:"S",c:"Germany"},{r:"IT Systems Analyst",type:"S",c:"Latvia"},
-            {r:"Inventory Clerk",type:"S",c:"Poland"},{r:"Juice Maker",type:"S",c:"Finland"},
-            {r:"Kitchen Helper",type:"S",c:"Finland"},{r:"Land Surveyor",type:"S",c:"Sweden"},
-            {r:"Laundry Supervisor",type:"S",c:"Finland"},{r:"Laundry Worker",type:"S",c:"Finland"},
-            {r:"Lift Technician",type:"S",c:"Sweden"},{r:"Liner",type:"S",c:"Sweden"},
-            {r:"Loading Unloading Workers",type:"S",c:"Sweden"},{r:"Loading/Unloading Worker",type:"S",c:"Sweden"},
-            {r:"Logistics Coordinator",type:"S",c:"Netherlands"},{r:"Machine Operator",type:"S",c:"Poland"},
-            {r:"Manager",type:"S",c:"Italy"},{r:"Mason",type:"S",c:"Macedonia"},
-            {r:"Mason / Plasterer",type:"S",c:"Poland"},{r:"Mason Plaster / Tiles",type:"S",c:"Poland"},
-            {r:"Mechanical Draughtsman",type:"S",c:"Sweden"},{r:"Mechanical Engineer",type:"S",c:"Sweden"},
-            {r:"Mechanical Supervisor",type:"S",c:"Sweden"},{r:"Mobile Crane Operator",type:"S",c:"Sweden"},
-            {r:"Nursing Assistant",type:"S",c:"France"},{r:"Office Assistant",type:"S",c:"Finland"},
-            {r:"Office Clerk",type:"S",c:"Italy"},{r:"Office Clerk / Receptionist",type:"S",c:"Netherlands"},
-            {r:"Packaging Staff",type:"S",c:"Poland"},{r:"Packing Helper",type:"S",c:"Finland"},
-            {r:"Pastry Chef",type:"S",c:"Finland"},{r:"Picker / Packer",type:"S",c:"Poland"},
-            {r:"Pizza Chef",type:"S",c:"Finland"},{r:"Pizza Makers",type:"S",c:"Finland"},
-            {r:"Plumber",type:"S",c:"Macedonia"},{r:"Poultry Farm Hand",type:"S",c:"Poland"},
-            {r:"Poultry Farm Supervisor",type:"S",c:"Poland"},{r:"Poultry Farm Worker",type:"S",c:"Poland"},
-            {r:"Poultry Yard Cleaner",type:"S",c:"Poland"},{r:"Procurement / Purchase Assistant",type:"S",c:"Germany"},
-            {r:"Production Line Worker",type:"S",c:"Czech Republic"},{r:"Professional Cook",type:"S",c:"Serbia"},
-            {r:"Project Coordinator",type:"S",c:"Netherlands"},{r:"Pump Motor Mechanic",type:"S",c:"Sweden"},
-            {r:"Quality Control (QC)",type:"S",c:"Poland"},{r:"RCC Fitter",type:"S",c:"Sweden"},
-            {r:"RO Water Technician",type:"S",c:"Poland"},{r:"Radiology X-Ray Technician",type:"S",c:"Sweden"},
-            {r:"Restaurant Supervisor",type:"S",c:"Finland"},{r:"Roller Operator",type:"S",c:"Sweden"},
-            {r:"Safety Engineer",type:"S",c:"Sweden"},{r:"Sales & Marketing Exec",type:"S",c:"Italy"},
-            {r:"Sales & Marketing Executive",type:"S",c:"Netherlands"},{r:"Sales Supervisor",type:"S",c:"Finland"},
-            {r:"Sales Workers",type:"S",c:"Finland"},{r:"Sales Workers (Duty-Free)",type:"S",c:"Finland"},
-            {r:"Scaffolder",type:"S",c:"Poland"},{r:"Secretary / Personal Assistant",type:"S",c:"Netherlands"},
-            {r:"Security Guard",type:"S",c:"Finland"},{r:"Software Developer",type:"S",c:"Latvia"},
-            {r:"Sous Chef",type:"S",c:"Finland"},{r:"Specialist Doctor",type:"S",c:"Latvia"},
-            {r:"Spray Painter",type:"S",c:"Czech Republic"},{r:"Sprayer Mechanic",type:"S",c:"Poland"},
-            {r:"Sprayer Operator",type:"S",c:"Poland"},{r:"Staff Bus Driver / Heavy Duty",type:"S",c:"Sweden"},
-            {r:"Staff Bus Driver Head Duty",type:"S",c:"Finland"},{r:"Steel Fixer",type:"S",c:"Sweden"},
-            {r:"Steward",type:"S",c:"Finland"},{r:"Steward Supervisor",type:"S",c:"Finland"},
-            {r:"Stewards",type:"S",c:"Finland"},{r:"Store Keeper",type:"S",c:"Sweden"},
-            {r:"Store Supervisor",type:"S",c:"Netherlands"},{r:"Sweeper",type:"S",c:"Sweden"},
-            {r:"System Engineer",type:"S",c:"Finland"},{r:"System Operator",type:"S",c:"Finland"},
-            {r:"System Service Engineer",type:"S",c:"Sweden"},{r:"TV Mechanic",type:"S",c:"Poland"},
-            {r:"Tailor",type:"S",c:"Croatia"},{r:"Tailor Cutting Master",type:"S",c:"Croatia"},
-            {r:"Tanker Driver / Heavy Duty",type:"S",c:"Sweden"},{r:"Tanker Driver Head Duty",type:"S",c:"Finland"},
-            {r:"Time Keeper",type:"S",c:"Finland"},{r:"Tinker",type:"S",c:"Poland"},
-            {r:"Tinker/Welder",type:"S",c:"Poland"},{r:"Tire Man",type:"S",c:"Poland"},
-            {r:"Tower Crane Operator",type:"S",c:"Sweden"},{r:"Tractor Driver",type:"S",c:"Poland"},
-            {r:"Transport Supervisor",type:"S",c:"Finland"},{r:"Trolley Helper",type:"S",c:"Sweden"},
-            {r:"Truck Driver",type:"S",c:"Serbia"},{r:"Truck Driver (Code 95)",type:"S",c:"Latvia"},
-            {r:"Veterinary Pharmacist",type:"S",c:"Poland"},{r:"Veterinary Technician",type:"S",c:"Poland"},
-            {r:"Waiter",type:"S",c:"Finland"},{r:"Waiter/Waitress",type:"S",c:"Finland"},
-            {r:"Wall Painter",type:"S",c:"Sweden"},{r:"Ward Assistant",type:"S",c:"Sweden"},
-            {r:"Warehouse & Factory Workers",type:"S",c:"Serbia"},{r:"Warehouse Assistant",type:"S",c:"Poland"},
-            {r:"Warehouse Packer",type:"S",c:"Latvia"},{r:"Warehouse Staff",type:"S",c:"Serbia"},
-            {r:"Water Service Station Helper",type:"S",c:"Poland"},{r:"Welder",type:"S",c:"Macedonia"},
-            {r:"Welder (Certified)",type:"S",c:"Poland"},{r:"Welder / Fitter",type:"S",c:"Latvia"},
-            {r:"Workshop Helper",type:"S",c:"Poland"}
+            {r:"ACCOUNTANT",type:"S",c:"Netherlands"},
+            {r:"ADMINISTRATIVE ASSISTANT",type:"S",c:"Germany"},
+            {r:"AGRICULTURE FARM SUPERVISOR",type:"S",c:"Finland"},
+            {r:"AGRICULTURE FARM WORKERS",type:"U",c:"Poland"},
+            {r:"AGRICULTURE FIELD OFFICER",type:"S",c:"Netherlands"},
+            {r:"AGRICULTURE PHARMACIST TECHNICIAN",type:"S",c:"Netherlands"},
+            {r:"AGRICULTURE WORKER",type:"U",c:"Croatia"},
+            {r:"AGRICULTURE WORKERS",type:"U",c:"Serbia"},
+            {r:"AIR CONDITIONING TECHNICIAN",type:"S",c:"Germany"},
+            {r:"AIRCRAFT CLEANING WORKER",type:"U",c:"Sweden"},
+            {r:"AIRCRAFT MECHANIC",type:"S",c:"Latvia"},
+            {r:"ALARM TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"AMBULANCE DRIVER",type:"S",c:"Finland"},
+            {r:"ASSEMBLY OPERATOR",type:"U",c:"Poland"},
+            {r:"ASSEMBLY WORKER",type:"U",c:"Macedonia"},
+            {r:"ASSISTANT CHEF",type:"U",c:"Finland"},
+            {r:"ASSISTANT COOK",type:"U",c:"France"},
+            {r:"ASSISTANT LABORATORY TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"ASSISTANT NURSE",type:"S",c:"Germany"},
+            {r:"ASSISTANT PHARMACIST",type:"S",c:"Sweden"},
+            {r:"AUTO AIR CONDITIONING TECHNICIAN",type:"S",c:"Czech Republic"},
+            {r:"AUTO ELECTRICIAN",type:"S",c:"Czech Republic"},
+            {r:"AUTO SPRAY PAINTER",type:"S",c:"Czech Republic"},
+            {r:"AUTOMOTIVE MECHANIC",type:"S",c:"Serbia"},
+            {r:"AUTOMOTIVE TECHNICIAN",type:"S",c:"Germany"},
+            {r:"BAKER/PASTRY CHEF",type:"S",c:"France"},
+            {r:"BANK ASSISTANT / FINANCE EXECUTIVE",type:"S",c:"Netherlands"},
+            {r:"BAR SUPERVISOR",type:"S",c:"Finland"},
+            {r:"BARISTA",type:"U",c:"Italy"},
+            {r:"BARTENDER / BARMAN",type:"U",c:"Croatia"},
+            {r:"BATTERY MECHANIC",type:"S",c:"Poland"},
+            {r:"BRICKLAYER / MASON",type:"S",c:"Latvia"},
+            {r:"BUSINESS DEVELOPMENT",type:"S",c:"Netherlands"},
+            {r:"BUSINESS DEVELOPMENT EXECUTIVE",type:"S",c:"Germany"},
+            {r:"BUTCHER",type:"S",c:"Poland"},
+            {r:"CALL CENTRE EXECUTIVE",type:"S",c:"Latvia"},
+            {r:"CAM SUPERVISOR",type:"S",c:"Finland"},
+            {r:"CAPTAIN",type:"S",c:"Netherlands"},
+            {r:"CAPTAIN (SHIP/FLIGHT RELATED)",type:"S",c:"Netherlands"},
+            {r:"CARE HOME ASSISTANT",type:"U",c:"Germany"},
+            {r:"CARE HOME JOBS",type:"U",c:"Germany"},
+            {r:"CARPENTER JOINERY FURNITURE",type:"S",c:"Croatia"},
+            {r:"CARPENTER SHUTTERING",type:"S",c:"Croatia"},
+            {r:"CASHIER",type:"U",c:"Finland"},
+            {r:"CASHIER (DUTY-FREE)",type:"U",c:"Finland"},
+            {r:"CATERING SUPERVISOR",type:"S",c:"Sweden"},
+            {r:"CCTV TECHNICIAN",type:"S",c:"Germany"},
+            {r:"CERTIFIED WELDER",type:"S",c:"Poland"},
+            {r:"CHAPATHI / PAROTTA MAKER",type:"U",c:"Finland"},
+            {r:"CHEF / COOK",type:"S",c:"France"},
+            {r:"CHEF DE PARTIE",type:"S",c:"Finland"},
+            {r:"CHIEF COOK",type:"S",c:"France"},
+            {r:"CHIEF LABORATORY TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"CHIEF PHARMACIST",type:"S",c:"Netherlands"},
+            {r:"CIVIL DRAUGHTSMAN",type:"S",c:"Germany"},
+            {r:"CIVIL ENGINEER",type:"S",c:"Sweden"},
+            {r:"CIVIL SITE SUPERVISOR",type:"S",c:"Finland"},
+            {r:"CLEANING HELPER",type:"U",c:"Finland"},
+            {r:"CLEANING JOBS",type:"U",c:"Finland"},
+            {r:"CNC OPERATOR",type:"S",c:"Czech Republic"},
+            {r:"COMMIS CHEF",type:"U",c:"Finland"},
+            {r:"COMMIS I, II",type:"U",c:"France"},
+            {r:"COMMIS III",type:"U",c:"France"},
+            {r:"COMPUTER OPERATOR",type:"S",c:"Latvia"},
+            {r:"CONCRETE MIX OPERATOR",type:"S",c:"Croatia"},
+            {r:"CONSTRUCTION HELPER",type:"U",c:"Croatia"},
+            {r:"CONSTRUCTION HELPERS",type:"U",c:"Serbia"},
+            {r:"CONSTRUCTION SAFETY ENGINEER",type:"S",c:"Sweden"},
+            {r:"CONSTRUCTION SAFETY OFFICER",type:"S",c:"Germany"},
+            {r:"CONSTRUCTION WORKER",type:"U",c:"Poland"},
+            {r:"CONTINENTAL COOK",type:"S",c:"Finland"},
+            {r:"CUSTOMER SERVICE EXECUTIVE",type:"S",c:"Latvia"},
+            {r:"DAIRY FARM SUPERVISOR",type:"S",c:"Netherlands"},
+            {r:"DAIRY FARM WORKER",type:"U",c:"Netherlands"},
+            {r:"DATA ENTRY OPERATOR",type:"S",c:"Latvia"},
+            {r:"DELIVERY DRIVER",type:"U",c:"Croatia"},
+            {r:"DIESEL / PETROL MECHANIC",type:"S",c:"Germany"},
+            {r:"DIESEL MECHANICAL TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"DISHWASHER",type:"U",c:"Finland"},
+            {r:"DOCUMENT CONTROLLER",type:"S",c:"Netherlands"},
+            {r:"DOZER OPERATOR",type:"S",c:"Serbia"},
+            {r:"DRIVER LIGHT DUTY",type:"U",c:"Poland"},
+            {r:"EGG COLLECTOR",type:"U",c:"Poland"},
+            {r:"EGG PACKER",type:"U",c:"Poland"},
+            {r:"ELDERLY CARE STAFF",type:"U",c:"Germany"},
+            {r:"ELECTRICAL DRAUGHTSMAN",type:"S",c:"Sweden"},
+            {r:"ELECTRICAL ENGINEER",type:"S",c:"Germany"},
+            {r:"ELECTRICAL SUPERVISOR",type:"S",c:"Finland"},
+            {r:"ELECTRICAL TECHNICIAN HIGH VOLTAGE",type:"S",c:"Sweden"},
+            {r:"ELECTRICIAN",type:"S",c:"Poland"},
+            {r:"ELECTRICIAN (CERTIFIED)",type:"S",c:"Latvia"},
+            {r:"ENGINEER",type:"S",c:"Netherlands"},
+            {r:"ENGINEER (VARIOUS DISCIPLINES)",type:"S",c:"Germany"},
+            {r:"EXCAVATOR OPERATOR",type:"S",c:"Croatia"},
+            {r:"F & B SUPERVISOR",type:"S",c:"Finland"},
+            {r:"FABRICATOR",type:"S",c:"Czech Republic"},
+            {r:"FARM WORKER",type:"U",c:"Albania"},
+            {r:"FIRE & SAFETY OFFICER",type:"S",c:"Sweden"},
+            {r:"FIRE ALARM TECHNICIAN",type:"S",c:"Finland"},
+            {r:"FOOD & BEVERAGE STAFF",type:"U",c:"Croatia"},
+            {r:"FOOD & BEVERAGE SUPERVISOR",type:"S",c:"Italy"},
+            {r:"FOOD AND BEVERAGE",type:"U",c:"Serbia"},
+            {r:"FOOD PACKING WORKER",type:"U",c:"Poland"},
+            {r:"FOOD QUALITY INSPECTION OFFICER",type:"S",c:"Netherlands"},
+            {r:"FOOD QUALITY INSPECTOR",type:"S",c:"Germany"},
+            {r:"FORKLIFT OPERATOR",type:"S",c:"Poland"},
+            {r:"FRONT OFFICE EXECUTIVE",type:"S",c:"Latvia"},
+            {r:"FUEL STATION OPERATOR",type:"U",c:"Poland"},
+            {r:"FUEL STATION WORKER",type:"U",c:"Latvia"},
+            {r:"GENERAL LABORER",type:"U",c:"Croatia"},
+            {r:"GENERATOR MECHANIC",type:"S",c:"Serbia"},
+            {r:"GLASS CUTTER",type:"S",c:"Czech Republic"},
+            {r:"GRADER OPERATOR",type:"S",c:"Poland"},
+            {r:"GREENHOUSE WORKER",type:"U",c:"Netherlands"},
+            {r:"HAIR STYLIST (BARBER)",type:"S",c:"Italy"},
+            {r:"HARVESTER MACHINE MECHANIC",type:"S",c:"Germany"},
+            {r:"HARVESTER MACHINE OPERATOR",type:"S",c:"Finland"},
+            {r:"HARVESTING WORKER",type:"U",c:"Poland"},
+            {r:"HEAD CHEF",type:"S",c:"France"},
+            {r:"HEAD NURSE",type:"S",c:"Sweden"},
+            {r:"HEALTH & SAFETY OFFICER",type:"S",c:"Netherlands"},
+            {r:"HEALTH AND SAFETY OFFICER",type:"S",c:"Finland"},
+            {r:"HEALTHCARE SUPPORT",type:"U",c:"Germany"},
+            {r:"HEAVY GOODS DRIVER (C+E)",type:"S",c:"Poland"},
+            {r:"HOSPITALITY STAFF",type:"U",c:"Croatia"},
+            {r:"HOTEL & HOSPITALITY JOBS",type:"U",c:"Italy"},
+            {r:"HOTEL STAFF",type:"U",c:"Macedonia"},
+            {r:"HOUSEKEEPING SUPERVISOR",type:"S",c:"Finland"},
+            {r:"HOUSEKEEPING WORKER",type:"U",c:"Sweden"},
+            {r:"HR ASSISTANT",type:"S",c:"Latvia"},
+            {r:"HR ASSISTANT / EXECUTIVE",type:"S",c:"Netherlands"},
+            {r:"HYDRAULIC MECHANIC",type:"S",c:"Germany"},
+            {r:"INVENTORY CLERK",type:"S",c:"Poland"},
+            {r:"IT PROFESSIONAL",type:"S",c:"Germany"},
+            {r:"IT SYSTEMS ANALYST",type:"S",c:"Sweden"},
+            {r:"JUICE MAKER",type:"U",c:"Finland"},
+            {r:"KITCHEN HELPER",type:"U",c:"France"},
+            {r:"LAND SURVEYOR",type:"S",c:"Croatia"},
+            {r:"LAUNDRY SUPERVISOR",type:"S",c:"Italy"},
+            {r:"LAUNDRY WORKER",type:"U",c:"Latvia"},
+            {r:"LIFT TECHNICIAN",type:"S",c:"Finland"},
+            {r:"LINER",type:"S",c:"Sweden"},
+            {r:"LOADING UNLOADING WORKERS",type:"U",c:"Poland"},
+            {r:"LOADING/UNLOADING WORKER",type:"U",c:"Serbia"},
+            {r:"LOGISTICS COORDINATOR",type:"S",c:"Netherlands"},
+            {r:"MACHINE OPERATOR",type:"S",c:"Czech Republic"},
+            {r:"MANAGER",type:"S",c:"Germany"},
+            {r:"MASON",type:"S",c:"Croatia"},
+            {r:"MASON / PLASTERER",type:"S",c:"Poland"},
+            {r:"MASON PLASTER / TILES",type:"S",c:"Serbia"},
+            {r:"MECHANICAL DRAUGHTSMAN",type:"S",c:"Sweden"},
+            {r:"MECHANICAL ENGINEER",type:"S",c:"Finland"},
+            {r:"MECHANICAL SUPERVISOR",type:"S",c:"Germany"},
+            {r:"MOBILE CRANE OPERATOR",type:"S",c:"Poland"},
+            {r:"NURSING ASSISTANT",type:"S",c:"Sweden"},
+            {r:"OFFICE ASSISTANT",type:"S",c:"Latvia"},
+            {r:"OFFICE CLERK",type:"S",c:"Croatia"},
+            {r:"OFFICE CLERK / RECEPTIONIST",type:"S",c:"Finland"},
+            {r:"PACKAGING STAFF",type:"U",c:"Poland"},
+            {r:"PACKING HELPER",type:"U",c:"Czech Republic"},
+            {r:"PASTRY CHEF",type:"S",c:"France"},
+            {r:"PICKER / PACKER",type:"U",c:"Netherlands"},
+            {r:"PIZZA CHEF",type:"S",c:"Italy"},
+            {r:"PIZZA MAKERS",type:"S",c:"Finland"},
+            {r:"PLUMBER",type:"S",c:"Germany"},
+            {r:"POULTRY FARM HAND",type:"U",c:"Poland"},
+            {r:"POULTRY FARM SUPERVISOR",type:"S",c:"Netherlands"},
+            {r:"POULTRY FARM WORKER",type:"U",c:"Latvia"},
+            {r:"POULTRY YARD CLEANER",type:"U",c:"Serbia"},
+            {r:"PROCUREMENT / PURCHASE ASSISTANT",type:"S",c:"Germany"},
+            {r:"PRODUCTION LINE WORKER",type:"U",c:"Czech Republic"},
+            {r:"PROFESSIONAL COOK",type:"S",c:"France"},
+            {r:"PROJECT COORDINATOR",type:"S",c:"Sweden"},
+            {r:"PUMP MOTOR MECHANIC",type:"S",c:"Croatia"},
+            {r:"QUALITY CONTROL (QC)",type:"S",c:"Germany"},
+            {r:"RADIOLOGY X-RAY TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"RCC FITTER",type:"S",c:"Poland"},
+            {r:"RESTAURANT SUPERVISOR",type:"S",c:"Finland"},
+            {r:"RO WATER TECHNICIAN",type:"S",c:"Latvia"},
+            {r:"ROLLER OPERATOR",type:"S",c:"Serbia"},
+            {r:"SAFETY ENGINEER",type:"S",c:"Sweden"},
+            {r:"SALES & MARKETING EXEC",type:"S",c:"Netherlands"},
+            {r:"SALES & MARKETING EXECUTIVE",type:"S",c:"Finland"},
+            {r:"SALES SUPERVISOR",type:"S",c:"Germany"},
+            {r:"SALES WORKERS",type:"S",c:"Croatia"},
+            {r:"SALES WORKERS (DUTY-FREE)",type:"S",c:"Italy"},
+            {r:"SCAFFOLDER",type:"S",c:"Poland"},
+            {r:"SECRETARY / PERSONAL ASSISTANT",type:"S",c:"Latvia"},
+            {r:"SECURITY GUARD",type:"S",c:"Finland"},
+            {r:"SOFTWARE DEVELOPER",type:"S",c:"Netherlands"},
+            {r:"SOUS CHEF",type:"S",c:"France"},
+            {r:"SPECIALIST DOCTOR",type:"S",c:"Germany"},
+            {r:"SPRAY PAINTER",type:"S",c:"Czech Republic"},
+            {r:"SPRAYER MECHANIC",type:"S",c:"Poland"},
+            {r:"SPRAYER OPERATOR",type:"S",c:"Serbia"},
+            {r:"STAFF BUS DRIVER / HEAVY DUTY",type:"S",c:"Sweden"},
+            {r:"STAFF BUS DRIVER HEAD DUTY",type:"S",c:"Finland"},
+            {r:"STEEL FIXER",type:"S",c:"Poland"},
+            {r:"STEWARD",type:"U",c:"Italy"},
+            {r:"STEWARD SUPERVISOR",type:"S",c:"Croatia"},
+            {r:"STEWARDS",type:"U",c:"Latvia"},
+            {r:"STORE KEEPER",type:"U",c:"Serbia"},
+            {r:"STORE SUPERVISOR",type:"S",c:"Germany"},
+            {r:"SWEEPER",type:"U",c:"Finland"},
+            {r:"SYSTEM ENGINEER",type:"S",c:"Netherlands"},
+            {r:"SYSTEM OPERATOR",type:"S",c:"Sweden"},
+            {r:"SYSTEM SERVICE ENGINEER",type:"S",c:"Germany"},
+            {r:"TAILOR",type:"S",c:"Italy"},
+            {r:"TAILOR CUTTING MASTER",type:"S",c:"Croatia"},
+            {r:"TANKER DRIVER / HEAVY DUTY",type:"S",c:"Poland"},
+            {r:"TANKER DRIVER HEAD DUTY",type:"S",c:"Finland"},
+            {r:"TIME KEEPER",type:"S",c:"Latvia"},
+            {r:"TINKER",type:"S",c:"Serbia"},
+            {r:"TINKER/WELDER",type:"S",c:"Czech Republic"},
+            {r:"TIRE MAN",type:"S",c:"Croatia"},
+            {r:"TOWER CRANE OPERATOR",type:"S",c:"Sweden"},
+            {r:"TRACTOR DRIVER",type:"S",c:"Poland"},
+            {r:"TRANSPORT SUPERVISOR",type:"S",c:"Germany"},
+            {r:"TROLLEY HELPER",type:"U",c:"Finland"},
+            {r:"TRUCK DRIVER",type:"S",c:"Netherlands"},
+            {r:"TRUCK DRIVER (CODE 95)",type:"S",c:"Latvia"},
+            {r:"TV MECHANIC",type:"S",c:"Serbia"},
+            {r:"VETERINARY PHARMACIST",type:"S",c:"Poland"},
+            {r:"VETERINARY TECHNICIAN",type:"S",c:"Croatia"},
+            {r:"WAITER",type:"U",c:"Italy"},
+            {r:"WAITER/WAITRESS",type:"U",c:"France"},
+            {r:"WALL PAINTER",type:"S",c:"Czech Republic"},
+            {r:"WARD ASSISTANT",type:"U",c:"Sweden"},
+            {r:"WAREHOUSE & FACTORY WORKERS",type:"U",c:"Poland"},
+            {r:"WAREHOUSE ASSISTANT",type:"U",c:"Latvia"},
+            {r:"WAREHOUSE PACKER",type:"U",c:"Serbia"},
+            {r:"WAREHOUSE STAFF",type:"U",c:"Finland"},
+            {r:"WATER SERVICE STATION HELPER",type:"U",c:"Croatia"},
+            {r:"WELDER",type:"S",c:"Germany"},
+            {r:"WELDER (CERTIFIED)",type:"S",c:"Poland"},
+            {r:"WELDER / FITTER",type:"S",c:"Czech Republic"},
+            {r:"WORKSHOP HELPER",type:"U",c:"Latvia"}
         ];
 
         const stateData = {
@@ -1604,53 +1707,62 @@
                     headers: { 'Authorization': CLICKUP_API_KEY }
                 });
                 const data = await res.json();
-                fieldDefinitions = data.fields;
+                fieldDefinitions = data.fields || [];
             } catch (e) {
                 console.error("Failed to fetch field definitions for Dropdown mapping", e);
             }
 
-            // Helper to find Option UUID by Text (Case Insensitive)
-            const getOptionId = (fieldId, textValue) => {
-                if (!fieldDefinitions || !textValue) return null;
-                const field = fieldDefinitions.find(f => f.id === fieldId);
-                if (!field || !field.type_config || !field.type_config.options) return null;
-                
-                const option = field.type_config.options.find(o => o.name && o.name.toLowerCase() === textValue.toLowerCase());
-                return option ? option.id : null; // Return UUID or null
-            };
-
-            // UPDATED ADD FIELD FUNCTION (Handles Dropdown Failures and Placeholder IDs)
-            const addField = (key, val, isDropdown = false) => {
+            // UPDATED: Deep Logic to Handle Types Automatically
+            const addField = (key, val) => {
                 const fieldId = CLICKUP_FIELDS[key];
                 
-                // VALIDATION: Skip if ID is missing, placeholder, or value is empty
+                // 1. Basic Validation
                 if (!fieldId || fieldId.includes('replace_with') || val === null || val === "") {
                     if(fieldId && fieldId.includes('replace_with')) {
-                        console.warn(`Skipping field '${key}': Placeholder ID detected. Please update CLICKUP_FIELDS in the code.`);
+                        console.warn(`Skipping field '${key}': Placeholder ID detected. Update code.`);
                     }
                     return;
                 }
 
+                // 2. Find Field Definition from API
+                const fieldDef = fieldDefinitions.find(f => f.id === fieldId);
                 let finalValue = val;
-                
-                if (isDropdown) {
-                    const optionId = getOptionId(fieldId, val);
-                    if (optionId !== null) {
-                         const field = fieldDefinitions.find(f => f.id === fieldId);
-                         const index = field.type_config.options.findIndex(o => o.id === optionId);
-                         if(index > -1) finalValue = index; 
-                    } else {
-                        // CRITICAL FIX: If dropdown option not found, skip saving to prevent 400 error
-                        // The value will still be in the description
-                        console.warn(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Skipping custom field save to prevent error.`);
-                        return; 
+
+                if (fieldDef) {
+                    // --- CASE A: DROPDOWN or LABELS ---
+                    if (fieldDef.type === 'drop_down' || fieldDef.type === 'labels') {
+                        // We must send the INTEGER INDEX (orderindex) or UUID, not the text
+                        const options = fieldDef.type_config.options;
+                        const match = options.find(o => o.name && o.name.toLowerCase() === String(val).toLowerCase());
+                        
+                        if (match) {
+                            finalValue = match.orderindex !== undefined ? match.orderindex : match.id;
+                        } else {
+                            console.warn(`ClickUp Dropdown Mismatch for '${key}' (${val}). Field is '${fieldDef.type}'. Option not found in ClickUp list. Skipping field to prevent 400 Error.`);
+                            return; // STOP: Sending text to a dropdown field causes API Error 400
+                        }
                     }
+                    // --- CASE B: EMAIL, PHONE, URL (Validation Required by ClickUp) ---
+                    else if (fieldDef.type === 'email' || fieldDef.type === 'url' || fieldDef.type === 'phone') {
+                        // Ensure it's a string
+                        finalValue = String(val); 
+                    }
+                    // --- CASE C: TEXT / SHORT TEXT ---
+                    else {
+                        finalValue = val; // Send as is
+                    }
+                } else {
+                    // Fallback if we couldn't fetch definitions (e.g. network error)
+                    // We assume it's a simple text field to be safe. 
+                    // If it's actually a dropdown, this might fail, but we have no way to know indices without definitions.
+                    console.log(`Field definition not found for ${key}, sending as raw value.`);
                 }
                 
                 customFieldsArray.push({ "id": fieldId, "value": finalValue });
             };
 
             // Map Data to Configured IDs
+            // No longer need to pass 'true/false' for dropdowns. The code detects it.
             addField("SUR NAME", lastName);
             addField("MOBILE", mobile);
             addField("WHATSAPP", whatsapp);
@@ -1658,12 +1770,10 @@
             addField("AGE", age);
             addField("EMAIL", email);
             
-            // Dropdowns (Pass true for strict matching, false if you want to skip mismatch errors)
-            // Using TRUE for strict dropdowns to ensure FIELD_011 error is handled by the check above
-            addField("QUALIFICATION", qualification, true); 
-            addField("PROFESSION", role, true);             
-            addField("NATIONALITY", nationality, true);     
-            addField("PRESENT RESIDENCE", presentCountry, true);     
+            addField("QUALIFICATION", qualification); 
+            addField("JOB ROLE", role);             
+            addField("NATIONALITY", nationality);     
+            addField("PRESENT RESIDENCE", presentCountry);     
             
             addField("STATE", state);
             addField("EXPERIENCE", exp);
@@ -1700,7 +1810,7 @@
 
 **PROFESSIONAL PROFILE**
 --------------------------------------------------
-**Target Role:** ${role}
+**Job Role:** ${role}
 **Category:** ${currentMode}
 **Experience:** ${exp} Years
 **Qualification:** ${qualification}
