@@ -3,69 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Career Assessment | Better Call Immigration</title>
+    <title>Global Mobility Intelligence | Better Call Immigration</title>
     <meta name="description" content="AI-Powered Career Assessment for Global Migration">
 
-    <!-- Fonts -->
+    <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Template Font + Original Outfit Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Barcode Font for Authenticity -->
     <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Text&display=swap" rel="stylesheet">
     
-    <!-- Icons -->
+    <!-- ICONS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Flatpickr (Stylish Date Picker - Light Theme) -->
+    <!-- LIBRARIES -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-    <!-- Tailwind CSS (Warning Suppressed) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+    <!-- TAILWIND CONFIG -->
     <script>
-        // Suppress Tailwind CDN warning for cleaner console
         console.warn = function() {}; 
 
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        'brand-dark': '#ffffff',
-                        'brand-primary': '#2563eb', /* Royal Blue */
-                        'brand-secondary': '#7c3aed', /* Vibrant Violet */
-                        'brand-accent': '#f43f5e', /* Rose */
-                        'brand-gold': '#d97706', /* Amber */
-                        'glass-surface': 'rgba(255, 255, 255, 0.65)',
-                        'glass-border': 'rgba(255, 255, 255, 0.4)',
-                        'glass-highlight': 'rgba(255, 255, 255, 0.8)',
-                    },
                     fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'Outfit', 'sans-serif'],
                         barcode: ['"Libre Barcode 39 Text"', 'cursive'],
                     },
-                    boxShadow: {
-                        'soft-xl': '0 20px 40px -10px rgba(0, 0, 0, 0.08)',
-                        'soft-inner': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
-                        'glow-primary': '0 0 20px rgba(37, 99, 235, 0.2)',
-                        'glass-lg': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                    colors: {
+                        'brand-dark': '#ffffff',
+                        'brand-primary': '#2563eb', 
+                        'brand-secondary': '#7c3aed',
+                        'brand-accent': '#f43f5e', 
+                        'brand-gold': '#d97706',
+                        glass: { border: 'rgba(255, 255, 255, 0.4)', surface: 'rgba(255, 255, 255, 0.1)' },
+                        mat: { red: '#FF1744', indigo: '#3D5AFE', teal: '#00E5FF', yellow: '#FFEA00', pink: '#F50057', blue: '#2979FF', lightGreen: '#00E676', amber: '#FFC400', purple: '#D500F9', deepOrange: '#FF3D00' },
                     },
                     animation: {
-                        'blob': 'blob 15s infinite',
+                        'blob': 'blob 20s infinite alternate',
                         'float': 'float 6s ease-in-out infinite',
                         'slide-up-fade': 'slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'pop-in': 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards'
                     },
                     keyframes: {
                         blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '0%': { transform: 'translate(0, 0) scale(1)' },
+                            '33%': { transform: 'translate(50px, -50px) scale(1.1)' },
                             '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' }
+                            '100%': { transform: 'translate(0, 0) scale(1)' },
                         },
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' }
+                            '50%': { transform: 'translateY(-15px)' },
                         },
                         slideUpFade: {
                             '0%': { transform: 'translateY(20px)', opacity: '0' },
@@ -74,6 +70,10 @@
                         popIn: {
                             '0%': { transform: 'scale(0.9)', opacity: '0' },
                             '100%': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 }
@@ -83,248 +83,174 @@
 
     <style>
         /* BASE & BACKGROUND */
+        :root { --glass-border: 1px solid rgba(255, 255, 255, 0.25); }
         body {
-            background-color: #f8fafc;
+            background-color: #f0f9ff;
+            background: radial-gradient(ellipse at 60% 40%, rgba(255, 255, 255, 0.8) 0%, transparent 60%),
+                        radial-gradient(circle at 0% 0%, rgba(186, 230, 253, 0.8) 0%, transparent 50%),
+                        radial-gradient(circle at 100% 100%, rgba(232, 121, 249, 0.4) 0%, transparent 50%),
+                        linear-gradient(135deg, #e0f2fe 0%, #eef2ff 50%, #fce7f3 100%);
+            background-attachment: fixed;
+            background-size: cover;
             color: #1e293b;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
-            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Ambient Orbs Background (Vibrant Light Theme) */
-        .ambient-light {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            overflow: hidden;
-            background: linear-gradient(135deg, #f0f9ff 0%, #eef2ff 100%);
-        }
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: blob 25s infinite alternate;
-        }
-        .orb-1 { width: 800px; height: 800px; background: #e0e7ff; top: -200px; left: -200px; animation-delay: 0s; mix-blend-mode: multiply;}
-        .orb-2 { width: 600px; height: 600px; background: #dbeafe; bottom: -100px; right: -100px; animation-delay: -5s; mix-blend-mode: multiply;}
-        .orb-3 { width: 500px; height: 500px; background: #fae8ff; top: 30%; right: 20%; animation-delay: -10s; opacity: 0.5; mix-blend-mode: multiply;}
+        /* LENIS SMOOTH SCROLL FIXES */
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
 
-        /* GLASSMORPHISM PANEL (Clean Pro) */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        /* GLASS STYLES */
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1));
+            backdrop-filter: blur(40px) saturate(120%);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            border-radius: 2rem;
             position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        /* INPUTS (Clean White - Uniform) */
+        
+        /* INPUT STYLES */
         .form-input, .date-input-container, .geo-input {
-            height: 3.5rem; /* Uniform Height */
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
+            height: 3.5rem;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             color: #1e293b;
             transition: all 0.2s ease;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             border-radius: 0.75rem;
             width: 100%;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 600;
-        }
-        .form-input::placeholder, .date-input-container input::placeholder { color: #94a3b8; font-weight: 400; }
-        
-        .form-input:hover, .date-input-container:hover, .geo-input:hover {
-            border-color: #cbd5e1;
-            background: #f8fafc;
         }
         .form-input:focus, .geo-input:focus {
-            border-color: #2563eb;
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #3b82f6;
             outline: none;
-        }
-
-        /* Specific Date Input Fixes */
-        .date-input-container {
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            padding: 0;
-        }
-        .date-input-container:hover { border-color: #cbd5e1; }
-        .date-input-container:focus-within {
-            border-color: #2563eb;
             box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
         }
-        .date-icon-box {
-            padding: 0 1.25rem;
-            color: #7c3aed;
-            background: #f5f3ff;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            border-right: 1px solid #ede9fe;
-        }
-        .date-input-container input {
-            background: transparent;
-            border: none;
-            color: #1e293b;
-            width: 100%;
-            padding: 0 1rem;
-            height: 100%;
-            outline: none;
-            font-weight: 600;
-        }
-
-        /* DROPDOWN ARROW FIX */
-        select.geo-input {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 1rem center;
-            background-repeat: no-repeat;
-            background-size: 1.5em 1.5em;
-            padding-right: 2.5rem;
-        }
+        
+        /* ORB ANIMATIONS */
+        .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; animation: blob 25s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.6; mix-blend-mode: multiply; }
+        .orb-1 { top: -10%; left: -10%; width: 60vw; height: 60vw; background: #bae6fd; }
+        .orb-2 { bottom: -20%; right: -10%; width: 70vw; height: 70vw; background: #e879f9; animation-delay: -5s; opacity: 0.4; }
+        .orb-3 { top: 30%; right: 20%; width: 40vw; height: 40vw; background: #c4b5fd; animation-delay: -10s; opacity: 0.5; }
+        .orb-4 { bottom: 10%; left: 10%; width: 50vw; height: 50vw; background: #67e8f9; animation-delay: -8s; opacity: 0.4; }
 
         /* UTILS */
+        .date-input-container { display: flex; align-items: center; overflow: hidden; padding: 0; }
+        .date-icon-box { padding: 0 1.25rem; color: #7c3aed; background: rgba(245, 243, 255, 0.5); height: 100%; display: flex; align-items: center; border-right: 1px solid rgba(237, 233, 254, 0.6); }
+        .date-input-container input { background: transparent; border: none; color: #1e293b; width: 100%; padding: 0 1rem; height: 100%; outline: none; font-weight: 600; }
+        select.geo-input { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 1rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
         .uppercase-input { text-transform: uppercase; }
-        .valid-field { border-color: #10b981 !important; background-color: #ecfdf5 !important; }
-        .invalid-field { border-color: #f43f5e !important; background-color: #fff1f2 !important; }
-
+        .valid-field { border-color: #10b981 !important; background-color: rgba(236, 253, 245, 0.8) !important; }
+        .invalid-field { border-color: #f43f5e !important; background-color: rgba(255, 241, 242, 0.8) !important; }
+        
         /* CATEGORY CARDS */
-        .category-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-        .category-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
-            border-color: #2563eb;
-        }
-        .category-card.active {
-            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
-            border-color: #2563eb;
-            box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.15);
-            position: relative;
-        }
-        .category-card.active::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 1.5rem;
-            border: 2px solid #2563eb;
-            pointer-events: none;
-        }
-
-        /* DROPDOWN SCROLLBAR */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .category-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); }
+        .category-card:hover { transform: translateY(-4px); background: rgba(255, 255, 255, 0.9); border-color: #2563eb; }
+        .category-card.active { background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%); border-color: #2563eb; box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.15); position: relative; }
         
         /* BUTTON GRADIENTS */
-        .btn-gradient {
-            background-size: 200% auto;
-            background-image: linear-gradient(to right, #2563eb 0%, #7c3aed 51%, #2563eb 100%);
-            transition: 0.5s;
-        }
+        .btn-gradient { background-size: 200% auto; background-image: linear-gradient(to right, #2563eb 0%, #7c3aed 51%, #2563eb 100%); transition: 0.5s; }
         .btn-gradient:hover { background-position: right center; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4); }
 
-        /* CUSTOM MODAL */
-        #messageModal { backdrop-filter: blur(8px); }
-        .modal-content {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        /* SCROLLBAR */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* MOBILE DOCK MENU ITEMS (Light Theme) */
+        .lang-option-mobile, .dest-option-mobile {
+            width: 100%; text-align: left; padding: 0.75rem; border-radius: 1rem; 
+            background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.6);
+            color: #1e293b; font-size: 0.75rem; font-weight: 700;
+            display: flex; align-items: center; gap: 0.5rem; transition: background 0.3s;
         }
-        
-        /* FILE UPLOAD ZONE */
-        .upload-zone {
-            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23CBD5E1FF' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
-            transition: all 0.3s ease;
-        }
-        .upload-zone:hover {
-            background-color: #eff6ff;
-            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%232563EB' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+        .lang-option-mobile:hover, .dest-option-mobile:hover {
+            background: #eff6ff; border-color: #2563eb; color: #2563eb;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="antialiased selection:bg-pink-500 selection:text-white relative">
 
-    <!-- Ambient Background -->
-    <div class="ambient-light">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
+    <!-- Background Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
 
-    <!-- Header -->
-    <nav class="fixed w-full z-50 transition-all duration-300 backdrop-blur-md bg-white/70 border-b border-gray-100/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-brand-primary/20 animate-float">
-                        <i class="fa-solid fa-plane-departure transform -rotate-12"></i>
-                    </div>
-                    <div>
-                        <h1 class="font-bold text-2xl tracking-tight text-slate-900">Better Call <span class="text-brand-primary">Immigration</span></h1>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-semibold">Global Assessment Portal</p>
-                    </div>
+    <!-- 1. HEADER -->
+    <nav class="fixed top-2 md:top-4 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
+        <div class="glass-card w-full max-w-7xl px-3 py-2 md:px-5 md:py-2 flex justify-between items-center transition-all duration-300 min-h-[60px]" id="navbar">
+            <a href="index.html" class="flex items-center gap-2 group px-1">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/60 backdrop-blur-md overflow-hidden p-1 flex-shrink-0 border border-white/50">
+                    <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/6673d6ec4830e402627b97c4adf422593b2ec907/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain">
                 </div>
+                <div class="block leading-tight"> 
+                    <h1 class="font-bold text-slate-800 text-base md:text-lg tracking-wide group-hover:text-indigo-600 transition-colors">BETTER CALL</h1>
+                    <p class="text-[10px] md:text-xs font-bold text-amber-500 uppercase tracking-[0.2em]">Immigration</p>
+                </div>
+            </a>
+            <div class="hidden lg:flex items-center gap-1">
+                <a href="index.html" class="px-4 py-2 text-sm text-slate-600 hover:text-indigo-600 font-bold transition rounded-full hover:bg-white/50">Home</a>
+                <a href="assessment.html" class="px-4 py-2 text-sm text-indigo-600 font-bold transition rounded-full bg-white/50 shadow-sm border border-white/60">Free Assessment</a>
+            </div>
+             <div class="flex items-center gap-2 px-1">
+                <button class="group p-2 rounded-full hover:bg-white/50 transition-all duration-300 relative">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 group-hover:text-indigo-600 text-xl"></i>
+                </button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="flex-grow pt-32 pb-12 px-4 relative z-10">
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow pt-32 pb-32 md:pb-12 px-4 relative z-10">
         <div class="max-w-6xl mx-auto">
             
-            <!-- Progress Steps (Clean Nodes) -->
+            <!-- Progress Steps -->
             <div class="mb-16 relative">
-                <!-- Connecting Line -->
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-0.5 bg-gray-200"></div>
-                
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-0.5 bg-white/30"></div>
                 <div class="flex items-center justify-center gap-16 relative z-10">
-                    <!-- Step 1 -->
                     <div id="step-1-indicator" class="flex flex-col items-center gap-3 transition-all duration-500">
-                        <div class="w-12 h-12 rounded-full bg-white border-4 border-brand-primary shadow-lg flex items-center justify-center text-brand-primary text-lg font-bold">1</div>
-                        <span class="font-bold text-sm text-brand-primary tracking-widest uppercase">Profile</span>
+                        <div class="w-12 h-12 rounded-full bg-white/80 backdrop-blur border-4 border-brand-primary shadow-lg flex items-center justify-center text-brand-primary text-lg font-bold">1</div>
+                        <span class="font-bold text-sm text-brand-primary tracking-widest uppercase">Identity</span>
                     </div>
-                    
-                    <!-- Step 2 -->
                     <div id="step-2-indicator" class="flex flex-col items-center gap-3 transition-all duration-500 opacity-40 grayscale">
-                        <div class="w-12 h-12 rounded-full bg-white border-4 border-gray-200 flex items-center justify-center text-gray-400 text-lg font-bold">2</div>
-                        <span class="font-bold text-sm text-gray-400 tracking-widest uppercase">Report</span>
+                        <div class="w-12 h-12 rounded-full bg-white/40 border-4 border-gray-200 flex items-center justify-center text-gray-500 text-lg font-bold">2</div>
+                        <span class="font-bold text-sm text-slate-500 tracking-widest uppercase">Analysis</span>
                     </div>
                 </div>
             </div>
 
             <!-- TAB 1: Personal Details -->
-            <div id="tab-1" class="glass-panel rounded-3xl p-8 md:p-12 animate-slide-up-fade max-w-4xl mx-auto">
+            <div id="tab-1" class="glass-card p-8 md:p-12 animate-slide-up-fade max-w-4xl mx-auto">
                 <div class="mb-10 text-center">
-                    <h2 class="text-4xl font-black text-slate-900 mb-3 tracking-tight">Begin Your Journey</h2>
-                    <p class="text-slate-500 text-sm tracking-wide font-medium">Enter details as per your official documents.</p>
+                    <h2 class="text-4xl font-black text-slate-900 mb-3 tracking-tight">Initialize Candidate Profile</h2>
+                    <p class="text-slate-500 text-sm tracking-wide font-medium">Precision is key. Ensure all data matches your official travel documents for accurate assessment.</p>
                 </div>
 
                 <form id="personalForm" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Name & Surname -->
+                    <!-- Form Fields -->
                     <div class="group">
-                        <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Given Name</label>
+                        <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">First Name (As per Passport)</label>
                         <input type="text" id="firstName" required class="form-input uppercase-input px-5 text-lg" placeholder="JOHN" oninput="this.value = this.value.toUpperCase()">
                     </div>
                     <div class="group">
-                        <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Surname</label>
+                        <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Surname (Family Name)</label>
                         <input type="text" id="lastName" required class="form-input uppercase-input px-5 text-lg" placeholder="DOE" oninput="this.value = this.value.toUpperCase()">
                     </div>
-
-                    <!-- Email Address -->
                     <div class="group">
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Email Address</label>
                         <div class="relative">
@@ -332,53 +258,36 @@
                             <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                         </div>
                     </div>
-
-                    <!-- Date of Birth -->
                     <div>
-                        <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">
-                            <i class="fa-regular fa-calendar-days mr-1"></i> Date of Birth
-                        </label>
+                        <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1"><i class="fa-regular fa-calendar-days mr-1"></i> Date of Birth</label>
                         <div class="date-input-container rounded-xl">
                             <div class="date-icon-box"><i class="fa-solid fa-cake-candles"></i></div>
                             <input type="text" id="dob" required placeholder="Select Date" class="text-lg font-medium">
                         </div>
                     </div>
-                    
-                    <!-- Age (Readonly) -->
                     <div class="group">
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Age</label>
-                        <input type="text" id="age" readonly class="form-input w-full rounded-xl px-5 py-4 bg-gray-50 text-slate-500 cursor-not-allowed font-mono font-bold">
+                        <input type="text" id="age" readonly class="form-input w-full rounded-xl px-5 py-4 bg-gray-50/50 text-slate-500 cursor-not-allowed font-mono font-bold">
                         <p id="ageError" class="text-brand-accent text-[11px] hidden mt-2 font-bold flex items-center gap-2 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Must be 20+ years.</p>
                     </div>
 
-                    <!-- GEOGRAPHY SECTION (Gold Styled - Modern) -->
-                    <div class="md:col-span-2 relative p-8 rounded-2xl border border-brand-gold/20 bg-gradient-to-br from-amber-50 to-white overflow-hidden shadow-sm">
-                        
+                    <!-- Geography -->
+                    <div class="md:col-span-2 relative p-8 rounded-2xl border border-brand-gold/20 bg-gradient-to-br from-amber-50/50 to-white/30 overflow-hidden shadow-sm backdrop-blur-sm">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-                            
-                            <!-- Present Residence (Moved First) -->
                             <div>
-                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">
-                                    <i class="fa-solid fa-location-dot mr-1"></i> Present Residence
-                                </label>
+                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1"><i class="fa-solid fa-location-dot mr-1"></i> Present Residence</label>
                                 <div class="relative">
                                     <select id="presentResidence" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none" onchange="handleResidenceChange()">
                                         <option value="">Select Residence</option>
-                                        <!-- JS Populated - Will set 'UAE' via script -->
                                     </select>
                                     <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                                 </div>
                             </div>
-
-                            <!-- Nationality -->
                             <div>
-                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">
-                                    <i class="fa-solid fa-earth-americas mr-1"></i> Nationality
-                                </label>
+                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1"><i class="fa-solid fa-earth-americas mr-1"></i> Nationality</label>
                                 <div class="relative">
                                     <select id="nationality" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none">
                                         <option value="">Select Origin</option>
-                                        <!-- JS Populated -->
                                     </select>
                                     <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                                 </div>
@@ -388,7 +297,7 @@
 
                     <!-- Contact -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Mobile</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Mobile Contact</label>
                         <div class="relative group">
                             <input type="tel" id="mobile" required class="form-input w-full rounded-xl px-5 py-4 pl-12 font-mono text-lg font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('mobile')">
                             <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-primary transition-colors"></i>
@@ -397,7 +306,6 @@
                         <p id="mobileHint" class="text-xs text-brand-primary mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
                         <p id="mobileError" class="text-brand-accent text-[11px] hidden mt-2 pl-1 font-bold">Invalid Format.</p>
                     </div>
-                    
                     <div>
                         <div class="flex justify-between items-center mb-3">
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">WhatsApp</label>
@@ -413,8 +321,6 @@
                         </div>
                         <p id="waHint" class="text-xs text-brand-secondary mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
                     </div>
-
-                    <!-- NEW ALTERNATIVE PHONE FIELD -->
                     <div class="md:col-span-2">
                          <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Alternative Phone (Optional)</label>
                          <div class="relative group">
@@ -426,47 +332,46 @@
 
                     <!-- Qualifications -->
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 ml-1">Education Level</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 ml-1">Highest Academic Qualification</label>
                         <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
-                            <!-- Helper for cleaner HTML repetition -->
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="UNDER 10 TH" class="peer sr-only" required>
-                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
                                     <i class="fa-solid fa-school text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
                                     <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Under 10th</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="SCHOOL" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
                                     <i class="fa-solid fa-book-open text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
                                     <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">School</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="PLUS TWO" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
                                     <i class="fa-solid fa-graduation-cap text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
                                     <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Plus Two</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="DIPLOMA" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
                                     <i class="fa-solid fa-scroll text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
                                     <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Diploma</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="BACHELOR" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
                                     <i class="fa-solid fa-user-graduate text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
                                     <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Bachelor</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="MASTER" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200 bg-white p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
                                     <i class="fa-solid fa-medal text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
                                     <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Master</span>
                                 </div>
@@ -480,47 +385,35 @@
                         <input type="text" id="passportNo" class="form-input uppercase-input w-full rounded-xl px-5 py-4 font-mono font-medium" placeholder="X1234567" oninput="this.value = this.value.toUpperCase()">
                     </div>
                     <div class="md:col-span-1">
-                        <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">
-                             <i class="fa-solid fa-passport mr-1"></i> Passport Expiry
-                        </label>
+                        <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1"><i class="fa-solid fa-passport mr-1"></i> Passport Expiry</label>
                         <div class="date-input-container rounded-xl">
                             <div class="date-icon-box"><i class="fa-solid fa-hourglass-half"></i></div>
                             <input type="text" id="passportExp" placeholder="Select Date" class="text-lg font-medium">
                         </div>
                     </div>
 
-                    <!-- NEW CV UPLOAD SECTION -->
-                    <div class="md:col-span-2 mt-4 bg-gradient-to-br from-white to-blue-50/50 rounded-2xl border border-blue-100 p-6 shadow-sm relative overflow-hidden">
-                        <!-- Decorative bg elem -->
-                        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-brand-primary/5 rounded-full blur-2xl pointer-events-none"></div>
-
-                        <label class="block text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
-                            <i class="fa-solid fa-file-circle-question text-brand-primary"></i>
-                            Do you have a CV / Resume for better assessment?
-                        </label>
-                        
+                    <!-- CV UPLOAD -->
+                    <div class="md:col-span-2 mt-4 bg-gradient-to-br from-white/60 to-blue-50/30 rounded-2xl border border-blue-100/50 p-6 shadow-sm relative overflow-hidden backdrop-blur-sm">
+                        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-brand-primary/10 rounded-full blur-2xl pointer-events-none"></div>
+                        <label class="block text-sm font-bold text-slate-700 mb-4 flex items-center gap-2"><i class="fa-solid fa-file-circle-question text-brand-primary"></i> Accelerate Your Assessment: Attach Professional Portfolio</label>
                         <div class="flex gap-6 mb-4 relative z-10">
-                            <!-- Default to YES -->
-                            <label class="flex items-center gap-2 cursor-pointer group">
+                            <label class="cursor-pointer relative group">
                                 <input type="radio" name="hasCv" value="yes" class="peer sr-only" onchange="toggleCvUpload(true)" checked>
-                                <div class="px-6 py-2 rounded-full border border-gray-200 bg-white text-slate-500 font-bold peer-checked:bg-brand-primary peer-checked:text-white peer-checked:border-brand-primary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-primary/40">Yes</div>
+                                <div class="px-6 py-2 rounded-full border border-gray-200 bg-white/80 text-slate-500 font-bold peer-checked:bg-brand-primary peer-checked:text-white peer-checked:border-brand-primary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-primary/40">Yes</div>
                             </label>
-                            <label class="flex items-center gap-2 cursor-pointer group">
+                            <label class="cursor-pointer relative group">
                                 <input type="radio" name="hasCv" value="no" class="peer sr-only" onchange="toggleCvUpload(false)">
-                                <div class="px-6 py-2 rounded-full border border-gray-200 bg-white text-slate-500 font-bold peer-checked:bg-brand-secondary peer-checked:text-white peer-checked:border-brand-secondary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-secondary/40">No</div>
+                                <div class="px-6 py-2 rounded-full border border-gray-200 bg-white/80 text-slate-500 font-bold peer-checked:bg-brand-secondary peer-checked:text-white peer-checked:border-brand-secondary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-secondary/40">No</div>
                             </label>
                         </div>
-                        
-                        <!-- Default to visible -->
                         <div id="cvUploadContainer" class="animate-pop-in relative z-10">
-                            <div class="upload-zone rounded-xl p-8 text-center cursor-pointer relative group">
+                            <div class="rounded-xl border-2 border-dashed border-slate-300 hover:border-brand-primary hover:bg-blue-50/50 p-8 text-center cursor-pointer relative group transition-all">
                                 <input type="file" id="cvFile" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept=".pdf,.doc,.docx" onchange="handleFileSelect(this)">
-                                
                                 <div class="transition-transform duration-300 group-hover:-translate-y-1">
                                     <div class="w-12 h-12 rounded-full bg-white text-brand-primary shadow-md flex items-center justify-center mx-auto mb-3 text-xl group-hover:text-white group-hover:bg-brand-primary transition-colors">
                                         <i class="fa-solid fa-cloud-arrow-up"></i>
                                     </div>
-                                    <p class="text-sm font-bold text-slate-700" id="fileNameDisplay">Tap here to upload CV</p>
+                                    <p class="text-sm font-bold text-slate-700" id="fileNameDisplay">Upload Curriculum Vitae (PDF/DOC)</p>
                                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">PDF, DOC, DOCX (Max 5MB)</p>
                                 </div>
                             </div>
@@ -529,7 +422,7 @@
 
                     <div class="md:col-span-2 mt-8 flex justify-end">
                         <button type="button" onclick="goToStep2()" id="nextBtn" class="btn-gradient text-white font-bold py-4 px-12 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center gap-3">
-                            <span class="tracking-wider">NEXT STEP</span>
+                            <span class="tracking-wider">PROCEED TO EVALUATION</span>
                             <i class="fa-solid fa-arrow-right-long"></i>
                         </button>
                     </div>
@@ -538,98 +431,60 @@
 
             <!-- TAB 2: AI Job Report -->
             <div id="tab-2" class="hidden animate-slide-up-fade">
-                <!-- 1. CATEGORY SELECTOR -->
+                <!-- CATEGORY SELECTOR -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 max-w-4xl mx-auto">
-                    <!-- UNSKILLED OPTION -->
                     <div id="cardUnskilled" onclick="setSkillMode('Unskilled')" class="category-card rounded-3xl p-8 flex items-center gap-6 cursor-pointer relative overflow-hidden">
-                        <div class="w-16 h-16 rounded-2xl bg-blue-50 text-brand-primary flex items-center justify-center text-3xl shadow-sm">
-                            <i class="fa-solid fa-hands-holding-circle"></i>
-                        </div>
-                        <div class="z-10">
-                            <h3 class="text-xl font-bold text-slate-800 mb-1">General / Unskilled</h3>
-                            <p class="text-xs text-slate-500 tracking-wide font-medium">Factory, Agriculture, Warehouse</p>
-                        </div>
-                        <div class="ml-auto z-10">
-                            <div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkUnskilled">
-                                <div class="w-4 h-4 rounded-full bg-brand-primary hidden shadow-lg"></div>
-                            </div>
-                        </div>
+                        <div class="w-16 h-16 rounded-2xl bg-blue-50 text-brand-primary flex items-center justify-center text-3xl shadow-sm"><i class="fa-solid fa-hands-holding-circle"></i></div>
+                        <div class="z-10"><h3 class="text-xl font-bold text-slate-800 mb-1">Essential & Operational</h3><p class="text-xs text-slate-500 tracking-wide font-medium">Industrial, Logistics, Agritech</p></div>
+                        <div class="ml-auto z-10"><div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkUnskilled"><div class="w-4 h-4 rounded-full bg-brand-primary hidden shadow-lg"></div></div></div>
                     </div>
-                    <!-- SKILLED OPTION -->
                     <div id="cardSkilled" onclick="setSkillMode('Skilled')" class="category-card rounded-3xl p-8 flex items-center gap-6 cursor-pointer relative overflow-hidden">
-                        <div class="w-16 h-16 rounded-2xl bg-purple-50 text-brand-secondary flex items-center justify-center text-3xl shadow-sm">
-                            <i class="fa-solid fa-user-tie"></i>
-                        </div>
-                        <div class="z-10">
-                            <h3 class="text-xl font-bold text-slate-800 mb-1">Skilled Professional</h3>
-                            <p class="text-xs text-slate-500 tracking-wide font-medium">Engineer, IT, Medical, Trades</p>
-                        </div>
-                        <div class="ml-auto z-10">
-                            <div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkSkilled">
-                                <div class="w-4 h-4 rounded-full bg-brand-secondary hidden shadow-lg"></div>
-                            </div>
-                        </div>
+                        <div class="w-16 h-16 rounded-2xl bg-purple-50 text-brand-secondary flex items-center justify-center text-3xl shadow-sm"><i class="fa-solid fa-user-tie"></i></div>
+                        <div class="z-10"><h3 class="text-xl font-bold text-slate-800 mb-1">Specialized & Technical</h3><p class="text-xs text-slate-500 tracking-wide font-medium">Engineering, Healthcare, Skilled Trades</p></div>
+                        <div class="ml-auto z-10"><div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkSkilled"><div class="w-4 h-4 rounded-full bg-brand-secondary hidden shadow-lg"></div></div></div>
                     </div>
                 </div>
 
-                <!-- 2. JOB DETAILS FORM -->
-                <div id="jobDetailsPanel" class="glass-panel rounded-3xl p-8 mb-12 hidden animate-pop-in relative z-20 max-w-4xl mx-auto">
+                <!-- JOB DETAILS -->
+                <div id="jobDetailsPanel" class="glass-card p-8 mb-12 hidden animate-pop-in relative z-20 max-w-4xl mx-auto">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
-                        
-                        <!-- STYLISH DROP DOWN -->
                         <div class="relative group" id="customJobSelect">
-                            <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Job Role</label>
-                            
-                            <!-- Trigger -->
+                            <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Target Position</label>
                             <button type="button" class="form-input w-full text-left rounded-xl px-5 py-4 flex justify-between items-center cursor-pointer" onclick="toggleJobDropdown(event)">
                                 <span id="selectedJobText" class="text-slate-500 font-medium">Select Job Role</span>
                                 <i class="fa-solid fa-chevron-up transition-transform duration-300 text-brand-primary" id="jobDropdownIcon"></i>
                             </button>
-
-                            <!-- Drop Down List -->
-                            <div id="jobDropdownList" class="hidden absolute top-full left-0 w-full mt-2 bg-white border border-gray-200 rounded-2xl shadow-xl max-h-80 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
+                            <div id="jobDropdownList" class="hidden absolute top-full left-0 w-full mt-2 bg-white/90 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-80 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
                                 <!-- JS Injected -->
                             </div>
-                            
                             <input type="hidden" id="currentJob">
                         </div>
-
-                        <!-- EXPERIENCE -->
                         <div id="experienceWrapper" class="hidden animate-pop-in">
-                            <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">Years of Experience</label>
+                            <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">Professional Tenure</label>
                             <div class="relative">
                                 <input type="number" id="experience" min="1" max="30" value="1" class="form-input w-full rounded-xl px-5 py-4 font-bold text-lg" placeholder="Min 1" onblur="validateExperienceInput(this)">
                                 <div class="absolute right-5 top-1/2 -translate-y-1/2 text-xs text-brand-secondary font-black tracking-widest">YEARS</div>
                             </div>
                         </div>
-
                         <div class="md:col-span-2 flex justify-end mt-4">
                              <button type="button" onclick="generateReport()" class="w-full md:w-auto btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group">
                                 <i class="fa-solid fa-wand-magic-sparkles group-hover:rotate-12 transition-transform"></i> 
-                                <span>GENERATE ANALYSIS</span>
+                                <span>CALCULATE MIGRATION PATHWAYS</span>
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. REPORT DASHBOARD (Redesigned Professional Reality) -->
+                <!-- REPORT DASHBOARD -->
                 <div id="reportContainer" class="hidden max-w-5xl mx-auto">
-                    <div class="glass-panel p-1 rounded-3xl animate-slide-up-fade">
-                        <div class="bg-white rounded-[22px] p-8 md:p-12 relative overflow-hidden shadow-sm">
-                             <!-- Top decorative bar -->
+                    <div class="glass-card p-1 rounded-3xl animate-slide-up-fade">
+                        <div class="bg-white/80 backdrop-blur-xl rounded-[22px] p-8 md:p-12 relative overflow-hidden shadow-sm">
                              <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-brand-primary to-brand-secondary"></div>
-
-                             <!-- Header Section -->
                              <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-gray-100 pb-8 mb-8 gap-6">
                                 <div>
-                                    <div class="flex items-center gap-3 mb-2">
-                                         <div class="w-8 h-8 rounded bg-blue-50 text-brand-primary flex items-center justify-center">
-                                            <i class="fa-solid fa-layer-group"></i>
-                                         </div>
-                                         <span class="text-xs font-bold text-slate-400 tracking-widest uppercase">Immigration Strategy Unit</span>
-                                    </div>
-                                    <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Assessment Report</h2>
-                                    <p class="text-sm text-slate-500 font-medium mt-1">AI-Generated Analysis for Global Mobility</p>
+                                    <div class="flex items-center gap-3 mb-2"><div class="w-8 h-8 rounded bg-blue-50 text-brand-primary flex items-center justify-center"><i class="fa-solid fa-layer-group"></i></div><span class="text-xs font-bold text-slate-400 tracking-widest uppercase">Global Mobility Intelligence Unit</span></div>
+                                    <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Strategic Viability Audit</h2>
+                                    <p class="text-sm text-slate-500 font-medium mt-1">Algorithmic Match Analysis & Country Compatibility</p>
                                 </div>
                                 <div class="text-left md:text-right">
                                     <div class="font-barcode text-4xl text-slate-300 mb-1" id="barcodeRef"></div>
@@ -637,114 +492,41 @@
                                     <div class="text-xs font-mono text-slate-400">DATE: <span id="reportDate"></span></div>
                                 </div>
                              </div>
-
-                             <!-- Candidate Profile Grid (No Overlap - Professional Layout) -->
-                             <div class="bg-slate-50 rounded-2xl p-6 mb-10 border border-gray-100">
+                             <div class="bg-slate-50/50 rounded-2xl p-6 mb-10 border border-gray-100">
                                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-                                    <!-- Avatar -->
-                                    <div class="md:col-span-2 flex justify-center md:justify-start">
-                                        <div class="w-20 h-20 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center text-3xl font-bold text-brand-primary" id="avatarInitial"></div>
-                                    </div>
-                                    
-                                    <!-- Details -->
+                                    <div class="md:col-span-2 flex justify-center md:justify-start"><div class="w-20 h-20 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center text-3xl font-bold text-brand-primary" id="avatarInitial"></div></div>
                                     <div class="md:col-span-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                                        <div class="overflow-hidden">
-                                            <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Candidate</p>
-                                            <h3 class="text-lg font-bold text-slate-900 leading-tight break-words" id="reportName"></h3>
-                                        </div>
-                                        <div class="overflow-hidden">
-                                             <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Job Role</p>
-                                             <div class="text-sm font-semibold text-brand-primary leading-tight break-words" id="reportRole"></div>
-                                        </div>
-                                        <div class="overflow-hidden">
-                                             <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Qualification</p>
-                                             <div class="text-sm font-semibold text-slate-700 leading-tight break-words" id="reportQualification"></div>
-                                        </div>
-                                         <div class="overflow-hidden">
-                                             <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Experience</p>
-                                             <div class="text-sm font-bold text-slate-900" id="reportExp"></div>
-                                        </div>
+                                        <div class="overflow-hidden"><p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Candidate</p><h3 class="text-lg font-bold text-slate-900 leading-tight break-words" id="reportName"></h3></div>
+                                        <div class="overflow-hidden"><p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Job Role</p><div class="text-sm font-semibold text-brand-primary leading-tight break-words" id="reportRole"></div></div>
+                                        <div class="overflow-hidden"><p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Qualification</p><div class="text-sm font-semibold text-slate-700 leading-tight break-words" id="reportQualification"></div></div>
+                                         <div class="overflow-hidden"><p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Experience</p><div class="text-sm font-bold text-slate-900" id="reportExp"></div></div>
                                     </div>
                                 </div>
                              </div>
-
-                             <!-- Main Recommendation Area -->
                              <div class="flex flex-col lg:flex-row gap-8">
-                                <!-- Left: The Country Match -->
                                 <div class="lg:w-2/3">
-                                    <div class="h-full rounded-2xl border border-gray-200 bg-white shadow-sm p-1 relative overflow-hidden group">
+                                    <div class="h-full rounded-2xl border border-gray-200 bg-white/50 shadow-sm p-1 relative overflow-hidden group">
                                         <div class="absolute top-0 right-0 w-32 h-32 bg-brand-primary/5 rounded-full blur-3xl -mr-10 -mt-10"></div>
-                                        
                                         <div class="p-6 md:p-8 relative z-10">
-                                            <div class="flex items-center justify-between mb-6">
-                                                <span class="bg-green-50 text-green-600 border border-green-100 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-2">
-                                                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Top Recommendation
-                                                </span>
-                                                <i class="fa-solid fa-medal text-brand-gold text-2xl"></i>
-                                            </div>
-                                            
+                                            <div class="flex items-center justify-between mb-6"><span class="bg-green-50 text-green-600 border border-green-100 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Prime Pathway</span><i class="fa-solid fa-medal text-brand-gold text-2xl"></i></div>
                                             <h2 class="text-5xl font-black text-slate-900 mb-2 tracking-tight" id="topMatchCountry"></h2>
-                                            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500 mb-8">
-                                                <span class="flex items-center gap-2"><i class="fa-solid fa-briefcase text-brand-primary"></i> <span id="topMatchRole_2"></span></span>
-                                                <span class="hidden sm:inline text-gray-300">|</span>
-                                                <span class="flex items-center gap-2 text-slate-700 font-bold"><i class="fa-solid fa-wallet text-brand-secondary"></i> <span id="mainSalaryRange"></span></span>
-                                            </div>
-
-                                            <!-- Metrics Bar (Replacing Circular Gauge) -->
-                                            <div class="bg-slate-50 rounded-xl p-5 border border-gray-100 mb-6">
-                                                <div class="flex justify-between items-end mb-2">
-                                                    <span class="text-xs font-bold text-slate-700">Match Probability</span>
-                                                    <span class="text-xl font-black text-brand-primary">98%</span>
-                                                </div>
-                                                <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                    <div class="h-full bg-gradient-to-r from-brand-primary to-brand-secondary w-[98%] rounded-full shadow-[0_0_10px_rgba(37,99,235,0.3)]"></div>
-                                                </div>
-                                                <div class="flex justify-between mt-3 text-[10px] text-slate-400 font-medium uppercase tracking-wider">
-                                                    <span>Visa: Work Permit (D-Type)</span>
-                                                    <span>Processing: 3-5 Months</span>
-                                                </div>
-                                            </div>
-
-                                            <div class="prose prose-sm text-slate-500 leading-relaxed">
-                                                <p id="aiReasoning" class="italic border-l-4 border-brand-primary pl-4 py-1">AI Reasoning loading...</p>
-                                            </div>
+                                            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500 mb-8"><span class="flex items-center gap-2"><i class="fa-solid fa-briefcase text-brand-primary"></i> <span id="topMatchRole_2"></span></span><span class="hidden sm:inline text-gray-300">|</span><span class="flex items-center gap-2 text-slate-700 font-bold"><i class="fa-solid fa-wallet text-brand-secondary"></i> <span id="mainSalaryRange"></span></span></div>
+                                            <div class="bg-slate-50 rounded-xl p-5 border border-gray-100 mb-6"><div class="flex justify-between items-end mb-2"><span class="text-xs font-bold text-slate-700">Match Probability</span><span class="text-xl font-black text-brand-primary">98%</span></div><div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-brand-primary to-brand-secondary w-[98%] rounded-full shadow-[0_0_10px_rgba(37,99,235,0.3)]"></div></div><div class="flex justify-between mt-3 text-[10px] text-slate-400 font-medium uppercase tracking-wider"><span>Visa: Work Permit (D-Type)</span><span>Processing: 3-5 Months</span></div></div>
+                                            <div class="prose prose-sm text-slate-500 leading-relaxed"><p id="aiReasoning" class="italic border-l-4 border-brand-primary pl-4 py-1">AI Reasoning loading...</p></div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Right: CTA & Alternatives -->
                                 <div class="lg:w-1/3 flex flex-col gap-6">
-                                     <!-- Alternatives List (Moved Up to be First) -->
-                                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm order-1">
-                                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Strategic Alternatives</h4>
-                                        <div class="flex flex-col gap-3" id="altMatchesGrid">
-                                             <!-- Items -->
-                                        </div>
-                                    </div>
-
-                                     <!-- CTA (Moved Down to be Last & Creative Redesign) -->
+                                    <div class="bg-white/60 rounded-2xl border border-gray-100 p-6 shadow-sm order-1"><h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Alternative Viability Options</h4><div class="flex flex-col gap-3" id="altMatchesGrid"></div></div>
                                     <div class="order-2 relative group overflow-hidden rounded-2xl p-8 text-white shadow-2xl shadow-blue-900/20 transition-all hover:shadow-blue-900/40 hover:-translate-y-1">
-                                        <!-- Background with animated gradient -->
                                         <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-brand-primary/90 to-brand-secondary/90 transition-all duration-500 group-hover:scale-105"></div>
-                                        
-                                        <!-- Decorative Circles -->
                                         <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
                                         <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 bg-brand-gold/20 rounded-full blur-xl"></div>
-
                                         <div class="relative z-10 flex flex-col items-center text-center">
-                                            <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-3xl mb-4 border border-white/20 shadow-inner">
-                                                <i class="fa-solid fa-headset text-white animate-pulse"></i>
-                                            </div>
-
-                                            <h4 class="text-2xl font-black mb-2 tracking-tight">Expert Advice</h4>
-                                            <p class="text-blue-50 text-sm font-medium mb-6 leading-relaxed opacity-90 px-2">
-                                                Do you want to speak with our expert advice? Book your appointment.
-                                            </p>
-
-                                            <button id="mainActionBtn" class="w-full bg-white text-brand-primary font-black py-4 px-6 rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-50 transition-all flex items-center justify-center gap-3 group/btn">
-                                                <span class="tracking-wider text-sm">BOOK APPOINTMENT</span>
-                                                <i class="fa-solid fa-calendar-check text-lg group-hover/btn:scale-110 transition-transform"></i>
-                                            </button>
+                                            <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-3xl mb-4 border border-white/20 shadow-inner"><i class="fa-solid fa-headset text-white animate-pulse"></i></div>
+                                            <h4 class="text-2xl font-black mb-2 tracking-tight">Executive Consultation</h4>
+                                            <p class="text-blue-50 text-sm font-medium mb-6 leading-relaxed opacity-90 px-2">Transition from assessment to action. Secure a dedicated strategy session with our senior consultants.</p>
+                                            <button id="mainActionBtn" class="w-full bg-white text-brand-primary font-black py-4 px-6 rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-50 transition-all flex items-center justify-center gap-3 group/btn"><span class="tracking-wider text-sm">SCHEDULE STRATEGY CALL</span><i class="fa-solid fa-calendar-check text-lg group-hover/btn:scale-110 transition-transform"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -757,28 +539,106 @@
         </div>
     </main>
     
-    <footer class="border-t border-gray-200/60 bg-white/50 py-8 mt-auto backdrop-blur-sm relative z-10">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-slate-400 text-xs">© 2024 Better Call Immigration. Designed for the Future.</p>
+    <!-- 2. FOOTER -->
+    <footer class="mt-0 border-t border-white/20 relative z-10 backdrop-blur-[2px] hidden md:block">
+        <div class="border-t border-white/20 py-8 text-center text-xs text-slate-500 font-medium bg-white/10 backdrop-blur-sm">
+            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p>&copy; 2025 Better Call Immigration. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-indigo-600 transition">Privacy</a>
+                    <a href="#" class="hover:text-indigo-600 transition">Terms</a>
+                </div>
+            </div>
         </div>
     </footer>
 
+    <!-- 3. MOBILE DOCK (5-Items, Serbia Style Layout, Light Theme) -->
+    <div class="fixed bottom-6 left-4 right-4 z-50 md:hidden animate-fade-in-up">
+        <div class="glass-card !bg-white/90 backdrop-blur-xl p-1.5 rounded-full shadow-2xl border border-white/60 flex justify-between items-center gap-1 relative z-50">
+            
+            <a href="index.html" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full hover:bg-blue-50 text-slate-500 hover:text-brand-primary transition-all active:scale-95">
+                <i class="fa-solid fa-house text-lg mb-0.5 transition-colors"></i>
+                <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Home</span>
+            </a>
+
+            <button onclick="toggleMobileLanguage()" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full hover:bg-purple-50 text-slate-500 hover:text-brand-secondary transition-all active:scale-95">
+                <i class="fa-solid fa-language text-lg mb-0.5 transition-colors"></i>
+                <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Lang</span>
+            </button>
+
+            <button onclick="toggleMobileDestinations()" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full hover:bg-yellow-50 text-slate-500 hover:text-brand-gold transition-all active:scale-95">
+                <i class="fa-solid fa-earth-europe text-lg mb-0.5 transition-colors"></i>
+                <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Explore</span>
+            </button>
+
+            <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1558/91ROR9EQUJNVPS08FU" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full bg-gradient-to-br from-brand-primary to-blue-600 text-white shadow-lg shadow-blue-500/30 transition-all active:scale-95">
+                <i class="fa-solid fa-paper-plane text-lg mb-0.5"></i>
+                <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Apply</span>
+            </a>
+
+            <a href="https://wa.me/971503666382" target="_blank" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow-lg shadow-green-500/30 transition-all active:scale-95">
+                <i class="fa-brands fa-whatsapp text-xl mb-0.5"></i>
+                <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Chat</span>
+            </a>
+        </div>
+
+        <!-- Language Popup Menu (Light Theme) -->
+        <div id="mobile-language-menu" class="absolute bottom-[calc(100%+16px)] left-0 w-full p-4 rounded-[2rem] bg-white/95 backdrop-blur-xl border border-white/60 shadow-2xl opacity-0 invisible transition-all duration-300 transform translate-y-10 origin-bottom z-40">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+                <span class="text-sm font-bold text-slate-800 uppercase tracking-widest pl-2">Select Language</span>
+                <button onclick="toggleMobileLanguage()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="grid grid-cols-2 gap-2 max-h-[40vh] overflow-y-auto custom-scrollbar">
+                <button onclick="setLanguage('en', this); toggleMobileLanguage()" class="lang-option-mobile group"><span>English</span> <span class="text-xs text-slate-400">EN</span></button>
+                <button onclick="setLanguage('ml', this); toggleMobileLanguage()" class="lang-option-mobile group font-['Noto_Sans_Malayalam']"><span>മലയാളം</span> <span class="text-xs text-slate-400">ML</span></button>
+                <button onclick="setLanguage('hi', this); toggleMobileLanguage()" class="lang-option-mobile group"><span>हिंदी</span> <span class="text-xs text-slate-400">HI</span></button>
+                <button onclick="setLanguage('ta', this); toggleMobileLanguage()" class="lang-option-mobile group font-['Noto_Sans_Tamil']"><span>தமிழ்</span> <span class="text-xs text-slate-400">TA</span></button>
+                <button onclick="setLanguage('tl', this); toggleMobileLanguage()" class="lang-option-mobile group"><span>Filipino</span> <span class="text-xs text-slate-400">TL</span></button>
+                <button onclick="setLanguage('si', this); toggleMobileLanguage()" class="lang-option-mobile group font-['Noto_Sans_Sinhala']"><span>සිංහල</span> <span class="text-xs text-slate-400">SI</span></button>
+                <button onclick="setLanguage('sw', this); toggleMobileLanguage()" class="lang-option-mobile group"><span>Swahili</span> <span class="text-xs text-slate-400">SW</span></button>
+            </div>
+        </div>
+
+        <!-- Destinations Popup Menu (Light Theme) -->
+        <div id="mobile-destinations-menu" class="absolute bottom-[calc(100%+16px)] left-0 w-full p-4 rounded-[2rem] bg-white/95 backdrop-blur-xl border border-white/60 shadow-2xl opacity-0 invisible transition-all duration-300 transform translate-y-10 origin-bottom z-40">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+                <span class="text-sm font-bold text-slate-800 uppercase tracking-widest pl-2">Select Country</span>
+                <button onclick="toggleMobileDestinations()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="grid grid-cols-2 gap-3 max-h-[40vh] overflow-y-auto custom-scrollbar">
+                <a href="sweden.html" class="dest-option-mobile"><span class="text-xl">🇸🇪</span> <span class="text-xs font-bold text-slate-600">Sweden</span></a>
+                <a href="finland.html" class="dest-option-mobile"><span class="text-xl">🇫🇮</span> <span class="text-xs font-bold text-slate-600">Finland</span></a>
+                <a href="netherlands.html" class="dest-option-mobile"><span class="text-xl">🇳🇱</span> <span class="text-xs font-bold text-slate-600">Netherlands</span></a>
+                <a href="germany.html" class="dest-option-mobile"><span class="text-xl">🇩🇪</span> <span class="text-xs font-bold text-slate-600">Germany</span></a>
+                <a href="italy.html" class="dest-option-mobile"><span class="text-xl">🇮🇹</span> <span class="text-xs font-bold text-slate-600">Italy</span></a>
+                <a href="france.html" class="dest-option-mobile"><span class="text-xl">🇫🇷</span> <span class="text-xs font-bold text-slate-600">France</span></a>
+                <a href="poland.html" class="dest-option-mobile"><span class="text-xl">🇵🇱</span> <span class="text-xs font-bold text-slate-600">Poland</span></a>
+                <a href="czech.html" class="dest-option-mobile"><span class="text-xl">🇨🇿</span> <span class="text-xs font-bold text-slate-600">Czech Republic</span></a>
+                <a href="latvia.html" class="dest-option-mobile"><span class="text-xl">🇱🇻</span> <span class="text-xs font-bold text-slate-600">Latvia</span></a>
+                <a href="croatia.html" class="dest-option-mobile"><span class="text-xl">🇭🇷</span> <span class="text-xs font-bold text-slate-600">Croatia</span></a>
+                <a href="serbia.html" class="dest-option-mobile !bg-blue-50 border-blue-200"><span class="text-xl">🇷🇸</span> <span class="text-xs font-bold text-brand-primary">Serbia</span></a>
+                <a href="macedonia.html" class="dest-option-mobile"><span class="text-xl">🇲🇰</span> <span class="text-xs font-bold text-slate-600">Macedonia</span></a>
+                <a href="albania.html" class="dest-option-mobile"><span class="text-xl">🇦🇱</span> <span class="text-xs font-bold text-slate-600">Albania</span></a>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-8 right-8 transform translate-y-32 opacity-0 transition-all duration-500 z-50">
-        <div class="glass-panel border-l-4 border-brand-primary text-slate-800 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 bg-white">
+    <div id="toast" class="fixed bottom-24 md:bottom-8 right-8 transform translate-y-32 opacity-0 transition-all duration-500 z-[100]">
+        <div class="glass-card border-l-4 border-brand-primary text-slate-800 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 bg-white">
             <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-brand-primary">
                 <i class="fa-solid fa-check"></i>
             </div>
             <div>
                 <h4 class="font-bold text-sm">Success</h4>
-                <span class="text-xs text-slate-500" id="toastMsg">Assessment Saved Securely</span>
+                <span class="text-xs text-slate-500" id="toastMsg">Profile Data Encrypted & Archived</span>
             </div>
         </div>
     </div>
 
-    <!-- Custom Modal for Errors (Replaces Alert) -->
+    <!-- Custom Modal for Errors -->
     <div id="messageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/40 opacity-0 transition-opacity duration-300">
-        <div class="modal-content w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center">
+        <div class="modal-content glass-card !bg-white/95 w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center">
             <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
                 <i class="fa-solid fa-circle-exclamation"></i>
             </div>
@@ -791,9 +651,51 @@
     </div>
 
     <script>
-        // Suppress Tailwind CDN warning for cleaner console
-        console.warn = function() {}; 
+        // --- MOBILE DOCK LOGIC ---
+        function toggleMobileDestinations() {
+            const menu = document.getElementById('mobile-destinations-menu');
+            const langMenu = document.getElementById('mobile-language-menu');
+            if (langMenu) langMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
+            
+            if (menu) {
+                // Ensure centering logic relative to the dock container
+                menu.classList.toggle('invisible');
+                menu.classList.toggle('opacity-0');
+                menu.classList.toggle('translate-y-10');
+            }
+        }
 
+        function toggleMobileLanguage() {
+            const menu = document.getElementById('mobile-language-menu');
+            const destMenu = document.getElementById('mobile-destinations-menu');
+            if (destMenu) destMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
+            
+            if (menu) {
+                menu.classList.toggle('invisible');
+                menu.classList.toggle('opacity-0');
+                menu.classList.toggle('translate-y-10');
+            }
+        }
+
+        document.addEventListener('click', function(event) {
+            const destMenu = document.getElementById('mobile-destinations-menu');
+            const langMenu = document.getElementById('mobile-language-menu');
+            const destBtn = event.target.closest('button[onclick="toggleMobileDestinations()"]');
+            const langBtn = event.target.closest('button[onclick="toggleMobileLanguage()"]');
+            
+            if (destMenu && !destMenu.classList.contains('invisible') && !destMenu.contains(event.target) && !destBtn) {
+                toggleMobileDestinations();
+            }
+            if (langMenu && !langMenu.classList.contains('invisible') && !langMenu.contains(event.target) && !langBtn && !event.target.closest('.lang-option-mobile')) {
+                toggleMobileLanguage();
+            }
+        });
+        
+        function setLanguage(lang, el) {
+            console.log("Language set to:", lang);
+            // Placeholder for actual translation logic
+        }
+    
         // ==========================================
         //  CONFIGURATION AREA
         // ==========================================
@@ -803,24 +705,23 @@
         
         // ----------------------------------------------------
         //  CLICKUP CUSTOM FIELD IDs
-        //  Updated with specific IDs from user log.
         // ----------------------------------------------------
         const CLICKUP_FIELDS = {
             "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",  
             "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115", 
             "WHATSAPP": "87b4eee7-444f-4ec4-9882-441965757a68", 
-            "PHONE": "8efe7c3f-70cc-46d4-b6db-1324e5071b29", // Alternative Phone
+            "PHONE": "8efe7c3f-70cc-46d4-b6db-1324e5071b29", 
             "DATE OF BIRTH": "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38",    
             "AGE": "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c",    
             "QUALIFICATION": "2cd34df4-98b5-4c82-8d86-a34bf3c1618b",
-            "JOB ROLE": "5e3fdff6-e1ea-4ca3-8ce5-190f2ce09082", // Updated Field ID from Log
+            "JOB ROLE": "5e3fdff6-e1ea-4ca3-8ce5-190f2ce09082", 
             "NATIONALITY": "e79e1c4e-b123-4bd9-8051-34859ea4b87e", 
             "EXPERIENCE": "267d8fd1-cc80-4343-972a-4a1d45cab5d7", 
             "PASSPORT NUMBER": "b8798515-8962-40a7-a8cd-2685f9fd676c",
             "PASSPORT EXPIRY": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", 
             "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
             "EMAIL": "2e18821e-1c19-4de5-afb8-77ff11ee6327", 
-            "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5" // Dropdown ID
+            "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5"
         };
 
         // SALARY DATA
@@ -1228,8 +1129,13 @@
             document.getElementById('presentResidence').value = "UAE";
             toggleCvUpload(true); // Ensure CV upload section is visible
             // ---------------------------------------
-
-            // getClickUpFields(); // Disabled for production
+            
+            // Smooth Scroll
+             if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({ duration: 1.2, smooth: true });
+                function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+                requestAnimationFrame(raf);
+            }
 
             flatpickr("#dob", {
                 dateFormat: "d/m/Y",
@@ -1589,7 +1495,7 @@
             s1.classList.add('opacity-40', 'grayscale');
             s2.classList.remove('opacity-40', 'grayscale');
             s2.querySelector('div').classList.add('border-brand-primary', 'text-brand-primary');
-            s2.querySelector('div').classList.remove('border-gray-200', 'text-gray-400');
+            s2.querySelector('div').classList.remove('border-gray-200', 'text-gray-500');
             s2.querySelector('span').classList.add('text-brand-primary');
 
             const name = document.getElementById('firstName').value + " " + document.getElementById('lastName').value;
@@ -1635,8 +1541,6 @@
         function getSalary(countryCode, skillType) {
             // Helper to safe-get salary or return default
             const key = skillType === 'Unskilled' ? 'u' : 's';
-            // Need to match country names from jobMasterList with salaryDb keys
-            // Simple direct match for now
             const data = salaryDb[countryCode];
             if(data) return data[key] + " / Month";
             return "€800 - €2,000 / Month"; // Fallback
@@ -1666,8 +1570,6 @@
             document.getElementById('reportRole').innerText = role;
             document.getElementById('reportQualification').innerText = qual;
             
-            // Update the NEW role display (topMatchRole_2) and existing elements
-            // We use topMatchRole_2 for the redesigned Hero Card
             if(document.getElementById('topMatchRole_2')) {
                 document.getElementById('topMatchRole_2').innerText = role;
             }
@@ -1702,7 +1604,7 @@
             const others = jobMasterList.filter(j => j.type === jobData.type && j.c !== jobData.c).sort(() => 0.5 - Math.random()).slice(0, 3);
             others.forEach(o => {
                 const div = document.createElement('div');
-                div.className = "flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-gray-100 hover:bg-white hover:border-brand-primary/30 transition-all cursor-pointer group shadow-sm hover:shadow-md";
+                div.className = "flex items-center justify-between bg-slate-50/80 p-4 rounded-2xl border border-gray-100 hover:bg-white hover:border-brand-primary/30 transition-all cursor-pointer group shadow-sm hover:shadow-md";
                 
                 const altTargetPage = countryPageMap[o.c];
                 const altTargetUrl = altTargetPage ? altTargetPage : 'https://bettercallimmigration.com/appointment';
@@ -1732,7 +1634,7 @@
         }
 
         function getFlag(c) {
-            const m = { "Sweden": "🇸🇪", "Finland": "🇫🇮", "Netherlands": "🇳🇱", "Germany": "🇩🇪", "Czech Republic": "🇨🇿", "Poland": "🇵🇱", "France": "🇫🇷", "Italy": "🇮🇹", "Latvia": "🇱🇻", "Croatia": "🇭🇷", "Serbia": "🇷🇸", "Albania": "🇦🇱", "Macedonia": "🇲🇰", "UAE": "🇦🇪" }; // Added UAE flag
+            const m = { "Sweden": "🇸🇪", "Finland": "🇫🇮", "Netherlands": "🇳🇱", "Germany": "🇩🇪", "Czech Republic": "🇨🇿", "Poland": "🇵🇱", "France": "🇫🇷", "Italy": "🇮🇹", "Latvia": "🇱🇻", "Croatia": "🇭🇷", "Serbia": "🇷🇸", "Albania": "🇦🇱", "Macedonia": "🇲🇰", "UAE": "🇦🇪" }; 
             return m[c] || "🇪🇺";
         }
 
@@ -1767,8 +1669,6 @@
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
             
-            // FIX: Removed toTitleCase() for these fields to preserve Dropdown Matching (e.g., "UAE")
-            // Sending "Uae" (string) causes 400 Bad Request on ClickUp Dropdowns
             const presentResidenceEl = document.getElementById('presentResidence');
             const presentCountry = presentResidenceEl && presentResidenceEl.value ? presentResidenceEl.value.trim() : "";
             
@@ -1781,7 +1681,7 @@
             // Clean phone numbers: REMOVE SPACES/DASHES FOR CLICKUP SAVING
             const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
             const whatsapp = cleanPhoneNumber(document.getElementById('whatsapp').value);
-            const altPhone = cleanPhoneNumber(document.getElementById('altPhone').value); // New Field
+            const altPhone = cleanPhoneNumber(document.getElementById('altPhone').value); 
             
             const qualification = document.querySelector('input[name="qualification"]:checked')?.value || '';
             const passportNo = document.getElementById('passportNo').value;
@@ -1790,8 +1690,6 @@
             const exp = parseInt(document.getElementById('experience').value) || 0;
             const resultCountry = document.getElementById('topMatchCountry').innerText;
 
-            // Define African countries for mapping to "AFRICA (REGION)"
-            // EGYPT is excluded as it has its own category
             const africanCountries = [
                 "ALGERIA", "ANGOLA", "BENIN", "BOTSWANA", "BURKINA FASO", "BURUNDI", 
                 "CAMEROON", "CAPE VERDE", "CENTRAL AFRICAN REPUBLIC", "CHAD", "COMOROS", 
@@ -1820,15 +1718,10 @@
                 console.error("Failed to fetch field definitions for Dropdown mapping", e);
             }
 
-            // UPDATED: Deep Logic to Handle Types Automatically
             const addField = (key, val) => {
                 const fieldId = CLICKUP_FIELDS[key];
                 
-                // 1. Basic Validation
                 if (!fieldId || fieldId.includes('replace_with') || val === null || val === "") {
-                    if(fieldId && fieldId.includes('replace_with')) {
-                        console.warn(`Skipping field '${key}': Placeholder ID detected. Update code.`);
-                    }
                     return;
                 }
 
@@ -1837,64 +1730,41 @@
                 let finalValue = val;
 
                 if (fieldDef) {
-                    // --- CASE A: DROPDOWN or LABELS ---
                     if (fieldDef.type === 'drop_down' || fieldDef.type === 'labels') {
-                        // We must send the INTEGER INDEX (orderindex) or UUID, not the text
                         const options = fieldDef.type_config.options;
-                        
-                        // 1. Try Strict Match
                         let match = options.find(o => o.name && o.name.toLowerCase().trim() === String(val).toLowerCase().trim());
                         
-                        // 2. Try Fuzzy Match (if user sent spaces or minor chars)
                         if (!match) {
                              match = options.find(o => o.name && o.name.toLowerCase().replace(/[^a-z]/g, '') === String(val).toLowerCase().replace(/[^a-z]/g, ''));
                         }
 
-                        // 3. LOGIC FIX: Handle NATIONALITY Mappings if no direct match
                         if (!match && key === "NATIONALITY") {
                             const upperVal = String(val).toUpperCase();
-                            
-                            // A. Check for Africa Region
                             if (africanCountries.includes(upperVal)) {
                                 match = options.find(o => o.name === "AFRICA (REGION)");
                             } 
-                            // B. Fallback to "OTHER" for any other unmatched country
                             else {
                                 match = options.find(o => o.name === "OTHER");
-                            }
-                            
-                            if (match) {
-                                console.log(`Mapped '${val}' to '${match.name}' for ClickUp compatibility.`);
                             }
                         }
 
                         if (match) {
-                            // CHANGED: Prioritize UUID (match.id) over index. This fixes "Not Saved" issues in newer API versions.
                             finalValue = match.id;
                         } else {
-                            // CRITICAL FIX: If exact match fails, fallback to OTHER if possible, or skip
                             const otherOption = options.find(o => o.name === "OTHER");
                             if(otherOption) {
-                                console.warn(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Falling back to OTHER.`);
                                 finalValue = otherOption.id;
                             } else {
-                                console.error(`ClickUp Dropdown Mismatch for ${key}: '${val}'. Available options:`, options.map(o => o.name));
                                 return; // Skip adding this field
                             }
                         }
                     }
-                    // --- CASE B: EMAIL, PHONE, URL (Validation Required by ClickUp) ---
                     else if (fieldDef.type === 'email' || fieldDef.type === 'url' || fieldDef.type === 'phone') {
-                        // Ensure it's a string
                         finalValue = String(val); 
                     }
-                    // --- CASE C: TEXT / SHORT TEXT ---
                     else {
-                        finalValue = val; // Send as is
+                        finalValue = val; 
                     }
-                } else {
-                    // Fallback if we couldn't fetch definitions (e.g. network error)
-                    console.log(`Field definition not found for ${key}, sending as raw value.`);
                 }
                 
                 customFieldsArray.push({ "id": fieldId, "value": finalValue });
@@ -1903,7 +1773,6 @@
             // Map Data to Configured IDs
             addField("SUR NAME", lastName);
             
-            // Only add phones if they are valid E.164 strings
             if(mobile) addField("MOBILE", mobile);
             if(whatsapp) addField("WHATSAPP", whatsapp);
             if(altPhone) addField("PHONE", altPhone); 
@@ -1916,7 +1785,6 @@
             addField("JOB ROLE", role);             
             addField("NATIONALITY", nationality);     
             
-            // Explicit check here
             if(presentCountry) {
                 addField("PRESENT RESIDENCE", presentCountry);     
             }
