@@ -347,7 +347,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                             
                             <!-- Present Residence (Moved First) -->
-                            <div class="md:col-span-2">
+                            <div>
                                 <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">
                                     <i class="fa-solid fa-location-dot mr-1"></i> Present Residence
                                 </label>
@@ -366,7 +366,7 @@
                                     <i class="fa-solid fa-earth-americas mr-1"></i> Nationality
                                 </label>
                                 <div class="relative">
-                                    <select id="nationality" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none" onchange="handleNationalityChange()">
+                                    <select id="nationality" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none">
                                         <option value="">Select Origin</option>
                                         <!-- JS Populated -->
                                     </select>
@@ -374,15 +374,7 @@
                                 </div>
                             </div>
                             
-                            <!-- State -->
-                            <div id="stateContainer">
-                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">
-                                    <i class="fa-solid fa-map-location-dot mr-1"></i> Province / State
-                                </label>
-                                <div id="stateInputWrapper" class="relative">
-                                     <input type="text" id="state" class="geo-input w-full rounded-xl px-5 py-4 placeholder-brand-gold/40 uppercase opacity-60 font-bold" placeholder="Select Nationality First" disabled>
-                                </div>
-                            </div>
+                            <!-- State (REMOVED) -->
                         </div>
                     </div>
 
@@ -745,7 +737,7 @@
         
         // ----------------------------------------------------
         //  CLICKUP CUSTOM FIELD IDs
-        //  Updated Config to match user request (name = task name, others fields)
+        //  'STATE' field removed per user request.
         // ----------------------------------------------------
         const CLICKUP_FIELDS = {
             "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",  
@@ -754,15 +746,15 @@
             "DATE OF BIRTH": "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38",    
             "AGE": "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c",    
             "QUALIFICATION": "2cd34df4-98b5-4c82-8d86-a34bf3c1618b",
-            "JOB ROLE": "7dcb9f47-cf7a-4108-b42c-a5f84541b0d2", // Updated from PROFESSION
+            "JOB ROLE": "7dcb9f47-cf7a-4108-b42c-a5f84541b0d2", // Updated Field ID
             "NATIONALITY": "e79e1c4e-b123-4bd9-8051-34859ea4b87e", 
-            "STATE": "e65a622e-be4b-4367-ac2a-4d3b89907d96",  
+            // "STATE": "e65a622e-be4b-4367-ac2a-4d3b89907d96", // REMOVED
             "EXPERIENCE": "267d8fd1-cc80-4343-972a-4a1d45cab5d7", 
             "PASSPORT NUMBER": "b8798515-8962-40a7-a8cd-2685f9fd676c",
             "PASSPORT EXPIRY": "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", 
             "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
-            "EMAIL": "replace_with_email_field_id", // TODO: Update with actual ID
-            "PRESENT RESIDENCE": "replace_with_residence_field_id" // TODO: Update with actual ID
+            "EMAIL": "2e18821e-1c19-4de5-afb8-77ff11ee6327", 
+            "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5"
         };
 
         // SALARY DATA
@@ -782,9 +774,7 @@
             "Albania": { u: "€400 - €650", s: "€700 - €1,200" }
         };
 
-        // UPDATED JOB MASTER LIST (Categorized & Mapped)
-        // Format: { r: "ROLE NAME", type: "S" (Skilled) or "U" (Unskilled), c: "Default Country" }
-        // Default Country assignments allow the report logic to work correctly
+        // LARGE JOB MASTER LIST WITH VALIDATION
         const jobMasterList = [
             {r:"ACCOUNTANT",type:"S",c:"Netherlands"},
             {r:"ADMINISTRATIVE ASSISTANT",type:"S",c:"Germany"},
@@ -1025,17 +1015,8 @@
             {r:"WORKSHOP HELPER",type:"U",c:"Latvia"}
         ];
 
-        const stateData = {
-            "INDIA": ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi", "Chandigarh"],
-            "PAKISTAN": ["Punjab", "Sindh", "Khyber Pakhtunkhwa", "Balochistan", "Islamabad", "Gilgit-Baltistan", "Azad Kashmir"],
-            "NEPAL": ["Province 1", "Madhesh", "Bagmati", "Gandaki", "Lumbini", "Karnali", "Sudurpashchim"],
-            "SRILANKA": ["Central", "Eastern", "North Central", "Northern", "North Western", "Sabaragamuwa", "Southern", "Uva", "Western"],
-            "BANGLADESH": ["Barisal", "Chittagong", "Dhaka", "Khulna", "Mymensingh", "Rajshahi", "Rangpur", "Sylhet"],
-            "PHILIPPINES": ["Metro Manila", "Cordillera (CAR)", "Ilocos", "Cagayan Valley", "Central Luzon", "Calabarzon", "Mimaropa", "Bicol", "Western Visayas", "Central Visayas", "Eastern Visayas", "Zamboanga", "Northern Mindanao", "Davao", "Soccsksargen", "Caraga", "Bangsamoro"],
-            "EGYPT": ["Cairo", "Alexandria", "Giza", "Dakahlia", "Red Sea", "Beheira", "Faiyum", "Gharbia", "Ismailia", "Menofia", "Minya", "Qalyubia", "New Valley", "Sharqia", "Suez", "Aswan", "Assiut", "Beni Suef", "Port Said", "Damietta", "Kafr El Sheikh", "Matrouh", "Luxor", "Qena", "North Sinai", "South Sinai", "Sohag"],
-            "AFRICA": ["Lagos (Nigeria)", "Abuja (Nigeria)", "Kano (Nigeria)", "Gauteng (SA)", "Western Cape (SA)", "Nairobi (Kenya)", "Accra (Ghana)", "Addis Ababa (Ethiopia)", "Cairo (Egypt)", "Casablanca (Morocco)", "Other"]
-        };
-        
+        // REMOVED: stateData object is no longer needed
+
         // --- NEW PHONE RULES (COMPREHENSIVE) ---
         const countryRules = {
             "AFGHANISTAN": { regex: /^(\+93)\d{9}$/, hint: "+93 123456789" },
@@ -1213,8 +1194,8 @@
                 }
             });
             
-            // Trigger initial country check (using Default or First)
-            handleNationalityChange();
+            // Initial call to set phone logic based on default/first residence option
+            handleResidenceChange();
         };
 
         function setupListeners() {
@@ -1303,7 +1284,7 @@
             
             // Reset selection display
             document.getElementById('currentJob').value = "";
-            document.getElementById('selectedJobText').innerText = "Select Role";
+            document.getElementById('selectedJobText').innerText = "Select Job Role";
             document.getElementById('selectedJobText').classList.add('text-slate-500');
         }
 
@@ -1340,7 +1321,7 @@
 
         // GEOGRAPHY & VALIDATION LOGIC
         
-        // NEW: Handle Residence Change (Drives Phone Logic)
+        // Handle Residence Change (Drives Phone Logic)
         function handleResidenceChange() {
             const sel = document.getElementById('presentResidence');
             const country = sel.value;
@@ -1383,22 +1364,7 @@
             document.getElementById('waFeedback').innerHTML = '';
         }
 
-        // Handle Nationality Change (Only drives State logic now)
-        function handleNationalityChange() {
-            const sel = document.getElementById('nationality');
-            const country = sel.value;
-            const stateWrap = document.getElementById('stateInputWrapper');
-            const states = stateData[country];
-            
-            if(states) {
-                let h = `<select id="state" required class="geo-input w-full rounded-xl px-5 py-4 uppercase font-bold appearance-none"><option value="">SELECT STATE / PROVINCE</option>`;
-                states.forEach(s => h += `<option value="${s}">${s}</option>`);
-                h += `</select><div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>`;
-                stateWrap.innerHTML = h;
-            } else {
-                stateWrap.innerHTML = `<input type="text" id="state" required class="geo-input w-full rounded-xl px-5 py-4 placeholder-brand-gold/40 uppercase font-bold" placeholder="ENTER STATE">`;
-            }
-        }
+        // REMOVED: handleNationalityChange() is no longer needed
 
         function cleanPhoneNumber(phoneStr) {
             if(!phoneStr) return null;
@@ -1615,7 +1581,7 @@
 
                 div.innerHTML = `
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-xl shadow-sm border border-gray-100">${getFlag(o.c)}</div>
+                        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-xl">${getFlag(o.c)}</div>
                         <div class="flex-grow">
                             <div class="flex justify-between items-center">
                                 <div class="text-sm font-bold text-slate-700 group-hover:text-brand-primary transition tracking-wide">${o.c}</div>
@@ -1683,7 +1649,7 @@
             const dob = document.getElementById('dob').value;
             const age = parseInt(document.getElementById('age').value) || 0;
             const nationality = document.getElementById('nationality').value;
-            const state = document.getElementById('state') ? document.getElementById('state').value : '';
+            // const state = document.getElementById('state') ? document.getElementById('state').value : ''; // REMOVED
             
             // Clean phone numbers: REMOVE SPACES/DASHES FOR CLICKUP SAVING
             const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
@@ -1775,7 +1741,7 @@
             addField("NATIONALITY", nationality);     
             addField("PRESENT RESIDENCE", presentCountry);     
             
-            addField("STATE", state);
+            // addField("STATE", state); // REMOVED
             addField("EXPERIENCE", exp);
             addField("PASSPORT NUMBER", passportNo);
             addField("PASSPORT EXPIRY", getUnixTime(passportExp));
@@ -1801,7 +1767,7 @@
 **Email:** ${email}
 **Nationality:** ${nationality}
 **Present Residence:** ${presentCountry}
-**State/Province:** ${state}
+${/* **State/Province:** ${state} REMOVED */ ''}
 
 **CONTACT INFO**
 --------------------------------------------------
