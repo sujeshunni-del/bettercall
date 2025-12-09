@@ -22,6 +22,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // Suppress Tailwind CDN warning
         console.warn = function() {}; 
 
         tailwind.config = {
@@ -174,6 +175,16 @@
         .valid-field { border-color: #10b981 !important; background-color: #ecfdf5 !important; }
         .invalid-field { border-color: #f43f5e !important; background-color: #fff1f2 !important; }
         .hidden { display: none; }
+
+        /* On-screen Console (Debug) */
+        #debugConsole {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 150px;
+            background: #1e1e1e; color: #00ff00; font-family: monospace; font-size: 12px;
+            overflow-y: auto; padding: 10px; z-index: 9999; border-top: 2px solid #333;
+            display: none;
+        }
+        .debug-log { margin-bottom: 4px; border-bottom: 1px solid #333; padding-bottom: 2px; }
+        .debug-error { color: #ff5555; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -245,14 +256,7 @@
                                 <input type="email" id="email" required class="form-input px-5 text-lg font-semibold" placeholder="name@example.com">
                             </div>
 
-                            <!-- Contact -->
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Mobile</label>
-                                <input type="tel" id="mobile" required class="form-input px-5 text-lg font-mono" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('mobile')">
-                                <p id="mobileHint" class="text-xs text-brand-primary mt-2 ml-1 font-mono opacity-0"></p>
-                            </div>
-                            
-                            <!-- Residence -->
+                            <!-- Residence & Nationality -->
                             <div>
                                 <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">Present Residence</label>
                                 <div class="relative">
@@ -261,13 +265,35 @@
                                 </div>
                             </div>
 
-                            <!-- Nationality -->
                             <div>
                                 <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">Nationality</label>
                                 <div class="relative">
                                     <select id="nationality" required class="form-input px-5 uppercase appearance-none"></select>
                                     <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                                 </div>
+                            </div>
+
+                            <!-- CONTACT PHONES -->
+                            
+                            <!-- Mobile -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Mobile</label>
+                                <input type="tel" id="mobile" required class="form-input px-5 text-lg font-mono" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('mobile')">
+                                <p id="mobileHint" class="text-xs text-brand-primary mt-2 ml-1 font-mono opacity-0"></p>
+                            </div>
+
+                            <!-- WhatsApp -->
+                            <div>
+                                <label class="block text-xs font-bold text-green-600 uppercase tracking-widest mb-3 ml-1"><i class="fa-brands fa-whatsapp mr-1"></i>WhatsApp Number</label>
+                                <input type="tel" id="whatsapp" required class="form-input px-5 text-lg font-mono border-green-200 focus:border-green-500 focus:ring-green-500" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('whatsapp')">
+                                <p id="whatsappHint" class="text-xs text-green-600 mt-2 ml-1 font-mono opacity-0"></p>
+                            </div>
+
+                            <!-- Alternative Phone -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1">Alternative Number</label>
+                                <input type="tel" id="altPhone" class="form-input px-5 text-lg font-mono text-slate-600" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('altPhone')">
+                                <p id="altPhoneHint" class="text-xs text-slate-400 mt-2 ml-1 font-mono opacity-0"></p>
                             </div>
 
                              <!-- Education -->
@@ -324,6 +350,29 @@
                             </div>
                         </div>
 
+                        <!-- Migration Country -->
+                        <div class="relative group mb-6">
+                            <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">Preferred Migration Country</label>
+                            <select id="migrationCountry" class="form-input px-5 appearance-none font-bold text-slate-700">
+                                <option value="">Select Country</option>
+                                <option value="POLAND">Poland</option>
+                                <option value="CZECH REPUBLIC">Czech Republic</option>
+                                <option value="NORTH MACEDONIA">North Macedonia</option>
+                                <option value="SWEDEN">Sweden</option>
+                                <option value="FINLAND">Finland</option>
+                                <option value="FRANCE">France</option>
+                                <option value="GERMANY">Germany</option>
+                                <option value="ITALY">Italy</option>
+                                <option value="ALBANIA">Albania</option>
+                                <option value="CROATIA">Croatia</option>
+                                <option value="ASSESSMENT">Assessment</option>
+                                <option value="NETHERLANDS">Netherlands</option>
+                                <option value="LATVIA">Latvia</option>
+                                <option value="SERBIA">Serbia</option>
+                            </select>
+                            <div class="absolute right-5 top-11 text-slate-400 pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
+                        </div>
+
                         <!-- Job Dropdown -->
                         <div class="relative group mb-6">
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Target Job Role</label>
@@ -345,8 +394,8 @@
                             <h3 class="text-xl font-bold text-slate-800">Appointment Details</h3>
                         </div>
 
-                        <!-- CONSULTATION MODE SELECTION (NEW) -->
-                        <div class="mb-10">
+                        <!-- CONSULTATION MODE SELECTION -->
+                        <div class="mb-8">
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 ml-1">Consultation Method</label>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 
@@ -387,6 +436,24 @@
                             <input type="hidden" id="selectedMode" value="">
                         </div>
 
+                        <!-- Language Selection -->
+                        <div class="mb-10">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Preferred Language for Advisor</label>
+                            <div class="relative">
+                                <select id="languageSelect" class="form-input px-5 appearance-none font-bold text-slate-700">
+                                    <option value="">Select Language</option>
+                                    <option value="ENGLISH">English</option>
+                                    <option value="HINDI">Hindi</option>
+                                    <option value="MALAYALAM">Malayalam</option>
+                                    <option value="TAMIL">Tamil</option>
+                                    <option value="TAGALOG">Tagalog</option>
+                                    <option value="SWAHILI">Swahili</option>
+                                </select>
+                                <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-primary pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
+                            </div>
+                        </div>
+
+                        <!-- Calendar Grid -->
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             <!-- Calendar -->
                             <div class="lg:col-span-1">
@@ -424,6 +491,7 @@
     <footer class="border-t border-gray-200/60 bg-white/50 py-8 mt-auto backdrop-blur-sm relative z-10">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-slate-400 text-xs">© 2024 Better Call Immigration. Designed for the Future.</p>
+            <button onclick="document.getElementById('debugConsole').style.display = document.getElementById('debugConsole').style.display === 'none' ? 'block' : 'none'" class="mt-4 text-[10px] text-gray-400 underline">Toggle Debug Console</button>
         </div>
     </footer>
 
@@ -448,7 +516,31 @@
         </div>
     </div>
 
+    <!-- On-screen Console -->
+    <div id="debugConsole">
+        <div><strong>Debug Console (CORS Proxy Enabled)</strong></div>
+    </div>
+
     <script>
+        // --- CUSTOM LOGGER FOR ON-SCREEN CONSOLE ---
+        function logToScreen(msg, isError = false) {
+            const c = document.getElementById('debugConsole');
+            const d = document.createElement('div');
+            d.className = isError ? 'debug-log debug-error' : 'debug-log';
+            
+            // Handle objects
+            if (typeof msg === 'object') {
+                d.textContent = JSON.stringify(msg, null, 2);
+            } else {
+                d.textContent = msg;
+            }
+            c.appendChild(d);
+            c.scrollTop = c.scrollHeight;
+            
+            // Also log to real console
+            if(isError) console.error(msg); else console.log(msg);
+        }
+
         // CONFIG
         const CLICKUP_API_KEY = "pk_260468481_DGN3UIQ1QIOC3C2V3M3UG9XFE8SCXXCH"; 
         const CLICKUP_LIST_ID = "90182075750"; 
@@ -901,12 +993,23 @@
             const rule = countryRules[country] || countryRules["OTHER"];
             currentPhoneRegex = rule.regex;
             
+            // Update Mobile Field Hint
             const mob = document.getElementById('mobile');
-            // Pre-fill code only if field is empty or just has old code (heuristic length < 5)
             if(mob.value.length < 5) mob.value = rule.hint.split(' ')[0] + " ";
-            
             document.getElementById('mobileHint').innerText = "Format: " + rule.hint;
             document.getElementById('mobileHint').classList.remove('opacity-0');
+
+             // Update WhatsApp Field Hint
+            const wa = document.getElementById('whatsapp');
+            if(wa.value.length < 5) wa.value = rule.hint.split(' ')[0] + " ";
+            document.getElementById('whatsappHint').innerText = "Format: " + rule.hint;
+            document.getElementById('whatsappHint').classList.remove('opacity-0');
+
+             // Update Alt Phone Field Hint
+            const alt = document.getElementById('altPhone');
+            if(alt.value.length < 5) alt.value = rule.hint.split(' ')[0] + " ";
+            document.getElementById('altPhoneHint').innerText = "Format: " + rule.hint;
+            document.getElementById('altPhoneHint').classList.remove('opacity-0');
         }
 
         function enforcePhoneInput(el) {
@@ -1002,7 +1105,11 @@
             const ln = document.getElementById('lastName').value;
             const em = document.getElementById('email').value;
             const mo = document.getElementById('mobile').value;
+            const wa = document.getElementById('whatsapp').value;
+            const alt = document.getElementById('altPhone').value;
             const role = document.getElementById('jobRoleSelect').value;
+            const migrationCountry = document.getElementById('migrationCountry').value;
+            const lang = document.getElementById('languageSelect').value;
             const date = document.getElementById('appointmentDate').value;
             const age = parseInt(document.getElementById('age').value);
             
@@ -1015,11 +1122,20 @@
             if(isNaN(age) || age < 20) { showModal("Minimum age requirement is 20 years."); return; }
             if(!date) { showModal("Please select an appointment date."); return; }
             if(!selectedTimeSlot) { showModal("Please select a time slot."); return; }
+            if(!wa) { showModal("WhatsApp number is required."); return; }
+            if(!lang) { showModal("Please select a preferred language."); return; }
+            
+            // Clean Phones
+            const cleanMobile = mo.replace(/\s/g, '');
+            const cleanWA = wa.replace(/\s/g, '');
+            const cleanAlt = alt ? alt.replace(/\s/g, '') : '';
 
             // Validate Phone
-            const cleanPhone = mo.replace(/\s/g, '');
-            if(currentPhoneRegex && !currentPhoneRegex.test(cleanPhone)) {
-                showModal("Invalid Phone Format."); return;
+            if(currentPhoneRegex && !currentPhoneRegex.test(cleanMobile)) {
+                showModal("Invalid Mobile Number Format."); return;
+            }
+             if(currentPhoneRegex && !currentPhoneRegex.test(cleanWA)) {
+                showModal("Invalid WhatsApp Number Format."); return;
             }
 
             // Convert Date to Unix Timestamp (Milliseconds) for ClickUp
@@ -1045,18 +1161,16 @@
             };
 
             // 3. Map Form Data to ClickUp Fields
-            // Note: Ensure these IDs exist on your new list: 90182075750
             addField("SUR NAME", ln);
-            addField("MOBILE", cleanPhone);
+            addField("MOBILE", cleanMobile);
             addField("EMAIL", em);
             addField("AGE", age);
             addField("NATIONALITY", nationality);
             addField("PRESENT RESIDENCE", residence);
             addField("QUALIFICATION", qual);
             addField("JOB ROLE", role);
-            
-            // Clean/Formatted Phone for WhatsApp field if needed
-            addField("WHATSAPP", cleanPhone); 
+            addField("WHATSAPP", cleanWA); 
+            addField("PHONE", cleanAlt); // Alternative Phone
 
             // ClickUp Payload
             const payload = {
@@ -1066,12 +1180,16 @@
 **Date:** ${date}
 **Time:** ${selectedTimeSlot}
 **Mode:** ${selectedConsultationMode}
+**Language:** ${lang}
 **Job Role:** ${role} (${currentMode})
+**Migration Country:** ${migrationCountry}
 
 **CANDIDATE DETAILS**
 --------------------------------
 **Email:** ${em}
 **Mobile:** ${mo}
+**WhatsApp:** ${wa}
+**Alternative Phone:** ${alt}
 **Age:** ${age}
 **Nationality:** ${nationality}
 **Residence:** ${residence}
@@ -1083,9 +1201,19 @@
             const btn = document.getElementById('submitBtn');
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
             
+            logToScreen("Initiating ClickUp API Call via Proxy...");
+
             try {
                 if(CLICKUP_API_KEY && !CLICKUP_API_KEY.includes("pk_12345")) {
-                    const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+                    
+                    // --- CORS PROXY FIX START ---
+                    const PROXY_URL = "https://corsproxy.io/?"; 
+                    const TARGET_URL = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`;
+                    const FINAL_URL = PROXY_URL + encodeURIComponent(TARGET_URL);
+
+                    logToScreen(`Target: ${TARGET_URL}`);
+                    
+                    const res = await fetch(FINAL_URL, {
                         method: 'POST',
                         headers: { 
                             'Authorization': CLICKUP_API_KEY.trim(), 
@@ -1093,24 +1221,29 @@
                         },
                         body: JSON.stringify(payload)
                     });
+                    // --- CORS PROXY FIX END ---
                     
                     if(res.ok) {
                         const data = await res.json();
-                        // CV Upload logic removed
+                        logToScreen("Success! Task ID: " + data.id);
                         console.log("Task Created:", data.id);
+
+                        // Success UI
+                        document.getElementById('toast').classList.remove('translate-y-32', 'opacity-0');
+                        setTimeout(() => location.reload(), 3000);
                     } else {
                         const err = await res.json();
+                        logToScreen(err, true);
                         console.error(err);
                         throw new Error(`ClickUp Error: ${JSON.stringify(err)}`);
                     }
+                } else {
+                    throw new Error("Invalid API Key");
                 }
                 
-                // Success UI
-                document.getElementById('toast').classList.remove('translate-y-32', 'opacity-0');
-                setTimeout(() => location.reload(), 3000);
-
             } catch(e) {
                 console.error(e);
+                logToScreen(e.message, true);
                 showModal("Connection Error: " + e.message);
             } finally {
                 btn.innerHTML = '<span>CONFIRM APPOINTMENT</span><i class="fa-solid fa-calendar-check"></i>';
