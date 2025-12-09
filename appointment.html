@@ -596,7 +596,8 @@
             "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5",
             "APPOINTMENT_DATE": "a4a8197d-eb13-4e90-ad56-d56108137e2e", 
             "APPOINTMENT_TIME": "584f279f-8f78-4e2b-ac91-ccf2c4e48b00",
-            "CONSULTATION_MODE": "03414f61-a879-4d14-bee0-7186a3de27d5"
+            "CONSULTATION_MODE": "03414f61-a879-4d14-bee0-7186a3de27d5", // "BOOKING TYPE" in CSV
+            "MIGRATION_COUNTRY": "dd59c787-da25-4760-ab85-2974e1ae8838"  // "COUNTRY" in CSV
         };
 
         // --- DEBUG: CHECK CONNECTION ---
@@ -608,7 +609,7 @@
 
             try {
                 // We use the 'Get List' endpoint to verify the ID exists and Key works
-                const TARGET_URL = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}`;
+                const TARGET_URL = `https://app.clickup.com/90182075750/v/l/2kzmahb6-1978`;
                 const FINAL_URL = PROXY_URL + encodeURIComponent(TARGET_URL);
                 
                 const res = await fetch(FINAL_URL, {
@@ -645,7 +646,7 @@
         async function fetchAndMapFields() {
             logToScreen("--- FETCHING FIELDS ---");
             try {
-                const TARGET_URL = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`;
+                const TARGET_URL = `https://api.clickup.com/api/v2/list/${90182075750}/field`;
                 const FINAL_URL = PROXY_URL + encodeURIComponent(TARGET_URL);
                 
                 const res = await fetch(FINAL_URL, {
@@ -1311,6 +1312,7 @@
             addField("APPOINTMENT_DATE", dateTimestamp);
             addField("APPOINTMENT_TIME", selectedTimeSlot);
             addField("CONSULTATION_MODE", selectedConsultationMode);
+            addField("MIGRATION_COUNTRY", migrationCountry);
 
             // ClickUp Payload
             const payload = {
@@ -1345,9 +1347,9 @@
             logToScreen(`Target List: ${CLICKUP_LIST_ID}`);
 
             try {
-                if(CLICKUP_API_KEY && !CLICKUP_API_KEY.includes("pk_12345")) {
+                if(CLICKUP_API_KEY && !CLICKUP_API_KEY.includes("pk_260468481_S4KLO3ZGV6P1PL1POHKXNS1LA5ISSG0P")) {
                     
-                    const TARGET_URL = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`;
+                    const TARGET_URL = `https://api.clickup.com/api/v2/list/${90182075750}/task`;
                     // Use CORS Proxy
                     const FINAL_URL = PROXY_URL + encodeURIComponent(TARGET_URL);
                     
