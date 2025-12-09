@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Consultation | Better Call Immigration</title>
+    <meta name="description" content="Schedule your immigration consultation">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        console.warn = function() {}; 
+
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-dark': '#ffffff',
+                        'brand-primary': '#2563eb',
+                        'brand-secondary': '#7c3aed',
+                        'brand-accent': '#f43f5e',
+                        'brand-gold': '#d97706',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    animation: {
+                        'blob': 'blob 15s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'slide-up-fade': 'slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pop-in': 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        slideUpFade: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        popIn: {
+                            '0%': { transform: 'scale(0.9)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Background */
+        .ambient-light {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background: linear-gradient(135deg, #f0f9ff 0%, #eef2ff 100%);
+            overflow: hidden;
+        }
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6;
+            animation: blob 25s infinite alternate;
+        }
+        .orb-1 { width: 800px; height: 800px; background: #e0e7ff; top: -200px; left: -200px; }
+        .orb-2 { width: 600px; height: 600px; background: #dbeafe; bottom: -100px; right: -100px; animation-delay: -5s; }
+
+        /* Glass Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05);
+        }
+
+        /* Inputs */
+        .form-input, .date-input-container, .geo-input {
+            height: 3.5rem; background: #ffffff; border: 1px solid #e2e8f0;
+            color: #1e293b; border-radius: 0.75rem; width: 100%;
+            font-family: 'Outfit', sans-serif; font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .form-input:focus, .geo-input:focus {
+            border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); outline: none;
+        }
+        
+        /* Time Slots Grid */
+        .time-slot {
+            transition: all 0.2s ease;
+        }
+        .time-slot input:checked + div {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            color: white; border-color: transparent;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transform: translateY(-2px);
+        }
+        .time-slot div:hover {
+            border-color: #2563eb; background: #f8fafc;
+        }
+
+        /* Category Cards */
+        .category-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #ffffff; border: 1px solid #e2e8f0;
+        }
+        .category-card.active {
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+            border-color: #2563eb;
+            box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.15);
+        }
+        
+        /* Consultation Mode Cards */
+        .mode-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #ffffff; border: 1px solid #e2e8f0;
+        }
+        .mode-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+            border-color: #cbd5e1;
+        }
+        .mode-card.active {
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+            border-color: #2563eb;
+            box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.15);
+            position: relative;
+        }
+        .mode-card.active::after {
+            content: ''; position: absolute; inset: 0; border-radius: 1rem; border: 2px solid #2563eb; pointer-events: none;
+        }
+        .mode-icon {
+            transition: all 0.3s ease;
+        }
+        .mode-card.active .mode-icon {
+            transform: scale(1.1); color: #2563eb;
+        }
+
+
+        .btn-gradient {
+            background-image: linear-gradient(to right, #2563eb 0%, #7c3aed 51%, #2563eb 100%);
+            background-size: 200% auto; transition: 0.5s;
+        }
+        .btn-gradient:hover { background-position: right center; }
+
+        /* Utils */
+        .uppercase-input { text-transform: uppercase; }
+        .valid-field { border-color: #10b981 !important; background-color: #ecfdf5 !important; }
+        .invalid-field { border-color: #f43f5e !important; background-color: #fff1f2 !important; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <!-- Header -->
+    <nav class="fixed w-full z-50 backdrop-blur-md bg-white/70 border-b border-gray-100/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white font-bold text-2xl shadow-lg">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-2xl tracking-tight text-slate-900">Better Call <span class="text-brand-primary">Immigration</span></h1>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-semibold">Appointment Portal</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-32 pb-12 px-4 relative z-10">
+        <div class="max-w-5xl mx-auto">
+
+            <div class="glass-panel rounded-3xl p-8 md:p-12 animate-slide-up-fade">
+                <div class="mb-10 text-center">
+                    <h2 class="text-4xl font-black text-slate-900 mb-3 tracking-tight">Schedule Consultation</h2>
+                    <p class="text-slate-500 text-sm tracking-wide font-medium">Secure your slot with our immigration experts.</p>
+                </div>
+
+                <form id="bookingForm" class="space-y-12">
+                    
+                    <!-- SECTION 1: PERSONAL DETAILS -->
+                    <div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 text-brand-primary flex items-center justify-center font-bold text-sm">1</div>
+                            <h3 class="text-xl font-bold text-slate-800">Your Details</h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="group">
+                                <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Given Name</label>
+                                <input type="text" id="firstName" required class="form-input uppercase-input px-5 text-lg" placeholder="JOHN" oninput="this.value = this.value.toUpperCase()">
+                            </div>
+                            <div class="group">
+                                <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Surname</label>
+                                <input type="text" id="lastName" required class="form-input uppercase-input px-5 text-lg" placeholder="DOE" oninput="this.value = this.value.toUpperCase()">
+                            </div>
+
+                            <!-- Age & DOB -->
+                            <div>
+                                <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">Date of Birth</label>
+                                <input type="text" id="dob" required placeholder="Select Date" class="form-input px-5 text-lg">
+                            </div>
+                            <div class="group">
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Age</label>
+                                <input type="text" id="age" readonly class="form-input bg-gray-50 text-slate-500 font-mono font-bold px-5">
+                            </div>
+
+                            <!-- Email -->
+                            <div class="md:col-span-2 group">
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Email Address</label>
+                                <input type="email" id="email" required class="form-input px-5 text-lg font-semibold" placeholder="name@example.com">
+                            </div>
+
+                            <!-- Contact -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Mobile</label>
+                                <input type="tel" id="mobile" required class="form-input px-5 text-lg font-mono" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('mobile')">
+                                <p id="mobileHint" class="text-xs text-brand-primary mt-2 ml-1 font-mono opacity-0"></p>
+                            </div>
+                            
+                            <!-- Residence -->
+                            <div>
+                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">Present Residence</label>
+                                <div class="relative">
+                                    <select id="presentResidence" required class="form-input px-5 uppercase appearance-none" onchange="handleResidenceChange()"></select>
+                                    <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
+                                </div>
+                            </div>
+
+                            <!-- Nationality -->
+                            <div>
+                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1">Nationality</label>
+                                <div class="relative">
+                                    <select id="nationality" required class="form-input px-5 uppercase appearance-none"></select>
+                                    <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
+                                </div>
+                            </div>
+
+                             <!-- Education -->
+                             <div class="md:col-span-1">
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Qualification</label>
+                                <select id="qualificationSelect" class="form-input px-5">
+                                    <option value="UNDER 10 TH">Under 10th</option>
+                                    <option value="SCHOOL">School</option>
+                                    <option value="PLUS TWO">Plus Two</option>
+                                    <option value="DIPLOMA">Diploma</option>
+                                    <option value="BACHELOR">Bachelor</option>
+                                    <option value="MASTER">Master</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full h-px bg-gray-200"></div>
+
+                    <!-- SECTION 2: PROFESSIONAL PROFILE -->
+                    <div>
+                         <div class="flex items-center gap-4 mb-6">
+                            <div class="w-8 h-8 rounded-full bg-purple-100 text-brand-secondary flex items-center justify-center font-bold text-sm">2</div>
+                            <h3 class="text-xl font-bold text-slate-800">Professional Profile</h3>
+                        </div>
+
+                        <!-- Skill Category Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <!-- UNSKILLED -->
+                            <div id="cardUnskilled" onclick="setSkillMode('Unskilled')" class="category-card rounded-2xl p-6 flex items-center gap-4 cursor-pointer relative overflow-hidden">
+                                <div class="w-12 h-12 rounded-xl bg-blue-50 text-brand-primary flex items-center justify-center text-2xl">
+                                    <i class="fa-solid fa-hands-holding-circle"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-800">Unskilled</h3>
+                                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">General Labor / Factory</p>
+                                </div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-2 border-gray-200 flex items-center justify-center" id="checkUnskilled">
+                                    <div class="w-3 h-3 rounded-full bg-brand-primary hidden"></div>
+                                </div>
+                            </div>
+                            <!-- SKILLED -->
+                            <div id="cardSkilled" onclick="setSkillMode('Skilled')" class="category-card rounded-2xl p-6 flex items-center gap-4 cursor-pointer relative overflow-hidden">
+                                <div class="w-12 h-12 rounded-xl bg-purple-50 text-brand-secondary flex items-center justify-center text-2xl">
+                                    <i class="fa-solid fa-user-tie"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-800">Skilled</h3>
+                                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Professional / Trades</p>
+                                </div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-2 border-gray-200 flex items-center justify-center" id="checkSkilled">
+                                    <div class="w-3 h-3 rounded-full bg-brand-secondary hidden"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Job Dropdown -->
+                        <div class="relative group mb-6">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Target Job Role</label>
+                            <select id="jobRoleSelect" class="form-input px-5 appearance-none font-bold text-slate-700">
+                                <option value="">Select Role</option>
+                                <!-- JS Populated -->
+                            </select>
+                            <div class="absolute right-5 top-11 text-slate-400 pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
+                        </div>
+
+                         <!-- CV Upload -->
+                        <div class="bg-blue-50/50 rounded-xl border border-blue-100 p-6 flex flex-col md:flex-row items-center gap-6">
+                            <div class="flex-grow">
+                                <label class="text-sm font-bold text-slate-700 block mb-1">Upload CV / Resume</label>
+                                <p class="text-xs text-slate-500">Optional but recommended for faster assessment.</p>
+                            </div>
+                            <div class="relative group cursor-pointer">
+                                <input type="file" id="cvFile" class="hidden" onchange="updateFileName(this)">
+                                <label for="cvFile" class="bg-white border border-brand-primary text-brand-primary font-bold py-3 px-6 rounded-lg shadow-sm hover:bg-brand-primary hover:text-white transition-all cursor-pointer flex items-center gap-2">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i> <span id="fileNameDisplay">Choose File</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full h-px bg-gray-200"></div>
+
+                    <!-- SECTION 3: APPOINTMENT DETAILS -->
+                    <div>
+                         <div class="flex items-center gap-4 mb-6">
+                            <div class="w-8 h-8 rounded-full bg-amber-100 text-brand-gold flex items-center justify-center font-bold text-sm">3</div>
+                            <h3 class="text-xl font-bold text-slate-800">Appointment Details</h3>
+                        </div>
+
+                        <!-- CONSULTATION MODE SELECTION (NEW) -->
+                        <div class="mb-10">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 ml-1">Consultation Method</label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                
+                                <!-- In-Person -->
+                                <div id="modePerson" onclick="setConsultationMode('In Person')" class="mode-card rounded-xl p-5 cursor-pointer border border-gray-200 flex flex-col items-center text-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-50 text-brand-primary flex items-center justify-center text-xl mode-icon">
+                                        <i class="fa-solid fa-building"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-sm">In-Person</h4>
+                                        <p class="text-[10px] text-slate-400 font-medium uppercase mt-1">Visit our Office</p>
+                                    </div>
+                                </div>
+
+                                <!-- Phone -->
+                                <div id="modePhone" onclick="setConsultationMode('By Phone')" class="mode-card rounded-xl p-5 cursor-pointer border border-gray-200 flex flex-col items-center text-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-xl mode-icon">
+                                        <i class="fa-solid fa-phone-volume"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-sm">Phone Call</h4>
+                                        <p class="text-[10px] text-slate-400 font-medium uppercase mt-1">Direct Call</p>
+                                    </div>
+                                </div>
+
+                                <!-- Video -->
+                                <div id="modeVideo" onclick="setConsultationMode('Video Call')" class="mode-card rounded-xl p-5 cursor-pointer border border-gray-200 flex flex-col items-center text-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-purple-50 text-brand-secondary flex items-center justify-center text-xl mode-icon">
+                                        <i class="fa-solid fa-video"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-sm">Video Call</h4>
+                                        <p class="text-[10px] text-slate-400 font-medium uppercase mt-1">Zoom / Meet / WA</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <input type="hidden" id="selectedMode" value="">
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <!-- Calendar -->
+                            <div class="lg:col-span-1">
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Pick a Date</label>
+                                <input type="text" id="appointmentDate" class="hidden"> <!-- Flatpickr attaches here -->
+                            </div>
+
+                            <!-- Time Slots -->
+                            <div class="lg:col-span-2">
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Available Slots (15 min)</label>
+                                <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 max-h-[340px] overflow-y-auto custom-scrollbar">
+                                    <div id="timeSlotGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                                        <!-- JS Generated -->
+                                    </div>
+                                    <p id="noDateMsg" class="text-center text-slate-400 text-sm py-10 font-medium">Please select a date to view available times.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SUBMIT -->
+                    <div class="pt-6">
+                        <button type="button" onclick="bookAppointment()" id="submitBtn" class="w-full btn-gradient text-white font-bold py-5 px-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3 text-lg">
+                            <span>CONFIRM APPOINTMENT</span>
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="border-t border-gray-200/60 bg-white/50 py-8 mt-auto backdrop-blur-sm relative z-10">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-400 text-xs">© 2024 Better Call Immigration. Designed for the Future.</p>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-8 right-8 transform translate-y-32 opacity-0 transition-all duration-500 z-50">
+        <div class="glass-panel border-l-4 border-brand-primary text-slate-800 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 bg-white">
+            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-brand-primary"><i class="fa-solid fa-check"></i></div>
+            <div>
+                <h4 class="font-bold text-sm">Booking Confirmed</h4>
+                <span class="text-xs text-slate-500">We will contact you shortly.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="messageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/40 opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center shadow-2xl">
+            <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4"><i class="fa-solid fa-circle-exclamation"></i></div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Notice</h3>
+            <p id="modalText" class="text-slate-500 text-sm mb-6">Check inputs.</p>
+            <button onclick="closeModal()" class="w-full bg-brand-accent text-white font-bold py-3 rounded-xl">OKAY</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIG
+        const CLICKUP_API_KEY = "pk_260468481_DGN3UIQ1QIOC3C2V3M3UG9XFE8SCXXCH"; 
+        const CLICKUP_LIST_ID = "90182075750"; 
+        
+        // --- FIXED E.164 COMPLIANT REGEX RULES (FULL LIST) ---
+        const countryRules = {
+            "AFGHANISTAN": { regex: /^\+93\d{9}$/, hint: "+93 700123456" },
+            "ALBANIA": { regex: /^\+355\d{8,9}$/, hint: "+355 691234567" },
+            "ALGERIA": { regex: /^\+213\d{9}$/, hint: "+213 555123456" },
+            "ANGOLA": { regex: /^\+244\d{9}$/, hint: "+244 923123456" },
+            "ARMENIA": { regex: /^\+374\d{8}$/, hint: "+374 91123456" },
+            "AZERBAIJAN": { regex: /^\+994\d{9}$/, hint: "+994 501234567" },
+            "BAHRAIN": { regex: /^\+973\d{8}$/, hint: "+973 39123456" },
+            "BANGLADESH": { regex: /^\+8801\d{9}$/, hint: "+880 1712345678" },
+            "BENIN": { regex: /^\+229\d{8}$/, hint: "+229 97123456" },
+            "BHUTAN": { regex: /^\+975\d{8}$/, hint: "+975 17123456" },
+            "BOTSWANA": { regex: /^\+267\d{8}$/, hint: "+267 72123456" },
+            "BRUNEI": { regex: /^\+673\d{7}$/, hint: "+673 8123456" },
+            "BURKINA FASO": { regex: /^\+226\d{8}$/, hint: "+226 70123456" },
+            "BURUNDI": { regex: /^\+257\d{8}$/, hint: "+257 79123456" },
+            "CAMBODIA": { regex: /^\+855\d{8,9}$/, hint: "+855 12345678" },
+            "CAMEROON": { regex: /^\+237\d{9}$/, hint: "+237 671234567" },
+            "CAPE VERDE": { regex: /^\+238\d{7}$/, hint: "+238 9912345" },
+            "CENTRAL AFRICAN REPUBLIC": { regex: /^\+236\d{8}$/, hint: "+236 75123456" },
+            "CHAD": { regex: /^\+235\d{8}$/, hint: "+235 66123456" },
+            "CHINA": { regex: /^\+861\d{10}$/, hint: "+86 13912345678" },
+            "COMOROS": { regex: /^\+269\d{7}$/, hint: "+269 3312345" },
+            "CONGO (DRC)": { regex: /^\+243\d{9}$/, hint: "+243 811234567" },
+            "CONGO (REPUBLIC)": { regex: /^\+242\d{9}$/, hint: "+242 061234567" },
+            "CYPRUS": { regex: /^\+357\d{8}$/, hint: "+357 99123456" },
+            "DJIBOUTI": { regex: /^\+253\d{8}$/, hint: "+253 77123456" },
+            "EGYPT": { regex: /^\+201\d{9}$/, hint: "+20 1012345678" },
+            "EQUATORIAL GUINEA": { regex: /^\+240\d{9}$/, hint: "+240 222123456" },
+            "ERITREA": { regex: /^\+291\d{7}$/, hint: "+291 7123456" },
+            "ESWATINI": { regex: /^\+268\d{8}$/, hint: "+268 76123456" },
+            "ETHIOPIA": { regex: /^\+251\d{9}$/, hint: "+251 911234567" },
+            "GABON": { regex: /^\+241\d{7,8}$/, hint: "+241 07123456" },
+            "GAMBIA": { regex: /^\+220\d{7}$/, hint: "+220 7123456" },
+            "GEORGIA": { regex: /^\+995\d{9}$/, hint: "+995 599123456" },
+            "GHANA": { regex: /^\+233\d{9}$/, hint: "+233 241234567" },
+            "GUINEA": { regex: /^\+224\d{9}$/, hint: "+224 621234567" },
+            "GUINEA-BISSAU": { regex: /^\+245\d{9}$/, hint: "+245 961234567" },
+            "HONG KONG": { regex: /^\+852\d{8}$/, hint: "+852 91234567" },
+            "INDIA": { regex: /^\+91[6-9]\d{9}$/, hint: "+91 9876543210" },
+            "INDONESIA": { regex: /^\+628\d{9,11}$/, hint: "+62 8123456789" },
+            "IRAN": { regex: /^\+989\d{9}$/, hint: "+98 9123456789" },
+            "IRAQ": { regex: /^\+9647\d{9}$/, hint: "+964 7501234567" },
+            "ISRAEL": { regex: /^\+9725\d{8}$/, hint: "+972 501234567" },
+            "IVORY COAST": { regex: /^\+225\d{10}$/, hint: "+225 0701234567" },
+            "JAPAN": { regex: /^\+81[789]0\d{8}$/, hint: "+81 9012345678" },
+            "JORDAN": { regex: /^\+9627\d{8}$/, hint: "+962 791234567" },
+            "KAZAKHSTAN": { regex: /^\+77\d{9}$/, hint: "+7 7012345678" },
+            "KENYA": { regex: /^\+2547\d{8}$/, hint: "+254 712345678" },
+            "KUWAIT": { regex: /^\+965\d{8}$/, hint: "+965 91234567" },
+            "KYRGYZSTAN": { regex: /^\+996\d{9}$/, hint: "+996 555123456" },
+            "LAOS": { regex: /^\+85620\d{8}$/, hint: "+856 2012345678" },
+            "LEBANON": { regex: /^\+961\d{7,8}$/, hint: "+961 70123456" },
+            "LESOTHO": { regex: /^\+266\d{8}$/, hint: "+266 58123456" },
+            "LIBERIA": { regex: /^\+231\d{8,9}$/, hint: "+231 77123456" },
+            "LIBYA": { regex: /^\+2189\d{8}$/, hint: "+218 911234567" },
+            "MACAU": { regex: /^\+8536\d{7}$/, hint: "+853 66123456" },
+            "MADAGASCAR": { regex: /^\+261\d{9}$/, hint: "+261 341234567" },
+            "MALAWI": { regex: /^\+265\d{9}$/, hint: "+265 881234567" },
+            "MALAYSIA": { regex: /^\+601\d{8,9}$/, hint: "+60 123456789" },
+            "MALDIVES": { regex: /^\+960\d{7}$/, hint: "+960 7712345" },
+            "MALI": { regex: /^\+223\d{8}$/, hint: "+223 76123456" },
+            "MAURITANIA": { regex: /^\+222\d{8}$/, hint: "+222 46123456" },
+            "MAURITIUS": { regex: /^\+2305\d{7}$/, hint: "+230 57123456" },
+            "MONGOLIA": { regex: /^\+976\d{8}$/, hint: "+976 99123456" },
+            "MOROCCO": { regex: /^\+212\d{9}$/, hint: "+212 612345678" },
+            "MOZAMBIQUE": { regex: /^\+258\d{9}$/, hint: "+258 841234567" },
+            "MYANMAR (BURMA)": { regex: /^\+959\d{7,9}$/, hint: "+95 912345678" },
+            "NAMIBIA": { regex: /^\+2648\d{8}$/, hint: "+264 811234567" },
+            "NEPAL": { regex: /^\+9779\d{9}$/, hint: "+977 9812345678" },
+            "NIGER": { regex: /^\+227\d{8}$/, hint: "+227 96123456" },
+            "NIGERIA": { regex: /^\+234[789]\d{9}$/, hint: "+234 8012345678" },
+            "NORTH KOREA": { regex: /^\+850\d{8,10}$/, hint: "+850 191234567" },
+            "OMAN": { regex: /^\+968\d{8}$/, hint: "+968 99123456" },
+            "PAKISTAN": { regex: /^\+923\d{9}$/, hint: "+92 3001234567" },
+            "PALESTINE": { regex: /^\+9705\d{8}$/, hint: "+970 591234567" },
+            "PHILIPPINES": { regex: /^\+639\d{9}$/, hint: "+63 9171234567" },
+            "QATAR": { regex: /^\+974\d{8}$/, hint: "+974 33123456" },
+            "RWANDA": { regex: /^\+2507\d{8}$/, hint: "+250 781234567" },
+            "SAO TOME & PRINCIPE": { regex: /^\+239\d{7}$/, hint: "+239 9912345" },
+            "SAUDI ARABIA": { regex: /^\+9665\d{8}$/, hint: "+966 501234567" },
+            "SENEGAL": { regex: /^\+221\d{9}$/, hint: "+221 771234567" },
+            "SEYCHELLES": { regex: /^\+248\d{7}$/, hint: "+248 2512345" },
+            "SIERRA LEONE": { regex: /^\+232\d{8}$/, hint: "+232 76123456" },
+            "SINGAPORE": { regex: /^\+65\d{8}$/, hint: "+65 81234567" },
+            "SOMALIA": { regex: /^\+252\d{8,9}$/, hint: "+252 615123456" },
+            "SOUTH AFRICA": { regex: /^\+27\d{9}$/, hint: "+27 821234567" },
+            "SOUTH KOREA": { regex: /^\+8210\d{8}$/, hint: "+82 1012345678" },
+            "SOUTH SUDAN": { regex: /^\+2119\d{8}$/, hint: "+211 912345678" },
+            "SRI LANKA": { regex: /^\+947\d{8}$/, hint: "+94 771234567" },
+            "SUDAN": { regex: /^\+249\d{9}$/, hint: "+249 912345678" },
+            "SYRIA": { regex: /^\+9639\d{8}$/, hint: "+963 941234567" },
+            "TAIWAN": { regex: /^\+8869\d{8}$/, hint: "+886 912345678" },
+            "TAJIKISTAN": { regex: /^\+9929\d{8}$/, hint: "+992 901234567" },
+            "TANZANIA": { regex: /^\+255\d{9}$/, hint: "+255 712345678" },
+            "THAILAND": { regex: /^\+66\d{9}$/, hint: "+66 812345678" },
+            "TIMOR-LESTE": { regex: /^\+6707\d{7}$/, hint: "+670 77123456" },
+            "TOGO": { regex: /^\+228\d{8}$/, hint: "+228 90123456" },
+            "TUNISIA": { regex: /^\+216\d{8}$/, hint: "+216 20123456" },
+            "TURKEY": { regex: /^\+905\d{9}$/, hint: "+90 5321234567" },
+            "TURKMENISTAN": { regex: /^\+9936\d{7}$/, hint: "+993 65123456" },
+            "UAE": { regex: /^\+9715\d{8}$/, hint: "+971 501234567" },
+            "UGANDA": { regex: /^\+2567\d{8}$/, hint: "+256 771234567" },
+            "UZBEKISTAN": { regex: /^\+9989\d{8}$/, hint: "+998 901234567" },
+            "VIETNAM": { regex: /^\+84\d{9}$/, hint: "+84 901234567" },
+            "YEMEN": { regex: /^\+9677\d{8}$/, hint: "+967 712345678" },
+            "ZAMBIA": { regex: /^\+2609\d{8}$/, hint: "+260 971234567" },
+            "ZIMBABWE": { regex: /^\+2637\d{8}$/, hint: "+263 771234567" },
+            "OTHER": { regex: /^\+\d{8,15}$/, hint: "+ [CountryCode][Number]" }
+        };
+
+        // --- COMPLETE JOB MASTER LIST ---
+        const jobMasterList = [
+            {r:"ACCOUNTANT",type:"S",c:"Netherlands"},
+            {r:"ADMINISTRATIVE ASSISTANT",type:"S",c:"Germany"},
+            {r:"AGRICULTURE FARM SUPERVISOR",type:"S",c:"Finland"},
+            {r:"AGRICULTURE FARM WORKERS",type:"U",c:"Poland"},
+            {r:"AGRICULTURE FIELD OFFICER",type:"S",c:"Netherlands"},
+            {r:"AGRICULTURE PHARMACIST TECHNICIAN",type:"S",c:"Netherlands"},
+            {r:"AGRICULTURE WORKER",type:"U",c:"Croatia"},
+            {r:"AGRICULTURE WORKERS",type:"U",c:"Serbia"},
+            {r:"AIR CONDITIONING TECHNICIAN",type:"S",c:"Germany"},
+            {r:"AIRCRAFT CLEANING WORKER",type:"U",c:"Sweden"},
+            {r:"AIRCRAFT MECHANIC",type:"S",c:"Latvia"},
+            {r:"ALARM TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"AMBULANCE DRIVER",type:"S",c:"Finland"},
+            {r:"ASSEMBLY OPERATOR",type:"U",c:"Poland"},
+            {r:"ASSEMBLY WORKER",type:"U",c:"Macedonia"},
+            {r:"ASSISTANT CHEF",type:"U",c:"Finland"},
+            {r:"ASSISTANT COOK",type:"U",c:"France"},
+            {r:"ASSISTANT LABORATORY TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"ASSISTANT NURSE",type:"S",c:"Germany"},
+            {r:"ASSISTANT PHARMACIST",type:"S",c:"Sweden"},
+            {r:"AUTO AIR CONDITIONING TECHNICIAN",type:"S",c:"Czech Republic"},
+            {r:"AUTO ELECTRICIAN",type:"S",c:"Czech Republic"},
+            {r:"AUTO SPRAY PAINTER",type:"S",c:"Czech Republic"},
+            {r:"AUTOMOTIVE MECHANIC",type:"S",c:"Serbia"},
+            {r:"AUTOMOTIVE TECHNICIAN",type:"S",c:"Germany"},
+            {r:"BAKER/PASTRY CHEF",type:"S",c:"France"},
+            {r:"BANK ASSISTANT / FINANCE EXECUTIVE",type:"S",c:"Netherlands"},
+            {r:"BAR SUPERVISOR",type:"S",c:"Finland"},
+            {r:"BARISTA",type:"U",c:"Italy"},
+            {r:"BARTENDER / BARMAN",type:"U",c:"Croatia"},
+            {r:"BATTERY MECHANIC",type:"S",c:"Poland"},
+            {r:"BRICKLAYER / MASON",type:"S",c:"Latvia"},
+            {r:"BUSINESS DEVELOPMENT",type:"S",c:"Netherlands"},
+            {r:"BUSINESS DEVELOPMENT EXECUTIVE",type:"S",c:"Germany"},
+            {r:"BUTCHER",type:"S",c:"Poland"},
+            {r:"CALL CENTRE EXECUTIVE",type:"S",c:"Latvia"},
+            {r:"CAM SUPERVISOR",type:"S",c:"Finland"},
+            {r:"CAPTAIN",type:"S",c:"Netherlands"},
+            {r:"CAPTAIN (SHIP/FLIGHT RELATED)",type:"S",c:"Netherlands"},
+            {r:"CARE HOME ASSISTANT",type:"U",c:"Germany"},
+            {r:"CARE HOME JOBS",type:"U",c:"Germany"},
+            {r:"CARPENTER JOINERY FURNITURE",type:"S",c:"Croatia"},
+            {r:"CARPENTER SHUTTERING",type:"S",c:"Croatia"},
+            {r:"CASHIER",type:"U",c:"Finland"},
+            {r:"CASHIER (DUTY-FREE)",type:"U",c:"Finland"},
+            {r:"CATERING SUPERVISOR",type:"S",c:"Sweden"},
+            {r:"CCTV TECHNICIAN",type:"S",c:"Germany"},
+            {r:"CERTIFIED WELDER",type:"S",c:"Poland"},
+            {r:"CHAPATHI / PAROTTA MAKER",type:"U",c:"Finland"},
+            {r:"CHEF / COOK",type:"S",c:"France"},
+            {r:"CHEF DE PARTIE",type:"S",c:"Finland"},
+            {r:"CHIEF COOK",type:"S",c:"France"},
+            {r:"CHIEF LABORATORY TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"CHIEF PHARMACIST",type:"S",c:"Netherlands"},
+            {r:"CIVIL DRAUGHTSMAN",type:"S",c:"Germany"},
+            {r:"CIVIL ENGINEER",type:"S",c:"Sweden"},
+            {r:"CIVIL SITE SUPERVISOR",type:"S",c:"Finland"},
+            {r:"CLEANING HELPER",type:"U",c:"Finland"},
+            {r:"CLEANING JOBS",type:"U",c:"Finland"},
+            {r:"CNC OPERATOR",type:"S",c:"Czech Republic"},
+            {r:"COMMIS CHEF",type:"U",c:"Finland"},
+            {r:"COMMIS I, II",type:"U",c:"France"},
+            {r:"COMMIS III",type:"U",c:"France"},
+            {r:"COMPUTER OPERATOR",type:"S",c:"Latvia"},
+            {r:"CONCRETE MIX OPERATOR",type:"S",c:"Croatia"},
+            {r:"CONSTRUCTION HELPER",type:"U",c:"Croatia"},
+            {r:"CONSTRUCTION HELPERS",type:"U",c:"Serbia"},
+            {r:"CONSTRUCTION SAFETY ENGINEER",type:"S",c:"Sweden"},
+            {r:"CONSTRUCTION SAFETY OFFICER",type:"S",c:"Germany"},
+            {r:"CONSTRUCTION WORKER",type:"U",c:"Poland"},
+            {r:"CONTINENTAL COOK",type:"S",c:"Finland"},
+            {r:"CUSTOMER SERVICE EXECUTIVE",type:"S",c:"Latvia"},
+            {r:"DAIRY FARM SUPERVISOR",type:"S",c:"Netherlands"},
+            {r:"DAIRY FARM WORKER",type:"U",c:"Netherlands"},
+            {r:"DATA ENTRY OPERATOR",type:"S",c:"Latvia"},
+            {r:"DELIVERY DRIVER",type:"U",c:"Croatia"},
+            {r:"DIESEL / PETROL MECHANIC",type:"S",c:"Germany"},
+            {r:"DIESEL MECHANICAL TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"DISHWASHER",type:"U",c:"Finland"},
+            {r:"DOCUMENT CONTROLLER",type:"S",c:"Netherlands"},
+            {r:"DOZER OPERATOR",type:"S",c:"Serbia"},
+            {r:"DRIVER LIGHT DUTY",type:"U",c:"Poland"},
+            {r:"EGG COLLECTOR",type:"U",c:"Poland"},
+            {r:"EGG PACKER",type:"U",c:"Poland"},
+            {r:"ELDERLY CARE STAFF",type:"U",c:"Germany"},
+            {r:"ELECTRICAL DRAUGHTSMAN",type:"S",c:"Sweden"},
+            {r:"ELECTRICAL ENGINEER",type:"S",c:"Germany"},
+            {r:"ELECTRICAL SUPERVISOR",type:"S",c:"Finland"},
+            {r:"ELECTRICAL TECHNICIAN HIGH VOLTAGE",type:"S",c:"Sweden"},
+            {r:"ELECTRICIAN",type:"S",c:"Poland"},
+            {r:"ELECTRICIAN (CERTIFIED)",type:"S",c:"Latvia"},
+            {r:"ENGINEER",type:"S",c:"Netherlands"},
+            {r:"ENGINEER (VARIOUS DISCIPLINES)",type:"S",c:"Germany"},
+            {r:"EXCAVATOR OPERATOR",type:"S",c:"Croatia"},
+            {r:"F & B SUPERVISOR",type:"S",c:"Finland"},
+            {r:"FABRICATOR",type:"S",c:"Czech Republic"},
+            {r:"FARM WORKER",type:"U",c:"Albania"},
+            {r:"FIRE & SAFETY OFFICER",type:"S",c:"Sweden"},
+            {r:"FIRE ALARM TECHNICIAN",type:"S",c:"Finland"},
+            {r:"FOOD & BEVERAGE STAFF",type:"U",c:"Croatia"},
+            {r:"FOOD & BEVERAGE SUPERVISOR",type:"S",c:"Italy"},
+            {r:"FOOD AND BEVERAGE",type:"U",c:"Serbia"},
+            {r:"FOOD PACKING WORKER",type:"U",c:"Poland"},
+            {r:"FOOD QUALITY INSPECTION OFFICER",type:"S",c:"Netherlands"},
+            {r:"FOOD QUALITY INSPECTOR",type:"S",c:"Germany"},
+            {r:"FORKLIFT OPERATOR",type:"S",c:"Poland"},
+            {r:"FRONT OFFICE EXECUTIVE",type:"S",c:"Latvia"},
+            {r:"FUEL STATION OPERATOR",type:"U",c:"Poland"},
+            {r:"FUEL STATION WORKER",type:"U",c:"Latvia"},
+            {r:"GENERAL LABORER",type:"U",c:"Croatia"},
+            {r:"GENERATOR MECHANIC",type:"S",c:"Serbia"},
+            {r:"GLASS CUTTER",type:"S",c:"Czech Republic"},
+            {r:"GRADER OPERATOR",type:"S",c:"Poland"},
+            {r:"GREENHOUSE WORKER",type:"U",c:"Netherlands"},
+            {r:"HAIR STYLIST (BARBER)",type:"S",c:"Italy"},
+            {r:"HARVESTER MACHINE MECHANIC",type:"S",c:"Germany"},
+            {r:"HARVESTER MACHINE OPERATOR",type:"S",c:"Finland"},
+            {r:"HARVESTING WORKER",type:"U",c:"Poland"},
+            {r:"HEAD CHEF",type:"S",c:"France"},
+            {r:"HEAD NURSE",type:"S",c:"Sweden"},
+            {r:"HEALTH & SAFETY OFFICER",type:"S",c:"Netherlands"},
+            {r:"HEALTH AND SAFETY OFFICER",type:"S",c:"Finland"},
+            {r:"HEALTHCARE SUPPORT",type:"U",c:"Germany"},
+            {r:"HEAVY GOODS DRIVER (C+E)",type:"S",c:"Poland"},
+            {r:"HOSPITALITY STAFF",type:"U",c:"Croatia"},
+            {r:"HOTEL & HOSPITALITY JOBS",type:"U",c:"Italy"},
+            {r:"HOTEL STAFF",type:"U",c:"Macedonia"},
+            {r:"HOUSEKEEPING SUPERVISOR",type:"S",c:"Finland"},
+            {r:"HOUSEKEEPING WORKER",type:"U",c:"Sweden"},
+            {r:"HR ASSISTANT",type:"S",c:"Latvia"},
+            {r:"HR ASSISTANT / EXECUTIVE",type:"S",c:"Netherlands"},
+            {r:"HYDRAULIC MECHANIC",type:"S",c:"Germany"},
+            {r:"INVENTORY CLERK",type:"S",c:"Poland"},
+            {r:"IT PROFESSIONAL",type:"S",c:"Germany"},
+            {r:"IT SYSTEMS ANALYST",type:"S",c:"Sweden"},
+            {r:"JUICE MAKER",type:"U",c:"Finland"},
+            {r:"KITCHEN HELPER",type:"U",c:"France"},
+            {r:"LAND SURVEYOR",type:"S",c:"Croatia"},
+            {r:"LAUNDRY SUPERVISOR",type:"S",c:"Italy"},
+            {r:"LAUNDRY WORKER",type:"U",c:"Latvia"},
+            {r:"LIFT TECHNICIAN",type:"S",c:"Finland"},
+            {r:"LINER",type:"S",c:"Sweden"},
+            {r:"LOADING UNLOADING WORKERS",type:"U",c:"Poland"},
+            {r:"LOADING/UNLOADING WORKER",type:"U",c:"Serbia"},
+            {r:"LOGISTICS COORDINATOR",type:"S",c:"Netherlands"},
+            {r:"MACHINE OPERATOR",type:"S",c:"Czech Republic"},
+            {r:"MANAGER",type:"S",c:"Germany"},
+            {r:"MASON",type:"S",c:"Croatia"},
+            {r:"MASON / PLASTERER",type:"S",c:"Poland"},
+            {r:"MASON PLASTER / TILES",type:"S",c:"Serbia"},
+            {r:"MECHANICAL DRAUGHTSMAN",type:"S",c:"Sweden"},
+            {r:"MECHANICAL ENGINEER",type:"S",c:"Finland"},
+            {r:"MECHANICAL SUPERVISOR",type:"S",c:"Germany"},
+            {r:"MOBILE CRANE OPERATOR",type:"S",c:"Poland"},
+            {r:"NURSING ASSISTANT",type:"S",c:"Sweden"},
+            {r:"OFFICE ASSISTANT",type:"S",c:"Latvia"},
+            {r:"OFFICE CLERK",type:"S",c:"Croatia"},
+            {r:"OFFICE CLERK / RECEPTIONIST",type:"S",c:"Finland"},
+            {r:"PACKAGING STAFF",type:"U",c:"Poland"},
+            {r:"PACKING HELPER",type:"U",c:"Czech Republic"},
+            {r:"PASTRY CHEF",type:"S",c:"France"},
+            {r:"PICKER / PACKER",type:"U",c:"Netherlands"},
+            {r:"PIZZA CHEF",type:"S",c:"Italy"},
+            {r:"PIZZA MAKERS",type:"S",c:"Finland"},
+            {r:"PLUMBER",type:"S",c:"Germany"},
+            {r:"POULTRY FARM HAND",type:"U",c:"Poland"},
+            {r:"POULTRY FARM SUPERVISOR",type:"S",c:"Netherlands"},
+            {r:"POULTRY FARM WORKER",type:"U",c:"Latvia"},
+            {r:"POULTRY YARD CLEANER",type:"U",c:"Serbia"},
+            {r:"PROCUREMENT / PURCHASE ASSISTANT",type:"S",c:"Germany"},
+            {r:"PRODUCTION LINE WORKER",type:"U",c:"Czech Republic"},
+            {r:"PROFESSIONAL COOK",type:"S",c:"France"},
+            {r:"PROJECT COORDINATOR",type:"S",c:"Sweden"},
+            {r:"PUMP MOTOR MECHANIC",type:"S",c:"Croatia"},
+            {r:"QUALITY CONTROL (QC)",type:"S",c:"Germany"},
+            {r:"RADIOLOGY X-RAY TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"RCC FITTER",type:"S",c:"Poland"},
+            {r:"RESTAURANT SUPERVISOR",type:"S",c:"Finland"},
+            {r:"RO WATER TECHNICIAN",type:"S",c:"Latvia"},
+            {r:"ROLLER OPERATOR",type:"S",c:"Serbia"},
+            {r:"SAFETY ENGINEER",type:"S",c:"Sweden"},
+            {r:"SALES & MARKETING EXEC",type:"S",c:"Netherlands"},
+            {r:"SALES & MARKETING EXECUTIVE",type:"S",c:"Finland"},
+            {r:"SALES SUPERVISOR",type:"S",c:"Germany"},
+            {r:"SALES WORKERS",type:"S",c:"Croatia"},
+            {r:"SALES WORKERS (DUTY-FREE)",type:"S",c:"Italy"},
+            {r:"SCAFFOLDER",type:"S",c:"Poland"},
+            {r:"SECRETARY / PERSONAL ASSISTANT",type:"S",c:"Latvia"},
+            {r:"SECURITY GUARD",type:"S",c:"Finland"},
+            {r:"SOFTWARE DEVELOPER",type:"S",c:"Netherlands"},
+            {r:"SOUS CHEF",type:"S",c:"France"},
+            {r:"SPECIALIST DOCTOR",type:"S",c:"Germany"},
+            {r:"SPRAY PAINTER",type:"S",c:"Czech Republic"},
+            {r:"SPRAYER MECHANIC",type:"S",c:"Poland"},
+            {r:"SPRAYER OPERATOR",type:"S",c:"Serbia"},
+            {r:"STAFF BUS DRIVER / HEAVY DUTY",type:"S",c:"Sweden"},
+            {r:"STAFF BUS DRIVER HEAD DUTY",type:"S",c:"Finland"},
+            {r:"STEEL FIXER",type:"S",c:"Poland"},
+            {r:"STEWARD",type:"U",c:"Italy"},
+            {r:"STEWARD SUPERVISOR",type:"S",c:"Croatia"},
+            {r:"STEWARDS",type:"U",c:"Latvia"},
+            {r:"STORE KEEPER",type:"U",c:"Serbia"},
+            {r:"STORE SUPERVISOR",type:"S",c:"Germany"},
+            {r:"SWEEPER",type:"U",c:"Finland"},
+            {r:"SYSTEM ENGINEER",type:"S",c:"Netherlands"},
+            {r:"SYSTEM OPERATOR",type:"S",c:"Sweden"},
+            {r:"SYSTEM SERVICE ENGINEER",type:"S",c:"Germany"},
+            {r:"TAILOR",type:"S",c:"Italy"},
+            {r:"TAILOR CUTTING MASTER",type:"S",c:"Croatia"},
+            {r:"TANKER DRIVER / HEAVY DUTY",type:"S",c:"Poland"},
+            {r:"TANKER DRIVER HEAD DUTY",type:"S",c:"Finland"},
+            {r:"TIME KEEPER",type:"S",c:"Latvia"},
+            {r:"TINKER",type:"S",c:"Serbia"},
+            {r:"TINKER/WELDER",type:"S",c:"Czech Republic"},
+            {r:"TIRE MAN",type:"S",c:"Croatia"},
+            {r:"TOWER CRANE OPERATOR",type:"S",c:"Sweden"},
+            {r:"TRACTOR DRIVER",type:"S",c:"Poland"},
+            {r:"TRANSPORT SUPERVISOR",type:"S",c:"Germany"},
+            {r:"TROLLEY HELPER",type:"U",c:"Finland"},
+            {r:"TRUCK DRIVER",type:"S",c:"Netherlands"},
+            {r:"TRUCK DRIVER (CODE 95)",type:"S",c:"Latvia"},
+            {r:"TV MECHANIC",type:"S",c:"Serbia"},
+            {r:"VETERINARY PHARMACIST",type:"S",c:"Poland"},
+            {r:"VETERINARY TECHNICIAN",type:"S",c:"Croatia"},
+            {r:"WAITER",type:"U",c:"Italy"},
+            {r:"WAITER/WAITRESS",type:"U",c:"France"},
+            {r:"WALL PAINTER",type:"S",c:"Czech Republic"},
+            {r:"WARD ASSISTANT",type:"U",c:"Sweden"},
+            {r:"WAREHOUSE & FACTORY WORKERS",type:"U",c:"Poland"},
+            {r:"WAREHOUSE ASSISTANT",type:"U",c:"Latvia"},
+            {r:"WAREHOUSE PACKER",type:"U",c:"Serbia"},
+            {r:"WAREHOUSE STAFF",type:"U",c:"Finland"},
+            {r:"WATER SERVICE STATION HELPER",type:"U",c:"Croatia"},
+            {r:"WELDER",type:"S",c:"Germany"},
+            {r:"WELDER (CERTIFIED)",type:"S",c:"Poland"},
+            {r:"WELDER / FITTER",type:"S",c:"Czech Republic"},
+            {r:"WORKSHOP HELPER",type:"U",c:"Latvia"}
+        ];
+
+        let currentMode = 'Unskilled';
+        let currentPhoneRegex = null;
+        let selectedTimeSlot = null;
+        let selectedConsultationMode = 'In Person'; // Default
+
+        // INIT
+        window.onload = function() {
+            setSkillMode('Unskilled');
+            populateCountries();
+            document.getElementById('presentResidence').value = "UAE";
+            handleResidenceChange();
+
+            // Default Mode Highlight
+            setConsultationMode('In Person');
+
+            // Date Picker (DOB)
+            flatpickr("#dob", { 
+                dateFormat: "d/m/Y", theme: "airbnb",
+                onChange: function(d) {
+                    if(d.length) {
+                        const age = new Date().getFullYear() - d[0].getFullYear();
+                        document.getElementById('age').value = age;
+                    }
+                }
+            });
+
+            // Date Picker (Appointment) - Inline or attached
+            flatpickr("#appointmentDate", {
+                inline: true,
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                theme: "airbnb",
+                onChange: function(selectedDates, dateStr) {
+                    generateTimeSlots(dateStr);
+                }
+            });
+        };
+
+        // --- CORE FUNCTIONS ---
+        
+        // Mode Selection Logic
+        function setConsultationMode(mode) {
+            selectedConsultationMode = mode;
+            document.getElementById('selectedMode').value = mode;
+
+            // Reset Classes
+            ['modePerson', 'modePhone', 'modeVideo'].forEach(id => {
+                document.getElementById(id).classList.remove('active');
+            });
+
+            // Set Active
+            if(mode === 'In Person') document.getElementById('modePerson').classList.add('active');
+            else if(mode === 'By Phone') document.getElementById('modePhone').classList.add('active');
+            else if(mode === 'Video Call') document.getElementById('modeVideo').classList.add('active');
+        }
+
+        function populateCountries() {
+            const sel = document.getElementById('nationality');
+            const res = document.getElementById('presentResidence');
+            const list = Object.keys(countryRules).sort();
+            
+            // Clear existing options first to prevent duplication if called multiple times
+            sel.innerHTML = '<option value="">Select Nationality</option>';
+            res.innerHTML = '<option value="">Select Residence</option>';
+
+            list.forEach(c => {
+                if(c==='OTHER') return;
+                sel.add(new Option(c, c));
+                res.add(new Option(c, c));
+            });
+            sel.add(new Option("Other", "OTHER"));
+            res.add(new Option("Other", "OTHER"));
+        }
+
+        function handleResidenceChange() {
+            const country = document.getElementById('presentResidence').value;
+            // Default to UAE rules if null, or empty. But logic handles 'OTHER' key fallback.
+            const rule = countryRules[country] || countryRules["OTHER"];
+            currentPhoneRegex = rule.regex;
+            
+            const mob = document.getElementById('mobile');
+            // Pre-fill code only if field is empty or just has old code (heuristic length < 5)
+            if(mob.value.length < 5) mob.value = rule.hint.split(' ')[0] + " ";
+            
+            document.getElementById('mobileHint').innerText = "Format: " + rule.hint;
+            document.getElementById('mobileHint').classList.remove('opacity-0');
+        }
+
+        function enforcePhoneInput(el) {
+            el.value = el.value.replace(/[^0-9+ ]/g, '');
+        }
+
+        function validatePhone(id) {
+            const el = document.getElementById(id);
+            const raw = el.value.replace(/\s/g, '');
+            if(currentPhoneRegex && !currentPhoneRegex.test(raw)) {
+                el.classList.add('invalid-field');
+                el.classList.remove('valid-field');
+            } else {
+                el.classList.remove('invalid-field');
+                el.classList.add('valid-field');
+            }
+        }
+
+        function setSkillMode(mode) {
+            currentMode = mode;
+            document.getElementById('cardUnskilled').classList.remove('active');
+            document.getElementById('cardSkilled').classList.remove('active');
+            document.getElementById('checkUnskilled').querySelector('div').classList.add('hidden');
+            document.getElementById('checkSkilled').querySelector('div').classList.add('hidden');
+
+            if(mode === 'Unskilled') {
+                document.getElementById('cardUnskilled').classList.add('active');
+                document.getElementById('checkUnskilled').querySelector('div').classList.remove('hidden');
+            } else {
+                document.getElementById('cardSkilled').classList.add('active');
+                document.getElementById('checkSkilled').querySelector('div').classList.remove('hidden');
+            }
+            
+            // Repopulate Dropdown using COMPLETE JOB MASTER LIST
+            const sel = document.getElementById('jobRoleSelect');
+            sel.innerHTML = '<option value="">Select Role</option>';
+            
+            const typeCode = mode === 'Unskilled' ? 'U' : 'S';
+            // Extract roles matching type, map to role name, sort alphabetically
+            const roles = jobMasterList.filter(j => j.type === typeCode).map(j => j.r).sort();
+            
+            // Deduplicate if necessary (though current list seems distinct per line, safe to add directly)
+            roles.forEach(r => {
+                sel.add(new Option(r, r));
+            });
+            sel.add(new Option("Other", "Other"));
+        }
+
+        function updateFileName(input) {
+            if(input.files[0]) document.getElementById('fileNameDisplay').innerText = input.files[0].name;
+        }
+
+        // --- TIME SLOT GENERATOR ---
+        function generateTimeSlots(dateStr) {
+            const grid = document.getElementById('timeSlotGrid');
+            grid.innerHTML = '';
+            document.getElementById('noDateMsg').classList.add('hidden');
+            selectedTimeSlot = null;
+
+            // Generate 10:00 AM to 7:00 PM (19:00) in 15 min intervals
+            const startHour = 10;
+            const endHour = 19; 
+            
+            for(let h = startHour; h < endHour; h++) {
+                for(let m = 0; m < 60; m += 15) {
+                    createSlot(h, m, dateStr);
+                }
+            }
+            // Add exactly 7:00 PM
+            createSlot(19, 0, dateStr);
+        }
+
+        function createSlot(h, m, dateStr) {
+            const grid = document.getElementById('timeSlotGrid');
+            const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+            const displayTime = new Date(`2000-01-01T${timeStr}`).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            const label = document.createElement('label');
+            label.className = "time-slot cursor-pointer relative";
+            label.innerHTML = `
+                <input type="radio" name="timeSlot" value="${timeStr}" class="sr-only" onchange="selectTime('${timeStr}')">
+                <div class="px-2 py-3 rounded-xl border border-gray-200 bg-white text-center text-xs font-bold text-slate-600 hover:border-brand-primary transition-all">
+                    ${displayTime}
+                </div>
+            `;
+            grid.appendChild(label);
+        }
+
+        function selectTime(val) {
+            selectedTimeSlot = val;
+        }
+
+        // --- SUBMISSION ---
+        async function bookAppointment() {
+            // Basic Checks
+            const fn = document.getElementById('firstName').value;
+            const ln = document.getElementById('lastName').value;
+            const em = document.getElementById('email').value;
+            const mo = document.getElementById('mobile').value;
+            const role = document.getElementById('jobRoleSelect').value;
+            const date = document.getElementById('appointmentDate').value;
+            const age = parseInt(document.getElementById('age').value);
+
+            if(!fn || !ln || !em || !role) { showModal("Please fill all required fields."); return; }
+            if(isNaN(age) || age < 20) { showModal("Minimum age requirement is 20 years."); return; }
+            if(!date) { showModal("Please select an appointment date."); return; }
+            if(!selectedTimeSlot) { showModal("Please select a time slot."); return; }
+
+            // Validate Phone
+            const cleanPhone = mo.replace(/\s/g, '');
+            if(currentPhoneRegex && !currentPhoneRegex.test(cleanPhone)) {
+                showModal("Invalid Phone Format."); return;
+            }
+
+            // Convert Date to Unix Timestamp (Milliseconds) for ClickUp
+            const dateObj = new Date(date);
+            const dateTimestamp = dateObj.getTime();
+
+            // ClickUp Payload
+            const payload = {
+                name: `${fn} ${ln}`,
+                description: `**APPOINTMENT BOOKING**
+--------------------------------
+**Date:** ${date}
+**Time:** ${selectedTimeSlot}
+**Mode:** ${selectedConsultationMode}
+**Job Role:** ${role} (${currentMode})
+
+**CANDIDATE DETAILS**
+--------------------------------
+**Email:** ${em}
+**Mobile:** ${mo}
+**Age:** ${age}
+**Nationality:** ${document.getElementById('nationality').value}
+**Residence:** ${document.getElementById('presentResidence').value}
+**Qualification:** ${document.getElementById('qualificationSelect').value}
+`,
+                // ADDED CUSTOM FIELDS FOR DATE AND TIME AND MODE
+                custom_fields: [
+                    {
+                        "id": "a4a8197d-eb13-4e90-ad56-d56108137e2e", // DATE OF APPOINTMENT
+                        "value": dateTimestamp
+                    },
+                    {
+                        "id": "584f279f-8f78-4e2b-ac91-ccf2c4e48b00", // TIME
+                        "value": selectedTimeSlot
+                    },
+                    {
+                        "id": "03414f61-a879-4d14-bee0-7186a3de27d5", // CONSULTATION MODE
+                        "value": selectedConsultationMode
+                    }
+                ]
+            };
+
+            const btn = document.getElementById('submitBtn');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+            
+            try {
+                if(CLICKUP_API_KEY && !CLICKUP_API_KEY.includes("pk_12345")) {
+                    const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+                        method: 'POST',
+                        headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if(res.ok) {
+                        const data = await res.json();
+                        // Upload File if exists
+                        const file = document.getElementById('cvFile').files[0];
+                        if(file) {
+                            const formData = new FormData();
+                            formData.append("attachment", file);
+                            formData.append("filename", file.name);
+                            await fetch(`https://api.clickup.com/api/v2/task/${data.id}/attachment`, {
+                                method: 'POST', headers: { 'Authorization': CLICKUP_API_KEY }, body: formData
+                            });
+                        }
+                    } else {
+                        console.error(await res.json());
+                    }
+                }
+                
+                // Success UI
+                document.getElementById('toast').classList.remove('translate-y-32', 'opacity-0');
+                setTimeout(() => location.reload(), 3000);
+
+            } catch(e) {
+                console.error(e);
+                showModal("Connection Error. Please try again.");
+            } finally {
+                btn.innerHTML = '<span>CONFIRM APPOINTMENT</span><i class="fa-solid fa-calendar-check"></i>';
+            }
+        }
+
+        function showModal(msg) {
+            document.getElementById('modalText').innerText = msg;
+            const m = document.getElementById('messageModal');
+            m.classList.remove('hidden');
+            setTimeout(() => { m.classList.remove('opacity-0'); m.children[0].classList.remove('scale-90'); }, 10);
+        }
+        function closeModal() {
+            const m = document.getElementById('messageModal');
+            m.classList.add('opacity-0'); m.children[0].classList.add('scale-90');
+            setTimeout(() => m.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+</html>
