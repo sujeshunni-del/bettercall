@@ -82,178 +82,18 @@
     </script>
 
     <style>
-        /* BASE & BACKGROUND */
-        body {
-            background-color: #f8fafc;
-            color: #1e293b;
-            font-family: 'Outfit', sans-serif;
-            overflow-x: hidden;
-            position: relative;
-        }
+        /* ... existing styles ... */
 
-        /* Ambient Orbs Background (Vibrant Light Theme) */
-        .ambient-light {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            overflow: hidden;
-            background: linear-gradient(135deg, #f0f9ff 0%, #eef2ff 100%);
-        }
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: blob 25s infinite alternate;
-        }
-        .orb-1 { width: 800px; height: 800px; background: #e0e7ff; top: -200px; left: -200px; animation-delay: 0s; mix-blend-mode: multiply;}
-        .orb-2 { width: 600px; height: 600px; background: #dbeafe; bottom: -100px; right: -100px; animation-delay: -5s; mix-blend-mode: multiply;}
-        .orb-3 { width: 500px; height: 500px; background: #fae8ff; top: 30%; right: 20%; animation-delay: -10s; opacity: 0.5; mix-blend-mode: multiply;}
-
-        /* GLASSMORPHISM PANEL (Clean Pro) */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-            position: relative;
-        }
-
-        /* INPUTS (Clean White - Uniform) */
-        .form-input, .date-input-container, .geo-input {
-            height: 3.5rem; /* Uniform Height */
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            color: #1e293b;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            border-radius: 0.75rem;
-            width: 100%;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 600;
-        }
-        .form-input::placeholder, .date-input-container input::placeholder { color: #94a3b8; font-weight: 400; }
-        
-        .form-input:hover, .date-input-container:hover, .geo-input:hover {
-            border-color: #cbd5e1;
-            background: #f8fafc;
-        }
-        .form-input:focus, .geo-input:focus {
-            border-color: #2563eb;
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-            outline: none;
-        }
-
-        /* Specific Date Input Fixes */
-        .date-input-container {
+        /* CONFIRMATION MODAL */
+        #confirmModal { backdrop-filter: blur(8px); }
+        .summary-row {
             display: flex;
-            align-items: center;
-            overflow: hidden;
-            padding: 0;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
         }
-        .date-input-container:hover { border-color: #cbd5e1; }
-        .date-input-container:focus-within {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-        }
-        .date-icon-box {
-            padding: 0 1.25rem;
-            color: #7c3aed;
-            background: #f5f3ff;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            border-right: 1px solid #ede9fe;
-        }
-        .date-input-container input {
-            background: transparent;
-            border: none;
-            color: #1e293b;
-            width: 100%;
-            padding: 0 1rem;
-            height: 100%;
-            outline: none;
-            font-weight: 600;
-        }
-
-        /* DROPDOWN ARROW FIX */
-        select.geo-input {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 1rem center;
-            background-repeat: no-repeat;
-            background-size: 1.5em 1.5em;
-            padding-right: 2.5rem;
-        }
-
-        /* UTILS */
-        .uppercase-input { text-transform: uppercase; }
-        .valid-field { border-color: #10b981 !important; background-color: #ecfdf5 !important; }
-        .invalid-field { border-color: #f43f5e !important; background-color: #fff1f2 !important; }
-
-        /* CATEGORY CARDS */
-        .category-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-        .category-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
-            border-color: #2563eb;
-        }
-        .category-card.active {
-            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
-            border-color: #2563eb;
-            box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.15);
-            position: relative;
-        }
-        .category-card.active::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 1.5rem;
-            border: 2px solid #2563eb;
-            pointer-events: none;
-        }
-
-        /* DROPDOWN SCROLLBAR */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
-        /* BUTTON GRADIENTS */
-        .btn-gradient {
-            background-size: 200% auto;
-            background-image: linear-gradient(to right, #2563eb 0%, #7c3aed 51%, #2563eb 100%);
-            transition: 0.5s;
-        }
-        .btn-gradient:hover { background-position: right center; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4); }
-
-        /* CUSTOM MODAL */
-        #messageModal { backdrop-filter: blur(8px); }
-        .modal-content {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-        }
-        
-        /* FILE UPLOAD ZONE */
-        .upload-zone {
-            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23CBD5E1FF' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
-            transition: all 0.3s ease;
-        }
-        .upload-zone:hover {
-            background-color: #eff6ff;
-            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%232563EB' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
-        }
+        .summary-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
+        .summary-value { font-size: 0.9rem; color: #1e293b; font-weight: 600; text-align: right; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -596,17 +436,18 @@
 
                         <!-- EXPERIENCE -->
                         <div id="experienceWrapper" class="hidden animate-pop-in">
-                            <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">Years of Experience</label>
-                            <div class="relative">
-                                <input type="number" id="experience" min="1" max="30" value="1" class="form-input w-full rounded-xl px-5 py-4 font-bold text-lg" placeholder="Min 1" onblur="validateExperienceInput(this)">
-                                <div class="absolute right-5 top-1/2 -translate-y-1/2 text-xs text-brand-secondary font-black tracking-widest">YEARS</div>
-                            </div>
-                        </div>
+                        <!-- BUTTONS ROW -->
+                        <div class="md:col-span-2 flex justify-between items-center mt-4 gap-4">
+                             <!-- Back Button -->
+                             <button type="button" onclick="goBackToStep1()" class="text-slate-400 font-bold py-4 px-6 rounded-xl hover:text-slate-600 transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-left-long"></i>
+                                <span class="tracking-wider">BACK</span>
+                            </button>
 
-                        <div class="md:col-span-2 flex justify-end mt-4">
-                             <button type="button" onclick="generateReport()" class="w-full md:w-auto btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group">
-                                <i class="fa-solid fa-wand-magic-sparkles group-hover:rotate-12 transition-transform"></i> 
-                                <span>GENERATE ANALYSIS</span>
+                             <!-- Proceed Button (Triggers Confirmation) -->
+                             <button type="button" onclick="initiateAnalysis()" class="flex-grow md:flex-grow-0 btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group">
+                                <i class="fa-solid fa-clipboard-check group-hover:scale-110 transition-transform"></i> 
+                                <span>REVIEW & ANALYZE</span>
                             </button>
                         </div>
                     </div>
@@ -614,6 +455,13 @@
 
                 <!-- 3. REPORT DASHBOARD (Redesigned Professional Reality) -->
                 <div id="reportContainer" class="hidden max-w-5xl mx-auto">
+                    <!-- Back Button for Report -->
+                    <div class="mb-4">
+                        <button onclick="closeReport()" class="text-slate-400 hover:text-brand-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-colors">
+                            <i class="fa-solid fa-arrow-left"></i> Modify Inputs
+                        </button>
+                    </div>
+
                     <div class="glass-panel p-1 rounded-3xl animate-slide-up-fade">
                         <div class="bg-white rounded-[22px] p-8 md:p-12 relative overflow-hidden shadow-sm">
                              <!-- Top decorative bar -->
@@ -758,35 +606,40 @@
     </main>
     
     <footer class="border-t border-gray-200/60 bg-white/50 py-8 mt-auto backdrop-blur-sm relative z-10">
-        <div class="max-w-7xl mx-auto px-4 text-center">
+    <!-- Custom Modal for Errors -->
             <p class="text-slate-400 text-xs">© 2024 Better Call Immigration. Designed for the Future.</p>
-        </div>
-    </footer>
+    <!-- NEW CONFIRMATION MODAL -->
+    <div id="confirmModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/60 opacity-0 transition-opacity duration-300">
+        <div class="modal-content w-full max-w-md rounded-2xl p-0 transform scale-90 transition-transform duration-300 overflow-hidden bg-white shadow-2xl">
+            
+            <!-- Header -->
+            <div class="bg-slate-50 p-6 border-b border-gray-100 flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-black text-slate-900">Confirm Details</h3>
+                    <p class="text-slate-500 text-xs font-medium mt-1">Please verify your information before analysis.</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-blue-100 text-brand-primary flex items-center justify-center">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-8 right-8 transform translate-y-32 opacity-0 transition-all duration-500 z-50">
-        <div class="glass-panel border-l-4 border-brand-primary text-slate-800 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 bg-white">
-            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-brand-primary">
-                <i class="fa-solid fa-check"></i>
+            <!-- Summary Body -->
+            <div class="p-6">
+                <div class="space-y-1" id="summaryContent">
+                    <!-- JS Injected -->
+                </div>
             </div>
-            <div>
-                <h4 class="font-bold text-sm">Success</h4>
-                <span class="text-xs text-slate-500" id="toastMsg">Assessment Saved Securely</span>
-            </div>
-        </div>
-    </div>
 
-    <!-- Custom Modal for Errors (Replaces Alert) -->
-    <div id="messageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/40 opacity-0 transition-opacity duration-300">
-        <div class="modal-content w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center">
-            <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
-                <i class="fa-solid fa-circle-exclamation"></i>
+            <!-- Footer Actions -->
+            <div class="p-4 bg-slate-50 border-t border-gray-100 flex gap-3">
+                <button onclick="closeConfirmModal()" class="w-1/3 py-3 rounded-xl border border-gray-200 text-slate-500 font-bold hover:bg-white hover:border-gray-300 transition-all text-sm">
+                    EDIT
+                </button>
+                <button onclick="confirmAndGenerate()" class="w-2/3 btn-gradient text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-2 text-sm">
+                    <span>CONFIRM & GENERATE</span>
+                    <i class="fa-solid fa-bolt"></i>
+                </button>
             </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2">Attention Needed</h3>
-            <p id="modalText" class="text-slate-500 text-sm mb-6">Please check your inputs.</p>
-            <button onclick="closeModal()" class="w-full bg-brand-accent hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
-                UNDERSTOOD
-            </button>
         </div>
     </div>
 
@@ -2023,6 +1876,236 @@
             t.classList.remove('translate-y-32','opacity-0');
             setTimeout(() => t.classList.add('translate-y-32','opacity-0'), 3000);
         }
+    </script>
+</body>
+</html>
+
+
+        // ... existing functions ...
+
+        // --- NAVIGATION LOGIC ---
+
+        function goToStep2() {
+            // ... existing validation code ...
+            const age = parseInt(document.getElementById('age').value);
+            if(isNaN(age) || age < 20 || age > 50) { 
+                const ageField = document.getElementById('age');
+                ageField.classList.add('invalid-field', 'animate-pulse');
+                setTimeout(() => ageField.classList.remove('animate-pulse'), 500);
+                showModal("Sorry, you are not eligible for the immigration process. (Age requirement: 20-50)"); 
+                return; 
+            }
+            
+            // STRICT PHONE VALIDATION CHECK BEFORE NEXT
+            const mEl = document.getElementById('mobile');
+            // Check regex against cleaned value (no spaces)
+            const rawVal = mEl.value.replace(/\s/g, '');
+            
+            if(currentPhoneRegex && !currentPhoneRegex.test(rawVal)) {
+                mEl.classList.add('invalid-field');
+                const btn = document.getElementById('nextBtn');
+                btn.classList.add('animate-shake');
+                setTimeout(() => btn.classList.remove('animate-shake'), 500);
+                document.getElementById('mobileError').classList.remove('hidden');
+                
+                const sel = document.getElementById('presentResidence');
+                const rule = countryRules[sel.value] || countryRules["OTHER"];
+                showModal(`Invalid Mobile Number Format.\n\nPlease follow the format for ${sel.value}:\n${rule.hint}`);
+                return;
+            }
+
+            if(!document.getElementById('personalForm').checkValidity()) {
+                document.getElementById('personalForm').reportValidity(); return;
+            }
+
+            document.getElementById('tab-1').classList.add('hidden');
+            document.getElementById('tab-2').classList.remove('hidden');
+            
+            // Visual Update for Steps
+            updateSteps(2);
+
+            const name = document.getElementById('firstName').value + " " + document.getElementById('lastName').value;
+            document.getElementById('reportName').innerText = name;
+            document.getElementById('avatarInitial').innerText = name.charAt(0);
+            
+            const today = new Date();
+            document.getElementById('reportDate').innerText = today.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function goBackToStep1() {
+            document.getElementById('tab-2').classList.add('hidden');
+            document.getElementById('tab-1').classList.remove('hidden');
+            updateSteps(1);
+        }
+
+        function updateSteps(step) {
+            const s1 = document.getElementById('step-1-indicator');
+            const s2 = document.getElementById('step-2-indicator');
+            
+            if (step === 2) {
+                s1.classList.add('opacity-40', 'grayscale');
+                s2.classList.remove('opacity-40', 'grayscale');
+                s2.querySelector('div').classList.add('border-brand-primary', 'text-brand-primary');
+                s2.querySelector('div').classList.remove('border-gray-200', 'text-gray-400');
+                s2.querySelector('span').classList.add('text-brand-primary');
+            } else {
+                s1.classList.remove('opacity-40', 'grayscale');
+                s2.classList.add('opacity-40', 'grayscale');
+                s2.querySelector('div').classList.remove('border-brand-primary', 'text-brand-primary');
+                s2.querySelector('div').classList.add('border-gray-200', 'text-gray-400');
+                s2.querySelector('span').classList.remove('text-brand-primary');
+            }
+        }
+
+        // --- CONFIRMATION & GENERATION LOGIC ---
+
+        function initiateAnalysis() {
+            const role = document.getElementById('currentJob').value;
+            if(!role) { showModal("Please select a target position to continue."); return; }
+
+            const expEl = document.getElementById('experience');
+            if(currentMode === 'Skilled') {
+                let val = parseInt(expEl.value);
+                if(isNaN(val) || val < 1) { showModal("Minimum 1 year of professional experience is required for Skilled Migration."); return; }
+                if(val > 30) { showModal("Experience cannot exceed 30 years."); return; }
+            }
+
+            // Populate Summary
+            const summaryHTML = `
+                <div class="summary-row">
+                    <span class="summary-label">Full Name</span>
+                    <span class="summary-value">${document.getElementById('firstName').value} ${document.getElementById('lastName').value}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Mobile</span>
+                    <span class="summary-value">${document.getElementById('mobile').value}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Residence</span>
+                    <span class="summary-value">${document.getElementById('presentResidence').value}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Job Role</span>
+                    <span class="summary-value text-brand-primary">${role}</span>
+                </div>
+                <div class="summary-row" style="border: none;">
+                    <span class="summary-label">Category</span>
+                    <span class="summary-value">${currentMode} (${currentMode === 'Skilled' ? document.getElementById('experience').value + ' Years' : 'Entry Level'})</span>
+                </div>
+            `;
+            
+            document.getElementById('summaryContent').innerHTML = summaryHTML;
+            
+            // Show Modal
+            const m = document.getElementById('confirmModal');
+            m.classList.remove('hidden');
+            setTimeout(() => {
+                m.classList.remove('opacity-0');
+                m.querySelector('.modal-content').classList.remove('scale-90');
+                m.querySelector('.modal-content').classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeConfirmModal() {
+            const m = document.getElementById('confirmModal');
+            m.classList.add('opacity-0');
+            m.querySelector('.modal-content').classList.add('scale-90');
+            m.querySelector('.modal-content').classList.remove('scale-100');
+            setTimeout(() => { m.classList.add('hidden'); }, 300);
+        }
+
+        function confirmAndGenerate() {
+            closeConfirmModal();
+            // Proceed to generation
+            generateReport();
+        }
+
+        function generateReport() {
+            // Already validated in initiateAnalysis
+            const role = document.getElementById('currentJob').value;
+            const expEl = document.getElementById('experience');
+            // Get Qualification
+            const qual = document.querySelector('input[name="qualification"]:checked').value;
+
+            document.getElementById('reportContainer').classList.remove('hidden');
+            setTimeout(() => { document.getElementById('reportContainer').scrollIntoView({ behavior: 'smooth' }); }, 100);
+
+            // ... existing report generation logic ...
+            const jobData = jobMasterList.find(j => j.r === role);
+            
+            // Populate Data
+            document.getElementById('topMatchCountry').innerText = jobData.c;
+            document.getElementById('reportRole').innerText = role;
+            document.getElementById('reportQualification').innerText = qual;
+            
+            if(document.getElementById('topMatchRole_2')) {
+                document.getElementById('topMatchRole_2').innerText = role;
+            }
+            
+            const salaryText = getSalary(jobData.c, currentMode);
+            document.getElementById('mainSalaryRange').innerText = salaryText;
+
+            const mainBtn = document.getElementById('mainActionBtn');
+            const targetPage = countryPageMap[jobData.c];
+            const targetUrl = targetPage ? targetPage : 'https://bettercallimmigration.com/appointment';
+            mainBtn.onclick = function() {
+                 window.open(targetUrl, '_blank');
+            };
+            
+            const reasoning = document.getElementById('aiReasoning');
+            let exp = "0";
+            if(currentMode === 'Unskilled') {
+                reasoning.innerText = `Based on current labor shortages in the ${jobData.c} general labor market, candidates applying for ${role} have a high success rate. No specific experience verification is typically required for this visa category, making it an excellent entry-level pathway for global mobility.`;
+                document.getElementById('reportExp').innerText = "Entry Level";
+            } else {
+                exp = document.getElementById('experience').value;
+                reasoning.innerText = `With ${exp} years of specialized experience as a ${role}, you meet the skilled migration criteria for ${jobData.c}. This pathway offers long-term residency options for qualified professionals in your sector, with high demand noted in major industrial regions.`;
+                document.getElementById('reportExp').innerText = exp + " Years";
+            }
+
+            // Generate Alternatives
+            const grid = document.getElementById('altMatchesGrid');
+            grid.innerHTML = '';
+            const others = jobMasterList.filter(j => j.type === jobData.type && j.c !== jobData.c).sort(() => 0.5 - Math.random()).slice(0, 3);
+            
+            currentAlternatives = others;
+
+            others.forEach(o => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-gray-100 hover:bg-white hover:border-brand-primary/30 transition-all cursor-pointer group shadow-sm hover:shadow-md";
+                
+                const altTargetPage = countryPageMap[o.c];
+                const altTargetUrl = altTargetPage ? altTargetPage : 'https://bettercallimmigration.com/appointment';
+                div.onclick = function() { window.open(altTargetUrl, '_blank'); };
+
+                const altSal = getSalary(o.c, currentMode);
+
+                div.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-xl">${getFlag(o.c)}</div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold text-slate-700 group-hover:text-brand-primary transition tracking-wide">${o.c}</div>
+                                <div class="text-[10px] text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded border border-green-100">${altSal}</div>
+                            </div>
+                            <div class="text-[10px] text-slate-400 uppercase font-medium mt-1">${o.r}</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs group-hover:text-brand-primary transition-colors ml-2"></i>
+                `;
+                grid.appendChild(div);
+            });
+
+            saveData();
+        }
+
+        function closeReport() {
+            document.getElementById('reportContainer').classList.add('hidden');
+            // Optionally scroll back up to the form
+            document.getElementById('jobDetailsPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ... rest of existing code ...
     </script>
 </body>
 </html>
