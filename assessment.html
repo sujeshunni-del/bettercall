@@ -1069,114 +1069,116 @@
             {r:"WORKSHOP HELPER",type:"U",c:"Latvia"}
         ];
 
-        // --- NEW PHONE RULES (COMPREHENSIVE) ---
+        // --- FIXED E.164 COMPLIANT REGEX RULES ---
+        // Crucial for ClickUp API Validation
         const countryRules = {
-            "AFGHANISTAN": { regex: /^(\+93)\d{9}$/, hint: "+93 123456789" },
-            "ALGERIA": { regex: /^(\+213)\d{8,9}$/, hint: "+213 123456789" },
-            "ANGOLA": { regex: /^(\+244)\d{9}$/, hint: "+244 123456789" },
-            "ARMENIA": { regex: /^(\+374)\d{6,8}$/, hint: "+374 12345678" },
-            "AZERBAIJAN": { regex: /^(\+994)\d{9,10}$/, hint: "+994 123456789" },
-            "BAHRAIN": { regex: /^(\+973)\d{8}$/, hint: "+973 12345678" },
-            "BANGLADESH": { regex: /^(\+880)1\d{9}$/, hint: "+880 1712345678" },
-            "BENIN": { regex: /^(\+229)\d{8}$/, hint: "+229 12345678" },
-            "BHUTAN": { regex: /^(\+975)\d{7,8}$/, hint: "+975 17123456" },
-            "BOTSWANA": { regex: /^(\+267)\d{7,8}$/, hint: "+267 1234567" },
-            "BRUNEI": { regex: /^(\+673)\d{7}$/, hint: "+673 1234567" },
-            "BURKINA FASO": { regex: /^(\+226)\d{8}$/, hint: "+226 12345678" },
-            "BURUNDI": { regex: /^(\+257)\d{8}$/, hint: "+257 12345678" },
-            "CAMBODIA": { regex: /^(\+855)\d{8,9}$/, hint: "+855 123456789" },
-            "CAMEROON": { regex: /^(\+237)\d{8,9}$/, hint: "+237 123456789" },
-            "CAPE VERDE": { regex: /^(\+238)\d{7}$/, hint: "+238 1234567" },
-            "CENTRAL AFRICAN REPUBLIC": { regex: /^(\+236)\d{8}$/, hint: "+236 12345678" },
-            "CHAD": { regex: /^(\+235)\d{8}$/, hint: "+235 12345678" },
-            "CHINA": { regex: /^(\+86)\d{9,11}$/, hint: "+86 13800138000" },
-            "COMOROS": { regex: /^(\+269)\d{7}$/, hint: "+269 1234567" },
-            "CONGO (DRC)": { regex: /^(\+243)\d{9}$/, hint: "+243 123456789" },
-            "CONGO (REPUBLIC)": { regex: /^(\+242)\d{7,9}$/, hint: "+242 123456789" },
-            "CYPRUS": { regex: /^(\+357)\d{8}$/, hint: "+357 12345678" },
-            "DJIBOUTI": { regex: /^(\+253)\d{8}$/, hint: "+253 12345678" },
-            "EGYPT": { regex: /^(\+20)[1][0,1,2,5]\d{8}$/, hint: "+20 1012345678" },
-            "EQUATORIAL GUINEA": { regex: /^(\+240)\d{9}$/, hint: "+240 123456789" },
-            "ERITREA": { regex: /^(\+291)\d{7}$/, hint: "+291 1234567" },
-            "ESWATINI": { regex: /^(\+268)\d{8}$/, hint: "+268 12345678" },
-            "ETHIOPIA": { regex: /^(\+251)\d{9}$/, hint: "+251 123456789" },
-            "GABON": { regex: /^(\+241)\d{7,8}$/, hint: "+241 12345678" },
-            "GAMBIA": { regex: /^(\+220)\d{7}$/, hint: "+220 1234567" },
-            "GEORGIA": { regex: /^(\+995)\d{8,9}$/, hint: "+995 123456789" },
-            "GHANA": { regex: /^(\+233)\d{9}$/, hint: "+233 123456789" },
-            "GUINEA": { regex: /^(\+224)\d{8,9}$/, hint: "+224 123456789" },
-            "GUINEA-BISSAU": { regex: /^(\+245)\d{7}$/, hint: "+245 1234567" },
-            "HONG KONG": { regex: /^(\+852)\d{8}$/, hint: "+852 12345678" },
-            "INDIA": { regex: /^(\+91)[6-9]\d{9}$/, hint: "+91 9876543210" },
-            "INDONESIA": { regex: /^(\+62)\d{9,11}$/, hint: "+62 8123456789" },
-            "IRAN": { regex: /^(\+98)\d{10}$/, hint: "+98 9123456789" },
-            "IRAQ": { regex: /^(\+964)\d{9,10}$/, hint: "+964 7501234567" },
-            "ISRAEL": { regex: /^(\+972)\d{8,9}$/, hint: "+972 501234567" },
-            "IVORY COAST": { regex: /^(\+225)\d{8,10}$/, hint: "+225 01234567" },
-            "JAPAN": { regex: /^(\+81)\d{9,10}$/, hint: "+81 9012345678" },
-            "JORDAN": { regex: /^(\+962)\d{8,9}$/, hint: "+962 791234567" },
-            "KAZAKHSTAN": { regex: /^(\+7)\d{10}$/, hint: "+7 7012345678" },
-            "KENYA": { regex: /^(\+254)\d{9}$/, hint: "+254 712345678" },
-            "KUWAIT": { regex: /^(\+965)\d{8}$/, hint: "+965 12345678" },
-            "KYRGYZSTAN": { regex: /^(\+996)\d{9}$/, hint: "+996 555123456" },
-            "LAOS": { regex: /^(\+856)\d{9}$/, hint: "+856 2012345678" },
-            "LEBANON": { regex: /^(\+961)\d{7,8}$/, hint: "+961 3123456" },
-            "LESOTHO": { regex: /^(\+266)\d{8}$/, hint: "+266 12345678" },
-            "LIBERIA": { regex: /^(\+231)\d{7,8}$/, hint: "+231 77123456" },
-            "LIBYA": { regex: /^(\+218)\d{8,9}$/, hint: "+218 911234567" },
-            "MACAU": { regex: /^(\+853)\d{8}$/, hint: "+853 66123456" },
-            "MADAGASCAR": { regex: /^(\+261)\d{9}$/, hint: "+261 341234567" },
-            "MALAWI": { regex: /^(\+265)\d{9}$/, hint: "+265 881234567" },
-            "MALAYSIA": { regex: /^(\+60)\d{8,10}$/, hint: "+60 123456789" },
-            "MALDIVES": { regex: /^(\+960)\d{7}$/, hint: "+960 7123456" },
-            "MALI": { regex: /^(\+223)\d{8}$/, hint: "+223 12345678" },
-            "MAURITANIA": { regex: /^(\+222)\d{8}$/, hint: "+222 12345678" },
-            "MAURITIUS": { regex: /^(\+230)\d{7,8}$/, hint: "+230 51234567" },
-            "MONGOLIA": { regex: /^(\+976)\d{8}$/, hint: "+976 99123456" },
-            "MOROCCO": { regex: /^(\+212)\d{9}$/, hint: "+212 612345678" },
-            "MOZAMBIQUE": { regex: /^(\+258)\d{8,9}$/, hint: "+258 841234567" },
-            "MYANMAR (BURMA)": { regex: /^(\+95)\d{7,10}$/, hint: "+95 912345678" },
-            "NAMIBIA": { regex: /^(\+264)\d{8}$/, hint: "+264 811234567" },
-            "NEPAL": { regex: /^(\+977)(97|98)\d{8}$/, hint: "+977 9812345678" },
-            "NIGER": { regex: /^(\+227)\d{8}$/, hint: "+227 99123456" },
-            "NIGERIA": { regex: /^(\+234)\d{10}$/, hint: "+234 8012345678" },
-            "NORTH KOREA": { regex: /^(\+850)\d{6,10}$/, hint: "+850 191234567" },
-            "OMAN": { regex: /^(\+968)\d{8}$/, hint: "+968 91234567" },
-            "PAKISTAN": { regex: /^(\+92)3\d{2}\d{7}$/, hint: "+92 3001234567" },
-            "PALESTINE": { regex: /^(\+970|\+972)\d{8,9}$/, hint: "+970 591234567" },
-            "PHILIPPINES": { regex: /^(\+63)9\d{9}$/, hint: "+63 9123456789" },
-            "QATAR": { regex: /^(\+974)\d{8}$/, hint: "+974 33123456" },
-            "RWANDA": { regex: /^(\+250)\d{9}$/, hint: "+250 781234567" },
-            "SAO TOME & PRINCIPE": { regex: /^(\+239)\d{7}$/, hint: "+239 9912345" },
-            "SAUDI ARABIA": { regex: /^(\+966)\d{9}$/, hint: "+966 501234567" },
-            "SENEGAL": { regex: /^(\+221)\d{8}$/, hint: "+221 771234567" },
-            "SEYCHELLES": { regex: /^(\+248)\d{7}$/, hint: "+248 2123456" },
-            "SIERRA LEONE": { regex: /^(\+232)\d{8}$/, hint: "+232 76123456" },
-            "SINGAPORE": { regex: /^(\+65)\d{8}$/, hint: "+65 81234567" },
-            "SOMALIA": { regex: /^(\+252)\d{7,9}$/, hint: "+252 612345678" },
-            "SOUTH AFRICA": { regex: /^(\+27)\d{9}$/, hint: "+27 821234567" },
-            "SOUTH KOREA": { regex: /^(\+82)\d{8,9}$/, hint: "+82 1012345678" },
-            "SOUTH SUDAN": { regex: /^(\+211)\d{7,9}$/, hint: "+211 912345678" },
-            "SRI LANKA": { regex: /^(\+94)7\d{8}$/, hint: "+94 771234567" },
-            "SUDAN": { regex: /^(\+249)\d{9}$/, hint: "+249 912345678" },
-            "SYRIA": { regex: /^(\+963)\d{8,9}$/, hint: "+963 931234567" },
-            "TAIWAN": { regex: /^(\+886)\d{9}$/, hint: "+886 912345678" },
-            "TAJIKISTAN": { regex: /^(\+992)\d{9}$/, hint: "+992 901234567" },
-            "TANZANIA": { regex: /^(\+255)\d{9}$/, hint: "+255 712345678" },
-            "THAILAND": { regex: /^(\+66)\d{8,9}$/, hint: "+66 812345678" },
-            "TIMOR-LESTE": { regex: /^(\+670)\d{7}$/, hint: "+670 77123456" },
-            "TOGO": { regex: /^(\+228)\d{8}$/, hint: "+228 90123456" },
-            "TUNISIA": { regex: /^(\+216)\d{8}$/, hint: "+216 20123456" },
-            "TURKEY": { regex: /^(\+90)\d{10}$/, hint: "+90 5321234567" },
-            "TURKMENISTAN": { regex: /^(\+993)\d{8}$/, hint: "+993 61234567" },
-            "UAE": { regex: /^(\+971)\d{8,9}$/, hint: "+971 501234567" },
-            "UGANDA": { regex: /^(\+256)\d{9}$/, hint: "+256 771234567" },
-            "UZBEKISTAN": { regex: /^(\+998)\d{9}$/, hint: "+998 901234567" },
-            "VIETNAM": { regex: /^(\+84)\d{8,9}$/, hint: "+84 901234567" },
-            "YEMEN": { regex: /^(\+967)\d{7,9}$/, hint: "+967 712345678" },
-            "ZAMBIA": { regex: /^(\+260)\d{9}$/, hint: "+260 971234567" },
-            "ZIMBABWE": { regex: /^(\+263)\d{9,10}$/, hint: "+263 771234567" },
-            "OTHER": { regex: /^\+?\d{8,15}$/, hint: "+" }
+            "AFGHANISTAN": { regex: /^\+93\d{9}$/, hint: "+93 700123456" },
+            "ALBANIA": { regex: /^\+355\d{8,9}$/, hint: "+355 691234567" },
+            "ALGERIA": { regex: /^\+213\d{9}$/, hint: "+213 555123456" },
+            "ANGOLA": { regex: /^\+244\d{9}$/, hint: "+244 923123456" },
+            "ARMENIA": { regex: /^\+374\d{8}$/, hint: "+374 91123456" },
+            "AZERBAIJAN": { regex: /^\+994\d{9}$/, hint: "+994 501234567" },
+            "BAHRAIN": { regex: /^\+973\d{8}$/, hint: "+973 39123456" },
+            "BANGLADESH": { regex: /^\+8801\d{9}$/, hint: "+880 1712345678" },
+            "BENIN": { regex: /^\+229\d{8}$/, hint: "+229 97123456" },
+            "BHUTAN": { regex: /^\+975\d{8}$/, hint: "+975 17123456" },
+            "BOTSWANA": { regex: /^\+267\d{8}$/, hint: "+267 72123456" },
+            "BRUNEI": { regex: /^\+673\d{7}$/, hint: "+673 8123456" },
+            "BURKINA FASO": { regex: /^\+226\d{8}$/, hint: "+226 70123456" },
+            "BURUNDI": { regex: /^\+257\d{8}$/, hint: "+257 79123456" },
+            "CAMBODIA": { regex: /^\+855\d{8,9}$/, hint: "+855 12345678" },
+            "CAMEROON": { regex: /^\+237\d{9}$/, hint: "+237 671234567" },
+            "CAPE VERDE": { regex: /^\+238\d{7}$/, hint: "+238 9912345" },
+            "CENTRAL AFRICAN REPUBLIC": { regex: /^\+236\d{8}$/, hint: "+236 75123456" },
+            "CHAD": { regex: /^\+235\d{8}$/, hint: "+235 66123456" },
+            "CHINA": { regex: /^\+861\d{10}$/, hint: "+86 13912345678" },
+            "COMOROS": { regex: /^\+269\d{7}$/, hint: "+269 3312345" },
+            "CONGO (DRC)": { regex: /^\+243\d{9}$/, hint: "+243 811234567" },
+            "CONGO (REPUBLIC)": { regex: /^\+242\d{9}$/, hint: "+242 061234567" },
+            "CYPRUS": { regex: /^\+357\d{8}$/, hint: "+357 99123456" },
+            "DJIBOUTI": { regex: /^\+253\d{8}$/, hint: "+253 77123456" },
+            "EGYPT": { regex: /^\+201\d{9}$/, hint: "+20 1012345678" },
+            "EQUATORIAL GUINEA": { regex: /^\+240\d{9}$/, hint: "+240 222123456" },
+            "ERITREA": { regex: /^\+291\d{7}$/, hint: "+291 7123456" },
+            "ESWATINI": { regex: /^\+268\d{8}$/, hint: "+268 76123456" },
+            "ETHIOPIA": { regex: /^\+251\d{9}$/, hint: "+251 911234567" },
+            "GABON": { regex: /^\+241\d{7,8}$/, hint: "+241 07123456" },
+            "GAMBIA": { regex: /^\+220\d{7}$/, hint: "+220 7123456" },
+            "GEORGIA": { regex: /^\+995\d{9}$/, hint: "+995 599123456" },
+            "GHANA": { regex: /^\+233\d{9}$/, hint: "+233 241234567" },
+            "GUINEA": { regex: /^\+224\d{9}$/, hint: "+224 621234567" },
+            "GUINEA-BISSAU": { regex: /^\+245\d{9}$/, hint: "+245 961234567" },
+            "HONG KONG": { regex: /^\+852\d{8}$/, hint: "+852 91234567" },
+            "INDIA": { regex: /^\+91[6-9]\d{9}$/, hint: "+91 9876543210" },
+            "INDONESIA": { regex: /^\+628\d{9,11}$/, hint: "+62 8123456789" },
+            "IRAN": { regex: /^\+989\d{9}$/, hint: "+98 9123456789" },
+            "IRAQ": { regex: /^\+9647\d{9}$/, hint: "+964 7501234567" },
+            "ISRAEL": { regex: /^\+9725\d{8}$/, hint: "+972 501234567" },
+            "IVORY COAST": { regex: /^\+225\d{10}$/, hint: "+225 0701234567" },
+            "JAPAN": { regex: /^\+81[789]0\d{8}$/, hint: "+81 9012345678" },
+            "JORDAN": { regex: /^\+9627\d{8}$/, hint: "+962 791234567" },
+            "KAZAKHSTAN": { regex: /^\+77\d{9}$/, hint: "+7 7012345678" },
+            "KENYA": { regex: /^\+2547\d{8}$/, hint: "+254 712345678" },
+            "KUWAIT": { regex: /^\+965\d{8}$/, hint: "+965 91234567" },
+            "KYRGYZSTAN": { regex: /^\+996\d{9}$/, hint: "+996 555123456" },
+            "LAOS": { regex: /^\+85620\d{8}$/, hint: "+856 2012345678" },
+            "LEBANON": { regex: /^\+961\d{7,8}$/, hint: "+961 70123456" },
+            "LESOTHO": { regex: /^\+266\d{8}$/, hint: "+266 58123456" },
+            "LIBERIA": { regex: /^\+231\d{8,9}$/, hint: "+231 77123456" },
+            "LIBYA": { regex: /^\+2189\d{8}$/, hint: "+218 911234567" },
+            "MACAU": { regex: /^\+8536\d{7}$/, hint: "+853 66123456" },
+            "MADAGASCAR": { regex: /^\+261\d{9}$/, hint: "+261 341234567" },
+            "MALAWI": { regex: /^\+265\d{9}$/, hint: "+265 881234567" },
+            "MALAYSIA": { regex: /^\+601\d{8,9}$/, hint: "+60 123456789" },
+            "MALDIVES": { regex: /^\+960\d{7}$/, hint: "+960 7712345" },
+            "MALI": { regex: /^\+223\d{8}$/, hint: "+223 76123456" },
+            "MAURITANIA": { regex: /^\+222\d{8}$/, hint: "+222 46123456" },
+            "MAURITIUS": { regex: /^\+2305\d{7}$/, hint: "+230 57123456" },
+            "MONGOLIA": { regex: /^\+976\d{8}$/, hint: "+976 99123456" },
+            "MOROCCO": { regex: /^\+212\d{9}$/, hint: "+212 612345678" },
+            "MOZAMBIQUE": { regex: /^\+258\d{9}$/, hint: "+258 841234567" },
+            "MYANMAR (BURMA)": { regex: /^\+959\d{7,9}$/, hint: "+95 912345678" },
+            "NAMIBIA": { regex: /^\+2648\d{8}$/, hint: "+264 811234567" },
+            "NEPAL": { regex: /^\+9779\d{9}$/, hint: "+977 9812345678" },
+            "NIGER": { regex: /^\+227\d{8}$/, hint: "+227 96123456" },
+            "NIGERIA": { regex: /^\+234[789]\d{9}$/, hint: "+234 8012345678" },
+            "NORTH KOREA": { regex: /^\+850\d{8,10}$/, hint: "+850 191234567" },
+            "OMAN": { regex: /^\+968\d{8}$/, hint: "+968 99123456" },
+            "PAKISTAN": { regex: /^\+923\d{9}$/, hint: "+92 3001234567" },
+            "PALESTINE": { regex: /^\+9705\d{8}$/, hint: "+970 591234567" },
+            "PHILIPPINES": { regex: /^\+639\d{9}$/, hint: "+63 9171234567" },
+            "QATAR": { regex: /^\+974\d{8}$/, hint: "+974 33123456" },
+            "RWANDA": { regex: /^\+2507\d{8}$/, hint: "+250 781234567" },
+            "SAO TOME & PRINCIPE": { regex: /^\+239\d{7}$/, hint: "+239 9912345" },
+            "SAUDI ARABIA": { regex: /^\+9665\d{8}$/, hint: "+966 501234567" },
+            "SENEGAL": { regex: /^\+221\d{9}$/, hint: "+221 771234567" },
+            "SEYCHELLES": { regex: /^\+248\d{7}$/, hint: "+248 2512345" },
+            "SIERRA LEONE": { regex: /^\+232\d{8}$/, hint: "+232 76123456" },
+            "SINGAPORE": { regex: /^\+65\d{8}$/, hint: "+65 81234567" },
+            "SOMALIA": { regex: /^\+252\d{8,9}$/, hint: "+252 615123456" },
+            "SOUTH AFRICA": { regex: /^\+27\d{9}$/, hint: "+27 821234567" },
+            "SOUTH KOREA": { regex: /^\+8210\d{8}$/, hint: "+82 1012345678" },
+            "SOUTH SUDAN": { regex: /^\+2119\d{8}$/, hint: "+211 912345678" },
+            "SRI LANKA": { regex: /^\+947\d{8}$/, hint: "+94 771234567" },
+            "SUDAN": { regex: /^\+249\d{9}$/, hint: "+249 912345678" },
+            "SYRIA": { regex: /^\+9639\d{8}$/, hint: "+963 941234567" },
+            "TAIWAN": { regex: /^\+8869\d{8}$/, hint: "+886 912345678" },
+            "TAJIKISTAN": { regex: /^\+9929\d{8}$/, hint: "+992 901234567" },
+            "TANZANIA": { regex: /^\+255\d{9}$/, hint: "+255 712345678" },
+            "THAILAND": { regex: /^\+66\d{9}$/, hint: "+66 812345678" },
+            "TIMOR-LESTE": { regex: /^\+6707\d{7}$/, hint: "+670 77123456" },
+            "TOGO": { regex: /^\+228\d{8}$/, hint: "+228 90123456" },
+            "TUNISIA": { regex: /^\+216\d{8}$/, hint: "+216 20123456" },
+            "TURKEY": { regex: /^\+905\d{9}$/, hint: "+90 5321234567" },
+            "TURKMENISTAN": { regex: /^\+9936\d{7}$/, hint: "+993 65123456" },
+            "UAE": { regex: /^\+9715\d{8}$/, hint: "+971 501234567" },
+            "UGANDA": { regex: /^\+2567\d{8}$/, hint: "+256 771234567" },
+            "UZBEKISTAN": { regex: /^\+9989\d{8}$/, hint: "+998 901234567" },
+            "VIETNAM": { regex: /^\+84\d{9}$/, hint: "+84 901234567" },
+            "YEMEN": { regex: /^\+9677\d{8}$/, hint: "+967 712345678" },
+            "ZAMBIA": { regex: /^\+2609\d{8}$/, hint: "+260 971234567" },
+            "ZIMBABWE": { regex: /^\+2637\d{8}$/, hint: "+263 771234567" },
+            "OTHER": { regex: /^\+\d{8,15}$/, hint: "+ [CountryCode][Number]" }
         };
 
         const countryPageMap = {
@@ -1422,10 +1424,10 @@
             const parts = rule.hint.split(' ');
             const code = parts[0] + " "; 
             
-            // Update fields with code
-            mob.value = code;
-            wa.value = code;
-            alt.value = code;
+            // Update fields with code IF empty or just a code
+            if(mob.value.length < 5) mob.value = code;
+            if(wa.value.length < 5) wa.value = code;
+            if(alt.value.length < 5) alt.value = code;
             
             // Update Hints Text
             const mHint = document.getElementById('mobileHint');
@@ -1452,19 +1454,33 @@
             document.getElementById('altPhoneFeedback').innerHTML = '';
         }
 
+        // --- IMPROVED PHONE CLEANING FOR CLICKUP API ---
         function cleanPhoneNumber(phoneStr) {
             if(!phoneStr) return null;
-            return phoneStr.replace(/[^0-9+]/g, '');
+            
+            // 1. Remove all non-numeric and non-plus chars
+            let cleaned = phoneStr.replace(/[^0-9+]/g, '');
+            
+            // 2. Handle "00" prefix common in Europe/Asia -> convert to +
+            if(cleaned.startsWith('00')) {
+                cleaned = '+' + cleaned.substring(2);
+            }
+            
+            // 3. Ensure it starts with + if it has digits
+            if(cleaned.length > 0 && !cleaned.startsWith('+')) {
+                cleaned = '+' + cleaned;
+            }
+
+            // 4. Final Safety: Return null if it's just "+" or empty
+            if(cleaned.length < 5) return null; 
+
+            return cleaned;
         }
         
-        // NEW: Enforce Numeric Input (allow + only at start)
+        // Enforce Numeric Input (allow + only at start)
         function enforcePhoneInput(el) {
             // Allow + at start, then only digits and spaces
             let val = el.value;
-            if(!val.startsWith('+')) {
-                 // If user deleted +, put it back if we have a residence rule
-                 // Ideally, we just filter chars. 
-            }
             // Replace any char that is NOT 0-9, space, or +
             el.value = val.replace(/[^0-9+ ]/g, '');
         }
@@ -1497,7 +1513,7 @@
             } else {
                 el.classList.remove('valid-field');
                 // Only show error style if length is substantial
-                if(rawVal.length > 4) {
+                if(rawVal.length > 6) { // Increased threshold slightly
                     el.classList.add('invalid-field');
                     feedback.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
                 } else {
@@ -1530,7 +1546,7 @@
                 
                 const sel = document.getElementById('presentResidence');
                 const rule = countryRules[sel.value] || countryRules["OTHER"];
-                showModal(`Invalid Mobile Number Format.\n\nExample format for ${sel.value}: ${rule.hint}`);
+                showModal(`Invalid Mobile Number Format.\n\nPlease follow the format for ${sel.value}:\n${rule.hint}`);
                 return;
             }
 
@@ -1796,9 +1812,12 @@
 
             // Map Data to Configured IDs
             addField("SUR NAME", lastName);
-            addField("MOBILE", mobile);
-            addField("WHATSAPP", whatsapp);
-            addField("PHONE", altPhone); // Mapped new field
+            
+            // Only add phones if they are valid E.164 strings
+            if(mobile) addField("MOBILE", mobile);
+            if(whatsapp) addField("WHATSAPP", whatsapp);
+            if(altPhone) addField("PHONE", altPhone); 
+            
             addField("DATE OF BIRTH", getUnixTime(dob));
             addField("AGE", age);
             addField("EMAIL", email);
@@ -1835,8 +1854,8 @@
 
 **CONTACT INFO**
 --------------------------------------------------
-**Mobile:** ${mobile}
-**WhatsApp:** ${whatsapp}
+**Mobile:** ${mobile || "N/A"}
+**WhatsApp:** ${whatsapp || "N/A"}
 **Alt Phone:** ${altPhone || "N/A"}
 
 **PROFESSIONAL PROFILE**
