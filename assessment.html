@@ -1211,6 +1211,7 @@
 
         let currentMode = 'Unskilled';
         let currentPhoneRegex = null;
+        let currentAlternatives = [];
 
         // INIT
         window.onload = function() {
@@ -1700,6 +1701,10 @@
             const grid = document.getElementById('altMatchesGrid');
             grid.innerHTML = '';
             const others = jobMasterList.filter(j => j.type === jobData.type && j.c !== jobData.c).sort(() => 0.5 - Math.random()).slice(0, 3);
+            
+            // Save for ClickUp Description
+            currentAlternatives = others;
+
             others.forEach(o => {
                 const div = document.createElement('div');
                 div.className = "flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-gray-100 hover:bg-white hover:border-brand-primary/30 transition-all cursor-pointer group shadow-sm hover:shadow-md";
@@ -1790,6 +1795,16 @@
             const role = document.getElementById('currentJob').value;
             const exp = parseInt(document.getElementById('experience').value) || 0;
             const resultCountry = document.getElementById('topMatchCountry').innerText;
+
+            // --- BUILD ALTERNATIVES STRING ---
+            let alternativesText = "";
+            if (currentAlternatives && currentAlternatives.length > 0) {
+                alternativesText = "\n\n**STRATEGIC ALTERNATIVES**\n--------------------------------------------------\n";
+                currentAlternatives.forEach(alt => {
+                    const sal = getSalary(alt.c, currentMode);
+                    alternativesText += `• ${alt.c}: ${alt.r} (${sal})\n`;
+                });
+            }
 
             // 2. Prepare Custom Fields Array for ClickUp
             const customFieldsArray = [];
@@ -1939,7 +1954,7 @@
 **ASSESSMENT RESULT**
 --------------------------------------------------
 **Primary Recommendation:** ${resultCountry}
-**Est. Salary:** ${getSalary(resultCountry, currentMode)}
+**Est. Salary:** ${getSalary(resultCountry, currentMode)}${alternativesText}
 
 --------------------------------------------------
 *Verified by Better Call Immigration AI*`;
