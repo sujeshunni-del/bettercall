@@ -602,7 +602,7 @@
                         </div>
 
                         <div class="md:col-span-2 flex justify-end mt-4">
-                             <button onclick="generateReport()" class="w-full md:w-auto btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group">
+                             <button type="button" onclick="generateReport()" class="w-full md:w-auto btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group">
                                 <i class="fa-solid fa-wand-magic-sparkles group-hover:rotate-12 transition-transform"></i> 
                                 <span>GENERATE ANALYSIS</span>
                             </button>
@@ -1723,16 +1723,31 @@
             return null;
         }
 
+        // --- NEW HELPER FOR CASING ---
+        function toTitleCase(str) {
+            if (!str) return "";
+            return str.replace(
+                /\w\S*/g,
+                function(txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                }
+            );
+        }
+
         async function saveData() {
             // 1. Gather all data points
             const ref = document.getElementById('refId').innerText;
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
-            const presentCountry = document.getElementById('presentResidence').value;
+            
+            // CONVERT TO TITLE CASE TO MATCH CLICKUP DROPDOWN OPTIONS (Usually Title Case)
+            // Even if the input value is "AFGHANISTAN" (Uppercase), we send "Afghanistan"
+            const presentCountry = toTitleCase(document.getElementById('presentResidence').value);
+            const nationality = toTitleCase(document.getElementById('nationality').value);
+            
             const dob = document.getElementById('dob').value;
             const age = parseInt(document.getElementById('age').value) || 0;
-            const nationality = document.getElementById('nationality').value;
             
             // Clean phone numbers: REMOVE SPACES/DASHES FOR CLICKUP SAVING
             const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
@@ -1789,8 +1804,11 @@
                             // CHANGED: Prioritize UUID (match.id) over index. This fixes "Not Saved" issues in newer API versions.
                             finalValue = match.id;
                         } else {
-                            console.warn(`ClickUp Dropdown Mismatch for '${key}' (${val}). Field is '${fieldDef.type}'. Option not found in ClickUp list. Skipping field to prevent 400 Error.`);
-                            return; // STOP: Sending text to a dropdown field causes API Error 400
+                            // CRITICAL FIX: If exact match fails (or if API fetch failed), send the raw text value.
+                            // Previously this would 'return' and skip saving the field entirely.
+                            console.warn(`ClickUp Option Mismatch for ${key}: '${val}'. sending raw value.`);
+                            // Fallback to sending text. If user changes field to Text/Short Text in ClickUp, this works.
+                            finalValue = val; 
                         }
                     }
                     // --- CASE B: EMAIL, PHONE, URL (Validation Required by ClickUp) ---
