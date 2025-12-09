@@ -364,7 +364,7 @@
                                 <div class="relative">
                                     <select id="presentResidence" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none" onchange="handleResidenceChange()">
                                         <option value="">Select Residence</option>
-                                        <!-- JS Populated -->
+                                        <!-- JS Populated - Will set 'UAE' via script -->
                                     </select>
                                     <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                                 </div>
@@ -395,7 +395,7 @@
                             <div id="mobileFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                         </div>
                         <p id="mobileHint" class="text-xs text-brand-primary mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
-                        <p id="mobileError" class="text-brand-accent text-[11px] hidden mt-2 font-bold pl-1">Invalid Format.</p>
+                        <p id="mobileError" class="text-brand-accent text-[11px] hidden mt-2 pl-1 font-bold">Invalid Format.</p>
                     </div>
                     
                     <div>
@@ -500,17 +500,19 @@
                         </label>
                         
                         <div class="flex gap-6 mb-4 relative z-10">
+                            <!-- Default to YES -->
                             <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="radio" name="hasCv" value="yes" class="peer sr-only" onchange="toggleCvUpload(true)">
+                                <input type="radio" name="hasCv" value="yes" class="peer sr-only" onchange="toggleCvUpload(true)" checked>
                                 <div class="px-6 py-2 rounded-full border border-gray-200 bg-white text-slate-500 font-bold peer-checked:bg-brand-primary peer-checked:text-white peer-checked:border-brand-primary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-primary/40">Yes</div>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="radio" name="hasCv" value="no" class="peer sr-only" onchange="toggleCvUpload(false)" checked>
+                                <input type="radio" name="hasCv" value="no" class="peer sr-only" onchange="toggleCvUpload(false)">
                                 <div class="px-6 py-2 rounded-full border border-gray-200 bg-white text-slate-500 font-bold peer-checked:bg-brand-secondary peer-checked:text-white peer-checked:border-brand-secondary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-secondary/40">No</div>
                             </label>
                         </div>
                         
-                        <div id="cvUploadContainer" class="hidden animate-pop-in relative z-10">
+                        <!-- Default to visible -->
+                        <div id="cvUploadContainer" class="animate-pop-in relative z-10">
                             <div class="upload-zone rounded-xl p-8 text-center cursor-pointer relative group">
                                 <input type="file" id="cvFile" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept=".pdf,.doc,.docx" onchange="handleFileSelect(this)">
                                 
@@ -712,27 +714,37 @@
 
                                 <!-- Right: CTA & Alternatives -->
                                 <div class="lg:w-1/3 flex flex-col gap-6">
-                                     <!-- CTA -->
-                                    <div class="bg-slate-900 rounded-2xl p-6 text-white relative overflow-hidden text-center shadow-lg">
-                                        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
-                                         <div class="absolute bottom-0 right-0 text-9xl opacity-5 transform translate-x-10 translate-y-10">
-                                            <i class="fa-regular fa-paper-plane"></i>
-                                         </div>
-                                        <div class="relative z-10">
-                                            <h4 class="text-lg font-bold mb-2">Ready to Proceed?</h4>
-                                            <p class="text-slate-400 text-xs mb-6 px-2">Secure your consultation slot to discuss this profile with our experts.</p>
-                                            <button id="mainActionBtn" class="w-full bg-brand-primary hover:bg-brand-secondary text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-brand-primary/30 flex items-center justify-center gap-2 group">
-                                                <span>BOOK CONSULTATION</span>
-                                                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Alternatives List -->
-                                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                                     <!-- Alternatives List (Moved Up to be First) -->
+                                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm order-1">
                                         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Strategic Alternatives</h4>
                                         <div class="flex flex-col gap-3" id="altMatchesGrid">
                                              <!-- Items -->
+                                        </div>
+                                    </div>
+
+                                     <!-- CTA (Moved Down to be Last & Creative Redesign) -->
+                                    <div class="order-2 relative group overflow-hidden rounded-2xl p-8 text-white shadow-2xl shadow-blue-900/20 transition-all hover:shadow-blue-900/40 hover:-translate-y-1">
+                                        <!-- Background with animated gradient -->
+                                        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-brand-primary/90 to-brand-secondary/90 transition-all duration-500 group-hover:scale-105"></div>
+                                        
+                                        <!-- Decorative Circles -->
+                                        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                                        <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 bg-brand-gold/20 rounded-full blur-xl"></div>
+
+                                        <div class="relative z-10 flex flex-col items-center text-center">
+                                            <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-3xl mb-4 border border-white/20 shadow-inner">
+                                                <i class="fa-solid fa-headset text-white animate-pulse"></i>
+                                            </div>
+
+                                            <h4 class="text-2xl font-black mb-2 tracking-tight">Expert Advice</h4>
+                                            <p class="text-blue-50 text-sm font-medium mb-6 leading-relaxed opacity-90 px-2">
+                                                Do you want to speak with our expert advice? Book your appointment.
+                                            </p>
+
+                                            <button id="mainActionBtn" class="w-full bg-white text-brand-primary font-black py-4 px-6 rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-50 transition-all flex items-center justify-center gap-3 group/btn">
+                                                <span class="tracking-wider text-sm">BOOK APPOINTMENT</span>
+                                                <i class="fa-solid fa-calendar-check text-lg group-hover/btn:scale-110 transition-transform"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -1211,6 +1223,12 @@
             
             // Populate Countries
             populateCountryDropdowns();
+            
+            // --- NEW: Set default values on load ---
+            document.getElementById('presentResidence').value = "UAE";
+            toggleCvUpload(true); // Ensure CV upload section is visible
+            // ---------------------------------------
+
             // getClickUpFields(); // Disabled for production
 
             flatpickr("#dob", {
@@ -1266,10 +1284,18 @@
         // --- NEW CV UPLOAD LOGIC ---
         function toggleCvUpload(show) {
             const container = document.getElementById('cvUploadContainer');
+            // Update Radio Button Status
+            const radioYes = document.querySelector('input[name="hasCv"][value="yes"]');
+            const radioNo = document.querySelector('input[name="hasCv"][value="no"]');
+
             if(show) {
                 container.classList.remove('hidden');
+                radioYes.checked = true;
+                radioNo.checked = false;
             } else {
                 container.classList.add('hidden');
+                radioYes.checked = false;
+                radioNo.checked = true;
                 // Clear file if they toggle to NO
                 document.getElementById('cvFile').value = '';
                 document.getElementById('fileNameDisplay').innerText = "Tap here to upload CV";
@@ -1706,11 +1732,11 @@
         }
 
         function getFlag(c) {
-            const m = { "Sweden": "🇸🇪", "Finland": "🇫🇮", "Netherlands": "🇳🇱", "Germany": "🇩🇪", "Czech Republic": "🇨🇿", "Poland": "🇵🇱", "France": "🇫🇷", "Italy": "🇮🇹", "Latvia": "🇱🇻", "Croatia": "🇭🇷", "Serbia": "🇷🇸", "Albania": "🇦🇱", "Macedonia": "🇲🇰" };
+            const m = { "Sweden": "🇸🇪", "Finland": "🇫🇮", "Netherlands": "🇳🇱", "Germany": "🇩🇪", "Czech Republic": "🇨🇿", "Poland": "🇵🇱", "France": "🇫🇷", "Italy": "🇮🇹", "Latvia": "🇱🇻", "Croatia": "🇭🇷", "Serbia": "🇷🇸", "Albania": "🇦🇱", "Macedonia": "🇲🇰", "UAE": "🇦🇪" }; // Added UAE flag
             return m[c] || "🇪🇺";
         }
 
-        // Helper to convert date string DD/MM/YYYY to Unix Timestamp (ms) for ClickUp
+        // Helper to convert date string DD/MM/YYYY to Unix Timestamp (ms)
         function getUnixTime(dateStr) {
             if (!dateStr) return null;
             const parts = dateStr.split('/');
@@ -1984,5 +2010,4 @@
         }
     </script>
 </body>
-
 </html>
