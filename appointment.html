@@ -178,14 +178,16 @@
 
         /* On-screen Console (Debug) */
         #debugConsole {
-            position: fixed; bottom: 0; left: 0; right: 0; height: 150px;
-            background: #1e1e1e; color: #00ff00; font-family: monospace; font-size: 12px;
-            overflow-y: auto; padding: 10px; z-index: 9999; border-top: 2px solid #333;
-            display: none;
+            position: fixed; bottom: 0; left: 0; right: 0; height: 250px;
+            background: #111827; color: #4ade80; font-family: 'Courier New', monospace; font-size: 12px;
+            overflow-y: auto; padding: 15px; z-index: 9999; border-top: 4px solid #374151;
+            display: none; box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
         }
-        .debug-log { margin-bottom: 4px; border-bottom: 1px solid #333; padding-bottom: 2px; }
-        .debug-error { color: #ff5555; }
-        .debug-warn { color: #ffcc00; }
+        .debug-log { margin-bottom: 6px; border-bottom: 1px solid #374151; padding-bottom: 4px; word-wrap: break-word; }
+        .debug-error { color: #f87171; background: rgba(239, 68, 68, 0.1); padding: 4px; }
+        .debug-warn { color: #facc15; }
+        .debug-code { color: #93c5fd; white-space: pre-wrap; margin: 5px 0; background: #1f2937; padding: 10px; border-radius: 4px;}
+        .debug-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #4b5563; padding-bottom: 8px; margin-bottom: 10px; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -492,7 +494,10 @@
     <footer class="border-t border-gray-200/60 bg-white/50 py-8 mt-auto backdrop-blur-sm relative z-10">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-slate-400 text-xs">© 2024 Better Call Immigration. Designed for the Future.</p>
-            <button onclick="toggleDebug()" class="mt-4 text-[10px] text-gray-400 underline">Toggle Debug Console</button>
+            <div class="flex justify-center gap-4 mt-4">
+                 <button onclick="toggleDebug()" class="text-[10px] text-gray-400 underline hover:text-brand-primary">Open Debug Console</button>
+            </div>
+           
         </div>
     </footer>
 
@@ -519,20 +524,30 @@
 
     <!-- On-screen Console -->
     <div id="debugConsole">
-        <div><strong>Debug Console (CORS Proxy Enabled)</strong></div>
-        <div class="text-xs text-gray-500 mt-1 mb-2 border-b border-gray-700 pb-2">
-            ClickUp API Check: <span id="apiStatus">Pending...</span>
+        <div class="debug-header">
+            <strong>System Console</strong>
+            <button onclick="toggleDebug()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        <div class="flex gap-2 mb-4">
+            <button onclick="checkClickUpConnection()" class="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-500">1. Test Connection</button>
+            <button onclick="fetchAndMapFields()" class="px-3 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-500">2. Auto-Map Fields</button>
+            <button onclick="document.getElementById('debugLogs').innerHTML=''" class="px-3 py-1 bg-gray-700 text-white text-xs rounded hover:bg-gray-600">Clear</button>
+        </div>
+        <div class="text-xs text-gray-500 mt-1 mb-2 border-b border-gray-700 pb-2">
+            Status: <span id="apiStatus">Idle</span>
+        </div>
+        <div id="debugLogs"></div>
     </div>
 
     <script>
         // --- CUSTOM LOGGER FOR ON-SCREEN CONSOLE ---
         function logToScreen(msg, type = 'info') {
-            const c = document.getElementById('debugConsole');
+            const c = document.getElementById('debugLogs');
             const d = document.createElement('div');
             d.className = 'debug-log';
             if (type === 'error') d.className += ' debug-error';
             if (type === 'warn') d.className += ' debug-warn';
+            if (type === 'code') d.className += ' debug-code';
             
             // Handle objects
             if (typeof msg === 'object') {
@@ -541,7 +556,8 @@
                 d.textContent = msg;
             }
             c.appendChild(d);
-            c.scrollTop = c.scrollHeight;
+            const container = document.getElementById('debugConsole');
+            container.scrollTop = container.scrollHeight;
             
             // Also log to real console
             if(type === 'error') console.error(msg); else console.log(msg);
@@ -551,23 +567,20 @@
             const el = document.getElementById('debugConsole');
             const isHidden = el.style.display === 'none';
             el.style.display = isHidden ? 'block' : 'none';
-            if(isHidden) {
-                // When opening, try to fetch fields to help user debug
-                checkClickUpConnection();
-            }
         }
 
-        // --- CREDENTIALS (UPDATED) ---
+        // --- CREDENTIALS (USER EDITABLE) ---
+        // SECURITY NOTE: In a real production app, never store API Keys in frontend code.
         const CLICKUP_API_KEY = "pk_260468481_S4KLO3ZGV6P1PL1POHKXNS1LA5ISSG0P"; 
-        const CLICKUP_LIST_ID = "90182075750"; // Derived from link. If error, this might be Workspace ID.
+        const CLICKUP_LIST_ID = "90182075750"; 
         
         // --- PROXY CONFIG ---
-        // Reverted to public proxy because local path /api/proxy is not configured on production server
+        // Using corsproxy.io to bypass browser CORS restrictions
         const PROXY_URL = "https://corsproxy.io/?"; 
         
         // --- FIELD MAPPING CONFIGURATION ---
-        // IMPORTANT: If you created a new list, ALL these UUIDs MUST be updated.
-        // Use the Debug Console to find the correct IDs for your new list.
+        // These IDs are specific to ONE ClickUp List. If you create a new list, these CHANGE.
+        // Use the "Auto-Map Fields" button in Debug Console to generate new IDs.
         const CLICKUP_FIELDS = {
             "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",  
             "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115", 
@@ -581,22 +594,21 @@
             "EXPERIENCE": "267d8fd1-cc80-4343-972a-4a1d45cab5d7", 
             "EMAIL": "2e18821e-1c19-4de5-afb8-77ff11ee6327", 
             "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5",
-            // Consolidating Appointment Fields Here
             "APPOINTMENT_DATE": "a4a8197d-eb13-4e90-ad56-d56108137e2e", 
             "APPOINTMENT_TIME": "584f279f-8f78-4e2b-ac91-ccf2c4e48b00",
             "CONSULTATION_MODE": "03414f61-a879-4d14-bee0-7186a3de27d5"
         };
 
-        // --- DEBUG: CHECK FIELDS ---
+        // --- DEBUG: CHECK CONNECTION ---
         async function checkClickUpConnection() {
-            logToScreen("Checking ClickUp List Connection...");
+            logToScreen("--- CHECKING CONNECTION ---");
             const statusSpan = document.getElementById('apiStatus');
             statusSpan.innerText = "Connecting...";
             statusSpan.className = "text-yellow-400";
 
             try {
-                // Attempt to get list fields to verify ID
-                const TARGET_URL = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`;
+                // We use the 'Get List' endpoint to verify the ID exists and Key works
+                const TARGET_URL = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}`;
                 const FINAL_URL = PROXY_URL + encodeURIComponent(TARGET_URL);
                 
                 const res = await fetch(FINAL_URL, {
@@ -608,24 +620,76 @@
                     const data = await res.json();
                     statusSpan.innerText = "Connected ✅";
                     statusSpan.className = "text-green-400";
-                    logToScreen(`Success! Found ${data.fields.length} Custom Fields.`);
-                    logToScreen("--- AVAILABLE FIELDS (Use these IDs in Config) ---");
-                    data.fields.forEach(f => {
-                        logToScreen(`"${f.name.toUpperCase()}": "${f.id}"`);
-                    });
-                    logToScreen("------------------------------------------------");
+                    logToScreen(`SUCCESS: Connected to List "${data.name}"`);
+                    logToScreen(`Workspace: ${data.space.name}`);
                 } else {
                     statusSpan.innerText = "Error ❌";
                     statusSpan.className = "text-red-400";
-                    const err = await res.json();
-                    logToScreen("Connection Failed. Check LIST ID.", 'error');
-                    logToScreen(err, 'error');
-                    if(res.status === 404) {
-                        logToScreen("CRITICAL: The ID '90182075750' might be a WORKSPACE ID, not a LIST ID. Please find the correct List ID.", 'warn');
+                    
+                    if(res.status === 401) {
+                        logToScreen("ERROR 401: Unauthorized. Your API Key is invalid.", 'error');
+                    } else if (res.status === 404) {
+                        logToScreen("ERROR 404: List Not Found. Check if LIST_ID is correct.", 'error');
+                    } else {
+                        logToScreen(`ERROR ${res.status}: ${res.statusText}`, 'error');
                     }
                 }
             } catch(e) {
                 statusSpan.innerText = "Network Error";
+                logToScreen(`NETWORK ERROR: ${e.message}`, 'error');
+                logToScreen("Hint: The proxy server might be down or blocked by your firewall.", 'warn');
+            }
+        }
+
+        // --- DEBUG: AUTO MAP FIELDS ---
+        async function fetchAndMapFields() {
+            logToScreen("--- FETCHING FIELDS ---");
+            try {
+                const TARGET_URL = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`;
+                const FINAL_URL = PROXY_URL + encodeURIComponent(TARGET_URL);
+                
+                const res = await fetch(FINAL_URL, {
+                    method: 'GET',
+                    headers: { 'Authorization': CLICKUP_API_KEY.trim() }
+                });
+
+                if(!res.ok) throw new Error(`API Error: ${res.status}`);
+
+                const data = await res.json();
+                const fields = data.fields;
+                logToScreen(`Found ${fields.length} Custom Fields.`);
+                
+                // Generate a copy-paste object
+                let mapping = "const CLICKUP_FIELDS = {\n";
+                
+                // Helper to find field by likely name
+                const findField = (name) => {
+                    return fields.find(f => f.name.toLowerCase().includes(name.toLowerCase()));
+                };
+
+                // Define standard keys we use in code
+                const codeKeys = [
+                    "SUR NAME", "MOBILE", "WHATSAPP", "PHONE", "DATE OF BIRTH", 
+                    "AGE", "QUALIFICATION", "JOB ROLE", "NATIONALITY", "EMAIL", 
+                    "PRESENT RESIDENCE", "APPOINTMENT_DATE", "APPOINTMENT_TIME", "CONSULTATION_MODE"
+                ];
+
+                codeKeys.forEach(key => {
+                    // Try to find a matching field in ClickUp response
+                    // We look for partial matches (e.g., Code "MOBILE" matches ClickUp "Candidate Mobile")
+                    const match = fields.find(f => f.name.toLowerCase().includes(key.toLowerCase().replace(/_/g, ' ')));
+                    if(match) {
+                        mapping += `    "${key}": "${match.id}", // Found: ${match.name}\n`;
+                    } else {
+                        mapping += `    "${key}": "MISSING", // Could not find field matching '${key}'\n`;
+                    }
+                });
+                mapping += "};";
+                
+                logToScreen("--- COPY THE CODE BELOW TO UPDATE CONFIG ---", 'warn');
+                logToScreen(mapping, 'code');
+
+            } catch(e) {
                 logToScreen(e.message, 'error');
             }
         }
@@ -1212,12 +1276,8 @@
             }
 
             // Convert Date to Unix Timestamp (Milliseconds) for ClickUp
-            // Note: ClickUp typically expects milliseconds from epoch. 
-            // The value for a Date field should be the selected date at midnight UTC. 
-            // However, the existing code uses `dateObj.getTime()`, which includes time and timezone offset. 
-            // For now, sticking to the existing pattern for APPOINTMENT_DATE, and using string for APPOINTMENT_TIME.
             const dateObj = new Date(date);
-            const dateTimestamp = dateObj.getTime();
+            const dateTimestamp = dateObj.getTime(); // Milliseconds
 
             // 1. Prepare Base Custom Fields
             const finalCustomFields = [];
@@ -1225,8 +1285,7 @@
             // 2. Helper to add mapped fields from CLICKUP_FIELDS config
             const addField = (key, val) => {
                 const fieldId = CLICKUP_FIELDS[key];
-                if (!fieldId || val === null || val === "") {
-                    // console.warn("Skipping field", key, val);
+                if (!fieldId || val === null || val === "" || fieldId === "MISSING") {
                     return;
                 }
                 
@@ -1283,15 +1342,14 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
             
             logToScreen("Initiating ClickUp API Call...");
+            logToScreen(`Target List: ${CLICKUP_LIST_ID}`);
 
             try {
                 if(CLICKUP_API_KEY && !CLICKUP_API_KEY.includes("pk_12345")) {
                     
                     const TARGET_URL = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`;
-                    // Use the updated PROXY_URL
+                    // Use CORS Proxy
                     const FINAL_URL = PROXY_URL + encodeURIComponent(TARGET_URL);
-
-                    logToScreen(`Target: ${TARGET_URL}`);
                     
                     const res = await fetch(FINAL_URL, {
                         method: 'POST',
@@ -1305,32 +1363,36 @@
                     if(res.ok) {
                         const data = await res.json();
                         logToScreen("Success! Task ID: " + data.id);
-                        console.log("Task Created:", data.id);
-
+                        
                         // Success UI
                         document.getElementById('toast').classList.remove('translate-y-32', 'opacity-0');
                         setTimeout(() => location.reload(), 3000);
                     } else {
                         const err = await res.json();
-                        logToScreen(err, 'error');
-                        console.error(err);
+                        let errorMsg = `ClickUp Error (${res.status}): ${JSON.stringify(err)}`;
                         
-                        let errorMsg = `ClickUp Error: ${JSON.stringify(err)}`;
-                        if(res.status === 404) {
-                            errorMsg = "Error 404: List not found. The ID '" + CLICKUP_LIST_ID + "' might be incorrect or is a Workspace ID.";
-                            showModal(errorMsg);
-                        } else {
-                            throw new Error(errorMsg);
+                        // User Friendly Error Handling
+                        if(res.status === 401) {
+                            errorMsg = "Authorization Error: Your API Key is invalid or expired.";
+                            logToScreen("CRITICAL: API Key rejected.", 'error');
+                        } else if(res.status === 404) {
+                            errorMsg = "List Not Found: The List ID is incorrect.";
+                            logToScreen("CRITICAL: Check CLICKUP_LIST_ID.", 'error');
                         }
+
+                        logToScreen(err, 'error');
+                        throw new Error(errorMsg);
                     }
                 } else {
-                    throw new Error("Invalid API Key");
+                    throw new Error("Invalid API Key configuration.");
                 }
                 
             } catch(e) {
                 console.error(e);
                 logToScreen(e.message, 'error');
                 showModal("Connection Error: " + e.message);
+                // Auto-open debug to help user
+                document.getElementById('debugConsole').style.display = 'block';
             } finally {
                 btn.innerHTML = '<span>CONFIRM APPOINTMENT</span><i class="fa-solid fa-calendar-check"></i>';
             }
@@ -1349,5 +1411,4 @@
         }
     </script>
 </body>
-
 </html>
