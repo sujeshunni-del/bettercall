@@ -82,18 +82,178 @@
     </script>
 
     <style>
-        /* ... existing styles ... */
-
-        /* CONFIRMATION MODAL */
-        #confirmModal { backdrop-filter: blur(8px); }
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #f1f5f9;
+        /* BASE & BACKGROUND */
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            position: relative;
         }
-        .summary-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
-        .summary-value { font-size: 0.9rem; color: #1e293b; font-weight: 600; text-align: right; }
+
+        /* Ambient Orbs Background (Vibrant Light Theme) */
+        .ambient-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f0f9ff 0%, #eef2ff 100%);
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: blob 25s infinite alternate;
+        }
+        .orb-1 { width: 800px; height: 800px; background: #e0e7ff; top: -200px; left: -200px; animation-delay: 0s; mix-blend-mode: multiply;}
+        .orb-2 { width: 600px; height: 600px; background: #dbeafe; bottom: -100px; right: -100px; animation-delay: -5s; mix-blend-mode: multiply;}
+        .orb-3 { width: 500px; height: 500px; background: #fae8ff; top: 30%; right: 20%; animation-delay: -10s; opacity: 0.5; mix-blend-mode: multiply;}
+
+        /* GLASSMORPHISM PANEL (Clean Pro) */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+            position: relative;
+        }
+
+        /* INPUTS (Clean White - Uniform) */
+        .form-input, .date-input-container, .geo-input {
+            height: 3.5rem; /* Uniform Height */
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #1e293b;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border-radius: 0.75rem;
+            width: 100%;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .form-input::placeholder, .date-input-container input::placeholder { color: #94a3b8; font-weight: 400; }
+        
+        .form-input:hover, .date-input-container:hover, .geo-input:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+        .form-input:focus, .geo-input:focus {
+            border-color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        /* Specific Date Input Fixes */
+        .date-input-container {
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding: 0;
+        }
+        .date-input-container:hover { border-color: #cbd5e1; }
+        .date-input-container:focus-within {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+        .date-icon-box {
+            padding: 0 1.25rem;
+            color: #7c3aed;
+            background: #f5f3ff;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            border-right: 1px solid #ede9fe;
+        }
+        .date-input-container input {
+            background: transparent;
+            border: none;
+            color: #1e293b;
+            width: 100%;
+            padding: 0 1rem;
+            height: 100%;
+            outline: none;
+            font-weight: 600;
+        }
+
+        /* DROPDOWN ARROW FIX */
+        select.geo-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        /* UTILS */
+        .uppercase-input { text-transform: uppercase; }
+        .valid-field { border-color: #10b981 !important; background-color: #ecfdf5 !important; }
+        .invalid-field { border-color: #f43f5e !important; background-color: #fff1f2 !important; }
+
+        /* CATEGORY CARDS */
+        .category-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
+            border-color: #2563eb;
+        }
+        .category-card.active {
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+            border-color: #2563eb;
+            box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.15);
+            position: relative;
+        }
+        .category-card.active::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            border: 2px solid #2563eb;
+            pointer-events: none;
+        }
+
+        /* DROPDOWN SCROLLBAR */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* BUTTON GRADIENTS */
+        .btn-gradient {
+            background-size: 200% auto;
+            background-image: linear-gradient(to right, #2563eb 0%, #7c3aed 51%, #2563eb 100%);
+            transition: 0.5s;
+        }
+        .btn-gradient:hover { background-position: right center; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4); }
+
+        /* CUSTOM MODAL */
+        #messageModal { backdrop-filter: blur(8px); }
+        .modal-content {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* FILE UPLOAD ZONE */
+        .upload-zone {
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23CBD5E1FF' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+            transition: all 0.3s ease;
+        }
+        .upload-zone:hover {
+            background-color: #eff6ff;
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%232563EB' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -204,7 +364,7 @@
                                 <div class="relative">
                                     <select id="presentResidence" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none" onchange="handleResidenceChange()">
                                         <option value="">Select Residence</option>
-                                        <!-- JS Populated - Will set 'UAE' via script -->
+                                        <!-- JS Populated -->
                                     </select>
                                     <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                                 </div>
@@ -235,7 +395,7 @@
                             <div id="mobileFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                         </div>
                         <p id="mobileHint" class="text-xs text-brand-primary mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
-                        <p id="mobileError" class="text-brand-accent text-[11px] hidden mt-2 pl-1 font-bold">Invalid Format.</p>
+                        <p id="mobileError" class="text-brand-accent text-[11px] hidden mt-2 font-bold pl-1">Invalid Format.</p>
                     </div>
                     
                     <div>
@@ -340,19 +500,17 @@
                         </label>
                         
                         <div class="flex gap-6 mb-4 relative z-10">
-                            <!-- Default to YES -->
                             <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="radio" name="hasCv" value="yes" class="peer sr-only" onchange="toggleCvUpload(true)" checked>
+                                <input type="radio" name="hasCv" value="yes" class="peer sr-only" onchange="toggleCvUpload(true)">
                                 <div class="px-6 py-2 rounded-full border border-gray-200 bg-white text-slate-500 font-bold peer-checked:bg-brand-primary peer-checked:text-white peer-checked:border-brand-primary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-primary/40">Yes</div>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="radio" name="hasCv" value="no" class="peer sr-only" onchange="toggleCvUpload(false)">
+                                <input type="radio" name="hasCv" value="no" class="peer sr-only" onchange="toggleCvUpload(false)" checked>
                                 <div class="px-6 py-2 rounded-full border border-gray-200 bg-white text-slate-500 font-bold peer-checked:bg-brand-secondary peer-checked:text-white peer-checked:border-brand-secondary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-secondary/40">No</div>
                             </label>
                         </div>
                         
-                        <!-- Default to visible -->
-                        <div id="cvUploadContainer" class="animate-pop-in relative z-10">
+                        <div id="cvUploadContainer" class="hidden animate-pop-in relative z-10">
                             <div class="upload-zone rounded-xl p-8 text-center cursor-pointer relative group">
                                 <input type="file" id="cvFile" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept=".pdf,.doc,.docx" onchange="handleFileSelect(this)">
                                 
@@ -436,18 +594,17 @@
 
                         <!-- EXPERIENCE -->
                         <div id="experienceWrapper" class="hidden animate-pop-in">
-                        <!-- BUTTONS ROW -->
-                        <div class="md:col-span-2 flex justify-between items-center mt-4 gap-4">
-                             <!-- Back Button -->
-                             <button type="button" onclick="goBackToStep1()" class="text-slate-400 font-bold py-4 px-6 rounded-xl hover:text-slate-600 transition-colors flex items-center gap-2">
-                                <i class="fa-solid fa-arrow-left-long"></i>
-                                <span class="tracking-wider">BACK</span>
-                            </button>
+                            <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">Years of Experience</label>
+                            <div class="relative">
+                                <input type="number" id="experience" min="1" max="30" value="1" class="form-input w-full rounded-xl px-5 py-4 font-bold text-lg" placeholder="Min 1" onblur="validateExperienceInput(this)">
+                                <div class="absolute right-5 top-1/2 -translate-y-1/2 text-xs text-brand-secondary font-black tracking-widest">YEARS</div>
+                            </div>
+                        </div>
 
-                             <!-- Proceed Button (Triggers Confirmation) -->
-                             <button type="button" onclick="initiateAnalysis()" class="flex-grow md:flex-grow-0 btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group">
-                                <i class="fa-solid fa-clipboard-check group-hover:scale-110 transition-transform"></i> 
-                                <span>REVIEW & ANALYZE</span>
+                        <div class="md:col-span-2 flex justify-end mt-4">
+                             <button onclick="generateReport()" class="w-full md:w-auto btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group">
+                                <i class="fa-solid fa-wand-magic-sparkles group-hover:rotate-12 transition-transform"></i> 
+                                <span>GENERATE ANALYSIS</span>
                             </button>
                         </div>
                     </div>
@@ -455,13 +612,6 @@
 
                 <!-- 3. REPORT DASHBOARD (Redesigned Professional Reality) -->
                 <div id="reportContainer" class="hidden max-w-5xl mx-auto">
-                    <!-- Back Button for Report -->
-                    <div class="mb-4">
-                        <button onclick="closeReport()" class="text-slate-400 hover:text-brand-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-colors">
-                            <i class="fa-solid fa-arrow-left"></i> Modify Inputs
-                        </button>
-                    </div>
-
                     <div class="glass-panel p-1 rounded-3xl animate-slide-up-fade">
                         <div class="bg-white rounded-[22px] p-8 md:p-12 relative overflow-hidden shadow-sm">
                              <!-- Top decorative bar -->
@@ -562,37 +712,27 @@
 
                                 <!-- Right: CTA & Alternatives -->
                                 <div class="lg:w-1/3 flex flex-col gap-6">
-                                     <!-- Alternatives List (Moved Up to be First) -->
-                                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm order-1">
-                                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Strategic Alternatives</h4>
-                                        <div class="flex flex-col gap-3" id="altMatchesGrid">
-                                             <!-- Items -->
+                                     <!-- CTA -->
+                                    <div class="bg-slate-900 rounded-2xl p-6 text-white relative overflow-hidden text-center shadow-lg">
+                                        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
+                                         <div class="absolute bottom-0 right-0 text-9xl opacity-5 transform translate-x-10 translate-y-10">
+                                            <i class="fa-regular fa-paper-plane"></i>
+                                         </div>
+                                        <div class="relative z-10">
+                                            <h4 class="text-lg font-bold mb-2">Ready to Proceed?</h4>
+                                            <p class="text-slate-400 text-xs mb-6 px-2">Secure your consultation slot to discuss this profile with our experts.</p>
+                                            <button id="mainActionBtn" class="w-full bg-brand-primary hover:bg-brand-secondary text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-brand-primary/30 flex items-center justify-center gap-2 group">
+                                                <span>BOOK CONSULTATION</span>
+                                                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                                            </button>
                                         </div>
                                     </div>
 
-                                     <!-- CTA (Moved Down to be Last & Creative Redesign) -->
-                                    <div class="order-2 relative group overflow-hidden rounded-2xl p-8 text-white shadow-2xl shadow-blue-900/20 transition-all hover:shadow-blue-900/40 hover:-translate-y-1">
-                                        <!-- Background with animated gradient -->
-                                        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-brand-primary/90 to-brand-secondary/90 transition-all duration-500 group-hover:scale-105"></div>
-                                        
-                                        <!-- Decorative Circles -->
-                                        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                                        <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 bg-brand-gold/20 rounded-full blur-xl"></div>
-
-                                        <div class="relative z-10 flex flex-col items-center text-center">
-                                            <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-3xl mb-4 border border-white/20 shadow-inner">
-                                                <i class="fa-solid fa-headset text-white animate-pulse"></i>
-                                            </div>
-
-                                            <h4 class="text-2xl font-black mb-2 tracking-tight">Expert Advice</h4>
-                                            <p class="text-blue-50 text-sm font-medium mb-6 leading-relaxed opacity-90 px-2">
-                                                Do you want to speak with our expert advice? Book your appointment.
-                                            </p>
-
-                                            <button id="mainActionBtn" class="w-full bg-white text-brand-primary font-black py-4 px-6 rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-50 transition-all flex items-center justify-center gap-3 group/btn">
-                                                <span class="tracking-wider text-sm">BOOK APPOINTMENT</span>
-                                                <i class="fa-solid fa-calendar-check text-lg group-hover/btn:scale-110 transition-transform"></i>
-                                            </button>
+                                    <!-- Alternatives List -->
+                                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Strategic Alternatives</h4>
+                                        <div class="flex flex-col gap-3" id="altMatchesGrid">
+                                             <!-- Items -->
                                         </div>
                                     </div>
                                 </div>
@@ -606,40 +746,35 @@
     </main>
     
     <footer class="border-t border-gray-200/60 bg-white/50 py-8 mt-auto backdrop-blur-sm relative z-10">
-    <!-- Custom Modal for Errors -->
+        <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-slate-400 text-xs">© 2024 Better Call Immigration. Designed for the Future.</p>
-    <!-- NEW CONFIRMATION MODAL -->
-    <div id="confirmModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/60 opacity-0 transition-opacity duration-300">
-        <div class="modal-content w-full max-w-md rounded-2xl p-0 transform scale-90 transition-transform duration-300 overflow-hidden bg-white shadow-2xl">
-            
-            <!-- Header -->
-            <div class="bg-slate-50 p-6 border-b border-gray-100 flex items-center justify-between">
-                <div>
-                    <h3 class="text-xl font-black text-slate-900">Confirm Details</h3>
-                    <p class="text-slate-500 text-xs font-medium mt-1">Please verify your information before analysis.</p>
-                </div>
-                <div class="w-10 h-10 rounded-full bg-blue-100 text-brand-primary flex items-center justify-center">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-            </div>
+        </div>
+    </footer>
 
-            <!-- Summary Body -->
-            <div class="p-6">
-                <div class="space-y-1" id="summaryContent">
-                    <!-- JS Injected -->
-                </div>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-8 right-8 transform translate-y-32 opacity-0 transition-all duration-500 z-50">
+        <div class="glass-panel border-l-4 border-brand-primary text-slate-800 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 bg-white">
+            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-brand-primary">
+                <i class="fa-solid fa-check"></i>
             </div>
+            <div>
+                <h4 class="font-bold text-sm">Success</h4>
+                <span class="text-xs text-slate-500" id="toastMsg">Assessment Saved Securely</span>
+            </div>
+        </div>
+    </div>
 
-            <!-- Footer Actions -->
-            <div class="p-4 bg-slate-50 border-t border-gray-100 flex gap-3">
-                <button onclick="closeConfirmModal()" class="w-1/3 py-3 rounded-xl border border-gray-200 text-slate-500 font-bold hover:bg-white hover:border-gray-300 transition-all text-sm">
-                    EDIT
-                </button>
-                <button onclick="confirmAndGenerate()" class="w-2/3 btn-gradient text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-2 text-sm">
-                    <span>CONFIRM & GENERATE</span>
-                    <i class="fa-solid fa-bolt"></i>
-                </button>
+    <!-- Custom Modal for Errors (Replaces Alert) -->
+    <div id="messageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/40 opacity-0 transition-opacity duration-300">
+        <div class="modal-content w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center">
+            <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
+                <i class="fa-solid fa-circle-exclamation"></i>
             </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Attention Needed</h3>
+            <p id="modalText" class="text-slate-500 text-sm mb-6">Please check your inputs.</p>
+            <button onclick="closeModal()" class="w-full bg-brand-accent hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
+                UNDERSTOOD
+            </button>
         </div>
     </div>
 
@@ -934,116 +1069,114 @@
             {r:"WORKSHOP HELPER",type:"U",c:"Latvia"}
         ];
 
-        // --- FIXED E.164 COMPLIANT REGEX RULES ---
-        // Crucial for ClickUp API Validation
+        // --- NEW PHONE RULES (COMPREHENSIVE) ---
         const countryRules = {
-            "AFGHANISTAN": { regex: /^\+93\d{9}$/, hint: "+93 700123456" },
-            "ALBANIA": { regex: /^\+355\d{8,9}$/, hint: "+355 691234567" },
-            "ALGERIA": { regex: /^\+213\d{9}$/, hint: "+213 555123456" },
-            "ANGOLA": { regex: /^\+244\d{9}$/, hint: "+244 923123456" },
-            "ARMENIA": { regex: /^\+374\d{8}$/, hint: "+374 91123456" },
-            "AZERBAIJAN": { regex: /^\+994\d{9}$/, hint: "+994 501234567" },
-            "BAHRAIN": { regex: /^\+973\d{8}$/, hint: "+973 39123456" },
-            "BANGLADESH": { regex: /^\+8801\d{9}$/, hint: "+880 1712345678" },
-            "BENIN": { regex: /^\+229\d{8}$/, hint: "+229 97123456" },
-            "BHUTAN": { regex: /^\+975\d{8}$/, hint: "+975 17123456" },
-            "BOTSWANA": { regex: /^\+267\d{8}$/, hint: "+267 72123456" },
-            "BRUNEI": { regex: /^\+673\d{7}$/, hint: "+673 8123456" },
-            "BURKINA FASO": { regex: /^\+226\d{8}$/, hint: "+226 70123456" },
-            "BURUNDI": { regex: /^\+257\d{8}$/, hint: "+257 79123456" },
-            "CAMBODIA": { regex: /^\+855\d{8,9}$/, hint: "+855 12345678" },
-            "CAMEROON": { regex: /^\+237\d{9}$/, hint: "+237 671234567" },
-            "CAPE VERDE": { regex: /^\+238\d{7}$/, hint: "+238 9912345" },
-            "CENTRAL AFRICAN REPUBLIC": { regex: /^\+236\d{8}$/, hint: "+236 75123456" },
-            "CHAD": { regex: /^\+235\d{8}$/, hint: "+235 66123456" },
-            "CHINA": { regex: /^\+861\d{10}$/, hint: "+86 13912345678" },
-            "COMOROS": { regex: /^\+269\d{7}$/, hint: "+269 3312345" },
-            "CONGO (DRC)": { regex: /^\+243\d{9}$/, hint: "+243 811234567" },
-            "CONGO (REPUBLIC)": { regex: /^\+242\d{9}$/, hint: "+242 061234567" },
-            "CYPRUS": { regex: /^\+357\d{8}$/, hint: "+357 99123456" },
-            "DJIBOUTI": { regex: /^\+253\d{8}$/, hint: "+253 77123456" },
-            "EGYPT": { regex: /^\+201\d{9}$/, hint: "+20 1012345678" },
-            "EQUATORIAL GUINEA": { regex: /^\+240\d{9}$/, hint: "+240 222123456" },
-            "ERITREA": { regex: /^\+291\d{7}$/, hint: "+291 7123456" },
-            "ESWATINI": { regex: /^\+268\d{8}$/, hint: "+268 76123456" },
-            "ETHIOPIA": { regex: /^\+251\d{9}$/, hint: "+251 911234567" },
-            "GABON": { regex: /^\+241\d{7,8}$/, hint: "+241 07123456" },
-            "GAMBIA": { regex: /^\+220\d{7}$/, hint: "+220 7123456" },
-            "GEORGIA": { regex: /^\+995\d{9}$/, hint: "+995 599123456" },
-            "GHANA": { regex: /^\+233\d{9}$/, hint: "+233 241234567" },
-            "GUINEA": { regex: /^\+224\d{9}$/, hint: "+224 621234567" },
-            "GUINEA-BISSAU": { regex: /^\+245\d{9}$/, hint: "+245 961234567" },
-            "HONG KONG": { regex: /^\+852\d{8}$/, hint: "+852 91234567" },
-            "INDIA": { regex: /^\+91[6-9]\d{9}$/, hint: "+91 9876543210" },
-            "INDONESIA": { regex: /^\+628\d{9,11}$/, hint: "+62 8123456789" },
-            "IRAN": { regex: /^\+989\d{9}$/, hint: "+98 9123456789" },
-            "IRAQ": { regex: /^\+9647\d{9}$/, hint: "+964 7501234567" },
-            "ISRAEL": { regex: /^\+9725\d{8}$/, hint: "+972 501234567" },
-            "IVORY COAST": { regex: /^\+225\d{10}$/, hint: "+225 0701234567" },
-            "JAPAN": { regex: /^\+81[789]0\d{8}$/, hint: "+81 9012345678" },
-            "JORDAN": { regex: /^\+9627\d{8}$/, hint: "+962 791234567" },
-            "KAZAKHSTAN": { regex: /^\+77\d{9}$/, hint: "+7 7012345678" },
-            "KENYA": { regex: /^\+2547\d{8}$/, hint: "+254 712345678" },
-            "KUWAIT": { regex: /^\+965\d{8}$/, hint: "+965 91234567" },
-            "KYRGYZSTAN": { regex: /^\+996\d{9}$/, hint: "+996 555123456" },
-            "LAOS": { regex: /^\+85620\d{8}$/, hint: "+856 2012345678" },
-            "LEBANON": { regex: /^\+961\d{7,8}$/, hint: "+961 70123456" },
-            "LESOTHO": { regex: /^\+266\d{8}$/, hint: "+266 58123456" },
-            "LIBERIA": { regex: /^\+231\d{8,9}$/, hint: "+231 77123456" },
-            "LIBYA": { regex: /^\+2189\d{8}$/, hint: "+218 911234567" },
-            "MACAU": { regex: /^\+8536\d{7}$/, hint: "+853 66123456" },
-            "MADAGASCAR": { regex: /^\+261\d{9}$/, hint: "+261 341234567" },
-            "MALAWI": { regex: /^\+265\d{9}$/, hint: "+265 881234567" },
-            "MALAYSIA": { regex: /^\+601\d{8,9}$/, hint: "+60 123456789" },
-            "MALDIVES": { regex: /^\+960\d{7}$/, hint: "+960 7712345" },
-            "MALI": { regex: /^\+223\d{8}$/, hint: "+223 76123456" },
-            "MAURITANIA": { regex: /^\+222\d{8}$/, hint: "+222 46123456" },
-            "MAURITIUS": { regex: /^\+2305\d{7}$/, hint: "+230 57123456" },
-            "MONGOLIA": { regex: /^\+976\d{8}$/, hint: "+976 99123456" },
-            "MOROCCO": { regex: /^\+212\d{9}$/, hint: "+212 612345678" },
-            "MOZAMBIQUE": { regex: /^\+258\d{9}$/, hint: "+258 841234567" },
-            "MYANMAR (BURMA)": { regex: /^\+959\d{7,9}$/, hint: "+95 912345678" },
-            "NAMIBIA": { regex: /^\+2648\d{8}$/, hint: "+264 811234567" },
-            "NEPAL": { regex: /^\+9779\d{9}$/, hint: "+977 9812345678" },
-            "NIGER": { regex: /^\+227\d{8}$/, hint: "+227 96123456" },
-            "NIGERIA": { regex: /^\+234[789]\d{9}$/, hint: "+234 8012345678" },
-            "NORTH KOREA": { regex: /^\+850\d{8,10}$/, hint: "+850 191234567" },
-            "OMAN": { regex: /^\+968\d{8}$/, hint: "+968 99123456" },
-            "PAKISTAN": { regex: /^\+923\d{9}$/, hint: "+92 3001234567" },
-            "PALESTINE": { regex: /^\+9705\d{8}$/, hint: "+970 591234567" },
-            "PHILIPPINES": { regex: /^\+639\d{9}$/, hint: "+63 9171234567" },
-            "QATAR": { regex: /^\+974\d{8}$/, hint: "+974 33123456" },
-            "RWANDA": { regex: /^\+2507\d{8}$/, hint: "+250 781234567" },
-            "SAO TOME & PRINCIPE": { regex: /^\+239\d{7}$/, hint: "+239 9912345" },
-            "SAUDI ARABIA": { regex: /^\+9665\d{8}$/, hint: "+966 501234567" },
-            "SENEGAL": { regex: /^\+221\d{9}$/, hint: "+221 771234567" },
-            "SEYCHELLES": { regex: /^\+248\d{7}$/, hint: "+248 2512345" },
-            "SIERRA LEONE": { regex: /^\+232\d{8}$/, hint: "+232 76123456" },
-            "SINGAPORE": { regex: /^\+65\d{8}$/, hint: "+65 81234567" },
-            "SOMALIA": { regex: /^\+252\d{8,9}$/, hint: "+252 615123456" },
-            "SOUTH AFRICA": { regex: /^\+27\d{9}$/, hint: "+27 821234567" },
-            "SOUTH KOREA": { regex: /^\+8210\d{8}$/, hint: "+82 1012345678" },
-            "SOUTH SUDAN": { regex: /^\+2119\d{8}$/, hint: "+211 912345678" },
-            "SRI LANKA": { regex: /^\+947\d{8}$/, hint: "+94 771234567" },
-            "SUDAN": { regex: /^\+249\d{9}$/, hint: "+249 912345678" },
-            "SYRIA": { regex: /^\+9639\d{8}$/, hint: "+963 941234567" },
-            "TAIWAN": { regex: /^\+8869\d{8}$/, hint: "+886 912345678" },
-            "TAJIKISTAN": { regex: /^\+9929\d{8}$/, hint: "+992 901234567" },
-            "TANZANIA": { regex: /^\+255\d{9}$/, hint: "+255 712345678" },
-            "THAILAND": { regex: /^\+66\d{9}$/, hint: "+66 812345678" },
-            "TIMOR-LESTE": { regex: /^\+6707\d{7}$/, hint: "+670 77123456" },
-            "TOGO": { regex: /^\+228\d{8}$/, hint: "+228 90123456" },
-            "TUNISIA": { regex: /^\+216\d{8}$/, hint: "+216 20123456" },
-            "TURKEY": { regex: /^\+905\d{9}$/, hint: "+90 5321234567" },
-            "TURKMENISTAN": { regex: /^\+9936\d{7}$/, hint: "+993 65123456" },
-            "UAE": { regex: /^\+9715\d{8}$/, hint: "+971 501234567" },
-            "UGANDA": { regex: /^\+2567\d{8}$/, hint: "+256 771234567" },
-            "UZBEKISTAN": { regex: /^\+9989\d{8}$/, hint: "+998 901234567" },
-            "VIETNAM": { regex: /^\+84\d{9}$/, hint: "+84 901234567" },
-            "YEMEN": { regex: /^\+9677\d{8}$/, hint: "+967 712345678" },
-            "ZAMBIA": { regex: /^\+2609\d{8}$/, hint: "+260 971234567" },
-            "ZIMBABWE": { regex: /^\+2637\d{8}$/, hint: "+263 771234567" },
-            "OTHER": { regex: /^\+\d{8,15}$/, hint: "+ [CountryCode][Number]" }
+            "AFGHANISTAN": { regex: /^(\+93)\d{9}$/, hint: "+93 123456789" },
+            "ALGERIA": { regex: /^(\+213)\d{8,9}$/, hint: "+213 123456789" },
+            "ANGOLA": { regex: /^(\+244)\d{9}$/, hint: "+244 123456789" },
+            "ARMENIA": { regex: /^(\+374)\d{6,8}$/, hint: "+374 12345678" },
+            "AZERBAIJAN": { regex: /^(\+994)\d{9,10}$/, hint: "+994 123456789" },
+            "BAHRAIN": { regex: /^(\+973)\d{8}$/, hint: "+973 12345678" },
+            "BANGLADESH": { regex: /^(\+880)1\d{9}$/, hint: "+880 1712345678" },
+            "BENIN": { regex: /^(\+229)\d{8}$/, hint: "+229 12345678" },
+            "BHUTAN": { regex: /^(\+975)\d{7,8}$/, hint: "+975 17123456" },
+            "BOTSWANA": { regex: /^(\+267)\d{7,8}$/, hint: "+267 1234567" },
+            "BRUNEI": { regex: /^(\+673)\d{7}$/, hint: "+673 1234567" },
+            "BURKINA FASO": { regex: /^(\+226)\d{8}$/, hint: "+226 12345678" },
+            "BURUNDI": { regex: /^(\+257)\d{8}$/, hint: "+257 12345678" },
+            "CAMBODIA": { regex: /^(\+855)\d{8,9}$/, hint: "+855 123456789" },
+            "CAMEROON": { regex: /^(\+237)\d{8,9}$/, hint: "+237 123456789" },
+            "CAPE VERDE": { regex: /^(\+238)\d{7}$/, hint: "+238 1234567" },
+            "CENTRAL AFRICAN REPUBLIC": { regex: /^(\+236)\d{8}$/, hint: "+236 12345678" },
+            "CHAD": { regex: /^(\+235)\d{8}$/, hint: "+235 12345678" },
+            "CHINA": { regex: /^(\+86)\d{9,11}$/, hint: "+86 13800138000" },
+            "COMOROS": { regex: /^(\+269)\d{7}$/, hint: "+269 1234567" },
+            "CONGO (DRC)": { regex: /^(\+243)\d{9}$/, hint: "+243 123456789" },
+            "CONGO (REPUBLIC)": { regex: /^(\+242)\d{7,9}$/, hint: "+242 123456789" },
+            "CYPRUS": { regex: /^(\+357)\d{8}$/, hint: "+357 12345678" },
+            "DJIBOUTI": { regex: /^(\+253)\d{8}$/, hint: "+253 12345678" },
+            "EGYPT": { regex: /^(\+20)[1][0,1,2,5]\d{8}$/, hint: "+20 1012345678" },
+            "EQUATORIAL GUINEA": { regex: /^(\+240)\d{9}$/, hint: "+240 123456789" },
+            "ERITREA": { regex: /^(\+291)\d{7}$/, hint: "+291 1234567" },
+            "ESWATINI": { regex: /^(\+268)\d{8}$/, hint: "+268 12345678" },
+            "ETHIOPIA": { regex: /^(\+251)\d{9}$/, hint: "+251 123456789" },
+            "GABON": { regex: /^(\+241)\d{7,8}$/, hint: "+241 12345678" },
+            "GAMBIA": { regex: /^(\+220)\d{7}$/, hint: "+220 1234567" },
+            "GEORGIA": { regex: /^(\+995)\d{8,9}$/, hint: "+995 123456789" },
+            "GHANA": { regex: /^(\+233)\d{9}$/, hint: "+233 123456789" },
+            "GUINEA": { regex: /^(\+224)\d{8,9}$/, hint: "+224 123456789" },
+            "GUINEA-BISSAU": { regex: /^(\+245)\d{7}$/, hint: "+245 1234567" },
+            "HONG KONG": { regex: /^(\+852)\d{8}$/, hint: "+852 12345678" },
+            "INDIA": { regex: /^(\+91)[6-9]\d{9}$/, hint: "+91 9876543210" },
+            "INDONESIA": { regex: /^(\+62)\d{9,11}$/, hint: "+62 8123456789" },
+            "IRAN": { regex: /^(\+98)\d{10}$/, hint: "+98 9123456789" },
+            "IRAQ": { regex: /^(\+964)\d{9,10}$/, hint: "+964 7501234567" },
+            "ISRAEL": { regex: /^(\+972)\d{8,9}$/, hint: "+972 501234567" },
+            "IVORY COAST": { regex: /^(\+225)\d{8,10}$/, hint: "+225 01234567" },
+            "JAPAN": { regex: /^(\+81)\d{9,10}$/, hint: "+81 9012345678" },
+            "JORDAN": { regex: /^(\+962)\d{8,9}$/, hint: "+962 791234567" },
+            "KAZAKHSTAN": { regex: /^(\+7)\d{10}$/, hint: "+7 7012345678" },
+            "KENYA": { regex: /^(\+254)\d{9}$/, hint: "+254 712345678" },
+            "KUWAIT": { regex: /^(\+965)\d{8}$/, hint: "+965 12345678" },
+            "KYRGYZSTAN": { regex: /^(\+996)\d{9}$/, hint: "+996 555123456" },
+            "LAOS": { regex: /^(\+856)\d{9}$/, hint: "+856 2012345678" },
+            "LEBANON": { regex: /^(\+961)\d{7,8}$/, hint: "+961 3123456" },
+            "LESOTHO": { regex: /^(\+266)\d{8}$/, hint: "+266 12345678" },
+            "LIBERIA": { regex: /^(\+231)\d{7,8}$/, hint: "+231 77123456" },
+            "LIBYA": { regex: /^(\+218)\d{8,9}$/, hint: "+218 911234567" },
+            "MACAU": { regex: /^(\+853)\d{8}$/, hint: "+853 66123456" },
+            "MADAGASCAR": { regex: /^(\+261)\d{9}$/, hint: "+261 341234567" },
+            "MALAWI": { regex: /^(\+265)\d{9}$/, hint: "+265 881234567" },
+            "MALAYSIA": { regex: /^(\+60)\d{8,10}$/, hint: "+60 123456789" },
+            "MALDIVES": { regex: /^(\+960)\d{7}$/, hint: "+960 7123456" },
+            "MALI": { regex: /^(\+223)\d{8}$/, hint: "+223 12345678" },
+            "MAURITANIA": { regex: /^(\+222)\d{8}$/, hint: "+222 12345678" },
+            "MAURITIUS": { regex: /^(\+230)\d{7,8}$/, hint: "+230 51234567" },
+            "MONGOLIA": { regex: /^(\+976)\d{8}$/, hint: "+976 99123456" },
+            "MOROCCO": { regex: /^(\+212)\d{9}$/, hint: "+212 612345678" },
+            "MOZAMBIQUE": { regex: /^(\+258)\d{8,9}$/, hint: "+258 841234567" },
+            "MYANMAR (BURMA)": { regex: /^(\+95)\d{7,10}$/, hint: "+95 912345678" },
+            "NAMIBIA": { regex: /^(\+264)\d{8}$/, hint: "+264 811234567" },
+            "NEPAL": { regex: /^(\+977)(97|98)\d{8}$/, hint: "+977 9812345678" },
+            "NIGER": { regex: /^(\+227)\d{8}$/, hint: "+227 99123456" },
+            "NIGERIA": { regex: /^(\+234)\d{10}$/, hint: "+234 8012345678" },
+            "NORTH KOREA": { regex: /^(\+850)\d{6,10}$/, hint: "+850 191234567" },
+            "OMAN": { regex: /^(\+968)\d{8}$/, hint: "+968 91234567" },
+            "PAKISTAN": { regex: /^(\+92)3\d{2}\d{7}$/, hint: "+92 3001234567" },
+            "PALESTINE": { regex: /^(\+970|\+972)\d{8,9}$/, hint: "+970 591234567" },
+            "PHILIPPINES": { regex: /^(\+63)9\d{9}$/, hint: "+63 9123456789" },
+            "QATAR": { regex: /^(\+974)\d{8}$/, hint: "+974 33123456" },
+            "RWANDA": { regex: /^(\+250)\d{9}$/, hint: "+250 781234567" },
+            "SAO TOME & PRINCIPE": { regex: /^(\+239)\d{7}$/, hint: "+239 9912345" },
+            "SAUDI ARABIA": { regex: /^(\+966)\d{9}$/, hint: "+966 501234567" },
+            "SENEGAL": { regex: /^(\+221)\d{8}$/, hint: "+221 771234567" },
+            "SEYCHELLES": { regex: /^(\+248)\d{7}$/, hint: "+248 2123456" },
+            "SIERRA LEONE": { regex: /^(\+232)\d{8}$/, hint: "+232 76123456" },
+            "SINGAPORE": { regex: /^(\+65)\d{8}$/, hint: "+65 81234567" },
+            "SOMALIA": { regex: /^(\+252)\d{7,9}$/, hint: "+252 612345678" },
+            "SOUTH AFRICA": { regex: /^(\+27)\d{9}$/, hint: "+27 821234567" },
+            "SOUTH KOREA": { regex: /^(\+82)\d{8,9}$/, hint: "+82 1012345678" },
+            "SOUTH SUDAN": { regex: /^(\+211)\d{7,9}$/, hint: "+211 912345678" },
+            "SRI LANKA": { regex: /^(\+94)7\d{8}$/, hint: "+94 771234567" },
+            "SUDAN": { regex: /^(\+249)\d{9}$/, hint: "+249 912345678" },
+            "SYRIA": { regex: /^(\+963)\d{8,9}$/, hint: "+963 931234567" },
+            "TAIWAN": { regex: /^(\+886)\d{9}$/, hint: "+886 912345678" },
+            "TAJIKISTAN": { regex: /^(\+992)\d{9}$/, hint: "+992 901234567" },
+            "TANZANIA": { regex: /^(\+255)\d{9}$/, hint: "+255 712345678" },
+            "THAILAND": { regex: /^(\+66)\d{8,9}$/, hint: "+66 812345678" },
+            "TIMOR-LESTE": { regex: /^(\+670)\d{7}$/, hint: "+670 77123456" },
+            "TOGO": { regex: /^(\+228)\d{8}$/, hint: "+228 90123456" },
+            "TUNISIA": { regex: /^(\+216)\d{8}$/, hint: "+216 20123456" },
+            "TURKEY": { regex: /^(\+90)\d{10}$/, hint: "+90 5321234567" },
+            "TURKMENISTAN": { regex: /^(\+993)\d{8}$/, hint: "+993 61234567" },
+            "UAE": { regex: /^(\+971)\d{8,9}$/, hint: "+971 501234567" },
+            "UGANDA": { regex: /^(\+256)\d{9}$/, hint: "+256 771234567" },
+            "UZBEKISTAN": { regex: /^(\+998)\d{9}$/, hint: "+998 901234567" },
+            "VIETNAM": { regex: /^(\+84)\d{8,9}$/, hint: "+84 901234567" },
+            "YEMEN": { regex: /^(\+967)\d{7,9}$/, hint: "+967 712345678" },
+            "ZAMBIA": { regex: /^(\+260)\d{9}$/, hint: "+260 971234567" },
+            "ZIMBABWE": { regex: /^(\+263)\d{9,10}$/, hint: "+263 771234567" },
+            "OTHER": { regex: /^\+?\d{8,15}$/, hint: "+" }
         };
 
         const countryPageMap = {
@@ -1064,7 +1197,6 @@
 
         let currentMode = 'Unskilled';
         let currentPhoneRegex = null;
-        let currentAlternatives = [];
 
         // INIT
         window.onload = function() {
@@ -1077,12 +1209,6 @@
             
             // Populate Countries
             populateCountryDropdowns();
-            
-            // --- NEW: Set default values on load ---
-            document.getElementById('presentResidence').value = "UAE";
-            toggleCvUpload(true); // Ensure CV upload section is visible
-            // ---------------------------------------
-
             // getClickUpFields(); // Disabled for production
 
             flatpickr("#dob", {
@@ -1138,18 +1264,10 @@
         // --- NEW CV UPLOAD LOGIC ---
         function toggleCvUpload(show) {
             const container = document.getElementById('cvUploadContainer');
-            // Update Radio Button Status
-            const radioYes = document.querySelector('input[name="hasCv"][value="yes"]');
-            const radioNo = document.querySelector('input[name="hasCv"][value="no"]');
-
             if(show) {
                 container.classList.remove('hidden');
-                radioYes.checked = true;
-                radioNo.checked = false;
             } else {
                 container.classList.add('hidden');
-                radioYes.checked = false;
-                radioNo.checked = true;
                 // Clear file if they toggle to NO
                 document.getElementById('cvFile').value = '';
                 document.getElementById('fileNameDisplay').innerText = "Tap here to upload CV";
@@ -1304,10 +1422,10 @@
             const parts = rule.hint.split(' ');
             const code = parts[0] + " "; 
             
-            // Update fields with code IF empty or just a code
-            if(mob.value.length < 5) mob.value = code;
-            if(wa.value.length < 5) wa.value = code;
-            if(alt.value.length < 5) alt.value = code;
+            // Update fields with code
+            mob.value = code;
+            wa.value = code;
+            alt.value = code;
             
             // Update Hints Text
             const mHint = document.getElementById('mobileHint');
@@ -1334,33 +1452,19 @@
             document.getElementById('altPhoneFeedback').innerHTML = '';
         }
 
-        // --- IMPROVED PHONE CLEANING FOR CLICKUP API ---
         function cleanPhoneNumber(phoneStr) {
             if(!phoneStr) return null;
-            
-            // 1. Remove all non-numeric and non-plus chars
-            let cleaned = phoneStr.replace(/[^0-9+]/g, '');
-            
-            // 2. Handle "00" prefix common in Europe/Asia -> convert to +
-            if(cleaned.startsWith('00')) {
-                cleaned = '+' + cleaned.substring(2);
-            }
-            
-            // 3. Ensure it starts with + if it has digits
-            if(cleaned.length > 0 && !cleaned.startsWith('+')) {
-                cleaned = '+' + cleaned;
-            }
-
-            // 4. Final Safety: Return null if it's just "+" or empty
-            if(cleaned.length < 5) return null; 
-
-            return cleaned;
+            return phoneStr.replace(/[^0-9+]/g, '');
         }
         
-        // Enforce Numeric Input (allow + only at start)
+        // NEW: Enforce Numeric Input (allow + only at start)
         function enforcePhoneInput(el) {
             // Allow + at start, then only digits and spaces
             let val = el.value;
+            if(!val.startsWith('+')) {
+                 // If user deleted +, put it back if we have a residence rule
+                 // Ideally, we just filter chars. 
+            }
             // Replace any char that is NOT 0-9, space, or +
             el.value = val.replace(/[^0-9+ ]/g, '');
         }
@@ -1393,7 +1497,7 @@
             } else {
                 el.classList.remove('valid-field');
                 // Only show error style if length is substantial
-                if(rawVal.length > 6) { // Increased threshold slightly
+                if(rawVal.length > 4) {
                     el.classList.add('invalid-field');
                     feedback.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
                 } else {
@@ -1426,7 +1530,7 @@
                 
                 const sel = document.getElementById('presentResidence');
                 const rule = countryRules[sel.value] || countryRules["OTHER"];
-                showModal(`Invalid Mobile Number Format.\n\nPlease follow the format for ${sel.value}:\n${rule.hint}`);
+                showModal(`Invalid Mobile Number Format.\n\nExample format for ${sel.value}: ${rule.hint}`);
                 return;
             }
 
@@ -1554,10 +1658,6 @@
             const grid = document.getElementById('altMatchesGrid');
             grid.innerHTML = '';
             const others = jobMasterList.filter(j => j.type === jobData.type && j.c !== jobData.c).sort(() => 0.5 - Math.random()).slice(0, 3);
-            
-            // Save for ClickUp Description
-            currentAlternatives = others;
-
             others.forEach(o => {
                 const div = document.createElement('div');
                 div.className = "flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-gray-100 hover:bg-white hover:border-brand-primary/30 transition-all cursor-pointer group shadow-sm hover:shadow-md";
@@ -1590,11 +1690,11 @@
         }
 
         function getFlag(c) {
-            const m = { "Sweden": "🇸🇪", "Finland": "🇫🇮", "Netherlands": "🇳🇱", "Germany": "🇩🇪", "Czech Republic": "🇨🇿", "Poland": "🇵🇱", "France": "🇫🇷", "Italy": "🇮🇹", "Latvia": "🇱🇻", "Croatia": "🇭🇷", "Serbia": "🇷🇸", "Albania": "🇦🇱", "Macedonia": "🇲🇰", "UAE": "🇦🇪" }; // Added UAE flag
+            const m = { "Sweden": "🇸🇪", "Finland": "🇫🇮", "Netherlands": "🇳🇱", "Germany": "🇩🇪", "Czech Republic": "🇨🇿", "Poland": "🇵🇱", "France": "🇫🇷", "Italy": "🇮🇹", "Latvia": "🇱🇻", "Croatia": "🇭🇷", "Serbia": "🇷🇸", "Albania": "🇦🇱", "Macedonia": "🇲🇰" };
             return m[c] || "🇪🇺";
         }
 
-        // Helper to convert date string DD/MM/YYYY to Unix Timestamp (ms)
+        // Helper to convert date string DD/MM/YYYY to Unix Timestamp (ms) for ClickUp
         function getUnixTime(dateStr) {
             if (!dateStr) return null;
             const parts = dateStr.split('/');
@@ -1607,35 +1707,16 @@
             return null;
         }
 
-        // --- NEW HELPER FOR CASING ---
-        function toTitleCase(str) {
-            if (!str) return "";
-            return str.replace(
-                /\w\S*/g,
-                function(txt) {
-                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-                }
-            );
-        }
-
         async function saveData() {
             // 1. Gather all data points
             const ref = document.getElementById('refId').innerText;
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
-            
-            // CONVERT TO TITLE CASE TO MATCH CLICKUP DROPDOWN OPTIONS (Usually Title Case)
-            // Even if the input value is "AFGHANISTAN" (Uppercase), we send "Afghanistan"
-            // FIX: Added .trim() to ensure no trailing spaces break matching
-            const presentResidenceEl = document.getElementById('presentResidence');
-            const presentCountry = presentResidenceEl && presentResidenceEl.value ? toTitleCase(presentResidenceEl.value.trim()) : "";
-            
-            const nationalityEl = document.getElementById('nationality');
-            const nationality = nationalityEl && nationalityEl.value ? toTitleCase(nationalityEl.value.trim()) : "";
-            
+            const presentCountry = document.getElementById('presentResidence').value;
             const dob = document.getElementById('dob').value;
             const age = parseInt(document.getElementById('age').value) || 0;
+            const nationality = document.getElementById('nationality').value;
             
             // Clean phone numbers: REMOVE SPACES/DASHES FOR CLICKUP SAVING
             const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
@@ -1648,16 +1729,6 @@
             const role = document.getElementById('currentJob').value;
             const exp = parseInt(document.getElementById('experience').value) || 0;
             const resultCountry = document.getElementById('topMatchCountry').innerText;
-
-            // --- BUILD ALTERNATIVES STRING ---
-            let alternativesText = "";
-            if (currentAlternatives && currentAlternatives.length > 0) {
-                alternativesText = "\n\n**STRATEGIC ALTERNATIVES**\n--------------------------------------------------\n";
-                currentAlternatives.forEach(alt => {
-                    const sal = getSalary(alt.c, currentMode);
-                    alternativesText += `• ${alt.c}: ${alt.r} (${sal})\n`;
-                });
-            }
 
             // 2. Prepare Custom Fields Array for ClickUp
             const customFieldsArray = [];
@@ -1692,35 +1763,18 @@
                 let finalValue = val;
 
                 if (fieldDef) {
-                    // --- DEBUG LOG FOR RESIDENCE ---
-                    if(key === "PRESENT RESIDENCE") {
-                        console.log(`[ClickUp Match] Found ID for PRESENT RESIDENCE. Attempting to match: '${val}'`);
-                        // Un-comment next line to see all options in console if needed
-                        // console.log("Available Options:", fieldDef.type_config.options);
-                    }
-
                     // --- CASE A: DROPDOWN or LABELS ---
                     if (fieldDef.type === 'drop_down' || fieldDef.type === 'labels') {
                         // We must send the INTEGER INDEX (orderindex) or UUID, not the text
                         const options = fieldDef.type_config.options;
+                        const match = options.find(o => o.name && o.name.toLowerCase() === String(val).toLowerCase());
                         
-                        // Try strict match first (trimmed)
-                        let match = options.find(o => o.name && o.name.toLowerCase().trim() === String(val).toLowerCase().trim());
-                        
-                        // If strict match fails, try fuzzy match (if user sent spaces or minor chars)
-                        if (!match) {
-                             match = options.find(o => o.name && o.name.toLowerCase().replace(/[^a-z]/g, '') === String(val).toLowerCase().replace(/[^a-z]/g, ''));
-                        }
-
                         if (match) {
                             // CHANGED: Prioritize UUID (match.id) over index. This fixes "Not Saved" issues in newer API versions.
                             finalValue = match.id;
                         } else {
-                            // CRITICAL FIX: If exact match fails (or if API fetch failed), send the raw text value.
-                            // Previously this would 'return' and skip saving the field entirely.
-                            console.warn(`ClickUp Option Mismatch for ${key}: '${val}'. sending raw value.`);
-                            // Fallback to sending text. If user changes field to Text/Short Text in ClickUp, this works.
-                            finalValue = val; 
+                            console.warn(`ClickUp Dropdown Mismatch for '${key}' (${val}). Field is '${fieldDef.type}'. Option not found in ClickUp list. Skipping field to prevent 400 Error.`);
+                            return; // STOP: Sending text to a dropdown field causes API Error 400
                         }
                     }
                     // --- CASE B: EMAIL, PHONE, URL (Validation Required by ClickUp) ---
@@ -1742,12 +1796,9 @@
 
             // Map Data to Configured IDs
             addField("SUR NAME", lastName);
-            
-            // Only add phones if they are valid E.164 strings
-            if(mobile) addField("MOBILE", mobile);
-            if(whatsapp) addField("WHATSAPP", whatsapp);
-            if(altPhone) addField("PHONE", altPhone); 
-            
+            addField("MOBILE", mobile);
+            addField("WHATSAPP", whatsapp);
+            addField("PHONE", altPhone); // Mapped new field
             addField("DATE OF BIRTH", getUnixTime(dob));
             addField("AGE", age);
             addField("EMAIL", email);
@@ -1755,11 +1806,7 @@
             addField("QUALIFICATION", qualification); 
             addField("JOB ROLE", role);             
             addField("NATIONALITY", nationality);     
-            
-            // Explicit check here
-            if(presentCountry) {
-                addField("PRESENT RESIDENCE", presentCountry);     
-            }
+            addField("PRESENT RESIDENCE", presentCountry);     
             
             addField("EXPERIENCE", exp);
             addField("PASSPORT NUMBER", passportNo);
@@ -1788,8 +1835,8 @@
 
 **CONTACT INFO**
 --------------------------------------------------
-**Mobile:** ${mobile || "N/A"}
-**WhatsApp:** ${whatsapp || "N/A"}
+**Mobile:** ${mobile}
+**WhatsApp:** ${whatsapp}
 **Alt Phone:** ${altPhone || "N/A"}
 
 **PROFESSIONAL PROFILE**
@@ -1807,7 +1854,7 @@
 **ASSESSMENT RESULT**
 --------------------------------------------------
 **Primary Recommendation:** ${resultCountry}
-**Est. Salary:** ${getSalary(resultCountry, currentMode)}${alternativesText}
+**Est. Salary:** ${getSalary(resultCountry, currentMode)}
 
 --------------------------------------------------
 *Verified by Better Call Immigration AI*`;
@@ -1876,236 +1923,6 @@
             t.classList.remove('translate-y-32','opacity-0');
             setTimeout(() => t.classList.add('translate-y-32','opacity-0'), 3000);
         }
-    </script>
-</body>
-</html>
-
-
-        // ... existing functions ...
-
-        // --- NAVIGATION LOGIC ---
-
-        function goToStep2() {
-            // ... existing validation code ...
-            const age = parseInt(document.getElementById('age').value);
-            if(isNaN(age) || age < 20 || age > 50) { 
-                const ageField = document.getElementById('age');
-                ageField.classList.add('invalid-field', 'animate-pulse');
-                setTimeout(() => ageField.classList.remove('animate-pulse'), 500);
-                showModal("Sorry, you are not eligible for the immigration process. (Age requirement: 20-50)"); 
-                return; 
-            }
-            
-            // STRICT PHONE VALIDATION CHECK BEFORE NEXT
-            const mEl = document.getElementById('mobile');
-            // Check regex against cleaned value (no spaces)
-            const rawVal = mEl.value.replace(/\s/g, '');
-            
-            if(currentPhoneRegex && !currentPhoneRegex.test(rawVal)) {
-                mEl.classList.add('invalid-field');
-                const btn = document.getElementById('nextBtn');
-                btn.classList.add('animate-shake');
-                setTimeout(() => btn.classList.remove('animate-shake'), 500);
-                document.getElementById('mobileError').classList.remove('hidden');
-                
-                const sel = document.getElementById('presentResidence');
-                const rule = countryRules[sel.value] || countryRules["OTHER"];
-                showModal(`Invalid Mobile Number Format.\n\nPlease follow the format for ${sel.value}:\n${rule.hint}`);
-                return;
-            }
-
-            if(!document.getElementById('personalForm').checkValidity()) {
-                document.getElementById('personalForm').reportValidity(); return;
-            }
-
-            document.getElementById('tab-1').classList.add('hidden');
-            document.getElementById('tab-2').classList.remove('hidden');
-            
-            // Visual Update for Steps
-            updateSteps(2);
-
-            const name = document.getElementById('firstName').value + " " + document.getElementById('lastName').value;
-            document.getElementById('reportName').innerText = name;
-            document.getElementById('avatarInitial').innerText = name.charAt(0);
-            
-            const today = new Date();
-            document.getElementById('reportDate').innerText = today.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        }
-
-        function goBackToStep1() {
-            document.getElementById('tab-2').classList.add('hidden');
-            document.getElementById('tab-1').classList.remove('hidden');
-            updateSteps(1);
-        }
-
-        function updateSteps(step) {
-            const s1 = document.getElementById('step-1-indicator');
-            const s2 = document.getElementById('step-2-indicator');
-            
-            if (step === 2) {
-                s1.classList.add('opacity-40', 'grayscale');
-                s2.classList.remove('opacity-40', 'grayscale');
-                s2.querySelector('div').classList.add('border-brand-primary', 'text-brand-primary');
-                s2.querySelector('div').classList.remove('border-gray-200', 'text-gray-400');
-                s2.querySelector('span').classList.add('text-brand-primary');
-            } else {
-                s1.classList.remove('opacity-40', 'grayscale');
-                s2.classList.add('opacity-40', 'grayscale');
-                s2.querySelector('div').classList.remove('border-brand-primary', 'text-brand-primary');
-                s2.querySelector('div').classList.add('border-gray-200', 'text-gray-400');
-                s2.querySelector('span').classList.remove('text-brand-primary');
-            }
-        }
-
-        // --- CONFIRMATION & GENERATION LOGIC ---
-
-        function initiateAnalysis() {
-            const role = document.getElementById('currentJob').value;
-            if(!role) { showModal("Please select a target position to continue."); return; }
-
-            const expEl = document.getElementById('experience');
-            if(currentMode === 'Skilled') {
-                let val = parseInt(expEl.value);
-                if(isNaN(val) || val < 1) { showModal("Minimum 1 year of professional experience is required for Skilled Migration."); return; }
-                if(val > 30) { showModal("Experience cannot exceed 30 years."); return; }
-            }
-
-            // Populate Summary
-            const summaryHTML = `
-                <div class="summary-row">
-                    <span class="summary-label">Full Name</span>
-                    <span class="summary-value">${document.getElementById('firstName').value} ${document.getElementById('lastName').value}</span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">Mobile</span>
-                    <span class="summary-value">${document.getElementById('mobile').value}</span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">Residence</span>
-                    <span class="summary-value">${document.getElementById('presentResidence').value}</span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">Job Role</span>
-                    <span class="summary-value text-brand-primary">${role}</span>
-                </div>
-                <div class="summary-row" style="border: none;">
-                    <span class="summary-label">Category</span>
-                    <span class="summary-value">${currentMode} (${currentMode === 'Skilled' ? document.getElementById('experience').value + ' Years' : 'Entry Level'})</span>
-                </div>
-            `;
-            
-            document.getElementById('summaryContent').innerHTML = summaryHTML;
-            
-            // Show Modal
-            const m = document.getElementById('confirmModal');
-            m.classList.remove('hidden');
-            setTimeout(() => {
-                m.classList.remove('opacity-0');
-                m.querySelector('.modal-content').classList.remove('scale-90');
-                m.querySelector('.modal-content').classList.add('scale-100');
-            }, 10);
-        }
-
-        function closeConfirmModal() {
-            const m = document.getElementById('confirmModal');
-            m.classList.add('opacity-0');
-            m.querySelector('.modal-content').classList.add('scale-90');
-            m.querySelector('.modal-content').classList.remove('scale-100');
-            setTimeout(() => { m.classList.add('hidden'); }, 300);
-        }
-
-        function confirmAndGenerate() {
-            closeConfirmModal();
-            // Proceed to generation
-            generateReport();
-        }
-
-        function generateReport() {
-            // Already validated in initiateAnalysis
-            const role = document.getElementById('currentJob').value;
-            const expEl = document.getElementById('experience');
-            // Get Qualification
-            const qual = document.querySelector('input[name="qualification"]:checked').value;
-
-            document.getElementById('reportContainer').classList.remove('hidden');
-            setTimeout(() => { document.getElementById('reportContainer').scrollIntoView({ behavior: 'smooth' }); }, 100);
-
-            // ... existing report generation logic ...
-            const jobData = jobMasterList.find(j => j.r === role);
-            
-            // Populate Data
-            document.getElementById('topMatchCountry').innerText = jobData.c;
-            document.getElementById('reportRole').innerText = role;
-            document.getElementById('reportQualification').innerText = qual;
-            
-            if(document.getElementById('topMatchRole_2')) {
-                document.getElementById('topMatchRole_2').innerText = role;
-            }
-            
-            const salaryText = getSalary(jobData.c, currentMode);
-            document.getElementById('mainSalaryRange').innerText = salaryText;
-
-            const mainBtn = document.getElementById('mainActionBtn');
-            const targetPage = countryPageMap[jobData.c];
-            const targetUrl = targetPage ? targetPage : 'https://bettercallimmigration.com/appointment';
-            mainBtn.onclick = function() {
-                 window.open(targetUrl, '_blank');
-            };
-            
-            const reasoning = document.getElementById('aiReasoning');
-            let exp = "0";
-            if(currentMode === 'Unskilled') {
-                reasoning.innerText = `Based on current labor shortages in the ${jobData.c} general labor market, candidates applying for ${role} have a high success rate. No specific experience verification is typically required for this visa category, making it an excellent entry-level pathway for global mobility.`;
-                document.getElementById('reportExp').innerText = "Entry Level";
-            } else {
-                exp = document.getElementById('experience').value;
-                reasoning.innerText = `With ${exp} years of specialized experience as a ${role}, you meet the skilled migration criteria for ${jobData.c}. This pathway offers long-term residency options for qualified professionals in your sector, with high demand noted in major industrial regions.`;
-                document.getElementById('reportExp').innerText = exp + " Years";
-            }
-
-            // Generate Alternatives
-            const grid = document.getElementById('altMatchesGrid');
-            grid.innerHTML = '';
-            const others = jobMasterList.filter(j => j.type === jobData.type && j.c !== jobData.c).sort(() => 0.5 - Math.random()).slice(0, 3);
-            
-            currentAlternatives = others;
-
-            others.forEach(o => {
-                const div = document.createElement('div');
-                div.className = "flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-gray-100 hover:bg-white hover:border-brand-primary/30 transition-all cursor-pointer group shadow-sm hover:shadow-md";
-                
-                const altTargetPage = countryPageMap[o.c];
-                const altTargetUrl = altTargetPage ? altTargetPage : 'https://bettercallimmigration.com/appointment';
-                div.onclick = function() { window.open(altTargetUrl, '_blank'); };
-
-                const altSal = getSalary(o.c, currentMode);
-
-                div.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-xl">${getFlag(o.c)}</div>
-                        <div class="flex-grow">
-                            <div class="flex justify-between items-center">
-                                <div class="text-sm font-bold text-slate-700 group-hover:text-brand-primary transition tracking-wide">${o.c}</div>
-                                <div class="text-[10px] text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded border border-green-100">${altSal}</div>
-                            </div>
-                            <div class="text-[10px] text-slate-400 uppercase font-medium mt-1">${o.r}</div>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs group-hover:text-brand-primary transition-colors ml-2"></i>
-                `;
-                grid.appendChild(div);
-            });
-
-            saveData();
-        }
-
-        function closeReport() {
-            document.getElementById('reportContainer').classList.add('hidden');
-            // Optionally scroll back up to the form
-            document.getElementById('jobDetailsPanel').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // ... rest of existing code ...
     </script>
 </body>
 </html>
