@@ -899,6 +899,7 @@
     <!-- Custom Modal for Errors -->
     <div id="messageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/40 opacity-0 transition-opacity duration-300">
         <div class="modal-content glass-card !bg-white/95 w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center">
+            <!-- Modal Content Injected Here -->
             <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
                 <i class="fa-solid fa-circle-exclamation"></i>
             </div>
@@ -954,6 +955,13 @@
         //  CONFIGURATION AREA
         // ==========================================
         
+        // MOVED UP TO ENSURE GLOBAL SCOPE
+        function validateExperienceInput(el) {
+            let val = parseInt(el.value);
+            if(isNaN(val) || val < 1) el.value = 1;
+            else if(val > 30) el.value = 30;
+        }
+
         const CLICKUP_API_KEY = "pk_260468481_S4KLO3ZGV6P1PL1POHKXNS1LA5ISSG0P"; 
         const CLICKUP_LIST_ID = "901813907839"; 
         let globalTaskId = null; // Store created task ID for update
@@ -1377,8 +1385,8 @@
             document.getElementById('barcodeRef').innerText = "*" + rId + "*";
             
             populateCountryDropdowns();
-            renderAdvisors();
-            renderTimeSlots();
+            renderAdvisors(); // Now correctly defined
+            renderTimeSlots(); // Now correctly defined
             
             // Defaults
             document.getElementById('presentResidence').value = "UAE";
@@ -1448,9 +1456,10 @@
             });
         }
         
-        // --- BOOKING UI LOGIC ---
+        // --- BOOKING UI LOGIC (RESTORED) ---
         function renderAdvisors() {
             const grid = document.getElementById('advisorGrid');
+            if(!grid) return;
             grid.innerHTML = '';
             // Make grid 1 col on mobile, 2 on md
             grid.className = "grid grid-cols-1 md:grid-cols-2 gap-6"; 
@@ -1516,6 +1525,7 @@
 
         function renderTimeSlots() {
             const grid = document.getElementById('timeSlotGrid');
+            if(!grid) return;
             const startHour = 10;
             const endHour = 19; // 7 PM
             
@@ -1799,7 +1809,7 @@
         }
         function showModal(msg) {
             const m = document.getElementById('messageModal');
-            document.getElementById('modalText').innerText = msg;
+            document.getElementById('modalText').innerHTML = msg; // Changed to innerHTML to support HTML content
             m.classList.remove('hidden');
             setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
         }
@@ -1898,16 +1908,45 @@
                 showModal("Please select Advisor, Method, Date and Time to confirm."); return;
             }
 
+            // --- Creative Success Message Logic ---
+            const successHtml = `
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                        <i class="fa-solid fa-calendar-check text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-2">Appointment Confirmed!</h3>
+                    <p class="text-slate-500 text-sm mb-6">Your strategy session is locked in.</p>
+                    
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 mb-6 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-brand-primary"></div>
+                        <div class="grid grid-cols-2 gap-4 text-left">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Date</p>
+                                <p class="text-lg font-bold text-slate-800">${date}</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Time</p>
+                                <p class="text-lg font-bold text-brand-primary">${time}</p>
+                            </div>
+                            <div class="col-span-2 pt-4 border-t border-slate-200">
+                                <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Expert Advisor</p>
+                                <p class="text-sm font-bold text-slate-700 flex items-center gap-2">
+                                    <i class="fa-solid fa-headset text-brand-secondary"></i> ${advisor}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-xs text-slate-400 italic">Our expert will contact you via ${method} at the scheduled time.</p>
+                </div>
+            `;
+
             // Prepare Update Payload
-            // Note: For dropdowns/labels, usually need UUIDs, but here passing values and hoping ClickUp matches or fields are Text.
-            // Given complexity of field types without API lookup, we map best effort.
             const updateFields = [
                 { id: CLICKUP_FIELDS["BOOKING_DATE"], value: getUnixTime(date) },
-                { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time } // Assuming Text Field
+                { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time } 
             ];
 
-            // For Advisor & Type (likely dropdowns), we try to fetch definitions again or just send value if API allows
-            // To ensure reliability, we will try to find the option IDs.
             try {
                 const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
                 const fieldDefs = (await res.json()).fields || [];
@@ -1915,23 +1954,20 @@
                 const mapDropdown = (fid, val) => {
                     const def = fieldDefs.find(f => f.id === fid);
                     if(def && (def.type === 'drop_down' || def.type === 'labels')) {
-                        // Loose matching
                         const opt = def.type_config.options.find(o => o.name.toLowerCase().includes(val.toLowerCase().split(' ')[0]));
                         if(opt) return { id: fid, value: opt.id };
                     }
-                    return { id: fid, value: val }; // Fallback to text
+                    return { id: fid, value: val }; 
                 };
 
                 updateFields.push(mapDropdown(CLICKUP_FIELDS["ADVISOR"], advisor));
                 updateFields.push(mapDropdown(CLICKUP_FIELDS["BOOKING_TYPE"], method));
 
             } catch(e) {
-                // Fallback if fetch fails
                 updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: advisor });
                 updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
             }
 
-            // Add Description Update
             const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nMethod: ${method}\nDate: ${date}\nTime: ${time}`;
 
             if(globalTaskId && CLICKUP_API_KEY) {
@@ -1944,14 +1980,16 @@
                             body: JSON.stringify({ value: f.value })
                         });
                     }
-                    // Append Comment/Desc (Optional, but good for visibility)
+                    // Add Comment
                     await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/comment`, {
                         method: 'POST',
                         headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
                         body: JSON.stringify({ comment_text: desc })
                     });
 
-                    showToast("Appointment Confirmed! We will contact you shortly.");
+                    // Show Creative Success Message
+                    showModal(successHtml);
+                    
                     // Disable button
                     document.querySelector('button[onclick="submitBooking()"]').disabled = true;
                     document.querySelector('button[onclick="submitBooking()"]').innerHTML = 'BOOKED <i class="fa-solid fa-check"></i>';
@@ -1959,9 +1997,12 @@
                     showModal("Connection Error. Please contact support.");
                 }
             } else {
-                showToast("Booking simulated (No API Key or Task ID)");
+                // Demo Mode
+                showModal(successHtml);
             }
         }
+        
+        console.log("Script Loaded Successfully");
     </script>
 </body>
 </html>
