@@ -1743,8 +1743,12 @@
             
             // CONVERT TO TITLE CASE TO MATCH CLICKUP DROPDOWN OPTIONS (Usually Title Case)
             // Even if the input value is "AFGHANISTAN" (Uppercase), we send "Afghanistan"
-            const presentCountry = toTitleCase(document.getElementById('presentResidence').value);
-            const nationality = toTitleCase(document.getElementById('nationality').value);
+            // FIX: Added .trim() to ensure no trailing spaces break matching
+            const presentResidenceEl = document.getElementById('presentResidence');
+            const presentCountry = presentResidenceEl && presentResidenceEl.value ? toTitleCase(presentResidenceEl.value.trim()) : "";
+            
+            const nationalityEl = document.getElementById('nationality');
+            const nationality = nationalityEl && nationalityEl.value ? toTitleCase(nationalityEl.value.trim()) : "";
             
             const dob = document.getElementById('dob').value;
             const age = parseInt(document.getElementById('age').value) || 0;
@@ -1794,12 +1798,26 @@
                 let finalValue = val;
 
                 if (fieldDef) {
+                    // --- DEBUG LOG FOR RESIDENCE ---
+                    if(key === "PRESENT RESIDENCE") {
+                        console.log(`[ClickUp Match] Found ID for PRESENT RESIDENCE. Attempting to match: '${val}'`);
+                        // Un-comment next line to see all options in console if needed
+                        // console.log("Available Options:", fieldDef.type_config.options);
+                    }
+
                     // --- CASE A: DROPDOWN or LABELS ---
                     if (fieldDef.type === 'drop_down' || fieldDef.type === 'labels') {
                         // We must send the INTEGER INDEX (orderindex) or UUID, not the text
                         const options = fieldDef.type_config.options;
-                        const match = options.find(o => o.name && o.name.toLowerCase() === String(val).toLowerCase());
                         
+                        // Try strict match first (trimmed)
+                        let match = options.find(o => o.name && o.name.toLowerCase().trim() === String(val).toLowerCase().trim());
+                        
+                        // If strict match fails, try fuzzy match (if user sent spaces or minor chars)
+                        if (!match) {
+                             match = options.find(o => o.name && o.name.toLowerCase().replace(/[^a-z]/g, '') === String(val).toLowerCase().replace(/[^a-z]/g, ''));
+                        }
+
                         if (match) {
                             // CHANGED: Prioritize UUID (match.id) over index. This fixes "Not Saved" issues in newer API versions.
                             finalValue = match.id;
@@ -1843,7 +1861,11 @@
             addField("QUALIFICATION", qualification); 
             addField("JOB ROLE", role);             
             addField("NATIONALITY", nationality);     
-            addField("PRESENT RESIDENCE", presentCountry);     
+            
+            // Explicit check here
+            if(presentCountry) {
+                addField("PRESENT RESIDENCE", presentCountry);     
+            }
             
             addField("EXPERIENCE", exp);
             addField("PASSPORT NUMBER", passportNo);
