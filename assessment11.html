@@ -125,14 +125,14 @@
             backdrop-filter: blur(40px) saturate(120%);
             border: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-            border-radius: 2rem;
+            border-radius: 1.5rem; /* Slightly smaller radius for compact feel */
             position: relative;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        /* INPUT STYLES */
+        /* INPUT STYLES - COMPACT MOBILE */
         .form-input, .date-input-container, .geo-input {
-            height: 3.5rem;
+            height: 3rem; /* Compact height for mobile */
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.6);
@@ -143,7 +143,15 @@
             width: 100%;
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 600;
+            font-size: 0.95rem; /* Slightly smaller text */
         }
+        @media (min-width: 768px) {
+            .form-input, .date-input-container, .geo-input {
+                height: 3.5rem; /* Original height for desktop */
+                font-size: 1.125rem;
+            }
+        }
+
         .form-input:focus, .geo-input:focus {
             background: rgba(255, 255, 255, 0.9);
             border-color: #3b82f6;
@@ -160,8 +168,10 @@
 
         /* UTILS */
         .date-input-container { display: flex; align-items: center; overflow: hidden; padding: 0; }
-        .date-icon-box { padding: 0 1.25rem; color: #7c3aed; background: rgba(245, 243, 255, 0.5); height: 100%; display: flex; align-items: center; border-right: 1px solid rgba(237, 233, 254, 0.6); }
-        .date-input-container input { background: transparent; border: none; color: #1e293b; width: 100%; padding: 0 1rem; height: 100%; outline: none; font-weight: 600; }
+        .date-icon-box { padding: 0 1rem; color: #7c3aed; background: rgba(245, 243, 255, 0.5); height: 100%; display: flex; align-items: center; border-right: 1px solid rgba(237, 233, 254, 0.6); }
+        .date-input-container input { background: transparent; border: none; color: #1e293b; width: 100%; padding: 0 1rem; height: 100%; outline: none; font-weight: 600; font-size: 0.95rem; }
+        @media (min-width: 768px) { .date-input-container input { font-size: 1.125rem; } .date-icon-box { padding: 0 1.25rem; } }
+
         select.geo-input { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 1rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
         .uppercase-input { text-transform: uppercase; }
         .valid-field { border-color: #10b981 !important; background-color: rgba(236, 253, 245, 0.8) !important; }
@@ -186,8 +196,8 @@
         /* BOOKING SPECIFIC - NEW 3D ADVISOR CARDS */
         .advisor-3d-card {
             position: relative;
-            height: 140px;
-            border-radius: 24px;
+            height: 120px; /* Reduced for mobile */
+            border-radius: 20px;
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(14px);
             border: 1px solid rgba(255, 255, 255, 0.6);
@@ -197,16 +207,18 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             overflow: visible;
         }
+        @media (min-width: 768px) { .advisor-3d-card { height: 140px; border-radius: 24px; } }
         
         .advisor-3d-card::before {
             content: '';
             position: absolute;
             inset: 0;
-            border-radius: 24px;
+            border-radius: 20px;
             background: linear-gradient(120deg, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
             z-index: 0;
             opacity: 0.8;
         }
+        @media (min-width: 768px) { .advisor-3d-card::before { border-radius: 24px; } }
 
         .advisor-3d-card.selected {
             background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(124, 58, 237, 0.05));
@@ -220,15 +232,16 @@
             display: flex;
             align-items: center;
             height: 100%;
-            padding: 0 20px;
-            gap: 16px;
+            padding: 0 16px; /* Compact padding */
+            gap: 12px;
             transform: translateZ(20px);
         }
+        @media (min-width: 768px) { .advisor-content { padding: 0 20px; gap: 16px; } }
 
         .advisor-image-wrapper {
             position: relative;
-            width: 70px;
-            height: 70px;
+            width: 60px; /* Smaller mobile image */
+            height: 60px;
             border-radius: 50%;
             background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
             border: 2px solid #fff;
@@ -239,6 +252,7 @@
             align-items: center;
             justify-content: center;
         }
+        @media (min-width: 768px) { .advisor-image-wrapper { width: 70px; height: 70px; } }
         
         .advisor-3d-card:hover .advisor-image-wrapper {
             transform: translateZ(50px) scale(1.1);
@@ -246,27 +260,29 @@
         }
 
         .advisor-icon {
-            font-size: 32px;
+            font-size: 24px;
             color: #e11d48;
             filter: drop-shadow(0 4px 6px rgba(225, 29, 72, 0.2));
             transition: all 0.3s ease;
         }
+        @media (min-width: 768px) { .advisor-icon { font-size: 32px; } }
 
         .advisor-badge {
             position: absolute;
             bottom: -5px;
             right: -5px;
             background: #fff;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 12px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             z-index: 20;
         }
+        @media (min-width: 768px) { .advisor-badge { width: 24px; height: 24px; font-size: 14px; } }
 
         .advisor-info {
             flex-grow: 1;
@@ -274,7 +290,7 @@
         }
 
         .advisor-role {
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 800;
             letter-spacing: 0.05em;
             text-transform: uppercase;
@@ -284,14 +300,16 @@
             align-items: center;
             gap: 4px;
         }
+        @media (min-width: 768px) { .advisor-role { font-size: 10px; } }
 
         .advisor-name {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 800;
             color: #1e293b;
             margin-bottom: 4px;
             line-height: 1.2;
         }
+        @media (min-width: 768px) { .advisor-name { font-size: 16px; } }
 
         .advisor-langs {
             display: flex;
@@ -301,34 +319,36 @@
         }
 
         .lang-pill {
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 700;
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 100px;
             background: rgba(255,255,255,0.8);
             border: 1px solid rgba(226, 232, 240, 0.8);
             color: #64748b;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
+        @media (min-width: 768px) { .lang-pill { font-size: 9px; padding: 2px 8px; } }
 
         .check-3d {
             position: absolute;
             top: 15px;
             right: 15px;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             background: #2563eb;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 12px;
+            font-size: 10px;
             opacity: 0;
             transform: translateZ(20px) scale(0);
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
         }
+        @media (min-width: 768px) { .check-3d { width: 24px; height: 24px; font-size: 12px; } }
 
         .advisor-3d-card.selected .check-3d {
             opacity: 1;
@@ -375,15 +395,15 @@
     <div class="orb orb-4"></div>
 
     <!-- 1. HEADER -->
-    <nav class="fixed top-2 md:top-4 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
-        <div class="glass-card w-full max-w-7xl px-3 py-2 md:px-5 md:py-2 flex justify-between items-center transition-all duration-300 min-h-[60px]" id="navbar">
+    <nav class="fixed top-0 md:top-4 left-0 right-0 z-50 flex justify-center px-0 md:px-4" id="navbar-container">
+        <div class="glass-card !rounded-none md:!rounded-[2rem] !border-t-0 w-full max-w-7xl px-4 py-3 md:px-5 md:py-2 flex justify-between items-center transition-all duration-300 min-h-[60px]" id="navbar">
             <a href="index.html" class="flex items-center gap-2 group px-1">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/60 backdrop-blur-md overflow-hidden p-1 flex-shrink-0 border border-white/50">
+                <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center bg-white/60 backdrop-blur-md overflow-hidden p-1 flex-shrink-0 border border-white/50">
                     <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/6673d6ec4830e402627b97c4adf422593b2ec907/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain">
                 </div>
                 <div class="block leading-tight"> 
-                    <h1 class="font-bold text-slate-800 text-base md:text-lg tracking-wide group-hover:text-indigo-600 transition-colors">BETTER CALL</h1>
-                    <p class="text-[10px] md:text-xs font-bold text-amber-500 uppercase tracking-[0.2em]">Immigration</p>
+                    <h1 class="font-bold text-slate-800 text-sm md:text-lg tracking-wide group-hover:text-indigo-600 transition-colors">BETTER CALL</h1>
+                    <p class="text-[9px] md:text-xs font-bold text-amber-500 uppercase tracking-[0.2em]">Immigration</p>
                 </div>
             </a>
             <div class="hidden lg:flex items-center gap-1">
@@ -392,91 +412,91 @@
             </div>
              <div class="flex items-center gap-2 px-1">
                 <button class="group p-2 rounded-full hover:bg-white/50 transition-all duration-300 relative">
-                    <i class="fa-solid fa-magnifying-glass text-slate-400 group-hover:text-indigo-600 text-xl"></i>
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 group-hover:text-indigo-600 text-lg md:text-xl"></i>
                 </button>
             </div>
         </div>
     </nav>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-grow pt-32 pb-32 md:pb-12 px-4 relative z-10">
+    <main class="flex-grow pt-24 md:pt-32 pb-12 px-2 md:px-4 relative z-10">
         <div class="max-w-6xl mx-auto">
             
-            <!-- Progress Steps -->
-            <div class="mb-16 relative">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-0.5 bg-white/30"></div>
-                <div class="flex items-center justify-center gap-10 md:gap-24 relative z-10">
+            <!-- Progress Steps (Compact) -->
+            <div class="mb-8 md:mb-16 relative">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 md:w-96 h-0.5 bg-white/30"></div>
+                <div class="flex items-center justify-center gap-6 md:gap-24 relative z-10">
                     <!-- Step 1 -->
-                    <div id="step-1-indicator" class="flex flex-col items-center gap-3 transition-all duration-500">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 backdrop-blur border-4 border-brand-primary shadow-lg flex items-center justify-center text-brand-primary text-base md:text-lg font-bold">1</div>
-                        <span class="font-bold text-[10px] md:text-sm text-brand-primary tracking-widest uppercase">Identity</span>
+                    <div id="step-1-indicator" class="flex flex-col items-center gap-1 md:gap-3 transition-all duration-500">
+                        <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-white/80 backdrop-blur border-2 md:border-4 border-brand-primary shadow-lg flex items-center justify-center text-brand-primary text-xs md:text-lg font-bold">1</div>
+                        <span class="font-bold text-[9px] md:text-sm text-brand-primary tracking-widest uppercase">Identity</span>
                     </div>
                     <!-- Step 2 -->
-                    <div id="step-2-indicator" class="flex flex-col items-center gap-3 transition-all duration-500 opacity-40 grayscale">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/40 border-4 border-gray-200 flex items-center justify-center text-gray-500 text-base md:text-lg font-bold">2</div>
-                        <span class="font-bold text-[10px] md:text-sm text-slate-500 tracking-widest uppercase">Analysis</span>
+                    <div id="step-2-indicator" class="flex flex-col items-center gap-1 md:gap-3 transition-all duration-500 opacity-40 grayscale">
+                        <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-white/40 border-2 md:border-4 border-gray-200 flex items-center justify-center text-gray-500 text-xs md:text-lg font-bold">2</div>
+                        <span class="font-bold text-[9px] md:text-sm text-slate-500 tracking-widest uppercase">Analysis</span>
                     </div>
                     <!-- Step 3 -->
-                    <div id="step-3-indicator" class="flex flex-col items-center gap-3 transition-all duration-500 opacity-40 grayscale">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/40 border-4 border-gray-200 flex items-center justify-center text-gray-500 text-base md:text-lg font-bold">3</div>
-                        <span class="font-bold text-[10px] md:text-sm text-slate-500 tracking-widest uppercase">Booking</span>
+                    <div id="step-3-indicator" class="flex flex-col items-center gap-1 md:gap-3 transition-all duration-500 opacity-40 grayscale">
+                        <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-white/40 border-2 md:border-4 border-gray-200 flex items-center justify-center text-gray-500 text-xs md:text-lg font-bold">3</div>
+                        <span class="font-bold text-[9px] md:text-sm text-slate-500 tracking-widest uppercase">Booking</span>
                     </div>
                 </div>
             </div>
 
             <!-- TAB 1: Personal Details -->
-            <div id="tab-1" class="glass-card p-8 md:p-12 animate-slide-up-fade max-w-4xl mx-auto">
-                <div class="mb-10 text-center">
-                    <h2 class="text-4xl font-black text-slate-900 mb-3 tracking-tight">Initialize Candidate Profile</h2>
-                    <p class="text-slate-500 text-sm tracking-wide font-medium">Precision is key. Ensure all data matches your official travel documents for accurate assessment.</p>
+            <div id="tab-1" class="glass-card p-5 md:p-12 animate-slide-up-fade max-w-4xl mx-auto">
+                <div class="mb-6 md:mb-10 text-center">
+                    <h2 class="text-2xl md:text-4xl font-black text-slate-900 mb-2 md:mb-3 tracking-tight">Initialize Profile</h2>
+                    <p class="text-slate-500 text-xs md:text-sm tracking-wide font-medium">Precision is key. Ensure all data matches your documents.</p>
                 </div>
 
-                <form id="personalForm" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <form id="personalForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     <!-- Form Fields -->
                     <div class="group">
-                        <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">First Name (As per Passport)</label>
-                        <input type="text" id="firstName" required class="form-input uppercase-input px-5 text-lg" placeholder="JOHN" oninput="this.value = this.value.toUpperCase()">
+                        <label class="block text-[10px] md:text-xs font-bold text-brand-primary uppercase tracking-widest mb-1.5 md:mb-3 ml-1">First Name (As per Passport)</label>
+                        <input type="text" id="firstName" required class="form-input uppercase-input px-4 md:px-5" placeholder="JOHN" oninput="this.value = this.value.toUpperCase()">
                     </div>
                     <div class="group">
-                        <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Surname (Family Name)</label>
-                        <input type="text" id="lastName" required class="form-input uppercase-input px-5 text-lg" placeholder="DOE" oninput="this.value = this.value.toUpperCase()">
+                        <label class="block text-[10px] md:text-xs font-bold text-brand-primary uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Surname (Family Name)</label>
+                        <input type="text" id="lastName" required class="form-input uppercase-input px-4 md:px-5" placeholder="DOE" oninput="this.value = this.value.toUpperCase()">
                     </div>
                     <div class="group">
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Email Address</label>
+                        <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Email Address</label>
                         <div class="relative">
-                            <input type="email" id="email" required class="form-input pl-12 text-lg font-semibold" placeholder="name@example.com">
-                            <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="email" id="email" required class="form-input pl-10 md:pl-12 font-semibold" placeholder="name@example.com">
+                            <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1"><i class="fa-regular fa-calendar-days mr-1"></i> Date of Birth</label>
-                        <div class="date-input-container rounded-xl">
-                            <div class="date-icon-box"><i class="fa-solid fa-cake-candles"></i></div>
-                            <input type="text" id="dob" required placeholder="Select Date" class="text-lg font-medium">
+                        <label class="block text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-regular fa-calendar-days mr-1"></i> Date of Birth</label>
+                        <div class="date-input-container rounded-xl h-12 md:h-14">
+                            <div class="date-icon-box"><i class="fa-solid fa-cake-candles text-sm"></i></div>
+                            <input type="text" id="dob" required placeholder="Select Date" class="font-medium">
                         </div>
                     </div>
                     <div class="group">
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Age</label>
-                        <input type="text" id="age" readonly class="form-input w-full rounded-xl px-5 py-4 bg-gray-50/50 text-slate-500 cursor-not-allowed font-mono font-bold">
-                        <p id="ageError" class="text-brand-accent text-[11px] hidden mt-2 font-bold flex items-center gap-2 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Must be 20+ years.</p>
+                        <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Age</label>
+                        <input type="text" id="age" readonly class="form-input w-full rounded-xl px-4 md:px-5 bg-gray-50/50 text-slate-500 cursor-not-allowed font-mono font-bold">
+                        <p id="ageError" class="text-brand-accent text-[11px] hidden mt-1 md:mt-2 font-bold flex items-center gap-2 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Must be 20+ years.</p>
                     </div>
 
                     <!-- Geography -->
-                    <div class="md:col-span-2 relative p-8 rounded-2xl border border-brand-gold/20 bg-gradient-to-br from-amber-50/50 to-white/30 overflow-hidden shadow-sm backdrop-blur-sm">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                    <div class="md:col-span-2 relative p-4 md:p-8 rounded-2xl border border-brand-gold/20 bg-gradient-to-br from-amber-50/50 to-white/30 overflow-hidden shadow-sm backdrop-blur-sm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 relative z-10">
                             <div>
-                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1"><i class="fa-solid fa-location-dot mr-1"></i> Present Residence</label>
+                                <label class="block text-[10px] md:text-xs font-black text-brand-gold uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-location-dot mr-1"></i> Present Residence</label>
                                 <div class="relative">
-                                    <select id="presentResidence" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none" onchange="handleResidenceChange()">
+                                    <select id="presentResidence" required class="geo-input w-full rounded-xl px-4 md:px-5 font-bold uppercase appearance-none" onchange="handleResidenceChange()">
                                         <option value="">Select Residence</option>
                                     </select>
                                     <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-xs font-black text-brand-gold uppercase tracking-widest mb-3 ml-1"><i class="fa-solid fa-earth-americas mr-1"></i> Nationality</label>
+                                <label class="block text-[10px] md:text-xs font-black text-brand-gold uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-earth-americas mr-1"></i> Nationality</label>
                                 <div class="relative">
-                                    <select id="nationality" required class="geo-input w-full rounded-xl px-5 py-4 font-bold uppercase appearance-none">
+                                    <select id="nationality" required class="geo-input w-full rounded-xl px-4 md:px-5 font-bold uppercase appearance-none">
                                         <option value="">Select Origin</option>
                                     </select>
                                     <div class="absolute right-5 top-1/2 -translate-y-1/2 text-brand-gold pointer-events-none"><i class="fa-solid fa-chevron-down"></i></div>
@@ -487,83 +507,75 @@
 
                     <!-- Contact -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Mobile Contact</label>
+                        <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Mobile Contact</label>
                         <div class="relative group">
-                            <input type="tel" id="mobile" required class="form-input w-full rounded-xl px-5 py-4 pl-12 font-mono text-lg font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('mobile')">
-                            <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-primary transition-colors"></i>
+                            <input type="tel" id="mobile" required class="form-input w-full rounded-xl px-4 md:px-5 pl-10 md:pl-12 font-mono font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('mobile')">
+                            <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-primary transition-colors text-sm"></i>
                             <div id="mobileFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                         </div>
-                        <p id="mobileHint" class="text-xs text-brand-primary mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
-                        <p id="mobileError" class="text-brand-accent text-[11px] hidden mt-2 pl-1 font-bold">Invalid Format.</p>
+                        <p id="mobileHint" class="text-[10px] md:text-xs text-brand-primary mt-1 md:mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
+                        <p id="mobileError" class="text-brand-accent text-[10px] md:text-[11px] hidden mt-1 font-bold">Invalid Format.</p>
                     </div>
                     <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">WhatsApp</label>
+                        <div class="flex justify-between items-center mb-1.5 md:mb-3">
+                            <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">WhatsApp</label>
                             <div class="flex items-center gap-2">
-                                <input type="checkbox" id="sameAsMobile" class="w-4 h-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary cursor-pointer">
-                                <label for="sameAsMobile" class="text-[10px] text-slate-500 cursor-pointer select-none font-bold uppercase tracking-wider">Same as Mobile</label>
+                                <input type="checkbox" id="sameAsMobile" class="w-3 h-3 md:w-4 md:h-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary cursor-pointer">
+                                <label for="sameAsMobile" class="text-[9px] md:text-[10px] text-slate-500 cursor-pointer select-none font-bold uppercase tracking-wider">Same as Mobile</label>
                             </div>
                         </div>
                         <div class="relative group">
-                            <input type="tel" id="whatsapp" required class="form-input w-full rounded-xl px-5 py-4 pl-12 font-mono text-lg font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('whatsapp')">
-                            <i class="fa-brands fa-whatsapp absolute left-4 top-1/2 -translate-y-1/2 text-green-500 opacity-60 group-focus-within:opacity-100 transition-opacity"></i>
+                            <input type="tel" id="whatsapp" required class="form-input w-full rounded-xl px-4 md:px-5 pl-10 md:pl-12 font-mono font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('whatsapp')">
+                            <i class="fa-brands fa-whatsapp absolute left-4 top-1/2 -translate-y-1/2 text-green-500 opacity-60 group-focus-within:opacity-100 transition-opacity text-sm"></i>
                             <div id="waFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                         </div>
-                        <p id="waHint" class="text-xs text-brand-secondary mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
-                    </div>
-                    <div class="md:col-span-2">
-                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Alternative Phone (Optional)</label>
-                         <div class="relative group">
-                            <input type="tel" id="altPhone" class="form-input w-full rounded-xl px-5 py-4 pl-12 font-mono text-lg font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('altPhone')">
-                            <i class="fa-solid fa-phone-volume absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-gold transition-colors"></i>
-                            <div id="altPhoneFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
-                        </div>
+                        <p id="waHint" class="text-[10px] md:text-xs text-brand-secondary mt-1 md:mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
                     </div>
 
                     <!-- Qualifications -->
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 ml-1">Highest Academic Qualification</label>
-                        <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
+                        <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 md:mb-4 ml-1">Highest Academic Qualification</label>
+                        <div class="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3">
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="UNDER 10 TH" class="peer sr-only" required>
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-school text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Under 10th</span>
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-school text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Under 10th</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="SCHOOL" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-book-open text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">School</span>
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-book-open text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">School</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="PLUS TWO" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-graduation-cap text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Plus Two</span>
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-graduation-cap text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Plus Two</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="DIPLOMA" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-scroll text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Diploma</span>
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-scroll text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Diploma</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="BACHELOR" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-user-graduate text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Bachelor</span>
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-user-graduate text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Bachelor</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="MASTER" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-medal text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Master</span>
+                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
+                                    <i class="fa-solid fa-medal text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Master</span>
                                 </div>
                             </label>
                         </div>
@@ -571,48 +583,48 @@
                     
                     <!-- Passport -->
                      <div class="md:col-span-1">
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Passport No. (Optional)</label>
-                        <input type="text" id="passportNo" class="form-input uppercase-input w-full rounded-xl px-5 py-4 font-mono font-medium" placeholder="X1234567" oninput="this.value = this.value.toUpperCase()">
+                        <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Passport No. (Optional)</label>
+                        <input type="text" id="passportNo" class="form-input uppercase-input w-full rounded-xl px-4 md:px-5 font-mono font-medium" placeholder="X1234567" oninput="this.value = this.value.toUpperCase()">
                     </div>
                     <div class="md:col-span-1">
-                        <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1"><i class="fa-solid fa-passport mr-1"></i> Passport Expiry</label>
-                        <div class="date-input-container rounded-xl">
-                            <div class="date-icon-box"><i class="fa-solid fa-hourglass-half"></i></div>
-                            <input type="text" id="passportExp" placeholder="Select Date" class="text-lg font-medium">
+                        <label class="block text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-passport mr-1"></i> Passport Expiry</label>
+                        <div class="date-input-container rounded-xl h-12 md:h-14">
+                            <div class="date-icon-box"><i class="fa-solid fa-hourglass-half text-sm"></i></div>
+                            <input type="text" id="passportExp" placeholder="Select Date" class="font-medium">
                         </div>
                     </div>
 
                     <!-- CV UPLOAD -->
-                    <div class="md:col-span-2 mt-4 bg-gradient-to-br from-white/60 to-blue-50/30 rounded-2xl border border-blue-100/50 p-6 shadow-sm relative overflow-hidden backdrop-blur-sm">
+                    <div class="md:col-span-2 mt-2 md:mt-4 bg-gradient-to-br from-white/60 to-blue-50/30 rounded-2xl border border-blue-100/50 p-4 md:p-6 shadow-sm relative overflow-hidden backdrop-blur-sm">
                         <div class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-brand-primary/10 rounded-full blur-2xl pointer-events-none"></div>
-                        <label class="block text-sm font-bold text-slate-700 mb-4 flex items-center gap-2"><i class="fa-solid fa-file-circle-question text-brand-primary"></i> Accelerate Your Assessment: Attach Professional Portfolio</label>
-                        <div class="flex gap-6 mb-4 relative z-10">
+                        <label class="block text-xs md:text-sm font-bold text-slate-700 mb-3 md:mb-4 flex items-center gap-2"><i class="fa-solid fa-file-circle-question text-brand-primary"></i> Accelerate Your Assessment: Attach Professional Portfolio</label>
+                        <div class="flex gap-4 md:gap-6 mb-4 relative z-10">
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="hasCv" value="yes" class="peer sr-only" onchange="toggleCvUpload(true)" checked>
-                                <div class="px-6 py-2 rounded-full border border-gray-200 bg-white/80 text-slate-500 font-bold peer-checked:bg-brand-primary peer-checked:text-white peer-checked:border-brand-primary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-primary/40">Yes</div>
+                                <div class="px-4 py-1.5 md:px-6 md:py-2 rounded-full border border-gray-200 bg-white/80 text-slate-500 text-xs md:text-sm font-bold peer-checked:bg-brand-primary peer-checked:text-white peer-checked:border-brand-primary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-primary/40">Yes</div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="hasCv" value="no" class="peer sr-only" onchange="toggleCvUpload(false)">
-                                <div class="px-6 py-2 rounded-full border border-gray-200 bg-white/80 text-slate-500 font-bold peer-checked:bg-brand-secondary peer-checked:text-white peer-checked:border-brand-secondary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-secondary/40">No</div>
+                                <div class="px-4 py-1.5 md:px-6 md:py-2 rounded-full border border-gray-200 bg-white/80 text-slate-500 text-xs md:text-sm font-bold peer-checked:bg-brand-secondary peer-checked:text-white peer-checked:border-brand-secondary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-secondary/40">No</div>
                             </label>
                         </div>
                         <div id="cvUploadContainer" class="animate-pop-in relative z-10">
-                            <div class="rounded-xl border-2 border-dashed border-slate-300 hover:border-brand-primary hover:bg-blue-50/50 p-8 text-center cursor-pointer relative group transition-all">
+                            <div class="rounded-xl border-2 border-dashed border-slate-300 hover:border-brand-primary hover:bg-blue-50/50 p-4 md:p-8 text-center cursor-pointer relative group transition-all">
                                 <input type="file" id="cvFile" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept=".pdf,.doc,.docx" onchange="handleFileSelect(this)">
                                 <div class="transition-transform duration-300 group-hover:-translate-y-1">
-                                    <div class="w-12 h-12 rounded-full bg-white text-brand-primary shadow-md flex items-center justify-center mx-auto mb-3 text-xl group-hover:text-white group-hover:bg-brand-primary transition-colors">
+                                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white text-brand-primary shadow-md flex items-center justify-center mx-auto mb-2 md:mb-3 text-lg md:text-xl group-hover:text-white group-hover:bg-brand-primary transition-colors">
                                         <i class="fa-solid fa-cloud-arrow-up"></i>
                                     </div>
-                                    <p class="text-sm font-bold text-slate-700" id="fileNameDisplay">Upload Curriculum Vitae (PDF/DOC)</p>
-                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">PDF, DOC, DOCX (Max 5MB)</p>
+                                    <p class="text-xs md:text-sm font-bold text-slate-700" id="fileNameDisplay">Upload Curriculum Vitae (PDF/DOC)</p>
+                                    <p class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">PDF, DOC, DOCX (Max 5MB)</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="md:col-span-2 mt-8 flex justify-end">
-                        <button type="button" onclick="goToStep2()" id="nextBtn" class="btn-gradient text-white font-bold py-4 px-12 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center gap-3">
-                            <span class="tracking-wider">PROCEED TO EVALUATION</span>
+                    <div class="md:col-span-2 mt-4 md:mt-8 flex justify-end">
+                        <button type="button" onclick="goToStep2()" id="nextBtn" class="w-full md:w-auto btn-gradient text-white font-bold py-3 md:py-4 px-12 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3">
+                            <span class="tracking-wider text-xs md:text-base">PROCEED TO EVALUATION</span>
                             <i class="fa-solid fa-arrow-right-long"></i>
                         </button>
                     </div>
@@ -622,44 +634,44 @@
             <!-- TAB 2: AI Job Report -->
             <div id="tab-2" class="hidden animate-slide-up-fade">
                 <!-- CATEGORY SELECTOR -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 max-w-4xl mx-auto">
-                    <div id="cardUnskilled" onclick="setSkillMode('Unskilled')" class="category-card rounded-3xl p-8 flex items-center gap-6 cursor-pointer relative overflow-hidden">
-                        <div class="w-16 h-16 rounded-2xl bg-blue-50 text-brand-primary flex items-center justify-center text-3xl shadow-sm"><i class="fa-solid fa-hands-holding-circle"></i></div>
-                        <div class="z-10"><h3 class="text-xl font-bold text-slate-800 mb-1">Essential & Operational</h3><p class="text-xs text-slate-500 tracking-wide font-medium">Industrial, Logistics, Agritech</p></div>
-                        <div class="ml-auto z-10"><div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkUnskilled"><div class="w-4 h-4 rounded-full bg-brand-primary hidden shadow-lg"></div></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-6 md:mb-10 max-w-4xl mx-auto">
+                    <div id="cardUnskilled" onclick="setSkillMode('Unskilled')" class="category-card rounded-2xl md:rounded-3xl p-4 md:p-8 flex items-center gap-4 md:gap-6 cursor-pointer relative overflow-hidden">
+                        <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-blue-50 text-brand-primary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-hands-holding-circle"></i></div>
+                        <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Essential & Operational</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Industrial, Logistics, Agritech</p></div>
+                        <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkUnskilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-primary hidden shadow-lg"></div></div></div>
                     </div>
-                    <div id="cardSkilled" onclick="setSkillMode('Skilled')" class="category-card rounded-3xl p-8 flex items-center gap-6 cursor-pointer relative overflow-hidden">
-                        <div class="w-16 h-16 rounded-2xl bg-purple-50 text-brand-secondary flex items-center justify-center text-3xl shadow-sm"><i class="fa-solid fa-user-tie"></i></div>
-                        <div class="z-10"><h3 class="text-xl font-bold text-slate-800 mb-1">Specialized & Technical</h3><p class="text-xs text-slate-500 tracking-wide font-medium">Engineering, Healthcare, Skilled Trades</p></div>
-                        <div class="ml-auto z-10"><div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkSkilled"><div class="w-4 h-4 rounded-full bg-brand-secondary hidden shadow-lg"></div></div></div>
+                    <div id="cardSkilled" onclick="setSkillMode('Skilled')" class="category-card rounded-2xl md:rounded-3xl p-4 md:p-8 flex items-center gap-4 md:gap-6 cursor-pointer relative overflow-hidden">
+                        <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-purple-50 text-brand-secondary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-user-tie"></i></div>
+                        <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Specialized & Technical</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Engineering, Healthcare, Skilled Trades</p></div>
+                        <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkSkilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-secondary hidden shadow-lg"></div></div></div>
                     </div>
                 </div>
 
                 <!-- JOB DETAILS -->
-                <div id="jobDetailsPanel" class="glass-card p-8 mb-12 hidden animate-pop-in relative z-20 max-w-4xl mx-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+                <div id="jobDetailsPanel" class="glass-card p-5 md:p-8 mb-8 md:mb-12 hidden animate-pop-in relative z-20 max-w-4xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-end">
                         <div class="relative group" id="customJobSelect">
-                            <label class="block text-xs font-bold text-brand-primary uppercase tracking-widest mb-3 ml-1">Target Position</label>
-                            <button type="button" class="form-input w-full text-left rounded-xl px-5 py-4 flex justify-between items-center cursor-pointer" onclick="toggleJobDropdown(event)">
-                                <span id="selectedJobText" class="text-slate-500 font-medium">Select Job Role</span>
+                            <label class="block text-[10px] md:text-xs font-bold text-brand-primary uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Target Position</label>
+                            <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 py-2 md:py-4 flex justify-between items-center cursor-pointer h-12 md:h-auto" onclick="toggleJobDropdown(event)">
+                                <span id="selectedJobText" class="text-slate-500 font-medium text-sm md:text-base">Select Job Role</span>
                                 <i class="fa-solid fa-chevron-up transition-transform duration-300 text-brand-primary" id="jobDropdownIcon"></i>
                             </button>
-                            <div id="jobDropdownList" class="hidden absolute top-full left-0 w-full mt-2 bg-white/90 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-80 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
+                            <div id="jobDropdownList" class="hidden absolute top-full left-0 w-full mt-2 bg-white/90 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 md:max-h-80 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
                                 <!-- JS Injected -->
                             </div>
                             <input type="hidden" id="currentJob">
                         </div>
                         <div id="experienceWrapper" class="hidden animate-pop-in">
-                            <label class="block text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3 ml-1">Professional Tenure</label>
+                            <label class="block text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Professional Tenure</label>
                             <div class="relative">
-                                <input type="number" id="experience" min="1" max="30" value="1" class="form-input w-full rounded-xl px-5 py-4 font-bold text-lg" placeholder="Min 1" onblur="validateExperienceInput(this)">
-                                <div class="absolute right-5 top-1/2 -translate-y-1/2 text-xs text-brand-secondary font-black tracking-widest">YEARS</div>
+                                <input type="number" id="experience" min="1" max="30" value="1" class="form-input w-full rounded-xl px-4 md:px-5 py-2 md:py-4 font-bold text-lg h-12 md:h-auto" placeholder="Min 1" onblur="validateExperienceInput(this)">
+                                <div class="absolute right-5 top-1/2 -translate-y-1/2 text-[10px] md:text-xs text-brand-secondary font-black tracking-widest">YEARS</div>
                             </div>
                         </div>
-                        <div class="md:col-span-2 flex justify-end mt-4">
-                             <button type="button" onclick="generateReport()" class="w-full md:w-auto btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group">
+                        <div class="md:col-span-2 flex justify-end mt-2 md:mt-4">
+                             <button type="button" onclick="generateReport()" class="w-full md:w-auto btn-gradient text-white font-bold py-3 md:py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group">
                                 <i class="fa-solid fa-wand-magic-sparkles group-hover:rotate-12 transition-transform"></i> 
-                                <span>CALCULATE MIGRATION PATHWAYS</span>
+                                <span class="text-xs md:text-base">CALCULATE MIGRATION PATHWAYS</span>
                             </button>
                         </div>
                     </div>
@@ -668,58 +680,58 @@
                 <!-- REPORT DASHBOARD -->
                 <div id="reportContainer" class="hidden max-w-5xl mx-auto">
                     <div class="glass-card p-1 rounded-3xl animate-slide-up-fade">
-                        <div class="bg-white/80 backdrop-blur-xl rounded-[22px] p-8 md:p-12 relative overflow-hidden shadow-sm">
+                        <div class="bg-white/80 backdrop-blur-xl rounded-[22px] p-5 md:p-12 relative overflow-hidden shadow-sm">
                              <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-brand-primary to-brand-secondary"></div>
-                             <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-gray-100 pb-8 mb-8 gap-6">
+                             <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-gray-100 pb-4 md:pb-8 mb-4 md:mb-8 gap-4 md:gap-6">
                                 <div>
-                                    <div class="flex items-center gap-3 mb-2"><div class="w-8 h-8 rounded bg-blue-50 text-brand-primary flex items-center justify-center"><i class="fa-solid fa-layer-group"></i></div><span class="text-xs font-bold text-slate-400 tracking-widest uppercase">Global Mobility Intelligence Unit</span></div>
-                                    <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Strategic Viability Audit</h2>
-                                    <p class="text-sm text-slate-500 font-medium mt-1">Algorithmic Match Analysis & Country Compatibility</p>
+                                    <div class="flex items-center gap-3 mb-2"><div class="w-8 h-8 rounded bg-blue-50 text-brand-primary flex items-center justify-center"><i class="fa-solid fa-layer-group"></i></div><span class="text-[9px] md:text-xs font-bold text-slate-400 tracking-widest uppercase">Global Mobility Intelligence Unit</span></div>
+                                    <h2 class="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">Strategic Viability Audit</h2>
+                                    <p class="text-xs md:text-sm text-slate-500 font-medium mt-1">Algorithmic Match Analysis & Country Compatibility</p>
                                 </div>
-                                <div class="text-left md:text-right">
+                                <div class="text-left md:text-right hidden md:block">
                                     <div class="font-barcode text-4xl text-slate-300 mb-1" id="barcodeRef"></div>
                                     <div class="text-xs font-mono text-slate-400">REF: <span id="refId" class="text-slate-600 font-bold"></span></div>
                                     <div class="text-xs font-mono text-slate-400">DATE: <span id="reportDate"></span></div>
                                 </div>
                              </div>
-                             <div class="bg-slate-50/50 rounded-2xl p-6 mb-10 border border-gray-100">
-                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-                                    <div class="md:col-span-2 flex justify-center md:justify-start"><div class="w-20 h-20 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center text-3xl font-bold text-brand-primary" id="avatarInitial"></div></div>
-                                    <div class="md:col-span-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                                        <div class="overflow-hidden"><p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Candidate</p><h3 class="text-lg font-bold text-slate-900 leading-tight break-words" id="reportName"></h3></div>
-                                        <div class="overflow-hidden"><p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Job Role</p><div class="text-sm font-semibold text-brand-primary leading-tight break-words" id="reportRole"></div></div>
-                                        <div class="overflow-hidden"><p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Qualification</p><div class="text-sm font-semibold text-slate-700 leading-tight break-words" id="reportQualification"></div></div>
-                                         <div class="overflow-hidden"><p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Experience</p><div class="text-sm font-bold text-slate-900" id="reportExp"></div></div>
+                             <div class="bg-slate-50/50 rounded-2xl p-4 md:p-6 mb-6 md:mb-10 border border-gray-100">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-start">
+                                    <div class="md:col-span-2 flex justify-center md:justify-start"><div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center text-2xl md:text-3xl font-bold text-brand-primary" id="avatarInitial"></div></div>
+                                    <div class="md:col-span-10 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                                        <div class="overflow-hidden"><p class="text-[9px] md:text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Candidate</p><h3 class="text-sm md:text-lg font-bold text-slate-900 leading-tight break-words" id="reportName"></h3></div>
+                                        <div class="overflow-hidden"><p class="text-[9px] md:text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Job Role</p><div class="text-xs md:text-sm font-semibold text-brand-primary leading-tight break-words" id="reportRole"></div></div>
+                                        <div class="overflow-hidden"><p class="text-[9px] md:text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Qualification</p><div class="text-xs md:text-sm font-semibold text-slate-700 leading-tight break-words" id="reportQualification"></div></div>
+                                         <div class="overflow-hidden"><p class="text-[9px] md:text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Experience</p><div class="text-xs md:text-sm font-bold text-slate-900" id="reportExp"></div></div>
                                     </div>
                                 </div>
                              </div>
-                             <div class="flex flex-col lg:flex-row gap-8">
+                             <div class="flex flex-col lg:flex-row gap-6 md:gap-8">
                                 <div class="lg:w-2/3">
                                     <div class="h-full rounded-2xl border border-gray-200 bg-white/50 shadow-sm p-1 relative overflow-hidden group">
                                         <div class="absolute top-0 right-0 w-32 h-32 bg-brand-primary/5 rounded-full blur-3xl -mr-10 -mt-10"></div>
-                                        <div class="p-6 md:p-8 relative z-10">
-                                            <div class="flex items-center justify-between mb-6"><span class="bg-green-50 text-green-600 border border-green-100 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Prime Pathway</span><i class="fa-solid fa-medal text-brand-gold text-2xl"></i></div>
-                                            <h2 class="text-5xl font-black text-slate-900 mb-2 tracking-tight" id="topMatchCountry"></h2>
-                                            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500 mb-8"><span class="flex items-center gap-2"><i class="fa-solid fa-briefcase text-brand-primary"></i> <span id="topMatchRole_2"></span></span><span class="hidden sm:inline text-gray-300">|</span><span class="flex items-center gap-2 text-slate-700 font-bold"><i class="fa-solid fa-wallet text-brand-secondary"></i> <span id="mainSalaryRange"></span></span></div>
-                                            <div class="bg-slate-50 rounded-xl p-5 border border-gray-100 mb-6"><div class="flex justify-between items-end mb-2"><span class="text-xs font-bold text-slate-700">Match Probability</span><span class="text-xl font-black text-brand-primary">98%</span></div><div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-brand-primary to-brand-secondary w-[98%] rounded-full shadow-[0_0_10px_rgba(37,99,235,0.3)]"></div></div><div class="flex justify-between mt-3 text-[10px] text-slate-400 font-medium uppercase tracking-wider"><span>Visa: Work Permit (D-Type)</span><span>Processing: 3-5 Months</span></div></div>
-                                            <div class="prose prose-sm text-slate-500 leading-relaxed"><p id="aiReasoning" class="italic border-l-4 border-brand-primary pl-4 py-1">AI Reasoning loading...</p></div>
+                                        <div class="p-5 md:p-8 relative z-10">
+                                            <div class="flex items-center justify-between mb-4 md:mb-6"><span class="bg-green-50 text-green-600 border border-green-100 text-[9px] md:text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-2"><span class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500 animate-pulse"></span> Prime Pathway</span><i class="fa-solid fa-medal text-brand-gold text-xl md:text-2xl"></i></div>
+                                            <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-2 tracking-tight" id="topMatchCountry"></h2>
+                                            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs md:text-sm text-slate-500 mb-6 md:mb-8"><span class="flex items-center gap-2"><i class="fa-solid fa-briefcase text-brand-primary"></i> <span id="topMatchRole_2"></span></span><span class="hidden sm:inline text-gray-300">|</span><span class="flex items-center gap-2 text-slate-700 font-bold"><i class="fa-solid fa-wallet text-brand-secondary"></i> <span id="mainSalaryRange"></span></span></div>
+                                            <div class="bg-slate-50 rounded-xl p-4 md:p-5 border border-gray-100 mb-4 md:mb-6"><div class="flex justify-between items-end mb-2"><span class="text-xs font-bold text-slate-700">Match Probability</span><span class="text-lg md:text-xl font-black text-brand-primary">98%</span></div><div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-brand-primary to-brand-secondary w-[98%] rounded-full shadow-[0_0_10px_rgba(37,99,235,0.3)]"></div></div><div class="flex justify-between mt-3 text-[9px] md:text-[10px] text-slate-400 font-medium uppercase tracking-wider"><span>Visa: Work Permit (D-Type)</span><span>Processing: 3-5 Months</span></div></div>
+                                            <div class="prose prose-sm text-slate-500 leading-relaxed text-xs md:text-sm"><p id="aiReasoning" class="italic border-l-4 border-brand-primary pl-4 py-1">AI Reasoning loading...</p></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="lg:w-1/3 flex flex-col gap-6">
-                                    <div class="bg-white/60 rounded-2xl border border-gray-100 p-6 shadow-sm order-1"><h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Alternative Viability Options</h4><div class="flex flex-col gap-3" id="altMatchesGrid"></div></div>
+                                <div class="lg:w-1/3 flex flex-col gap-4 md:gap-6">
+                                    <div class="bg-white/60 rounded-2xl border border-gray-100 p-4 md:p-6 shadow-sm order-1"><h4 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 md:mb-4">Alternative Viability Options</h4><div class="flex flex-col gap-3" id="altMatchesGrid"></div></div>
                                     
                                     <!-- UPDATED ACTION AREA WITH TWO BUTTONS -->
-                                    <div class="order-2 relative group overflow-hidden rounded-2xl p-6 text-white shadow-2xl shadow-blue-900/20 transition-all hover:shadow-blue-900/40 hover:-translate-y-1">
+                                    <div class="order-2 relative group overflow-hidden rounded-2xl p-5 md:p-6 text-white shadow-2xl shadow-blue-900/20 transition-all hover:shadow-blue-900/40 hover:-translate-y-1">
                                         <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-brand-primary/90 to-brand-secondary/90 transition-all duration-500 group-hover:scale-105"></div>
                                         <div class="relative z-10 flex flex-col items-center text-center">
-                                            <div class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-2xl mb-3 border border-white/20 shadow-inner"><i class="fa-solid fa-headset text-white"></i></div>
+                                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-xl md:text-2xl mb-3 border border-white/20 shadow-inner"><i class="fa-solid fa-headset text-white"></i></div>
                                             
-                                            <h4 class="text-lg font-black mb-1 tracking-tight">Advisor Support</h4>
+                                            <h4 class="text-base md:text-lg font-black mb-1 tracking-tight">Advisor Support</h4>
                                             
                                             <div class="bg-white/10 rounded-lg p-2 mb-4 w-full border border-white/10">
-                                                 <p class="text-[10px] uppercase font-bold text-blue-200 mb-1">Available Languages</p>
-                                                 <p class="text-[10px] text-white leading-relaxed font-medium">Malayalam, English, Tagalog, Swahili, Sinhala, Hindi, Tamil</p>
+                                                 <p class="text-[9px] md:text-[10px] uppercase font-bold text-blue-200 mb-1">Available Languages</p>
+                                                 <p class="text-[9px] md:text-[10px] text-white leading-relaxed font-medium">Malayalam, English, Tagalog, Swahili, Sinhala, Hindi, Tamil</p>
                                             </div>
 
                                             <div class="flex flex-col w-full gap-3">
@@ -744,20 +756,20 @@
 
             <!-- TAB 3: BOOKING -->
             <div id="tab-3" class="hidden animate-slide-up-fade max-w-5xl mx-auto">
-                <div class="glass-card p-6 md:p-10">
-                    <div class="mb-8 text-center">
-                        <h2 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Finalize Appointment</h2>
-                        <p class="text-slate-500 text-sm tracking-wide font-medium">Select your advisor and preferred slot.</p>
+                <div class="glass-card p-5 md:p-10">
+                    <div class="mb-6 md:mb-8 text-center">
+                        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-2 tracking-tight">Finalize Appointment</h2>
+                        <p class="text-slate-500 text-xs md:text-sm tracking-wide font-medium">Select your advisor and preferred slot.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
                         <!-- Left: Advisor Selection -->
-                        <div class="lg:col-span-2 space-y-8">
+                        <div class="lg:col-span-2 space-y-6 md:space-y-8">
                             
                             <!-- 1. Advisor Grid -->
                             <div>
-                                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">1. Select Your Immigration Advisor</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="advisorGrid">
+                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 md:mb-4">1. Select Your Immigration Advisor</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6" id="advisorGrid">
                                     <!-- Advisors injected via JS -->
                                 </div>
                                 <input type="hidden" id="selectedAdvisor">
@@ -765,22 +777,22 @@
 
                             <!-- 2. Method Selection -->
                             <div>
-                                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">2. Consultation Method</h3>
-                                <div class="grid grid-cols-3 gap-4">
-                                    <div class="method-card p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('In-Person', this)">
-                                        <div class="w-10 h-10 rounded-full bg-blue-50 text-brand-primary flex items-center justify-center text-lg"><i class="fa-solid fa-building"></i></div>
-                                        <span class="text-xs font-bold text-slate-700">In-Person</span>
-                                        <span class="text-[9px] text-slate-400 font-medium">Visit Office</span>
+                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 md:mb-4">2. Consultation Method</h3>
+                                <div class="grid grid-cols-3 gap-3 md:gap-4">
+                                    <div class="method-card p-3 md:p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('In-Person', this)">
+                                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-50 text-brand-primary flex items-center justify-center text-base md:text-lg"><i class="fa-solid fa-building"></i></div>
+                                        <span class="text-[10px] md:text-xs font-bold text-slate-700">In-Person</span>
+                                        <span class="text-[8px] md:text-[9px] text-slate-400 font-medium">Visit Office</span>
                                     </div>
-                                    <div class="method-card p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('Phone Call', this)">
-                                        <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-lg"><i class="fa-solid fa-phone"></i></div>
-                                        <span class="text-xs font-bold text-slate-700">Phone Call</span>
-                                        <span class="text-[9px] text-slate-400 font-medium">Direct Call</span>
+                                    <div class="method-card p-3 md:p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('Phone Call', this)">
+                                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-base md:text-lg"><i class="fa-solid fa-phone"></i></div>
+                                        <span class="text-[10px] md:text-xs font-bold text-slate-700">Phone Call</span>
+                                        <span class="text-[8px] md:text-[9px] text-slate-400 font-medium">Direct Call</span>
                                     </div>
-                                    <div class="method-card p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('Video Call', this)">
-                                        <div class="w-10 h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-lg"><i class="fa-solid fa-video"></i></div>
-                                        <span class="text-xs font-bold text-slate-700">Video Call</span>
-                                        <span class="text-[9px] text-slate-400 font-medium">Zoom / Meet</span>
+                                    <div class="method-card p-3 md:p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('Video Call', this)">
+                                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-base md:text-lg"><i class="fa-solid fa-video"></i></div>
+                                        <span class="text-[10px] md:text-xs font-bold text-slate-700">Video Call</span>
+                                        <span class="text-[8px] md:text-[9px] text-slate-400 font-medium">Zoom / Meet</span>
                                     </div>
                                 </div>
                                 <input type="hidden" id="selectedMethod">
@@ -788,22 +800,22 @@
                         </div>
 
                         <!-- Right: Date & Time -->
-                        <div class="bg-white/60 rounded-2xl border border-white/50 p-6 shadow-sm">
-                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">3. Date & Time</h3>
+                        <div class="bg-white/60 rounded-2xl border border-white/50 p-4 md:p-6 shadow-sm">
+                            <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 md:mb-4">3. Date & Time</h3>
                             
                             <!-- Date -->
-                            <div class="mb-6">
-                                <label class="block text-[10px] font-bold text-brand-primary uppercase mb-2">Select Date</label>
+                            <div class="mb-4 md:mb-6">
+                                <label class="block text-[9px] md:text-[10px] font-bold text-brand-primary uppercase mb-2">Select Date</label>
                                 <div class="relative">
-                                    <input type="text" id="bookingDate" class="form-input w-full rounded-xl px-4 text-sm font-bold text-center" placeholder="Pick a date">
+                                    <input type="text" id="bookingDate" class="form-input w-full rounded-xl px-4 text-xs md:text-sm font-bold text-center h-10 md:h-14" placeholder="Pick a date">
                                     <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"><i class="fa-regular fa-calendar"></i></div>
                                 </div>
                             </div>
 
                             <!-- Time Slots -->
                             <div>
-                                <label class="block text-[10px] font-bold text-brand-primary uppercase mb-2">Select Time (GST)</label>
-                                <div class="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto custom-scrollbar p-1" id="timeSlotGrid">
+                                <label class="block text-[9px] md:text-[10px] font-bold text-brand-primary uppercase mb-2">Select Time (GST)</label>
+                                <div class="grid grid-cols-3 gap-2 max-h-48 md:max-h-60 overflow-y-auto custom-scrollbar p-1" id="timeSlotGrid">
                                     <!-- JS Generated -->
                                 </div>
                                 <input type="hidden" id="selectedTime">
@@ -812,12 +824,12 @@
                     </div>
                     
                     <!-- Confirmation -->
-                    <div class="mt-8 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
                         <div class="text-center md:text-left">
                             <p class="text-sm font-bold text-slate-900">Ready to Book?</p>
                             <p class="text-xs text-slate-500">Your selected advisor will confirm shortly.</p>
                         </div>
-                        <button onclick="submitBooking()" class="btn-gradient text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center gap-3 w-full md:w-auto justify-center">
+                        <button onclick="submitBooking()" class="btn-gradient text-white font-bold py-3 md:py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center gap-3 w-full md:w-auto justify-center">
                             <span>CONFIRM APPOINTMENT</span>
                             <i class="fa-solid fa-check-circle"></i>
                         </button>
@@ -842,71 +854,10 @@
         </div>
     </footer>
 
-    <!-- MOBILE DOCK (UNCHANGED) -->
-    <div class="fixed bottom-6 left-4 right-4 z-50 md:hidden animate-fade-in-up">
-        <div class="glass-card !bg-white/90 backdrop-blur-xl p-1.5 rounded-full shadow-2xl border border-white/60 flex justify-between items-center gap-1 relative z-50">
-            <a href="index.html" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full hover:bg-blue-50 text-slate-500 hover:text-brand-primary transition-all active:scale-95">
-                <i class="fa-solid fa-house text-lg mb-0.5 transition-colors"></i>
-                <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Home</span>
-            </a>
-            <button onclick="toggleMobileLanguage()" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full hover:bg-purple-50 text-slate-500 hover:text-brand-secondary transition-all active:scale-95">
-                <i class="fa-solid fa-language text-lg mb-0.5 transition-colors"></i>
-                <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Lang</span>
-            </button>
-            <button onclick="toggleMobileDestinations()" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full hover:bg-yellow-50 text-slate-500 hover:text-brand-gold transition-all active:scale-95">
-                <i class="fa-solid fa-earth-europe text-lg mb-0.5 transition-colors"></i>
-                <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Explore</span>
-            </button>
-            <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-1558/91ROR9EQUJNVPS08FU" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full bg-gradient-to-br from-brand-primary to-blue-600 text-white shadow-lg shadow-blue-500/30 transition-all active:scale-95">
-                <i class="fa-solid fa-paper-plane text-lg mb-0.5"></i>
-                <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Apply</span>
-            </a>
-            <a href="https://wa.me/971503666382" target="_blank" class="flex-1 min-w-0 group flex flex-col items-center justify-center py-2 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow-lg shadow-green-500/30 transition-all active:scale-95">
-                <i class="fa-brands fa-whatsapp text-xl mb-0.5"></i>
-                <span class="text-[9px] font-bold uppercase tracking-wide leading-none truncate w-full text-center">Chat</span>
-            </a>
-        </div>
-        <!-- Menus remain same (Language/Destination) -->
-        <div id="mobile-language-menu" class="absolute bottom-[calc(100%+16px)] left-0 w-full p-4 rounded-[2rem] bg-white/95 backdrop-blur-xl border border-white/60 shadow-2xl opacity-0 invisible transition-all duration-300 transform translate-y-10 origin-bottom z-40">
-             <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                <span class="text-sm font-bold text-slate-800 uppercase tracking-widest pl-2">Select Language</span>
-                <button onclick="toggleMobileLanguage()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="grid grid-cols-2 gap-2 max-h-[40vh] overflow-y-auto custom-scrollbar">
-                <button onclick="setLanguage('en', this); toggleMobileLanguage()" class="lang-option-mobile group"><span>English</span> <span class="text-xs text-slate-400">EN</span></button>
-                <button onclick="setLanguage('ml', this); toggleMobileLanguage()" class="lang-option-mobile group font-['Noto_Sans_Malayalam']"><span>മലയാളം</span> <span class="text-xs text-slate-400">ML</span></button>
-                <button onclick="setLanguage('hi', this); toggleMobileLanguage()" class="lang-option-mobile group"><span>हिंदी</span> <span class="text-xs text-slate-400">HI</span></button>
-                <button onclick="setLanguage('ta', this); toggleMobileLanguage()" class="lang-option-mobile group font-['Noto_Sans_Tamil']"><span>தமிழ்</span> <span class="text-xs text-slate-400">TA</span></button>
-                <button onclick="setLanguage('tl', this); toggleMobileLanguage()" class="lang-option-mobile group"><span>Filipino</span> <span class="text-xs text-slate-400">TL</span></button>
-                <button onclick="setLanguage('si', this); toggleMobileLanguage()" class="lang-option-mobile group font-['Noto_Sans_Sinhala']"><span>සිංහල</span> <span class="text-xs text-slate-400">SI</span></button>
-                <button onclick="setLanguage('sw', this); toggleMobileLanguage()" class="lang-option-mobile group"><span>Swahili</span> <span class="text-xs text-slate-400">SW</span></button>
-            </div>
-        </div>
-        <div id="mobile-destinations-menu" class="absolute bottom-[calc(100%+16px)] left-0 w-full p-4 rounded-[2rem] bg-white/95 backdrop-blur-xl border border-white/60 shadow-2xl opacity-0 invisible transition-all duration-300 transform translate-y-10 origin-bottom z-40">
-             <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                <span class="text-sm font-bold text-slate-800 uppercase tracking-widest pl-2">Select Country</span>
-                <button onclick="toggleMobileDestinations()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="grid grid-cols-2 gap-3 max-h-[40vh] overflow-y-auto custom-scrollbar">
-                 <a href="sweden.html" class="dest-option-mobile"><span class="text-xl">🇸🇪</span> <span class="text-xs font-bold text-slate-600">Sweden</span></a>
-                <a href="finland.html" class="dest-option-mobile"><span class="text-xl">🇫🇮</span> <span class="text-xs font-bold text-slate-600">Finland</span></a>
-                <a href="netherlands.html" class="dest-option-mobile"><span class="text-xl">🇳🇱</span> <span class="text-xs font-bold text-slate-600">Netherlands</span></a>
-                <a href="germany.html" class="dest-option-mobile"><span class="text-xl">🇩🇪</span> <span class="text-xs font-bold text-slate-600">Germany</span></a>
-                <a href="italy.html" class="dest-option-mobile"><span class="text-xl">🇮🇹</span> <span class="text-xs font-bold text-slate-600">Italy</span></a>
-                <a href="france.html" class="dest-option-mobile"><span class="text-xl">🇫🇷</span> <span class="text-xs font-bold text-slate-600">France</span></a>
-                <a href="poland.html" class="dest-option-mobile"><span class="text-xl">🇵🇱</span> <span class="text-xs font-bold text-slate-600">Poland</span></a>
-                <a href="czech.html" class="dest-option-mobile"><span class="text-xl">🇨🇿</span> <span class="text-xs font-bold text-slate-600">Czech Republic</span></a>
-                <a href="latvia.html" class="dest-option-mobile"><span class="text-xl">🇱🇻</span> <span class="text-xs font-bold text-slate-600">Latvia</span></a>
-                <a href="croatia.html" class="dest-option-mobile"><span class="text-xl">🇭🇷</span> <span class="text-xs font-bold text-slate-600">Croatia</span></a>
-                <a href="serbia.html" class="dest-option-mobile !bg-blue-50 border-blue-200"><span class="text-xl">🇷🇸</span> <span class="text-xs font-bold text-brand-primary">Serbia</span></a>
-                <a href="macedonia.html" class="dest-option-mobile"><span class="text-xl">🇲🇰</span> <span class="text-xs font-bold text-slate-600">Macedonia</span></a>
-                <a href="albania.html" class="dest-option-mobile"><span class="text-xl">🇦🇱</span> <span class="text-xs font-bold text-slate-600">Albania</span></a>
-            </div>
-        </div>
-    </div>
+    <!-- MOBILE DOCK REMOVED -->
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-24 md:bottom-8 right-8 transform translate-y-32 opacity-0 transition-all duration-500 z-[100]">
+    <div id="toast" class="fixed bottom-8 right-8 transform translate-y-32 opacity-0 transition-all duration-500 z-[100]">
         <div class="glass-card border-l-4 border-brand-primary text-slate-800 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 bg-white">
             <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-brand-primary">
                 <i class="fa-solid fa-check"></i>
@@ -920,7 +871,7 @@
 
     <!-- Custom Modal for Errors -->
     <div id="messageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/40 opacity-0 transition-opacity duration-300">
-        <div class="modal-content glass-card !bg-white/95 w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center">
+        <div class="modal-content glass-card !bg-white/95 w-[90%] md:w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center">
             <!-- Modal Content Injected Here -->
             <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
                 <i class="fa-solid fa-circle-exclamation"></i>
@@ -934,42 +885,7 @@
     </div>
 
     <script>
-        // --- MOBILE DOCK LOGIC ---
-        function toggleMobileDestinations() {
-            const menu = document.getElementById('mobile-destinations-menu');
-            const langMenu = document.getElementById('mobile-language-menu');
-            if (langMenu) langMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
-            if (menu) {
-                menu.classList.toggle('invisible');
-                menu.classList.toggle('opacity-0');
-                menu.classList.toggle('translate-y-10');
-            }
-        }
-
-        function toggleMobileLanguage() {
-            const menu = document.getElementById('mobile-language-menu');
-            const destMenu = document.getElementById('mobile-destinations-menu');
-            if (destMenu) destMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
-            if (menu) {
-                menu.classList.toggle('invisible');
-                menu.classList.toggle('opacity-0');
-                menu.classList.toggle('translate-y-10');
-            }
-        }
-
-        document.addEventListener('click', function(event) {
-            const destMenu = document.getElementById('mobile-destinations-menu');
-            const langMenu = document.getElementById('mobile-language-menu');
-            const destBtn = event.target.closest('button[onclick="toggleMobileDestinations()"]');
-            const langBtn = event.target.closest('button[onclick="toggleMobileLanguage()"]');
-            
-            if (destMenu && !destMenu.classList.contains('invisible') && !destMenu.contains(event.target) && !destBtn) {
-                toggleMobileDestinations();
-            }
-            if (langMenu && !langMenu.classList.contains('invisible') && !langMenu.contains(event.target) && !langBtn && !event.target.closest('.lang-option-mobile')) {
-                toggleMobileLanguage();
-            }
-        });
+        // MOBILE DOCK LOGIC REMOVED
         
         function setLanguage(lang, el) { console.log("Language set to:", lang); }
     
@@ -1164,7 +1080,7 @@
             if(!grid) return;
             grid.innerHTML = '';
             // Make grid 1 col on mobile, 2 on md
-            grid.className = "grid grid-cols-1 md:grid-cols-2 gap-6"; 
+            grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"; 
             
             advisors.forEach(adv => {
                 const div = document.createElement('div');
@@ -1235,7 +1151,7 @@
                 for (let m = 0; m < 60; m += 15) {
                     const timeStr = `${h > 12 ? h - 12 : h}:${m === 0 ? '00' : m} ${h >= 12 ? 'PM' : 'AM'}`;
                     const btn = document.createElement('button');
-                    btn.className = "time-slot py-2 rounded-lg text-xs font-bold text-slate-600 bg-slate-50 border border-slate-100";
+                    btn.className = "time-slot py-2 rounded-lg text-[10px] md:text-xs font-bold text-slate-600 bg-slate-50 border border-slate-100";
                     btn.innerText = timeStr;
                     btn.onclick = () => selectTime(timeStr, btn);
                     grid.appendChild(btn);
@@ -1243,7 +1159,7 @@
             }
             // Add 7:00 PM
             const btn = document.createElement('button');
-            btn.className = "time-slot py-2 rounded-lg text-xs font-bold text-slate-600 bg-slate-50 border border-slate-100";
+            btn.className = "time-slot py-2 rounded-lg text-[10px] md:text-xs font-bold text-slate-600 bg-slate-50 border border-slate-100";
             btn.innerText = "7:00 PM";
             btn.onclick = () => selectTime("7:00 PM", btn);
             grid.appendChild(btn);
@@ -1272,6 +1188,7 @@
 
             document.getElementById('tab-1').classList.add('hidden');
             document.getElementById('tab-2').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             
             updateStepIndicator(2);
             
@@ -1285,6 +1202,7 @@
             // NOTE: saveData(false) removed from here because it's now called in generateReport()
             document.getElementById('tab-2').classList.add('hidden');
             document.getElementById('tab-3').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             updateStepIndicator(3);
         }
 
@@ -1361,7 +1279,7 @@
             
             ['mobile', 'whatsapp', 'altPhone'].forEach(id => {
                 const el = document.getElementById(id);
-                if(el.value.length < 5) el.value = code;
+                if(el && el.value.length < 5) el.value = code;
             });
             
             document.getElementById('mobileHint').innerText = "Format: " + rule.hint;
@@ -1392,7 +1310,7 @@
             
             roles.forEach(r => {
                 const div = document.createElement('div');
-                div.className = "px-5 py-4 text-sm text-slate-700 hover:bg-blue-50 hover:text-brand-primary cursor-pointer border-b border-gray-100 last:border-0 transition-colors font-medium";
+                div.className = "px-4 md:px-5 py-3 md:py-4 text-xs md:text-sm text-slate-700 hover:bg-blue-50 hover:text-brand-primary cursor-pointer border-b border-gray-100 last:border-0 transition-colors font-medium";
                 div.innerText = r;
                 div.onclick = function() { selectJob(r); };
                 listContainer.appendChild(div);
@@ -1410,16 +1328,16 @@
             
             uCard.classList.remove('active'); sCard.classList.remove('active');
             uCheck.querySelector('div').classList.add('hidden'); sCheck.querySelector('div').classList.add('hidden');
-            uCheck.className = sCheck.className = "w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all";
+            uCheck.className = sCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all";
 
             if (mode === 'Unskilled') {
                 uCard.classList.add('active');
-                uCheck.className = "w-8 h-8 rounded-full border-brand-primary flex items-center justify-center bg-blue-100 shadow-sm";
+                uCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-brand-primary flex items-center justify-center bg-blue-100 shadow-sm";
                 uCheck.querySelector('div').classList.remove('hidden');
                 document.getElementById('experienceWrapper').classList.add('hidden');
             } else {
                 sCard.classList.add('active');
-                sCheck.className = "w-8 h-8 rounded-full border-brand-secondary flex items-center justify-center bg-purple-100 shadow-sm";
+                sCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-brand-secondary flex items-center justify-center bg-purple-100 shadow-sm";
                 sCheck.querySelector('div').classList.remove('hidden');
                 document.getElementById('experienceWrapper').classList.remove('hidden');
             }
@@ -1465,19 +1383,19 @@
             const others = jobMasterList.filter(j => j.type === jobData.type && j.c !== jobData.c).sort(() => 0.5 - Math.random()).slice(0, 3);
             others.forEach(o => {
                 const div = document.createElement('div');
-                div.className = "flex items-center justify-between bg-slate-50/80 p-4 rounded-2xl border border-gray-100 hover:bg-white hover:border-brand-primary/30 transition-all cursor-pointer group shadow-sm hover:shadow-md";
+                div.className = "flex items-center justify-between bg-slate-50/80 p-3 rounded-2xl border border-gray-100 hover:bg-white hover:border-brand-primary/30 transition-all cursor-pointer group shadow-sm hover:shadow-md";
                 div.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-xl">🇪🇺</div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-lg">🇪🇺</div>
                         <div class="flex-grow">
                             <div class="flex justify-between items-center">
-                                <div class="text-sm font-bold text-slate-700 group-hover:text-brand-primary transition tracking-wide">${o.c}</div>
-                                <div class="text-[10px] text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded border border-green-100">${getSalary(o.c, currentMode)}</div>
+                                <div class="text-xs font-bold text-slate-700 group-hover:text-brand-primary transition tracking-wide">${o.c}</div>
+                                <div class="text-[9px] text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded border border-green-100">${getSalary(o.c, currentMode)}</div>
                             </div>
-                            <div class="text-[10px] text-slate-400 uppercase font-medium mt-1">${o.r}</div>
+                            <div class="text-[9px] text-slate-400 uppercase font-medium mt-0.5">${o.r}</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-chevron-right text-slate-300 text-xs group-hover:text-brand-primary transition-colors ml-2"></i>`;
+                    <i class="fa-solid fa-chevron-right text-slate-300 text-[10px] group-hover:text-brand-primary transition-colors ml-1"></i>`;
                 div.onclick = function() { window.open(countryPageMap[o.c] || '#', '_blank'); };
                 grid.appendChild(div);
             });
@@ -1548,7 +1466,7 @@
                 { id: CLICKUP_FIELDS["SUR NAME"], value: document.getElementById('lastName').value },
                 { id: CLICKUP_FIELDS["MOBILE"], value: mobile },
                 { id: CLICKUP_FIELDS["WHATSAPP"], value: cleanPhoneNumber(document.getElementById('whatsapp').value) },
-                { id: CLICKUP_FIELDS["PHONE"], value: cleanPhoneNumber(document.getElementById('altPhone').value) },
+                { id: CLICKUP_FIELDS["PHONE"], value: cleanPhoneNumber(document.getElementById('altPhone') ? document.getElementById('altPhone').value : "") },
                 { id: CLICKUP_FIELDS["DATE OF BIRTH"], value: getUnixTime(document.getElementById('dob').value) },
                 { id: CLICKUP_FIELDS["AGE"], value: parseInt(document.getElementById('age').value) },
                 { id: CLICKUP_FIELDS["EMAIL"], value: document.getElementById('email').value },
