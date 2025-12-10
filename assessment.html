@@ -549,7 +549,7 @@
                             <span id="residenceDisplay" class="text-slate-500 font-bold uppercase truncate">Select Residence</span>
                             <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300" id="residenceArrow"></i>
                         </button>
-                        <div id="residenceList" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
+                        <div id="residenceList" data-lenis-prevent class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-[60] custom-scrollbar transform origin-top transition-all duration-300">
                             <!-- Populated by JS -->
                         </div>
                     </div>
@@ -562,7 +562,7 @@
                             <span id="nationalityDisplay" class="text-slate-500 font-bold uppercase truncate">Select Origin</span>
                             <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300" id="nationalityArrow"></i>
                         </button>
-                        <div id="nationalityList" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
+                        <div id="nationalityList" data-lenis-prevent class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-[60] custom-scrollbar transform origin-top transition-all duration-300">
                             <!-- Populated by JS -->
                         </div>
                     </div>
@@ -747,12 +747,12 @@
                             <label class="block text-[10px] md:text-xs font-bold text-brand-primary uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Target Position</label>
                             <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 py-2 md:py-4 flex justify-between items-center cursor-pointer h-12 md:h-auto" onclick="toggleJobDropdown(event)">
                                 <span id="selectedJobText" class="text-slate-500 font-medium text-sm md:text-base">Select Job Role</span>
-                                <i class="fa-solid fa-chevron-up transition-transform duration-300 text-brand-primary" id="jobDropdownIcon"></i>
+                                <i class="fa-solid fa-chevron-down transition-transform duration-300 text-brand-primary" id="jobDropdownIcon"></i>
                             </button>
-                            <div id="jobDropdownList" class="hidden absolute top-full left-0 w-full mt-2 bg-white/90 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 md:max-h-80 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
+                            <input type="hidden" id="currentJob">
+                            <div id="jobDropdownList" data-lenis-prevent class="hidden absolute top-full left-0 w-full mt-2 bg-white/90 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 md:max-h-80 overflow-y-auto z-[60] custom-scrollbar transform origin-top transition-all duration-300">
                                 <!-- JS Injected -->
                             </div>
-                            <input type="hidden" id="currentJob">
                         </div>
                         <div id="experienceWrapper" class="hidden animate-pop-in">
                             <label class="block text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Professional Tenure</label>
@@ -1756,7 +1756,7 @@
             setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
 
             setTimeout(() => {
-                window.location.href = ""https://www.bettercall.online/#home";";
+                window.location.href = "https://bettercall.online";
             }, 2000);
         }
 
@@ -2467,5 +2467,4 @@ END:VCALENDAR`;
         console.log("Script Loaded Successfully");
     </script>
 </body>
-
 </html>
