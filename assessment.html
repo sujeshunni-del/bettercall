@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
@@ -29,61 +30,66 @@
     <script>
         console.warn = function() {}; 
 
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'Outfit', 'sans-serif'],
-                        barcode: ['"Libre Barcode 39 Text"', 'cursive'],
-                    },
-                    colors: {
-                        'brand-dark': '#ffffff',
-                        'brand-primary': '#2563eb', 
-                        'brand-secondary': '#7c3aed',
-                        'brand-accent': '#f43f5e', 
-                        'brand-gold': '#d97706',
-                        glass: { border: 'rgba(255, 255, 255, 0.4)', surface: 'rgba(255, 255, 255, 0.1)' },
-                    },
-                    animation: {
-                        'blob': 'blob 20s infinite alternate',
-                        'float': 'float 6s ease-in-out infinite',
-                        'slide-up-fade': 'slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'pop-in': 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
-                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
-                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both'
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0, 0) scale(1)' },
-                            '33%': { transform: 'translate(50px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0, 0) scale(1)' },
+        // Safe Tailwind Config Initialization
+        if (typeof tailwind !== 'undefined') {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ['Plus Jakarta Sans', 'Outfit', 'sans-serif'],
+                            barcode: ['"Libre Barcode 39 Text"', 'cursive'],
                         },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-15px)' },
+                        colors: {
+                            'brand-dark': '#ffffff',
+                            'brand-primary': '#2563eb', 
+                            'brand-secondary': '#7c3aed',
+                            'brand-accent': '#f43f5e', 
+                            'brand-gold': '#d97706',
+                            glass: { border: 'rgba(255, 255, 255, 0.4)', surface: 'rgba(255, 255, 255, 0.1)' },
                         },
-                        slideUpFade: {
-                            '0%': { transform: 'translateY(20px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        animation: {
+                            'blob': 'blob 20s infinite alternate',
+                            'float': 'float 6s ease-in-out infinite',
+                            'slide-up-fade': 'slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                            'pop-in': 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                            'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                            'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both'
                         },
-                        popIn: {
-                            '0%': { transform: 'scale(0.9)', opacity: '0' },
-                            '100%': { transform: 'scale(1)', opacity: '1' }
-                        },
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        shake: {
-                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
-                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
-                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
-                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+                        keyframes: {
+                            blob: {
+                                '0%': { transform: 'translate(0, 0) scale(1)' },
+                                '33%': { transform: 'translate(50px, -50px) scale(1.1)' },
+                                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                                '100%': { transform: 'translate(0, 0) scale(1)' },
+                            },
+                            float: {
+                                '0%, 100%': { transform: 'translateY(0)' },
+                                '50%': { transform: 'translateY(-15px)' },
+                            },
+                            slideUpFade: {
+                                '0%': { transform: 'translateY(20px)', opacity: '0' },
+                                '100%': { transform: 'translateY(0)', opacity: '1' }
+                            },
+                            popIn: {
+                                '0%': { transform: 'scale(0.9)', opacity: '0' },
+                                '100%': { transform: 'scale(1)', opacity: '1' }
+                            },
+                            fadeInUp: {
+                                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                                '100%': { opacity: '1', transform: 'translateY(0)' },
+                            },
+                            shake: {
+                                '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                                '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                                '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                                '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+                            }
                         }
                     }
                 }
-            }
+            };
+        } else {
+            console.error("Tailwind CSS failed to load.");
         }
     </script>
 
@@ -1385,8 +1391,8 @@
             document.getElementById('barcodeRef').innerText = "*" + rId + "*";
             
             populateCountryDropdowns();
-            renderAdvisors(); // Now correctly defined
-            renderTimeSlots(); // Now correctly defined
+            renderAdvisors();
+            renderTimeSlots();
             
             // Defaults
             document.getElementById('presentResidence').value = "UAE";
