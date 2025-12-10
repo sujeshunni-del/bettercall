@@ -1552,8 +1552,9 @@
                 { id: CLICKUP_FIELDS["DATE OF BIRTH"], value: getUnixTime(document.getElementById('dob').value) },
                 { id: CLICKUP_FIELDS["AGE"], value: parseInt(document.getElementById('age').value) },
                 { id: CLICKUP_FIELDS["EMAIL"], value: document.getElementById('email').value },
-                { id: CLICKUP_FIELDS["QUALIFICATION"], value: document.querySelector('input[name="qualification"]:checked')?.value },
-                { id: CLICKUP_FIELDS["JOB ROLE"], value: document.getElementById('currentJob').value },
+                // REMOVED RAW STRINGS HERE TO FIX ERROR
+                // { id: CLICKUP_FIELDS["QUALIFICATION"], value: document.querySelector('input[name="qualification"]:checked')?.value },
+                // { id: CLICKUP_FIELDS["JOB ROLE"], value: document.getElementById('currentJob').value },
                 { id: CLICKUP_FIELDS["EXPERIENCE"], value: parseInt(document.getElementById('experience').value) || 0 },
                 { id: CLICKUP_FIELDS["Case Reference ID"], value: ref }
             ];
@@ -1561,7 +1562,7 @@
             // CRITICAL FIX: Filter out null/undefined/empty values to prevent 400 Bad Request
             customFieldsArray = customFieldsArray.filter(f => f.value !== null && f.value !== undefined && f.value !== "");
             
-            // Fetch definitions to handle Dropdowns (Nationality/Residence)
+            // Fetch definitions to handle Dropdowns (Nationality/Residence AND Job/Qual)
             try {
                 const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
                 if(res.ok) {
@@ -1570,16 +1571,41 @@
                     const addDropdown = (key, val) => {
                         const fid = CLICKUP_FIELDS[key];
                         const def = fieldDefs.find(f => f.id === fid);
-                        if(def && def.type === 'drop_down' && val) {
+                        if(def && (def.type === 'drop_down' || def.type === 'labels') && val) {
                             const opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase()) 
                                      || def.type_config.options.find(o => o.name === "OTHER");
                             if(opt) customFieldsArray.push({ id: fid, value: opt.id });
+                        } else if (fid && val) {
+                            // If it's not a dropdown (or def not found), push value safely (fallback for mixed types)
+                             // But since we removed them from initial array, we only want to add here if it IS a dropdown OR if we need to add back the raw value for non-dropdowns.
+                             // However, since we specifically know Job/Qual MIGHT be dropdowns, we handle them carefully.
+                             // For now, assuming they ARE dropdowns based on error. If they are text fields, this logic might skip them.
+                             // Let's add a safe fallback: if no def found or not dropdown, add the raw value back.
+                             if (!def || (def.type !== 'drop_down' && def.type !== 'labels')) {
+                                customFieldsArray.push({ id: fid, value: val });
+                             }
                         }
                     };
                     addDropdown("NATIONALITY", document.getElementById('nationality').value);
                     addDropdown("PRESENT RESIDENCE", document.getElementById('presentResidence').value);
+                    addDropdown("QUALIFICATION", document.querySelector('input[name="qualification"]:checked')?.value);
+                    addDropdown("JOB ROLE", document.getElementById('currentJob').value);
+
+                } else {
+                     // Fallback if field fetch fails completely (will fail if fields are strict dropdowns)
+                     const qual = document.querySelector('input[name="qualification"]:checked')?.value;
+                     const job = document.getElementById('currentJob').value;
+                     if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
+                     if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
                 }
-            } catch(e) { console.warn("Could not fetch field definitions, skipping dropdowns", e); }
+            } catch(e) { 
+                console.warn("Could not fetch field definitions, using raw values", e); 
+                 // Fallback
+                 const qual = document.querySelector('input[name="qualification"]:checked')?.value;
+                 const job = document.getElementById('currentJob').value;
+                 if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
+                 if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
+            }
 
             const payload = {
                 name: document.getElementById('firstName').value,
