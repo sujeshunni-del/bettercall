@@ -1003,7 +1003,7 @@
                             <!-- 1. Advisor Selection -->
                             <div>
                                 <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-primary text-white inline-flex items-center justify-center mr-2">1</span> Select Immigration Advisor</h3>
-                                <div class="flex flex-col gap-3 h-[300px] overflow-y-auto custom-scrollbar pr-1" id="advisorGrid">
+                                <div class="flex flex-col gap-3" id="advisorGrid">
                                     <!-- Professional Advisors injected via JS -->
                                 </div>
                                 <input type="hidden" id="selectedAdvisor">
@@ -1875,19 +1875,29 @@
         }
 
         function updateStepIndicator(step) {
-            const s2 = document.getElementById('step-2-indicator');
-            const s3 = document.getElementById('step-3-indicator');
-            
-            if(step >= 2) {
-                s2.classList.remove('opacity-40', 'grayscale');
-                s2.querySelector('div').classList.add('border-brand-primary', 'text-brand-primary');
-                s2.querySelector('span').classList.add('text-brand-primary');
+            const update = (id, active) => {
+                const el = document.getElementById(id);
+                const box = el.querySelector('div');
+                const txt = el.querySelector('span');
+                
+                if (active) {
+                    el.classList.remove('opacity-40', 'grayscale');
+                    box.classList.remove('border-gray-200', 'text-gray-500', 'bg-white/40');
+                    box.classList.add('border-brand-primary', 'text-brand-primary', 'bg-white/80', 'backdrop-blur', 'shadow-lg');
+                    txt.classList.remove('text-slate-500');
+                    txt.classList.add('text-brand-primary');
+                } else {
+                    el.classList.add('opacity-40', 'grayscale');
+                    box.classList.add('border-gray-200', 'text-gray-500', 'bg-white/40');
+                    box.classList.remove('border-brand-primary', 'text-brand-primary', 'bg-white/80', 'backdrop-blur', 'shadow-lg');
+                    txt.classList.add('text-slate-500');
+                    txt.classList.remove('text-brand-primary');
+                }
             }
-            if(step >= 3) {
-                s3.classList.remove('opacity-40', 'grayscale');
-                s3.querySelector('div').classList.add('border-brand-primary', 'text-brand-primary');
-                s3.querySelector('span').classList.add('text-brand-primary');
-            }
+
+            // Handle Step 2 (Analysis) and Step 3 (Booking) states
+            update('step-2-indicator', step >= 2);
+            update('step-3-indicator', step >= 3);
         }
 
         // --- CORE FUNCTIONS (Job, Country, etc) ---
