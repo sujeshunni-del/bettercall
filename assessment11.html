@@ -173,7 +173,73 @@
         .date-input-container input { background: transparent; border: none; color: #1e293b; width: 100%; padding: 0 1rem; height: 100%; outline: none; font-weight: 600; font-size: 0.95rem; }
         @media (min-width: 768px) { .date-input-container input { font-size: 1.125rem; } .date-icon-box { padding: 0 1.25rem; } }
 
-        select.geo-input { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 1rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
+        /* STYLISH DROPDOWNS */
+        select.geo-input { 
+            appearance: none; 
+            background-image: none !important; /* Removed default SVG */
+            padding-right: 2.5rem; 
+            cursor: pointer;
+        }
+        
+        /* STYLISH CALENDAR (FLATPICKR OVERRIDES) */
+        .flatpickr-calendar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding: 1rem;
+            overflow: hidden;
+        }
+        .flatpickr-calendar::before, .flatpickr-calendar::after { display: none; }
+        
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            border-color: transparent;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+            color: white;
+        }
+        .flatpickr-day.today { border-color: #2563eb; color: #2563eb; font-weight: 800; }
+        .flatpickr-day:hover { background: #eff6ff; border-color: transparent; }
+        .flatpickr-months .flatpickr-month { background: transparent; color: #1e293b; fill: #1e293b; padding-bottom: 10px; }
+        .flatpickr-current-month .flatpickr-monthDropdown-months { font-weight: 800; font-size: 1.1em; }
+        .flatpickr-weekday { font-weight: 700; color: #64748b; }
+        .flatpickr-monthSelect-months { margin: 5px 0; }
+        
+        /* FIXED YEAR DISPLAY STYLES */
+        .flatpickr-current-month {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 10px;
+        }
+        .flatpickr-current-month input.cur-year {
+            font-weight: 800;
+            color: #2563eb;
+            font-size: 1.1em;
+            padding: 0 0 0 0.5ch;
+            display: inline-block;
+            background: transparent;
+            box-shadow: none;
+            border: none;
+        }
+        .flatpickr-current-month .numInputWrapper {
+            width: 8ch;
+            display: inline-block;
+        }
+        .flatpickr-current-month .numInputWrapper:hover {
+            background: rgba(37, 99, 235, 0.05);
+            border-radius: 8px;
+        }
+        .flatpickr-current-month .numInputWrapper span.arrowUp:after {
+            border-bottom-color: #2563eb;
+        }
+        .flatpickr-current-month .numInputWrapper span.arrowDown:after {
+            border-top-color: #2563eb;
+        }
+
         .uppercase-input { text-transform: uppercase; }
         .valid-field { border-color: #10b981 !important; background-color: rgba(236, 253, 245, 0.8) !important; }
         .invalid-field { border-color: #f43f5e !important; background-color: rgba(255, 241, 242, 0.8) !important; }
@@ -344,10 +410,16 @@
 
             <!-- TAB 1: Personal Details -->
             <div id="tab-1" class="glass-card p-5 md:p-12 animate-slide-up-fade max-w-4xl mx-auto">
-                <!-- ... existing form code ... -->
                 <div class="mb-6 md:mb-10 text-center">
-                    <h2 class="text-2xl md:text-4xl font-black text-slate-900 mb-2 md:mb-3 tracking-tight">Initialize Profile</h2>
-                    <p class="text-slate-500 text-xs md:text-sm tracking-wide font-medium">Precision is key. Ensure all data matches your documents.</p>
+                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 mb-4 shadow-sm border border-white animate-pulse-slow">
+                        <i class="fa-solid fa-earth-americas text-2xl text-brand-primary"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-3 tracking-tight">
+                        Unlock Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-secondary">Global Future</span>
+                    </h2>
+                    <p class="text-slate-500 text-xs md:text-sm tracking-wide font-medium max-w-lg mx-auto leading-relaxed">
+                        Your journey to a new horizon begins here. Enter your credentials to initialize the AI compatibility scan.
+                    </p>
                 </div>
 
                 <form id="personalForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
@@ -431,65 +503,96 @@
                         <p id="waHint" class="text-[10px] md:text-xs text-brand-secondary mt-1 md:mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
                     </div>
 
+                    <!-- Alternative Phone (Added) -->
+                    <div class="md:col-span-2">
+                         <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Alternative Phone (Optional)</label>
+                         <div class="relative group">
+                            <input type="tel" id="altPhone" class="form-input w-full rounded-xl px-4 md:px-5 pl-10 md:pl-12 font-mono font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('altPhone')">
+                            <i class="fa-solid fa-phone-volume absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-gold transition-colors text-sm"></i>
+                            <div id="altPhoneFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
+                        </div>
+                    </div>
+
                     <!-- Qualifications -->
                     <div class="md:col-span-2">
                         <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 md:mb-4 ml-1">Highest Academic Qualification</label>
-                        <div class="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3">
+                        <div class="grid grid-cols-3 md:grid-cols-6 gap-3">
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="UNDER 10 TH" class="peer sr-only" required>
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-school text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Under 10th</span>
+                                <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-brand-primary peer-checked:bg-blue-50 peer-checked:shadow-brand-primary/30 peer-checked:shadow-lg relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <i class="fa-solid fa-school text-2xl text-slate-300 peer-checked:text-brand-primary group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
+                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-primary relative z-10">Under 10th</span>
+                                    <div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="SCHOOL" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-book-open text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">School</span>
+                                <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-brand-primary peer-checked:bg-blue-50 peer-checked:shadow-brand-primary/30 peer-checked:shadow-lg relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <i class="fa-solid fa-book-open text-2xl text-slate-300 peer-checked:text-brand-primary group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
+                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-primary relative z-10">School</span>
+                                    <div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="PLUS TWO" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-graduation-cap text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Plus Two</span>
+                                <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-brand-primary peer-checked:bg-blue-50 peer-checked:shadow-brand-primary/30 peer-checked:shadow-lg relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <i class="fa-solid fa-graduation-cap text-2xl text-slate-300 peer-checked:text-brand-primary group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
+                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-primary relative z-10">Plus Two</span>
+                                    <div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="DIPLOMA" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-scroll text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Diploma</span>
+                                <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-brand-primary peer-checked:bg-blue-50 peer-checked:shadow-brand-primary/30 peer-checked:shadow-lg relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <i class="fa-solid fa-scroll text-2xl text-slate-300 peer-checked:text-brand-primary group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
+                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-primary relative z-10">Diploma</span>
+                                    <div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="BACHELOR" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-user-graduate text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Bachelor</span>
+                                <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-brand-primary peer-checked:bg-blue-50 peer-checked:shadow-brand-primary/30 peer-checked:shadow-lg relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <i class="fa-solid fa-user-graduate text-2xl text-slate-300 peer-checked:text-brand-primary group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
+                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-primary relative z-10">Bachelor</span>
+                                    <div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="qualification" value="MASTER" class="peer sr-only">
-                                <div class="h-full rounded-xl border border-gray-200/60 bg-white/50 p-2 md:p-4 flex flex-col items-center justify-center text-center gap-1 md:gap-2 hover:border-brand-primary/50 hover:bg-slate-50 peer-checked:bg-blue-50/80 peer-checked:border-brand-primary peer-checked:shadow-md transition-all">
-                                    <i class="fa-solid fa-medal text-sm md:text-xl text-slate-400 peer-checked:text-brand-primary group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 peer-checked:text-brand-primary">Master</span>
+                                <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-brand-primary peer-checked:bg-blue-50 peer-checked:shadow-brand-primary/30 peer-checked:shadow-lg relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <i class="fa-solid fa-medal text-2xl text-slate-300 peer-checked:text-brand-primary group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
+                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-primary relative z-10">Master</span>
+                                    <div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
                                 </div>
                             </label>
                         </div>
                     </div>
                     
-                    <!-- Passport -->
-                     <div class="md:col-span-1">
-                        <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Passport No. (Optional)</label>
-                        <input type="text" id="passportNo" class="form-input uppercase-input w-full rounded-xl px-4 md:px-5 font-mono font-medium" placeholder="X1234567" oninput="this.value = this.value.toUpperCase()">
-                    </div>
-                    <div class="md:col-span-1">
-                        <label class="block text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-passport mr-1"></i> Passport Expiry</label>
-                        <div class="date-input-container rounded-xl h-12 md:h-14">
-                            <div class="date-icon-box"><i class="fa-solid fa-hourglass-half text-sm"></i></div>
-                            <input type="text" id="passportExp" placeholder="Select Date" class="font-medium">
+                    <!-- Passport Group -->
+                    <div class="md:col-span-2 p-4 md:p-6 rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50/30 to-white/50">
+                        <div class="flex items-center gap-2 mb-4">
+                            <i class="fa-solid fa-passport text-brand-secondary text-lg"></i>
+                            <span class="text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest">Travel Document Details</span>
+                            <div class="h-px bg-indigo-100 flex-grow ml-2"></div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Passport No. (Optional)</label>
+                                <input type="text" id="passportNo" class="form-input uppercase-input w-full rounded-xl px-4 md:px-5 font-mono font-medium bg-white/60 focus:bg-white" placeholder="X1234567" oninput="this.value = this.value.toUpperCase()">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Passport Expiry</label>
+                                <div class="date-input-container rounded-xl h-12 md:h-14 bg-white/60 focus-within:bg-white">
+                                    <div class="date-icon-box"><i class="fa-solid fa-hourglass-half text-sm"></i></div>
+                                    <input type="text" id="passportExp" placeholder="Select Date" class="font-medium">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -807,7 +910,7 @@
             "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",  
             "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115", 
             "WHATSAPP": "87b4eee7-444f-4ec4-9882-441965757a68", 
-            "PHONE": "8efe7c3f-70cc-46d4-b6db-1324e5071b29", 
+            "PHONE": "8efe7c3f-70cc-46d4-b6db-1324e5071b29", // Alternative Number
             "DATE OF BIRTH": "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38",    
             "AGE": "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c",    
             "QUALIFICATION": "2cd34df4-98b5-4c82-8d86-a34bf3c1618b",
@@ -898,22 +1001,42 @@
             document.getElementById('presentResidence').value = "UAE";
             toggleCvUpload(true);
             
-            // Init Flatpickr for DOB
+            // Init Flatpickr for DOB (Fixed Year Display)
+            const maxDob = new Date();
+            maxDob.setFullYear(maxDob.getFullYear() - 18); // Show years up to 18 years ago
+            
+            const minDob = new Date();
+            minDob.setFullYear(minDob.getFullYear() - 60); // Show years back to 60 years ago
+            
+            // Default to a valid age (e.g., 25 years old) so the calendar opens in a valid year
+            const defaultDob = new Date();
+            defaultDob.setFullYear(defaultDob.getFullYear() - 25);
+
             flatpickr("#dob", {
                 dateFormat: "d/m/Y",
-                disableMobile: false, 
+                disableMobile: true, // Force custom UI for year scrolling
+                altInput: true,
+                altFormat: "F j, Y",
+                animate: true,
+                minDate: minDob, // Restrict years to valid range
+                maxDate: maxDob, // Restrict years to valid range
+                defaultDate: defaultDob, // Opens on a valid year
                 theme: "airbnb",
                 onChange: function(selectedDates) {
                     if(selectedDates.length > 0) {
                         const age = new Date(Date.now() - selectedDates[0].getTime()).getUTCFullYear() - 1970;
                         const el = document.getElementById('age');
+                        const errEl = document.getElementById('ageError');
                         el.value = age;
-                        if(age < 20) {
+                        
+                        // Age Eligibility Check: 21 - 50
+                        if(age < 21 || age > 50) {
                             el.classList.add('border-red-500');
-                            document.getElementById('ageError').classList.remove('hidden');
+                            errEl.classList.remove('hidden');
+                            errEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Eligibility: 21-50 years only.';
                         } else {
                             el.classList.remove('border-red-500');
-                            document.getElementById('ageError').classList.add('hidden');
+                            errEl.classList.add('hidden');
                         }
                     }
                 }
@@ -923,6 +1046,10 @@
             flatpickr("#bookingDate", {
                 dateFormat: "d/m/Y",
                 minDate: "today",
+                disableMobile: true,
+                altInput: true,
+                altFormat: "l, F j, Y",
+                animate: true,
                 disable: [
                     function(date) {
                         return (date.getDay() === 0); // Disable Sundays
@@ -931,7 +1058,14 @@
                 theme: "airbnb"
             });
             
-            flatpickr("#passportExp", { dateFormat: "d/m/Y", disableMobile: false, theme: "airbnb" });
+            flatpickr("#passportExp", { 
+                dateFormat: "d/m/Y", 
+                disableMobile: true, 
+                altInput: true,
+                altFormat: "F j, Y",
+                minDate: "today", // Passport expiry usually in future
+                theme: "airbnb" 
+            });
             
             handleResidenceChange();
             
@@ -1037,14 +1171,26 @@
         // --- NAVIGATION & FLOW ---
         function goToStep2() {
             const age = parseInt(document.getElementById('age').value);
-            if(isNaN(age) || age < 20 || age > 50) { 
-                showModal("Sorry, you are not eligible for the immigration process. (Age requirement: 20-50)"); return; 
+            // Updated validation check for 21-50 years
+            if(isNaN(age) || age < 21 || age > 50) { 
+                showModal("Sorry, you are not eligible for the immigration process. (Age requirement: 21-50)"); return; 
             }
             const mEl = document.getElementById('mobile');
             const rawVal = mEl.value.replace(/\s/g, '');
             if(currentPhoneRegex && !currentPhoneRegex.test(rawVal)) {
                 showModal("Invalid Mobile Number Format."); return;
             }
+
+            // Alternative Phone Validation
+            const altEl = document.getElementById('altPhone');
+            if(altEl && altEl.value.length > 5) {
+                const altVal = altEl.value.replace(/\s/g, '');
+                if(altVal === rawVal) {
+                    showModal("Alternative number must be different from mobile number.");
+                    return;
+                }
+            }
+
             if(!document.getElementById('personalForm').checkValidity()) {
                 document.getElementById('personalForm').reportValidity(); return;
             }
@@ -1383,6 +1529,7 @@ END:VCALENDAR`;
                 { id: CLICKUP_FIELDS["SUR NAME"], value: document.getElementById('lastName').value },
                 { id: CLICKUP_FIELDS["MOBILE"], value: mobile },
                 { id: CLICKUP_FIELDS["WHATSAPP"], value: cleanPhoneNumber(document.getElementById('whatsapp').value) },
+                // Mapped Alt Phone to PHONE field ID
                 { id: CLICKUP_FIELDS["PHONE"], value: cleanPhoneNumber(document.getElementById('altPhone') ? document.getElementById('altPhone').value : "") },
                 { id: CLICKUP_FIELDS["DATE OF BIRTH"], value: getUnixTime(document.getElementById('dob').value) },
                 { id: CLICKUP_FIELDS["AGE"], value: parseInt(document.getElementById('age').value) },
