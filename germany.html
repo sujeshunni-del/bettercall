@@ -328,7 +328,7 @@
     </div>
 
     <!-- Reduced top/bottom padding significantly for compact view. Added pt-32 to account for fixed header -->
-    <main class="flex-grow w-full max-w-7xl mx-auto relative z-10 space-y-8 pt-32 pb-32 px-3 sm:px-6">
+    <main class="flex-grow w-full max-w-7xl mx-auto relative z-10 space-y-8 pt-40 md:pt-32 pb-32 px-3 sm:px-6">
 
         <header class="text-center space-y-4 reveal-item">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel border border-germany-red/30 text-white font-bold tracking-widest text-[9px] uppercase mb-2 animate-fade-in-up">
@@ -338,7 +338,7 @@
             </div>
 
             <!-- Smaller text on mobile -->
-            <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-none drop-shadow-[0_0_25px_rgba(221,0,0,0.3)]">
+            <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-tight md:leading-none drop-shadow-[0_0_25px_rgba(221,0,0,0.3)]">
                 <span data-i18n="hero_title_1">Germany</span> <br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-germany-red to-germany-gold" data-i18n="hero_title_2">Professional Program</span>
             </h1>
@@ -349,7 +349,7 @@
         </header>
 
         <!-- Search & Filter Section (Page Specific) -->
-        <div id="job-search-section" class="sticky top-24 z-40 my-4 reveal-item">
+        <div id="job-search-section" class="sticky top-32 md:top-24 z-40 my-4 reveal-item">
             <div class="glass-panel rounded-xl p-3 border border-white/10 shadow-2xl backdrop-blur-xl bg-[#0B1120]/80">
                 <div class="relative group">
                     <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-germany-red transition-colors text-lg"></i>
@@ -1045,7 +1045,7 @@
         };
 
         // --- GLOBAL STATE ---
-        let currentLang = 'de'; // Set default language to German
+        let currentLang = 'en'; // Changed default to English
 
         // --- 1. GLOBAL COMPONENTS (FROM TEMPLATE) ---
         // UPDATED: Hidden menu button on mobile (hidden md:block lg:hidden)
@@ -1495,8 +1495,11 @@
             
             // Sync mobile button state
             document.querySelectorAll('.lang-option-mobile').forEach(btn => {
-                if (btn.querySelector('span:nth-child(2)').textContent.trim().toLowerCase() === lang) {
+                const langSpan = btn.querySelector('span:nth-child(2)');
+                if (langSpan && langSpan.textContent.trim().toLowerCase() === lang) {
                     btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
                 }
             });
 
@@ -1510,11 +1513,18 @@
                     if (el.tagName === 'INPUT') {
                         el.placeholder = t[key];
                     } else {
-                        el.style.opacity = '0';
-                        setTimeout(() => {
+                        // Check if the element has inline style that was set by JS before
+                        const needsFade = el.style.opacity === '1';
+
+                        if (needsFade) {
+                            el.style.opacity = '0';
+                            setTimeout(() => {
+                                el.innerHTML = t[key];
+                                el.style.opacity = '1';
+                            }, 200);
+                        } else {
                             el.innerHTML = t[key];
-                            el.style.opacity = '1';
-                        }, 200);
+                        }
                     }
                 }
             });
@@ -1531,21 +1541,19 @@
             
             // Re-render components
             renderCategoryChips();
-            renderJobs(jobsData);
+            filterPageJobs(); // Calls renderJobs inside
             renderTimeline();
-            filterPageJobs();
 
             // Mobile specific logic
             const mobileMenu = document.getElementById('mobile-language-menu');
             if (mobileMenu && !mobileMenu.classList.contains('invisible')) {
-                // toggleMobileLanguage(); // close it - done inside the mobile buttons
-            }
-
-            // Desktop logic
-            const deskBtn = document.getElementById('lang-toggle-btn');
-            if(deskBtn) {
-                 deskBtn.classList.remove('active');
-                 document.removeEventListener('click', closeLanguageDropdown);
+                // If it's open, it will close automatically by clicking an option, 
+                // but we ensure desktop dropdown is closed just in case.
+                const deskBtn = document.getElementById('lang-toggle-btn');
+                if(deskBtn) {
+                     deskBtn.classList.remove('active');
+                     document.removeEventListener('click', closeLanguageDropdown);
+                }
             }
         }
         
@@ -1793,8 +1801,15 @@
 
             initSearchElements();
             
-            // Set initial language to 'de' and trigger rendering
-            setLanguage('de', document.querySelector('.lang-option[onclick*="setLanguage(\'de\')"]'));
+            // Set initial language to 'en' (Default for Mobile & Desktop)
+            // Pass null as element to avoid error if element is not yet injected by GLOBAL_HEADER
+            setLanguage('en', null); 
+
+            // Find the correct element after GLOBAL_HEADER is inserted and set it active manually
+            const deskLangButton = document.querySelector('.lang-option[onclick*="setLanguage(\'en\')"]');
+            if (deskLangButton) {
+                deskLangButton.classList.add('active');
+            }
 
             checkScroll();
         });
