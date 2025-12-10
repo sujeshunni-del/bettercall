@@ -240,15 +240,35 @@
         }
 
         .method-card {
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             border: 1px solid rgba(255,255,255,0.6);
+            position: relative;
+            overflow: hidden;
         }
+        
+        /* Stylish Selected State */
         .method-card.selected {
-            border-color: #0891b2;
-            background: #ecfeff;
-            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
+            background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+            border-color: transparent;
+            box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.4);
+            transform: translateY(-2px) scale(1.02);
         }
+
+        /* Override Text Colors when Selected */
+        .method-card.selected .text-slate-700 { color: #ffffff !important; }
+        .method-card.selected .text-slate-400 { color: rgba(255, 255, 255, 0.85) !important; }
+
+        /* Override Icon Box when Selected */
+        .method-card.selected > div:first-child {
+            background-color: rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
         .time-slot {
             transition: all 0.2s;
             cursor: pointer;
@@ -1173,11 +1193,11 @@
         };
 
         const advisors = [
-            { name: "Benetta", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം)" },
-            { name: "Anjali", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം), Hindi (हिंदी), English" },
-            { name: "Budhunpa", country: "Sri Lanka", flag: "🇱🇰", lang: "English, Sinhala (සිංහල)" },
-            { name: "Roniee Lee", country: "Philippines", flag: "🇵🇭", lang: "English, Tagalog" },
-            { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Kiswahili" }
+            { name: "Benetta", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം)", image: null },
+            { name: "Anju M Nair", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം), Hindi (हिंदी), English", image: "https://raw.githubusercontent.com/sujeshunni-del/bettercall/9d03faaa3da5ec82f33234f1f169091f82a62e6f/WhatsApp%20Image%202025-12-10%20at%2020.47.55.jpeg" },
+            { name: "Budhunpa", country: "Sri Lanka", flag: "🇱🇰", lang: "English, Sinhala (සිංහල)", image: null },
+            { name: "Roniee Lee", country: "Philippines", flag: "🇵🇭", lang: "English, Tagalog", image: null },
+            { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Kiswahili", image: "https://raw.githubusercontent.com/sujeshunni-del/bettercall/9d03faaa3da5ec82f33234f1f169091f82a62e6f/Gemini_Generated_Image_1zthso1zthso1zth%20(2).png" }
         ];
 
         let currentMode = 'Unskilled';
@@ -1320,11 +1340,17 @@
                 div.className = "advisor-pro-card group"; 
                 div.onclick = () => selectAdvisor(adv.name, div);
                 
+                const imageContent = adv.image 
+                    ? `<img src="${adv.image}" alt="${adv.name}" class="w-full h-full object-cover">` 
+                    : adv.flag;
+
                 div.innerHTML = `
                     <div class="absolute top-3 right-3 opacity-0 group-[.selected]:opacity-100 text-brand-primary transition-all duration-300 transform scale-50 group-[.selected]:scale-100">
                         <i class="fa-solid fa-circle-check text-xl bg-white rounded-full"></i>
                     </div>
-                    <div class="advisor-img group-hover:scale-110 transition-transform duration-300">${adv.flag}</div>
+                    <div class="advisor-img group-hover:scale-110 transition-transform duration-300 overflow-hidden">
+                        ${imageContent}
+                    </div>
                     <div class="w-full">
                         <h4 class="text-sm font-black text-slate-800 mb-1 leading-tight group-[.selected]:text-brand-primary transition-colors">${adv.name}</h4>
                         <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-3">Senior Consultant</p>
