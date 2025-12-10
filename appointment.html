@@ -1901,9 +1901,54 @@ END:VCALENDAR`;
                      if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
                 }
 
+                // --- CHANGED: Construct Full Description ---
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+                const dob = document.getElementById('dob').value;
+                const age = document.getElementById('age').value;
+                const residence = document.getElementById('presentResidence').value;
+                const nationality = document.getElementById('nationality').value;
+                const whatsapp = document.getElementById('whatsapp').value;
+                const altPhone = document.getElementById('altPhone').value;
+                const qualification = document.querySelector('input[name="qualification"]:checked')?.value || "Not Selected";
+                const passportNo = document.getElementById('passportNo').value;
+                const passportExp = document.getElementById('passportExp').value;
+                const jobRole = document.getElementById('currentJob').value;
+                const experience = document.getElementById('experience').value;
+
+                const fullDescription = `
+**CASE REFERENCE ID:** ${ref}
+
+**PERSONAL DETAILS**
+--------------------
+**Name:** ${firstName} ${lastName}
+**Email:** ${email}
+**DOB:** ${dob} (Age: ${age})
+**Nationality:** ${nationality}
+**Current Residence:** ${residence}
+
+**CONTACT INFO**
+----------------
+**Mobile:** ${mobile}
+**WhatsApp:** ${whatsapp}
+**Alt Phone:** ${altPhone || "N/A"}
+
+**PROFESSIONAL PROFILE**
+------------------------
+**Qualification:** ${qualification}
+**Target Role:** ${jobRole}
+**Experience:** ${experience} Years
+
+**TRAVEL DOCUMENTS**
+--------------------
+**Passport No:** ${passportNo || "N/A"}
+**Expiry:** ${passportExp || "N/A"}
+                `.trim();
+
                 const payload = {
-                    name: document.getElementById('firstName').value,
-                    description: `REF: ${ref}\nRole: ${document.getElementById('currentJob').value}`,
+                    name: firstName + " " + lastName,
+                    description: fullDescription, // Use the new detailed description
                     custom_fields: customFieldsArray
                 };
 
