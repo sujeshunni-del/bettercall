@@ -9,8 +9,8 @@
     <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Template Font + Original Outfit Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Template Font + Original Outfit Font + Noto Sans for Global Scripts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
     <!-- Barcode Font for Authenticity -->
     <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Text&display=swap" rel="stylesheet">
     
@@ -36,7 +36,7 @@
                 theme: {
                     extend: {
                         fontFamily: {
-                            sans: ['Plus Jakarta Sans', 'Outfit', 'sans-serif'],
+                            sans: ['Plus Jakarta Sans', 'Outfit', 'Noto Sans', 'sans-serif'],
                             barcode: ['"Libre Barcode 39 Text"', 'cursive'],
                         },
                         colors: {
@@ -53,7 +53,8 @@
                             'slide-up-fade': 'slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                             'pop-in': 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
                             'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
-                            'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both'
+                            'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+                            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
                         },
                         keyframes: {
                             blob: {
@@ -186,6 +187,24 @@
         .btn-gradient { background-size: 200% auto; background-image: linear-gradient(to right, #2563eb 0%, #7c3aed 51%, #2563eb 100%); transition: 0.5s; }
         .btn-gradient:hover { background-position: right center; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4); }
 
+        .btn-consult {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-consult:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4); }
+
+        .btn-exit {
+            background: white;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-exit:hover {
+            background: #f8fafc;
+            color: #0f172a;
+            border-color: #94a3b8;
+        }
+
         /* SCROLLBAR */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
@@ -193,167 +212,46 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* BOOKING SPECIFIC - NEW 3D ADVISOR CARDS */
-        .advisor-3d-card {
+        /* PROFESSIONAL ADVISOR CARD (UPDATED) */
+        .advisor-pro-card {
             position: relative;
-            height: 120px; /* Reduced for mobile */
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            transform-style: preserve-3d;
-            transform: perspective(1000px);
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            overflow: visible;
-        }
-        @media (min-width: 768px) { .advisor-3d-card { height: 140px; border-radius: 24px; } }
-        
-        .advisor-3d-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 20px;
-            background: linear-gradient(120deg, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
-            z-index: 0;
-            opacity: 0.8;
-        }
-        @media (min-width: 768px) { .advisor-3d-card::before { border-radius: 24px; } }
-
-        .advisor-3d-card.selected {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(124, 58, 237, 0.05));
-            border-color: #2563eb;
-            box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.2), 0 0 0 2px #2563eb;
-        }
-
-        .advisor-content {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            height: 100%;
-            padding: 0 16px; /* Compact padding */
-            gap: 12px;
-            transform: translateZ(20px);
-        }
-        @media (min-width: 768px) { .advisor-content { padding: 0 20px; gap: 16px; } }
-
-        .advisor-image-wrapper {
-            position: relative;
-            width: 60px; /* Smaller mobile image */
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
-            border: 2px solid #fff;
-            box-shadow: 0 10px 20px rgba(244, 63, 94, 0.15), inset 0 2px 4px rgba(255,255,255,0.8);
-            transform: translateZ(30px);
-            transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        @media (min-width: 768px) { .advisor-image-wrapper { width: 70px; height: 70px; } }
-        
-        .advisor-3d-card:hover .advisor-image-wrapper {
-            transform: translateZ(50px) scale(1.1);
-            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-        }
-
-        .advisor-icon {
-            font-size: 24px;
-            color: #e11d48;
-            filter: drop-shadow(0 4px 6px rgba(225, 29, 72, 0.2));
             transition: all 0.3s ease;
-        }
-        @media (min-width: 768px) { .advisor-icon { font-size: 32px; } }
-
-        .advisor-badge {
-            position: absolute;
-            bottom: -5px;
-            right: -5px;
-            background: #fff;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            z-index: 20;
-        }
-        @media (min-width: 768px) { .advisor-badge { width: 24px; height: 24px; font-size: 14px; } }
-
-        .advisor-info {
-            flex-grow: 1;
-            transform: translateZ(25px);
-        }
-
-        .advisor-role {
-            font-size: 9px;
-            font-weight: 800;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin-bottom: 2px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        @media (min-width: 768px) { .advisor-role { font-size: 10px; } }
-
-        .advisor-name {
-            font-size: 14px;
-            font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 4px;
-            line-height: 1.2;
-        }
-        @media (min-width: 768px) { .advisor-name { font-size: 16px; } }
-
-        .advisor-langs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            margin-top: 6px;
-        }
-
-        .lang-pill {
-            font-size: 8px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 100px;
-            background: rgba(255,255,255,0.8);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            color: #64748b;
+            gap: 16px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-        @media (min-width: 768px) { .lang-pill { font-size: 9px; padding: 2px 8px; } }
-
-        .check-3d {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 20px;
-            height: 20px;
-            background: #2563eb;
+        .advisor-pro-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-color: #cbd5e1;
+        }
+        .advisor-pro-card.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+            box-shadow: 0 0 0 2px #2563eb;
+        }
+        .advisor-img {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
+            background: #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 10px;
-            opacity: 0;
-            transform: translateZ(20px) scale(0);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+            font-size: 20px;
+            flex-shrink: 0;
+            border: 2px solid white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
-        @media (min-width: 768px) { .check-3d { width: 24px; height: 24px; font-size: 12px; } }
-
-        .advisor-3d-card.selected .check-3d {
-            opacity: 1;
-            transform: translateZ(30px) scale(1);
-        }
+        .advisor-details h4 { font-size: 14px; font-weight: 800; color: #1e293b; line-height: 1.2; margin-bottom: 2px; }
+        .advisor-details p { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .lang-tag { display: inline-block; font-size: 10px; color: #475569; background: #f8fafc; padding: 2px 6px; border-radius: 4px; margin-top: 4px; border: 1px solid #e2e8f0; font-family: 'Noto Sans', sans-serif; }
 
         .method-card {
             transition: all 0.2s ease;
@@ -446,6 +344,7 @@
 
             <!-- TAB 1: Personal Details -->
             <div id="tab-1" class="glass-card p-5 md:p-12 animate-slide-up-fade max-w-4xl mx-auto">
+                <!-- ... existing form code ... -->
                 <div class="mb-6 md:mb-10 text-center">
                     <h2 class="text-2xl md:text-4xl font-black text-slate-900 mb-2 md:mb-3 tracking-tight">Initialize Profile</h2>
                     <p class="text-slate-500 text-xs md:text-sm tracking-wide font-medium">Precision is key. Ensure all data matches your documents.</p>
@@ -633,7 +532,7 @@
 
             <!-- TAB 2: AI Job Report -->
             <div id="tab-2" class="hidden animate-slide-up-fade">
-                <!-- CATEGORY SELECTOR -->
+                <!-- ... existing category selector and job details ... -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-6 md:mb-10 max-w-4xl mx-auto">
                     <div id="cardUnskilled" onclick="setSkillMode('Unskilled')" class="category-card rounded-2xl md:rounded-3xl p-4 md:p-8 flex items-center gap-4 md:gap-6 cursor-pointer relative overflow-hidden">
                         <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-blue-50 text-brand-primary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-hands-holding-circle"></i></div>
@@ -683,6 +582,7 @@
                         <div class="bg-white/80 backdrop-blur-xl rounded-[22px] p-5 md:p-12 relative overflow-hidden shadow-sm">
                              <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-brand-primary to-brand-secondary"></div>
                              <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-gray-100 pb-4 md:pb-8 mb-4 md:mb-8 gap-4 md:gap-6">
+                                <!-- ... existing report header info ... -->
                                 <div>
                                     <div class="flex items-center gap-3 mb-2"><div class="w-8 h-8 rounded bg-blue-50 text-brand-primary flex items-center justify-center"><i class="fa-solid fa-layer-group"></i></div><span class="text-[9px] md:text-xs font-bold text-slate-400 tracking-widest uppercase">Global Mobility Intelligence Unit</span></div>
                                     <h2 class="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">Strategic Viability Audit</h2>
@@ -694,6 +594,8 @@
                                     <div class="text-xs font-mono text-slate-400">DATE: <span id="reportDate"></span></div>
                                 </div>
                              </div>
+                             
+                             <!-- Candidate Details -->
                              <div class="bg-slate-50/50 rounded-2xl p-4 md:p-6 mb-6 md:mb-10 border border-gray-100">
                                 <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-start">
                                     <div class="md:col-span-2 flex justify-center md:justify-start"><div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center text-2xl md:text-3xl font-bold text-brand-primary" id="avatarInitial"></div></div>
@@ -705,6 +607,7 @@
                                     </div>
                                 </div>
                              </div>
+
                              <div class="flex flex-col lg:flex-row gap-6 md:gap-8">
                                 <div class="lg:w-2/3">
                                     <div class="h-full rounded-2xl border border-gray-200 bg-white/50 shadow-sm p-1 relative overflow-hidden group">
@@ -735,13 +638,16 @@
                                             </div>
 
                                             <div class="flex flex-col w-full gap-3">
-                                                <button id="mainActionBtn" onclick="goToStep3()" class="w-full bg-white text-brand-primary font-black py-3 px-4 rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-50 transition-all flex items-center justify-center gap-2 group/btn">
-                                                    <span class="tracking-wider text-xs">FREE CONSULTATION</span>
+                                                <!-- FREE CONSULTATION BUTTON -->
+                                                <button id="mainActionBtn" onclick="goToStep3()" class="btn-consult w-full text-white font-black py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 group/btn animate-pulse-slow">
+                                                    <span class="tracking-wider text-xs uppercase">Free Consultation</span>
                                                     <i class="fa-solid fa-arrow-right text-sm group-hover/btn:translate-x-1 transition-transform"></i>
                                                 </button>
                                                 
-                                                <button onclick="exitApp()" class="w-full bg-slate-800/50 hover:bg-slate-800/80 text-white font-bold py-2 px-4 rounded-xl border border-white/10 transition-all text-xs">
-                                                    EXIT
+                                                <!-- EXIT BUTTON -->
+                                                <button onclick="exitApp()" class="btn-exit w-full font-bold py-3 px-4 rounded-xl transition-all text-xs flex items-center justify-center gap-2">
+                                                    <span>Explore Our Programs</span>
+                                                    <i class="fa-solid fa-arrow-up-right-from-square text-xs opacity-50"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -754,68 +660,58 @@
                 </div>
             </div>
 
-            <!-- TAB 3: BOOKING -->
+            <!-- TAB 3: BOOKING (PROFESSIONAL REDESIGN) -->
             <div id="tab-3" class="hidden animate-slide-up-fade max-w-5xl mx-auto">
                 <div class="glass-card p-5 md:p-10">
-                    <div class="mb-6 md:mb-8 text-center">
+                    <div class="mb-6 md:mb-8 text-center border-b border-gray-200 pb-6">
                         <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-2 tracking-tight">Finalize Appointment</h2>
-                        <p class="text-slate-500 text-xs md:text-sm tracking-wide font-medium">Select your advisor and preferred slot.</p>
+                        <p class="text-slate-500 text-xs md:text-sm tracking-wide font-medium">Select your advisor and preferred slot to lock in your strategy session.</p>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
                         <!-- Left: Advisor Selection -->
-                        <div class="lg:col-span-2 space-y-6 md:space-y-8">
-                            
-                            <!-- 1. Advisor Grid -->
-                            <div>
-                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 md:mb-4">1. Select Your Immigration Advisor</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6" id="advisorGrid">
-                                    <!-- Advisors injected via JS -->
-                                </div>
-                                <input type="hidden" id="selectedAdvisor">
+                        <div class="lg:col-span-2">
+                            <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-primary text-white inline-flex items-center justify-center mr-2">1</span> Select Immigration Advisor</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="advisorGrid">
+                                <!-- Professional Advisors injected via JS -->
                             </div>
+                            <input type="hidden" id="selectedAdvisor">
+                        </div>
 
-                            <!-- 2. Method Selection -->
+                        <!-- Right: Date & Time -->
+                        <div class="space-y-6">
+                            <!-- Method -->
                             <div>
-                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 md:mb-4">2. Consultation Method</h3>
-                                <div class="grid grid-cols-3 gap-3 md:gap-4">
-                                    <div class="method-card p-3 md:p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('In-Person', this)">
-                                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-50 text-brand-primary flex items-center justify-center text-base md:text-lg"><i class="fa-solid fa-building"></i></div>
-                                        <span class="text-[10px] md:text-xs font-bold text-slate-700">In-Person</span>
-                                        <span class="text-[8px] md:text-[9px] text-slate-400 font-medium">Visit Office</span>
+                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-secondary text-white inline-flex items-center justify-center mr-2">2</span> Consultation Mode</h3>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="method-card p-3 rounded-lg bg-white flex flex-col items-center text-center gap-1 group hover:border-brand-primary" onclick="selectMethod('In-Person', this)">
+                                        <i class="fa-solid fa-building text-slate-400 group-hover:text-brand-primary text-lg mb-1"></i>
+                                        <span class="text-[10px] font-bold text-slate-700">Office</span>
                                     </div>
-                                    <div class="method-card p-3 md:p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('Phone Call', this)">
-                                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-base md:text-lg"><i class="fa-solid fa-phone"></i></div>
-                                        <span class="text-[10px] md:text-xs font-bold text-slate-700">Phone Call</span>
-                                        <span class="text-[8px] md:text-[9px] text-slate-400 font-medium">Direct Call</span>
+                                    <div class="method-card p-3 rounded-lg bg-white flex flex-col items-center text-center gap-1 group hover:border-brand-primary" onclick="selectMethod('Phone Call', this)">
+                                        <i class="fa-solid fa-phone text-slate-400 group-hover:text-green-600 text-lg mb-1"></i>
+                                        <span class="text-[10px] font-bold text-slate-700">Phone</span>
                                     </div>
-                                    <div class="method-card p-3 md:p-4 rounded-xl bg-white/60 flex flex-col items-center text-center gap-2 group hover:bg-white" onclick="selectMethod('Video Call', this)">
-                                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-base md:text-lg"><i class="fa-solid fa-video"></i></div>
-                                        <span class="text-[10px] md:text-xs font-bold text-slate-700">Video Call</span>
-                                        <span class="text-[8px] md:text-[9px] text-slate-400 font-medium">Zoom / Meet</span>
+                                    <div class="method-card p-3 rounded-lg bg-white flex flex-col items-center text-center gap-1 group hover:border-brand-primary" onclick="selectMethod('Video Call', this)">
+                                        <i class="fa-solid fa-video text-slate-400 group-hover:text-purple-600 text-lg mb-1"></i>
+                                        <span class="text-[10px] font-bold text-slate-700">Video</span>
                                     </div>
                                 </div>
                                 <input type="hidden" id="selectedMethod">
                             </div>
-                        </div>
 
-                        <!-- Right: Date & Time -->
-                        <div class="bg-white/60 rounded-2xl border border-white/50 p-4 md:p-6 shadow-sm">
-                            <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 md:mb-4">3. Date & Time</h3>
-                            
-                            <!-- Date -->
-                            <div class="mb-4 md:mb-6">
-                                <label class="block text-[9px] md:text-[10px] font-bold text-brand-primary uppercase mb-2">Select Date</label>
-                                <div class="relative">
-                                    <input type="text" id="bookingDate" class="form-input w-full rounded-xl px-4 text-xs md:text-sm font-bold text-center h-10 md:h-14" placeholder="Pick a date">
-                                    <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"><i class="fa-regular fa-calendar"></i></div>
+                            <!-- Date & Time -->
+                            <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-gold text-white inline-flex items-center justify-center mr-2">3</span> Schedule</h3>
+                                
+                                <div class="mb-4">
+                                    <div class="relative">
+                                        <input type="text" id="bookingDate" class="form-input w-full rounded-lg px-4 text-xs font-bold text-center h-10 border-slate-200 bg-slate-50 focus:bg-white" placeholder="Select Date">
+                                        <div class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"><i class="fa-regular fa-calendar"></i></div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Time Slots -->
-                            <div>
-                                <label class="block text-[9px] md:text-[10px] font-bold text-brand-primary uppercase mb-2">Select Time (GST)</label>
-                                <div class="grid grid-cols-3 gap-2 max-h-48 md:max-h-60 overflow-y-auto custom-scrollbar p-1" id="timeSlotGrid">
+                                <div class="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto custom-scrollbar pr-1" id="timeSlotGrid">
                                     <!-- JS Generated -->
                                 </div>
                                 <input type="hidden" id="selectedTime">
@@ -824,14 +720,17 @@
                     </div>
                     
                     <!-- Confirmation -->
-                    <div class="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div class="text-center md:text-left">
-                            <p class="text-sm font-bold text-slate-900">Ready to Book?</p>
-                            <p class="text-xs text-slate-500">Your selected advisor will confirm shortly.</p>
+                    <div class="mt-8 pt-6 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 text-brand-primary flex items-center justify-center"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-900">Secure Booking</p>
+                                <p class="text-[10px] text-slate-500">Instant confirmation via Email/SMS</p>
+                            </div>
                         </div>
-                        <button onclick="submitBooking()" class="btn-gradient text-white font-bold py-3 md:py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center gap-3 w-full md:w-auto justify-center">
+                        <button onclick="submitBooking()" class="w-full md:w-auto bg-slate-900 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-3">
                             <span>CONFIRM APPOINTMENT</span>
-                            <i class="fa-solid fa-check-circle"></i>
+                            <i class="fa-solid fa-check"></i>
                         </button>
                     </div>
 
@@ -854,8 +753,6 @@
         </div>
     </footer>
 
-    <!-- MOBILE DOCK REMOVED -->
-
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-8 right-8 transform translate-y-32 opacity-0 transition-all duration-500 z-[100]">
         <div class="glass-card border-l-4 border-brand-primary text-slate-800 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 bg-white">
@@ -872,28 +769,27 @@
     <!-- Custom Modal for Errors -->
     <div id="messageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/40 opacity-0 transition-opacity duration-300">
         <div class="modal-content glass-card !bg-white/95 w-[90%] md:w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center">
-            <!-- Modal Content Injected Here -->
-            <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
-                <i class="fa-solid fa-circle-exclamation"></i>
+            <div id="modalContent">
+                <!-- Dynamic Content -->
+                <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Attention Needed</h3>
+                <p id="modalText" class="text-slate-500 text-sm mb-6">Please check your inputs.</p>
+                <button onclick="closeModal()" class="w-full bg-brand-accent hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
+                    UNDERSTOOD
+                </button>
             </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2">Attention Needed</h3>
-            <p id="modalText" class="text-slate-500 text-sm mb-6">Please check your inputs.</p>
-            <button onclick="closeModal()" class="w-full bg-brand-accent hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
-                UNDERSTOOD
-            </button>
         </div>
     </div>
 
     <script>
-        // MOBILE DOCK LOGIC REMOVED
-        
         function setLanguage(lang, el) { console.log("Language set to:", lang); }
     
         // ==========================================
         //  CONFIGURATION AREA
         // ==========================================
         
-        // MOVED UP TO ENSURE GLOBAL SCOPE
         function validateExperienceInput(el) {
             let val = parseInt(el.value);
             if(isNaN(val) || val < 1) el.value = 1;
@@ -902,7 +798,7 @@
 
         const CLICKUP_API_KEY = "pk_260468481_S4KLO3ZGV6P1PL1POHKXNS1LA5ISSG0P"; 
         const CLICKUP_LIST_ID = "901813907839"; 
-        let globalTaskId = null; // Store created task ID for update
+        let globalTaskId = null; 
 
         // ----------------------------------------------------
         //  CLICKUP CUSTOM FIELD IDs
@@ -923,15 +819,12 @@
             "Case Reference ID": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
             "EMAIL": "2e18821e-1c19-4de5-afb8-77ff11ee6327", 
             "PRESENT RESIDENCE": "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5",
-            
-            // --- UPDATED BOOKING FIELDS ---
             "ADVISOR": "a220503d-5a45-4f0b-b83d-6547a28ca0b5",
             "BOOKING_DATE": "a4a8197d-eb13-4e90-ad56-d56108137e2e",
             "BOOKING_TIME": "584f279f-8f78-4e2b-ac91-ccf2c4e48b00",
             "BOOKING_TYPE": "03414f61-a879-4d14-bee0-7186a3de27d5"
         };
 
-        // SALARY DATA
         const salaryDb = {
             "Netherlands": { u: "€1,800 - €2,400", s: "€3,200 - €4,500" },
             "Germany": { u: "€1,600 - €2,200", s: "€3,500 - €5,000" },
@@ -948,7 +841,6 @@
             "Albania": { u: "€400 - €650", s: "€700 - €1,200" }
         };
 
-        // LARGE JOB MASTER LIST WITH VALIDATION
         const jobMasterList = [
             {r:"ACCOUNTANT",type:"S",c:"Netherlands"},
             {r:"ADMINISTRATIVE ASSISTANT",type:"S",c:"Germany"},
@@ -960,16 +852,12 @@
             {r:"AGRICULTURE WORKERS",type:"U",c:"Serbia"},
             {r:"AIR CONDITIONING TECHNICIAN",type:"S",c:"Germany"},
             {r:"AIRCRAFT CLEANING WORKER",type:"U",c:"Sweden"},
-
         ];
 
-        // --- FIXED E.164 COMPLIANT REGEX RULES ---
         const countryRules = {
-       
             "HONG KONG": { regex: /^\+852\d{8}$/, hint: "+852 91234567" },
             "INDIA": { regex: /^\+91[6-9]\d{9}$/, hint: "+91 9876543210" },
             "INDONESIA": { regex: /^\+628\d{9,11}$/, hint: "+62 8123456789" },
-     
             "UAE": { regex: /^\+9715\d{8}$/, hint: "+971 501234567" },
             "UGANDA": { regex: /^\+2567\d{8}$/, hint: "+256 771234567" },
             "UZBEKISTAN": { regex: /^\+9989\d{8}$/, hint: "+998 901234567" },
@@ -982,13 +870,13 @@
 
         const countryPageMap = { "Croatia": "croatia", "Czech Republic": "czech", "Albania": "albania", "Finland": "finland", "France": "france", "Germany": "germany", "Italy": "italy", "Latvia": "latvia", "Macedonia": "macedonia", "Netherlands": "netherlands", "Poland": "poland", "Sweden": "sweden", "Serbia": "serbia" };
         
-        // ADVISOR DATA
+        // ADVISOR DATA WITH NATIVE LANGUAGES
         const advisors = [
-            { name: "Benetta", country: "India", flag: "🇮🇳", lang: "Malayalam" },
-            { name: "Anjali", country: "India", flag: "🇮🇳", lang: "Malayalam, Hindi, English" },
-            { name: "Budhunpa", country: "Sri Lanka", flag: "🇱🇰", lang: "English, Sinhala" },
+            { name: "Benetta", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം)" },
+            { name: "Anjali", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം), Hindi (हिंदी), English" },
+            { name: "Budhunpa", country: "Sri Lanka", flag: "🇱🇰", lang: "English, Sinhala (සිංහල)" },
             { name: "Roniee Lee", country: "Philippines", flag: "🇵🇭", lang: "English, Tagalog" },
-            { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Swahili" }
+            { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Kiswahili" }
         ];
 
         let currentMode = 'Unskilled';
@@ -1074,62 +962,37 @@
             });
         }
         
-        // --- BOOKING UI LOGIC (RESTORED) ---
+        // --- BOOKING UI LOGIC (UPDATED FOR PROFESSIONAL LOOK) ---
         function renderAdvisors() {
             const grid = document.getElementById('advisorGrid');
             if(!grid) return;
             grid.innerHTML = '';
-            // Make grid 1 col on mobile, 2 on md
-            grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"; 
             
             advisors.forEach(adv => {
                 const div = document.createElement('div');
-                div.className = "advisor-3d-card group"; 
+                div.className = "advisor-pro-card group"; 
                 div.onclick = () => selectAdvisor(adv.name, div);
                 
-                // 3D Tilt Attributes
-                div.setAttribute('data-tilt', '');
-                div.setAttribute('data-tilt-max', '10');
-                div.setAttribute('data-tilt-speed', '400');
-                div.setAttribute('data-tilt-glare', 'true');
-                div.setAttribute('data-tilt-max-glare', '0.2');
-                
                 div.innerHTML = `
-                    <div class="advisor-content">
-                        <div class="advisor-image-wrapper">
-                            <i class="fa-solid fa-headset advisor-icon"></i>
-                            <div class="advisor-badge">${adv.flag}</div>
-                        </div>
-                        <div class="advisor-info">
-                            <div class="advisor-role"><i class="fa-solid fa-circle-check text-brand-primary text-[10px]"></i> Online Support</div>
-                            <div class="advisor-name">${adv.name}</div>
-                            <div class="advisor-langs">
-                                ${adv.lang.split(',').map(l => `<span class="lang-pill">${l.trim()}</span>`).join('')}
-                            </div>
+                    <div class="advisor-img">${adv.flag}</div>
+                    <div class="advisor-details">
+                        <h4>${adv.name}</h4>
+                        <p>Senior Consultant</p>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            ${adv.lang.split(',').map(l => `<span class="lang-tag">${l.trim()}</span>`).join('')}
                         </div>
                     </div>
-                    <div class="check-3d">
-                        <i class="fa-solid fa-check"></i>
+                    <div class="ml-auto opacity-0 group-[.selected]:opacity-100 text-brand-primary transition-opacity">
+                        <i class="fa-solid fa-circle-check text-xl"></i>
                     </div>
                 `;
                 grid.appendChild(div);
             });
-
-            // Initialize Tilt
-            if(typeof VanillaTilt !== 'undefined') {
-                VanillaTilt.init(document.querySelectorAll(".advisor-3d-card"), {
-                    max: 10,
-                    speed: 400,
-                    glare: true,
-                    "max-glare": 0.3,
-                    scale: 1.02
-                });
-            }
         }
 
         function selectAdvisor(name, el) {
             document.getElementById('selectedAdvisor').value = name;
-            document.querySelectorAll('.advisor-3d-card').forEach(c => {
+            document.querySelectorAll('.advisor-pro-card').forEach(c => {
                 c.classList.remove('selected');
             });
             el.classList.add('selected');
@@ -1151,7 +1014,7 @@
                 for (let m = 0; m < 60; m += 15) {
                     const timeStr = `${h > 12 ? h - 12 : h}:${m === 0 ? '00' : m} ${h >= 12 ? 'PM' : 'AM'}`;
                     const btn = document.createElement('button');
-                    btn.className = "time-slot py-2 rounded-lg text-[10px] md:text-xs font-bold text-slate-600 bg-slate-50 border border-slate-100";
+                    btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-600 bg-white border border-slate-100";
                     btn.innerText = timeStr;
                     btn.onclick = () => selectTime(timeStr, btn);
                     grid.appendChild(btn);
@@ -1159,7 +1022,7 @@
             }
             // Add 7:00 PM
             const btn = document.createElement('button');
-            btn.className = "time-slot py-2 rounded-lg text-[10px] md:text-xs font-bold text-slate-600 bg-slate-50 border border-slate-100";
+            btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-600 bg-white border border-slate-100";
             btn.innerText = "7:00 PM";
             btn.onclick = () => selectTime("7:00 PM", btn);
             grid.appendChild(btn);
@@ -1199,7 +1062,6 @@
         }
 
         function goToStep3() {
-            // NOTE: saveData(false) removed from here because it's now called in generateReport()
             document.getElementById('tab-2').classList.add('hidden');
             document.getElementById('tab-3').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1207,10 +1069,27 @@
         }
 
         function exitApp() {
-            showModal("Thank you for using Better Call Immigration. Redirecting to home page...");
+            const modalContent = `
+                <div class="text-center p-2">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                        <i class="fa-solid fa-earth-americas text-3xl text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-800 mb-2">Explore Possibilities</h3>
+                    <p class="text-slate-500 text-sm mb-6">Redirecting you to our comprehensive global program listings...</p>
+                    <div class="h-1 w-full bg-gray-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-brand-primary w-1/2 animate-[pulse_1s_infinite]"></div>
+                    </div>
+                </div>
+            `;
+            
+            const m = document.getElementById('messageModal');
+            document.getElementById('modalContent').innerHTML = modalContent;
+            m.classList.remove('hidden');
+            setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
+
             setTimeout(() => {
                 window.location.href = "https://bettercall.online";
-            }, 2500);
+            }, 2000);
         }
 
         function updateStepIndicator(step) {
@@ -1437,7 +1316,17 @@
         }
         function showModal(msg) {
             const m = document.getElementById('messageModal');
-            document.getElementById('modalText').innerHTML = msg; // Changed to innerHTML to support HTML content
+            // Reset to default simple modal for generic messages
+            document.getElementById('modalContent').innerHTML = `
+                <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Attention Needed</h3>
+                <p id="modalText" class="text-slate-500 text-sm mb-6">${msg}</p>
+                <button onclick="closeModal()" class="w-full bg-brand-accent hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
+                    UNDERSTOOD
+                </button>
+            `;
             m.classList.remove('hidden');
             setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
         }
@@ -1453,15 +1342,43 @@
             setTimeout(() => t.classList.add('translate-y-32','opacity-0'), 3000);
         }
 
+        // CALENDAR HELPER
+        function createICSFile(dateStr, timeStr, advisor) {
+            const [day, month, year] = dateStr.split('/');
+            let [time, modifier] = timeStr.split(' ');
+            let [hours, minutes] = time.split(':');
+            if (hours === '12') hours = '00';
+            if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+            
+            const start = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00`);
+            const end = new Date(start.getTime() + 30 * 60 * 1000);
+            
+            const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            
+            return `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Better Call Immigration//Booking//EN
+BEGIN:VEVENT
+UID:${Date.now()}@bettercall.online
+DTSTAMP:${fmt(new Date())}
+DTSTART:${fmt(start)}
+DTEND:${fmt(end)}
+SUMMARY:Strategy Session with ${advisor}
+DESCRIPTION:Immigration Consultation. Prepare your documents.
+LOCATION:Online / Phone
+URL:https://bettercall.online
+END:VEVENT
+END:VCALENDAR`;
+        }
+
         // --- CLICKUP INTEGRATION ---
 
         async function saveData(showSuccess = true) {
-            if (globalTaskId) return; // Prevent duplicate tasks if user clicks Calculate multiple times
+            if (globalTaskId) return; 
 
             const ref = document.getElementById('refId').innerText;
             const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
             
-            // Gather Base Data
             let customFieldsArray = [
                 { id: CLICKUP_FIELDS["SUR NAME"], value: document.getElementById('lastName').value },
                 { id: CLICKUP_FIELDS["MOBILE"], value: mobile },
@@ -1470,22 +1387,16 @@
                 { id: CLICKUP_FIELDS["DATE OF BIRTH"], value: getUnixTime(document.getElementById('dob').value) },
                 { id: CLICKUP_FIELDS["AGE"], value: parseInt(document.getElementById('age').value) },
                 { id: CLICKUP_FIELDS["EMAIL"], value: document.getElementById('email').value },
-                // REMOVED RAW STRINGS HERE TO FIX ERROR
-                // { id: CLICKUP_FIELDS["QUALIFICATION"], value: document.querySelector('input[name="qualification"]:checked')?.value },
-                // { id: CLICKUP_FIELDS["JOB ROLE"], value: document.getElementById('currentJob').value },
                 { id: CLICKUP_FIELDS["EXPERIENCE"], value: parseInt(document.getElementById('experience').value) || 0 },
                 { id: CLICKUP_FIELDS["Case Reference ID"], value: ref }
             ];
 
-            // CRITICAL FIX: Filter out null/undefined/empty values to prevent 400 Bad Request
             customFieldsArray = customFieldsArray.filter(f => f.value !== null && f.value !== undefined && f.value !== "");
             
-            // Fetch definitions to handle Dropdowns (Nationality/Residence AND Job/Qual)
             try {
                 const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
                 if(res.ok) {
                     const fieldDefs = (await res.json()).fields || [];
-                    
                     const addDropdown = (key, val) => {
                         const fid = CLICKUP_FIELDS[key];
                         const def = fieldDefs.find(f => f.id === fid);
@@ -1494,11 +1405,6 @@
                                      || def.type_config.options.find(o => o.name === "OTHER");
                             if(opt) customFieldsArray.push({ id: fid, value: opt.id });
                         } else if (fid && val) {
-                            // If it's not a dropdown (or def not found), push value safely (fallback for mixed types)
-                             // But since we removed them from initial array, we only want to add here if it IS a dropdown OR if we need to add back the raw value for non-dropdowns.
-                             // However, since we specifically know Job/Qual MIGHT be dropdowns, we handle them carefully.
-                             // For now, assuming they ARE dropdowns based on error. If they are text fields, this logic might skip them.
-                             // Let's add a safe fallback: if no def found or not dropdown, add the raw value back.
                              if (!def || (def.type !== 'drop_down' && def.type !== 'labels')) {
                                 customFieldsArray.push({ id: fid, value: val });
                              }
@@ -1508,9 +1414,7 @@
                     addDropdown("PRESENT RESIDENCE", document.getElementById('presentResidence').value);
                     addDropdown("QUALIFICATION", document.querySelector('input[name="qualification"]:checked')?.value);
                     addDropdown("JOB ROLE", document.getElementById('currentJob').value);
-
                 } else {
-                     // Fallback if field fetch fails completely (will fail if fields are strict dropdowns)
                      const qual = document.querySelector('input[name="qualification"]:checked')?.value;
                      const job = document.getElementById('currentJob').value;
                      if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
@@ -1518,7 +1422,6 @@
                 }
             } catch(e) { 
                 console.warn("Could not fetch field definitions, using raw values", e); 
-                 // Fallback
                  const qual = document.querySelector('input[name="qualification"]:checked')?.value;
                  const job = document.getElementById('currentJob').value;
                  if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
@@ -1531,7 +1434,6 @@
                 custom_fields: customFieldsArray
             };
 
-            // Send POST
             if(CLICKUP_API_KEY && CLICKUP_LIST_ID) {
                 try {
                     const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
@@ -1542,9 +1444,7 @@
                     
                     if(res.ok) {
                         const data = await res.json();
-                        globalTaskId = data.id; // STORE ID FOR UPDATE
-                        
-                        // Upload CV
+                        globalTaskId = data.id; 
                         const cvFile = document.getElementById('cvFile').files[0];
                         if (cvFile) {
                             const formData = new FormData();
@@ -1556,7 +1456,6 @@
                         }
                         if(showSuccess) showToast("Profile Created");
                     } else {
-                        // LOG THE SPECIFIC ERROR FROM CLICKUP
                         const err = await res.json();
                         console.error("ClickUp Error Response:", err);
                         showModal("Submission Error: " + (err.err || "Please check inputs"));
@@ -1578,43 +1477,53 @@
                 showModal("Please select Advisor, Method, Date and Time to confirm."); return;
             }
 
-            // --- Creative Success Message Logic ---
+            // CREATE CALENDAR DATA
+            const icsContent = createICSFile(date, time, advisor);
+            const icsBlob = new Blob([icsContent], { type: 'text/calendar' });
+            const icsUrl = URL.createObjectURL(icsBlob);
+
+            // CREATIVE SUCCESS HTML
             const successHtml = `
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
-                        <i class="fa-solid fa-calendar-check text-3xl text-green-600"></i>
-                    </div>
-                    <h3 class="text-2xl font-black text-slate-800 mb-2">Appointment Confirmed!</h3>
-                    <p class="text-slate-500 text-sm mb-6">Your strategy session is locked in.</p>
-                    
-                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 mb-6 relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-1 h-full bg-brand-primary"></div>
-                        <div class="grid grid-cols-2 gap-4 text-left">
-                            <div>
-                                <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Date</p>
-                                <p class="text-lg font-bold text-slate-800">${date}</p>
-                            </div>
-                            <div>
-                                <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Time</p>
-                                <p class="text-lg font-bold text-brand-primary">${time}</p>
-                            </div>
-                            <div class="col-span-2 pt-4 border-t border-slate-200">
-                                <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Expert Advisor</p>
-                                <p class="text-sm font-bold text-slate-700 flex items-center gap-2">
-                                    <i class="fa-solid fa-headset text-brand-secondary"></i> ${advisor}
-                                </p>
-                            </div>
+                <div class="text-center p-2">
+                    <div class="relative w-20 h-20 mx-auto mb-4">
+                        <div class="absolute inset-0 bg-green-100 rounded-full animate-ping opacity-75"></div>
+                        <div class="relative w-full h-full bg-green-500 rounded-full flex items-center justify-center text-white text-3xl shadow-lg border-4 border-white">
+                            <i class="fa-solid fa-check"></i>
                         </div>
                     </div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-1">You're All Set!</h3>
+                    <p class="text-slate-500 text-sm font-medium mb-6">Strategy session locked with <span class="text-brand-primary font-bold">${advisor}</span></p>
                     
-                    <p class="text-xs text-slate-400 italic">Our expert will contact you via ${method} at the scheduled time.</p>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-6 text-left">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Date</span>
+                            <span class="text-sm font-bold text-slate-800">${date}</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Time</span>
+                            <span class="text-sm font-bold text-slate-800">${time}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Method</span>
+                            <span class="text-sm font-bold text-brand-primary uppercase">${method}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <a href="${icsUrl}" download="appointment.ics" class="w-full bg-brand-primary hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-regular fa-calendar-plus"></i> Add to Calendar
+                        </a>
+                        <a href="https://www.bettercall.online" class="w-full bg-white text-slate-600 border border-slate-200 font-bold py-3 rounded-xl transition-all hover:bg-slate-50">
+                            Return to Home
+                        </a>
+                    </div>
                 </div>
             `;
 
             // Prepare Update Payload using correct IDs
             const updateFields = [
                 { id: CLICKUP_FIELDS["BOOKING_DATE"], value: getUnixTime(date) },
-                { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time } // Assuming text field for time or string value
+                { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time } 
             ];
 
             try {
@@ -1634,7 +1543,6 @@
                 updateFields.push(mapDropdown(CLICKUP_FIELDS["BOOKING_TYPE"], method));
 
             } catch(e) {
-                // Fallback if field fetch fails
                 updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: advisor });
                 updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
             }
@@ -1643,7 +1551,6 @@
 
             if(globalTaskId && CLICKUP_API_KEY) {
                 try {
-                    // Update Custom Fields
                     for (let f of updateFields) {
                         await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${f.id}`, {
                             method: 'POST',
@@ -1651,17 +1558,18 @@
                             body: JSON.stringify({ value: f.value })
                         });
                     }
-                    // Add Comment
                     await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/comment`, {
                         method: 'POST',
                         headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
                         body: JSON.stringify({ comment_text: desc })
                     });
 
-                    // Show Creative Success Message
-                    showModal(successHtml);
+                    // Update modal content and show
+                    const m = document.getElementById('messageModal');
+                    document.getElementById('modalContent').innerHTML = successHtml;
+                    m.classList.remove('hidden');
+                    setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
                     
-                    // Disable button
                     document.querySelector('button[onclick="submitBooking()"]').disabled = true;
                     document.querySelector('button[onclick="submitBooking()"]').innerHTML = 'BOOKED <i class="fa-solid fa-check"></i>';
                 } catch(e) {
@@ -1669,7 +1577,10 @@
                 }
             } else {
                 // Demo Mode
-                showModal(successHtml);
+                const m = document.getElementById('messageModal');
+                document.getElementById('modalContent').innerHTML = successHtml;
+                m.classList.remove('hidden');
+                setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
             }
         }
         
