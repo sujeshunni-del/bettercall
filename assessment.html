@@ -275,6 +275,59 @@
             border-top-color: #64748b;
         }
 
+        /* INLINE CALENDAR STYLING (NEW) */
+        .flatpickr-calendar.inline {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-shadow: none !important;
+            border: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .flatpickr-calendar.inline .flatpickr-innerContainer {
+            width: 100% !important;
+        }
+        .flatpickr-calendar.inline .flatpickr-rContainer {
+            width: 100% !important;
+        }
+        .flatpickr-calendar.inline .flatpickr-days {
+            width: 100% !important;
+            border: none !important;
+        }
+        .flatpickr-calendar.inline .dayContainer {
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            justify-content: space-around;
+        }
+        .flatpickr-calendar.inline .flatpickr-day {
+            height: 36px;
+            line-height: 36px;
+            margin: 4px 0;
+            border-radius: 10px !important;
+            font-weight: 700;
+            color: #475569;
+            border: 1px solid transparent;
+        }
+        .flatpickr-calendar.inline .flatpickr-day.selected {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            border: none;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            color: white;
+        }
+        .flatpickr-calendar.inline .flatpickr-months {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #f1f5f9;
+        }
+        .flatpickr-calendar.inline .flatpickr-weekday {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
         .uppercase-input { text-transform: uppercase; }
         .valid-field { border-color: #10b981 !important; background-color: rgba(236, 253, 245, 0.8) !important; }
         .invalid-field { border-color: #f43f5e !important; background-color: rgba(255, 241, 242, 0.8) !important; }
@@ -487,34 +540,30 @@
                         <p id="ageError" class="text-brand-accent text-[11px] hidden mt-1 md:mt-2 font-bold flex items-center gap-2 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Must be 20+ years.</p>
                     </div>
 
-                    <!-- Geography (Searchable Dropdowns) -->
-                    <div class="md:col-span-2 relative p-4 md:p-8 rounded-2xl border border-brand-gold/20 bg-gradient-to-br from-amber-50/50 to-white/30 overflow-hidden shadow-sm backdrop-blur-sm">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 relative z-10">
-                            <!-- Residence -->
-                            <div class="relative group" id="residenceWrapper">
-                                <label class="block text-[10px] md:text-xs font-black text-brand-gold uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-location-dot mr-1"></i> Present Residence</label>
-                                <input type="hidden" id="presentResidence" onchange="handleResidenceChange()">
-                                <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 flex justify-between items-center cursor-pointer bg-white/60 hover:bg-white transition-colors" onclick="toggleCountryDropdown('residence', event)">
-                                    <span id="residenceDisplay" class="text-slate-500 font-bold uppercase truncate">Select Residence</span>
-                                    <i class="fa-solid fa-chevron-down text-brand-gold transition-transform duration-300" id="residenceArrow"></i>
-                                </button>
-                                <div id="residenceList" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
-                                    <!-- Populated by JS -->
-                                </div>
-                            </div>
-                            
-                            <!-- Nationality -->
-                            <div class="relative group" id="nationalityWrapper">
-                                <label class="block text-[10px] md:text-xs font-black text-brand-gold uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-earth-americas mr-1"></i> Nationality</label>
-                                <input type="hidden" id="nationality">
-                                <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 flex justify-between items-center cursor-pointer bg-white/60 hover:bg-white transition-colors" onclick="toggleCountryDropdown('nationality', event)">
-                                    <span id="nationalityDisplay" class="text-slate-500 font-bold uppercase truncate">Select Origin</span>
-                                    <i class="fa-solid fa-chevron-down text-brand-gold transition-transform duration-300" id="nationalityArrow"></i>
-                                </button>
-                                <div id="nationalityList" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
-                                    <!-- Populated by JS -->
-                                </div>
-                            </div>
+                    <!-- Geography (Separated & Standardized) -->
+                    <!-- Residence -->
+                    <div class="relative group" id="residenceWrapper">
+                        <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-location-dot mr-1 text-slate-400"></i> Present Residence</label>
+                        <input type="hidden" id="presentResidence" onchange="handleResidenceChange()">
+                        <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 flex justify-between items-center cursor-pointer bg-white/60 hover:bg-white transition-colors" onclick="toggleCountryDropdown('residence', event)">
+                            <span id="residenceDisplay" class="text-slate-500 font-bold uppercase truncate">Select Residence</span>
+                            <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300" id="residenceArrow"></i>
+                        </button>
+                        <div id="residenceList" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Nationality -->
+                    <div class="relative group" id="nationalityWrapper">
+                        <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-earth-americas mr-1 text-slate-400"></i> Nationality</label>
+                        <input type="hidden" id="nationality">
+                        <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 flex justify-between items-center cursor-pointer bg-white/60 hover:bg-white transition-colors" onclick="toggleCountryDropdown('nationality', event)">
+                            <span id="nationalityDisplay" class="text-slate-500 font-bold uppercase truncate">Select Origin</span>
+                            <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300" id="nationalityArrow"></i>
+                        </button>
+                        <div id="nationalityList" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-50 custom-scrollbar transform origin-top transition-all duration-300">
+                            <!-- Populated by JS -->
                         </div>
                     </div>
 
@@ -799,10 +848,10 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Text Info -->
+                                                <!-- Text Info (Generic Title) -->
                                                 <div class="mb-5">
-                                                    <h4 class="text-xl font-black tracking-tight mb-1 text-white">Sarah Jenkins</h4>
-                                                    <p class="text-[10px] uppercase tracking-widest text-blue-200 font-bold mb-3">Senior Immigration Expert</p>
+                                                    <h4 class="text-xl font-black tracking-tight mb-1 text-white">Expert Advisor</h4>
+                                                    <p class="text-[10px] uppercase tracking-widest text-blue-200 font-bold mb-3">Global Mobility Team</p>
                                                     
                                                     <!-- Glass Pill Data -->
                                                     <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-md">
@@ -811,21 +860,24 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Languages -->
-                                                <div class="flex flex-wrap justify-center gap-1.5 mb-6 opacity-80">
-                                                    <span class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800/50 border border-white/10 text-slate-300">EN</span>
-                                                    <span class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800/50 border border-white/10 text-slate-300 font-['Noto_Sans_Malayalam']">മലയാളം</span>
-                                                    <span class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800/50 border border-white/10 text-slate-300 font-['Noto_Sans']">हिंदी</span>
-                                                    <span class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800/50 border border-white/10 text-slate-300">+4</span>
+                                                <!-- Languages (Expanded List) -->
+                                                <div class="flex flex-wrap justify-center gap-1.5 mb-6 opacity-90 max-w-[280px]">
+                                                    <span class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800/50 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-colors cursor-default" title="English">English</span>
+                                                    <span class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800/50 border border-white/10 text-slate-300 font-['Noto_Sans_Malayalam'] hover:bg-white/10 hover:text-white transition-colors cursor-default" title="Malayalam">മലയാളം</span>
+                                                    <span class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800/50 border border-white/10 text-slate-300 font-['Noto_Sans'] hover:bg-white/10 hover:text-white transition-colors cursor-default" title="Hindi">हिंदी</span>
+                                                    <span class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800/50 border border-white/10 text-slate-300 font-['Noto_Sans_Tamil'] hover:bg-white/10 hover:text-white transition-colors cursor-default" title="Tamil">தமிழ்</span>
+                                                    <span class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800/50 border border-white/10 text-slate-300 font-['Noto_Sans_Sinhala'] hover:bg-white/10 hover:text-white transition-colors cursor-default" title="Sinhala">සිංහල</span>
+                                                    <span class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800/50 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-colors cursor-default">Tagalog</span>
+                                                    <span class="text-[9px] font-bold px-2 py-1 rounded bg-slate-800/50 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-colors cursor-default">Swahili</span>
                                                 </div>
 
                                                 <!-- Primary Action: Consultation Only -->
                                                 <div class="w-full mt-2">
-                                                    <button id="mainActionBtn" onclick="goToStep3()" class="group/btn relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-brand-primary via-indigo-500 to-brand-secondary p-[1px] shadow-lg shadow-indigo-500/30 transition-all duration-300 hover:shadow-indigo-500/50 hover:-translate-y-0.5 active:scale-95">
-                                                        <div class="relative flex items-center justify-center gap-3 rounded-[11px] bg-slate-900/80 backdrop-blur-md py-4 px-4 transition-all duration-300 group-hover/btn:bg-slate-900/0">
-                                                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_1.5s_infinite]"></div>
-                                                            <span class="font-black tracking-wider text-xs uppercase text-white relative z-10">Start Free Consultation</span>
-                                                            <div class="flex items-center justify-center w-6 h-6 rounded-full bg-white/10 text-white group-hover/btn:bg-white group-hover/btn:text-brand-primary transition-all relative z-10 border border-white/20 group-hover/btn:border-white">
+                                                    <button id="mainActionBtn" onclick="goToStep3()" class="group/btn relative w-full overflow-hidden rounded-xl bg-white p-[1px] shadow-lg shadow-white/10 transition-all duration-300 hover:shadow-brand-primary/50 hover:-translate-y-0.5 active:scale-95">
+                                                        <div class="relative flex items-center justify-center gap-3 rounded-[11px] bg-gradient-to-r from-brand-primary to-blue-600 py-4 px-4 transition-all duration-300 group-hover/btn:brightness-110">
+                                                            <div class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] bg-[length:250%_250%,100%_100%] bg-[position:-100%_0,0_0] bg-no-repeat transition-[background-position_0s] duration-0 group-hover/btn:bg-[position:200%_0,0_0] group-hover/btn:duration-[1500ms]"></div>
+                                                            <span class="font-black tracking-widest text-xs uppercase text-white relative z-10">Start Free Consultation</span>
+                                                            <div class="flex items-center justify-center w-6 h-6 rounded-full bg-white/20 text-white group-hover/btn:bg-white group-hover/btn:text-brand-primary transition-all relative z-10 border border-white/30 group-hover/btn:border-white backdrop-blur-sm">
                                                                 <i class="fa-solid fa-arrow-right text-[10px] group-hover/btn:-rotate-45 transition-transform duration-300"></i>
                                                             </div>
                                                         </div>
@@ -905,11 +957,9 @@
                             <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
                                 <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-gold text-white inline-flex items-center justify-center mr-2">3</span> Schedule</h3>
                                 
-                                <div class="mb-4">
-                                    <div class="relative">
-                                        <input type="text" id="bookingDate" class="form-input w-full rounded-lg px-4 text-xs font-bold text-center h-10 border-slate-200 bg-slate-50 focus:bg-white" placeholder="Select Date">
-                                        <div class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"><i class="fa-regular fa-calendar"></i></div>
-                                    </div>
+                                <div class="mb-6">
+                                    <!-- Clean Container for Inline Calendar -->
+                                    <input type="text" id="bookingDate" class="hidden" placeholder="Select Date">
                                 </div>
 
                                 <div class="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto custom-scrollbar pr-1" id="timeSlotGrid">
@@ -1073,6 +1123,7 @@
             "Albania": { u: "€400 - €650", s: "€700 - €1,200" }
         };
 
+        // LARGE JOB MASTER LIST WITH VALIDATION
         const jobMasterList = [
             {r:"ACCOUNTANT",type:"S",c:"Netherlands"},
             {r:"ADMINISTRATIVE ASSISTANT",type:"S",c:"Germany"},
@@ -1084,12 +1135,336 @@
             {r:"AGRICULTURE WORKERS",type:"U",c:"Serbia"},
             {r:"AIR CONDITIONING TECHNICIAN",type:"S",c:"Germany"},
             {r:"AIRCRAFT CLEANING WORKER",type:"U",c:"Sweden"},
+            {r:"AIRCRAFT MECHANIC",type:"S",c:"Latvia"},
+            {r:"ALARM TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"AMBULANCE DRIVER",type:"S",c:"Finland"},
+            {r:"ASSEMBLY OPERATOR",type:"U",c:"Poland"},
+            {r:"ASSEMBLY WORKER",type:"U",c:"Macedonia"},
+            {r:"ASSISTANT CHEF",type:"U",c:"Finland"},
+            {r:"ASSISTANT COOK",type:"U",c:"France"},
+            {r:"ASSISTANT LABORATORY TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"ASSISTANT NURSE",type:"S",c:"Germany"},
+            {r:"ASSISTANT PHARMACIST",type:"S",c:"Sweden"},
+            {r:"AUTO AIR CONDITIONING TECHNICIAN",type:"S",c:"Czech Republic"},
+            {r:"AUTO ELECTRICIAN",type:"S",c:"Czech Republic"},
+            {r:"AUTO SPRAY PAINTER",type:"S",c:"Czech Republic"},
+            {r:"AUTOMOTIVE MECHANIC",type:"S",c:"Serbia"},
+            {r:"AUTOMOTIVE TECHNICIAN",type:"S",c:"Germany"},
+            {r:"BAKER/PASTRY CHEF",type:"S",c:"France"},
+            {r:"BANK ASSISTANT / FINANCE EXECUTIVE",type:"S",c:"Netherlands"},
+            {r:"BAR SUPERVISOR",type:"S",c:"Finland"},
+            {r:"BARISTA",type:"U",c:"Italy"},
+            {r:"BARTENDER / BARMAN",type:"U",c:"Croatia"},
+            {r:"BATTERY MECHANIC",type:"S",c:"Poland"},
+            {r:"BRICKLAYER / MASON",type:"S",c:"Latvia"},
+            {r:"BUSINESS DEVELOPMENT",type:"S",c:"Netherlands"},
+            {r:"BUSINESS DEVELOPMENT EXECUTIVE",type:"S",c:"Germany"},
+            {r:"BUTCHER",type:"S",c:"Poland"},
+            {r:"CALL CENTRE EXECUTIVE",type:"S",c:"Latvia"},
+            {r:"CAM SUPERVISOR",type:"S",c:"Finland"},
+            {r:"CAPTAIN",type:"S",c:"Netherlands"},
+            {r:"CAPTAIN (SHIP/FLIGHT RELATED)",type:"S",c:"Netherlands"},
+            {r:"CARE HOME ASSISTANT",type:"U",c:"Germany"},
+            {r:"CARE HOME JOBS",type:"U",c:"Germany"},
+            {r:"CARPENTER JOINERY FURNITURE",type:"S",c:"Croatia"},
+            {r:"CARPENTER SHUTTERING",type:"S",c:"Croatia"},
+            {r:"CASHIER",type:"U",c:"Finland"},
+            {r:"CASHIER (DUTY-FREE)",type:"U",c:"Finland"},
+            {r:"CATERING SUPERVISOR",type:"S",c:"Sweden"},
+            {r:"CCTV TECHNICIAN",type:"S",c:"Germany"},
+            {r:"CERTIFIED WELDER",type:"S",c:"Poland"},
+            {r:"CHAPATHI / PAROTTA MAKER",type:"U",c:"Finland"},
+            {r:"CHEF / COOK",type:"S",c:"France"},
+            {r:"CHEF DE PARTIE",type:"S",c:"Finland"},
+            {r:"CHIEF COOK",type:"S",c:"France"},
+            {r:"CHIEF LABORATORY TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"CHIEF PHARMACIST",type:"S",c:"Netherlands"},
+            {r:"CIVIL DRAUGHTSMAN",type:"S",c:"Germany"},
+            {r:"CIVIL ENGINEER",type:"S",c:"Sweden"},
+            {r:"CIVIL SITE SUPERVISOR",type:"S",c:"Finland"},
+            {r:"CLEANING HELPER",type:"U",c:"Finland"},
+            {r:"CLEANING JOBS",type:"U",c:"Finland"},
+            {r:"CNC OPERATOR",type:"S",c:"Czech Republic"},
+            {r:"COMMIS CHEF",type:"U",c:"Finland"},
+            {r:"COMMIS I, II",type:"U",c:"France"},
+            {r:"COMMIS III",type:"U",c:"France"},
+            {r:"COMPUTER OPERATOR",type:"S",c:"Latvia"},
+            {r:"CONCRETE MIX OPERATOR",type:"S",c:"Croatia"},
+            {r:"CONSTRUCTION HELPER",type:"U",c:"Croatia"},
+            {r:"CONSTRUCTION HELPERS",type:"U",c:"Serbia"},
+            {r:"CONSTRUCTION SAFETY ENGINEER",type:"S",c:"Sweden"},
+            {r:"CONSTRUCTION SAFETY OFFICER",type:"S",c:"Germany"},
+            {r:"CONSTRUCTION WORKER",type:"U",c:"Poland"},
+            {r:"CONTINENTAL COOK",type:"S",c:"Finland"},
+            {r:"CUSTOMER SERVICE EXECUTIVE",type:"S",c:"Latvia"},
+            {r:"DAIRY FARM SUPERVISOR",type:"S",c:"Netherlands"},
+            {r:"DAIRY FARM WORKER",type:"U",c:"Netherlands"},
+            {r:"DATA ENTRY OPERATOR",type:"S",c:"Latvia"},
+            {r:"DELIVERY DRIVER",type:"U",c:"Croatia"},
+            {r:"DIESEL / PETROL MECHANIC",type:"S",c:"Germany"},
+            {r:"DIESEL MECHANICAL TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"DISHWASHER",type:"U",c:"Finland"},
+            {r:"DOCUMENT CONTROLLER",type:"S",c:"Netherlands"},
+            {r:"DOZER OPERATOR",type:"S",c:"Serbia"},
+            {r:"DRIVER LIGHT DUTY",type:"U",c:"Poland"},
+            {r:"EGG COLLECTOR",type:"U",c:"Poland"},
+            {r:"EGG PACKER",type:"U",c:"Poland"},
+            {r:"ELDERLY CARE STAFF",type:"U",c:"Germany"},
+            {r:"ELECTRICAL DRAUGHTSMAN",type:"S",c:"Sweden"},
+            {r:"ELECTRICAL ENGINEER",type:"S",c:"Germany"},
+            {r:"ELECTRICAL SUPERVISOR",type:"S",c:"Finland"},
+            {r:"ELECTRICAL TECHNICIAN HIGH VOLTAGE",type:"S",c:"Sweden"},
+            {r:"ELECTRICIAN",type:"S",c:"Poland"},
+            {r:"ELECTRICIAN (CERTIFIED)",type:"S",c:"Latvia"},
+            {r:"ENGINEER",type:"S",c:"Netherlands"},
+            {r:"ENGINEER (VARIOUS DISCIPLINES)",type:"S",c:"Germany"},
+            {r:"EXCAVATOR OPERATOR",type:"S",c:"Croatia"},
+            {r:"F & B SUPERVISOR",type:"S",c:"Finland"},
+            {r:"FABRICATOR",type:"S",c:"Czech Republic"},
+            {r:"FARM WORKER",type:"U",c:"Albania"},
+            {r:"FIRE & SAFETY OFFICER",type:"S",c:"Sweden"},
+            {r:"FIRE ALARM TECHNICIAN",type:"S",c:"Finland"},
+            {r:"FOOD & BEVERAGE STAFF",type:"U",c:"Croatia"},
+            {r:"FOOD & BEVERAGE SUPERVISOR",type:"S",c:"Italy"},
+            {r:"FOOD AND BEVERAGE",type:"U",c:"Serbia"},
+            {r:"FOOD PACKING WORKER",type:"U",c:"Poland"},
+            {r:"FOOD QUALITY INSPECTION OFFICER",type:"S",c:"Netherlands"},
+            {r:"FOOD QUALITY INSPECTOR",type:"S",c:"Germany"},
+            {r:"FORKLIFT OPERATOR",type:"S",c:"Poland"},
+            {r:"FRONT OFFICE EXECUTIVE",type:"S",c:"Latvia"},
+            {r:"FUEL STATION OPERATOR",type:"U",c:"Poland"},
+            {r:"FUEL STATION WORKER",type:"U",c:"Latvia"},
+            {r:"GENERAL LABORER",type:"U",c:"Croatia"},
+            {r:"GENERATOR MECHANIC",type:"S",c:"Serbia"},
+            {r:"GLASS CUTTER",type:"S",c:"Czech Republic"},
+            {r:"GRADER OPERATOR",type:"S",c:"Poland"},
+            {r:"GREENHOUSE WORKER",type:"U",c:"Netherlands"},
+            {r:"HAIR STYLIST (BARBER)",type:"S",c:"Italy"},
+            {r:"HARVESTER MACHINE MECHANIC",type:"S",c:"Germany"},
+            {r:"HARVESTER MACHINE OPERATOR",type:"S",c:"Finland"},
+            {r:"HARVESTING WORKER",type:"U",c:"Poland"},
+            {r:"HEAD CHEF",type:"S",c:"France"},
+            {r:"HEAD NURSE",type:"S",c:"Sweden"},
+            {r:"HEALTH & SAFETY OFFICER",type:"S",c:"Netherlands"},
+            {r:"HEALTH AND SAFETY OFFICER",type:"S",c:"Finland"},
+            {r:"HEALTHCARE SUPPORT",type:"U",c:"Germany"},
+            {r:"HEAVY GOODS DRIVER (C+E)",type:"S",c:"Poland"},
+            {r:"HOSPITALITY STAFF",type:"U",c:"Croatia"},
+            {r:"HOTEL & HOSPITALITY JOBS",type:"U",c:"Italy"},
+            {r:"HOTEL STAFF",type:"U",c:"Macedonia"},
+            {r:"HOUSEKEEPING SUPERVISOR",type:"S",c:"Finland"},
+            {r:"HOUSEKEEPING WORKER",type:"U",c:"Sweden"},
+            {r:"HR ASSISTANT",type:"S",c:"Latvia"},
+            {r:"HR ASSISTANT / EXECUTIVE",type:"S",c:"Netherlands"},
+            {r:"HYDRAULIC MECHANIC",type:"S",c:"Germany"},
+            {r:"INVENTORY CLERK",type:"S",c:"Poland"},
+            {r:"IT PROFESSIONAL",type:"S",c:"Germany"},
+            {r:"IT SYSTEMS ANALYST",type:"S",c:"Sweden"},
+            {r:"JUICE MAKER",type:"U",c:"Finland"},
+            {r:"KITCHEN HELPER",type:"U",c:"France"},
+            {r:"LAND SURVEYOR",type:"S",c:"Croatia"},
+            {r:"LAUNDRY SUPERVISOR",type:"S",c:"Italy"},
+            {r:"LAUNDRY WORKER",type:"U",c:"Latvia"},
+            {r:"LIFT TECHNICIAN",type:"S",c:"Finland"},
+            {r:"LINER",type:"S",c:"Sweden"},
+            {r:"LOADING UNLOADING WORKERS",type:"U",c:"Poland"},
+            {r:"LOADING/UNLOADING WORKER",type:"U",c:"Serbia"},
+            {r:"LOGISTICS COORDINATOR",type:"S",c:"Netherlands"},
+            {r:"MACHINE OPERATOR",type:"S",c:"Czech Republic"},
+            {r:"MANAGER",type:"S",c:"Germany"},
+            {r:"MASON",type:"S",c:"Croatia"},
+            {r:"MASON / PLASTERER",type:"S",c:"Poland"},
+            {r:"MASON PLASTER / TILES",type:"S",c:"Serbia"},
+            {r:"MECHANICAL DRAUGHTSMAN",type:"S",c:"Sweden"},
+            {r:"MECHANICAL ENGINEER",type:"S",c:"Finland"},
+            {r:"MECHANICAL SUPERVISOR",type:"S",c:"Germany"},
+            {r:"MOBILE CRANE OPERATOR",type:"S",c:"Poland"},
+            {r:"NURSING ASSISTANT",type:"S",c:"Sweden"},
+            {r:"OFFICE ASSISTANT",type:"S",c:"Latvia"},
+            {r:"OFFICE CLERK",type:"S",c:"Croatia"},
+            {r:"OFFICE CLERK / RECEPTIONIST",type:"S",c:"Finland"},
+            {r:"PACKAGING STAFF",type:"U",c:"Poland"},
+            {r:"PACKING HELPER",type:"U",c:"Czech Republic"},
+            {r:"PASTRY CHEF",type:"S",c:"France"},
+            {r:"PICKER / PACKER",type:"U",c:"Netherlands"},
+            {r:"PIZZA CHEF",type:"S",c:"Italy"},
+            {r:"PIZZA MAKERS",type:"S",c:"Finland"},
+            {r:"PLUMBER",type:"S",c:"Germany"},
+            {r:"POULTRY FARM HAND",type:"U",c:"Poland"},
+            {r:"POULTRY FARM SUPERVISOR",type:"S",c:"Netherlands"},
+            {r:"POULTRY FARM WORKER",type:"U",c:"Latvia"},
+            {r:"POULTRY YARD CLEANER",type:"U",c:"Serbia"},
+            {r:"PROCUREMENT / PURCHASE ASSISTANT",type:"S",c:"Germany"},
+            {r:"PRODUCTION LINE WORKER",type:"U",c:"Czech Republic"},
+            {r:"PROFESSIONAL COOK",type:"S",c:"France"},
+            {r:"PROJECT COORDINATOR",type:"S",c:"Sweden"},
+            {r:"PUMP MOTOR MECHANIC",type:"S",c:"Croatia"},
+            {r:"QUALITY CONTROL (QC)",type:"S",c:"Germany"},
+            {r:"RADIOLOGY X-RAY TECHNICIAN",type:"S",c:"Sweden"},
+            {r:"RCC FITTER",type:"S",c:"Poland"},
+            {r:"RESTAURANT SUPERVISOR",type:"S",c:"Finland"},
+            {r:"RO WATER TECHNICIAN",type:"S",c:"Latvia"},
+            {r:"ROLLER OPERATOR",type:"S",c:"Serbia"},
+            {r:"SAFETY ENGINEER",type:"S",c:"Sweden"},
+            {r:"SALES & MARKETING EXEC",type:"S",c:"Netherlands"},
+            {r:"SALES & MARKETING EXECUTIVE",type:"S",c:"Finland"},
+            {r:"SALES SUPERVISOR",type:"S",c:"Germany"},
+            {r:"SALES WORKERS",type:"S",c:"Croatia"},
+            {r:"SALES WORKERS (DUTY-FREE)",type:"S",c:"Italy"},
+            {r:"SCAFFOLDER",type:"S",c:"Poland"},
+            {r:"SECRETARY / PERSONAL ASSISTANT",type:"S",c:"Latvia"},
+            {r:"SECURITY GUARD",type:"S",c:"Finland"},
+            {r:"SOFTWARE DEVELOPER",type:"S",c:"Netherlands"},
+            {r:"SOUS CHEF",type:"S",c:"France"},
+            {r:"SPECIALIST DOCTOR",type:"S",c:"Germany"},
+            {r:"SPRAY PAINTER",type:"S",c:"Czech Republic"},
+            {r:"SPRAYER MECHANIC",type:"S",c:"Poland"},
+            {r:"SPRAYER OPERATOR",type:"S",c:"Serbia"},
+            {r:"STAFF BUS DRIVER / HEAVY DUTY",type:"S",c:"Sweden"},
+            {r:"STAFF BUS DRIVER HEAD DUTY",type:"S",c:"Finland"},
+            {r:"STEEL FIXER",type:"S",c:"Poland"},
+            {r:"STEWARD",type:"U",c:"Italy"},
+            {r:"STEWARD SUPERVISOR",type:"S",c:"Croatia"},
+            {r:"STEWARDS",type:"U",c:"Latvia"},
+            {r:"STORE KEEPER",type:"U",c:"Serbia"},
+            {r:"STORE SUPERVISOR",type:"S",c:"Germany"},
+            {r:"SWEEPER",type:"U",c:"Finland"},
+            {r:"SYSTEM ENGINEER",type:"S",c:"Netherlands"},
+            {r:"SYSTEM OPERATOR",type:"S",c:"Sweden"},
+            {r:"SYSTEM SERVICE ENGINEER",type:"S",c:"Germany"},
+            {r:"TAILOR",type:"S",c:"Italy"},
+            {r:"TAILOR CUTTING MASTER",type:"S",c:"Croatia"},
+            {r:"TANKER DRIVER / HEAVY DUTY",type:"S",c:"Poland"},
+            {r:"TANKER DRIVER HEAD DUTY",type:"S",c:"Finland"},
+            {r:"TIME KEEPER",type:"S",c:"Latvia"},
+            {r:"TINKER",type:"S",c:"Serbia"},
+            {r:"TINKER/WELDER",type:"S",c:"Czech Republic"},
+            {r:"TIRE MAN",type:"S",c:"Croatia"},
+            {r:"TOWER CRANE OPERATOR",type:"S",c:"Sweden"},
+            {r:"TRACTOR DRIVER",type:"S",c:"Poland"},
+            {r:"TRANSPORT SUPERVISOR",type:"S",c:"Germany"},
+            {r:"TROLLEY HELPER",type:"U",c:"Finland"},
+            {r:"TRUCK DRIVER",type:"S",c:"Netherlands"},
+            {r:"TRUCK DRIVER (CODE 95)",type:"S",c:"Latvia"},
+            {r:"TV MECHANIC",type:"S",c:"Serbia"},
+            {r:"VETERINARY PHARMACIST",type:"S",c:"Poland"},
+            {r:"VETERINARY TECHNICIAN",type:"S",c:"Croatia"},
+            {r:"WAITER",type:"U",c:"Italy"},
+            {r:"WAITER/WAITRESS",type:"U",c:"France"},
+            {r:"WALL PAINTER",type:"S",c:"Czech Republic"},
+            {r:"WARD ASSISTANT",type:"U",c:"Sweden"},
+            {r:"WAREHOUSE & FACTORY WORKERS",type:"U",c:"Poland"},
+            {r:"WAREHOUSE ASSISTANT",type:"U",c:"Latvia"},
+            {r:"WAREHOUSE PACKER",type:"U",c:"Serbia"},
+            {r:"WAREHOUSE STAFF",type:"U",c:"Finland"},
+            {r:"WATER SERVICE STATION HELPER",type:"U",c:"Croatia"},
+            {r:"WELDER",type:"S",c:"Germany"},
+            {r:"WELDER (CERTIFIED)",type:"S",c:"Poland"},
+            {r:"WELDER / FITTER",type:"S",c:"Czech Republic"},
+            {r:"WORKSHOP HELPER",type:"U",c:"Latvia"}
         ];
 
+        // --- FIXED E.164 COMPLIANT REGEX RULES ---
         const countryRules = {
+            "AFGHANISTAN": { regex: /^\+93\d{9}$/, hint: "+93 700123456" },
+            "ALBANIA": { regex: /^\+355\d{8,9}$/, hint: "+355 691234567" },
+            "ALGERIA": { regex: /^\+213\d{9}$/, hint: "+213 555123456" },
+            "ANGOLA": { regex: /^\+244\d{9}$/, hint: "+244 923123456" },
+            "ARMENIA": { regex: /^\+374\d{8}$/, hint: "+374 91123456" },
+            "AZERBAIJAN": { regex: /^\+994\d{9}$/, hint: "+994 501234567" },
+            "BAHRAIN": { regex: /^\+973\d{8}$/, hint: "+973 39123456" },
+            "BANGLADESH": { regex: /^\+8801\d{9}$/, hint: "+880 1712345678" },
+            "BENIN": { regex: /^\+229\d{8}$/, hint: "+229 97123456" },
+            "BHUTAN": { regex: /^\+975\d{8}$/, hint: "+975 17123456" },
+            "BOTSWANA": { regex: /^\+267\d{8}$/, hint: "+267 72123456" },
+            "BRUNEI": { regex: /^\+673\d{7}$/, hint: "+673 8123456" },
+            "BURKINA FASO": { regex: /^\+226\d{8}$/, hint: "+226 70123456" },
+            "BURUNDI": { regex: /^\+257\d{8}$/, hint: "+257 79123456" },
+            "CAMBODIA": { regex: /^\+855\d{8,9}$/, hint: "+855 12345678" },
+            "CAMEROON": { regex: /^\+237\d{9}$/, hint: "+237 671234567" },
+            "CAPE VERDE": { regex: /^\+238\d{7}$/, hint: "+238 9912345" },
+            "CENTRAL AFRICAN REPUBLIC": { regex: /^\+236\d{8}$/, hint: "+236 75123456" },
+            "CHAD": { regex: /^\+235\d{8}$/, hint: "+235 66123456" },
+            "CHINA": { regex: /^\+861\d{10}$/, hint: "+86 13912345678" },
+            "COMOROS": { regex: /^\+269\d{7}$/, hint: "+269 3312345" },
+            "CONGO (DRC)": { regex: /^\+243\d{9}$/, hint: "+243 811234567" },
+            "CONGO (REPUBLIC)": { regex: /^\+242\d{9}$/, hint: "+242 061234567" },
+            "CYPRUS": { regex: /^\+357\d{8}$/, hint: "+357 99123456" },
+            "DJIBOUTI": { regex: /^\+253\d{8}$/, hint: "+253 77123456" },
+            "EGYPT": { regex: /^\+201\d{9}$/, hint: "+20 1012345678" },
+            "EQUATORIAL GUINEA": { regex: /^\+240\d{9}$/, hint: "+240 222123456" },
+            "ERITREA": { regex: /^\+291\d{7}$/, hint: "+291 7123456" },
+            "ESWATINI": { regex: /^\+268\d{8}$/, hint: "+268 76123456" },
+            "ETHIOPIA": { regex: /^\+251\d{9}$/, hint: "+251 911234567" },
+            "GABON": { regex: /^\+241\d{7,8}$/, hint: "+241 07123456" },
+            "GAMBIA": { regex: /^\+220\d{7}$/, hint: "+220 7123456" },
+            "GEORGIA": { regex: /^\+995\d{9}$/, hint: "+995 599123456" },
+            "GHANA": { regex: /^\+233\d{9}$/, hint: "+233 241234567" },
+            "GUINEA": { regex: /^\+224\d{9}$/, hint: "+224 621234567" },
+            "GUINEA-BISSAU": { regex: /^\+245\d{9}$/, hint: "+245 961234567" },
             "HONG KONG": { regex: /^\+852\d{8}$/, hint: "+852 91234567" },
             "INDIA": { regex: /^\+91[6-9]\d{9}$/, hint: "+91 9876543210" },
             "INDONESIA": { regex: /^\+628\d{9,11}$/, hint: "+62 8123456789" },
+            "IRAN": { regex: /^\+989\d{9}$/, hint: "+98 9123456789" },
+            "IRAQ": { regex: /^\+9647\d{9}$/, hint: "+964 7501234567" },
+            "ISRAEL": { regex: /^\+9725\d{8}$/, hint: "+972 501234567" },
+            "IVORY COAST": { regex: /^\+225\d{10}$/, hint: "+225 0701234567" },
+            "JAPAN": { regex: /^\+81[789]0\d{8}$/, hint: "+81 9012345678" },
+            "JORDAN": { regex: /^\+9627\d{8}$/, hint: "+962 791234567" },
+            "KAZAKHSTAN": { regex: /^\+77\d{9}$/, hint: "+7 7012345678" },
+            "KENYA": { regex: /^\+2547\d{8}$/, hint: "+254 712345678" },
+            "KUWAIT": { regex: /^\+965\d{8}$/, hint: "+965 91234567" },
+            "KYRGYZSTAN": { regex: /^\+996\d{9}$/, hint: "+996 555123456" },
+            "LAOS": { regex: /^\+85620\d{8}$/, hint: "+856 2012345678" },
+            "LEBANON": { regex: /^\+961\d{7,8}$/, hint: "+961 70123456" },
+            "LESOTHO": { regex: /^\+266\d{8}$/, hint: "+266 58123456" },
+            "LIBERIA": { regex: /^\+231\d{8,9}$/, hint: "+231 77123456" },
+            "LIBYA": { regex: /^\+2189\d{8}$/, hint: "+218 911234567" },
+            "MACAU": { regex: /^\+8536\d{7}$/, hint: "+853 66123456" },
+            "MADAGASCAR": { regex: /^\+261\d{9}$/, hint: "+261 341234567" },
+            "MALAWI": { regex: /^\+265\d{9}$/, hint: "+265 881234567" },
+            "MALAYSIA": { regex: /^\+601\d{8,9}$/, hint: "+60 123456789" },
+            "MALDIVES": { regex: /^\+960\d{7}$/, hint: "+960 7712345" },
+            "MALI": { regex: /^\+223\d{8}$/, hint: "+223 76123456" },
+            "MAURITANIA": { regex: /^\+222\d{8}$/, hint: "+222 46123456" },
+            "MAURITIUS": { regex: /^\+2305\d{7}$/, hint: "+230 57123456" },
+            "MONGOLIA": { regex: /^\+976\d{8}$/, hint: "+976 99123456" },
+            "MOROCCO": { regex: /^\+212\d{9}$/, hint: "+212 612345678" },
+            "MOZAMBIQUE": { regex: /^\+258\d{9}$/, hint: "+258 841234567" },
+            "MYANMAR (BURMA)": { regex: /^\+959\d{7,9}$/, hint: "+95 912345678" },
+            "NAMIBIA": { regex: /^\+2648\d{8}$/, hint: "+264 811234567" },
+            "NEPAL": { regex: /^\+9779\d{9}$/, hint: "+977 9812345678" },
+            "NIGER": { regex: /^\+227\d{8}$/, hint: "+227 96123456" },
+            "NIGERIA": { regex: /^\+234[789]\d{9}$/, hint: "+234 8012345678" },
+            "NORTH KOREA": { regex: /^\+850\d{8,10}$/, hint: "+850 191234567" },
+            "OMAN": { regex: /^\+968\d{8}$/, hint: "+968 99123456" },
+            "PAKISTAN": { regex: /^\+923\d{9}$/, hint: "+92 3001234567" },
+            "PALESTINE": { regex: /^\+9705\d{8}$/, hint: "+970 591234567" },
+            "PHILIPPINES": { regex: /^\+639\d{9}$/, hint: "+63 9171234567" },
+            "QATAR": { regex: /^\+974\d{8}$/, hint: "+974 33123456" },
+            "RWANDA": { regex: /^\+2507\d{8}$/, hint: "+250 781234567" },
+            "SAO TOME & PRINCIPE": { regex: /^\+239\d{7}$/, hint: "+239 9912345" },
+            "SAUDI ARABIA": { regex: /^\+9665\d{8}$/, hint: "+966 501234567" },
+            "SENEGAL": { regex: /^\+221\d{9}$/, hint: "+221 771234567" },
+            "SEYCHELLES": { regex: /^\+248\d{7}$/, hint: "+248 2512345" },
+            "SIERRA LEONE": { regex: /^\+232\d{8}$/, hint: "+232 76123456" },
+            "SINGAPORE": { regex: /^\+65\d{8}$/, hint: "+65 81234567" },
+            "SOMALIA": { regex: /^\+252\d{8,9}$/, hint: "+252 615123456" },
+            "SOUTH AFRICA": { regex: /^\+27\d{9}$/, hint: "+27 821234567" },
+            "SOUTH KOREA": { regex: /^\+8210\d{8}$/, hint: "+82 1012345678" },
+            "SOUTH SUDAN": { regex: /^\+2119\d{8}$/, hint: "+211 912345678" },
+            "SRI LANKA": { regex: /^\+947\d{8}$/, hint: "+94 771234567" },
+            "SUDAN": { regex: /^\+249\d{9}$/, hint: "+249 912345678" },
+            "SYRIA": { regex: /^\+9639\d{8}$/, hint: "+963 941234567" },
+            "TAIWAN": { regex: /^\+8869\d{8}$/, hint: "+886 912345678" },
+            "TAJIKISTAN": { regex: /^\+9929\d{8}$/, hint: "+992 901234567" },
+            "TANZANIA": { regex: /^\+255\d{9}$/, hint: "+255 712345678" },
+            "THAILAND": { regex: /^\+66\d{9}$/, hint: "+66 812345678" },
+            "TIMOR-LESTE": { regex: /^\+6707\d{7}$/, hint: "+670 77123456" },
+            "TOGO": { regex: /^\+228\d{8}$/, hint: "+228 90123456" },
+            "TUNISIA": { regex: /^\+216\d{8}$/, hint: "+216 20123456" },
+            "TURKEY": { regex: /^\+905\d{9}$/, hint: "+90 5321234567" },
+            "TURKMENISTAN": { regex: /^\+9936\d{7}$/, hint: "+993 65123456" },
             "UAE": { regex: /^\+9715\d{8}$/, hint: "+971 501234567" },
             "UGANDA": { regex: /^\+2567\d{8}$/, hint: "+256 771234567" },
             "UZBEKISTAN": { regex: /^\+9989\d{8}$/, hint: "+998 901234567" },
@@ -1177,12 +1552,11 @@
             maxBookingDate.setDate(maxBookingDate.getDate() + 20); // Limit to next 20 days
 
             flatpickr("#bookingDate", {
+                inline: true, // Show as always-visible calendar block
                 dateFormat: "d/m/Y",
                 minDate: "today",
                 maxDate: maxBookingDate, // Apply 20-day rule
-                disableMobile: false, // Changed to false to enable Native Apple-style scroller on mobile
-                altInput: true,
-                altFormat: "l, F j, Y",
+                disableMobile: true, // Force custom style over native picker for inline
                 animate: true,
                 disable: [
                     function(date) {
@@ -1423,7 +1797,7 @@
             }
         }
 
-        // NEW: Searchable Country Dropdown Logic
+        // NEW: Searchable Country Dropdown Logic (Fixed Population)
         function populateCountryDropdowns() {
             const sortedCountries = Object.keys(countryRules).sort();
             
@@ -1453,17 +1827,17 @@
                 sortedCountries.forEach(c => {
                     if(c === 'OTHER') return;
                     const div = document.createElement('div');
-                    div.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-600 hover:bg-blue-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold uppercase";
+                    div.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-600 hover:bg-blue-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold uppercase block";
                     div.innerText = c;
-                    div.onclick = () => selectCountry(c, type);
+                    div.onclick = function() { selectCountry(c, type); };
                     itemsWrapper.appendChild(div);
                 });
                 
                 // "Other" Option
                 const otherDiv = document.createElement('div');
-                otherDiv.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-600 hover:bg-blue-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold uppercase";
+                otherDiv.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-600 hover:bg-blue-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold uppercase block";
                 otherDiv.innerText = "OTHER";
-                otherDiv.onclick = () => selectCountry("OTHER", type);
+                otherDiv.onclick = function() { selectCountry("OTHER", type); };
                 itemsWrapper.appendChild(otherDiv);
 
                 list.appendChild(itemsWrapper);
@@ -1474,19 +1848,22 @@
         }
 
         function toggleCountryDropdown(type, event) {
+            event.stopPropagation(); // Prevent immediate closing
             const list = document.getElementById(type + 'List');
             const arrow = document.getElementById(type + 'Arrow');
             const otherType = type === 'nationality' ? 'residence' : 'nationality';
             
             // Close the other dropdown if open
-            document.getElementById(otherType + 'List').classList.add('hidden');
-            document.getElementById(otherType + 'Arrow').classList.remove('rotate-180');
+            const otherList = document.getElementById(otherType + 'List');
+            const otherArrow = document.getElementById(otherType + 'Arrow');
+            if(otherList) otherList.classList.add('hidden');
+            if(otherArrow) otherArrow.classList.remove('rotate-180');
             
-            list.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180');
+            if(list) list.classList.toggle('hidden');
+            if(arrow) arrow.classList.toggle('rotate-180');
             
             // Focus search input when opening
-            if (!list.classList.contains('hidden')) {
+            if (list && !list.classList.contains('hidden')) {
                 const searchInput = list.querySelector('input');
                 if (searchInput) setTimeout(() => searchInput.focus(), 100);
             }
@@ -1495,14 +1872,13 @@
         function filterCountries(input, type) {
             const filter = input.value.toUpperCase();
             const list = document.getElementById(type + 'Items');
+            if(!list) return;
             const items = list.getElementsByClassName('country-option');
-            let hasVisible = false;
             
             for (let i = 0; i < items.length; i++) {
                 const txt = items[i].innerText;
                 if (txt.toUpperCase().indexOf(filter) > -1) {
                     items[i].style.display = "";
-                    hasVisible = true;
                 } else {
                     items[i].style.display = "none";
                 }
@@ -1532,7 +1908,7 @@
 
         function handleResidenceChange() {
             const sel = document.getElementById('presentResidence');
-            const country = sel.value || "OTHER";
+            const country = sel ? (sel.value || "OTHER") : "OTHER";
             const rule = countryRules[country] || countryRules["OTHER"];
             currentPhoneRegex = rule.regex;
 
@@ -1544,11 +1920,15 @@
                 if(el && el.value.length < 5) el.value = code;
             });
             
-            document.getElementById('mobileHint').innerText = "Format: " + rule.hint;
-            document.getElementById('mobileHint').classList.remove('opacity-0');
+            const hintEl = document.getElementById('mobileHint');
+            if(hintEl) {
+                hintEl.innerText = "Format: " + rule.hint;
+                hintEl.classList.remove('opacity-0');
+            }
         }
 
         function toggleJobDropdown(e) {
+            e.stopPropagation();
             const list = document.getElementById('jobDropdownList');
             const icon = document.getElementById('jobDropdownIcon');
             list.classList.toggle('hidden');
@@ -1956,6 +2336,15 @@ END:VCALENDAR`;
                 showModal("Please select Advisor, Method, Date and Time to confirm."); return;
             }
 
+            // 1. Ensure Task Exists (Handle Page Refresh)
+            if (!globalTaskId) {
+                console.log("No Task ID found, attempting to recreate...");
+                await saveData(false, false); // Create task silently
+                if(!globalTaskId) {
+                    showModal("Session Error. Please restart the assessment."); return;
+                }
+            }
+
             // SHOW LOADER
             toggleLoader(true, "Confirming Booking", "Finalizing Appointment Slot...");
 
@@ -2002,54 +2391,64 @@ END:VCALENDAR`;
                 </div>
             `;
 
-            // Prepare Update Payload using correct IDs
+            // Prepare Update Payload
             const updateFields = [
                 { id: CLICKUP_FIELDS["BOOKING_DATE"], value: getUnixTime(date) },
                 { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time } 
             ];
 
             try {
+                // Fetch dropdown options to get UUIDs
                 const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
-                const fieldDefs = (await res.json()).fields || [];
+                
+                if (res.ok) {
+                    const fieldDefs = (await res.json()).fields || [];
 
-                const mapDropdown = (fid, val) => {
-                    const def = fieldDefs.find(f => f.id === fid);
-                    if(def && (def.type === 'drop_down' || def.type === 'labels')) {
-                        const opt = def.type_config.options.find(o => o.name.toLowerCase().includes(val.toLowerCase().split(' ')[0]));
-                        if(opt) return { id: fid, value: opt.id };
-                    }
-                    return { id: fid, value: val }; 
-                };
+                    const mapDropdown = (fid, val) => {
+                        const def = fieldDefs.find(f => f.id === fid);
+                        if(def && (def.type === 'drop_down' || def.type === 'labels')) {
+                            // 1. Exact Match
+                            let opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase());
+                            // 2. Partial Match (First Word)
+                            if(!opt) opt = def.type_config.options.find(o => o.name.toLowerCase().includes(val.toLowerCase().split(' ')[0]));
+                            
+                            if(opt) return { id: fid, value: opt.id };
+                            console.warn(`Dropdown option not found for: ${val} in field ${fid}`);
+                        }
+                        return { id: fid, value: val }; 
+                    };
 
-                updateFields.push(mapDropdown(CLICKUP_FIELDS["ADVISOR"], advisor));
-                updateFields.push(mapDropdown(CLICKUP_FIELDS["BOOKING_TYPE"], method));
+                    updateFields.push(mapDropdown(CLICKUP_FIELDS["ADVISOR"], advisor));
+                    updateFields.push(mapDropdown(CLICKUP_FIELDS["BOOKING_TYPE"], method));
+                } else {
+                    // Fallback
+                    updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: advisor });
+                    updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
+                }
 
-            } catch(e) {
-                updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: advisor });
-                updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
-            }
+                const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nMethod: ${method}\nDate: ${date}\nTime: ${time}`;
 
-            const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nMethod: ${method}\nDate: ${date}\nTime: ${time}`;
-
-            if(globalTaskId && CLICKUP_API_KEY) {
-                try {
+                if(CLICKUP_API_KEY) {
+                    // Update Custom Fields one by one
                     for (let f of updateFields) {
-                        await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${f.id}`, {
+                        const updateRes = await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${f.id}`, {
                             method: 'POST',
                             headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
                             body: JSON.stringify({ value: f.value })
                         });
+                        if (!updateRes.ok) console.error(`Failed update field ${f.id}`, await updateRes.json());
                     }
+                    // Add Comment
                     await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/comment`, {
                         method: 'POST',
                         headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
                         body: JSON.stringify({ comment_text: desc })
                     });
 
-                    // Hide Loader before showing Success
+                    // Hide Loader
                     toggleLoader(false);
 
-                    // Update modal content and show
+                    // Show Success
                     const m = document.getElementById('messageModal');
                     document.getElementById('modalContent').innerHTML = successHtml;
                     m.classList.remove('hidden');
@@ -2057,17 +2456,11 @@ END:VCALENDAR`;
                     
                     document.querySelector('button[onclick="submitBooking()"]').disabled = true;
                     document.querySelector('button[onclick="submitBooking()"]').innerHTML = 'BOOKED <i class="fa-solid fa-check"></i>';
-                } catch(e) {
-                    toggleLoader(false);
-                    showModal("Connection Error. Please contact support.");
                 }
-            } else {
-                // Demo Mode
+            } catch(e) {
+                console.error(e);
                 toggleLoader(false);
-                const m = document.getElementById('messageModal');
-                document.getElementById('modalContent').innerHTML = successHtml;
-                m.classList.remove('hidden');
-                setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
+                showModal("Connection Error. Please contact support.");
             }
         }
         
