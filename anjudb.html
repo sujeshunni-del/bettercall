@@ -301,14 +301,33 @@
             document.body.removeChild(link);
         }
 
+        // Updated Share Logic: Tries Native Share first, falls back to clipboard
         document.getElementById('shareButton').addEventListener('click', async () => {
-             const dummy = document.createElement('input');
-             document.body.appendChild(dummy);
-             dummy.value = window.location.href;
-             dummy.select();
-             document.execCommand('copy');
-             document.body.removeChild(dummy);
-             showMessage('Link copied to clipboard!');
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'Anju M Nair - Immigration Advisor',
+                        text: 'Connect with Anju M Nair at Better Call Immigration.',
+                        url: window.location.href
+                    });
+                } catch (err) {
+                    // User probably cancelled share or it failed
+                    console.log('Error sharing:', err);
+                }
+            } else {
+                // Fallback for Desktop/Browsers without Web Share API
+                try {
+                    const dummy = document.createElement('input');
+                    document.body.appendChild(dummy);
+                    dummy.value = window.location.href;
+                    dummy.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(dummy);
+                    showMessage('Link copied to clipboard!');
+                } catch (e) {
+                    showMessage('Unable to copy link.');
+                }
+            }
         });
     </script>
 </body>

@@ -18,7 +18,7 @@
     
     <!-- LIBRARIES -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
+    <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -33,22 +33,24 @@
                 theme: {
                     extend: {
                         fontFamily: {
-                            sans: ['Plus Jakarta Sans', 'Outfit', 'Noto Sans', 'sans-serif'],
+                            sans: ['Outfit', 'Plus Jakarta Sans', 'Noto Sans', 'sans-serif'],
                             barcode: ['"Libre Barcode 39 Text"', 'cursive'],
                         },
                         colors: {
-                            'brand-dark': '#ffffff',
-                            'brand-primary': '#0f172a', 
-                            'brand-secondary': '#334155',
+                            'brand-dark': '#0B1121', // Deep Navy
+                            'brand-gold': '#D4AF37', // Gold
+                            'brand-gold-light': '#F9E69D',
+                            'brand-primary': '#D4AF37', // Mapping Primary to Gold for logic
+                            'brand-secondary': '#3F51B5', // Indigo
                             'brand-accent': '#e11d48', 
-                            'brand-gold': '#d97706',
-                            glass: { border: 'rgba(255, 255, 255, 0.4)', surface: 'rgba(255, 255, 255, 0.1)' },
+                            glass: { border: 'rgba(255, 255, 255, 0.08)', surface: 'rgba(15, 23, 42, 0.6)' },
                         },
                         animation: {
                             'blob': 'blob 20s infinite alternate',
                             'slide-up-fade': 'slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                             'pop-in': 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
-                            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                            'float': 'float 8s ease-in-out infinite',
                         },
                         keyframes: {
                             blob: {
@@ -64,6 +66,10 @@
                             popIn: {
                                 '0%': { transform: 'scale(0.9)', opacity: '0' },
                                 '100%': { transform: 'scale(1)', opacity: '1' }
+                            },
+                            float: {
+                                '0%, 100%': { transform: 'translateY(0)' },
+                                '50%': { transform: 'translateY(-10px)' },
                             }
                         }
                     }
@@ -74,22 +80,23 @@
 
     <style>
         /* BASE & BACKGROUND */
-        :root { --glass-border: 1px solid rgba(255, 255, 255, 0.25); }
         body {
-            background-color: #f8fafc;
-            background: radial-gradient(ellipse at 60% 40%, rgba(255, 255, 255, 0.8) 0%, transparent 60%),
-                        radial-gradient(circle at 0% 0%, rgba(203, 213, 225, 0.4) 0%, transparent 50%),
-                        radial-gradient(circle at 100% 100%, rgba(191, 219, 254, 0.4) 0%, transparent 50%),
-                        linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #eff6ff 100%);
+            background-color: #0B1121;
             background-attachment: fixed;
-            background-size: cover;
-            color: #1e293b;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #E2E8F0;
+            font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
+
+        /* AMBIENT ORBS (ANJUDB THEME) */
+        .orb { position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; animation: float 10s infinite ease-in-out; opacity: 0.4; }
+        .orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #3F51B5 0%, transparent 70%); }
+        .orb-2 { bottom: -10%; right: -5%; width: 40vw; height: 40vw; background: radial-gradient(circle, #D4AF37 0%, transparent 70%); animation-delay: -2s; opacity: 0.25; }
+        .orb-3 { top: 40%; left: 30%; width: 30vw; height: 30vw; background: radial-gradient(circle, #9F1239 0%, transparent 70%); animation-delay: -5s; opacity: 0.2; }
+        .orb-4 { display: none; } /* Removed 4th orb from previous theme */
 
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
@@ -97,27 +104,37 @@
         .lenis.lenis-stopped { overflow: hidden; }
         .lenis.lenis-scrolling iframe { pointer-events: none; }
 
+        /* DARK GLASS CARD */
         .glass-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1));
-            backdrop-filter: blur(40px) saturate(120%);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 0 0 1px rgba(0,0,0,0.2),
+                0 20px 40px -10px rgba(0,0,0,0.5),
+                inset 0 0 20px rgba(255,255,255,0.02);
             border-radius: 1.5rem; 
             position: relative;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
+        .noise-overlay {
+            position: absolute; inset: 0; opacity: 0.03; pointer-events: none; z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
         .form-input, .date-input-container, .geo-input {
             height: 3rem; 
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            color: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #E2E8F0;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             border-radius: 0.75rem;
             width: 100%;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Outfit', sans-serif;
             font-weight: 600;
             font-size: 0.95rem; 
         }
@@ -129,228 +146,207 @@
         }
 
         .form-input:focus, .geo-input:focus {
-            background: rgba(255, 255, 255, 0.9);
-            border-color: #0f172a;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #D4AF37;
             outline: none;
-            box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.1);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15);
         }
         
-        .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; animation: blob 25s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.6; mix-blend-mode: multiply; }
-        .orb-1 { top: -10%; left: -10%; width: 60vw; height: 60vw; background: #94a3b8; }
-        .orb-2 { bottom: -20%; right: -10%; width: 70vw; height: 70vw; background: #60a5fa; animation-delay: -5s; opacity: 0.4; }
-        .orb-3 { top: 30%; right: 20%; width: 40vw; height: 40vw; background: #cbd5e1; animation-delay: -10s; opacity: 0.5; }
-        .orb-4 { bottom: 10%; left: 10%; width: 50vw; height: 50vw; background: #3b82f6; animation-delay: -8s; opacity: 0.4; }
-
         .date-input-container { display: flex; align-items: center; overflow: hidden; padding: 0; }
-        .date-icon-box { padding: 0 1rem; color: #334155; background: rgba(241, 245, 249, 0.5); height: 100%; display: flex; align-items: center; border-right: 1px solid rgba(226, 232, 240, 0.6); }
-        .date-input-container input { background: transparent; border: none; color: #1e293b; width: 100%; padding: 0 1rem; height: 100%; outline: none; font-weight: 600; font-size: 0.95rem; }
+        .date-icon-box { padding: 0 1rem; color: #D4AF37; background: rgba(255, 255, 255, 0.05); height: 100%; display: flex; align-items: center; border-right: 1px solid rgba(255, 255, 255, 0.1); }
+        .date-input-container input { background: transparent; border: none; color: #E2E8F0; width: 100%; padding: 0 1rem; height: 100%; outline: none; font-weight: 600; font-size: 0.95rem; }
         @media (min-width: 768px) { .date-input-container input { font-size: 1.125rem; } .date-icon-box { padding: 0 1.25rem; } }
 
-        /* FLATPICKR CUSTOM */
+        /* FLATPICKR DARK THEME OVERRIDES */
         .flatpickr-calendar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            padding: 1rem;
-            overflow: hidden;
+            background: #1e293b !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important;
+            font-family: 'Outfit', sans-serif;
         }
-        .flatpickr-calendar::before, .flatpickr-calendar::after { display: none; }
-        
-        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange {
-            background: linear-gradient(135deg, #0f172a, #334155);
-            border-color: transparent;
+        .flatpickr-day { color: #cbd5e1 !important; }
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange {
+            background: #D4AF37 !important;
+            border-color: #D4AF37 !important;
+            color: #0B1121 !important;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.3);
-            color: white;
         }
-        .flatpickr-day.today { border-color: #0f172a; color: #0f172a; font-weight: 800; }
-        .flatpickr-day:hover { background: #f1f5f9; border-color: transparent; }
-        .flatpickr-current-month .flatpickr-monthDropdown-months { font-weight: 800; font-size: 1.1em; }
+        .flatpickr-months .flatpickr-month { color: #e2e8f0 !important; fill: #e2e8f0 !important; }
+        .flatpickr-current-month .flatpickr-monthDropdown-months { color: #e2e8f0 !important; }
+        .flatpickr-weekday { color: #94a3b8 !important; }
         
-        .flatpickr-current-month { display: flex; align-items: center; justify-content: center; padding: 15px 0; gap: 8px; }
-        .flatpickr-current-month .flatpickr-monthDropdown-months { appearance: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px 12px; font-weight: 700; color: #334155; font-size: 14px; cursor: pointer; }
-        .flatpickr-current-month input.cur-year { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px 8px; font-weight: 700; color: #334155; font-size: 14px; width: 70px; display: inline-block; }
-
-        .flatpickr-calendar.inline { width: 100% !important; max-width: 100% !important; box-shadow: none !important; border: none !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
-        .flatpickr-calendar.inline .flatpickr-innerContainer { width: 100% !important; }
-        .flatpickr-calendar.inline .flatpickr-rContainer { width: 100% !important; }
-        .flatpickr-calendar.inline .flatpickr-days { width: 100% !important; border: none !important; }
-        .flatpickr-calendar.inline .dayContainer { width: 100% !important; min-width: 100% !important; max-width: 100% !important; justify-content: space-around; }
-        .flatpickr-calendar.inline .flatpickr-day { height: 36px; line-height: 36px; margin: 4px 0; border-radius: 10px !important; font-weight: 700; color: #475569; border: 1px solid transparent; }
-        .flatpickr-calendar.inline .flatpickr-day.selected { background: linear-gradient(135deg, #0f172a, #334155); border: none; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3); color: white; }
-        .flatpickr-calendar.inline .flatpickr-months { background: #f8fafc; border-radius: 12px; padding: 10px; margin-bottom: 10px; border: 1px solid #f1f5f9; }
+        .flatpickr-current-month input.cur-year { color: #e2e8f0 !important; }
 
         .uppercase-input { text-transform: uppercase; }
-        .valid-field { border-color: #10b981 !important; background-color: rgba(236, 253, 245, 0.8) !important; }
-        .invalid-field { border-color: #f43f5e !important; background-color: rgba(255, 241, 242, 0.8) !important; }
+        .valid-field { border-color: #10b981 !important; background-color: rgba(16, 185, 129, 0.1) !important; }
+        .invalid-field { border-color: #f43f5e !important; background-color: rgba(244, 63, 94, 0.1) !important; }
         
-        .category-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); }
-        .category-card:hover { transform: translateY(-4px); background: rgba(255, 255, 255, 0.9); border-color: #0f172a; }
-        .category-card.active { background: linear-gradient(135deg, #f1f5f9 0%, #ffffff 100%); border-color: #0f172a; box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.15); position: relative; }
+        .category-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); }
+        .category-card:hover { transform: translateY(-4px); background: rgba(255, 255, 255, 0.08); border-color: #D4AF37; }
+        .category-card.active { background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%); border-color: #D4AF37; box-shadow: 0 10px 30px -5px rgba(212, 175, 55, 0.1); position: relative; }
         
-        .btn-gradient { background-size: 200% auto; background-image: linear-gradient(to right, #0f172a 0%, #334155 51%, #0f172a 100%); transition: 0.5s; }
-        .btn-gradient:hover { background-position: right center; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.4); }
+        .btn-gradient { background-size: 200% auto; background-image: linear-gradient(to right, #D4AF37 0%, #F9E69D 51%, #D4AF37 100%); transition: 0.5s; color: #0B1121; }
+        .btn-gradient:hover { background-position: right center; box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.4); }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0B1121; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 
-        /* UPDATED ADVISOR CARD CSS for Grid View */
+        /* ADVISOR CARD */
         .advisor-pro-card {
             position: relative;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
             border-radius: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 2rem;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
-            flex-direction: column; /* Vertical Stack */
-            align-items: center;    /* Centered */
+            flex-direction: column; 
+            align-items: center;    
             text-align: center;
             gap: 1rem;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 400px;
             margin: 0 auto;
         }
         .advisor-pro-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            background: rgba(255, 255, 255, 0.8);
-            border-color: #0f172a;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: #D4AF37;
         }
         .advisor-pro-card.selected {
-            border-color: #0f172a;
-            background: linear-gradient(145deg, rgba(241, 245, 249, 0.9), rgba(255, 255, 255, 0.95));
-            box-shadow: 0 0 0 2px #0f172a, 0 20px 40px -5px rgba(15, 23, 42, 0.15);
+            border-color: #D4AF37;
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
+            box-shadow: 0 0 0 2px #D4AF37, 0 20px 40px -5px rgba(212, 175, 55, 0.15);
         }
+        
         .advisor-img {
-            width: 140px; /* Big Profile */
+            width: 140px; 
             height: 140px;
             border-radius: 50%;
-            background: #f8fafc;
+            padding: 3px;
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.8) 0%, rgba(212, 175, 55, 0.2) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 36px;
-            border: 4px solid white;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
             margin-bottom: 0.5rem;
-            object-fit: cover;
         }
         .advisor-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
+            border: 4px solid #0B1121;
         }
 
         .method-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.03);
             position: relative;
             overflow: hidden;
         }
         
-        /* Stylish Selected State */
         .method-card.selected {
-            background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+            background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
             border-color: transparent;
-            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.4);
             transform: translateY(-2px) scale(1.02);
         }
 
-        /* Override Text Colors when Selected */
-        .method-card.selected .text-slate-700 { color: #ffffff !important; }
-        .method-card.selected .text-slate-400 { color: rgba(255, 255, 255, 0.85) !important; }
+        .method-card.selected .text-slate-700 { color: #0B1121 !important; }
+        .method-card.selected .text-slate-400 { color: #0B1121 !important; opacity: 0.8; }
 
-        /* Override Icon Box when Selected */
         .method-card.selected > div:first-child {
-            background-color: rgba(255, 255, 255, 0.2) !important;
-            color: #ffffff !important;
+            background-color: rgba(11, 17, 33, 0.2) !important;
+            color: #0B1121 !important;
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(11, 17, 33, 0.1);
             transform: scale(1.1);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .time-slot {
             transition: all 0.2s;
             cursor: pointer;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
         }
         .time-slot:hover:not(.disabled) {
-            background-color: #f1f5f9;
-            color: #0f172a;
+            background-color: rgba(212, 175, 55, 0.1);
+            color: #D4AF37;
+            border-color: #D4AF37;
         }
         .time-slot.selected {
-            background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
-            color: white;
+            background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+            color: #0B1121;
             border-color: transparent;
-            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.3);
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+            font-weight: 800;
         }
         .time-slot.disabled {
-            opacity: 0.5;
+            opacity: 0.3;
             cursor: not-allowed;
-            background-color: #f1f5f9;
+            background-color: rgba(0,0,0,0.2);
         }
         
         /* Country Button Styling */
         .country-btn {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .country-btn:hover {
             transform: translateY(-2px);
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border-color: #0f172a;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-color: #D4AF37;
         }
         .country-btn.selected {
-            background: linear-gradient(135deg, #0f172a, #334155);
-            color: white;
+            background: linear-gradient(135deg, #D4AF37, #B8860B);
+            color: #0B1121;
             border-color: transparent;
-            box-shadow: 0 8px 20px -5px rgba(15, 23, 42, 0.4);
+            box-shadow: 0 8px 20px -5px rgba(212, 175, 55, 0.4);
         }
         .country-btn.selected span {
-            color: white;
+            color: #0B1121;
         }
     </style>
 </head>
-<body class="antialiased selection:bg-slate-700 selection:text-white relative">
+<body class="antialiased selection:bg-brand-gold selection:text-brand-dark relative">
 
     <!-- Background Orbs -->
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
-    <div class="orb orb-4"></div>
 
     <!-- 1. HEADER -->
     <nav class="fixed top-0 md:top-4 left-0 right-0 z-50 flex justify-center px-0 md:px-4" id="navbar-container">
         <div class="glass-card !rounded-none md:!rounded-[2rem] !border-t-0 w-full max-w-7xl px-4 py-3 md:px-5 md:py-2 flex justify-between items-center transition-all duration-300 min-h-[60px]" id="navbar">
             <a href="index.html" class="flex items-center gap-2 group px-1">
-                <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center bg-white/60 backdrop-blur-md overflow-hidden p-1 flex-shrink-0 border border-white/50">
-                    <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/6673d6ec4830e402627b97c4adf422593b2ec907/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain">
+                <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center bg-white/10 backdrop-blur-md overflow-hidden p-1 flex-shrink-0 border border-white/10">
+                    <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/6673d6ec4830e402627b97c4adf422593b2ec907/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain brightness-0 invert">
                 </div>
                 <div class="block leading-tight"> 
-                    <h1 class="font-bold text-slate-800 text-sm md:text-lg tracking-wide group-hover:text-blue-900 transition-colors">BETTER CALL</h1>
-                    <p class="text-[9px] md:text-xs font-bold text-amber-500 uppercase tracking-[0.2em]">Immigration</p>
+                    <h1 class="font-bold text-white text-sm md:text-lg tracking-wide group-hover:text-brand-gold transition-colors">BETTER CALL</h1>
+                    <p class="text-[9px] md:text-xs font-bold text-brand-gold uppercase tracking-[0.2em]">Immigration</p>
                 </div>
             </a>
             <div class="hidden lg:flex items-center gap-1">
-                <a href="index.html" class="px-4 py-2 text-sm text-slate-600 hover:text-blue-900 font-bold transition rounded-full hover:bg-white/50">Home</a>
-                <a href="appointment.html" class="px-4 py-2 text-sm text-blue-900 font-bold transition rounded-full bg-white/50 shadow-sm border border-white/60">Book Now</a>
+                <a href="index.html" class="px-4 py-2 text-sm text-slate-300 hover:text-brand-gold font-bold transition rounded-full hover:bg-white/5">Home</a>
+                <a href="appointment.html" class="px-4 py-2 text-sm text-brand-gold font-bold transition rounded-full bg-brand-gold/10 shadow-sm border border-brand-gold/20">Book Now</a>
             </div>
              <div class="flex items-center gap-2 px-1">
-                <button class="group p-2 rounded-full hover:bg-white/50 transition-all duration-300 relative">
-                    <i class="fa-solid fa-magnifying-glass text-slate-400 group-hover:text-blue-900 text-lg md:text-xl"></i>
+                <button class="group p-2 rounded-full hover:bg-white/5 transition-all duration-300 relative">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 group-hover:text-brand-gold text-lg md:text-xl"></i>
                 </button>
             </div>
         </div>
@@ -360,111 +356,112 @@
     <main class="flex-grow pt-24 md:pt-32 pb-12 px-2 md:px-4 relative z-10">
         <div class="max-w-6xl mx-auto">
             
-            <!-- Progress Steps (UPDATED TO 2 STEPS) -->
+            <!-- Progress Steps -->
             <div class="mb-8 md:mb-16 relative">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 md:w-64 h-0.5 bg-white/30"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 md:w-64 h-0.5 bg-white/10"></div>
                 <div class="flex items-center justify-center gap-16 md:gap-32 relative z-10">
-                    <!-- Step 1: Profile (Identity + Job) -->
+                    <!-- Step 1: Profile -->
                     <div id="step-1-indicator" class="flex flex-col items-center gap-1 md:gap-3 transition-all duration-500">
-                        <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-white/80 backdrop-blur border-2 md:border-4 border-brand-primary shadow-lg flex items-center justify-center text-brand-primary text-xs md:text-lg font-bold">1</div>
-                        <span class="font-bold text-[9px] md:text-sm text-brand-primary tracking-widest uppercase">Profile</span>
+                        <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-brand-gold text-brand-dark backdrop-blur border-2 md:border-4 border-brand-gold shadow-[0_0_20px_rgba(212,175,55,0.4)] flex items-center justify-center text-xs md:text-lg font-bold">1</div>
+                        <span class="font-bold text-[9px] md:text-sm text-brand-gold tracking-widest uppercase">Profile</span>
                     </div>
-                    <!-- Step 2: Booking (Was Step 3) -->
-                    <div id="step-2-indicator" class="flex flex-col items-center gap-1 md:gap-3 transition-all duration-500 opacity-40 grayscale">
-                        <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-white/40 border-2 md:border-4 border-gray-200 flex items-center justify-center text-gray-500 text-xs md:text-lg font-bold">2</div>
+                    <!-- Step 2: Booking -->
+                    <div id="step-2-indicator" class="flex flex-col items-center gap-1 md:gap-3 transition-all duration-500 opacity-40">
+                        <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-white/5 border-2 md:border-4 border-white/20 flex items-center justify-center text-gray-500 text-xs md:text-lg font-bold">2</div>
                         <span class="font-bold text-[9px] md:text-sm text-slate-500 tracking-widest uppercase">Booking</span>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 1: Profile (Consolidated Personal + Job Details) -->
+            <!-- TAB 1: Profile -->
             <div id="tab-1" class="glass-card p-5 md:p-12 animate-slide-up-fade max-w-4xl mx-auto">
-                <div class="mb-6 md:mb-10 text-center">
-                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-slate-50 to-blue-50 mb-4 shadow-sm border border-white animate-pulse-slow">
-                        <i class="fa-solid fa-address-card text-2xl text-brand-primary"></i>
+                <div class="noise-overlay"></div>
+                <div class="relative z-10 mb-6 md:mb-10 text-center">
+                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-white/5 mb-4 shadow-sm border border-white/10 animate-pulse-slow">
+                        <i class="fa-solid fa-address-card text-2xl text-brand-gold"></i>
                     </div>
-                    <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-3 tracking-tight">
-                        Start Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-secondary">Consultation</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-white mb-3 tracking-tight">
+                        Start Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-[#F9E69D]">Consultation</span>
                     </h2>
-                    <p class="text-slate-500 text-xs md:text-sm tracking-wide font-medium max-w-lg mx-auto leading-relaxed">
+                    <p class="text-slate-400 text-xs md:text-sm tracking-wide font-medium max-w-lg mx-auto leading-relaxed">
                         Secure your personalized immigration strategy session. Enter your profile details below.
                     </p>
                 </div>
 
-                <form id="personalForm" class="space-y-8">
+                <form id="personalForm" class="space-y-8 relative z-10">
                     <!-- SECTION 1: PERSONAL DETAILS -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                         <div class="group">
-                            <label class="block text-[10px] md:text-xs font-bold text-brand-primary uppercase tracking-widest mb-1.5 md:mb-3 ml-1">First Name (As per Passport)</label>
+                            <label class="block text-[10px] md:text-xs font-bold text-brand-gold uppercase tracking-widest mb-1.5 md:mb-3 ml-1">First Name (As per Passport)</label>
                             <input type="text" id="firstName" required class="form-input uppercase-input px-4 md:px-5" placeholder="JOHN" oninput="this.value = this.value.toUpperCase()">
                         </div>
                         <div class="group">
-                            <label class="block text-[10px] md:text-xs font-bold text-brand-primary uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Surname (Family Name)</label>
+                            <label class="block text-[10px] md:text-xs font-bold text-brand-gold uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Surname (Family Name)</label>
                             <input type="text" id="lastName" required class="form-input uppercase-input px-4 md:px-5" placeholder="DOE" oninput="this.value = this.value.toUpperCase()">
                         </div>
                         <div class="group">
-                            <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Email Address</label>
+                            <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Email Address</label>
                             <div class="relative">
                                 <input type="email" id="email" required class="form-input pl-10 md:pl-12 font-semibold" placeholder="name@example.com">
-                                <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                                <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-regular fa-calendar-days mr-1"></i> Date of Birth</label>
+                            <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-regular fa-calendar-days mr-1"></i> Date of Birth</label>
                             <div class="date-input-container rounded-xl h-12 md:h-14">
                                 <div class="date-icon-box"><i class="fa-solid fa-cake-candles text-sm"></i></div>
                                 <input type="text" id="dob" required placeholder="Select Date" class="font-medium">
                             </div>
                         </div>
                         <div class="group">
-                            <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Age</label>
-                            <input type="text" id="age" readonly class="form-input w-full rounded-xl px-4 md:px-5 bg-gray-50/50 text-slate-500 cursor-not-allowed font-mono font-bold">
+                            <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Age</label>
+                            <input type="text" id="age" readonly class="form-input w-full rounded-xl px-4 md:px-5 bg-white/5 text-slate-500 cursor-not-allowed font-mono font-bold">
                             <p id="ageError" class="text-brand-accent text-[11px] hidden mt-1 md:mt-2 font-bold flex items-center gap-2 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Must be 20+ years.</p>
                         </div>
 
                         <!-- Residence -->
                         <div class="relative group" id="residenceWrapper">
-                            <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-location-dot mr-1 text-slate-400"></i> Present Residence</label>
+                            <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-location-dot mr-1 text-slate-500"></i> Present Residence</label>
                             <input type="hidden" id="presentResidence" onchange="handleResidenceChange()">
-                            <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 flex justify-between items-center cursor-pointer bg-white/60 hover:bg-white transition-colors" onclick="toggleCountryDropdown('residence', event)">
-                                <span id="residenceDisplay" class="text-slate-500 font-bold uppercase truncate">Select Residence</span>
-                                <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300" id="residenceArrow"></i>
+                            <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors" onclick="toggleCountryDropdown('residence', event)">
+                                <span id="residenceDisplay" class="text-slate-400 font-bold uppercase truncate">Select Residence</span>
+                                <i class="fa-solid fa-chevron-down text-slate-500 transition-transform duration-300" id="residenceArrow"></i>
                             </button>
-                            <div id="residenceList" data-lenis-prevent class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-[60] custom-scrollbar transform origin-top transition-all duration-300">
+                            <div id="residenceList" data-lenis-prevent class="hidden absolute top-full left-0 w-full mt-2 bg-[#0F172A] border border-white/10 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-[60] custom-scrollbar transform origin-top transition-all duration-300">
                                 <!-- Populated by JS -->
                             </div>
                         </div>
                         
                         <!-- Nationality -->
                         <div class="relative group" id="nationalityWrapper">
-                            <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-earth-americas mr-1 text-slate-400"></i> Nationality</label>
+                            <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 md:mb-3 ml-1"><i class="fa-solid fa-earth-americas mr-1 text-slate-500"></i> Nationality</label>
                             <input type="hidden" id="nationality">
-                            <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 flex justify-between items-center cursor-pointer bg-white/60 hover:bg-white transition-colors" onclick="toggleCountryDropdown('nationality', event)">
-                                <span id="nationalityDisplay" class="text-slate-500 font-bold uppercase truncate">Select Origin</span>
-                                <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300" id="nationalityArrow"></i>
+                            <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors" onclick="toggleCountryDropdown('nationality', event)">
+                                <span id="nationalityDisplay" class="text-slate-400 font-bold uppercase truncate">Select Origin</span>
+                                <i class="fa-solid fa-chevron-down text-slate-500 transition-transform duration-300" id="nationalityArrow"></i>
                             </button>
-                            <div id="nationalityList" data-lenis-prevent class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-[60] custom-scrollbar transform origin-top transition-all duration-300">
+                            <div id="nationalityList" data-lenis-prevent class="hidden absolute top-full left-0 w-full mt-2 bg-[#0F172A] border border-white/10 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-[60] custom-scrollbar transform origin-top transition-all duration-300">
                                 <!-- Populated by JS -->
                             </div>
                         </div>
 
                         <!-- Contact -->
                         <div>
-                            <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Mobile Contact</label>
+                            <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Mobile Contact</label>
                             <div class="relative group">
                                 <input type="tel" id="mobile" required class="form-input w-full rounded-xl px-4 md:px-5 pl-10 md:pl-12 font-mono font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('mobile')">
-                                <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-primary transition-colors text-sm"></i>
+                                <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-brand-gold transition-colors text-sm"></i>
                                 <div id="mobileFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                             </div>
-                            <p id="mobileHint" class="text-[10px] md:text-xs text-brand-primary mt-1 md:mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
+                            <p id="mobileHint" class="text-[10px] md:text-xs text-brand-gold mt-1 md:mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
                             <p id="mobileError" class="text-brand-accent text-[10px] md:text-[11px] hidden mt-1 font-bold">Invalid Format.</p>
                         </div>
                         <div>
                             <div class="flex justify-between items-center mb-1.5 md:mb-3">
-                                <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">WhatsApp</label>
+                                <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">WhatsApp</label>
                                 <div class="flex items-center gap-2">
-                                    <input type="checkbox" id="sameAsMobile" class="w-3 h-3 md:w-4 md:h-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary cursor-pointer">
-                                    <label for="sameAsMobile" class="text-[9px] md:text-[10px] text-slate-500 cursor-pointer select-none font-bold uppercase tracking-wider">Same as Mobile</label>
+                                    <input type="checkbox" id="sameAsMobile" class="w-3 h-3 md:w-4 md:h-4 rounded border-gray-600 text-brand-gold focus:ring-brand-gold cursor-pointer bg-white/10">
+                                    <label for="sameAsMobile" class="text-[9px] md:text-[10px] text-slate-400 cursor-pointer select-none font-bold uppercase tracking-wider">Same as Mobile</label>
                                 </div>
                             </div>
                             <div class="relative group">
@@ -472,101 +469,84 @@
                                 <i class="fa-brands fa-whatsapp absolute left-4 top-1/2 -translate-y-1/2 text-green-500 opacity-60 group-focus-within:opacity-100 transition-opacity text-sm"></i>
                                 <div id="waFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                             </div>
-                            <p id="waHint" class="text-[10px] md:text-xs text-brand-secondary mt-1 md:mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
+                            <p id="waHint" class="text-[10px] md:text-xs text-slate-500 mt-1 md:mt-2 pl-1 font-mono font-medium opacity-0 transition-opacity">Format: </p>
                         </div>
 
                         <!-- Alternative Phone -->
                         <div class="md:col-span-2">
-                             <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Alternative Phone (Optional)</label>
+                             <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Alternative Phone (Optional)</label>
                              <div class="relative group">
                                 <input type="tel" id="altPhone" class="form-input w-full rounded-xl px-4 md:px-5 pl-10 md:pl-12 font-mono font-semibold" placeholder="+..." oninput="enforcePhoneInput(this); validatePhone('altPhone')">
-                                <i class="fa-solid fa-phone-volume absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-gold transition-colors text-sm"></i>
+                                <i class="fa-solid fa-phone-volume absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-brand-gold transition-colors text-sm"></i>
                                 <div id="altPhoneFeedback" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold"></div>
                             </div>
                         </div>
 
                         <!-- Qualifications -->
                         <div class="md:col-span-2">
-                            <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 md:mb-4 ml-1">Highest Academic Qualification</label>
+                            <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 md:mb-4 ml-1">Highest Academic Qualification</label>
                             <div class="grid grid-cols-3 md:grid-cols-6 gap-3">
-                                <!-- Option 1: Under 10th -->
+                                <!-- Helper to create qualification options -->
                                 <label class="cursor-pointer relative group">
                                     <input type="radio" name="qualification" value="UNDER 10 TH" class="peer sr-only" required>
-                                    <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-transparent peer-checked:bg-gradient-to-br peer-checked:from-brand-primary peer-checked:to-brand-secondary peer-checked:text-white peer-checked:shadow-xl peer-checked:shadow-brand-primary/40 peer-checked:scale-105 peer-checked:[&_i]:text-white peer-checked:[&_span]:text-white peer-checked:[&_.indicator-dot]:bg-white relative overflow-hidden">
-                                        <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                        <i class="fa-solid fa-school text-2xl text-slate-300 group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
-                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide relative z-10">Under 10th</span>
-                                        <div class="indicator-dot absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+                                    <div class="h-full rounded-2xl border border-white/10 bg-white/5 p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 peer-checked:text-brand-gold peer-checked:shadow-[0_0_15px_rgba(212,175,55,0.2)] peer-checked:scale-105 relative overflow-hidden">
+                                        <i class="fa-solid fa-school text-2xl text-slate-500 group-hover:text-brand-gold transition-colors peer-checked:text-brand-gold relative z-10"></i>
+                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-gold relative z-10">Under 10th</span>
                                     </div>
                                 </label>
-                                <!-- Option 2: School -->
                                 <label class="cursor-pointer relative group">
                                     <input type="radio" name="qualification" value="SCHOOL" class="peer sr-only">
-                                    <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-transparent peer-checked:bg-gradient-to-br peer-checked:from-brand-primary peer-checked:to-brand-secondary peer-checked:text-white peer-checked:shadow-xl peer-checked:shadow-brand-primary/40 peer-checked:scale-105 peer-checked:[&_i]:text-white peer-checked:[&_span]:text-white peer-checked:[&_.indicator-dot]:bg-white relative overflow-hidden">
-                                        <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                        <i class="fa-solid fa-book-open text-2xl text-slate-300 group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
-                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide relative z-10">School</span>
-                                        <div class="indicator-dot absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+                                    <div class="h-full rounded-2xl border border-white/10 bg-white/5 p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 peer-checked:text-brand-gold peer-checked:shadow-[0_0_15px_rgba(212,175,55,0.2)] peer-checked:scale-105 relative overflow-hidden">
+                                        <i class="fa-solid fa-book-open text-2xl text-slate-500 group-hover:text-brand-gold transition-colors peer-checked:text-brand-gold relative z-10"></i>
+                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-gold relative z-10">School</span>
                                     </div>
                                 </label>
-                                <!-- Option 3: Plus Two -->
                                 <label class="cursor-pointer relative group">
                                     <input type="radio" name="qualification" value="PLUS TWO" class="peer sr-only">
-                                    <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-transparent peer-checked:bg-gradient-to-br peer-checked:from-brand-primary peer-checked:to-brand-secondary peer-checked:text-white peer-checked:shadow-xl peer-checked:shadow-brand-primary/40 peer-checked:scale-105 peer-checked:[&_i]:text-white peer-checked:[&_span]:text-white peer-checked:[&_.indicator-dot]:bg-white relative overflow-hidden">
-                                        <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                        <i class="fa-solid fa-graduation-cap text-2xl text-slate-300 group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
-                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide relative z-10">Plus Two</span>
-                                        <div class="indicator-dot absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+                                    <div class="h-full rounded-2xl border border-white/10 bg-white/5 p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 peer-checked:text-brand-gold peer-checked:shadow-[0_0_15px_rgba(212,175,55,0.2)] peer-checked:scale-105 relative overflow-hidden">
+                                        <i class="fa-solid fa-graduation-cap text-2xl text-slate-500 group-hover:text-brand-gold transition-colors peer-checked:text-brand-gold relative z-10"></i>
+                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-gold relative z-10">Plus Two</span>
                                     </div>
                                 </label>
-                                <!-- Option 4: Diploma -->
                                 <label class="cursor-pointer relative group">
                                     <input type="radio" name="qualification" value="DIPLOMA" class="peer sr-only">
-                                    <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-transparent peer-checked:bg-gradient-to-br peer-checked:from-brand-primary peer-checked:to-brand-secondary peer-checked:text-white peer-checked:shadow-xl peer-checked:shadow-brand-primary/40 peer-checked:scale-105 peer-checked:[&_i]:text-white peer-checked:[&_span]:text-white peer-checked:[&_.indicator-dot]:bg-white relative overflow-hidden">
-                                        <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                        <i class="fa-solid fa-scroll text-2xl text-slate-300 group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
-                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide relative z-10">Diploma</span>
-                                        <div class="indicator-dot absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+                                    <div class="h-full rounded-2xl border border-white/10 bg-white/5 p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 peer-checked:text-brand-gold peer-checked:shadow-[0_0_15px_rgba(212,175,55,0.2)] peer-checked:scale-105 relative overflow-hidden">
+                                        <i class="fa-solid fa-scroll text-2xl text-slate-500 group-hover:text-brand-gold transition-colors peer-checked:text-brand-gold relative z-10"></i>
+                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-gold relative z-10">Diploma</span>
                                     </div>
                                 </label>
-                                <!-- Option 5: Bachelor -->
                                 <label class="cursor-pointer relative group">
                                     <input type="radio" name="qualification" value="BACHELOR" class="peer sr-only">
-                                    <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-transparent peer-checked:bg-gradient-to-br peer-checked:from-brand-primary peer-checked:to-brand-secondary peer-checked:text-white peer-checked:shadow-xl peer-checked:shadow-brand-primary/40 peer-checked:scale-105 peer-checked:[&_i]:text-white peer-checked:[&_span]:text-white peer-checked:[&_.indicator-dot]:bg-white relative overflow-hidden">
-                                        <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                        <i class="fa-solid fa-user-graduate text-2xl text-slate-300 group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
-                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide relative z-10">Bachelor</span>
-                                        <div class="indicator-dot absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+                                    <div class="h-full rounded-2xl border border-white/10 bg-white/5 p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 peer-checked:text-brand-gold peer-checked:shadow-[0_0_15px_rgba(212,175,55,0.2)] peer-checked:scale-105 relative overflow-hidden">
+                                        <i class="fa-solid fa-user-graduate text-2xl text-slate-500 group-hover:text-brand-gold transition-colors peer-checked:text-brand-gold relative z-10"></i>
+                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-gold relative z-10">Bachelor</span>
                                     </div>
                                 </label>
-                                <!-- Option 6: Master -->
                                 <label class="cursor-pointer relative group">
                                     <input type="radio" name="qualification" value="MASTER" class="peer sr-only">
-                                    <div class="h-full rounded-2xl border-2 border-slate-200 bg-white p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg peer-checked:border-transparent peer-checked:bg-gradient-to-br peer-checked:from-brand-primary peer-checked:to-brand-secondary peer-checked:text-white peer-checked:shadow-xl peer-checked:shadow-brand-primary/40 peer-checked:scale-105 peer-checked:[&_i]:text-white peer-checked:[&_span]:text-white peer-checked:[&_.indicator-dot]:bg-white relative overflow-hidden">
-                                        <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                        <i class="fa-solid fa-medal text-2xl text-slate-300 group-hover:text-brand-primary/70 transition-colors relative z-10"></i>
-                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide relative z-10">Master</span>
-                                        <div class="indicator-dot absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+                                    <div class="h-full rounded-2xl border border-white/10 bg-white/5 p-3 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 peer-checked:text-brand-gold peer-checked:shadow-[0_0_15px_rgba(212,175,55,0.2)] peer-checked:scale-105 relative overflow-hidden">
+                                        <i class="fa-solid fa-medal text-2xl text-slate-500 group-hover:text-brand-gold transition-colors peer-checked:text-brand-gold relative z-10"></i>
+                                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-wide peer-checked:text-brand-gold relative z-10">Master</span>
                                     </div>
                                 </label>
                             </div>
                         </div>
                         
                         <!-- Passport Group -->
-                        <div class="md:col-span-2 p-4 md:p-6 rounded-2xl border border-slate-200 bg-gradient-to-br from-blue-50/30 to-white/50">
+                        <div class="md:col-span-2 p-4 md:p-6 rounded-2xl border border-white/10 bg-white/5">
                             <div class="flex items-center gap-2 mb-4">
-                                <i class="fa-solid fa-passport text-brand-secondary text-lg"></i>
-                                <span class="text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest">Travel Document Details</span>
-                                <div class="h-px bg-slate-200 flex-grow ml-2"></div>
+                                <i class="fa-solid fa-passport text-brand-gold text-lg"></i>
+                                <span class="text-[10px] md:text-xs font-bold text-brand-gold uppercase tracking-widest">Travel Document Details</span>
+                                <div class="h-px bg-white/10 flex-grow ml-2"></div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Passport No. (Optional)</label>
-                                    <input type="text" id="passportNo" class="form-input uppercase-input w-full rounded-xl px-4 md:px-5 font-mono font-medium bg-white/60 focus:bg-white" placeholder="X1234567" oninput="this.value = this.value.toUpperCase()">
+                                    <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Passport No. (Optional)</label>
+                                    <input type="text" id="passportNo" class="form-input uppercase-input w-full rounded-xl px-4 md:px-5 font-mono font-medium" placeholder="X1234567" oninput="this.value = this.value.toUpperCase()">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Passport Expiry</label>
-                                    <div class="date-input-container rounded-xl h-12 md:h-14 bg-white/60 focus-within:bg-white">
+                                    <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Passport Expiry</label>
+                                    <div class="date-input-container rounded-xl h-12 md:h-14">
                                         <div class="date-icon-box"><i class="fa-solid fa-hourglass-half text-sm"></i></div>
                                         <input type="text" id="passportExp" placeholder="Select Date" class="font-medium">
                                     </div>
@@ -575,50 +555,50 @@
                         </div>
                     </div>
 
-                    <!-- SECTION 2: JOB DETAILS (Moved from Tab 2) -->
-                    <div class="pt-6 border-t border-gray-100">
+                    <!-- SECTION 2: JOB DETAILS -->
+                    <div class="pt-6 border-t border-white/10">
                         <div class="mb-4">
-                            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 uppercase tracking-wide"><i class="fa-solid fa-briefcase text-brand-primary"></i> Professional Profile</h3>
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2 uppercase tracking-wide"><i class="fa-solid fa-briefcase text-brand-gold"></i> Professional Profile</h3>
                         </div>
 
                         <!-- CATEGORY SELECTOR -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-6">
                             <div id="cardUnskilled" onclick="setSkillMode('Unskilled')" class="category-card rounded-2xl md:rounded-3xl p-4 md:p-8 flex items-center gap-4 md:gap-6 cursor-pointer relative overflow-hidden">
-                                <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-slate-100 text-brand-primary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-hands-holding-circle"></i></div>
-                                <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Essential & Operational</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Industrial, Logistics, Agritech</p></div>
-                                <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkUnskilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-primary hidden shadow-lg"></div></div></div>
+                                <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white/10 text-brand-gold flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-hands-holding-circle"></i></div>
+                                <div class="z-10"><h3 class="text-base md:text-xl font-bold text-white mb-1">Essential & Operational</h3><p class="text-[10px] md:text-xs text-slate-400 tracking-wide font-medium">Industrial, Logistics, Agritech</p></div>
+                                <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-slate-600 flex items-center justify-center transition-all" id="checkUnskilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-gold hidden shadow-[0_0_10px_#D4AF37]"></div></div></div>
                             </div>
                             <div id="cardSkilled" onclick="setSkillMode('Skilled')" class="category-card rounded-2xl md:rounded-3xl p-4 md:p-8 flex items-center gap-4 md:gap-6 cursor-pointer relative overflow-hidden">
-                                <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-slate-100 text-brand-secondary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-user-tie"></i></div>
-                                <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Specialized & Technical</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Engineering, Healthcare, Skilled Trades</p></div>
-                                <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkSkilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-secondary hidden shadow-lg"></div></div></div>
+                                <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white/10 text-brand-secondary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-user-tie"></i></div>
+                                <div class="z-10"><h3 class="text-base md:text-xl font-bold text-white mb-1">Specialized & Technical</h3><p class="text-[10px] md:text-xs text-slate-400 tracking-wide font-medium">Engineering, Healthcare, Skilled Trades</p></div>
+                                <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-slate-600 flex items-center justify-center transition-all" id="checkSkilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-secondary hidden shadow-[0_0_10px_#3F51B5]"></div></div></div>
                             </div>
                         </div>
 
                         <!-- JOB DETAILS PANEL -->
-                        <div id="jobDetailsPanel" class="bg-white/50 p-4 rounded-2xl border border-gray-100">
+                        <div id="jobDetailsPanel" class="bg-white/5 p-4 rounded-2xl border border-white/10">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
                                 <div class="relative group" id="customJobSelect">
-                                    <label class="block text-[10px] md:text-xs font-bold text-brand-primary uppercase tracking-widest mb-1.5 ml-1">Target Position</label>
-                                    <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 py-2 flex justify-between items-center cursor-pointer bg-white" onclick="toggleJobDropdown(event)">
-                                        <span id="selectedJobText" class="text-slate-500 font-medium text-sm">Select Job Role</span>
-                                        <i class="fa-solid fa-chevron-down transition-transform duration-300 text-brand-primary" id="jobDropdownIcon"></i>
+                                    <label class="block text-[10px] md:text-xs font-bold text-brand-gold uppercase tracking-widest mb-1.5 ml-1">Target Position</label>
+                                    <button type="button" class="form-input w-full text-left rounded-xl px-4 md:px-5 py-2 flex justify-between items-center cursor-pointer hover:bg-white/10" onclick="toggleJobDropdown(event)">
+                                        <span id="selectedJobText" class="text-slate-400 font-medium text-sm">Select Job Role</span>
+                                        <i class="fa-solid fa-chevron-down transition-transform duration-300 text-brand-gold" id="jobDropdownIcon"></i>
                                     </button>
                                     <input type="hidden" id="currentJob">
-                                    <div id="jobDropdownList" data-lenis-prevent class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-[60] custom-scrollbar transform origin-top transition-all duration-300">
+                                    <div id="jobDropdownList" data-lenis-prevent class="hidden absolute top-full left-0 w-full mt-2 bg-[#0F172A] border border-white/10 rounded-2xl shadow-xl max-h-60 overflow-y-auto z-[60] custom-scrollbar transform origin-top transition-all duration-300">
                                         <!-- JS Injected -->
                                     </div>
                                 </div>
 
                                 <!-- Professional Experience -->
                                 <div id="experienceWrapper" class="hidden animate-pop-in">
-                                    <label class="block text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest mb-1.5 ml-1">Professional Experience</label>
+                                    <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Professional Experience</label>
                                     <div class="relative">
-                                        <select id="experience" class="form-input w-full rounded-xl px-4 md:px-5 py-2 font-bold text-lg appearance-none cursor-pointer bg-white transition-colors text-slate-700 shadow-sm">
+                                        <select id="experience" class="form-input w-full rounded-xl px-4 md:px-5 py-2 font-bold text-lg appearance-none cursor-pointer hover:bg-white/10 transition-colors text-white shadow-sm bg-[#0F172A]">
                                             <!-- Options 1-30 populated via JS -->
                                         </select>
                                         <div class="absolute right-5 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
-                                            <span class="text-[10px] md:text-xs text-brand-secondary font-black tracking-widest">YEARS</span>
+                                            <span class="text-[10px] md:text-xs text-brand-gold font-black tracking-widest">YEARS</span>
                                         </div>
                                     </div>
                                 </div>
@@ -627,35 +607,34 @@
                     </div>
 
                     <!-- CV UPLOAD -->
-                    <div class="mt-2 md:mt-4 bg-gradient-to-br from-white/60 to-blue-50/30 rounded-2xl border border-slate-200 p-4 md:p-6 shadow-sm relative overflow-hidden backdrop-blur-sm">
-                        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-brand-primary/10 rounded-full blur-2xl pointer-events-none"></div>
-                        <label class="block text-xs md:text-sm font-bold text-slate-700 mb-3 md:mb-4 flex items-center gap-2"><i class="fa-solid fa-file-circle-question text-brand-primary"></i> Accelerate Your Assessment: Attach Professional Portfolio</label>
+                    <div class="mt-2 md:mt-4 bg-white/5 rounded-2xl border border-white/10 p-4 md:p-6 shadow-sm relative overflow-hidden backdrop-blur-sm">
+                        <label class="block text-xs md:text-sm font-bold text-slate-300 mb-3 md:mb-4 flex items-center gap-2"><i class="fa-solid fa-file-circle-question text-brand-gold"></i> Accelerate Your Assessment: Attach Professional Portfolio</label>
                         <div class="flex gap-4 md:gap-6 mb-4 relative z-10">
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="hasCv" value="yes" class="peer sr-only" onchange="toggleCvUpload(true)" checked>
-                                <div class="px-4 py-1.5 md:px-6 md:py-2 rounded-full border border-gray-200 bg-white/80 text-slate-500 text-xs md:text-sm font-bold peer-checked:bg-brand-primary peer-checked:text-white peer-checked:border-brand-primary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-primary/40">Yes</div>
+                                <div class="px-4 py-1.5 md:px-6 md:py-2 rounded-full border border-white/20 bg-white/5 text-slate-400 text-xs md:text-sm font-bold peer-checked:bg-brand-gold peer-checked:text-brand-dark peer-checked:border-brand-gold peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-gold/40">Yes</div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="hasCv" value="no" class="peer sr-only" onchange="toggleCvUpload(false)">
-                                <div class="px-4 py-1.5 md:px-6 md:py-2 rounded-full border border-gray-200 bg-white/80 text-slate-500 text-xs md:text-sm font-bold peer-checked:bg-brand-secondary peer-checked:text-white peer-checked:border-brand-secondary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-secondary/40">No</div>
+                                <div class="px-4 py-1.5 md:px-6 md:py-2 rounded-full border border-white/20 bg-white/5 text-slate-400 text-xs md:text-sm font-bold peer-checked:bg-brand-secondary peer-checked:text-white peer-checked:border-brand-secondary peer-checked:shadow-lg transition-all shadow-sm group-hover:border-brand-secondary/40">No</div>
                             </label>
                         </div>
                         <div id="cvUploadContainer" class="animate-pop-in relative z-10">
-                            <div class="rounded-xl border-2 border-dashed border-slate-300 hover:border-brand-primary hover:bg-slate-50 p-4 md:p-8 text-center cursor-pointer relative group transition-all">
+                            <div class="rounded-xl border-2 border-dashed border-white/20 hover:border-brand-gold hover:bg-brand-gold/5 p-4 md:p-8 text-center cursor-pointer relative group transition-all">
                                 <input type="file" id="cvFile" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept=".pdf,.doc,.docx" onchange="handleFileSelect(this)">
                                 <div class="transition-transform duration-300 group-hover:-translate-y-1">
-                                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white text-brand-primary shadow-md flex items-center justify-center mx-auto mb-2 md:mb-3 text-lg md:text-xl group-hover:text-white group-hover:bg-brand-primary transition-colors">
+                                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 text-brand-gold shadow-md flex items-center justify-center mx-auto mb-2 md:mb-3 text-lg md:text-xl group-hover:text-brand-dark group-hover:bg-brand-gold transition-colors">
                                         <i class="fa-solid fa-cloud-arrow-up"></i>
                                     </div>
-                                    <p class="text-xs md:text-sm font-bold text-slate-700" id="fileNameDisplay">Upload Curriculum Vitae (PDF/DOC)</p>
-                                    <p class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">PDF, DOC, DOCX (Max 5MB)</p>
+                                    <p class="text-xs md:text-sm font-bold text-slate-300" id="fileNameDisplay">Upload Curriculum Vitae (PDF/DOC)</p>
+                                    <p class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">PDF, DOC, DOCX (Max 5MB)</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-4 md:mt-8 flex justify-end">
-                        <button type="button" onclick="proceedToBooking()" id="nextBtn" class="w-full md:w-auto btn-gradient text-white font-bold py-3 md:py-4 px-12 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3">
+                        <button type="button" onclick="proceedToBooking()" id="nextBtn" class="w-full md:w-auto btn-gradient text-brand-dark font-bold py-3 md:py-4 px-12 rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-3">
                             <span class="tracking-wider text-xs md:text-base">CONFIRM & BOOK</span>
                             <i class="fa-solid fa-arrow-right-long"></i>
                         </button>
@@ -663,116 +642,113 @@
                 </form>
             </div>
 
-            <!-- TAB 3: BOOKING (Consolidated Tab) -->
+            <!-- TAB 3: BOOKING -->
             <div id="tab-3" class="hidden animate-slide-up-fade max-w-7xl mx-auto">
                 <div class="glass-card p-5 md:p-10">
-                    <div class="mb-6 md:mb-8 text-center border-b border-gray-200 pb-6">
-                        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-2 tracking-tight">Finalize Appointment</h2>
-                        <p class="text-slate-500 text-xs md:text-sm tracking-wide font-medium">Select your destination, advisor, and preferred slot to lock in your strategy session.</p>
+                    <div class="noise-overlay"></div>
+                    <div class="mb-6 md:mb-8 text-center border-b border-white/10 pb-6 relative z-10">
+                        <h2 class="text-2xl md:text-3xl font-black text-white mb-2 tracking-tight">Finalize Appointment</h2>
+                        <p class="text-slate-400 text-xs md:text-sm tracking-wide font-medium">Select your destination, advisor, and preferred slot to lock in your strategy session.</p>
                     </div>
 
                     <!-- NEW: COUNTRY SELECTION -->
-                    <div class="mb-8">
+                    <div class="mb-8 relative z-10">
                         <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center justify-center md:justify-start">
-                            <span class="w-5 h-5 rounded-full bg-brand-gold text-white inline-flex items-center justify-center mr-2">1</span> Select Destination
+                            <span class="w-5 h-5 rounded-full bg-brand-gold text-brand-dark inline-flex items-center justify-center mr-2">1</span> Select Destination
                         </h3>
                         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                            <!-- Helper Function for Button Generation -->
                             <button class="country-btn group relative overflow-hidden rounded-xl p-3 flex items-center justify-center gap-2" onclick="selectDestination('SWEDEN', this)">
                                 <span class="text-xl md:hidden">🇸🇪</span>
-                                <span class="text-xs md:text-sm font-bold text-slate-700 group-hover:text-brand-primary transition-colors">SWEDEN</span>
+                                <span class="text-xs md:text-sm font-bold text-slate-300 group-hover:text-brand-gold transition-colors">SWEDEN</span>
                             </button>
                             <button class="country-btn group relative overflow-hidden rounded-xl p-3 flex items-center justify-center gap-2" onclick="selectDestination('FINLAND', this)">
                                 <span class="text-xl md:hidden">🇫🇮</span>
-                                <span class="text-xs md:text-sm font-bold text-slate-700 group-hover:text-brand-primary transition-colors">FINLAND</span>
+                                <span class="text-xs md:text-sm font-bold text-slate-300 group-hover:text-brand-gold transition-colors">FINLAND</span>
                             </button>
                             <button class="country-btn group relative overflow-hidden rounded-xl p-3 flex items-center justify-center gap-2" onclick="selectDestination('GERMANY', this)">
                                 <span class="text-xl md:hidden">🇩🇪</span>
-                                <span class="text-xs md:text-sm font-bold text-slate-700 group-hover:text-brand-primary transition-colors">GERMANY</span>
+                                <span class="text-xs md:text-sm font-bold text-slate-300 group-hover:text-brand-gold transition-colors">GERMANY</span>
                             </button>
                             <button class="country-btn group relative overflow-hidden rounded-xl p-3 flex items-center justify-center gap-2" onclick="selectDestination('NETHERLANDS', this)">
                                 <span class="text-xl md:hidden">🇳🇱</span>
-                                <span class="text-xs md:text-sm font-bold text-slate-700 group-hover:text-brand-primary transition-colors">NETHERLANDS</span>
+                                <span class="text-xs md:text-sm font-bold text-slate-300 group-hover:text-brand-gold transition-colors">NETHERLANDS</span>
                             </button>
                             <button class="country-btn group relative overflow-hidden rounded-xl p-3 flex items-center justify-center gap-2" onclick="selectDestination('FRANCE', this)">
                                 <span class="text-xl md:hidden">🇫🇷</span>
-                                <span class="text-xs md:text-sm font-bold text-slate-700 group-hover:text-brand-primary transition-colors">FRANCE</span>
+                                <span class="text-xs md:text-sm font-bold text-slate-300 group-hover:text-brand-gold transition-colors">FRANCE</span>
                             </button>
                             <button class="country-btn group relative overflow-hidden rounded-xl p-3 flex items-center justify-center gap-2" onclick="selectDestination('ITALY', this)">
                                 <span class="text-xl md:hidden">🇮🇹</span>
-                                <span class="text-xs md:text-sm font-bold text-slate-700 group-hover:text-brand-primary transition-colors">ITALY</span>
+                                <span class="text-xs md:text-sm font-bold text-slate-300 group-hover:text-brand-gold transition-colors">ITALY</span>
                             </button>
                             <button class="country-btn group relative overflow-hidden rounded-xl p-3 flex items-center justify-center gap-2" onclick="selectDestination('POLAND', this)">
                                 <span class="text-xl md:hidden">🇵🇱</span>
-                                <span class="text-xs md:text-sm font-bold text-slate-700 group-hover:text-brand-primary transition-colors">POLAND</span>
+                                <span class="text-xs md:text-sm font-bold text-slate-300 group-hover:text-brand-gold transition-colors">POLAND</span>
                             </button>
                             <button class="country-btn group relative overflow-hidden rounded-xl p-3 flex items-center justify-center gap-2" onclick="selectDestination('CZECH REPUBLIC', this)">
                                 <span class="text-xl md:hidden">🇨🇿</span>
-                                <span class="text-xs md:text-sm font-bold text-slate-700 group-hover:text-brand-primary transition-colors">CZECH REP.</span>
+                                <span class="text-xs md:text-sm font-bold text-slate-300 group-hover:text-brand-gold transition-colors">CZECH REP.</span>
                             </button>
                             <button class="country-btn group relative overflow-hidden rounded-xl p-3 flex items-center justify-center gap-2" onclick="selectDestination('SERBIA', this)">
                                 <span class="text-xl md:hidden">🇷🇸</span>
-                                <span class="text-xs md:text-sm font-bold text-slate-700 group-hover:text-brand-primary transition-colors">SERBIA</span>
+                                <span class="text-xs md:text-sm font-bold text-slate-300 group-hover:text-brand-gold transition-colors">SERBIA</span>
                             </button>
                             <button class="country-btn group relative overflow-hidden rounded-xl p-3 flex items-center justify-center gap-2" onclick="selectDestination('ALBANIA', this)">
                                 <span class="text-xl md:hidden">🇦🇱</span>
-                                <span class="text-xs md:text-sm font-bold text-slate-700 group-hover:text-brand-primary transition-colors">ALBANIA</span>
+                                <span class="text-xs md:text-sm font-bold text-slate-300 group-hover:text-brand-gold transition-colors">ALBANIA</span>
                             </button>
                             <button class="country-btn group relative overflow-hidden rounded-xl p-3 flex items-center justify-center gap-2" onclick="selectDestination('MACEDONIA', this)">
                                 <span class="text-xl md:hidden">🇲🇰</span>
-                                <span class="text-xs md:text-sm font-bold text-slate-700 group-hover:text-brand-primary transition-colors">MACEDONIA</span>
+                                <span class="text-xs md:text-sm font-bold text-slate-300 group-hover:text-brand-gold transition-colors">MACEDONIA</span>
                             </button>
                         </div>
                         <input type="hidden" id="selectedDestination">
                     </div>
 
-                    <!-- 1. ADVISOR SELECTION (UPDATED for Single Big Profile) -->
-                    <div class="mb-8 md:mb-12">
+                    <!-- 1. ADVISOR SELECTION -->
+                    <div class="mb-8 md:mb-12 relative z-10">
                         <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center justify-center md:justify-start">
-                            <span class="w-5 h-5 rounded-full bg-brand-primary text-white inline-flex items-center justify-center mr-2">2</span> Select Immigration Advisor
+                            <span class="w-5 h-5 rounded-full bg-brand-gold text-brand-dark inline-flex items-center justify-center mr-2">2</span> Select Immigration Advisor
                         </h3>
                         
-                        <!-- Grid changed to center single item -->
                         <div class="flex justify-center" id="advisorGrid">
                             <!-- Professional Advisor injected via JS -->
                         </div>
                         <input type="hidden" id="selectedAdvisor">
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 relative z-10">
                         
-                        <!-- LEFT COLUMN: Consultation Method (Span 3) -->
+                        <!-- LEFT COLUMN: Consultation Method -->
                         <div class="lg:col-span-3 flex flex-col gap-6">
-                            
-                            <!-- 2. Consultation Mode -->
                             <div>
                                 <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-secondary text-white inline-flex items-center justify-center mr-2">3</span> Consultation Mode</h3>
-                                <div class="grid grid-cols-1 gap-3"> <!-- Vertical Stack for this narrow column -->
-                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex items-center gap-4 group hover:border-brand-primary hover:shadow-md transition-all cursor-pointer" onclick="selectMethod('In-Person', this)">
-                                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-slate-400 group-hover:text-brand-primary group-hover:scale-110 transition-all shrink-0">
+                                <div class="grid grid-cols-1 gap-3"> 
+                                    <div class="method-card p-4 rounded-2xl flex items-center gap-4 group hover:border-brand-gold hover:shadow-md transition-all cursor-pointer" onclick="selectMethod('In-Person', this)">
+                                        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-slate-400 group-hover:text-brand-gold group-hover:scale-110 transition-all shrink-0">
                                             <i class="fa-solid fa-building text-sm"></i>
                                         </div>
                                         <div class="text-left">
-                                            <span class="block text-xs font-bold text-slate-700">In-Office</span>
-                                            <span class="block text-[10px] text-slate-400 font-medium">Face to face</span>
+                                            <span class="block text-xs font-bold text-slate-300 group-hover:text-white">In-Office</span>
+                                            <span class="block text-[10px] text-slate-500 font-medium">Face to face</span>
                                         </div>
                                     </div>
-                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex items-center gap-4 group hover:border-brand-primary hover:shadow-md transition-all cursor-pointer" onclick="selectMethod('Phone Call', this)">
-                                        <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-slate-400 group-hover:text-green-600 group-hover:scale-110 transition-all shrink-0">
+                                    <div class="method-card p-4 rounded-2xl flex items-center gap-4 group hover:border-brand-gold hover:shadow-md transition-all cursor-pointer" onclick="selectMethod('Phone Call', this)">
+                                        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-slate-400 group-hover:text-green-400 group-hover:scale-110 transition-all shrink-0">
                                             <i class="fa-solid fa-phone text-sm"></i>
                                         </div>
                                         <div class="text-left">
-                                            <span class="block text-xs font-bold text-slate-700">Phone Call</span>
-                                            <span class="block text-[10px] text-slate-400 font-medium">Voice call</span>
+                                            <span class="block text-xs font-bold text-slate-300 group-hover:text-white">Phone Call</span>
+                                            <span class="block text-[10px] text-slate-500 font-medium">Voice call</span>
                                         </div>
                                     </div>
-                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex items-center gap-4 group hover:border-brand-primary hover:shadow-md transition-all cursor-pointer" onclick="selectMethod('Video Call', this)">
-                                        <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-slate-400 group-hover:text-purple-600 group-hover:scale-110 transition-all shrink-0">
+                                    <div class="method-card p-4 rounded-2xl flex items-center gap-4 group hover:border-brand-gold hover:shadow-md transition-all cursor-pointer" onclick="selectMethod('Video Call', this)">
+                                        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-slate-400 group-hover:text-purple-400 group-hover:scale-110 transition-all shrink-0">
                                             <i class="fa-solid fa-video text-sm"></i>
                                         </div>
                                         <div class="text-left">
-                                            <span class="block text-xs font-bold text-slate-700">Video Call</span>
-                                            <span class="block text-[10px] text-slate-400 font-medium">Zoom / GMeet</span>
+                                            <span class="block text-xs font-bold text-slate-300 group-hover:text-white">Video Call</span>
+                                            <span class="block text-[10px] text-slate-500 font-medium">Zoom / GMeet</span>
                                         </div>
                                     </div>
                                 </div>
@@ -780,30 +756,30 @@
                             </div>
                         </div>
 
-                        <!-- RIGHT COLUMN: Calendar & Time (Span 9) -->
+                        <!-- RIGHT COLUMN: Calendar & Time -->
                         <div class="lg:col-span-9">
-                            <div class="bg-white rounded-[2rem] border border-slate-200 p-6 md:p-8 shadow-sm h-full flex flex-col">
-                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-6"><span class="w-5 h-5 rounded-full bg-brand-gold text-white inline-flex items-center justify-center mr-2">4</span> Select Date & Time</h3>
+                            <div class="bg-white/5 rounded-[2rem] border border-white/10 p-6 md:p-8 shadow-sm h-full flex flex-col">
+                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-6"><span class="w-5 h-5 rounded-full bg-brand-gold text-brand-dark inline-flex items-center justify-center mr-2">4</span> Select Date & Time</h3>
                                 
                                 <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 flex-grow">
                                     <!-- Calendar Side -->
                                     <div class="lg:w-1/2 flex flex-col">
-                                        <div class="bg-slate-50 rounded-3xl p-4 border border-slate-100 flex-grow">
+                                        <div class="bg-white/5 rounded-3xl p-4 border border-white/10 flex-grow">
                                             <input type="text" id="bookingDate" class="hidden" placeholder="Select Date">
                                         </div>
-                                        <p class="text-center text-[10px] text-slate-400 font-bold mt-4"><i class="fa-solid fa-circle-info text-brand-primary mr-1"></i> Times displayed in your local timezone</p>
+                                        <p class="text-center text-[10px] text-slate-500 font-bold mt-4"><i class="fa-solid fa-circle-info text-brand-gold mr-1"></i> Times displayed in your local timezone</p>
                                     </div>
 
                                     <!-- Divider -->
-                                    <div class="hidden lg:block w-px bg-slate-100 my-2"></div>
+                                    <div class="hidden lg:block w-px bg-white/10 my-2"></div>
 
                                     <!-- Time Side -->
                                     <div class="lg:w-1/2 flex flex-col">
                                         <div class="flex justify-between items-center mb-4">
-                                            <span class="text-xs font-bold text-slate-700">Available Slots</span>
+                                            <span class="text-xs font-bold text-slate-300">Available Slots</span>
                                             <div class="flex gap-2">
-                                                <span class="w-2 h-2 rounded-full bg-white border border-slate-300"></span><span class="text-[9px] text-slate-400 font-bold mr-2">Free</span>
-                                                <span class="w-2 h-2 rounded-full bg-brand-primary"></span><span class="text-[9px] text-slate-400 font-bold">Selected</span>
+                                                <span class="w-2 h-2 rounded-full bg-white/10 border border-white/20"></span><span class="text-[9px] text-slate-500 font-bold mr-2">Free</span>
+                                                <span class="w-2 h-2 rounded-full bg-brand-gold"></span><span class="text-[9px] text-slate-500 font-bold">Selected</span>
                                             </div>
                                         </div>
                                         
@@ -818,15 +794,15 @@
                     </div>
                     
                     <!-- Confirmation -->
-                    <div class="mt-8 pt-6 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="mt-8 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-blue-50 text-brand-primary flex items-center justify-center"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div class="w-10 h-10 rounded-full bg-blue-500/10 text-brand-gold flex items-center justify-center"><i class="fa-solid fa-shield-halved"></i></div>
                             <div>
-                                <p class="text-xs font-bold text-slate-900">Secure Booking</p>
+                                <p class="text-xs font-bold text-white">Secure Booking</p>
                                 <p class="text-[10px] text-slate-500">Instant confirmation via Email/SMS</p>
                             </div>
                         </div>
-                        <button onclick="submitBooking()" class="w-full md:w-auto bg-slate-900 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-3">
+                        <button onclick="submitBooking()" class="w-full md:w-auto bg-brand-gold text-brand-dark font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-white hover:text-brand-dark transition-all flex items-center justify-center gap-3">
                             <span>CONFIRM APPOINTMENT</span>
                             <i class="fa-solid fa-check"></i>
                         </button>
@@ -839,45 +815,45 @@
     </main>
     
     <!-- 2. FOOTER -->
-    <footer class="mt-0 border-t border-white/20 relative z-10 backdrop-blur-[2px] hidden md:block">
-        <div class="border-t border-white/20 py-8 text-center text-xs text-slate-500 font-medium bg-white/10 backdrop-blur-sm">
+    <footer class="mt-0 border-t border-white/10 relative z-10 backdrop-blur-[2px] hidden md:block">
+        <div class="border-t border-white/10 py-8 text-center text-xs text-slate-500 font-medium bg-white/5 backdrop-blur-sm">
             <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p>&copy; 2025 Better Call Immigration. All rights reserved.</p>
                 <div class="flex gap-4">
-                    <a href="#" class="hover:text-blue-900 transition">Privacy</a>
-                    <a href="#" class="hover:text-blue-900 transition">Terms</a>
+                    <a href="#" class="hover:text-brand-gold transition">Privacy</a>
+                    <a href="#" class="hover:text-brand-gold transition">Terms</a>
                 </div>
             </div>
         </div>
     </footer>
 
     <!-- CREATIVE LOADING OVERLAY -->
-    <div id="loadingOverlay" class="fixed inset-0 z-[200] hidden flex flex-col items-center justify-center bg-white/90 backdrop-blur-xl transition-opacity duration-500 opacity-0">
+    <div id="loadingOverlay" class="fixed inset-0 z-[200] hidden flex flex-col items-center justify-center bg-[#0B1121]/95 backdrop-blur-xl transition-opacity duration-500 opacity-0">
         <div class="relative w-32 h-32 mb-8">
-            <div class="absolute inset-0 border-4 border-brand-primary/20 rounded-full animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+            <div class="absolute inset-0 border-4 border-brand-gold/20 rounded-full animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
             <div class="absolute inset-0 border-4 border-brand-secondary/20 rounded-full animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]" style="animation-delay: 1s"></div>
-            <div class="absolute inset-2 border-4 border-t-brand-primary border-r-transparent border-b-brand-secondary border-l-transparent rounded-full animate-spin"></div>
+            <div class="absolute inset-2 border-4 border-t-brand-gold border-r-transparent border-b-brand-secondary border-l-transparent rounded-full animate-spin"></div>
             <div class="absolute inset-0 flex items-center justify-center">
-                <i class="fa-solid fa-satellite-dish text-4xl text-brand-primary animate-pulse"></i>
+                <i class="fa-solid fa-satellite-dish text-4xl text-brand-gold animate-pulse"></i>
             </div>
         </div>
-        <h3 id="loaderTitle" class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-secondary tracking-widest uppercase mb-2 animate-pulse">
+        <h3 id="loaderTitle" class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-[#F9E69D] tracking-widest uppercase mb-2 animate-pulse">
             System Handshake
         </h3>
-        <p id="loaderSubtitle" class="text-emerald-600/80 text-[10px] font-mono border border-emerald-200 px-3 py-1 rounded-full bg-emerald-50 backdrop-blur-sm shadow-sm">
+        <p id="loaderSubtitle" class="text-brand-gold/80 text-[10px] font-mono border border-brand-gold/20 px-3 py-1 rounded-full bg-brand-gold/5 backdrop-blur-sm shadow-sm">
             INITIALIZING :: SECURE_UPLINK_ESTABLISHED
         </p>
     </div>
 
     <!-- Custom Modal for Errors -->
-    <div id="messageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/40 opacity-0 transition-opacity duration-300">
-        <div class="modal-content glass-card !bg-white/95 w-[90%] md:w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center">
+    <div id="messageModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/60 opacity-0 transition-opacity duration-300">
+        <div class="modal-content glass-card !bg-[#0F172A] w-[90%] md:w-full max-w-sm rounded-2xl p-6 transform scale-90 transition-transform duration-300 text-center border border-white/10">
             <div id="modalContent">
-                <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
+                <div class="w-12 h-12 rounded-full bg-brand-accent/20 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4 border border-brand-accent/30">
                     <i class="fa-solid fa-circle-exclamation"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-2">Attention Needed</h3>
-                <p id="modalText" class="text-slate-500 text-sm mb-6">Please check your inputs.</p>
+                <h3 class="text-xl font-bold text-white mb-2">Attention Needed</h3>
+                <p id="modalText" class="text-slate-400 text-sm mb-6">Please check your inputs.</p>
                 <button onclick="closeModal()" class="w-full bg-brand-accent hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
                     UNDERSTOOD
                 </button>
@@ -887,13 +863,13 @@
 
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-8 right-8 transform translate-y-32 opacity-0 transition-all duration-500 z-[100]">
-        <div class="glass-card border-l-4 border-brand-primary text-slate-800 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 bg-white">
-            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-brand-primary">
+        <div class="glass-card border-l-4 border-brand-gold text-slate-200 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 bg-[#0F172A] border-t border-r border-b border-white/10">
+            <div class="w-8 h-8 rounded-full bg-brand-gold/20 flex items-center justify-center text-brand-gold">
                 <i class="fa-solid fa-check"></i>
             </div>
             <div>
-                <h4 class="font-bold text-sm">Success</h4>
-                <span class="text-xs text-slate-500" id="toastMsg">Action Completed Successfully</span>
+                <h4 class="font-bold text-sm text-white">Success</h4>
+                <span class="text-xs text-slate-400" id="toastMsg">Action Completed Successfully</span>
             </div>
         </div>
     </div>
@@ -1335,7 +1311,7 @@
                 minDate: minDob,
                 maxDate: maxDob,
                 defaultDate: defaultDob,
-                theme: "airbnb",
+                // Removed explicit theme string to use custom CSS overrides
                 onChange: function(selectedDates) {
                     if(selectedDates.length > 0) {
                         const age = new Date(Date.now() - selectedDates[0].getTime()).getUTCFullYear() - 1970;
@@ -1368,8 +1344,7 @@
                 animate: true,
                 disable: [
                     function(date) { return (date.getDay() === 0); }
-                ],
-                theme: "airbnb"
+                ]
             });
             
             flatpickr("#passportExp", { 
@@ -1377,8 +1352,7 @@
                 disableMobile: false,
                 altInput: true,
                 altFormat: "F j, Y",
-                minDate: "today",
-                theme: "airbnb" 
+                minDate: "today"
             });
             
             handleResidenceChange();
@@ -1432,25 +1406,24 @@
                 div.className = "advisor-pro-card group selected"; // Auto-select since only one
                 div.onclick = () => selectAdvisor(adv.name, div);
                 
-                // Big image with object-cover
                 const imageContent = adv.image 
                     ? `<img src="${adv.image}" alt="${adv.name}">` 
                     : `<span class="text-4xl">${adv.flag}</span>`;
 
                 div.innerHTML = `
-                    <div class="absolute top-4 right-4 text-brand-primary">
-                        <i class="fa-solid fa-circle-check text-2xl bg-white rounded-full"></i>
+                    <div class="absolute top-4 right-4 text-brand-gold">
+                        <i class="fa-solid fa-circle-check text-2xl bg-brand-dark rounded-full"></i>
                     </div>
                     <div class="advisor-img group-hover:scale-105 transition-transform duration-500">
                         ${imageContent}
                     </div>
                     <div class="w-full mt-2">
-                        <h4 class="text-xl md:text-2xl font-black text-slate-800 mb-2 leading-tight">${adv.name}</h4>
-                        <div class="inline-block bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full mb-3">
-                            <p class="text-[10px] font-bold text-brand-primary uppercase tracking-wider">Senior Immigration Consultant</p>
+                        <h4 class="text-xl md:text-2xl font-black text-white mb-2 leading-tight">${adv.name}</h4>
+                        <div class="inline-block bg-brand-gold/10 border border-brand-gold/20 px-3 py-1 rounded-full mb-3">
+                            <p class="text-[10px] font-bold text-brand-gold uppercase tracking-wider">Senior Immigration Consultant</p>
                         </div>
                         <div class="flex flex-wrap justify-center gap-2 mt-2">
-                            ${adv.lang.split(',').map(l => `<span class="inline-block text-[10px] font-bold text-slate-500 bg-white/50 border border-slate-200 px-2 py-1 rounded-md shadow-sm">${l.trim()}</span>`).join('')}
+                            ${adv.lang.split(',').map(l => `<span class="inline-block text-[10px] font-bold text-slate-400 bg-white/5 border border-white/10 px-2 py-1 rounded-md shadow-sm">${l.trim()}</span>`).join('')}
                         </div>
                     </div>
                 `;
@@ -1465,7 +1438,6 @@
 
         function selectAdvisor(name, el) {
             document.getElementById('selectedAdvisor').value = name;
-            // No visual toggle needed as there is only one
         }
         
         // NEW: Destination Selection
@@ -1494,7 +1466,7 @@
                 for (let m = 0; m < 60; m += 15) {
                     const timeStr = `${h > 12 ? h - 12 : h}:${m === 0 ? '00' : m} ${h >= 12 ? 'PM' : 'AM'}`;
                     const btn = document.createElement('button');
-                    btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-600 bg-white border border-slate-100";
+                    btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-400 bg-white/5 border border-white/10";
                     btn.innerText = timeStr;
                     btn.onclick = () => selectTime(timeStr, btn);
                     grid.appendChild(btn);
@@ -1502,7 +1474,7 @@
             }
             // Add the 7:00 PM slot which is the end hour (19:00)
             const btn = document.createElement('button');
-            btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-600 bg-white border border-slate-100";
+            btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-400 bg-white/5 border border-white/10";
             btn.innerText = "7:00 PM";
             btn.onclick = () => selectTime("7:00 PM", btn);
             grid.appendChild(btn);
@@ -1514,7 +1486,6 @@
             el.classList.add('selected');
         }
 
-        // Renamed from goToStep2 to better reflect action (proceedToBooking is used as wrapper)
         function goToBookingTab() {
             document.getElementById('tab-1').classList.add('hidden');
             document.getElementById('tab-3').classList.remove('hidden');
@@ -1523,11 +1494,11 @@
             // Update indicator to step 2 (Booking)
             const step2Indicator = document.getElementById('step-2-indicator');
             if(step2Indicator) {
-                step2Indicator.classList.remove('opacity-40', 'grayscale');
-                step2Indicator.querySelector('div').classList.remove('border-gray-200', 'text-gray-500', 'bg-white/40');
-                step2Indicator.querySelector('div').classList.add('border-brand-primary', 'text-brand-primary', 'bg-white/80', 'backdrop-blur', 'shadow-lg');
+                step2Indicator.classList.remove('opacity-40');
+                step2Indicator.querySelector('div').classList.remove('border-white/20', 'bg-white/5', 'text-gray-500');
+                step2Indicator.querySelector('div').classList.add('bg-brand-gold', 'text-brand-dark', 'backdrop-blur', 'shadow-[0_0_20px_rgba(212,175,55,0.4)]', 'border-brand-gold');
                 step2Indicator.querySelector('span').classList.remove('text-slate-500');
-                step2Indicator.querySelector('span').classList.add('text-brand-primary');
+                step2Indicator.querySelector('span').classList.add('text-brand-gold');
             }
         }
         
@@ -1547,12 +1518,12 @@
             if(file) {
                 if(file.size > 5 * 1024 * 1024) { showModal("File size exceeds 5MB limit."); input.value = ''; return; }
                 display.innerText = file.name;
-                display.classList.add('text-brand-primary');
+                display.classList.remove('text-slate-300');
+                display.classList.add('text-brand-gold');
             }
         }
 
         function populateCountryDropdowns() {
-            // Using existing countryRules for dropdown
             const sortedCountries = Object.keys(countryRules).sort();
             
             const buildList = (type) => {
@@ -1561,12 +1532,12 @@
                 list.innerHTML = '';
                 
                 const searchBox = document.createElement('div');
-                searchBox.className = "sticky top-0 bg-white/95 backdrop-blur-sm p-3 border-b border-gray-100 z-10";
+                searchBox.className = "sticky top-0 bg-[#0F172A] backdrop-blur-sm p-3 border-b border-white/10 z-10";
                 searchBox.innerHTML = `
                     <div class="relative group">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs group-focus-within:text-brand-primary transition-colors"></i>
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs group-focus-within:text-brand-gold transition-colors"></i>
                         <input type="text" placeholder="Search Country..." 
-                            class="w-full pl-9 pr-3 py-2.5 text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-primary focus:bg-white focus:ring-2 focus:ring-brand-primary/10 transition-all placeholder:text-slate-400 placeholder:font-semibold uppercase"
+                            class="w-full pl-9 pr-3 py-2.5 text-xs font-bold text-slate-300 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-brand-gold focus:bg-white/10 focus:ring-1 focus:ring-brand-gold/20 transition-all placeholder:text-slate-500 placeholder:font-semibold uppercase"
                             onkeyup="filterCountries(this, '${type}')" onclick="event.stopPropagation()">
                     </div>
                 `;
@@ -1578,14 +1549,14 @@
                 sortedCountries.forEach(c => {
                     if(c === 'OTHER') return;
                     const div = document.createElement('div');
-                    div.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold uppercase block";
+                    div.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-400 hover:bg-brand-gold hover:text-brand-dark cursor-pointer border-b border-white/5 last:border-0 transition-colors font-bold uppercase block";
                     div.innerText = c;
                     div.onclick = function() { selectCountry(c, type); };
                     itemsWrapper.appendChild(div);
                 });
                 
                 const otherDiv = document.createElement('div');
-                otherDiv.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold uppercase block";
+                otherDiv.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-400 hover:bg-brand-gold hover:text-brand-dark cursor-pointer border-b border-white/5 last:border-0 transition-colors font-bold uppercase block";
                 otherDiv.innerText = "OTHER";
                 otherDiv.onclick = function() { selectCountry("OTHER", type); };
                 itemsWrapper.appendChild(otherDiv);
@@ -1605,11 +1576,9 @@
             
             const otherList = document.getElementById(otherType + 'List');
             const otherArrow = document.getElementById(otherType + 'Arrow');
-            // Close the other dropdown
             if(otherList) otherList.classList.add('hidden');
             if(otherArrow) otherArrow.classList.remove('rotate-180');
             
-            // Toggle the current dropdown
             if(list) list.classList.toggle('hidden');
             if(arrow) arrow.classList.toggle('rotate-180');
             
@@ -1644,8 +1613,8 @@
             if (hiddenInput) hiddenInput.value = val;
             if (display) {
                 display.innerText = val;
-                display.classList.remove('text-slate-500');
-                display.classList.add('text-slate-900');
+                display.classList.remove('text-slate-400');
+                display.classList.add('text-white');
             }
             
             if (list) list.classList.add('hidden');
@@ -1667,7 +1636,6 @@
             
             ['mobile', 'whatsapp', 'altPhone'].forEach(id => {
                 const el = document.getElementById(id);
-                // Only reset if input is mostly empty or hasn't been properly formatted yet
                 if(el && el.value.length < 5) el.value = code;
             });
             
@@ -1689,8 +1657,8 @@
         function selectJob(jobRole) {
             document.getElementById('currentJob').value = jobRole;
             document.getElementById('selectedJobText').innerText = jobRole;
-            document.getElementById('selectedJobText').classList.remove('text-slate-500');
-            document.getElementById('selectedJobText').classList.add('text-slate-900');
+            document.getElementById('selectedJobText').classList.remove('text-slate-400');
+            document.getElementById('selectedJobText').classList.add('text-white');
             document.getElementById('jobDropdownList').classList.add('hidden');
             document.getElementById('jobDropdownIcon').classList.remove('rotate-180');
         }
@@ -1700,12 +1668,12 @@
             listContainer.innerHTML = '';
             
             const searchBox = document.createElement('div');
-            searchBox.className = "sticky top-0 bg-white/95 backdrop-blur-sm p-3 border-b border-gray-100 z-10";
+            searchBox.className = "sticky top-0 bg-[#0F172A] backdrop-blur-sm p-3 border-b border-white/10 z-10";
             searchBox.innerHTML = `
                 <div class="relative group">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs group-focus-within:text-brand-primary transition-colors"></i>
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs group-focus-within:text-brand-gold transition-colors"></i>
                     <input type="text" placeholder="Search roles..." 
-                        class="w-full pl-9 pr-3 py-2.5 text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-primary focus:bg-white focus:ring-2 focus:ring-brand-primary/10 transition-all placeholder:text-slate-400 placeholder:font-semibold"
+                        class="w-full pl-9 pr-3 py-2.5 text-xs font-bold text-slate-300 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-brand-gold focus:bg-white/10 focus:ring-1 focus:ring-brand-gold/20 transition-all placeholder:text-slate-500 placeholder:font-semibold"
                         onkeyup="filterJobs(this)" onclick="event.stopPropagation()">
                 </div>
             `;
@@ -1714,13 +1682,12 @@
             const itemsWrapper = document.createElement('div');
             itemsWrapper.id = "jobItemsList";
             
-            // Re-using logic assuming jobMasterList is fully present in original file
             const typeCode = mode === 'Unskilled' ? 'U' : 'S';
             const roles = jobMasterList.filter(j => j.type === typeCode).map(j => j.r).sort();
             
             roles.forEach(r => {
                 const div = document.createElement('div');
-                div.className = "job-option px-4 md:px-5 py-3 md:py-3.5 text-xs md:text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold";
+                div.className = "job-option px-4 md:px-5 py-3 md:py-3.5 text-xs md:text-sm text-slate-400 hover:bg-brand-gold hover:text-brand-dark cursor-pointer border-b border-white/5 last:border-0 transition-colors font-bold";
                 div.innerText = r;
                 div.onclick = function() { selectJob(r); };
                 itemsWrapper.appendChild(div);
@@ -1752,7 +1719,7 @@
                 if(!noRes) {
                     noRes = document.createElement('div');
                     noRes.id = "noJobResults";
-                    noRes.className = "p-6 text-center text-xs text-slate-400 font-bold italic flex flex-col items-center gap-2 animate-pop-in";
+                    noRes.className = "p-6 text-center text-xs text-slate-500 font-bold italic flex flex-col items-center gap-2 animate-pop-in";
                     noRes.innerHTML = `<i class="fa-solid fa-ghost text-lg opacity-50"></i><span>No matching roles found</span>`;
                     list.appendChild(noRes);
                 }
@@ -1771,16 +1738,16 @@
             // Reset styles
             uCard.classList.remove('active'); sCard.classList.remove('active');
             uCheck.querySelector('div').classList.add('hidden'); sCheck.querySelector('div').classList.add('hidden');
-            uCheck.className = sCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all";
+            uCheck.className = sCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-slate-600 flex items-center justify-center transition-all";
 
             if (mode === 'Unskilled') {
                 uCard.classList.add('active');
-                uCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-brand-primary flex items-center justify-center bg-slate-100 shadow-sm";
+                uCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-brand-gold flex items-center justify-center bg-brand-gold shadow-[0_0_10px_#D4AF37]";
                 uCheck.querySelector('div').classList.remove('hidden');
                 document.getElementById('experienceWrapper').classList.add('hidden');
             } else {
                 sCard.classList.add('active');
-                sCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-brand-secondary flex items-center justify-center bg-slate-100 shadow-sm";
+                sCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-brand-secondary flex items-center justify-center bg-brand-secondary shadow-[0_0_10px_#3F51B5]";
                 sCheck.querySelector('div').classList.remove('hidden');
                 document.getElementById('experienceWrapper').classList.remove('hidden');
             }
@@ -1887,11 +1854,11 @@
         function showModal(msg) {
             const m = document.getElementById('messageModal');
             document.getElementById('modalContent').innerHTML = `
-                <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
+                <div class="w-12 h-12 rounded-full bg-brand-accent/20 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4 border border-brand-accent/30">
                     <i class="fa-solid fa-circle-exclamation"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-2">Attention Needed</h3>
-                <p id="modalText" class="text-slate-500 text-sm mb-6">${msg}</p>
+                <h3 class="text-xl font-bold text-white mb-2">Attention Needed</h3>
+                <p id="modalText" class="text-slate-400 text-sm mb-6">${msg}</p>
                 <button onclick="closeModal()" class="w-full bg-brand-accent hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
                     UNDERSTOOD
                 </button>
@@ -1974,7 +1941,6 @@ END:VCALENDAR`;
 
                 customFieldsArray = customFieldsArray.filter(f => f.value !== null && f.value !== undefined && f.value !== "");
                 
-                // Attempt to map dropdown/label fields for ClickUp
                 try {
                     const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
                     
@@ -1984,12 +1950,10 @@ END:VCALENDAR`;
                             const fid = CLICKUP_FIELDS[key];
                             const def = fieldDefs.find(f => f.id === fid);
                             if(def && (def.type === 'drop_down' || def.type === 'labels') && val) {
-                                // Attempt match first, fallback to 'OTHER' if field exists
                                 const opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase()) 
                                          || def.type_config.options.find(o => o.name === "OTHER");
                                 if(opt) customFieldsArray.push({ id: fid, value: opt.id });
                             } else if (fid && val) {
-                                // If not a dropdown field or definition failed, push raw value
                                  if (!def || (def.type !== 'drop_down' && def.type !== 'labels')) {
                                     customFieldsArray.push({ id: fid, value: val });
                                  }
@@ -2000,7 +1964,6 @@ END:VCALENDAR`;
                         addDropdown("QUALIFICATION", document.querySelector('input[name="qualification"]:checked')?.value);
                         addDropdown("JOB ROLE", document.getElementById('currentJob').value);
                     } else {
-                         // Fallback: If cannot fetch field definitions, send raw values for custom fields
                          const qual = document.querySelector('input[name="qualification"]:checked')?.value;
                          const job = document.getElementById('currentJob').value;
                          if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
@@ -2014,7 +1977,6 @@ END:VCALENDAR`;
                      if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
                 }
 
-                // Construct Full Description for the task
                 const firstName = document.getElementById('firstName').value;
                 const lastName = document.getElementById('lastName').value;
                 const email = document.getElementById('email').value;
@@ -2060,12 +2022,11 @@ END:VCALENDAR`;
                 `.trim();
 
                 const payload = {
-                    name: firstName, // Updated: Only First Name, no Surname, no suffix
+                    name: firstName, 
                     description: fullDescription, 
                     custom_fields: customFieldsArray
                 };
 
-                // ClickUp API Call: Create Task
                 if(CLICKUP_API_KEY && CLICKUP_LIST_ID) {
                     const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
                         method: 'POST',
@@ -2077,7 +2038,6 @@ END:VCALENDAR`;
                         const data = await res.json();
                         globalTaskId = data.id; 
                         
-                        // Handle File Upload if present
                         const cvFile = document.getElementById('cvFile').files[0];
                         if (cvFile) {
                             const formData = new FormData();
@@ -2088,21 +2048,20 @@ END:VCALENDAR`;
                             });
                         }
                         if(showSuccess) showToast("Profile Created");
-                        return true; // SUCCESS
+                        return true; 
                     } else {
                         const err = await res.json();
                         console.error("ClickUp Error Response:", err);
                         showModal("Submission Error: Task Creation Failed. " + (err.err || "Please check inputs"));
-                        return false; // FAILED
+                        return false; 
                     }
                 }
-                return false; // No API Key
+                return false; 
             } catch(e) { 
                 console.error("Network Error:", e);
                 showModal("Network Error. Please check your internet connection and try again.");
-                return false; // FAILED
+                return false; 
             } finally {
-                // Delay hiding loader slightly for better UX
                 if (useLoader) {
                     setTimeout(() => {
                         const loader = document.getElementById('loadingOverlay');
@@ -2118,7 +2077,7 @@ END:VCALENDAR`;
             const method = document.getElementById('selectedMethod').value;
             const date = document.getElementById('bookingDate').value;
             const time = document.getElementById('selectedTime').value;
-            const destination = document.getElementById('selectedDestination').value; // Get destination
+            const destination = document.getElementById('selectedDestination').value; 
 
             // Strict Validation
             if(!destination) { showModal("Please select your Destination Country."); return; }
@@ -2147,48 +2106,46 @@ END:VCALENDAR`;
             const successHtml = `
                 <div class="text-center p-2">
                     <div class="relative w-20 h-20 mx-auto mb-4">
-                        <div class="absolute inset-0 bg-green-100 rounded-full animate-ping opacity-75"></div>
-                        <div class="relative w-full h-full bg-green-500 rounded-full flex items-center justify-center text-white text-3xl shadow-lg border-4 border-white">
+                        <div class="absolute inset-0 bg-green-500/20 rounded-full animate-ping opacity-75"></div>
+                        <div class="relative w-full h-full bg-brand-gold rounded-full flex items-center justify-center text-brand-dark text-3xl shadow-lg border-4 border-[#0F172A]">
                             <i class="fa-solid fa-check"></i>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-black text-slate-800 mb-1">You're All Set!</h3>
-                    <p class="text-slate-500 text-sm font-medium mb-6">Strategy session locked with <span class="text-brand-primary font-bold">${advisor}</span> for <span class="font-bold text-slate-900">${destination}</span></p>
+                    <h3 class="text-2xl font-black text-white mb-1">You're All Set!</h3>
+                    <p class="text-slate-400 text-sm font-medium mb-6">Strategy session locked with <span class="text-brand-gold font-bold">${advisor}</span> for <span class="font-bold text-white">${destination}</span></p>
                     
-                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-6 text-left">
+                    <div class="bg-white/5 rounded-xl p-4 border border-white/10 mb-6 text-left">
                         <div class="flex justify-between mb-2">
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Date</span>
-                            <span class="text-sm font-bold text-slate-800">${date}</span>
+                            <span class="text-xs text-slate-500 font-bold uppercase tracking-wider">Date</span>
+                            <span class="text-sm font-bold text-slate-200">${date}</span>
                         </div>
                         <div class="flex justify-between mb-2">
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Time</span>
-                            <span class="text-sm font-bold text-slate-800">${time}</span>
+                            <span class="text-xs text-slate-500 font-bold uppercase tracking-wider">Time</span>
+                            <span class="text-sm font-bold text-slate-200">${time}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Method</span>
-                            <span class="text-sm font-bold text-brand-primary uppercase">${method}</span>
+                            <span class="text-xs text-slate-500 font-bold uppercase tracking-wider">Method</span>
+                            <span class="text-sm font-bold text-brand-gold uppercase">${method}</span>
                         </div>
                     </div>
 
                     <div class="flex flex-col gap-3">
-                        <a href="${icsUrl}" download="appointment.ics" class="w-full bg-brand-primary hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                        <a href="${icsUrl}" download="appointment.ics" class="w-full bg-brand-gold hover:bg-white text-brand-dark font-bold py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
                             <i class="fa-regular fa-calendar-plus"></i> Add to Calendar
                         </a>
-                        <a href="https://www.bettercall.online" class="w-full bg-white text-slate-600 border border-slate-200 font-bold py-3 rounded-xl transition-all hover:bg-slate-50">
+                        <a href="https://www.bettercall.online" class="w-full bg-white/5 text-slate-400 border border-white/10 font-bold py-3 rounded-xl transition-all hover:bg-white/10 hover:text-white">
                             Return to Home
                         </a>
                     </div>
                 </div>
             `;
 
-            // Prepare Update Payload
             let updateFields = [
                 { id: CLICKUP_FIELDS["BOOKING_DATE"], value: getUnixTime(date) },
                 { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time } 
             ];
 
             try {
-                // Try to fetch field definitions to map dropdown options
                 const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
                 
                 if (res.ok) {
@@ -2197,7 +2154,6 @@ END:VCALENDAR`;
                     const mapDropdown = (fid, val) => {
                         const def = fieldDefs.find(f => f.id === fid);
                         if(def && (def.type === 'drop_down' || def.type === 'labels')) {
-                            // Match the value to an option ID
                             let opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase());
                             if(!opt) opt = def.type_config.options.find(o => o.name.toLowerCase().includes(val.toLowerCase().split(' ')[0]));
                             
@@ -2209,20 +2165,17 @@ END:VCALENDAR`;
 
                     updateFields.push(mapDropdown(CLICKUP_FIELDS["ADVISOR"], advisor));
                     updateFields.push(mapDropdown(CLICKUP_FIELDS["BOOKING_TYPE"], method));
-                    updateFields.push(mapDropdown(CLICKUP_FIELDS["DESTINATION"], destination)); // Added Destination Update
+                    updateFields.push(mapDropdown(CLICKUP_FIELDS["DESTINATION"], destination)); 
                 } else {
-                    // Fallback to sending raw values if definitions fail
                     updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: advisor });
                     updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
-                    updateFields.push({ id: CLICKUP_FIELDS["DESTINATION"], value: destination }); // Added Destination Update
+                    updateFields.push({ id: CLICKUP_FIELDS["DESTINATION"], value: destination });
                 }
 
                 const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nDestination: ${destination}\nMethod: ${method}\nDate: ${date}\nTime: ${time}`;
 
-                // ClickUp API Call: Update Task Fields & Add Comment
                 if(CLICKUP_API_KEY) {
                     for (let f of updateFields) {
-                        // Note: ClickUp API requires separate calls for each custom field update
                         const updateRes = await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${f.id}`, {
                             method: 'POST',
                             headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
@@ -2230,7 +2183,6 @@ END:VCALENDAR`;
                         });
                         if (!updateRes.ok) console.error(`Failed update field ${f.id}`, await updateRes.json());
                     }
-                    // Add comment to track the booking details
                     await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/comment`, {
                         method: 'POST',
                         headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
@@ -2239,13 +2191,11 @@ END:VCALENDAR`;
 
                     toggleLoader(false);
 
-                    // Show success modal
                     const m = document.getElementById('messageModal');
                     document.getElementById('modalContent').innerHTML = successHtml;
                     m.classList.remove('hidden');
                     setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
                     
-                    // Disable button to prevent double submission
                     const submitButton = document.querySelector('button[onclick="submitBooking()"]');
                     if (submitButton) {
                         submitButton.disabled = true;
