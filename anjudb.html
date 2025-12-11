@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anju M Nair - Digital Business Card</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-gold': '#D4AF37',
+                        'brand-dark': '#0B1121', // Darker navy
+                        'glass-surface': 'rgba(255, 255, 255, 0.03)',
+                        'glass-border': 'rgba(255, 255, 255, 0.08)',
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 8s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B1121;
+            color: #E2E8F0;
+            min-height: 100vh;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- MODERN AMBIENT BACKGROUND --- */
+        .ambient-light {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: #0B1121;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 10s infinite ease-in-out;
+        }
+        
+        .orb-1 { top: -5%; left: -10%; width: 600px; height: 600px; background: radial-gradient(circle, #3F51B5 0%, transparent 70%); animation-delay: 0s; }
+        .orb-2 { bottom: -10%; right: -5%; width: 500px; height: 500px; background: radial-gradient(circle, #D4AF37 0%, transparent 70%); animation-delay: -2s; opacity: 0.3; }
+        .orb-3 { top: 40%; left: 30%; width: 300px; height: 300px; background: radial-gradient(circle, #9F1239 0%, transparent 70%); animation-delay: -5s; opacity: 0.2; }
+
+        /* --- GLASSMORPHISM 2.0 CARD --- */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 0 0 1px rgba(0,0,0,0.2),
+                0 20px 40px -10px rgba(0,0,0,0.5),
+                inset 0 0 20px rgba(255,255,255,0.02);
+            position: relative;
+        }
+        
+        /* Subtle noise texture overlay for realism */
+        .noise-overlay {
+            position: absolute;
+            inset: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* --- FLAT GLASS BUTTONS --- */
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
+
+        .text-gold-gradient {
+            background: linear-gradient(135deg, #F9E69D 0%, #D4AF37 50%, #B8860B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Profile Image Container */
+        .profile-ring {
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.5) 0%, rgba(212, 175, 55, 0.1) 100%);
+            padding: 2px;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen py-8 px-4 selection:bg-brand-gold selection:text-brand-dark">
+
+    <!-- Ambient Background -->
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Main Card -->
+    <main class="w-full max-w-sm glass-card rounded-[2rem] overflow-hidden animate-fade-in-up flex flex-col items-center pt-12 pb-8 px-6 relative">
+        <div class="noise-overlay"></div>
+        
+        <!-- Logo Absolute Top Right -->
+        <div class="absolute top-6 right-6 z-20 opacity-80 hover:opacity-100 transition-opacity">
+            <img src="https://github.com/sujeshunni-del/bettercall/blob/282b4bde45f0a20256156a40c444f0674dab9b80/Bettercall%20Logo%20SVG%2003.svg?raw=true" 
+                 alt="Logo" class="h-8 w-auto drop-shadow-lg">
+        </div>
+
+        <!-- Profile Image -->
+        <div class="relative z-10 mb-6">
+            <div class="w-32 h-32 profile-ring">
+                <div class="w-full h-full rounded-full overflow-hidden border-4 border-[#0F172A] bg-[#0F172A]">
+                    <img src="https://github.com/sujeshunni-del/bettercall/blob/e89b3e960306cd1d54449e416acb9e2ce4ed62c8/anju.jpeg?raw=true" 
+                         alt="Anju M Nair" 
+                         class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                         onerror="this.src='https://ui-avatars.com/api/?name=Anju+Nair&background=0F172A&color=D4AF37&size=256'">
+                </div>
+            </div>
+            <!-- Status Dot -->
+            <div class="absolute bottom-2 right-2 w-4 h-4 bg-green-500 rounded-full border-4 border-[#0F172A] shadow-md z-20"></div>
+        </div>
+
+        <!-- Text Info -->
+        <div class="text-center z-10 w-full mb-8">
+            <h1 class="text-3xl font-bold text-white tracking-tight mb-1">Anju M Nair</h1>
+            <p class="text-brand-gold text-xs font-semibold uppercase tracking-[0.25em] mb-4">Immigration Advisor</p>
+            
+            <div class="flex items-center justify-center gap-2 text-xs text-gray-400 font-light bg-white/5 rounded-full py-1.5 px-4 mx-auto w-max border border-white/5 backdrop-blur-sm">
+                <i class="fas fa-location-dot text-brand-gold"></i>
+                <span>Dubai Healthcare City, UAE</span>
+            </div>
+        </div>
+
+        <!-- Primary Actions (Row) -->
+        <div class="grid grid-cols-4 gap-3 w-full mb-8 z-10">
+            <a href="tel:+971503249696" class="btn-glass rounded-2xl p-4 flex flex-col items-center justify-center gap-2 group">
+                <i class="fas fa-phone text-xl text-cyan-400 group-hover:text-white transition-colors"></i>
+            </a>
+            
+            <a href="https://wa.me/971503249696" target="_blank" class="btn-glass rounded-2xl p-4 flex flex-col items-center justify-center gap-2 group">
+                <i class="fab fa-whatsapp text-2xl text-green-400 group-hover:text-white transition-colors"></i>
+            </a>
+
+            <a href="mailto:anjubettercall@gmail.com" class="btn-glass rounded-2xl p-4 flex flex-col items-center justify-center gap-2 group">
+                <i class="fas fa-envelope text-xl text-purple-400 group-hover:text-white transition-colors"></i>
+            </a>
+
+            <a href="https://maps.google.com/?q=Better+Call+Immigration+Dubai+Healthcare+City" target="_blank" class="btn-glass rounded-2xl p-4 flex flex-col items-center justify-center gap-2 group">
+                <i class="fas fa-map-location-dot text-xl text-pink-400 group-hover:text-white transition-colors"></i>
+            </a>
+        </div>
+
+        <!-- Main CTAs -->
+        <div class="space-y-3 w-full z-10 mb-8">
+            <!-- Appointment Button (Solid Gradient) -->
+            <a href="https://www.bettercall.online/anju" target="_blank" class="relative block w-full group">
+                <div class="absolute inset-0 bg-brand-gold rounded-xl blur opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                <div class="relative bg-gradient-to-r from-[#CCA01D] to-[#B8860B] text-white py-4 rounded-xl flex items-center justify-center gap-3 shadow-lg border border-[#F9E69D]/30 group-hover:-translate-y-0.5 transition-transform">
+                    <span class="font-bold text-sm uppercase tracking-wider">Book Appointment</span>
+                    <i class="far fa-calendar-alt"></i>
+                </div>
+            </a>
+
+            <!-- Assessment Button (Outlined/Glass) -->
+            <a href="https://www.bettercall.online/assessment" target="_blank" class="block w-full group">
+                <div class="relative bg-brand-gold/10 hover:bg-brand-gold/20 text-brand-gold py-4 rounded-xl flex items-center justify-center gap-3 border border-brand-gold/50 transition-all duration-300">
+                    <span class="font-bold text-sm uppercase tracking-wider">Free Assessment</span>
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+            </a>
+        </div>
+
+        <!-- Secondary Links -->
+        <div class="grid grid-cols-2 gap-4 w-full z-10 mb-8">
+            <a href="https://bettercall.online/programs" target="_blank" class="btn-glass py-3.5 rounded-xl flex items-center justify-center gap-2 text-sm text-gray-300 hover:text-white">
+                <i class="fas fa-globe text-xs opacity-70"></i> Programs
+            </a>
+            <a href="https://bettercall.online/services" target="_blank" class="btn-glass py-3.5 rounded-xl flex items-center justify-center gap-2 text-sm text-gray-300 hover:text-white">
+                <i class="fas fa-briefcase text-xs opacity-70"></i> Services
+            </a>
+        </div>
+
+        <!-- Bottom Info -->
+        <div class="w-full bg-white/5 rounded-xl p-5 border border-white/5 backdrop-blur-sm z-10 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-brand-gold/10 flex items-center justify-center text-brand-gold">
+                        <i class="fas fa-building text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-white">Better Call Immigration</p>
+                        <p class="text-[10px] text-gray-400">R320, 12th Floor, Office 14</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Actions -->
+            <div class="flex justify-between items-center border-t border-white/10 pt-3 text-[10px] font-bold tracking-wider text-gray-400">
+                 <button onclick="downloadVCard()" class="hover:text-brand-gold transition-colors flex items-center gap-1.5 uppercase">
+                    <i class="fas fa-download"></i> Save
+                </button>
+                <a href="https://www.bettercall.online" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-1.5 uppercase">
+                    <i class="fas fa-globe"></i> Website
+                </a>
+                 <button id="shareButton" class="hover:text-brand-gold transition-colors flex items-center gap-1.5 uppercase">
+                    <i class="fas fa-share-nodes"></i> Share
+                </button>
+            </div>
+        </div>
+        
+    </main>
+    
+    <!-- Footer Credits -->
+    <footer class="fixed bottom-4 text-[10px] text-gray-600 font-light tracking-widest uppercase opacity-50 z-0">
+        Better Call Digital
+    </footer>
+
+    <!-- Floating Message Box -->
+    <div id="messageBox" class="fixed top-10 left-1/2 transform -translate-x-1/2 bg-[#0F172A] text-white px-6 py-3 rounded-full shadow-2xl border border-brand-gold/20 z-[100] transition-all duration-300 ease-out opacity-0 -translate-y-full pointer-events-none flex items-center gap-2">
+        <i class="fas fa-check-circle text-green-400"></i>
+        <span class="text-sm font-medium">Link copied to clipboard!</span>
+    </div>
+
+    <script>
+        function showMessage(message) {
+            const msgBox = document.getElementById('messageBox');
+            msgBox.querySelector('span').textContent = message;
+            msgBox.style.opacity = '1';
+            msgBox.style.transform = 'translate(-50%, 0)';
+            setTimeout(() => {
+                msgBox.style.opacity = '0';
+                msgBox.style.transform = 'translate(-50%, -100%)';
+            }, 3000);
+        }
+
+        // Updated vCard Data for Anju M Nair
+        function downloadVCard() {
+            const vCardData = [
+                'BEGIN:VCARD',
+                'VERSION:3.0',
+                'FN:Anju M Nair',
+                'N:Nair;Anju;M;;',
+                'ORG:Better Call Immigration',
+                'TITLE:Immigration Advisor',
+                'TEL;TYPE=CELL:+971503249696',
+                'EMAIL;TYPE=WORK:anjubettercall@gmail.com',
+                'EMAIL;TYPE=OTHER:admin@thebettercall.com',
+                'URL:https://www.bettercall.online',
+                'ADR;TYPE=WORK:;;R320 12th Floor Office 14 Sheikh Rashid Rd;Dubai;Dubai Healthcare City;;UAE',
+                'NOTE:Appointment Link: https://www.bettercall.online/anju',
+                'END:VCARD'
+            ].join('\n');
+
+            const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'Anju_M_Nair.vcf');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        document.getElementById('shareButton').addEventListener('click', async () => {
+             const dummy = document.createElement('input');
+             document.body.appendChild(dummy);
+             dummy.value = window.location.href;
+             dummy.select();
+             document.execCommand('copy');
+             document.body.removeChild(dummy);
+             showMessage('Link copied to clipboard!');
+        });
+    </script>
+</body>
+</html>
