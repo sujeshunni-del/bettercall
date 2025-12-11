@@ -2447,9 +2447,33 @@ END:VCALENDAR`;
                      if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
                 }
 
+                // Construct a comprehensive description note
+                const descriptionNote = `
+**APPLICANT SUMMARY**
+--------------------------------
+**Ref ID:** ${ref}
+**Name:** ${document.getElementById('firstName').value} ${document.getElementById('lastName').value}
+**Email:** ${document.getElementById('email').value}
+**Mobile:** ${mobile}
+**WhatsApp:** ${cleanPhoneNumber(document.getElementById('whatsapp').value)}
+**Alt Phone:** ${cleanPhoneNumber(document.getElementById('altPhone') ? document.getElementById('altPhone').value : "")}
+--------------------------------
+**Profile:**
+- **Age:** ${document.getElementById('age').value} (DOB: ${document.getElementById('dob').value})
+- **Nationality:** ${document.getElementById('nationality').value}
+- **Residence:** ${document.getElementById('presentResidence').value}
+- **Qualification:** ${document.querySelector('input[name="qualification"]:checked')?.value || "N/A"}
+- **Passport:** ${document.getElementById('passportNo').value || "N/A"} (Exp: ${document.getElementById('passportExp').value || "N/A"})
+--------------------------------
+**Job Interest:**
+- **Role:** ${document.getElementById('currentJob').value}
+- **Experience:** ${document.getElementById('experience').value || 0} Years
+- **Mode:** ${currentMode}
+                `.trim();
+
                 const payload = {
                     name: document.getElementById('firstName').value,
-                    description: `REF: ${ref}\nRole: ${document.getElementById('currentJob').value}`,
+                    description: descriptionNote,
                     custom_fields: customFieldsArray
                 };
 
