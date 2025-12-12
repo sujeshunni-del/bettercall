@@ -18,10 +18,8 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Google Fonts including Regional Scripts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Sinhala:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind Config -->
     <script>
@@ -29,8 +27,8 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Outfit', 'Noto Sans Devanagari', 'Noto Sans Malayalam', 'Noto Sans Tamil', 'Noto Sans Sinhala', 'sans-serif'],
-                        display: ['Space Grotesk', 'Noto Sans Devanagari', 'Noto Sans Malayalam', 'Noto Sans Tamil', 'Noto Sans Sinhala', 'sans-serif'],
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
                     },
                     animation: {
                         'blob': 'blob 10s infinite',
@@ -118,6 +116,21 @@
             transform: translateY(0);
         }
 
+        /* Sticky Search Pill */
+        .sticky-search-pill {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        .sticky-search-pill:focus-within {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 0 0 2px rgba(255, 255, 255, 0.8);
+        }
+
         /* Scrollbar Styling */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -139,13 +152,7 @@
         .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .animate-blob { animation: blob 10s infinite; }
-        @keyframes blob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
-        }
+        .floating-element { animation: float 6s ease-in-out infinite; }
     </style>
 </head>
 <body class="antialiased">
@@ -153,119 +160,6 @@
 
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
-
-        // --- LANGUAGES CONFIG ---
-        const LANGUAGES = {
-            en: { label: 'English', flag: '🇬🇧' },
-            ml: { label: 'മലയാളം', flag: '🇮🇳' },
-            hi: { label: 'हिंदी', flag: '🇮🇳' },
-            ta: { label: 'தமிழ்', flag: '🇮🇳' },
-            tl: { label: 'Tagalog', flag: '🇵🇭' },
-            si: { label: 'සිංහල', flag: '🇱🇰' },
-            sw: { label: 'Swahili', flag: '🇰🇪' }
-        };
-
-        // --- EXTENDED TRANSLATION DICTIONARY ---
-        const DICTIONARY = {
-            en: {
-                openRoles: "Open Roles", apply: "APPLY", startAssessment: "Start Assessment", liveData: "Live Data", positionsAvailable: "positions available",
-                noJobs: "No matching jobs found.", opportunities: "Opportunities", process: "Process", lifestyle: "Lifestyle", salary: "Salary (Monthly)",
-                experience: "Exp", demand: "Market Demand", verified: "Verified", avgSalary: "Avg Salary", visaTime: "Visa Time", roles: "Roles",
-                prep: "Preparation", submit: "Submission", relocate: "Relocation", requiredDocs: "Mandatory Documents", proTips: "Pro Tips",
-                glossary: "Glossary & Technical Terms", visaCats: "Visa Categories", qolIndex: "Quality of Life Index", mustSee: "Must See",
-                happiness: "Happiness", safety: "Safety", overall: "Overall Score", dataBy: "Data by BetterCall.online",
-                years: "Years", degree: "Degree", diploma: "Diploma", entry: "Entry Level", skilled: "Skilled", seasonal: "Seasonal",
-                dept_const: "Construction", dept_health: "Healthcare", dept_hosp: "Hospitality", dept_tech: "Technology", dept_log: "Logistics",
-                dept_manuf: "Manufacturing", dept_airport: "Airport Operations", dept_retail: "Retail & Sales", dept_admin: "Corporate & Office", dept_automotive: "Automotive",
-                tier1_sub: "Nordic Premium", tier2_sub: "Western Schengen", tier3_sub: "Emerging Schengen", tier4_sub: "Non-Schengen",
-                c_se: "Sweden", c_fi: "Finland", c_nl: "Netherlands", c_de: "Germany", c_it: "Italy", c_fr: "France", c_pl: "Poland", c_lv: "Latvia", c_cz: "Czech Republic", c_hr: "Croatia", c_rs: "Serbia", c_mk: "Macedonia", c_al: "Albania",
-                j_eng: "Engineer", j_welder: "Welder", j_nurse: "Nurse", j_chef: "Chef", j_driver: "Driver", j_worker: "Worker", j_manager: "Manager", j_accountant: "Accountant"
-            },
-            ml: {
-                openRoles: "തുറന്ന ഒഴിവുകൾ", apply: "അപേക്ഷിക്കുക", startAssessment: "അസ്സസ്മെന്റ് തുടങ്ങുക", liveData: "തത്സമയ വിവരങ്ങൾ", positionsAvailable: "ഒഴിവുകൾ",
-                noJobs: "ജോലികളൊന്നും കണ്ടെത്തിയില്ല", opportunities: "അവസരങ്ങൾ", process: "നടപടിക്രമം", lifestyle: "ജീവിതശൈലി", salary: "ശമ്പളം",
-                experience: "പരിചയം", demand: "വിപണി ആവശ്യം", verified: "പരിശോധിച്ചു", avgSalary: "ശരാശരി ശമ്പളം", visaTime: "വിസ സമയം", roles: "റോളുകൾ",
-                prep: "തയ്യാറെടുപ്പ്", submit: "സമർപ്പിക്കൽ", relocate: "യാത്ര", requiredDocs: "ആവശ്യമായ രേഖകൾ", proTips: "വിദഗ്ദ്ധ ഉപദേശങ്ങൾ",
-                glossary: "സാങ്കേതിക പദങ്ങൾ", visaCats: "വിസ വിഭാഗങ്ങൾ", qolIndex: "ജീവിത നിലവാര സൂചിക", mustSee: "കാണേണ്ട സ്ഥലങ്ങൾ",
-                happiness: "സന്തോഷം", safety: "സുരക്ഷ", overall: "മൊത്തം സ്കോർ", dataBy: "ഡാറ്റ നൽകിയത് BetterCall.online",
-                years: "വർഷം", degree: "ബിരുദം", diploma: "ഡിപ്ലോമ", entry: "തുടക്കക്കാർ", skilled: "വിദഗ്ദ്ധൻ", seasonal: "സീസണൽ",
-                dept_const: "നിർമ്മാണം", dept_health: "ആരോഗ്യരംഗം", dept_hosp: "ഹോസ്പിറ്റാലിറ്റി", dept_tech: "സാങ്കേതികവിദ്യ", dept_log: "ലോജിസ്റ്റിക്സ്",
-                dept_manuf: "നിർമ്മാണം", dept_airport: "എയർപോർട്ട്", dept_retail: "റീട്ടെയിൽ", dept_admin: "അഡ്മിനിസ്ട്രേഷൻ", dept_automotive: "ഓട്ടോമോട്ടീവ്",
-                tier1_sub: "നോർഡിക് പ്രീമിയം", tier2_sub: "വെസ്റ്റേൺ ഷെഞ്ചൻ", tier3_sub: "എമർജിംഗ് ഷെഞ്ചൻ", tier4_sub: "നോൺ-ഷെഞ്ചൻ",
-                c_se: "സ്വീഡൻ", c_fi: "ഫിൻലാൻഡ്", c_nl: "നെതർലാൻഡ്സ്", c_de: "ജർമ്മനി", c_it: "ഇറ്റലി", c_fr: "ഫ്രാൻസ്", c_pl: "പോളണ്ട്", c_lv: "ലാത്വിയ", c_cz: "ചെക്ക് റിപ്പബ്ലിക്", c_hr: "ക്രൊയേഷ്യ", c_rs: "സെർബിയ", c_mk: "മാസിഡോണിയ", c_al: "അൽബേനിയ",
-                j_eng: "എഞ്ചിനീയർ", j_welder: "വെൽഡർ", j_nurse: "നഴ്സ്", j_chef: "ഷെഫ്", j_driver: "ഡ്രൈവർ", j_worker: "വർക്കർ", j_manager: "മാനേജർ", j_accountant: "അക്കൗണ്ടന്റ്"
-            },
-            hi: {
-                openRoles: "खुली भूमिकाएं", apply: "आवेदन करें", startAssessment: "मूल्यांकन शुरू करें", liveData: "लाइव डेटा", positionsAvailable: "पद उपलब्ध",
-                noJobs: "कोई नौकरी नहीं मिली", opportunities: "अवसर", process: "प्रक्रिया", lifestyle: "जीवन शैली", salary: "वेतन (मासिक)",
-                experience: "अनुभव", demand: "बाजार मांग", verified: "सत्यापित", avgSalary: "औसत वेतन", visaTime: "वीज़ा समय", roles: "भूमिकाएं",
-                prep: "तैयारी", submit: "जमा करें", relocate: "स्थानांतरण", requiredDocs: "अनिवार्य दस्तावेज", proTips: "विशेषज्ञ सुझाव",
-                glossary: "शब्दावली", visaCats: "वीज़ा श्रेणियाँ", qolIndex: "जीवन गुणवत्ता", mustSee: "जरूर देखें",
-                happiness: "खुशी", safety: "सुरक्षा", overall: "कुल स्कोर", dataBy: "डेटा BetterCall.online द्वारा",
-                years: "वर्ष", degree: "डिग्री", diploma: "डिप्लोमा", entry: "प्रवेश स्तर", skilled: "कुशल", seasonal: "मौसमी",
-                dept_const: "निर्माण", dept_health: "स्वास्थ्य सेवा", dept_hosp: "आतिथ्य", dept_tech: "तकनीकी", dept_log: "रसद (Logistics)",
-                dept_manuf: "विनिर्माण", dept_airport: "हवाई अड्डा", dept_retail: "खुदरा", dept_admin: "कार्यालय", dept_automotive: "ऑटोमोटिव",
-                tier1_sub: "नॉर्डिक प्रीमियम", tier2_sub: "पश्चिमी शेंगेन", tier3_sub: "उभरता शेंगेन", tier4_sub: "गैर-शेंगेन",
-                c_se: "स्वीडन", c_fi: "फिनलैंड", c_nl: "नीदरलैंड", c_de: "जर्मनी", c_it: "इटली", c_fr: "फ्रांस", c_pl: "पोलैंड", c_lv: "लातविया", c_cz: "चेक गणराज्य", c_hr: "क्रोएशिया", c_rs: "सर्बिया", c_mk: "मैसेडोनिया", c_al: "अल्बानिया",
-                j_eng: "इंजीनियर", j_welder: "वेल्डर", j_nurse: "नर्स", j_chef: "रसोइया", j_driver: "चालक", j_worker: "कर्मचारी", j_manager: "प्रबंधक", j_accountant: "मुनीम"
-            },
-            ta: {
-                openRoles: "பணிகள்", apply: "விண்ணப்பிக்க", startAssessment: "மதிப்பீட்டைத் தொடங்கு", liveData: "நேரடி தரவு", positionsAvailable: "காலியிடங்கள்",
-                noJobs: "வேலை இல்லை", opportunities: "வாய்ப்புகள்", process: "செயல்முறை", lifestyle: "வாழ்க்கை முறை", salary: "சம்பளம்",
-                experience: "அனுபவம்", demand: "தேவை", verified: "சரிபார்க்கப்பட்டது", avgSalary: "சராசரி சம்பளம்", visaTime: "விசா நேரம்", roles: "பணிகள்",
-                prep: "தயாரிப்பு", submit: "சமர்ப்பித்தல்", relocate: "இடமாற்றம்", requiredDocs: "தேவையான ஆவணங்கள்", proTips: "நிபுணர் குறிப்புகள்",
-                glossary: "சொற்களஞ்சியம்", visaCats: "விசா வகைகள்", qolIndex: "வாழ்க்கை தரம்", mustSee: "பார்க்க வேண்டியவை",
-                happiness: "மகிழ்ச்சி", safety: "பாதுகாப்பு", overall: "மொத்த மதிப்பெண்", dataBy: "தரவு வழங்கியவர் BetterCall",
-                years: "ஆண்டுகள்", degree: "பட்டம்", diploma: "டிப்ளமோ", entry: "நுழைவு நிலை", skilled: "திறமையான", seasonal: "பருவகால",
-                dept_const: "கட்டுமானம்", dept_health: "சுகாதாரம்", dept_hosp: "விருந்தோம்பல்", dept_tech: "தொழில்நுட்பம்", dept_log: "தளவாடங்கள்",
-                dept_manuf: "உற்பத்தி", dept_airport: "விமான நிலையம்", dept_retail: "விற்பனை", dept_admin: "நிர்வாகம்", dept_automotive: "வாகனத்துறை",
-                tier1_sub: "நார்டிக் பிரீமியம்", tier2_sub: "மேற்கு ஷெங்கன்", tier3_sub: "வளரும் ஷெங்கன்", tier4_sub: "ஷெங்கன் அல்லாத",
-                c_se: "ஸ்வீடன்", c_fi: "பின்லாந்து", c_nl: "நெதர்லாந்து", c_de: "ஜெர்மனி", c_it: "இத்தாலி", c_fr: "பிரான்ஸ்", c_pl: "போலந்து", c_lv: "லாட்வியா", c_cz: "செக் குடியரசு", c_hr: "குரோஷியா", c_rs: "செர்பியா", c_mk: "மாசிடோனியா", c_al: "அல்பேனியா",
-                j_eng: "பொறியாளர்", j_welder: "வெல்டர்", j_nurse: "செவிலியர்", j_chef: "சமையல்காரர்", j_driver: "ஓட்டுநர்", j_worker: "பணியாளர்", j_manager: "மேலாளர்", j_accountant: "கணக்காளர்"
-            },
-            tl: {
-                openRoles: "Mga Posisyon", apply: "MAG-APPLY", startAssessment: "Simulan", liveData: "Live na Datos", positionsAvailable: "posisyon",
-                noJobs: "Walang trabaho", opportunities: "Oportunidad", process: "Proseso", lifestyle: "Pamumuhay", salary: "Sahod",
-                experience: "Karanasan", demand: "Pangangailangan", verified: "Beripikado", avgSalary: "Karaniwang Sahod", visaTime: "Oras ng Visa", roles: "Papel",
-                prep: "Paghahanda", submit: "Pagsusumite", relocate: "Paglipat", requiredDocs: "Dokumento", proTips: "Payo",
-                glossary: "Talahulugan", visaCats: "Uri ng Visa", qolIndex: "Antas ng Pamumuhay", mustSee: "Dapat Makita",
-                happiness: "Saya", safety: "Kaligtasan", overall: "Kabuuang Iskor", dataBy: "Datos ng BetterCall",
-                years: "Taon", degree: "Digri", diploma: "Diploma", entry: "Entry Level", skilled: "Skilled", seasonal: "Seasonal",
-                dept_const: "Konstruksyon", dept_health: "Kalusugan", dept_hosp: "Hospitality", dept_tech: "Teknolohiya", dept_log: "Logistics",
-                dept_manuf: "Paggawa", dept_airport: "Paliparan", dept_retail: "Tindahan", dept_admin: "Opisina", dept_automotive: "Automotive",
-                tier1_sub: "Nordic Premium", tier2_sub: "Western Schengen", tier3_sub: "Emerging Schengen", tier4_sub: "Non-Schengen",
-                c_se: "Sweden", c_fi: "Finland", c_nl: "Netherlands", c_de: "Germany", c_it: "Italy", c_fr: "France", c_pl: "Poland", c_lv: "Latvia", c_cz: "Czech Republic", c_hr: "Croatia", c_rs: "Serbia", c_mk: "Macedonia", c_al: "Albania",
-                j_eng: "Inhenyero", j_welder: "Welder", j_nurse: "Nars", j_chef: "Chef", j_driver: "Drayber", j_worker: "Manggagawa", j_manager: "Manedyer", j_accountant: "Accountant"
-            },
-            si: {
-                openRoles: "විවෘත රැකියා", apply: "අයදුම් කරන්න", startAssessment: "ඇගයීම අරඹන්න", liveData: "සජීවී දත්ත", positionsAvailable: "තනතුරු",
-                noJobs: "රැකියා නැත", opportunities: "අවස්ථා", process: "ක්‍රියාවලිය", lifestyle: "ජීවන රටාව", salary: "වැටුප",
-                experience: "පළපුරුද්ද", demand: "ඉල්ලුම", verified: "තහවුරු කර ඇත", avgSalary: "සාමාන්‍ය වැටුප", visaTime: "වීසා කාලය", roles: "තනතුරු",
-                prep: "සූදානම", submit: "ඉදිරිපත් කිරීම", relocate: "ස්ථාන මාරුව", requiredDocs: "ලියකියවිලි", proTips: "උපදෙස්",
-                glossary: "පාරිභාෂික වචන", visaCats: "වීසා වර්ග", qolIndex: "ජීවන තත්ත්වය", mustSee: "නැරඹිය යුතු",
-                happiness: "සතුට", safety: "ආරක්ෂාව", overall: "මුළු ලකුණු", dataBy: "BetterCall දත්ත",
-                years: "වසර", degree: "උපාධිය", diploma: "ඩිප්ලෝමා", entry: "ආධුනික", skilled: "පුහුණු", seasonal: "කාලීන",
-                dept_const: "ඉදිකිරීම්", dept_health: "සෞඛ්‍ය", dept_hosp: "ආගන්තුක සත්කාර", dept_tech: "තාක්ෂණ", dept_log: "ප්‍රවාහන",
-                dept_manuf: "නිෂ්පාදන", dept_airport: "ගුවන් තොටුපල", dept_retail: "වෙළඳ", dept_admin: "පරිපාලන", dept_automotive: "මෝටර් රථ",
-                tier1_sub: "නෝර්ඩික්", tier2_sub: "බටහිර ෂෙන්ගන්", tier3_sub: "නැගී එන ෂෙන්ගන්", tier4_sub: "ෂෙන්ගන් නොවන",
-                c_se: "ස්වීඩනය", c_fi: "ෆින්ලන්තය", c_nl: "නෙදර්ලන්තය", c_de: "ජර්මනිය", c_it: "ඉතාලිය", c_fr: "ප්‍රංශය", c_pl: "පෝලන්තය", c_lv: "ලැට්වියාව", c_cz: "චෙක් ජනරජය", c_hr: "ක්‍රොඒෂියාව", c_rs: "සර්බියාව", c_mk: "මැසිඩෝනියාව", c_al: " ඇල්බේනියාව",
-                j_eng: "ඉංජිනේරු", j_welder: "වෙල්ඩර්", j_nurse: "හෙදිය", j_chef: "චෙෆ්", j_driver: "රියදුරු", j_worker: "සේවක", j_manager: "කළමනාකරු", j_accountant: "ගණකාධිකාරී"
-            },
-            sw: {
-                openRoles: "Nafasi za Kazi", apply: "TUMA OMBI", startAssessment: "Anza Tathmini", liveData: "Data Hai", positionsAvailable: "nafasi",
-                noJobs: "Hakuna kazi", opportunities: "Fursa", process: "Mchakato", lifestyle: "Maisha", salary: "Mshahara",
-                experience: "Uzoefu", demand: "Mahitaji", verified: "Imethibitishwa", avgSalary: "Wastani wa Mshahara", visaTime: "Muda wa Visa", roles: "Nafasi",
-                prep: "Matayarisho", submit: "Uwasilishaji", relocate: "Kuhama", requiredDocs: "Nyaraka", proTips: "Vidokezo",
-                glossary: "Faharasa", visaCats: "Aina za Visa", qolIndex: "Kielelezo cha Maisha", mustSee: "Lazima Uone",
-                happiness: "Furaha", safety: "Usalama", overall: "Jumla", dataBy: "Data na BetterCall",
-                years: "Miaka", degree: "Shahada", diploma: "Diploma", entry: "Kuanza", skilled: "Mtaalamu", seasonal: "Msimu",
-                dept_const: "Ujenzi", dept_health: "Afya", dept_hosp: "Ukarimu", dept_tech: "Teknolojia", dept_log: "Usafirishaji",
-                dept_manuf: "Uzalishaji", dept_airport: "Uwanja wa Ndege", dept_retail: "Mauzo", dept_admin: "Utawala", dept_automotive: "Magari",
-                tier1_sub: "Nordic Premium", tier2_sub: "Schengen Magharibi", tier3_sub: "Schengen Mpya", tier4_sub: "Isiyo Schengen",
-                c_se: "Sweden", c_fi: "Finland", c_nl: "Uholanzi", c_de: "Ujerumani", c_it: "Italia", c_fr: "Ufaransa", c_pl: "Poland", c_lv: "Latvia", c_cz: "Jamhuri ya Czech", c_hr: "Croatia", c_rs: "Serbia", c_mk: "Macedonia", c_al: "Albania",
-                j_eng: "Mhandisi", j_welder: "Mchomeleaji", j_nurse: "Muuguzi", j_chef: "Mpishi", j_driver: "Dereva", j_worker: "Mfanyakazi", j_manager: "Meneja", j_accountant: "Mhasibu"
-            }
-        };
 
         // --- ICON COMPONENT ---
         const Icon = ({ name, size = 24, className = "", ...props }) => {
@@ -294,808 +188,932 @@
             );
         };
 
-        // --- DYNAMIC DATA GENERATOR ---
-        const getTierData = (lang) => {
-            const t = (key) => DICTIONARY[lang]?.[key] || DICTIONARY['en'][key] || key;
-            
-            // Helper to translate years/exp
-            const trExp = (exp) => {
-                if(exp.includes('Years')) return exp.replace('Years', t('years'));
-                if(exp.includes('Degree')) return t('degree');
-                if(exp.includes('Diploma')) return t('diploma');
-                if(exp.includes('Entry')) return t('entry');
-                return exp;
-            };
-
-            // Helper to translate common job titles
-            const trJob = (title) => {
-                let lower = title.toLowerCase();
-                if(lower.includes('engineer')) return title.replace('Engineer', t('j_eng'));
-                if(lower.includes('welder')) return title.replace('Welder', t('j_welder'));
-                if(lower.includes('nurse')) return title.replace('Nurse', t('j_nurse'));
-                if(lower.includes('chef') || lower.includes('cook')) return title.replace('Chef', t('j_chef')).replace('Cook', t('j_chef'));
-                if(lower.includes('driver')) return title.replace('Driver', t('j_driver'));
-                if(lower.includes('worker') || lower.includes('laborer') || lower.includes('helper')) return title.replace('Worker', t('j_worker')).replace('Laborer', t('j_worker')).replace('Helper', t('j_worker'));
-                if(lower.includes('manager')) return title.replace('Manager', t('j_manager'));
-                if(lower.includes('accountant')) return title.replace('Accountant', t('j_accountant'));
-                return title;
-            };
-
-            return [
+        // --- DATA ---
+        const TIER_DATA = [
+          {
+            id: 'tier1',
+            title: 'Elite Nordic & Global Hubs',
+            subtitle: 'Nordic Premium',
+            description: 'High-income economies with world-class infrastructure and social benefits.',
+            color: 'cyan', 
+            accent: 'cyan',
+            iconName: 'Award',
+            stats: { avgSalary: '€3,500+', demand: 'Specialized', satisfaction: '98%' },
+            countries: [
               {
-                id: 'tier1',
-                title: 'Elite Nordic & Global Hubs',
-                subtitle: t('tier1_sub'),
-                description: lang === 'en' ? 'High-income economies with world-class infrastructure and social benefits.' : t('opportunities'),
-                color: 'cyan', 
-                accent: 'cyan',
-                iconName: 'Award',
-                stats: { avgSalary: '€3,500+', demand: t('skilled'), satisfaction: '98%' },
-                countries: [
+                id: 'se',
+                name: 'Sweden',
+                flag: '🇸🇪',
+                themeColor: 'cyan',
+                description: 'Focus on Aviation Infrastructure, Maintenance, and Emergency Services.',
+                visaInfo: {
+                    types: ['Work Permit', 'EU Blue Card'],
+                    processingTime: '3-5 Months',
+                    detailedProcess: {
+                        preparation: ['Employer initiates offer', 'Union statement', 'Valid Passport', 'Insurance'],
+                        submission: ['Online application', 'Pay fee', 'Visit Embassy', 'Receive UT-card'],
+                        postArrival: ['Register Skatteverket', 'Open Bank Account', 'Social Insurance', 'SFI']
+                    },
+                    documents: ['Passport', 'Employment Offer', 'Union Statement', 'Insurance'],
+                    expertTips: [{ title: "Union Approval", desc: "Critical step. Ensure employer handles this early." }],
+                    technicalTerms: [
+                        { term: 'SFI', definition: 'Swedish for Immigrants (Svenska för invandrare). Free national Swedish language courses.' },
+                        { term: 'UT-card', definition: 'Uppehållstillståndskort. The biometric residence permit card proving your right to live in Sweden.' },
+                        { term: 'Skatteverket', definition: 'The Swedish Tax Agency. You must visit here to register (folkbokföring) and get your ID.' },
+                        { term: 'Personnummer', definition: 'Swedish Personal Identity Number. Essential for banking, healthcare, and contracts.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{ label: 'Safety', value: 98 }, { label: 'English', value: 95 }, { label: 'Innovation', value: 99 }, { label: 'Eco-Living', value: 100 }], 
+                    highlights: ['Vasa Museum', 'Gamla Stan', 'Abisko National Park', 'Stockholm Archipelago']
+                },
+                stats: { qol: 96, safety: 98, happiness: 94 },
+                departments: [
                   {
-                    id: 'se',
-                    name: t('c_se'),
-                    flag: '🇸🇪',
-                    themeColor: 'cyan',
-                    description: 'Focus on Aviation Infrastructure, Maintenance, and Emergency Services.',
-                    visaInfo: {
-                        types: ['Work Permit', 'EU Blue Card'],
-                        processingTime: '3-5 ' + t('years').replace('Years','Months'), // Simple swap trick for Months if available, else generic
-                        detailedProcess: {
-                            preparation: ['Employer initiates offer', 'Union statement', 'Valid Passport', 'Insurance'],
-                            submission: ['Online application', 'Pay fee', 'Visit Embassy', 'Receive UT-card'],
-                            postArrival: ['Register Skatteverket', 'Open Bank Account', 'Social Insurance', 'SFI']
-                        },
-                        documents: ['Passport', 'Employment Offer', 'Union Statement', 'Insurance'],
-                        expertTips: [{ title: "Union Approval", desc: "Critical step. Ensure employer handles this early." }],
-                        technicalTerms: [
-                            { term: 'SFI', definition: 'Swedish for Immigrants. Free national Swedish language courses.' },
-                            { term: 'UT-card', definition: 'Uppehållstillståndskort. Residence permit card.' },
-                            { term: 'Skatteverket', definition: 'The Swedish Tax Agency.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{ label: t('safety'), value: 98 }, { label: 'English', value: 95 }, { label: 'Innovation', value: 99 }, { label: 'Eco-Living', value: 100 }], 
-                        highlights: ['Vasa Museum', 'Gamla Stan', 'Abisko National Park', 'Stockholm Archipelago']
-                    },
-                    stats: { qol: 96, safety: 98, happiness: 94 },
-                    departments: [
-                      {
-                        name: t('dept_airport'),
-                        iconName: 'HardHat',
-                        jobs: [
-                          { title: trJob('Civil Engineer'), exp: trExp('3 Years'), salary: '€4,535', demand: 85 },
-                          { title: trJob('Civil Draughtsman'), exp: trExp('3 Years'), salary: '€4,535', demand: 70 },
-                          { title: trJob('Land Surveyor'), exp: trExp('3 Years'), salary: '€4,535', demand: 75 },
-                          { title: trJob('Welder'), exp: trExp('3 Years'), salary: '€2,268', demand: 85 },
-                          { title: trJob('Fabricator'), exp: trExp('3 Years'), salary: '€2,268', demand: 80 },
-                          { title: trJob('Tower Crane Operator'), exp: trExp('3 Years'), salary: '€4,535', demand: 90 },
-                          { title: trJob('Excavator Operator'), exp: trExp('3 Years'), salary: '€3,628', demand: 80 },
-                          { title: trJob('Steel Fixer'), exp: trExp('3 Years'), salary: '€2,268', demand: 80 }
-                        ]
-                      },
-                      {
-                        name: t('dept_manuf'),
-                        iconName: 'Wrench',
-                        jobs: [
-                          { title: trJob('Mechanical Engineer'), exp: trExp('3 Years'), salary: '€4,535', demand: 80 },
-                          { title: trJob('Diesel Mechanical Technician'), exp: trExp('3 Years'), salary: '€2,268', demand: 75 }
-                        ]
-                      },
-                       {
-                        name: t('dept_health'),
-                        iconName: 'Stethoscope',
-                        jobs: [
-                          { title: trJob('Head Nurse'), exp: trExp('Degree'), salary: '€6,349', demand: 98 },
-                          { title: trJob('Assistant Nurse'), exp: trExp('Diploma'), salary: '€4,535', demand: 95 },
-                          { title: trJob('Ambulance Driver'), exp: trExp('3 Years'), salary: '€2,721', demand: 85 },
-                          { title: trJob('Ward Assistant'), exp: trExp('3 Years'), salary: '€2,268', demand: 80 }
-                        ]
-                      }
+                    name: 'Airport Civil Construction',
+                    iconName: 'HardHat',
+                    jobs: [
+                      { title: 'Civil Engineer', exp: '3 Years', salary: '€4,535', demand: 85 },
+                      { title: 'Civil Draughtsman', exp: '3 Years', salary: '€4,535', demand: 70 },
+                      { title: 'Land Surveyor', exp: '3 Years', salary: '€4,535', demand: 75 },
+                      { title: 'Civil Site Supervisor', exp: '3 Years', salary: '€2,721', demand: 75 },
+                      { title: 'Construction Safety Engineer', exp: '3 Years', salary: '€4,535', demand: 80 },
+                      { title: 'Welder', exp: '3 Years', salary: '€2,268', demand: 85 },
+                      { title: 'Fabricator', exp: '3 Years', salary: '€2,268', demand: 80 },
+                      { title: 'Scaffolder', exp: '3 Years', salary: '€2,268', demand: 85 },
+                      { title: 'Tower Crane Operator', exp: '3 Years', salary: '€4,535', demand: 90 },
+                      { title: 'Excavator Operator', exp: '3 Years', salary: '€3,628', demand: 80 },
+                      { title: 'Concrete Mix Operator', exp: '3 Years', salary: '€2,721', demand: 70 },
+                      { title: 'Construction Safety Officer', exp: '3 Years', salary: '€2,721', demand: 75 },
+                      { title: 'RCC Fitter', exp: '3 Years', salary: '€2,268', demand: 80 },
+                      { title: 'Wall Painter', exp: '3 Years', salary: '€2,268', demand: 75 },
+                      { title: 'Dozer Operator', exp: '3 Years', salary: '€2,721', demand: 75 },
+                      { title: 'Mobile Crane Operator', exp: '3 Years', salary: '€2,268', demand: 80 },
+                      { title: 'Grader Operator', exp: '3 Years', salary: '€2,268', demand: 75 },
+                      { title: 'Steel Fixer', exp: '3 Years', salary: '€2,268', demand: 80 }
                     ]
                   },
                   {
-                    id: 'fi',
-                    name: t('c_fi'),
-                    flag: '🇫🇮',
-                    themeColor: 'sky',
-                    description: 'Opportunities in Retail, Catering, and Logistics sectors.',
-                    visaInfo: {
-                        types: ['Residence Permit'],
-                        processingTime: '2-4 Months',
-                        detailedProcess: {
-                            preparation: ['Employer fills TEM054', 'Passport copies', 'Certificate translations', 'Proof of accommodation'],
-                            submission: ['Enter Finland account', 'Submit Application', 'Visit Mission for ID', 'Wait for decision'],
-                            postArrival: ['Visit DVV', 'Personal ID Code', 'Tax Card', 'Open bank account']
-                        },
-                        documents: ['Passport', 'Contract TEM054', 'Photo', 'Certificates'],
-                        expertTips: [{ title: "Enter Finland", desc: "Use e-service for cheaper fees and faster tracking." }],
-                        technicalTerms: [
-                            { term: 'TEM054', definition: 'The official form detailing terms of employment.' },
-                            { term: 'DVV', definition: 'Digital and Population Data Services Agency.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{ label: 'Nature', value: 100 }, { label: 'Education', value: 96 }, { label: 'Air Quality', value: 99 }, { label: 'Silence', value: 95 }], 
-                        highlights: ['Santa Claus Village', 'Northern Lights', 'Sauna Culture', 'Suomenlinna Fortress']
-                    },
-                    stats: { qol: 95, safety: 99, happiness: 98 },
-                    departments: [
-                      {
-                        name: t('dept_retail'),
-                        iconName: 'ShoppingCart',
-                        jobs: [
-                          { title: trJob('Sales Supervisor'), exp: trExp('3 Years'), salary: '€3,000', demand: 70 },
-                          { title: trJob('Store Keeper'), exp: trExp('3 Years'), salary: '€2,000', demand: 60 },
-                          { title: trJob('Forklift Operator'), exp: trExp('3 Years'), salary: '€2,000', demand: 75 },
-                          { title: trJob('Data Entry Operator'), exp: trExp('3 Years'), salary: '€4,000', demand: 70 },
-                          { title: trJob('Security Guard'), exp: trExp('3 Years'), salary: '€2,000', demand: 65 },
-                          { title: trJob('Packing Helper'), exp: trExp('0'), salary: '€1,000', demand: 60 },
-                          { title: trJob('Accountant'), exp: trExp('3 Years'), salary: '€3,000', demand: 80 },
-                          { title: trJob('Driver Light Duty'), exp: trExp('3 Years'), salary: '€1,500', demand: 65 },
-                          { title: trJob('Cleaning Helper'), exp: trExp('0'), salary: '€1,000', demand: 60 }
-                        ]
-                      },
-                      {
-                        name: t('dept_hosp'),
-                        iconName: 'Utensils',
-                        jobs: [
-                          { title: trJob('Head Chef'), exp: trExp('3 Years'), salary: '€5,000', demand: 90 },
-                          { title: trJob('Restaurant Supervisor'), exp: trExp('3 Years'), salary: '€3,000', demand: 75 },
-                          { title: trJob('Waiter'), exp: trExp('3 Years'), salary: '€2,000', demand: 75 },
-                          { title: trJob('Kitchen Helper'), exp: trExp('0'), salary: '€1,500', demand: 70 },
-                          { title: trJob('Housekeeping Supervisor'), exp: trExp('3 Years'), salary: '€3,000', demand: 70 },
-                          { title: trJob('Assistant Cook'), exp: trExp('3 Years'), salary: '€2,500', demand: 80 }
-                        ]
-                      }
+                    name: 'Airport Workshop',
+                    iconName: 'Wrench',
+                    jobs: [
+                      { title: 'Mechanical Engineer', exp: '3 Years', salary: '€4,535', demand: 80 },
+                      { title: 'Mechanical Supervisor', exp: '3 Years', salary: '€2,721', demand: 70 },
+                      { title: 'Diesel Mechanical Technician', exp: '3 Years', salary: '€2,268', demand: 75 },
+                      { title: 'Mechanical Draughtsman', exp: '3 Years', salary: '€4,535', demand: 70 }
+                    ]
+                  },
+                  {
+                    name: 'Airport Maintenance',
+                    iconName: 'Plane',
+                    jobs: [
+                      { title: 'System Service Engineer', exp: '3 Years', salary: '€6,349', demand: 95 },
+                      { title: 'Accountant', exp: '3 Years', salary: '€4,535', demand: 80 },
+                      { title: 'Data Entry Operator', exp: '3 Years', salary: '€4,535', demand: 70 },
+                      { title: 'CCTV Technician', exp: '3 Years', salary: '€2,721', demand: 70 },
+                      { title: 'Staff Bus Driver', exp: '3 Years', salary: '€4,535', demand: 60 },
+                      { title: 'Store Keeper', exp: '3 Years', salary: '€2,721', demand: 65 },
+                      { title: 'Generator Mechanic', exp: '3 Years', salary: '€2,721', demand: 70 },
+                      { title: 'Lift Technician', exp: '3 Years', salary: '€2,721', demand: 75 },
+                      { title: 'Alarm Technician', exp: '3 Years', salary: '€2,721', demand: 70 },
+                      { title: 'Loading/Unloading Worker', exp: '0', salary: '€1,814', demand: 65 },
+                      { title: 'Aircraft Cleaning Worker', exp: '0', salary: '€1,361', demand: 60 },
+                      { title: 'Trolley Helper', exp: '0', salary: '€1,361', demand: 60 },
+                      { title: 'Office Assistant', exp: '3 Years', salary: '€1,814', demand: 65 },
+                      { title: 'Computer Operator', exp: '3 Years', salary: '€3,628', demand: 75 },
+                      { title: 'Tanker Driver / Heavy Duty', exp: '3 Years', salary: '€3,628', demand: 70 }
+                    ]
+                  },
+                   {
+                    name: 'Emergency Hospital',
+                    iconName: 'Stethoscope',
+                    jobs: [
+                      { title: 'Head Nurse', exp: 'Degree', salary: '€6,349', demand: 98 },
+                      { title: 'Chief Pharmacist', exp: 'Degree', salary: '€4,535', demand: 90 },
+                      { title: 'Assistant Nurse', exp: 'Diploma', salary: '€4,535', demand: 95 },
+                      { title: 'Ambulance Driver', exp: '3 Years', salary: '€2,721', demand: 85 },
+                      { title: 'Chief Laboratory Technician', exp: 'Degree', salary: '€4,535', demand: 90 },
+                      { title: 'Radiology X-Ray Technician', exp: 'Degree/Diploma', salary: '€4,535', demand: 85 },
+                      { title: 'Ward Assistant', exp: '3 Years', salary: '€2,268', demand: 80 },
+                      { title: 'Sweeper', exp: '0', salary: '€1,814', demand: 65 },
+                      { title: 'Assistant Pharmacist', exp: 'Diploma', salary: '€2,721', demand: 80 }
                     ]
                   }
                 ]
               },
               {
-                id: 'tier2',
-                title: 'Western European Economic Powerhouses',
-                subtitle: t('tier2_sub'),
-                description: 'The economic engines of Europe offering corporate and technical roles.',
-                color: 'emerald', 
-                accent: 'emerald',
-                iconName: 'Building2',
-                stats: { avgSalary: '€3,000+', demand: 'Very High', satisfaction: '92%' },
-                countries: [
+                id: 'fi',
+                name: 'Finland',
+                flag: '🇫🇮',
+                themeColor: 'sky',
+                description: 'Opportunities in Retail, Catering, and Logistics sectors.',
+                visaInfo: {
+                    types: ['Residence Permit'],
+                    processingTime: '2-4 Months',
+                    detailedProcess: {
+                        preparation: ['Employer fills TEM054', 'Passport copies', 'Certificate translations', 'Proof of accommodation'],
+                        submission: ['Enter Finland account', 'Submit Application', 'Visit Mission for ID', 'Wait for decision'],
+                        postArrival: ['Visit DVV', 'Personal ID Code', 'Tax Card', 'Open bank account']
+                    },
+                    documents: ['Passport', 'Contract TEM054', 'Photo', 'Certificates'],
+                    expertTips: [{ title: "Enter Finland", desc: "Use e-service for cheaper fees and faster tracking." }],
+                    technicalTerms: [
+                        { term: 'TEM054', definition: 'The official form detailing terms of employment, filled by the employer.' },
+                        { term: 'DVV', definition: 'Digital and Population Data Services Agency. You register here to get your Personal ID Code.' },
+                        { term: 'Henkilötunnus', definition: 'Personal Identity Code. Required for opening a bank account and taxation.' },
+                        { term: 'Tax Card', definition: 'Document stating your tax withholding rate, given to your employer.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{ label: 'Nature', value: 100 }, { label: 'Education', value: 96 }, { label: 'Air Quality', value: 99 }, { label: 'Silence', value: 95 }], 
+                    highlights: ['Santa Claus Village', 'Northern Lights', 'Sauna Culture', 'Suomenlinna Fortress']
+                },
+                stats: { qol: 95, safety: 99, happiness: 98 },
+                departments: [
                   {
-                    id: 'nl',
-                    name: t('c_nl'),
-                    flag: '🇳🇱',
-                    themeColor: 'orange',
-                    description: 'Corporate, Tech, and Logistics Hub.',
-                    visaInfo: { 
-                        types: ['GVVA', 'HSM'], 
-                        processingTime: '2-3 Months', 
-                        detailedProcess: {
-                            preparation: ['Employer applies for advice', 'Legalization of documents', 'TB test check', 'Antecedents Certificate'],
-                            submission: ['Employer submits TEV', 'Collect MVV at embassy', 'Provide biometrics'],
-                            postArrival: ['Collect Residence Permit', 'Register for BSN', 'Mandatory Health Insurance', 'Open bank account']
-                        },
-                        documents: ['Passport','Contract','Antecedents'], 
-                        expertTips: [{title:'30% Ruling',desc:'Check tax benefit eligibility for skilled migrants.'}],
-                        technicalTerms: [
-                            { term: 'BSN', definition: 'Burgerservicenummer. Citizen Service Number.' },
-                            { term: 'MVV', definition: 'Machtiging tot Voorlopig Verblijf. Provisional visa.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{label:'Biking',value:98},{label:'English',value:95},{label:'Work-Life',value:92},{label:'Waterways',value:97}], 
-                        highlights: ['Rijksmuseum & Van Gogh', 'Keukenhof Gardens', 'Canal Cruises', 'Anne Frank House'] 
-                    },
-                    stats: { qol: 92, safety: 90, happiness: 89 },
-                    departments: [
-                      {
-                        name: t('dept_admin'),
-                        iconName: 'Briefcase',
-                        jobs: [
-                          { title: trJob('Manager'), exp: trExp('3-5 Years'), salary: '€6,000+', demand: 80 },
-                          { title: trJob('Accountant'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 85 },
-                          { title: trJob('HR Executive'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 75 },
-                          { title: trJob('Document Controller'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 65 },
-                          { title: trJob('Office Clerk'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 70 }
-                        ]
-                      },
-                      {
-                        name: t('dept_tech'),
-                        iconName: 'Cpu',
-                        jobs: [
-                          { title: trJob('IT Professional'), exp: trExp('3-5 Years'), salary: '€6,000+', demand: 95 },
-                          { title: trJob('Project Coordinator'), exp: trExp('3-5 Years'), salary: '€5,500+', demand: 80 },
-                          { title: trJob('Data Entry Operator'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 70 }
-                        ]
-                      },
-                      {
-                        name: t('dept_log'),
-                        iconName: 'Truck',
-                        jobs: [
-                          { title: trJob('Logistics Coordinator'), exp: trExp('3-5 Years'), salary: '€5,500+', demand: 80 },
-                          { title: trJob('Store Supervisor'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 75 },
-                          { title: trJob('Customer Service Executive'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 80 }
-                        ]
-                      }
+                    name: 'Supermarket Dept',
+                    iconName: 'ShoppingCart',
+                    jobs: [
+                      { title: 'System Engineer', exp: '3 Years', salary: '€5,000', demand: 85 },
+                      { title: 'System Operator', exp: '3 Years', salary: '€3,000', demand: 75 },
+                      { title: 'Sales Supervisor', exp: '3 Years', salary: '€3,000', demand: 70 },
+                      { title: 'Store Keeper', exp: '3 Years', salary: '€2,000', demand: 60 },
+                      { title: 'Forklift Operator', exp: '3 Years', salary: '€2,000', demand: 75 },
+                      { title: 'Data Entry Operator', exp: '3 Years', salary: '€4,000', demand: 70 },
+                      { title: 'Security Guard', exp: '3 Years', salary: '€2,000', demand: 65 },
+                      { title: 'Packing Helper', exp: '0', salary: '€1,000', demand: 60 },
+                      { title: 'Cam Supervisor', exp: '3 Years', salary: '€3,000', demand: 65 },
+                      { title: 'Transport Supervisor', exp: '3 Years', salary: '€3,000', demand: 70 },
+                      { title: 'Laundry Supervisor', exp: '3 Years', salary: '€3,000', demand: 65 },
+                      { title: 'Accountant', exp: '3 Years', salary: '€3,000', demand: 80 },
+                      { title: 'Sales Workers', exp: '3 Years', salary: '€2,000', demand: 70 },
+                      { title: 'Office Clerk', exp: '3 Years', salary: '€3,000', demand: 75 },
+                      { title: 'Office Assistant', exp: '3 Years', salary: '€2,000', demand: 70 },
+                      { title: 'Time Keeper', exp: '3 Years', salary: '€2,000', demand: 65 },
+                      { title: 'Laundry Worker', exp: '3 Years', salary: '€1,500', demand: 60 },
+                      { title: 'Tanker Driver Head Duty', exp: '3 Years', salary: '€2,000', demand: 75 },
+                      { title: 'Staff Bus Driver Head Duty', exp: '3 Years', salary: '€2,000', demand: 70 },
+                      { title: 'Driver Light Duty', exp: '3 Years', salary: '€1,500', demand: 65 },
+                      { title: 'Trolley Helper', exp: '0', salary: '€1,000', demand: 60 },
+                      { title: 'Loading Unloading Workers', exp: '0', salary: '€1,200', demand: 70 },
+                      { title: 'Cleaning Helper', exp: '0', salary: '€1,000', demand: 60 }
                     ]
                   },
                   {
-                    id: 'de',
-                    name: t('c_de'),
-                    flag: '🇩🇪',
-                    themeColor: 'red',
-                    description: 'Engineering excellence and Healthcare services.',
-                    visaInfo: { 
-                        types: ['Skilled Act', 'Blue Card'], 
-                        processingTime: '1-3 Months', 
-                        detailedProcess: {
-                            preparation: ['Qualification recognition (ZAB)', 'Binding job offer', 'Incoming Insurance', 'Language proof'],
-                            submission: ['Fill VIDEX online', 'Book appointment', 'Submit documents', 'Agency approval'],
-                            postArrival: ['City Registration (Anmeldung)', 'Open Girokonto (Bank Account)', 'Convert visa to Residence Permit', 'Register for Health Insurance']
-                        },
-                        documents: ['Videx','Passport','Qualifications'], 
-                        expertTips: [{title:'Recognition',desc:'Check degree equivalence early.'}],
-                        technicalTerms: [
-                            { term: 'Anmeldung', definition: 'City registration. You must register your address.' },
-                            { term: 'ZAB', definition: 'Central Office for Foreign Education.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{label:'Transport',value:95},{label:'Benefits',value:92},{label:'History',value:98},{label:'Beer Culture',value:94}], 
-                        highlights: ['Neuschwanstein Castle', 'Berlin Wall', 'Oktoberfest', 'Black Forest'] 
-                    },
-                    stats: { qol: 90, safety: 92, happiness: 85 },
-                    departments: [
-                      {
-                        name: t('dept_health'),
-                        iconName: 'Stethoscope',
-                        jobs: [ { title: trJob('Care Home Jobs'), exp: trExp('0 Years'), salary: '€2,000 - €2,600', demand: 95 } ]
-                      },
-                      {
-                        name: t('dept_admin'),
-                        iconName: 'Briefcase',
-                        jobs: [ 
-                            { title: trJob('Manager'), exp: trExp('3-5 Years'), salary: '€6,000+', demand: 80 }, 
-                            { title: trJob('Accountant'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 85 },
-                            { title: trJob('Secretary'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 70 },
-                            { title: trJob('Office Clerk'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 70 }
-                        ]
-                      },
-                      {
-                        name: t('dept_tech'),
-                        iconName: 'Factory',
-                        jobs: [ 
-                            { title: trJob('IT Professional'), exp: trExp('3-5 Years'), salary: '€6,000+', demand: 90 }, 
-                            { title: trJob('Data Entry Operator'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 65 },
-                            { title: trJob('Project Coordinator'), exp: trExp('3-5 Years'), salary: '€5,500+', demand: 80 }
-                        ]
-                      },
-                      {
-                        name: t('dept_log'),
-                        iconName: 'Truck',
-                        jobs: [
-                            { title: trJob('Logistics Coordinator'), exp: trExp('3-5 Years'), salary: '€5,500+', demand: 80 },
-                            { title: trJob('Store Supervisor'), exp: trExp('3-5 Years'), salary: '€5,000+', demand: 75 }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    id: 'it',
-                    name: t('c_it'),
-                    flag: '🇮🇹',
-                    themeColor: 'emerald',
-                    description: 'Mediterranean lifestyle with Service and Tech roles.',
-                    visaInfo: { 
-                        types: ['Decreto Flussi', 'Blue Card'], 
-                        processingTime: '2-4 Months', 
-                        detailedProcess: {
-                            preparation: ['Employer applies for Nulla Osta', 'Check Quotas', 'Accommodation proof', 'Sign stay contract'],
-                            submission: ['Receive Nulla Osta', 'Apply for Visa D', 'Submit passport'],
-                            postArrival: ['Apply for Permesso (Post Office)', 'Fingerprinting', 'Codice Fiscale', 'Register SSN']
-                        },
-                        documents: ['Nulla Osta','Contract','Passport'], 
-                        expertTips: [{title:'Quotas',desc:'Wait for Decree dates for non-specialized work.'}],
-                        technicalTerms: [
-                            { term: 'Nulla Osta', definition: 'A "No Impediment" certificate issued by immigration.' },
-                            { term: 'Codice Fiscale', definition: 'Tax identification code.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{label:'Culture',value:98},{label:'Food',value:100},{label:'Art',value:99},{label:'Climate',value:90}], 
-                        highlights: ['Colosseum & Rome', 'Venice Canals', 'Amalfi Coast', 'Tuscany Vineyards'] 
-                    },
-                    stats: { qol: 85, safety: 85, happiness: 82 },
-                    departments: [
-                      {
-                        name: t('dept_health'),
-                        iconName: 'Stethoscope',
-                        jobs: [
-                          { title: trJob('Nursing Assistant'), exp: trExp('Entry'), salary: '€1,200 - €1,600', demand: 88 },
-                          { title: trJob('Healthcare Support'), exp: trExp('Entry'), salary: '€1,200 - €1,600', demand: 85 },
-                          { title: trJob('Care Home Assistant'), exp: trExp('Entry'), salary: '€1,200 - €1,600', demand: 85 }
-                        ]
-                      },
-                      {
-                        name: t('dept_admin'),
-                        iconName: 'Briefcase',
-                        jobs: [
-                          { title: trJob('Manager'), exp: trExp('3-5 Years'), salary: '€2,200 - €3,000', demand: 75 },
-                          { title: trJob('Accountant'), exp: trExp('3-5 Years'), salary: '€1,800 - €2,500', demand: 80 },
-                          { title: trJob('Office Clerk'), exp: trExp('3-5 Years'), salary: '€1,500 - €2,000', demand: 70 }
-                        ]
-                      },
-                      {
-                        name: t('dept_tech'),
-                        iconName: 'Cpu',
-                        jobs: [
-                          { title: trJob('IT Professional'), exp: trExp('3-5 Years'), salary: '€2,200 - €3,500', demand: 85 },
-                          { title: trJob('Engineer'), exp: trExp('3-5 Years'), salary: '€2,200 - €3,200', demand: 80 }
-                        ]
-                      },
-                      {
-                        name: t('dept_log'),
-                        iconName: 'Truck',
-                        jobs: [
-                          { title: trJob('Logistics Coordinator'), exp: trExp('3-5 Years'), salary: '€1,800 - €2,400', demand: 70 },
-                          { title: trJob('Store Supervisor'), exp: trExp('3-5 Years'), salary: '€1,600 - €2,100', demand: 65 }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    id: 'fr',
-                    name: t('c_fr'),
-                    flag: '🇫🇷',
-                    themeColor: 'indigo',
-                    description: 'Diverse opportunities in Healthcare and Administration.',
-                    visaInfo: { 
-                        types: ['Talent Passport', 'Work Visa'], 
-                        processingTime: '2-3 Months', 
-                        detailedProcess: {
-                            preparation: ['Employer work authorization', 'Cerfa form', 'Translate documents'],
-                            submission: ['France-Visas online', 'VFS Appointment', 'Biometrics', 'Track online'],
-                            postArrival: ['Validate VLS-TS (OFII)', 'Medical exam', 'Social Security', 'Open bank account']
-                        },
-                        documents: ['Cerfa Form','Contract','Passport'], 
-                        expertTips: [{title:'Talent Passport',desc:'Check if you qualify for multi-year without authorization.'}],
-                        technicalTerms: [
-                            { term: 'Cerfa', definition: 'Standardized administrative forms.' },
-                            { term: 'VLS-TS', definition: 'Long-stay visa equivalent to a residence permit.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{label:'Lifestyle',value:95},{label:'Health',value:98},{label:'Fashion',value:96},{label:'Gastronomy',value:100}], 
-                        highlights: ['Eiffel Tower', 'Louvre Museum', 'French Riviera', 'Palace of Versailles'] 
-                    },
-                    stats: { qol: 88, safety: 86, happiness: 84 },
-                    departments: [
-                      {
-                        name: t('dept_health'),
-                        iconName: 'Stethoscope',
-                        jobs: [
-                          { title: trJob('Care Home Assistant'), exp: trExp('0 Years'), salary: '€1,200 - €1,600', demand: 90 },
-                          { title: trJob('Nursing Assistant'), exp: trExp('0 Years'), salary: '€1,200 - €1,600', demand: 85 }
-                        ]
-                      },
-                      {
-                        name: t('dept_admin'),
-                        iconName: 'Briefcase',
-                        jobs: [
-                          { title: trJob('Manager'), exp: trExp('3-5 Years'), salary: '€2,200 - €3,000', demand: 75 },
-                          { title: trJob('Accountant'), exp: trExp('3-5 Years'), salary: '€1,800 - €2,500', demand: 80 },
-                          { title: trJob('Office Clerk'), exp: trExp('3-5 Years'), salary: '€1,500 - €2,000', demand: 70 }
-                        ]
-                      },
-                      {
-                        name: t('dept_tech'),
-                        iconName: 'Factory',
-                        jobs: [
-                          { title: trJob('IT Professional'), exp: trExp('3-5 Years'), salary: '€2,200 - €3,500', demand: 85 },
-                          { title: trJob('Engineer'), exp: trExp('3-5 Years'), salary: '€2,200 - €3,200', demand: 80 }
-                        ]
-                      },
-                      {
-                        name: t('dept_log'),
-                        iconName: 'Truck',
-                        jobs: [
-                          { title: trJob('Logistics Coordinator'), exp: trExp('3-5 Years'), salary: '€1,800 - €2,400', demand: 70 },
-                          { title: trJob('Store Supervisor'), exp: trExp('3-5 Years'), salary: '€1,600 - €2,100', demand: 65 }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                id: 'tier3',
-                title: 'Rapid Growth Emerging Schengen Markets',
-                subtitle: t('tier3_sub'),
-                description: 'Rapidly developing economies with high demand for skilled labor.',
-                color: 'orange', 
-                accent: 'orange',
-                iconName: 'Factory',
-                stats: { avgSalary: '€1,800', demand: 'Growing', satisfaction: '85%' },
-                countries: [
-                  {
-                    id: 'pl',
-                    name: t('c_pl'),
-                    flag: '🇵🇱',
-                    themeColor: 'rose',
-                    description: 'Industrial hub with streamlined visa processes.',
-                    visaInfo: { 
-                        types: ['Type A'], 
-                        processingTime: '4-8 Weeks', 
-                        detailedProcess: {
-                            preparation: ['Employer Labor Market Test', 'Apply for Type A Permit', 'Wait for permit document'],
-                            submission: ['Register e-Konsulat', 'Book Type D appointment', 'Submit documents', 'Interview'],
-                            postArrival: ['Sign contract', 'Register ZUS (7 days)', 'Apply PESEL', 'Apply Karta Pobytu']
-                        },
-                        documents: ['Permit','Insurance','Flight'], 
-                        expertTips: [{title:'ZUS',desc:'Ensure employer registers you with ZUS within 7 days.'}],
-                        technicalTerms: [
-                            { term: 'ZUS', definition: 'Social Insurance Institution.' },
-                            { term: 'PESEL', definition: 'Universal Electronic System for Registration of the Population.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{label:'Cost',value:85},{label:'Growth',value:92},{label:'History',value:90},{label:'Nature',value:88}], 
-                        highlights: ['Wieliczka Salt Mine', 'Krakow Old Town', 'Auschwitz Memorial', 'Tatra Mountains'] 
-                    },
-                    stats: { qol: 78, safety: 82, happiness: 75 },
-                    departments: [
-                      {
-                        name: t('dept_manuf'),
-                        iconName: 'Factory',
-                        jobs: [
-                          { title: trJob('Machine Operator'), exp: t('skilled'), salary: '4,500 – 6,000 PLN', demand: 85 },
-                          { title: trJob('Assembly Operator'), exp: 'Perf. Bonus', salary: '4,200 – 5,800 PLN', demand: 80 },
-                          { title: trJob('Quality Control'), exp: 'Indoor/Stable', salary: '4,000 – 5,500 PLN', demand: 75 },
-                          { title: trJob('Production Line Worker'), exp: 'Stable Hours', salary: '4,000 – 5,500 PLN', demand: 70 },
-                          { title: trJob('Packaging Staff'), exp: trExp('Entry'), salary: '4,000 – 5,500 PLN', demand: 65 }
-                        ]
-                      },
-                      {
-                        name: t('dept_log'),
-                        iconName: 'Truck',
-                        jobs: [
-                          { title: trJob('Forklift Operator'), exp: 'License Req', salary: '4,500 – 6,500 PLN', demand: 90 },
-                          { title: trJob('Warehouse Assistant'), exp: 'Sorting', salary: '4,000 – 5,500 PLN', demand: 75 },
-                          { title: trJob('Inventory Clerk'), exp: 'Admin', salary: '4,200 – 5,800 PLN', demand: 70 }
-                        ]
-                      },
-                      {
-                        name: t('dept_const'),
-                        iconName: 'HardHat',
-                        jobs: [
-                          { title: trJob('Welder'), exp: 'Highest Pay', salary: '5,500 – 8,000+ PLN', demand: 95 },
-                          { title: trJob('Scaffolder'), exp: 'Height Bonus', salary: '5,000 – 7,000 PLN', demand: 85 },
-                          { title: trJob('General Laborer'), exp: 'Physical', salary: '4,000 – 5,500 PLN', demand: 75 }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    id: 'lv',
-                    name: t('c_lv'),
-                    flag: '🇱🇻',
-                    themeColor: 'red',
-                    description: 'Baltic tech hub with affordable living.',
-                    visaInfo: { 
-                        types: ['Visa D'], 
-                        processingTime: '1-2 Months', 
-                        detailedProcess: {
-                            preparation: ['Employer registers with OCMA', 'Get Invitation Number', 'TB X-ray', 'Police Clearance'],
-                            submission: ['Online application', 'Book appointment', 'Submit documents', 'Wait'],
-                            postArrival: ['Health check in Latvia', 'Collect Residence Card', 'Declare residence', 'Get Smart-ID']
-                        },
-                        documents: ['Invite #','X-ray','Passport'], 
-                        expertTips: [{title:'Smart-ID',desc:'Get digital ID immediately for banking access.'}],
-                        technicalTerms: [
-                            { term: 'OCMA', definition: 'Office of Citizenship and Migration Affairs.' },
-                            { term: 'Smart-ID', definition: 'Mobile app based identification.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{label:'Tech',value:85},{label:'Nature',value:92},{label:'Speed',value:95},{label:'Compact',value:88}], 
-                        highlights: ['Riga Old Town', 'Jurmala Beach', 'Gauja National Park', 'Rundale Palace'] 
-                    },
-                    stats: { qol: 75, safety: 80, happiness: 70 },
-                    departments: [
-                      {
-                        name: t('dept_const'),
-                        iconName: 'HardHat',
-                        jobs: [
-                          { title: trJob('Welder'), exp: '1 Year', salary: '€1,537 - €2,500+', demand: 85 }
-                        ]
-                      },
-                      {
-                        name: t('dept_manuf'),
-                        iconName: 'Cpu',
-                        jobs: [
-                          { title: trJob('CNC Operator'), exp: '1 Year', salary: '€1,537 - €2,000+', demand: 80 },
-                          { title: trJob('Aircraft Mechanic'), exp: '1 Year', salary: '€1,800 - €3,500+', demand: 85 }
-                        ]
-                      },
-                      {
-                        name: t('dept_log'),
-                        iconName: 'Truck',
-                        jobs: [
-                          { title: trJob('Truck Driver'), exp: '1 Year', salary: '€1,800 - €3,000+', demand: 95 },
-                          { title: trJob('Warehouse Packer'), exp: '1 Year', salary: '€1,537 - €1,800+', demand: 75 },
-                          { title: trJob('Chef'), exp: '1 Year', salary: '€1,537 - €2,000+', demand: 80 }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    id: 'cz',
-                    name: t('c_cz'),
-                    flag: '🇨🇿',
-                    themeColor: 'blue',
-                    description: 'Automotive and Technical powerhouse.',
-                    visaInfo: { 
-                        types: ['Employee Card'], 
-                        processingTime: '2-3 Months', 
-                        detailedProcess: {
-                            preparation: ['Vacancy report to Labor Office', 'Wait 30 days', 'Get Vacancy Number', 'Accommodation proof'],
-                            submission: ['Embassy appointment', 'Submit Employee Card app', 'Wait for MOI approval'],
-                            postArrival: ['Foreign Police (3 days)', 'Biometrics at OAMP', 'Collect Card', 'Health Insurance']
-                        },
-                        documents: ['Contract','Accommodation','Passport'], 
-                        expertTips: [{title:'Quota',desc:'Check annual quotas for your country.'}],
-                        technicalTerms: [
-                            { term: 'OAMP', definition: 'Department for Asylum and Migration Policy.' },
-                            { term: 'Vacancy Number', definition: 'Unique reference number for the specific job position.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{label:'Transport',value:90},{label:'Safety',value:95},{label:'Beer',value:100},{label:'Architecture',value:98}], 
-                        highlights: ['Prague Castle', 'Charles Bridge', 'Cesky Krumlov', 'Pilsner Urquell Brewery'] 
-                    },
-                    stats: { qol: 80, safety: 95, happiness: 78 },
-                    departments: [
-                      {
-                        name: t('dept_automotive'),
-                        iconName: 'Wrench',
-                        jobs: [
-                          { title: trJob('Auto Electrician'), exp: trExp('3 Years'), salary: '€1,400 - €2,200', demand: 85 }
-                        ]
-                      },
-                      {
-                        name: t('dept_tech'),
-                        iconName: 'Factory',
-                        jobs: [
-                          { title: trJob('CNC Operator'), exp: trExp('2 Years'), salary: '€1,500 - €2,400+', demand: 85 },
-                          { title: trJob('Welder'), exp: trExp('3 Years'), salary: '€1,400 - €2,300+', demand: 90 }
-                        ]
-                      },
-                      {
-                        name: t('dept_log'),
-                        iconName: 'Truck',
-                        jobs: [
-                          { title: trJob('Driver'), exp: trExp('3 Years'), salary: '€1,800 – €2,800+', demand: 90 },
-                          { title: trJob('Warehouse Staff'), exp: '1 Year', salary: '€1,000 – €1,400', demand: 75 },
-                          { title: trJob('Production Line Worker'), exp: trExp('0'), salary: '€900 – €1,300', demand: 70 },
-                          { title: trJob('Construction Helper'), exp: trExp('0'), salary: '€950 – €1,300', demand: 70 }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    id: 'hr',
-                    name: t('c_hr'),
-                    flag: '🇭🇷',
-                    themeColor: 'red',
-                    description: 'Tourism and Service oriented economy.',
-                    visaInfo: { 
-                        types: ['Work Permit'], 
-                        processingTime: '4-6 Weeks', 
-                        detailedProcess: {
-                            preparation: ['Employer requests Labor Test', 'Apply for Work Permit (MUP)', 'Receive positive opinion'],
-                            submission: ['Apply for Visa D', 'Or enter visa-free to collect', 'Travel to Croatia'],
-                            postArrival: ['Register address at police', 'Biometric Residence Permit', 'Obtain Tax ID (OIB)']
-                        },
-                        documents: ['Contract','Passport','Background Check'], 
-                        expertTips: [{title:'Seasonal',desc:'Quotas often apply for tourism/seasonal jobs.'}],
-                        technicalTerms: [
-                            { term: 'OIB', definition: 'Personal ID Number.' },
-                            { term: 'MUP', definition: 'Ministry of the Interior.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{label:'Coast',value:100},{label:'Relaxed',value:90},{label:'Islands',value:95},{label:'History',value:90}], 
-                        highlights: ['Dubrovnik Old Walls', 'Plitvice Lakes', 'Hvar Island', 'Split Diocletian Palace'] 
-                    },
-                    stats: { qol: 70, safety: 85, happiness: 75 },
-                    departments: [
-                      {
-                        name: t('dept_hosp'),
-                        iconName: 'Users',
-                        jobs: [
-                          { title: trJob('Construction Worker'), exp: trExp('0'), salary: '€600 - €1200', demand: 90 },
-                          { title: trJob('Hotel Staff'), exp: trExp('0'), salary: '€600 - €1200', demand: 85 },
-                          { title: trJob('Butcher'), exp: trExp('0'), salary: '€600 - €1200', demand: 75 }
-                        ]
-                      },
-                      {
-                        name: t('dept_log'),
-                        iconName: 'Truck',
-                        jobs: [
-                          { title: trJob('Truck Driver'), exp: '1', salary: '€600 - €1200', demand: 95 },
-                          { title: trJob('Welder'), exp: '1', salary: '€600 - €1200', demand: 85 },
-                          { title: trJob('Warehouse Packer'), exp: trExp('0'), salary: '€600 - €1200', demand: 80 }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                id: 'tier4',
-                title: 'Strategic Non-Schengen Opportunities',
-                subtitle: t('tier4_sub'),
-                description: 'Developing markets with accessible entry requirements.',
-                color: 'fuchsia', 
-                accent: 'slate',
-                iconName: 'Globe',
-                stats: { avgSalary: '€900', demand: 'Steady', satisfaction: '70%' },
-                countries: [
-                  {
-                    id: 'rs',
-                    name: t('c_rs'),
-                    flag: '🇷🇸',
-                    themeColor: 'blue',
-                    description: 'Key logistics crossroads in the Balkans.',
-                    visaInfo: { 
-                        types: ['Visa D'], 
-                        processingTime: '4-6 Weeks', 
-                        detailedProcess: {
-                            preparation: ['Employer market test (NSZ)', 'Obtain Work Permit approval', 'Receive Invitation Letter'],
-                            submission: ['Apply for Visa D', 'Submit insurance & funds proof', 'Optional Interview'],
-                            postArrival: ['Police Registration (White Card)', 'Temporary Residence (Boravište)', 'Finalize contract']
-                        },
-                        documents: ['Form D','Invitation','Insurance'], 
-                        expertTips: [{title:'White Card',desc:'Must register address within 24h of arrival.'}],
-                        technicalTerms: [
-                            { term: 'Bela Karta', definition: 'White Card. Mandatory police registration slip.' },
-                            { term: 'NSZ', definition: 'National Employment Service.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{label:'Cost',value:95},{label:'Social',value:88},{label:'Nightlife',value:90},{label:'History',value:85}], 
-                        highlights: ['Belgrade Fortress', 'Tara National Park', 'Nikola Tesla Museum', 'Skadarlija Street'] 
-                    },
-                    stats: { qol: 60, safety: 65, happiness: 55 },
-                    departments: [
-                      {
-                        name: t('dept_log'),
-                        iconName: 'Truck',
-                        jobs: [
-                          { title: trJob('Truck Driver'), exp: '1 Year', salary: '€800 - €1,500', demand: 90 },
-                          { title: trJob('Delivery Driver'), exp: '1 Year', salary: '€800 - €1,200', demand: 85 },
-                          { title: trJob('Warehouse Staff'), exp: '1 Year', salary: '€600 - €900', demand: 75 }
-                        ]
-                      },
-                      {
-                        name: t('dept_manuf'),
-                        iconName: 'Wrench',
-                        jobs: [
-                          { title: trJob('Welder'), exp: '1 Year', salary: '€550 - €1,000', demand: 80 }
-                        ]
-                      },
-                      {
-                        name: t('dept_hosp'),
-                        iconName: 'Utensils',
-                        jobs: [
-                            { title: trJob('Cook'), exp: '1 Year', salary: '€700 - €1,200', demand: 80 },
-                            { title: trJob('Hospitality Staff'), exp: '1 Year', salary: '€700 - €1,200', demand: 75 }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    id: 'mk',
-                    name: t('c_mk'),
-                    flag: '🇲🇰',
-                    themeColor: 'amber',
-                    description: 'Skilled Trades and Manufacturing.',
-                    visaInfo: { 
-                        types: ['Work Permit'], 
-                        processingTime: '4-6 Weeks', 
-                        detailedProcess: {
-                            preparation: ['Employer submits quota request', 'Obtain Work Permit approval', 'Medical check'],
-                            submission: ['Apply Visa D', 'Submit criminal record', 'Travel'],
-                            postArrival: ['Apply for ID Card', 'Register address with police', 'Final health check']
-                        },
-                        documents: ['Contract','Passport','Medical'], 
-                        expertTips: [{title:'Quota',desc:'Strict quotas by sector.'}],
-                        technicalTerms: [
-                            { term: 'Quota', definition: 'Government limit on foreign workers per sector.' },
-                            { term: 'AVRMS', definition: 'Employment Service Agency.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{label:'Nature',value:90},{label:'Cost',value:95},{label:'Lakes',value:98},{label:'Ancient',value:88}], 
-                        highlights: ['Lake Ohrid (UNESCO)', 'Old Bazaar Skopje', 'Matka Canyon', 'Mavrovo National Park'] 
-                    },
-                    stats: { qol: 58, safety: 62, happiness: 52 },
-                    departments: [
-                      {
-                        name: t('dept_manuf'),
-                        iconName: 'Wrench',
-                        jobs: [
-                          { title: trJob('Welder'), exp: '1 Year', salary: '€700 - €1,200', demand: 85 },
-                          { title: 'Electrician', exp: '1 Year', salary: '€700 - €1,200', demand: 80 },
-                          { title: 'Plumber', exp: '1 Year', salary: '€700 - €1,200', demand: 80 },
-                          { title: 'Mason', exp: '1 Year', salary: '€700 - €1,200', demand: 75 }
-                        ]
-                      },
-                      {
-                        name: t('dept_manuf'),
-                        iconName: 'Factory',
-                        jobs: [
-                          { title: trJob('Machine Operator'), exp: '1 Year', salary: '€550 - €1,000', demand: 75 },
-                          { title: trJob('Assembly Worker'), exp: trExp('0'), salary: '€550 - €1,000', demand: 70 }
-                        ]
-                      },
-                      {
-                        name: t('dept_hosp'),
-                        iconName: 'Utensils',
-                        jobs: [
-                            { title: trJob('Chef'), exp: '1 Year', salary: '€450 - €900', demand: 75 },
-                            { title: trJob('Hotel Staff'), exp: '1 Year', salary: '€450 - €900', demand: 70 },
-                            { title: trJob('General Laborer'), exp: trExp('0'), salary: '€400 - €700', demand: 65 }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    id: 'al',
-                    name: t('c_al'),
-                    flag: '🇦🇱',
-                    themeColor: 'red',
-                    description: 'Tourism hotspot with developing infrastructure.',
-                    visaInfo: { 
-                        types: ['Unique Permit'], 
-                        processingTime: '3-6 Weeks', 
-                        detailedProcess: {
-                            preparation: ['Employer uploads contract', 'Apply for Unique Permit', 'Wait approval'],
-                            submission: ['Apply Visa D online', 'Upload docs', 'Email approval'],
-                            postArrival: ['Register NIPT', 'Finalize Residence Card', 'Social Security']
-                        },
-                        documents: ['e-Visa','Contract','License'], 
-                        expertTips: [{title:'Online',desc:'Fully digital e-Visa system.'}],
-                        technicalTerms: [
-                            { term: 'Unique Permit', definition: 'Single document combining work and residence authorization.' },
-                            { term: 'NIPT', definition: 'Tax ID number.' }
-                        ]
-                    },
-                    attractions: { 
-                        metrics: [{label:'Tourism',value:92},{label:'Cost',value:95},{label:'Beaches',value:94},{label:'History',value:88}], 
-                        highlights: ['Albanian Riviera', 'Blue Eye Spring', 'Berat (City of Windows)', 'Gjirokaster Castle'] 
-                    },
-                    stats: { qol: 55, safety: 60, happiness: 58 },
-                    departments: [
-                      {
-                        name: t('dept_const'),
-                        iconName: 'Briefcase',
-                        jobs: [
-                          { title: trJob('Construction Worker'), exp: trExp('0'), salary: '€600 - €1200', demand: 90 },
-                          { title: trJob('Truck Driver'), exp: '1', salary: '€600 - €1200', demand: 85 },
-                          { title: trJob('Welder'), exp: '1', salary: '€600 - €1200', demand: 85 },
-                          { title: trJob('Hotel Staff'), exp: '1', salary: '€600 - €1200', demand: 80 },
-                          { title: trJob('Warehouse Packer'), exp: trExp('0'), salary: '€600 - €1200', demand: 75 },
-                          { title: trJob('Butcher'), exp: trExp('0'), salary: '€600 - €1200', demand: 70 }
-                        ]
-                      }
+                    name: 'Catering & Restaurant',
+                    iconName: 'Utensils',
+                    jobs: [
+                      { title: 'Head Chef', exp: '3 Years', salary: '€5,000', demand: 90 },
+                      { title: 'Chief Cook', exp: '3 Years', salary: '€4,000', demand: 85 },
+                      { title: 'Restaurant Supervisor', exp: '3 Years', salary: '€3,000', demand: 75 },
+                      { title: 'Baker/Pastry Chef', exp: '3 Years', salary: '€3,000', demand: 80 },
+                      { title: 'Waiter / Bartender', exp: '3 Years', salary: '€2,000', demand: 75 },
+                      { title: 'Kitchen Helper', exp: '0', salary: '€1,500', demand: 70 },
+                      { title: 'Bar Supervisor', exp: '3 Years', salary: '€3,000', demand: 75 },
+                      { title: 'Housekeeping Supervisor', exp: '3 Years', salary: '€3,000', demand: 70 },
+                      { title: 'F & B Supervisor', exp: '3 Years', salary: '€3,000', demand: 75 },
+                      { title: 'Steward Supervisor', exp: '3 Years', salary: '€3,000', demand: 70 },
+                      { title: 'Health and Safety Officer', exp: '3 Years', salary: '€2,000', demand: 75 },
+                      { title: 'Food Quality Inspector', exp: '3 Years', salary: '€3,000', demand: 80 },
+                      { title: 'Assistant Cook', exp: '3 Years', salary: '€2,500', demand: 80 },
+                      { title: 'Assistant Chef', exp: '3 Years', salary: '€3,000', demand: 80 },
+                      { title: 'Food and Beverage', exp: '3 Years', salary: '€2,000', demand: 75 },
+                      { title: 'Captain', exp: '3 Years', salary: '€2,000', demand: 75 },
+                      { title: 'Steward', exp: '3 Years', salary: '€2,000', demand: 70 },
+                      { title: 'Commis III', exp: '3 Years', salary: '€2,000', demand: 75 },
+                      { title: 'Pizza Makers', exp: '3 Years', salary: '€3,000', demand: 80 },
+                      { title: 'Chef de Partie', exp: '3 Years', salary: '€2,000', demand: 80 },
+                      { title: 'Housekeeping', exp: '3 Years', salary: '€2,000', demand: 70 }
                     ]
                   }
                 ]
               }
-            ];
-        };
+            ]
+          },
+          {
+            id: 'tier2',
+            title: 'Western European Economic Powerhouses',
+            subtitle: 'Western Schengen',
+            description: 'The economic engines of Europe offering corporate and technical roles.',
+            color: 'emerald', 
+            accent: 'emerald',
+            iconName: 'Building2',
+            stats: { avgSalary: '€3,000+', demand: 'Very High', satisfaction: '92%' },
+            countries: [
+              {
+                id: 'nl',
+                name: 'Netherlands',
+                flag: '🇳🇱',
+                themeColor: 'orange',
+                description: 'Corporate, Tech, and Logistics Hub.',
+                visaInfo: { 
+                    types: ['GVVA', 'HSM'], 
+                    processingTime: '2-3 Months', 
+                    detailedProcess: {
+                        preparation: ['Employer applies for advice', 'Legalization of documents', 'TB test check', 'Antecedents Certificate'],
+                        submission: ['Employer submits TEV', 'Collect MVV at embassy', 'Provide biometrics'],
+                        postArrival: ['Collect Residence Permit', 'Register for BSN', 'Mandatory Health Insurance', 'Open bank account']
+                    },
+                    documents: ['Passport','Contract','Antecedents'], 
+                    expertTips: [{title:'30% Ruling',desc:'Check tax benefit eligibility for skilled migrants.'}],
+                    technicalTerms: [
+                        { term: 'BSN', definition: 'Burgerservicenummer. Citizen Service Number required for work, banking, and insurance.' },
+                        { term: 'MVV', definition: 'Machtiging tot Voorlopig Verblijf. A provisional visa sticker allowing entry to the Netherlands.' },
+                        { term: 'TEV', definition: 'Toegang en Verblijf procedure. The combined application for entry and residence.' },
+                        { term: 'DigiD', definition: 'Digital Identity used for all government online services.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{label:'Biking',value:98},{label:'English',value:95},{label:'Work-Life',value:92},{label:'Waterways',value:97}], 
+                    highlights: ['Rijksmuseum & Van Gogh', 'Keukenhof Gardens', 'Canal Cruises', 'Anne Frank House'] 
+                },
+                stats: { qol: 92, safety: 90, happiness: 89 },
+                departments: [
+                  {
+                    name: 'Corporate & Office',
+                    iconName: 'Briefcase',
+                    jobs: [
+                      { title: 'Manager', exp: '3-5 Years', salary: '€6,000+', demand: 80 },
+                      { title: 'Accountant', exp: '3-5 Years', salary: '€5,000+', demand: 85 },
+                      { title: 'HR Executive', exp: '3-5 Years', salary: '€5,000+', demand: 75 },
+                      { title: 'Administrative Assistant', exp: '3-5 Years', salary: '€5,000+', demand: 70 },
+                      { title: 'Document Controller', exp: '3-5 Years', salary: '€5,000+', demand: 65 },
+                      { title: 'Office Clerk / Receptionist', exp: '3-5 Years', salary: '€5,000+', demand: 70 },
+                      { title: 'HR Assistant / Executive', exp: '3-5 Years', salary: '€5,000+', demand: 75 },
+                      { title: 'Front Office Executive', exp: '3-5 Years', salary: '€5,000+', demand: 70 },
+                      { title: 'Secretary / Personal Assistant', exp: '3-5 Years', salary: '€5,000+', demand: 70 }
+                    ]
+                  },
+                  {
+                    name: 'Technical & Eng',
+                    iconName: 'Cpu',
+                    jobs: [
+                      { title: 'IT Professional', exp: '3-5 Years', salary: '€6,000+', demand: 95 },
+                      { title: 'Engineer (Various)', exp: '3-5 Years', salary: '€6,000+', demand: 90 },
+                      { title: 'Project Coordinator', exp: '3-5 Years', salary: '€5,500+', demand: 80 },
+                      { title: 'Data Entry Operator', exp: '3-5 Years', salary: '€5,000+', demand: 70 }
+                    ]
+                  },
+                  {
+                    name: 'Sales & Logistics',
+                    iconName: 'Truck',
+                    jobs: [
+                      { title: 'Sales Executive', exp: '3-5 Years', salary: '€5,500+', demand: 85 },
+                      { title: 'Logistics Coordinator', exp: '3-5 Years', salary: '€5,500+', demand: 80 },
+                      { title: 'Store Supervisor', exp: '3-5 Years', salary: '€5,000+', demand: 75 },
+                      { title: 'Sales & Marketing Executive', exp: '3-5 Years', salary: '€5,500+', demand: 85 },
+                      { title: 'Business Development Executive', exp: '3-5 Years', salary: '€5,500+', demand: 85 },
+                      { title: 'Customer Service Executive', exp: '3-5 Years', salary: '€5,000+', demand: 80 },
+                      { title: 'Call Centre Executive', exp: '3-5 Years', salary: '€5,000+', demand: 75 },
+                      { title: 'Procurement / Purchase Assistant', exp: '3-5 Years', salary: '€5,000+', demand: 75 }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'de',
+                name: 'Germany',
+                flag: '🇩🇪',
+                themeColor: 'red',
+                description: 'Engineering excellence and Healthcare services.',
+                visaInfo: { 
+                    types: ['Skilled Act', 'Blue Card'], 
+                    processingTime: '1-3 Months', 
+                    detailedProcess: {
+                        preparation: ['Qualification recognition (ZAB)', 'Binding job offer', 'Incoming Insurance', 'Language proof'],
+                        submission: ['Fill VIDEX online', 'Book appointment', 'Submit documents', 'Agency approval'],
+                        postArrival: ['City Registration (Anmeldung)', 'Open Girokonto (Bank Account)', 'Convert visa to Residence Permit', 'Register for Health Insurance']
+                    },
+                    documents: ['Videx','Passport','Qualifications'], 
+                    expertTips: [{title:'Recognition',desc:'Check degree equivalence early.'}],
+                    technicalTerms: [
+                        { term: 'Anmeldung', definition: 'City registration. You must register your address at the Bürgeramt to get a tax ID.' },
+                        { term: 'ZAB', definition: 'Central Office for Foreign Education. They issue Statements of Comparability for foreign degrees.' },
+                        { term: 'VIDEX', definition: 'The online form for Schengen and National visa applications.' },
+                        { term: 'Ausländerbehörde', definition: 'Foreigners\' Authority. The local immigration office handling residence permits.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{label:'Transport',value:95},{label:'Benefits',value:92},{label:'History',value:98},{label:'Beer Culture',value:94}], 
+                    highlights: ['Neuschwanstein Castle', 'Berlin Wall', 'Oktoberfest', 'Black Forest'] 
+                },
+                stats: { qol: 90, safety: 92, happiness: 85 },
+                departments: [
+                  {
+                    name: 'Healthcare',
+                    iconName: 'Stethoscope',
+                    jobs: [ { title: 'Care Home Jobs', exp: '0 Years', salary: '€2,000 - €2,600', demand: 95 } ]
+                  },
+                  {
+                    name: 'Corporate & Office',
+                    iconName: 'Briefcase',
+                    jobs: [ 
+                        { title: 'Manager', exp: '3-5 Years', salary: '€6,000+', demand: 80 }, 
+                        { title: 'Accountant', exp: '3-5 Years', salary: '€5,000+', demand: 85 },
+                        { title: 'HR Executive', exp: '3-5 Years', salary: '€5,000+', demand: 75 },
+                        { title: 'Secretary', exp: '3-5 Years', salary: '€5,000+', demand: 70 },
+                        { title: 'Office Clerk / Receptionist', exp: '3-5 Years', salary: '€5,000+', demand: 70 },
+                        { title: 'HR Assistant / Executive', exp: '3-5 Years', salary: '€5,000+', demand: 75 },
+                        { title: 'Administrative Assistant', exp: '3-5 Years', salary: '€5,000+', demand: 70 },
+                        { title: 'Front Office Executive', exp: '3-5 Years', salary: '€5,000+', demand: 70 },
+                        { title: 'Secretary / Personal Assistant', exp: '3-5 Years', salary: '€5,000+', demand: 70 },
+                        { title: 'Document Controller', exp: '3-5 Years', salary: '€5,000+', demand: 65 }
+                    ]
+                  },
+                  {
+                    name: 'Technical',
+                    iconName: 'Factory',
+                    jobs: [ 
+                        { title: 'IT Professional', exp: '3-5 Years', salary: '€6,000+', demand: 90 }, 
+                        { title: 'Engineer (Various)', exp: '3-5 Years', salary: '€6,000+', demand: 92 },
+                        { title: 'Data Entry Operator', exp: '3-5 Years', salary: '€5,000+', demand: 65 },
+                        { title: 'Project Coordinator', exp: '3-5 Years', salary: '€5,500+', demand: 80 }
+                    ]
+                  },
+                  {
+                    name: 'Sales & Logistics',
+                    iconName: 'Truck',
+                    jobs: [
+                        { title: 'Sales Executive', exp: '3-5 Years', salary: '€5,500+', demand: 85 },
+                        { title: 'Logistics Coordinator', exp: '3-5 Years', salary: '€5,500+', demand: 80 },
+                        { title: 'Sales & Marketing Executive', exp: '3-5 Years', salary: '€5,500+', demand: 85 },
+                        { title: 'Business Development Executive', exp: '3-5 Years', salary: '€5,500+', demand: 85 },
+                        { title: 'Customer Service Executive', exp: '3-5 Years', salary: '€5,000+', demand: 80 },
+                        { title: 'Call Centre Executive', exp: '3-5 Years', salary: '€5,000+', demand: 75 },
+                        { title: 'Store Supervisor', exp: '3-5 Years', salary: '€5,000+', demand: 75 },
+                        { title: 'Procurement / Purchase Assistant', exp: '3-5 Years', salary: '€5,000+', demand: 75 }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'it',
+                name: 'Italy',
+                flag: '🇮🇹',
+                themeColor: 'emerald',
+                description: 'Mediterranean lifestyle with Service and Tech roles.',
+                visaInfo: { 
+                    types: ['Decreto Flussi', 'Blue Card'], 
+                    processingTime: '2-4 Months', 
+                    detailedProcess: {
+                        preparation: ['Employer applies for Nulla Osta', 'Check Quotas', 'Accommodation proof', 'Sign stay contract'],
+                        submission: ['Receive Nulla Osta', 'Apply for Visa D', 'Submit passport'],
+                        postArrival: ['Apply for Permesso (Post Office)', 'Fingerprinting', 'Codice Fiscale', 'Register SSN']
+                    },
+                    documents: ['Nulla Osta','Contract','Passport'], 
+                    expertTips: [{title:'Quotas',desc:'Wait for Decree dates for non-specialized work.'}],
+                    technicalTerms: [
+                        { term: 'Nulla Osta', definition: 'A "No Impediment" certificate issued by immigration, required before applying for a visa.' },
+                        { term: 'Codice Fiscale', definition: 'Tax identification code. Essential for signing contracts, renting, and healthcare.' },
+                        { term: 'Decreto Flussi', definition: 'The annual decree setting quotas for how many non-EU workers can enter Italy.' },
+                        { term: 'Permesso di Soggiorno', definition: 'Residence permit. Applied for at a post office (Kit Giallo) after arrival.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{label:'Culture',value:98},{label:'Food',value:100},{label:'Art',value:99},{label:'Climate',value:90}], 
+                    highlights: ['Colosseum & Rome', 'Venice Canals', 'Amalfi Coast', 'Tuscany Vineyards'] 
+                },
+                stats: { qol: 85, safety: 85, happiness: 82 },
+                departments: [
+                  {
+                    name: 'Healthcare',
+                    iconName: 'Stethoscope',
+                    jobs: [
+                      { title: 'Nursing Assistant', exp: 'Entry', salary: '€1,200 - €1,600', demand: 88 },
+                      { title: 'Healthcare Support', exp: 'Entry', salary: '€1,200 - €1,600', demand: 85 },
+                      { title: 'Care Home Assistant', exp: 'Entry', salary: '€1,200 - €1,600', demand: 85 },
+                      { title: 'Elderly Care Staff', exp: 'Entry', salary: '€1,200 - €1,600', demand: 85 }
+                    ]
+                  },
+                  {
+                    name: 'Corporate & Office',
+                    iconName: 'Briefcase',
+                    jobs: [
+                      { title: 'Manager', exp: '3-5 Years', salary: '€2,200 - €3,000', demand: 75 },
+                      { title: 'Accountant', exp: '3-5 Years', salary: '€1,800 - €2,500', demand: 80 },
+                      { title: 'Office Clerk / Receptionist', exp: '3-5 Years', salary: '€1,500 - €2,000', demand: 70 },
+                      { title: 'HR Assistant', exp: '3-5 Years', salary: '€1,600 - €2,200', demand: 75 }
+                    ]
+                  },
+                  {
+                    name: 'Technical & Eng',
+                    iconName: 'Cpu',
+                    jobs: [
+                      { title: 'IT Professional', exp: '3-5 Years', salary: '€2,200 - €3,500', demand: 85 },
+                      { title: 'Engineer', exp: '3-5 Years', salary: '€2,200 - €3,200', demand: 80 }
+                    ]
+                  },
+                  {
+                    name: 'Sales & Logistics',
+                    iconName: 'Truck',
+                    jobs: [
+                      { title: 'Sales & Marketing Exec', exp: '3-5 Years', salary: '€1,800 - €2,500', demand: 75 },
+                      { title: 'Logistics Coordinator', exp: '3-5 Years', salary: '€1,800 - €2,400', demand: 70 },
+                      { title: 'Business Development', exp: '3-5 Years', salary: '€1,900 - €2,600', demand: 75 },
+                      { title: 'Store Supervisor', exp: '3-5 Years', salary: '€1,600 - €2,100', demand: 65 }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'fr',
+                name: 'France',
+                flag: '🇫🇷',
+                themeColor: 'indigo',
+                description: 'Diverse opportunities in Healthcare and Administration.',
+                visaInfo: { 
+                    types: ['Talent Passport', 'Work Visa'], 
+                    processingTime: '2-3 Months', 
+                    detailedProcess: {
+                        preparation: ['Employer work authorization', 'Cerfa form', 'Translate documents'],
+                        submission: ['France-Visas online', 'VFS Appointment', 'Biometrics', 'Track online'],
+                        postArrival: ['Validate VLS-TS (OFII)', 'Medical exam', 'Social Security', 'Open bank account']
+                    },
+                    documents: ['Cerfa Form','Contract','Passport'], 
+                    expertTips: [{title:'Talent Passport',desc:'Check if you qualify for multi-year without authorization.'}],
+                    technicalTerms: [
+                        { term: 'Cerfa', definition: 'Standardized administrative forms used for all French visa applications.' },
+                        { term: 'VLS-TS', definition: 'Long-stay visa equivalent to a residence permit. Must be validated online upon arrival.' },
+                        { term: 'OFII', definition: 'French Office for Immigration and Integration. Conducts medical exams and integration.' },
+                        { term: 'Carte de Séjour', definition: 'Residence permit card. You apply for this if you stay longer than your VLS-TS validity.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{label:'Lifestyle',value:95},{label:'Health',value:98},{label:'Fashion',value:96},{label:'Gastronomy',value:100}], 
+                    highlights: ['Eiffel Tower', 'Louvre Museum', 'French Riviera', 'Palace of Versailles'] 
+                },
+                stats: { qol: 88, safety: 86, happiness: 84 },
+                departments: [
+                  {
+                    name: 'Healthcare',
+                    iconName: 'Stethoscope',
+                    jobs: [
+                      { title: 'Care Home Assistant', exp: '0 Years', salary: '€1,200 - €1,600', demand: 90 },
+                      { title: 'Nursing Assistant', exp: '0 Years', salary: '€1,200 - €1,600', demand: 85 },
+                      { title: 'Elderly Care Staff', exp: '0 Years', salary: '€1,200 - €1,600', demand: 85 },
+                      { title: 'Healthcare Support', exp: '0 Years', salary: '€1,200 - €1,600', demand: 80 }
+                    ]
+                  },
+                  {
+                    name: 'Corporate & Office',
+                    iconName: 'Briefcase',
+                    jobs: [
+                      { title: 'Manager', exp: '3-5 Years', salary: '€2,200 - €3,000', demand: 75 },
+                      { title: 'Accountant', exp: '3-5 Years', salary: '€1,800 - €2,500', demand: 80 },
+                      { title: 'Office Clerk / Receptionist', exp: '3-5 Years', salary: '€1,500 - €2,000', demand: 70 },
+                      { title: 'HR Assistant', exp: '3-5 Years', salary: '€1,600 - €2,200', demand: 75 }
+                    ]
+                  },
+                  {
+                    name: 'Technical',
+                    iconName: 'Factory',
+                    jobs: [
+                      { title: 'IT Professional', exp: '3-5 Years', salary: '€2,200 - €3,500', demand: 85 },
+                      { title: 'Engineer', exp: '3-5 Years', salary: '€2,200 - €3,200', demand: 80 }
+                    ]
+                  },
+                  {
+                    name: 'Sales & Logistics',
+                    iconName: 'Truck',
+                    jobs: [
+                      { title: 'Sales & Marketing Exec', exp: '3-5 Years', salary: '€1,800 - €2,500', demand: 75 },
+                      { title: 'Logistics Coordinator', exp: '3-5 Years', salary: '€1,800 - €2,400', demand: 70 },
+                      { title: 'Business Development', exp: '3-5 Years', salary: '€1,900 - €2,600', demand: 75 },
+                      { title: 'Store Supervisor', exp: '3-5 Years', salary: '€1,600 - €2,100', demand: 65 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            id: 'tier3',
+            title: 'Rapid Growth Emerging Schengen Markets',
+            subtitle: 'Emerging Schengen',
+            description: 'Rapidly developing economies with high demand for skilled labor.',
+            color: 'orange', 
+            accent: 'orange',
+            iconName: 'Factory',
+            stats: { avgSalary: '€1,800', demand: 'Growing', satisfaction: '85%' },
+            countries: [
+              {
+                id: 'pl',
+                name: 'Poland',
+                flag: '🇵🇱',
+                themeColor: 'rose',
+                description: 'Industrial hub with streamlined visa processes.',
+                visaInfo: { 
+                    types: ['Type A'], 
+                    processingTime: '4-8 Weeks', 
+                    detailedProcess: {
+                        preparation: ['Employer Labor Market Test', 'Apply for Type A Permit', 'Wait for permit document'],
+                        submission: ['Register e-Konsulat', 'Book Type D appointment', 'Submit documents', 'Interview'],
+                        postArrival: ['Sign contract', 'Register ZUS (7 days)', 'Apply PESEL', 'Apply Karta Pobytu']
+                    },
+                    documents: ['Permit','Insurance','Flight'], 
+                    expertTips: [{title:'ZUS',desc:'Ensure employer registers you with ZUS within 7 days.'}],
+                    technicalTerms: [
+                        { term: 'ZUS', definition: 'Zakład Ubezpieczeń Społecznych. Social Insurance Institution covering health and pension.' },
+                        { term: 'PESEL', definition: 'Universal Electronic System for Registration of the Population. Your national ID number.' },
+                        { term: 'Karta Pobytu', definition: 'Residence Card. Applied for at the Voivodeship office after arrival.' },
+                        { term: 'Oświadczenie', definition: 'Declaration of entrustment of work (simplified procedure for some nations).' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{label:'Cost',value:85},{label:'Growth',value:92},{label:'History',value:90},{label:'Nature',value:88}], 
+                    highlights: ['Wieliczka Salt Mine', 'Krakow Old Town', 'Auschwitz Memorial', 'Tatra Mountains'] 
+                },
+                stats: { qol: 78, safety: 82, happiness: 75 },
+                departments: [
+                  {
+                    name: 'Manufacturing',
+                    iconName: 'Factory',
+                    jobs: [
+                      { title: 'Machine Operator', exp: 'Skilled Role', salary: '4,500 – 6,000 PLN', demand: 85 },
+                      { title: 'Assembly Operator', exp: 'Perf. Bonus', salary: '4,200 – 5,800 PLN', demand: 80 },
+                      { title: 'Quality Control (QC)', exp: 'Indoor/Stable', salary: '4,000 – 5,500 PLN', demand: 75 },
+                      { title: 'Production Line Worker', exp: 'Stable Hours', salary: '4,000 – 5,500 PLN', demand: 70 },
+                      { title: 'Packaging Staff', exp: 'Entry Level', salary: '4,000 – 5,500 PLN', demand: 65 }
+                    ]
+                  },
+                  {
+                    name: 'Logistics',
+                    iconName: 'Truck',
+                    jobs: [
+                      { title: 'Forklift Operator', exp: 'License Req', salary: '4,500 – 6,500 PLN', demand: 90 },
+                      { title: 'Picker / Packer', exp: 'High OT', salary: '4,500 – 6,500 PLN', demand: 85 },
+                      { title: 'Warehouse Assistant', exp: 'Sorting', salary: '4,000 – 5,500 PLN', demand: 75 },
+                      { title: 'Inventory Clerk', exp: 'Admin', salary: '4,200 – 5,800 PLN', demand: 70 }
+                    ]
+                  },
+                  {
+                    name: 'Construction',
+                    iconName: 'HardHat',
+                    jobs: [
+                      { title: 'Welder (Certified)', exp: 'Highest Pay', salary: '5,500 – 8,000+ PLN', demand: 95 },
+                      { title: 'Electrician', exp: 'Skilled', salary: '5,500 – 8,000+ PLN', demand: 90 },
+                      { title: 'Scaffolder', exp: 'Height Bonus', salary: '5,000 – 7,000 PLN', demand: 85 },
+                      { title: 'Mason / Plasterer', exp: 'High Demand', salary: '5,500 – 8,000+ PLN', demand: 85 },
+                      { title: 'General Laborer', exp: 'Physical', salary: '4,000 – 5,500 PLN', demand: 75 }
+                    ]
+                  },
+                  {
+                    name: 'Agriculture',
+                    iconName: 'Tractor',
+                    jobs: [
+                      { title: 'Harvesting Worker', exp: 'Seasonal', salary: '3,800 – 5,000 PLN', demand: 80 }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'lv',
+                name: 'Latvia',
+                flag: '🇱🇻',
+                themeColor: 'red',
+                description: 'Baltic tech hub with affordable living.',
+                visaInfo: { 
+                    types: ['Visa D'], 
+                    processingTime: '1-2 Months', 
+                    detailedProcess: {
+                        preparation: ['Employer registers with OCMA', 'Get Invitation Number', 'TB X-ray', 'Police Clearance'],
+                        submission: ['Online application', 'Book appointment', 'Submit documents', 'Wait'],
+                        postArrival: ['Health check in Latvia', 'Collect Residence Card', 'Declare residence', 'Get Smart-ID']
+                    },
+                    documents: ['Invite #','X-ray','Passport'], 
+                    expertTips: [{title:'Smart-ID',desc:'Get digital ID immediately for banking access.'}],
+                    technicalTerms: [
+                        { term: 'OCMA', definition: 'Office of Citizenship and Migration Affairs (PMLP). The main immigration authority.' },
+                        { term: 'Smart-ID', definition: 'Mobile app based identification used for banking and government services.' },
+                        { term: 'Invitation Number', definition: 'Unique code generated by OCMA after employer request, required for visa app.' },
+                        { term: 'Code 95', definition: 'Specific certification required for professional truck and bus drivers.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{label:'Tech',value:85},{label:'Nature',value:92},{label:'Speed',value:95},{label:'Compact',value:88}], 
+                    highlights: ['Riga Old Town', 'Jurmala Beach', 'Gauja National Park', 'Rundale Palace'] 
+                },
+                stats: { qol: 75, safety: 80, happiness: 70 },
+                departments: [
+                  {
+                    name: 'Construction',
+                    iconName: 'HardHat',
+                    jobs: [
+                      { title: 'Welder / Fitter', exp: '1 Year', salary: '€1,537 - €2,500+', demand: 85 },
+                      { title: 'Electrician (Certified)', exp: '1 Year', salary: '€1,537 - €2,800+', demand: 80 },
+                      { title: 'Bricklayer / Mason', exp: '1 Year', salary: '€1,537 - €2,200+', demand: 75 }
+                    ]
+                  },
+                  {
+                    name: 'Manufacturing & Tech',
+                    iconName: 'Cpu',
+                    jobs: [
+                      { title: 'CNC Operator', exp: '1 Year', salary: '€1,537 - €2,000+', demand: 80 },
+                      { title: 'Aircraft Mechanic', exp: '1 Year', salary: '€1,800 - €3,500+', demand: 85 },
+                      { title: 'Software Developer', exp: '1 Year', salary: '€2,528 - €5,000+', demand: 90 },
+                      { title: 'IT Systems Analyst', exp: '1 Year', salary: '€2,528 - €4,000+', demand: 85 }
+                    ]
+                  },
+                  {
+                    name: 'Logistics & Service',
+                    iconName: 'Truck',
+                    jobs: [
+                      { title: 'Truck Driver (Code 95)', exp: '1 Year', salary: '€1,800 - €3,000+', demand: 95 },
+                      { title: 'Warehouse Packer', exp: '1 Year', salary: '€1,537 - €1,800+', demand: 75 },
+                      { title: 'Chef / Cook', exp: '1 Year', salary: '€1,537 - €2,000+', demand: 80 }
+                    ]
+                  },
+                  {
+                    name: 'Healthcare',
+                    iconName: 'HeartPulse',
+                    jobs: [
+                      { title: 'Specialist Doctor', exp: '1 Year', salary: '€2,528 - €5,000+', demand: 90 }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'cz',
+                name: 'Czech Republic',
+                flag: '🇨🇿',
+                themeColor: 'blue',
+                description: 'Automotive and Technical powerhouse.',
+                visaInfo: { 
+                    types: ['Employee Card'], 
+                    processingTime: '2-3 Months', 
+                    detailedProcess: {
+                        preparation: ['Vacancy report to Labor Office', 'Wait 30 days', 'Get Vacancy Number', 'Accommodation proof'],
+                        submission: ['Embassy appointment', 'Submit Employee Card app', 'Wait for MOI approval'],
+                        postArrival: ['Foreign Police (3 days)', 'Biometrics at OAMP', 'Collect Card', 'Health Insurance']
+                    },
+                    documents: ['Contract','Accommodation','Passport'], 
+                    expertTips: [{title:'Quota',desc:'Check annual quotas for your country.'}],
+                    technicalTerms: [
+                        { term: 'OAMP', definition: 'Department for Asylum and Migration Policy (Interior Ministry).' },
+                        { term: 'Vacancy Number', definition: 'Unique reference number for the specific job position in the central database.' },
+                        { term: 'Rodné číslo', definition: 'Birth number. A unique identifier assigned to residents.' },
+                        { term: 'Nostrification', definition: 'The official recognition of your foreign education diploma.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{label:'Transport',value:90},{label:'Safety',value:95},{label:'Beer',value:100},{label:'Architecture',value:98}], 
+                    highlights: ['Prague Castle', 'Charles Bridge', 'Cesky Krumlov', 'Pilsner Urquell Brewery'] 
+                },
+                stats: { qol: 80, safety: 95, happiness: 78 },
+                departments: [
+                  {
+                    name: 'Automotive',
+                    iconName: 'Wrench',
+                    jobs: [
+                      { title: 'Auto Electrician', exp: '3 Years', salary: '€1,400 - €2,200', demand: 85 },
+                      { title: 'Automotive Technician', exp: '3 Years', salary: '€1,500 - €2,500', demand: 80 }
+                    ]
+                  },
+                  {
+                    name: 'Technical',
+                    iconName: 'Factory',
+                    jobs: [
+                      { title: 'CNC Operator', exp: '2 Years', salary: '€1,500 - €2,400+', demand: 85 },
+                      { title: 'Welder (Certified)', exp: '3 Years', salary: '€1,400 - €2,300+', demand: 90 },
+                      { title: 'Software Developer', exp: '5 Years', salary: '€2,500 - €5,000+', demand: 95 }
+                    ]
+                  },
+                  {
+                    name: 'Logistics & Unskilled',
+                    iconName: 'Truck',
+                    jobs: [
+                      { title: 'Heavy Goods Driver (C+E)', exp: '3 Years', salary: '€1,800 – €2,800+', demand: 90 },
+                      { title: 'Warehouse Staff', exp: '1 Year', salary: '€1,000 – €1,400', demand: 75 },
+                      { title: 'Production Line Worker', exp: '0', salary: '€900 – €1,300', demand: 70 },
+                      { title: 'Construction Helper', exp: '0', salary: '€950 – €1,300', demand: 70 }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'hr',
+                name: 'Croatia',
+                flag: '🇭🇷',
+                themeColor: 'red',
+                description: 'Tourism and Service oriented economy.',
+                visaInfo: { 
+                    types: ['Work Permit'], 
+                    processingTime: '4-6 Weeks', 
+                    detailedProcess: {
+                        preparation: ['Employer requests Labor Test', 'Apply for Work Permit (MUP)', 'Receive positive opinion'],
+                        submission: ['Apply for Visa D', 'Or enter visa-free to collect', 'Travel to Croatia'],
+                        postArrival: ['Register address at police', 'Biometric Residence Permit', 'Obtain Tax ID (OIB)']
+                    },
+                    documents: ['Contract','Passport','Background Check'], 
+                    expertTips: [{title:'Seasonal',desc:'Quotas often apply for tourism/seasonal jobs.'}],
+                    technicalTerms: [
+                        { term: 'OIB', definition: 'Osobni identifikacijski broj. Personal ID Number needed for contracts and taxes.' },
+                        { term: 'MUP', definition: 'Ministry of the Interior. Responsible for issuing work and residence permits.' },
+                        { term: 'HZZ', definition: 'Croatian Employment Service. Conducts labor market tests.' },
+                        { term: 'Boravišna iskaznica', definition: 'Residence card. The physical ID card you receive after approval.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{label:'Coast',value:100},{label:'Relaxed',value:90},{label:'Islands',value:95},{label:'History',value:90}], 
+                    highlights: ['Dubrovnik Old Walls', 'Plitvice Lakes', 'Hvar Island', 'Split Diocletian Palace'] 
+                },
+                stats: { qol: 70, safety: 85, happiness: 75 },
+                departments: [
+                  {
+                    name: 'Service',
+                    iconName: 'Users',
+                    jobs: [
+                      { title: 'Construction Worker', exp: '0', salary: '€600 - €1200', demand: 90 },
+                      { title: 'Hotel Staff', exp: '0', salary: '€600 - €1200', demand: 85 },
+                      { title: 'Farm Worker', exp: '0', salary: '€600 - €1200', demand: 80 },
+                      { title: 'Butcher', exp: '0', salary: '€600 - €1200', demand: 75 }
+                    ]
+                  },
+                  {
+                    name: 'Logistics',
+                    iconName: 'Truck',
+                    jobs: [
+                      { title: 'Truck Driver', exp: '1', salary: '€600 - €1200', demand: 95 },
+                      { title: 'Welder', exp: '1', salary: '€600 - €1200', demand: 85 },
+                      { title: 'Warehouse Packer', exp: '0', salary: '€600 - €1200', demand: 80 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            id: 'tier4',
+            title: 'Strategic Non-Schengen Opportunities',
+            subtitle: 'Non-Schengen',
+            description: 'Developing markets with accessible entry requirements.',
+            color: 'fuchsia', 
+            accent: 'slate',
+            iconName: 'Globe',
+            stats: { avgSalary: '€900', demand: 'Steady', satisfaction: '70%' },
+            countries: [
+              {
+                id: 'rs',
+                name: 'Serbia',
+                flag: '🇷🇸',
+                themeColor: 'blue',
+                description: 'Key logistics crossroads in the Balkans.',
+                visaInfo: { 
+                    types: ['Visa D'], 
+                    processingTime: '4-6 Weeks', 
+                    detailedProcess: {
+                        preparation: ['Employer market test (NSZ)', 'Obtain Work Permit approval', 'Receive Invitation Letter'],
+                        submission: ['Apply for Visa D', 'Submit insurance & funds proof', 'Optional Interview'],
+                        postArrival: ['Police Registration (White Card)', 'Temporary Residence (Boravište)', 'Finalize contract']
+                    },
+                    documents: ['Form D','Invitation','Insurance'], 
+                    expertTips: [{title:'White Card',desc:'Must register address within 24h of arrival.'}],
+                    technicalTerms: [
+                        { term: 'Bela Karta', definition: 'White Card. Mandatory police registration slip obtained within 24h of arrival.' },
+                        { term: 'NSZ', definition: 'National Employment Service. Approves the labor market test for foreigners.' },
+                        { term: 'Boravište', definition: 'Temporary residence permit. Valid typically for 1 year.' },
+                        { term: 'MUP', definition: 'Ministry of Interior. Handles all visa and residence applications.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{label:'Cost',value:95},{label:'Social',value:88},{label:'Nightlife',value:90},{label:'History',value:85}], 
+                    highlights: ['Belgrade Fortress', 'Tara National Park', 'Nikola Tesla Museum', 'Skadarlija Street'] 
+                },
+                stats: { qol: 60, safety: 65, happiness: 55 },
+                departments: [
+                  {
+                    name: 'Logistics',
+                    iconName: 'Truck',
+                    jobs: [
+                      { title: 'Truck Driver', exp: '1 Year', salary: '€800 - €1,500', demand: 90 },
+                      { title: 'Delivery Driver', exp: '1 Year', salary: '€800 - €1,200', demand: 85 },
+                      { title: 'Warehouse Staff', exp: '1 Year', salary: '€600 - €900', demand: 75 }
+                    ]
+                  },
+                  {
+                    name: 'Trades',
+                    iconName: 'Wrench',
+                    jobs: [
+                      { title: 'Certified Welder', exp: '1 Year', salary: '€550 - €1,000', demand: 80 },
+                      { title: 'Automotive Mechanic', exp: '1 Year', salary: '€510 - €770', demand: 75 }
+                    ]
+                  },
+                  {
+                    name: 'Service',
+                    iconName: 'Utensils',
+                    jobs: [
+                        { title: 'Professional Cook', exp: '1 Year', salary: '€700 - €1,200', demand: 80 },
+                        { title: 'Hospitality Staff', exp: '1 Year', salary: '€700 - €1,200', demand: 75 },
+                        { title: 'Agriculture Worker', exp: '0', salary: '€340 - €600', demand: 70 }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'mk',
+                name: 'Macedonia',
+                flag: '🇲🇰',
+                themeColor: 'amber',
+                description: 'Skilled Trades and Manufacturing.',
+                visaInfo: { 
+                    types: ['Work Permit'], 
+                    processingTime: '4-6 Weeks', 
+                    detailedProcess: {
+                        preparation: ['Employer submits quota request', 'Obtain Work Permit approval', 'Medical check'],
+                        submission: ['Apply Visa D', 'Submit criminal record', 'Travel'],
+                        postArrival: ['Apply for ID Card', 'Register address with police', 'Final health check']
+                    },
+                    documents: ['Contract','Passport','Medical'], 
+                    expertTips: [{title:'Quota',desc:'Strict quotas by sector.'}],
+                    technicalTerms: [
+                        { term: 'Quota', definition: 'Government limit on foreign workers per sector, strictly enforced here.' },
+                        { term: 'AVRMS', definition: 'Employment Service Agency. Issues the work permit opinion.' },
+                        { term: 'MVR', definition: 'Ministry of Interior. Issues the final temporary residence permit.' },
+                        { term: 'Lična karta', definition: 'ID card for foreigners. Must be carried at all times.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{label:'Nature',value:90},{label:'Cost',value:95},{label:'Lakes',value:98},{label:'Ancient',value:88}], 
+                    highlights: ['Lake Ohrid (UNESCO)', 'Old Bazaar Skopje', 'Matka Canyon', 'Mavrovo National Park'] 
+                },
+                stats: { qol: 58, safety: 62, happiness: 52 },
+                departments: [
+                  {
+                    name: 'Skilled Trades',
+                    iconName: 'Wrench',
+                    jobs: [
+                      { title: 'Welder', exp: '1 Year', salary: '€700 - €1,200', demand: 85 },
+                      { title: 'Electrician', exp: '1 Year', salary: '€700 - €1,200', demand: 80 },
+                      { title: 'Plumber', exp: '1 Year', salary: '€700 - €1,200', demand: 80 },
+                      { title: 'Mason', exp: '1 Year', salary: '€700 - €1,200', demand: 75 }
+                    ]
+                  },
+                  {
+                    name: 'Manufacturing',
+                    iconName: 'Factory',
+                    jobs: [
+                      { title: 'Machine Operator', exp: '1 Year', salary: '€550 - €1,000', demand: 75 },
+                      { title: 'Assembly Worker', exp: '0', salary: '€550 - €1,000', demand: 70 }
+                    ]
+                  },
+                  {
+                    name: 'Hospitality & Agri',
+                    iconName: 'Utensils',
+                    jobs: [
+                        { title: 'Chef / Cook', exp: '1 Year', salary: '€450 - €900', demand: 75 },
+                        { title: 'Hotel Staff', exp: '1 Year', salary: '€450 - €900', demand: 70 },
+                        { title: 'General Laborer', exp: '0', salary: '€400 - €700', demand: 65 }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'al',
+                name: 'Albania',
+                flag: '🇦🇱',
+                themeColor: 'red',
+                description: 'Tourism hotspot with developing infrastructure.',
+                visaInfo: { 
+                    types: ['Unique Permit'], 
+                    processingTime: '3-6 Weeks', 
+                    detailedProcess: {
+                        preparation: ['Employer uploads contract', 'Apply for Unique Permit', 'Wait approval'],
+                        submission: ['Apply Visa D online', 'Upload docs', 'Email approval'],
+                        postArrival: ['Register NIPT', 'Finalize Residence Card', 'Social Security']
+                    },
+                    documents: ['e-Visa','Contract','License'], 
+                    expertTips: [{title:'Online',desc:'Fully digital e-Visa system.'}],
+                    technicalTerms: [
+                        { term: 'Unique Permit', definition: 'Single document combining work and residence authorization.' },
+                        { term: 'NIPT', definition: 'Tax ID number. Your employer registers you for this.' },
+                        { term: 'e-Visa', definition: 'Albania uses an electronic visa system; no physical sticker needed for entry.' },
+                        { term: 'AKPA', definition: 'National Agency for Employment and Skills.' }
+                    ]
+                },
+                attractions: { 
+                    metrics: [{label:'Tourism',value:92},{label:'Cost',value:95},{label:'Beaches',value:94},{label:'History',value:88}], 
+                    highlights: ['Albanian Riviera', 'Blue Eye Spring', 'Berat (City of Windows)', 'Gjirokaster Castle'] 
+                },
+                stats: { qol: 55, safety: 60, happiness: 58 },
+                departments: [
+                  {
+                    name: 'General',
+                    iconName: 'Briefcase',
+                    jobs: [
+                      { title: 'Construction Worker', exp: '0', salary: '€600 - €1200', demand: 90 },
+                      { title: 'Truck Driver', exp: '1', salary: '€600 - €1200', demand: 85 },
+                      { title: 'Welder', exp: '1', salary: '€600 - €1200', demand: 85 },
+                      { title: 'Hotel Staff', exp: '1', salary: '€600 - €1200', demand: 80 },
+                      { title: 'Warehouse Packer', exp: '0', salary: '€600 - €1200', demand: 75 },
+                      { title: 'Farm Worker', exp: '0', salary: '€600 - €1200', demand: 70 },
+                      { title: 'Butcher', exp: '0', salary: '€600 - €1200', demand: 70 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ];
 
         // --- BACKGROUND COMPONENT (UPDATED FOR LIGHT THEME) ---
         const AnimatedBackground = ({ tierColor }) => {
@@ -1127,7 +1145,7 @@
         };
 
         // --- SUB-COMPONENTS (MASSIVE HOVER EFFECT) ---
-        const JobRow = ({ job, theme, t }) => {
+        const JobRow = ({ job, theme }) => {
             return (
                 <tr className={`border-b border-slate-200/60 last:border-0 group transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl hover:border-transparent relative overflow-hidden rounded-xl`}>
                     
@@ -1138,22 +1156,19 @@
                         <div className={`font-bold text-slate-800 group-hover:text-white transition-colors duration-300 text-lg`}>{job.title}</div>
                     </td>
                     <td className="py-5 relative z-10">
-                        {/* Experience Badge: Uses theme color for bg/text when idle */}
-                        <span className={`text-sm font-bold text-${theme}-600 group-hover:text-white/90 bg-${theme}-50 group-hover:bg-white/20 px-3 py-1.5 rounded-lg border border-${theme}-200 group-hover:border-white/10 shadow-sm transition-colors duration-300`}>{job.exp}</span>
+                        <span className="text-sm font-bold text-slate-600 group-hover:text-white/90 bg-white/60 group-hover:bg-white/20 px-3 py-1.5 rounded-lg border border-white/50 group-hover:border-white/10 shadow-sm transition-colors duration-300">{job.exp}</span>
                     </td>
                     <td className="py-5 relative z-10">
-                        {/* Salary: Uses theme color when idle */}
-                        <div className={`font-mono font-bold text-lg transition-colors duration-300 text-${theme}-600 group-hover:text-white`}>
+                        <div className={`font-mono font-bold text-lg transition-colors duration-300 text-emerald-600 group-hover:text-white`}>
                             {job.salary}
                         </div>
                     </td>
                     <td className="py-5 w-48 pr-4 relative z-10">
                         <div className="flex flex-col gap-1.5">
-                            <span className="text-xs uppercase text-slate-500 group-hover:text-white/80 font-bold tracking-wider transition-colors duration-300">{t('demand')}</span>
+                            <span className="text-xs uppercase text-slate-500 group-hover:text-white/80 font-bold tracking-wider transition-colors duration-300">Demand</span>
                             <div className="w-full h-2.5 bg-slate-200 group-hover:bg-white/30 rounded-full overflow-hidden shadow-inner transition-colors duration-300">
-                                {/* Demand Bar: Uses theme gradient */}
                                 <div 
-                                    className={`h-full relative overflow-hidden rounded-full bg-gradient-to-r from-${theme}-400 to-${theme}-500 group-hover:bg-white`} 
+                                    className={`h-full relative overflow-hidden rounded-full ${job.demand > 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-500' : 'bg-gradient-to-r from-blue-400 to-blue-500'} group-hover:bg-white`} 
                                     style={{ width: `${job.demand}%` }}
                                 >
                                     <div className="absolute inset-0 bg-white/30 animate-shimmer"></div>
@@ -1162,12 +1177,11 @@
                         </div>
                     </td>
                     <td className="py-5 pr-6 text-right relative z-10">
-                         {/* Apply Button: Uses theme color text to tie it back to country identity */}
                          <button 
                             onClick={() => window.open('https://bettercall.online/appointment', '_blank')} 
-                            className={`btn-3d opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 px-6 py-2.5 bg-white text-${theme}-600 text-sm font-bold rounded-xl shadow-lg hover:bg-slate-50`}
+                            className="btn-3d opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 px-6 py-2.5 bg-white text-slate-900 text-sm font-bold rounded-xl shadow-lg hover:bg-slate-50"
                         >
-                            {t('apply')}
+                            APPLY
                         </button>
                     </td>
                 </tr>
@@ -1189,33 +1203,16 @@
         // --- MAIN APP ---
         const App = () => {
             const [selectedTierId, setSelectedTierId] = useState('tier1');
+            const [selectedCountryId, setSelectedCountryId] = useState(TIER_DATA[0].countries[0].id);
             const [activeTab, setActiveTab] = useState('jobs');
             const [searchTerm, setSearchTerm] = useState('');
-            const [lang, setLang] = useState('en');
-            const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
 
-            // Translation helper
-            const t = (key) => DICTIONARY[lang]?.[key] || DICTIONARY['en'][key] || key;
-
-            // Generate Data based on Language
-            const tierData = useMemo(() => getTierData(lang), [lang]);
-            const activeTier = tierData.find(t => t.id === selectedTierId);
-            
-            // Country State Management
-            const [selectedCountryId, setSelectedCountryId] = useState(tierData[0].countries[0].id);
-
-            // Effect to validate selected country when tier changes or data reloads
-            const activeCountry = useMemo(() => {
-                 let country = activeTier.countries.find(c => c.id === selectedCountryId);
-                 if (!country) {
-                    country = activeTier.countries[0];
-                 }
-                 return country;
-            }, [activeTier, selectedCountryId]);
+            const activeTier = TIER_DATA.find(t => t.id === selectedTierId);
+            const activeCountry = activeTier.countries.find(c => c.id === selectedCountryId) || activeTier.countries[0];
 
             useEffect(() => {
-                // When Tier changes, reset to first country if current isn't in new tier
-                if (!activeTier.countries.find(c => c.id === selectedCountryId)) {
+                const currentCountryInTier = activeTier.countries.find(c => c.id === selectedCountryId);
+                if (!currentCountryInTier) {
                     setSelectedCountryId(activeTier.countries[0].id);
                 }
             }, [selectedTierId, activeTier]);
@@ -1240,13 +1237,14 @@
 
 
             return (
-                <div className="flex h-screen w-full relative overflow-hidden bg-slate-50 font-sans">
+                <div className="flex h-screen w-full relative overflow-hidden bg-slate-50">
                     
                     {/* Background Animation Layer */}
                     <AnimatedBackground tierColor={activeTier.color} />
 
                     {/* =================================================================================================
-                        DESKTOP VIEW WRAPPER
+                        DESKTOP VIEW WRAPPER (Hidden on Mobile)
+                        Using hidden lg:flex to ensure it only shows on Large screens.
                        ================================================================================================= */}
                     <div className="hidden lg:flex w-full h-full relative z-10">
 
@@ -1262,7 +1260,7 @@
                             </div>
 
                             <div className="flex-1 overflow-y-auto py-8 px-6 space-y-8 scrollbar-hide">
-                                {tierData.map(tier => {
+                                {TIER_DATA.map(tier => {
                                     const isTierActive = selectedTierId === tier.id;
                                     const activeTextColor = `text-${tier.color}-700`;
 
@@ -1313,7 +1311,7 @@
                             <div className="p-8 border-t border-slate-200/50 bg-white/40">
                                 <a href="https://bettercall.online" target="_blank" className="flex items-center text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors group">
                                     <Icon name="Zap" size={18} className="mr-3 text-yellow-500 group-hover:animate-pulse" />
-                                    {t('dataBy')}
+                                    Data by BetterCall.online
                                 </a>
                             </div>
                         </div>
@@ -1322,35 +1320,6 @@
                         <div className="flex-1 flex flex-col overflow-hidden relative z-10 p-6 pl-0 mt-6">
                             <div className="glass-panel h-full w-full rounded-[2.5rem] flex flex-col overflow-hidden relative shadow-2xl">
                                 
-                                {/* Language Switcher - MOVED HERE */}
-                                <div className="absolute top-8 right-8 z-50">
-                                    <div className="relative">
-                                        <button 
-                                            onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                                            className="glass-card-strong px-4 py-2 rounded-xl flex items-center gap-2 hover:scale-105 active:scale-95 cursor-pointer"
-                                        >
-                                            <span className="text-xl">{LANGUAGES[lang].flag}</span>
-                                            <span className="font-bold text-sm text-slate-700">{LANGUAGES[lang].label}</span>
-                                            <Icon name="ChevronDown" size={16} className="text-slate-400" />
-                                        </button>
-                                        
-                                        {isLangMenuOpen && (
-                                            <div className="absolute right-0 top-full mt-2 bg-white/90 backdrop-blur-xl border border-white/50 rounded-xl shadow-xl p-2 w-48 animate-in fade-in slide-in-from-top-2">
-                                                {Object.entries(LANGUAGES).map(([code, config]) => (
-                                                    <button
-                                                        key={code}
-                                                        onClick={() => { setLang(code); setIsLangMenuOpen(false); }}
-                                                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-bold transition-colors ${lang === code ? 'bg-blue-50 text-blue-600' : 'hover:bg-slate-50 text-slate-600'}`}
-                                                    >
-                                                        <span className="text-lg">{config.flag}</span>
-                                                        {config.label}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
                                 {/* Header Banner */}
                                 <div className="h-64 relative shrink-0 overflow-hidden bg-white/40">
                                     <div className={`absolute inset-0 bg-gradient-to-br from-${activeTier.color}-100/50 via-white/20 to-transparent`}></div>
@@ -1366,7 +1335,7 @@
                                                             {activeTier.subtitle}
                                                         </span>
                                                         <span className="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center gap-2 shadow-sm">
-                                                            <Icon name="ShieldCheck" size={16} /> {t('verified')}
+                                                            <Icon name="ShieldCheck" size={16} /> Verified
                                                         </span>
                                                     </div>
                                                     <h1 className="text-6xl font-display font-black text-slate-900 tracking-tight mb-2 drop-shadow-sm">{activeCountry.name}</h1>
@@ -1375,8 +1344,8 @@
                                             </div>
 
                                             <div className="grid grid-cols-2 gap-4 mb-4 z-10">
-                                                <StatTile label={t('avgSalary')} value={activeTier.stats.avgSalary} icon="DollarSign" color={activeTier.color} />
-                                                <StatTile label={t('visaTime')} value={activeCountry.visaInfo.processingTime} icon="Clock" color="amber" />
+                                                <StatTile label="Avg Salary" value={activeTier.stats.avgSalary} icon="DollarSign" color={activeTier.color} />
+                                                <StatTile label="Visa Time" value={activeCountry.visaInfo.processingTime} icon="Clock" color="amber" />
                                             </div>
                                         </div>
 
@@ -1393,9 +1362,9 @@
                                                     }`}
                                                 >
                                                     {activeTab === tab && <div className={`absolute top-0 left-0 w-full h-1 bg-${activeTier.color}-500 shadow-[0_0_15px_currentColor]`}></div>}
-                                                    {tab === 'jobs' && t('opportunities')}
-                                                    {tab === 'visa' && t('process')}
-                                                    {tab === 'lifestyle' && t('lifestyle')}
+                                                    {tab === 'jobs' && 'Opportunities'}
+                                                    {tab === 'visa' && 'Process'}
+                                                    {tab === 'lifestyle' && 'Lifestyle'}
                                                 </button>
                                             ))}
                                         </div>
@@ -1404,21 +1373,21 @@
 
                                 {/* Scrollable Content Pane */}
                                 <div className="flex-1 overflow-y-auto bg-white/30 p-12 pt-6 relative scroll-smooth">
-                                    <div className="max-w-7xl mx-auto fade-in-up mt-6" key={activeTab + selectedCountryId + lang}>
+                                    <div className="max-w-7xl mx-auto fade-in-up mt-6" key={activeTab + selectedCountryId}>
                                         {/* --- JOBS TAB --- */}
                                         {activeTab === 'jobs' && (
                                             <div className="space-y-12">
                                                 <div className="flex justify-between items-center bg-white/60 p-10 rounded-[2rem] border border-white shadow-lg shadow-slate-200/50 backdrop-blur-xl hover:shadow-xl transition-shadow">
                                                     <div>
-                                                        <h2 className="text-4xl font-display font-bold text-slate-900">{t('openRoles')}</h2>
+                                                        <h2 className="text-4xl font-display font-bold text-slate-900">Open Roles</h2>
                                                         <p className="text-slate-500 text-lg mt-3 flex items-center gap-3">
                                                             <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]"></span>
-                                                            {t('liveData')}: {filteredDepartments.reduce((acc, d) => acc + d.jobs.length, 0)} {t('positionsAvailable')}
+                                                            Live Data: {filteredDepartments.reduce((acc, d) => acc + d.jobs.length, 0)} positions available
                                                         </p>
                                                     </div>
                                                     <button onClick={() => window.open('https://bettercall.online/assessment', '_blank')} className="btn-3d group relative px-12 py-5 bg-slate-900 text-white font-bold text-lg rounded-2xl overflow-hidden">
                                                         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                                        <span className="relative z-10 flex items-center">{t('startAssessment')} <Icon name="ArrowRight" size={24} className="ml-3 group-hover:translate-x-1 transition-transform" /></span>
+                                                        <span className="relative z-10 flex items-center">Start Assessment <Icon name="ArrowRight" size={24} className="ml-3 group-hover:translate-x-1 transition-transform" /></span>
                                                     </button>
                                                 </div>
 
@@ -1430,21 +1399,21 @@
                                                                     <Icon name={dept.iconName} size={28} />
                                                                 </div>
                                                                 <h3 className="text-2xl font-bold text-slate-900 tracking-tight">{dept.name}</h3>
-                                                                <span className="ml-auto text-xs font-bold uppercase bg-slate-100 border border-slate-200 px-5 py-2 rounded-full text-slate-500 tracking-wider shadow-sm">{dept.jobs.length} {t('roles')}</span>
+                                                                <span className="ml-auto text-xs font-bold uppercase bg-slate-100 border border-slate-200 px-5 py-2 rounded-full text-slate-500 tracking-wider shadow-sm">{dept.jobs.length} Roles</span>
                                                             </div>
                                                             <table className="w-full text-left border-collapse">
                                                                 <thead>
                                                                     <tr className="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 bg-slate-50/50">
                                                                         <th className="px-10 py-5">Role</th>
-                                                                        <th className="px-0 py-5">{t('experience')}</th>
-                                                                        <th className="px-0 py-5">{t('salary')}</th>
-                                                                        <th className="px-0 py-5">{t('demand')}</th>
+                                                                        <th className="px-0 py-5">Exp</th>
+                                                                        <th className="px-0 py-5">Salary (Monthly)</th>
+                                                                        <th className="px-0 py-5">Market Demand</th>
                                                                         <th className="px-10 py-5 text-right"></th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     {dept.jobs.map((job, jIdx) => (
-                                                                        <JobRow key={jIdx} job={job} theme={activeCountry.themeColor} t={t} />
+                                                                        <JobRow key={jIdx} job={job} theme={activeCountry.themeColor} />
                                                                     ))}
                                                                 </tbody>
                                                             </table>
@@ -1452,7 +1421,7 @@
                                                     ))}
                                                     {filteredDepartments.length === 0 && (
                                                         <div className="text-center py-20 text-slate-500 text-xl font-medium">
-                                                            {t('noJobs')}
+                                                            No matching jobs found in {activeCountry.name}. Try a different search term.
                                                         </div>
                                                     )}
                                                 </div>
@@ -1467,9 +1436,9 @@
                                                     <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -z-10 transform -translate-y-1/2 rounded-full"></div>
                                                     <div className="grid grid-cols-3 gap-16">
                                                         {[
-                                                            { step: 1, title: t('prep'), icon: 'FileText', data: activeCountry.visaInfo.detailedProcess.preparation },
-                                                            { step: 2, title: t('submit'), icon: 'Stamp', data: activeCountry.visaInfo.detailedProcess.submission },
-                                                            { step: 3, title: t('relocate'), icon: 'Plane', data: activeCountry.visaInfo.detailedProcess.postArrival }
+                                                            { step: 1, title: 'Preparation', icon: 'FileText', data: activeCountry.visaInfo.detailedProcess.preparation },
+                                                            { step: 2, title: 'Submission', icon: 'Stamp', data: activeCountry.visaInfo.detailedProcess.submission },
+                                                            { step: 3, title: 'Relocation', icon: 'Plane', data: activeCountry.visaInfo.detailedProcess.postArrival }
                                                         ].map((stage, i) => (
                                                             <div key={i} className={`glass-card-strong p-10 rounded-[2.5rem] relative group text-center hover:-translate-y-4 transition-all duration-500 hover:bg-gradient-to-br hover:from-${activeTier.color}-500 hover:to-${activeTier.color}-600 hover:text-white`}>
                                                                 <div className={`w-24 h-24 rounded-3xl bg-gradient-to-br from-${activeTier.color}-400 to-${activeTier.color}-600 text-white flex items-center justify-center shadow-xl shadow-${activeTier.color}-200 border-4 border-white absolute -top-12 left-1/2 transform -translate-x-1/2 group-hover:scale-110 transition-transform`}>
@@ -1492,7 +1461,7 @@
                                                 <div className="grid grid-cols-2 gap-10 mt-10">
                                                     <div className="glass-card-strong p-12 rounded-[2.5rem] relative overflow-hidden bg-white hover:bg-blue-600 group transition-colors duration-500 hover:shadow-2xl">
                                                         <div className="absolute top-0 right-0 p-10 opacity-5 transform rotate-12 group-hover:opacity-10 group-hover:text-white transition-all"><Icon name="FolderCheck" size={200} /></div>
-                                                        <h3 className="text-slate-900 group-hover:text-white font-display font-bold text-3xl mb-8 flex items-center relative z-10 transition-colors"><Icon name="FolderCheck" size={36} className="mr-5 text-blue-500 group-hover:text-white" /> {t('requiredDocs')}</h3>
+                                                        <h3 className="text-slate-900 group-hover:text-white font-display font-bold text-3xl mb-8 flex items-center relative z-10 transition-colors"><Icon name="FolderCheck" size={36} className="mr-5 text-blue-500 group-hover:text-white" /> Mandatory Documents</h3>
                                                         <div className="grid grid-cols-1 gap-4 relative z-10">
                                                             {activeCountry.visaInfo.documents.map((doc, i) => (
                                                                 <div key={i} className="flex items-center text-lg font-medium text-slate-700 group-hover:text-white p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-md group-hover:bg-white/10 group-hover:border-white/20 transition-all">
@@ -1504,7 +1473,7 @@
                                                     </div>
 
                                                     <div className="glass-card-strong p-12 rounded-[2.5rem] bg-gradient-to-br from-amber-50 via-white to-white border-l-8 border-l-amber-400 hover:from-amber-500 hover:to-orange-500 group transition-all duration-500 hover:shadow-2xl">
-                                                         <h3 className="text-amber-500 group-hover:text-white font-display font-bold text-3xl mb-8 flex items-center transition-colors"><Icon name="Lightbulb" size={36} className="mr-5 fill-amber-100 group-hover:fill-white/20" /> {t('proTips')}</h3>
+                                                         <h3 className="text-amber-500 group-hover:text-white font-display font-bold text-3xl mb-8 flex items-center transition-colors"><Icon name="Lightbulb" size={36} className="mr-5 fill-amber-100 group-hover:fill-white/20" /> Pro Tips</h3>
                                                          {activeCountry.visaInfo.expertTips.map((tip, i) => (
                                                              <div key={i} className="mb-8 last:mb-0">
                                                                 <div className="font-bold text-slate-900 group-hover:text-white text-xl mb-2 transition-colors">{tip.title}</div>
@@ -1512,7 +1481,7 @@
                                                              </div>
                                                          ))}
                                                          <div className="mt-12 pt-8 border-t border-slate-100 group-hover:border-white/20">
-                                                            <div className="text-xs uppercase font-bold text-slate-400 group-hover:text-white/80 tracking-widest mb-4 transition-colors">{t('visaCats')}</div>
+                                                            <div className="text-xs uppercase font-bold text-slate-400 group-hover:text-white/80 tracking-widest mb-4 transition-colors">Visa Categories</div>
                                                             <div className="flex gap-3">
                                                                 {activeCountry.visaInfo.types.map(t => (
                                                                     <span key={t} className="px-6 py-3 bg-white rounded-xl text-sm font-bold text-slate-700 border border-slate-200 shadow-sm group-hover:bg-white/20 group-hover:text-white group-hover:border-transparent transition-all">{t}</span>
@@ -1526,7 +1495,7 @@
                                                 {activeCountry.visaInfo.technicalTerms && (
                                                     <div className="glass-card-strong p-12 rounded-[2.5rem] bg-white relative overflow-hidden group hover:shadow-2xl transition-all duration-500">
                                                          <div className="absolute top-0 right-0 p-12 opacity-5"><Icon name="BookOpen" size={180} /></div>
-                                                         <h3 className="text-3xl font-display font-bold text-slate-900 mb-8 flex items-center relative z-10"><Icon name="BookOpen" size={32} className="mr-4 text-slate-400" /> {t('glossary')}</h3>
+                                                         <h3 className="text-3xl font-display font-bold text-slate-900 mb-8 flex items-center relative z-10"><Icon name="BookOpen" size={32} className="mr-4 text-slate-400" /> Glossary & Technical Terms</h3>
                                                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                                                             {activeCountry.visaInfo.technicalTerms.map((term, i) => (
                                                                 <div key={i} className="flex flex-col gap-2 p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-blue-50 hover:border-blue-100 transition-colors">
@@ -1545,7 +1514,7 @@
                                             <div className="grid grid-cols-12 gap-10">
                                                 <div className="col-span-8 space-y-10">
                                                     <div className="glass-card-strong p-12 rounded-[2.5rem] bg-white">
-                                                        <h3 className="text-3xl font-display font-bold text-slate-900 mb-10">{t('qolIndex')}</h3>
+                                                        <h3 className="text-3xl font-display font-bold text-slate-900 mb-10">Quality of Life Index</h3>
                                                         <div className="space-y-10">
                                                             {activeCountry.attractions.metrics.map((m, i) => (
                                                                 <div key={i}>
@@ -1585,7 +1554,7 @@
                                                         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-10"></div>
                                                         <div className="relative z-10">
                                                             <div className="text-9xl font-display font-black mb-4 drop-shadow-lg">{activeCountry.stats.qol}</div>
-                                                            <div className="uppercase text-sm font-bold tracking-[0.3em] opacity-90 mb-12">{t('overall')}</div>
+                                                            <div className="uppercase text-sm font-bold tracking-[0.3em] opacity-90 mb-12">Overall Score</div>
                                                             
                                                             <div className="flex justify-center gap-3 mb-14">
                                                                 {[1,2,3,4,5].map(s => <Icon key={s} name="Star" fill="currentColor" className="text-yellow-300 drop-shadow-md" size={32} />)}
@@ -1594,7 +1563,7 @@
                                                             <div className="text-left space-y-10 bg-white/20 p-10 rounded-[2rem] backdrop-blur-md border border-white/30 shadow-inner">
                                                                 <div>
                                                                     <div className="flex justify-between items-center mb-4">
-                                                                        <span className="text-base font-bold uppercase tracking-wider opacity-90">{t('happiness')}</span>
+                                                                        <span className="text-base font-bold uppercase tracking-wider opacity-90">Happiness</span>
                                                                         <span className="font-bold text-xl">{activeCountry.stats.happiness}%</span>
                                                                     </div>
                                                                     <div className="w-full h-3 bg-black/20 rounded-full"><div style={{width: `${activeCountry.stats.happiness}%`}} className="h-full bg-white rounded-full shadow-lg"></div></div>
@@ -1602,7 +1571,7 @@
                                                                 
                                                                 <div>
                                                                     <div className="flex justify-between items-center mb-4">
-                                                                        <span className="text-base font-bold uppercase tracking-wider opacity-90">{t('safety')}</span>
+                                                                        <span className="text-base font-bold uppercase tracking-wider opacity-90">Safety</span>
                                                                         <span className="font-bold text-xl">{activeCountry.stats.safety}%</span>
                                                                     </div>
                                                                     <div className="w-full h-3 bg-black/20 rounded-full"><div style={{width: `${activeCountry.stats.safety}%`}} className="h-full bg-emerald-300 rounded-full shadow-lg"></div></div>
@@ -1620,7 +1589,8 @@
                     </div>
 
                     {/* =================================================================================================
-                        MOBILE COMPACT VIEW WRAPPER
+                        MOBILE COMPACT VIEW WRAPPER (Hidden on Desktop)
+                        Using lg:hidden to ensure it only shows on Mobile/Tablet portrait.
                        ================================================================================================= */}
                     <div className="lg:hidden flex flex-col h-full relative z-10 overflow-hidden">
                         {/* Mobile Header */}
@@ -1629,37 +1599,15 @@
                                 <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/13ce55139c2e991e27510869459cf312d9897098/Bettercall%20Logo%20SVG%2002.svg" className="h-8 w-auto" alt="Logo" />
                                 <span className="font-bold text-slate-700 tracking-tight">GlobalHire</span>
                             </div>
-                            
-                            {/* Mobile Language Switcher */}
-                            <button 
-                                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                                className="flex items-center gap-1 bg-white/50 px-2 py-1 rounded-lg border border-slate-200"
-                            >
-                                <span className="text-lg">{LANGUAGES[lang].flag}</span>
-                                <Icon name="ChevronDown" size={14} className="text-slate-500" />
-                            </button>
-                        </div>
-                        
-                        {/* Mobile Language Menu Dropdown */}
-                        {isLangMenuOpen && (
-                            <div className="absolute top-16 right-4 z-50 bg-white shadow-xl rounded-xl border border-slate-100 w-40 overflow-hidden animate-in slide-in-from-top-2">
-                                {Object.entries(LANGUAGES).map(([code, config]) => (
-                                    <button
-                                        key={code}
-                                        onClick={() => { setLang(code); setIsLangMenuOpen(false); }}
-                                        className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-bold border-b border-slate-50 last:border-0 ${lang === code ? 'bg-blue-50 text-blue-600' : 'text-slate-600'}`}
-                                    >
-                                        <span className="text-xl">{config.flag}</span>
-                                        {config.label}
-                                    </button>
-                                ))}
+                            <div className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-${activeTier.color}-100 text-${activeTier.color}-700`}>
+                                {activeTier.subtitle}
                             </div>
-                        )}
+                        </div>
 
                         <div className="flex-1 overflow-y-auto scrollbar-hide">
                             {/* Tier Selector (Grid 2 Rows - Updated) */}
                             <div className="grid grid-cols-2 gap-2 p-4">
-                                {tierData.map(tier => (
+                                {TIER_DATA.map(tier => (
                                     <button
                                         key={tier.id}
                                         onClick={() => setSelectedTierId(tier.id)}
@@ -1707,7 +1655,7 @@
                                         <div className="bg-white/60 p-3 rounded-xl border border-white/40 shadow-sm flex items-center gap-3">
                                             <div className={`p-2 rounded-lg bg-${activeTier.color}-100 text-${activeTier.color}-600`}><Icon name="DollarSign" size={16} /></div>
                                             <div>
-                                                <div className="text-[10px] uppercase font-bold text-slate-400">{t('salary')}</div>
+                                                <div className="text-[10px] uppercase font-bold text-slate-400">Salary</div>
                                                 <div className="text-sm font-bold text-slate-900">{activeTier.stats.avgSalary}</div>
                                             </div>
                                         </div>
@@ -1733,7 +1681,7 @@
                                                 : 'text-slate-500 hover:text-slate-700'
                                             }`}
                                         >
-                                            {t(tab) || tab}
+                                            {tab}
                                         </button>
                                     ))}
                                 </div>
@@ -1758,7 +1706,7 @@
                                                                  </div>
                                                                  <div className="flex justify-between items-center pl-2 mt-2">
                                                                      <span className="font-mono font-bold text-emerald-600 text-sm">{job.salary}</span>
-                                                                     <button onClick={() => window.open('https://bettercall.online/appointment', '_blank')} className="text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-lg">{t('apply')}</button>
+                                                                     <button onClick={() => window.open('https://bettercall.online/appointment', '_blank')} className="text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-lg">Apply</button>
                                                                  </div>
                                                              </div>
                                                          ))}
@@ -1775,9 +1723,9 @@
                                                  <h3 className="text-xs font-bold uppercase text-slate-400 tracking-wider mb-3 px-1">Process Roadmap</h3>
                                                  <div className="space-y-3">
                                                      {[
-                                                         { title: t('prep'), data: activeCountry.visaInfo.detailedProcess.preparation },
-                                                         { title: t('submit'), data: activeCountry.visaInfo.detailedProcess.submission },
-                                                         { title: t('relocate'), data: activeCountry.visaInfo.detailedProcess.postArrival }
+                                                         { title: 'Prep', data: activeCountry.visaInfo.detailedProcess.preparation },
+                                                         { title: 'Submit', data: activeCountry.visaInfo.detailedProcess.submission },
+                                                         { title: 'Move', data: activeCountry.visaInfo.detailedProcess.postArrival }
                                                      ].map((step, i) => (
                                                          <div key={i} className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
                                                              <div className="flex items-center gap-2 mb-2">
@@ -1799,7 +1747,7 @@
 
                                              {/* 2. Documents (Horizontal Scroll) */}
                                              <div>
-                                                <h3 className="text-xs font-bold uppercase text-slate-400 tracking-wider mb-3 px-1">{t('requiredDocs')}</h3>
+                                                <h3 className="text-xs font-bold uppercase text-slate-400 tracking-wider mb-3 px-1">Required Docs</h3>
                                                 <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
                                                     {activeCountry.visaInfo.documents.map((doc, i) => (
                                                         <div key={i} className="flex-none bg-white py-2 px-3 rounded-lg border border-slate-200 shadow-sm flex items-center gap-2 whitespace-nowrap">
@@ -1812,7 +1760,7 @@
 
                                              {/* 3. Pro Tips */}
                                              <div>
-                                                 <h3 className="text-xs font-bold uppercase text-slate-400 tracking-wider mb-3 px-1">{t('proTips')}</h3>
+                                                 <h3 className="text-xs font-bold uppercase text-slate-400 tracking-wider mb-3 px-1">Expert Tips</h3>
                                                  <div className="grid gap-3">
                                                      {activeCountry.visaInfo.expertTips.map((tip, i) => (
                                                          <div key={i} className="bg-amber-50/80 p-3 rounded-xl border border-amber-100/50">
@@ -1829,7 +1777,7 @@
                                              {/* 4. Glossary (Small Cards Grid) */}
                                              {activeCountry.visaInfo.technicalTerms && (
                                                 <div>
-                                                    <h3 className="text-xs font-bold uppercase text-slate-400 tracking-wider mb-3 px-1">{t('glossary')}</h3>
+                                                    <h3 className="text-xs font-bold uppercase text-slate-400 tracking-wider mb-3 px-1">Glossary & Terms</h3>
                                                     <div className="grid grid-cols-2 gap-3">
                                                         {activeCountry.visaInfo.technicalTerms.map((term, i) => (
                                                             <div key={i} className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm flex flex-col h-full">
@@ -1847,7 +1795,7 @@
                                         <div className="grid grid-cols-2 gap-3">
                                              {activeCountry.attractions.highlights.map((h, i) => (
                                                  <div key={i} className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm text-center">
-                                                     <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">{t('mustSee')}</div>
+                                                     <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Must See</div>
                                                      <div className="font-display font-bold text-slate-900 leading-tight">{h}</div>
                                                  </div>
                                              ))}
