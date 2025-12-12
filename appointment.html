@@ -288,6 +288,40 @@
             cursor: not-allowed;
             background-color: #f1f5f9;
         }
+
+        /* Country Badge Styles */
+        .country-pill {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .country-pill:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);
+        }
+        .country-pill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .country-pill:hover::after {
+            opacity: 1;
+        }
+        .country-pill.selected {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px white, 0 8px 20px -4px rgba(0,0,0,0.2);
+            font-weight: 800;
+        }
+        .country-pill .check-icon {
+            transform: scale(0) rotate(-45deg);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .country-pill.selected .check-icon {
+            transform: scale(1) rotate(0deg);
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-emerald-500 selection:text-white relative">
@@ -637,10 +671,22 @@
                         <p class="text-slate-500 text-xs md:text-sm tracking-wide font-medium">Select your advisor and preferred slot to lock in your strategy session.</p>
                     </div>
 
-                    <!-- 1. ADVISOR SELECTION (Full-Width Grid) -->
+                    <!-- 1. COUNTRY SELECTOR (Moved Here) -->
                     <div class="mb-8 md:mb-10">
                         <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center justify-center md:justify-start">
-                            <span class="w-5 h-5 rounded-full bg-brand-primary text-white inline-flex items-center justify-center mr-2">1</span> Select Immigration Advisor
+                            <span class="w-5 h-5 rounded-full bg-brand-primary text-white inline-flex items-center justify-center mr-2">1</span> Select Target Destination
+                        </h3>
+                        <div class="grid grid-cols-3 md:flex md:flex-wrap gap-2 md:gap-3 justify-center px-0 md:px-2" id="countryContainer">
+                            <!-- Countries injected via JS -->
+                        </div>
+                        <input type="hidden" id="targetCountry" required>
+                        <p id="countryError" class="text-center text-brand-accent text-[11px] hidden mt-2 font-bold flex items-center justify-center gap-2 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Please select a destination.</p>
+                    </div>
+
+                    <!-- 2. ADVISOR SELECTION (Full-Width Grid) -->
+                    <div class="mb-8 md:mb-10">
+                        <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center justify-center md:justify-start">
+                            <span class="w-5 h-5 rounded-full bg-brand-primary text-white inline-flex items-center justify-center mr-2">2</span> Select Immigration Advisor
                         </h3>
                         
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" id="advisorGrid">
@@ -654,9 +700,9 @@
                         <!-- LEFT COLUMN: Consultation Method (Span 3) -->
                         <div class="lg:col-span-3 flex flex-col gap-6">
                             
-                            <!-- 2. Consultation Mode -->
+                            <!-- 3. Consultation Mode -->
                             <div>
-                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-secondary text-white inline-flex items-center justify-center mr-2">2</span> Consultation Mode</h3>
+                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-secondary text-white inline-flex items-center justify-center mr-2">3</span> Consultation Mode</h3>
                                 <div class="grid grid-cols-1 gap-3"> <!-- Vertical Stack for this narrow column -->
                                     <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex items-center gap-4 group hover:border-brand-primary hover:shadow-md transition-all cursor-pointer" onclick="selectMethod('In-Person', this)">
                                         <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-slate-400 group-hover:text-brand-primary group-hover:scale-110 transition-all shrink-0">
@@ -693,7 +739,7 @@
                         <!-- RIGHT COLUMN: Calendar & Time (Span 9) -->
                         <div class="lg:col-span-9">
                             <div class="bg-white rounded-[2rem] border border-slate-200 p-6 md:p-8 shadow-sm h-full flex flex-col">
-                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-6"><span class="w-5 h-5 rounded-full bg-brand-gold text-white inline-flex items-center justify-center mr-2">3</span> Select Date & Time</h3>
+                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-6"><span class="w-5 h-5 rounded-full bg-brand-gold text-white inline-flex items-center justify-center mr-2">4</span> Select Date & Time</h3>
                                 
                                 <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 flex-grow">
                                     <!-- Calendar Side -->
@@ -839,8 +885,25 @@
             "ADVISOR": "a220503d-5a45-4f0b-b83d-6547a28ca0b5",
             "BOOKING_DATE": "a4a8197d-eb13-4e90-ad56-d56108137e2e",
             "BOOKING_TIME": "584f279f-8f78-4e2b-ac91-ccf2c4e48b00",
-            "BOOKING_TYPE": "03414f61-a879-4d14-bee0-7186a3de27d5"
+            "BOOKING_TYPE": "03414f61-a879-4d14-bee0-7186a3de27d5",
+            "TARGET_COUNTRY": "dd59c787-da25-4760-ab85-2974e1ae8838"
         };
+
+        const targetCountries = [
+            { name: "SWEDEN", color: "hover:shadow-blue-300 hover:border-blue-400", bg: "bg-blue-50", icon: "🇸🇪" },
+            { name: "FINLAND", color: "hover:shadow-sky-200 hover:border-sky-300", bg: "bg-sky-50", icon: "🇫🇮" },
+            { name: "NETHERLANDS", color: "hover:shadow-orange-300 hover:border-orange-400", bg: "bg-orange-50", icon: "🇳🇱" },
+            { name: "GERMANY", color: "hover:shadow-yellow-400 hover:border-yellow-500", bg: "bg-yellow-50", icon: "🇩🇪" },
+            { name: "ITALY", color: "hover:shadow-green-300 hover:border-green-400", bg: "bg-green-50", icon: "🇮🇹" },
+            { name: "FRANCE", color: "hover:shadow-blue-400 hover:border-blue-500", bg: "bg-indigo-50", icon: "🇫🇷" },
+            { name: "CROATIA", color: "hover:shadow-red-300 hover:border-red-400", bg: "bg-red-50", icon: "🇭🇷" },
+            { name: "LATVIA", color: "hover:shadow-rose-400 hover:border-rose-500", bg: "bg-rose-50", icon: "🇱🇻" },
+            { name: "POLAND", color: "hover:shadow-red-400 hover:border-red-500", bg: "bg-red-50", icon: "🇵🇱" },
+            { name: "CZECH REPUBLIC", color: "hover:shadow-blue-300 hover:border-blue-400", bg: "bg-blue-50", icon: "🇨🇿" },
+            { name: "SERBIA", color: "hover:shadow-red-300 hover:border-red-400", bg: "bg-red-50", icon: "🇷🇸" },
+            { name: "ALBANIA", color: "hover:shadow-red-500 hover:border-red-600", bg: "bg-red-50", icon: "🇦🇱" },
+            { name: "MACEDONIA", color: "hover:shadow-yellow-300 hover:border-yellow-400", bg: "bg-yellow-50", icon: "🇲🇰" }
+        ];
 
         const jobMasterList = [
             {r:"ACCOUNTANT",type:"S",c:"Netherlands"},
@@ -1209,6 +1272,7 @@
             // Case ID logic moved to global scope/saveData to avoid null ref errors
             
             populateCountryDropdowns();
+            renderTargetCountries();
             renderAdvisors();
             renderTimeSlots();
             
@@ -1330,6 +1394,53 @@
             });
         }
         
+        function renderTargetCountries() {
+            const container = document.getElementById('countryContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            
+            targetCountries.forEach(tc => {
+                const btn = document.createElement('div');
+                // Base classes adjusted for mobile grid (flex-col on mobile)
+                let classes = "country-pill flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 p-2 md:px-4 md:py-2 rounded-xl bg-white border border-slate-200 cursor-pointer shadow-sm text-[10px] md:text-xs font-bold text-slate-600 select-none w-full h-full text-center";
+                // Add hover effect classes
+                classes += ` ${tc.color} hover:border-2`;
+                
+                btn.className = classes;
+                btn.innerHTML = `
+                    <span class="text-lg md:text-xl mb-1 md:mb-0">${tc.icon}</span>
+                    <span>${tc.name}</span>
+                    <div class="check-icon w-4 h-4 rounded-full bg-brand-primary text-white flex items-center justify-center text-[8px] absolute top-1 right-1 md:static md:opacity-0 transition-opacity opacity-0">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                `;
+                btn.onclick = () => selectTargetCountry(tc.name, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectTargetCountry(name, el) {
+            document.getElementById('targetCountry').value = name;
+            // Remove selected class from all
+            const pills = document.querySelectorAll('.country-pill');
+            pills.forEach(p => {
+                p.classList.remove('selected', 'ring-2', 'ring-brand-primary', 'bg-emerald-50');
+                // Reset to white bg if not selected
+                p.classList.add('bg-white');
+                p.querySelector('.check-icon').classList.add('opacity-0');
+                if(window.innerWidth >= 768) {
+                     p.querySelector('.check-icon').classList.remove('absolute', 'top-1', 'right-1');
+                }
+            });
+            
+            // Add selected style
+            el.classList.remove('bg-white');
+            el.classList.add('selected', 'ring-2', 'ring-brand-primary', 'bg-emerald-50');
+            el.querySelector('.check-icon').classList.remove('opacity-0');
+            
+            document.getElementById('countryError').classList.add('hidden');
+        }
+
         function renderAdvisors() {
             const grid = document.getElementById('advisorGrid');
             if(!grid) return;
@@ -1341,7 +1452,7 @@
                 div.onclick = () => selectAdvisor(adv.name, div);
                 
                 const imageContent = adv.image 
-                    ? `<img src="${adv.image}" alt="${adv.name}" class="w-full h-full object-cover">` 
+                    ? `<img src="${adv.image}" onerror="this.onerror=null;this.src='https://placehold.co/90x90/d1d5db/000000?text=${adv.name[0]}'" alt="${adv.name}" class="w-full h-full object-cover">` 
                     : adv.flag;
 
                 div.innerHTML = `
@@ -1701,6 +1812,8 @@
 
         // NEW: Proceed without Report Generation
         async function proceedToBooking() {
+            // NOTE: Removed Target Country Check here as it's now in the next step.
+
             // 1. Manual check for Qualification (Radio buttons often fail checkValidity/reportValidity UI when hidden)
             const qualChecked = document.querySelector('input[name="qualification"]:checked');
             if (!qualChecked) {
@@ -1837,7 +1950,7 @@ SUMMARY:Strategy Session with ${advisor}
 DESCRIPTION:Immigration Consultation. Prepare your documents.
 LOCATION:Online / Phone
 URL:https://bettercall.online
-END:VEENT
+END:VEVENT
 END:VCALENDAR`;
         }
 
@@ -1852,6 +1965,7 @@ END:VCALENDAR`;
             try {
                 const ref = appointmentRefId; 
                 const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
+                const targetCountry = document.getElementById('targetCountry').value;
                 
                 let customFieldsArray = [
                     { id: CLICKUP_FIELDS["SUR NAME"], value: document.getElementById('lastName').value },
@@ -1893,19 +2007,23 @@ END:VCALENDAR`;
                         addDropdown("PRESENT RESIDENCE", document.getElementById('presentResidence').value);
                         addDropdown("QUALIFICATION", document.querySelector('input[name="qualification"]:checked')?.value);
                         addDropdown("JOB ROLE", document.getElementById('currentJob').value);
+                        // NOTE: Target country is now selected in step 2, so it might be empty here.
+                        if(targetCountry) addDropdown("TARGET_COUNTRY", targetCountry);
                     } else {
-                         // Fallback: If cannot fetch field definitions, send raw values for custom fields
+                         // Fallback logic
                          const qual = document.querySelector('input[name="qualification"]:checked')?.value;
                          const job = document.getElementById('currentJob').value;
                          if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
                          if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
+                         if(targetCountry) customFieldsArray.push({ id: CLICKUP_FIELDS["TARGET_COUNTRY"], value: targetCountry });
                     }
                 } catch(e) { 
-                    console.warn("Could not fetch field definitions, using raw values for dropdowns/labels", e); 
+                    console.warn("Could not fetch field definitions, using raw values", e); 
                      const qual = document.querySelector('input[name="qualification"]:checked')?.value;
                      const job = document.getElementById('currentJob').value;
                      if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
                      if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
+                     if(targetCountry) customFieldsArray.push({ id: CLICKUP_FIELDS["TARGET_COUNTRY"], value: targetCountry });
                 }
 
                 // Construct Full Description for the task
@@ -1954,7 +2072,7 @@ END:VCALENDAR`;
                 `.trim();
 
                 const payload = {
-                    name: firstName, // Updated: Only First Name, no Surname, no suffix
+                    name: firstName, 
                     description: fullDescription, 
                     custom_fields: customFieldsArray
                 };
@@ -2012,8 +2130,10 @@ END:VCALENDAR`;
             const method = document.getElementById('selectedMethod').value;
             const date = document.getElementById('bookingDate').value;
             const time = document.getElementById('selectedTime').value;
+            const targetCountry = document.getElementById('targetCountry').value;
 
-            // Strict Validation
+            // Strict Validation including Country
+            if(!targetCountry) { showModal("Please select a Target Destination."); return; }
             if(!advisor) { showModal("Please select an Immigration Advisor to proceed."); return; }
             if(!method) { showModal("Please select a Consultation Mode."); return; }
             if(!date) { showModal("Please select a Date for your appointment."); return; }
@@ -2076,7 +2196,8 @@ END:VCALENDAR`;
             // Prepare Update Payload
             let updateFields = [
                 { id: CLICKUP_FIELDS["BOOKING_DATE"], value: getUnixTime(date) },
-                { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time } 
+                { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time },
+                { id: CLICKUP_FIELDS["TARGET_COUNTRY"], value: targetCountry } // Ensure country is updated
             ];
 
             try {
@@ -2107,7 +2228,7 @@ END:VCALENDAR`;
                     updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
                 }
 
-                const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nMethod: ${method}\nDate: ${date}\nTime: ${time}`;
+                const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nMethod: ${method}\nDate: ${date}\nTime: ${time}\nTarget Country: ${targetCountry}`;
 
                 // ClickUp API Call: Update Task Fields & Add Comment
                 if(CLICKUP_API_KEY) {
