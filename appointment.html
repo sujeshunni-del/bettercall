@@ -23,7 +23,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Meta Pixel Code (Placeholder - keep for completeness) -->
+    <!-- Meta Pixel Code -->
     <script>
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -115,43 +115,6 @@
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
         .lenis.lenis-stopped { overflow: hidden; }
         .lenis.lenis-scrolling iframe { pointer-events: none; }
-
-        /* Light Template Menu Styles */
-        .floating-nav {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(226, 232, 240, 1);
-            border-radius: 100px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            transform: translateZ(0);
-        }
-        .floating-nav.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            border-color: rgba(203, 213, 225, 1);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-        .dropdown-glass {
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(24px);       
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(226, 232, 240, 1);
-            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.15);
-        }
-        .dropdown-menu {
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .group:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .glass-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1));
@@ -388,109 +351,87 @@
     <div class="orb orb-3"></div>
     <div class="orb orb-4"></div>
 
-    <!-- 1. HEADER (Updated from Light Template) -->
-    <nav class="fixed top-2 md:top-6 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
-        <div class="floating-nav w-full max-w-7xl px-4 py-3 md:px-3 md:py-3 flex justify-between items-center transition-all duration-300" id="navbar">
-            <a href="index.html" class="flex items-center gap-3 md:gap-4 group px-2 md:px-4">
-                <div class="w-12 h-12 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-white border border-slate-200 overflow-hidden p-1 flex-shrink-0 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:scale-110">
-                    <img src="https://raw.githubusercontent.com/thebettercall/app/9ca2db3d96700f0412c9f2f420422ed1ccfb52bb/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain">
+    <!-- 1. HEADER -->
+    <nav class="fixed top-0 md:top-4 left-0 right-0 z-50 flex justify-center px-0 md:px-4" id="navbar-container">
+        <div class="glass-card !rounded-none md:!rounded-[2rem] !border-t-0 w-full max-w-7xl px-4 py-3 md:px-5 md:py-2 flex justify-between items-center transition-all duration-300 min-h-[60px]" id="navbar">
+            <a href="index.html" class="flex items-center gap-2 group px-1">
+                <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center bg-white/60 backdrop-blur-md overflow-hidden p-1 flex-shrink-0 border border-white/50">
+                    <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/6673d6ec4830e402627b97c4adf422593b2ec907/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain">
                 </div>
                 <div class="block leading-tight"> 
-                    <h1 class="font-bold text-slate-800 text-lg md:text-xl tracking-wide whitespace-nowrap">BETTER CALL</h1>
-                    <p class="text-[10px] md:text-xs font-bold text-brand-gold uppercase tracking-[0.2em] md:tracking-[0.2em]">Immigration</p>
+                    <h1 class="font-bold text-slate-800 text-sm md:text-lg tracking-wide group-hover:text-emerald-600 transition-colors">BETTER CALL</h1>
+                    <p class="text-[9px] md:text-xs font-bold text-amber-500 uppercase tracking-[0.2em]">Immigration</p>
                 </div>
             </a>
+            
+            <!-- GLOBAL NAVIGATION MENU -->
             <div class="hidden lg:flex items-center gap-1">
-                <a href="index.html" class="px-5 py-2.5 text-sm font-bold text-slate-700 hover:text-brand-primary transition rounded-full hover:bg-slate-50">Home</a>
+                <a href="index.html" class="px-4 py-2 text-sm text-slate-600 hover:text-emerald-600 font-bold transition rounded-full hover:bg-white/50">Home</a>
                 
                 <!-- Programs Dropdown -->
                 <div class="relative group">
-                    <button class="px-5 py-2.5 text-sm font-bold text-slate-700 hover:text-brand-primary transition rounded-full hover:bg-slate-50 flex items-center gap-1">
+                    <button class="px-4 py-2 text-sm text-slate-600 hover:text-emerald-600 font-bold transition rounded-full hover:bg-white/50 flex items-center gap-1">
                         Programs <i class="fa-solid fa-chevron-down text-[10px] opacity-70 ml-1 group-hover:rotate-180 transition-transform"></i>
                     </button>
-                    <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-72 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50 max-h-[80vh] overflow-y-auto hide-scrollbar">
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition block flex items-center gap-2"><span class="text-lg">🇸🇪</span> Sweden</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-purple-600 hover:bg-purple-50 transition block flex items-center gap-2"><span class="text-lg">🇫🇮</span> Finland</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-brand-gold hover:bg-amber-50 transition block flex items-center gap-2"><span class="text-lg">🇳🇱</span> Netherlands</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-brand-gold hover:bg-amber-50 transition block flex items-center gap-2"><span class="text-lg">🇩🇪</span> Germany</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-orange-600 hover:bg-orange-50 transition block flex items-center gap-2"><span class="text-lg">🇮🇹</span> Italy</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition block flex items-center gap-2"><span class="text-lg">🇫🇷</span> France</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-red-600 hover:bg-red-50 transition block flex items-center gap-2"><span class="text-lg">🇵🇱</span> Poland</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition block flex items-center gap-2"><span class="text-lg">🇨🇿</span> Czech Republic</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-red-600 hover:bg-red-50 transition block flex items-center gap-2"><span class="text-lg">🇱🇻</span> Latvia</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-red-600 hover:bg-red-50 transition block flex items-center gap-2"><span class="text-lg">🇭🇷</span> Croatia</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition block flex items-center gap-2"><span class="text-lg">🇷🇸</span> Serbia</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-yellow-600 hover:bg-yellow-50 transition block flex items-center gap-2"><span class="text-lg">🇲🇰</span> Macedonia</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-red-600 hover:bg-red-50 transition block flex items-center gap-2"><span class="text-lg">🇦🇱</span> Albania</a>
+                    <!-- Dropdown Menu -->
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-56 bg-white/90 backdrop-blur-xl border border-white/60 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top z-50 overflow-hidden">
+                        <div class="max-h-[300px] overflow-y-auto custom-scrollbar p-2 flex flex-col gap-1">
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇸🇪</span> Sweden
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇫🇮</span> Finland
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇳🇱</span> Netherlands
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇩🇪</span> Germany
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇮🇹</span> Italy
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇫🇷</span> France
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇭🇷</span> Croatia
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇱🇻</span> Latvia
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇵🇱</span> Poland
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇨🇿</span> Czech Republic
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇷🇸</span> Serbia
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇦🇱</span> Albania
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors text-left flex items-center gap-2">
+                                <span class="text-base">🇲🇰</span> Macedonia
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Services Dropdown -->
-                <div class="relative group">
-                    <button class="px-5 py-2.5 text-sm font-bold text-slate-700 hover:text-brand-primary transition rounded-full hover:bg-slate-50 flex items-center gap-1">
-                        Services <i class="fa-solid fa-chevron-down text-[10px] opacity-70 ml-1 group-hover:rotate-180 transition-transform"></i>
-                    </button>
-                    <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-4 w-72 dropdown-glass rounded-2xl p-2 flex flex-col gap-1 shadow-2xl z-50">
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-teal-600 hover:bg-teal-50 transition block">Visa Appointment</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-brand-primary hover:bg-blue-50 transition block">Visa Documentation</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-brand-primary hover:bg-blue-50 transition block">Travel Assistance</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-brand-primary hover:bg-blue-50 transition block">Insurance Assistance</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-600 hover:text-brand-primary hover:bg-blue-50 transition block">Medical Assistance</a>
-                        <a href="#" class="px-4 py-3 rounded-xl text-sm font-bold text-purple-600 hover:bg-purple-50 transition block">Corporate B2B Solution</a>
-                    </div>
-                </div>
-
-                <a href="#" class="px-5 py-2.5 text-sm font-bold text-brand-primary transition rounded-full hover:bg-slate-50">Free Assessment</a>
-                <a href="#" class="px-5 py-2.5 text-sm font-bold text-slate-700 hover:text-brand-primary transition rounded-full hover:bg-slate-50">About Us</a>
+                <a href="#" class="px-4 py-2 text-sm text-slate-600 hover:text-emerald-600 font-bold transition rounded-full hover:bg-white/50">Services</a>
+                <a href="#" class="px-4 py-2 text-sm text-brand-primary font-bold transition rounded-full bg-emerald-50/50 hover:bg-emerald-100/80 border border-emerald-100">Free Assessment</a>
+                <a href="#" class="px-4 py-2 text-sm text-slate-600 hover:text-emerald-600 font-bold transition rounded-full hover:bg-white/50">About Us</a>
             </div>
-            
-            <div class="flex items-center gap-4 sm:gap-3 px-2">
-                <!-- Mobile Menu Button -->
-                <button class="lg:hidden p-3 text-slate-700 hover:text-brand-primary transition rounded-full hover:bg-slate-100" onclick="toggleMobileMenu()">
-                    <i class="fa-solid fa-bars text-xl"></i>
+
+             <div class="flex items-center gap-2 px-1">
+                <button class="group p-2 rounded-full hover:bg-white/50 transition-all duration-300 relative">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 group-hover:text-emerald-600 text-lg md:text-xl"></i>
                 </button>
-            </div>
-        </div>
-        
-        <!-- Mobile Menu Overlay -->
-        <div id="mobileMenu" class="fixed inset-0 bg-white/98 backdrop-blur-3xl z-[60] transform translate-y-full transition-transform duration-500 flex flex-col items-center justify-start pt-32 pb-10 overflow-y-auto">
-            <button class="absolute top-8 right-8 text-slate-400 hover:text-slate-900 text-3xl transition" onclick="toggleMobileMenu()">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <a href="index.html" onclick="toggleMobileMenu()" class="text-4xl font-light text-slate-800 hover:text-brand-primary mb-8"><i class="fa-solid fa-house"></i></a>
-            <div class="w-full px-8 space-y-10">
-                <div class="text-center">
-                    <p class="text-brand-gold text-sm uppercase tracking-widest mb-6 font-bold opacity-80">Destinations</p>
-                    <div class="flex flex-wrap justify-center gap-3">
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">SWEDEN</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">FINLAND</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">GERMANY</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">ITALY</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">FRANCE</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">NETHERLANDS</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">POLAND</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">CZECHIA</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">LATVIA</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">CROATIA</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">SERBIA</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">MACEDONIA</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">ALBANIA</a>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <p class="text-brand-gold text-sm uppercase tracking-widest mb-6 font-bold opacity-80">Services</p>
-                    <div class="flex flex-wrap justify-center gap-3">
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">Visa Appointment</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">Visa Documentation</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">Travel Assistance</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">Insurance</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">Medical</a>
-                        <a href="#" class="px-4 py-2 bg-slate-50 rounded-xl text-sm font-bold text-slate-600">Corporate B2B</a>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col gap-5 items-center w-full px-8 pb-12 mt-8">
-                <a href="#" onclick="toggleMobileMenu()" class="w-full max-w-xs text-center text-lg font-bold text-white bg-brand-primary px-8 py-4 rounded-full shadow-lg hover:scale-105 transition-transform">Free Assessment</a>
+                <!-- Mobile Menu Button (Visible only on small screens) -->
+                <button class="lg:hidden group p-2 rounded-full hover:bg-white/50 transition-all duration-300">
+                    <i class="fa-solid fa-bars text-slate-600 text-lg"></i>
+                </button>
             </div>
         </div>
     </nav>
@@ -1396,10 +1337,10 @@
 
         const advisors = [
             { name: "Benetta", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം)", image: null },
-            { name: "Anju M Nair", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം), Hindi (हिंदी), English", image: "https://placehold.co/90x90/d1d5db/000000?text=A" }, // Replaced GitHub image with placeholder
+            { name: "Anju M Nair", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം), Hindi (हिंदी), English", image: "https://raw.githubusercontent.com/sujeshunni-del/bettercall/bb687d0a11a26c558eb8dfa3486bd809e75379e8/Untitled-1-01.png" },
             { name: "Budhunpa", country: "Sri Lanka", flag: "🇱🇰", lang: "English, Sinhala (සිංහල)", image: null },
             { name: "Roniee Lee", country: "Philippines", flag: "🇵🇭", lang: "English, Tagalog", image: null },
-            { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Kiswahili", image: "https://placehold.co/90x90/d1d5db/000000?text=E" } // Replaced GitHub image with placeholder
+            { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Kiswahili", image: "https://raw.githubusercontent.com/sujeshunni-del/bettercall/110817d3ca6fd4e0321185ce6e4c3c15e28de1af/kingo.png" }
         ];
 
         let currentMode = 'Unskilled';
@@ -1502,28 +1443,6 @@
             }
         };
 
-        // --- NEW MENU LOGIC FROM LIGHT TEMPLATE ---
-        
-        // Navbar Scroll Effect
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 20) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
-        });
-
-        // Mobile Menu Toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            if (menu.classList.contains('translate-y-full')) {
-                menu.classList.remove('translate-y-full');
-            } else {
-                menu.classList.add('translate-y-full');
-            }
-        }
-
         function setupListeners() {
             document.getElementById('sameAsMobile').addEventListener('change', function() {
                 if(this.checked) {
@@ -1612,10 +1531,9 @@
                 div.className = "advisor-pro-card group"; 
                 div.onclick = () => selectAdvisor(adv.name, div);
                 
-                // Use fallback to initials if image URL is null or fails
                 const imageContent = adv.image 
                     ? `<img src="${adv.image}" onerror="this.onerror=null;this.src='https://placehold.co/90x90/d1d5db/000000?text=${adv.name[0]}'" alt="${adv.name}" class="w-full h-full object-cover">` 
-                    : `<span class="text-4xl">${adv.name[0]}</span>`;
+                    : adv.flag;
 
                 div.innerHTML = `
                     <div class="absolute top-3 right-3 opacity-0 group-[.selected]:opacity-100 text-brand-primary transition-all duration-300 transform scale-50 group-[.selected]:scale-100">
@@ -2095,18 +2013,10 @@
             }
             hours = String(hours).padStart(2, '0');
             
-            // NOTE: Dates are constructed in local time zone based on the input strings (d/m/Y).
-            // This assumes the appointment time is displayed to the user in their local time.
-            const start = new Date(parseInt(year), parseInt(month) - 1, parseInt(day), hours, minutes, 0);
+            const start = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00`);
             const end = new Date(start.getTime() + 30 * 60 * 1000); // 30 minute appointment
             
-            // Format to UTC (required for iCalendar DTSTART/DTEND, indicated by 'Z' in fmt)
-            // This is a common pattern when assuming appointment slots are pre-calculated to user's timezone.
-            const fmt = (d) => {
-                const pad = (n) => String(n).padStart(2, '0');
-                return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T' + 
-                       pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + 'Z';
-            };
+            const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
             
             return `BEGIN:VCALENDAR
 VERSION:2.0
@@ -2124,30 +2034,173 @@ END:VEVENT
 END:VCALENDAR`;
         }
 
-        // NOTE: The ClickUp API calls are placeholders and will fail in this environment without a live backend/API key. 
-        // The core functionality related to form submission and UI state changes remains.
         async function saveData(showSuccess = true, useLoader = true) {
-            // Placeholder functionality for external API call
-            if (useLoader) {
-                toggleLoader(true, "Synchronizing Profile", "Local Save :: Simulated API Call");
-            }
-            
-            try {
-                // Simulate network latency
-                await new Promise(resolve => setTimeout(resolve, 800));
-                
-                // Simulate success and assign a temporary ID
-                globalTaskId = "TASK-" + appointmentRefId;
+            // Skip if task already exists (only update on booking submission later)
+            if (globalTaskId) return true; // Return TRUE if already saved
 
-                if(showSuccess) {
-                    showToast("Profile Created (Simulated)");
+            if (useLoader) {
+                toggleLoader(true, "Synchronizing Profile", "ENCRYPTING DATA :: VERIFYING INTEGRITY");
+            }
+
+            try {
+                const ref = appointmentRefId; 
+                const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
+                const targetCountry = document.getElementById('targetCountry').value;
+                
+                let customFieldsArray = [
+                    { id: CLICKUP_FIELDS["SUR NAME"], value: document.getElementById('lastName').value },
+                    { id: CLICKUP_FIELDS["MOBILE"], value: mobile },
+                    { id: CLICKUP_FIELDS["WHATSAPP"], value: cleanPhoneNumber(document.getElementById('whatsapp').value) },
+                    { id: CLICKUP_FIELDS["PHONE"], value: cleanPhoneNumber(document.getElementById('altPhone') ? document.getElementById('altPhone').value : "") },
+                    { id: CLICKUP_FIELDS["DATE OF BIRTH"], value: getUnixTime(document.getElementById('dob').value) },
+                    { id: CLICKUP_FIELDS["AGE"], value: parseInt(document.getElementById('age').value) },
+                    { id: CLICKUP_FIELDS["EMAIL"], value: document.getElementById('email').value },
+                    // Ensure experience is a number or 0
+                    { id: CLICKUP_FIELDS["EXPERIENCE"], value: parseInt(document.getElementById('experience').value) || 0 },
+                    { id: CLICKUP_FIELDS["Case Reference ID"], value: ref }
+                ];
+
+                customFieldsArray = customFieldsArray.filter(f => f.value !== null && f.value !== undefined && f.value !== "");
+                
+                // Attempt to map dropdown/label fields for ClickUp
+                try {
+                    const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
+                    
+                    if(res.ok) {
+                        const fieldDefs = (await res.json()).fields || [];
+                        const addDropdown = (key, val) => {
+                            const fid = CLICKUP_FIELDS[key];
+                            const def = fieldDefs.find(f => f.id === fid);
+                            if(def && (def.type === 'drop_down' || def.type === 'labels') && val) {
+                                // Attempt match first, fallback to 'OTHER' if field exists
+                                const opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase()) 
+                                         || def.type_config.options.find(o => o.name === "OTHER");
+                                if(opt) customFieldsArray.push({ id: fid, value: opt.id });
+                            } else if (fid && val) {
+                                // If not a dropdown field or definition failed, push raw value
+                                 if (!def || (def.type !== 'drop_down' && def.type !== 'labels')) {
+                                    customFieldsArray.push({ id: fid, value: val });
+                                 }
+                            }
+                        };
+                        addDropdown("NATIONALITY", document.getElementById('nationality').value);
+                        addDropdown("PRESENT RESIDENCE", document.getElementById('presentResidence').value);
+                        addDropdown("QUALIFICATION", document.querySelector('input[name="qualification"]:checked')?.value);
+                        addDropdown("JOB ROLE", document.getElementById('currentJob').value);
+                        // NOTE: Target country is now selected in step 2, so it might be empty here.
+                        if(targetCountry) addDropdown("TARGET_COUNTRY", targetCountry);
+                    } else {
+                         // Fallback logic
+                         const qual = document.querySelector('input[name="qualification"]:checked')?.value;
+                         const job = document.getElementById('currentJob').value;
+                         if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
+                         if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
+                         if(targetCountry) customFieldsArray.push({ id: CLICKUP_FIELDS["TARGET_COUNTRY"], value: targetCountry });
+                    }
+                } catch(e) { 
+                    console.warn("Could not fetch field definitions, using raw values", e); 
+                     const qual = document.querySelector('input[name="qualification"]:checked')?.value;
+                     const job = document.getElementById('currentJob').value;
+                     if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
+                     if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
+                     if(targetCountry) customFieldsArray.push({ id: CLICKUP_FIELDS["TARGET_COUNTRY"], value: targetCountry });
                 }
-                return true; // SIMULATED SUCCESS
+
+                // Construct Full Description for the task
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+                const dob = document.getElementById('dob').value;
+                const age = document.getElementById('age').value;
+                const residence = document.getElementById('presentResidence').value;
+                const nationality = document.getElementById('nationality').value;
+                const whatsapp = document.getElementById('whatsapp').value;
+                const altPhone = document.getElementById('altPhone').value;
+                const qualification = document.querySelector('input[name="qualification"]:checked')?.value || "Not Selected";
+                const passportNo = document.getElementById('passportNo').value;
+                const passportExp = document.getElementById('passportExp').value;
+                const jobRole = document.getElementById('currentJob').value;
+                const experience = document.getElementById('experience').value;
+
+                const fullDescription = `
+CASE REFERENCE ID: ${ref}
+
+PERSONAL DETAILS
+--------------------
+Name: ${firstName} ${lastName}
+Email: ${email}
+DOB: ${dob} (Age: ${age})
+Nationality: ${nationality}
+Current Residence: ${residence}
+
+CONTACT INFO
+----------------
+Mobile: ${mobile}
+WhatsApp: ${whatsapp}
+Alt Phone: ${altPhone || "N/A"}
+
+PROFESSIONAL PROFILE
+------------------------
+Qualification: ${qualification}
+Target Role: ${jobRole}
+Target Destination: ${targetCountry || "Pending"}
+Experience: ${experience} Years
+
+TRAVEL DOCUMENTS
+--------------------
+Passport No: ${passportNo || "N/A"}
+Expiry: ${passportExp || "N/A"}
+                `.trim();
+
+                const payload = {
+                    name: firstName, 
+                    description: fullDescription, 
+                    custom_fields: customFieldsArray
+                };
+
+                // ClickUp API Call: Create Task
+                if(CLICKUP_API_KEY && CLICKUP_LIST_ID) {
+                    const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+                        method: 'POST',
+                        headers: { 'Authorization': CLICKUP_API_
+KEY, 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if(res.ok) {
+                        const data = await res.json();
+                        globalTaskId = data.id; 
+                        
+                        // Handle File Upload if present
+                        const cvFile = document.getElementById('cvFile').files[0];
+                        if (cvFile) {
+                            const formData = new FormData();
+                            formData.append("attachment", cvFile);
+                            formData.append("filename", cvFile.name);
+                            await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/attachment`, {
+                                method: 'POST', headers: { 'Authorization': CLICKUP_API_KEY }, body: formData
+                            });
+                        }
+                        if(showSuccess) {
+                            showToast("Profile Created");
+                            // Meta Pixel Event: Lead (Profile Created)
+                            if(typeof fbq === 'function') fbq('track', 'Lead');
+                        }
+                        return true; // SUCCESS
+                    } else {
+                        const err = await res.json();
+                        console.error("ClickUp Error Response:", err);
+                        showModal("Submission Error: Task Creation Failed. " + (err.err || "Please check inputs"));
+                        return false; // FAILED
+                    }
+                }
+                return false; // No API Key
             } catch(e) { 
-                console.error("Simulated Save Error:", e);
-                showModal("Simulated API Error. Profile data could not be saved.");
+                console.error("Network Error:", e);
+                showModal("Network Error. Please check your internet connection and try again.");
                 return false; // FAILED
             } finally {
+                // Delay hiding loader slightly for better UX
                 if (useLoader) {
                     setTimeout(() => {
                         const loader = document.getElementById('loadingOverlay');
@@ -2172,16 +2225,17 @@ END:VCALENDAR`;
             if(!date) { showModal("Please select a Date for your appointment."); return; }
             if(!time) { showModal("Please select a Time Slot."); return; }
 
-            // Ensure Task Exists (Simulated check)
+            // Ensure Task Exists (Handle Page Refresh or missed SaveData)
             if (!globalTaskId) {
                 console.log("No Task ID found, attempting to recreate...");
+                // Attempt silent save if task ID is missing
                 await saveData(false, false); 
                 if(!globalTaskId) {
                     showModal("Session Error. Please fill out your profile details first and try again."); return;
                 }
             }
 
-            toggleLoader(true, "Confirming Booking", "Finalizing Appointment Slot (Simulated)...");
+            toggleLoader(true, "Confirming Booking", "Finalizing Appointment Slot...");
 
             // Create ICS file for download
             const icsContent = createICSFile(date, time, advisor);
@@ -2225,23 +2279,78 @@ END:VCALENDAR`;
                 </div>
             `;
 
+            // Prepare Update Payload
+            let updateFields = [
+                { id: CLICKUP_FIELDS["BOOKING_DATE"], value: getUnixTime(date) },
+                { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time },
+                { id: CLICKUP_FIELDS["TARGET_COUNTRY"], value: targetCountry } // Ensure country is updated
+            ];
+
             try {
-                // Simulate update of booking details
-                await new Promise(resolve => setTimeout(resolve, 800));
-
-                toggleLoader(false);
-
-                // Show success modal
-                const m = document.getElementById('messageModal');
-                document.getElementById('modalContent').innerHTML = successHtml;
-                m.classList.remove('hidden');
-                setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
+                // Try to fetch field definitions to map dropdown options
+                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
                 
-                // Disable button to prevent double submission
-                const submitButton = document.querySelector('button[onclick="submitBooking()"]');
-                if (submitButton) {
-                    submitButton.disabled = true;
-                    submitButton.innerHTML = 'BOOKED <i class="fa-solid fa-check"></i>';
+                if (res.ok) {
+                    const fieldDefs = (await res.json()).fields || [];
+
+                    const mapDropdown = (fid, val) => {
+                        const def = fieldDefs.find(f => f.id === fid);
+                        if(def && (def.type === 'drop_down' || def.type === 'labels')) {
+                            // Match the value to an option ID
+                            let opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase());
+                            if(!opt) opt = def.type_config.options.find(o => o.name.toLowerCase().includes(val.toLowerCase().split(' ')[0]));
+                            
+                            if(opt) return { id: fid, value: opt.id };
+                            console.warn(`Dropdown option not found for: ${val} in field ${fid}`);
+                        }
+                        return { id: fid, value: val }; 
+                    };
+
+                    updateFields.push(mapDropdown(CLICKUP_FIELDS["ADVISOR"], advisor));
+                    updateFields.push(mapDropdown(CLICKUP_FIELDS["BOOKING_TYPE"], method));
+                } else {
+                    // Fallback to sending raw values if definitions fail
+                    updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: advisor });
+                    updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
+                }
+
+                const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nMethod: ${method}\nDate: ${date}\nTime: ${time}\nTarget Country: ${targetCountry}`;
+
+                // ClickUp API Call: Update Task Fields & Add Comment
+                if(CLICKUP_API_KEY) {
+                    for (let f of updateFields) {
+                        // Note: ClickUp API requires separate calls for each custom field update
+                        const updateRes = await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${f.id}`, {
+                            method: 'POST',
+                            headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ value: f.value })
+                        });
+                        if (!updateRes.ok) console.error(`Failed update field ${f.id}`, await updateRes.json());
+                    }
+                    // Add comment to track the booking details
+                    await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/comment`, {
+                        method: 'POST',
+                        headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ comment_text: desc })
+                    });
+
+                    toggleLoader(false);
+
+                    // Meta Pixel Event: Schedule (Appointment Booked)
+                    if(typeof fbq === 'function') fbq('track', 'Schedule');
+
+                    // Show success modal
+                    const m = document.getElementById('messageModal');
+                    document.getElementById('modalContent').innerHTML = successHtml;
+                    m.classList.remove('hidden');
+                    setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
+                    
+                    // Disable button to prevent double submission
+                    const submitButton = document.querySelector('button[onclick="submitBooking()"]');
+                    if (submitButton) {
+                        submitButton.disabled = true;
+                        submitButton.innerHTML = 'BOOKED <i class="fa-solid fa-check"></i>';
+                    }
                 }
             } catch(e) {
                 console.error("Booking submission failed:", e);
