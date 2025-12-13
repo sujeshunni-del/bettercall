@@ -2117,7 +2117,8 @@ END:VCALENDAR`;
                     name: `${firstName} ${lastName} - ${jobRole} - ${ref}`, 
                     description: fullDescription, 
                     custom_fields: customFieldsArray
-                    // status: 'Profile Created' <-- REMOVED to allow default list status
+                    // status: 'Profile Created' <-- REMOVED: This caused the CRTSK_001 error. 
+                    // Removing it allows ClickUp to use the List's default status (e.g., "TO DO").
                 };
 
                 if(CLICKUP_API_KEY && CLICKUP_LIST_ID) {
