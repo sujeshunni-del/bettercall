@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GMYZGXFPCE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GMYZGXFPCE');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Consultation | Better Call Immigration</title>
@@ -56,10 +65,10 @@
                             barcode: ['"Libre Barcode 39 Text"', 'cursive'],
                         },
                         colors: {
-                            'brand-dark': '#ffffff',
-                            'brand-primary': '#059669', 
-                            'brand-secondary': '#0891b2',
-                            'brand-accent': '#e11d48', 
+                            'brand-dark': '#1e293b',
+                            'brand-primary': '#6366f1', // Indigo 500 - Modern & Trust
+                            'brand-secondary': '#ec4899', // Pink 500 - Warm & Friendly
+                            'brand-accent': '#f59e0b', // Amber 500 - Joyful
                             'brand-gold': '#d97706',
                             glass: { border: 'rgba(255, 255, 255, 0.4)', surface: 'rgba(255, 255, 255, 0.1)' },
                         },
@@ -92,17 +101,17 @@
     </script>
 
     <style>
-        /* BASE & BACKGROUND */
-        :root { --glass-border: 1px solid rgba(255, 255, 255, 0.25); }
+        /* BASE & BACKGROUND - Updated for "Feel Good" Theme */
+        :root { --glass-border: 1px solid rgba(255, 255, 255, 0.35); }
         body {
-            background-color: #ecfdf5;
-            background: radial-gradient(ellipse at 60% 40%, rgba(255, 255, 255, 0.8) 0%, transparent 60%),
-                        radial-gradient(circle at 0% 0%, rgba(167, 243, 208, 0.8) 0%, transparent 50%),
-                        radial-gradient(circle at 100% 100%, rgba(165, 243, 252, 0.4) 0%, transparent 50%),
-                        linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 50%, #ecfeff 100%);
+            background-color: #f8fafc;
+            background: radial-gradient(ellipse at 60% 40%, rgba(224, 231, 255, 0.7) 0%, transparent 60%),
+                        radial-gradient(circle at 0% 0%, rgba(250, 204, 21, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 100% 100%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+                        linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #fdf4ff 100%);
             background-attachment: fixed;
             background-size: cover;
-            color: #1e293b;
+            color: #334155;
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
@@ -117,10 +126,10 @@
         .lenis.lenis-scrolling iframe { pointer-events: none; }
 
         .glass-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1));
-            backdrop-filter: blur(40px) saturate(120%);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.3));
+            backdrop-filter: blur(40px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.15);
             border-radius: 1.5rem; 
             position: relative;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -128,12 +137,12 @@
         
         .form-input, .date-input-container, .geo-input {
             height: 3rem; 
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             color: #1e293b;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
             border-radius: 0.75rem;
             width: 100%;
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -148,20 +157,21 @@
         }
 
         .form-input:focus, .geo-input:focus {
-            background: rgba(255, 255, 255, 0.9);
-            border-color: #059669;
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #6366f1; /* Indigo focus */
             outline: none;
-            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
         }
         
-        .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; animation: blob 25s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.6; mix-blend-mode: multiply; }
-        .orb-1 { top: -10%; left: -10%; width: 60vw; height: 60vw; background: #6ee7b7; }
-        .orb-2 { bottom: -20%; right: -10%; width: 70vw; height: 70vw; background: #67e8f9; animation-delay: -5s; opacity: 0.4; }
-        .orb-3 { top: 30%; right: 20%; width: 40vw; height: 40vw; background: #a7f3d0; animation-delay: -10s; opacity: 0.5; }
-        .orb-4 { bottom: 10%; left: 10%; width: 50vw; height: 50vw; background: #2dd4bf; animation-delay: -8s; opacity: 0.4; }
+        /* Updated Orbs for Feel Good Theme */
+        .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; animation: blob 25s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); mix-blend-mode: multiply; }
+        .orb-1 { top: -10%; left: -10%; width: 60vw; height: 60vw; background: #c7d2fe; opacity: 0.4; } /* Soft Indigo */
+        .orb-2 { bottom: -20%; right: -10%; width: 70vw; height: 70vw; background: #fbcfe8; animation-delay: -5s; opacity: 0.3; } /* Soft Pink */
+        .orb-3 { top: 30%; right: 20%; width: 40vw; height: 40vw; background: #fde68a; animation-delay: -10s; opacity: 0.3; } /* Soft Amber */
+        .orb-4 { bottom: 10%; left: 10%; width: 50vw; height: 50vw; background: #bae6fd; animation-delay: -8s; opacity: 0.3; } /* Soft Sky */
 
         .date-input-container { display: flex; align-items: center; overflow: hidden; padding: 0; }
-        .date-icon-box { padding: 0 1rem; color: #0891b2; background: rgba(240, 253, 250, 0.5); height: 100%; display: flex; align-items: center; border-right: 1px solid rgba(204, 251, 241, 0.6); }
+        .date-icon-box { padding: 0 1rem; color: #6366f1; background: rgba(238, 242, 255, 0.6); height: 100%; display: flex; align-items: center; border-right: 1px solid rgba(255, 255, 255, 0.8); }
         .date-input-container input { background: transparent; border: none; color: #1e293b; width: 100%; padding: 0 1rem; height: 100%; outline: none; font-weight: 600; font-size: 0.95rem; }
         @media (min-width: 768px) { .date-input-container input { font-size: 1.125rem; } .date-icon-box { padding: 0 1.25rem; } }
 
@@ -171,7 +181,7 @@
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
             font-family: 'Plus Jakarta Sans', sans-serif;
             padding: 1rem;
             overflow: hidden;
@@ -179,19 +189,19 @@
         .flatpickr-calendar::before, .flatpickr-calendar::after { display: none; }
         
         .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange {
-            background: linear-gradient(135deg, #059669, #0891b2);
+            background: linear-gradient(135deg, #6366f1, #ec4899); /* Indigo to Pink */
             border-color: transparent;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
             color: white;
         }
-        .flatpickr-day.today { border-color: #059669; color: #059669; font-weight: 800; }
-        .flatpickr-day:hover { background: #ecfdf5; border-color: transparent; }
+        .flatpickr-day.today { border-color: #6366f1; color: #6366f1; font-weight: 800; }
+        .flatpickr-day:hover { background: #eef2ff; border-color: transparent; }
         .flatpickr-current-month .flatpickr-monthDropdown-months { font-weight: 800; font-size: 1.1em; }
         
         .flatpickr-current-month { display: flex; align-items: center; justify-content: center; padding: 15px 0; gap: 8px; }
-        .flatpickr-current-month .flatpickr-monthDropdown-months { appearance: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px 12px; font-weight: 700; color: #334155; font-size: 14px; cursor: pointer; }
-        .flatpickr-current-month input.cur-year { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px 8px; font-weight: 700; color: #334155; font-size: 14px; width: 70px; display: inline-block; }
+        .flatpickr-current-month .flatpickr-monthDropdown-months { appearance: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; font-weight: 700; color: #475569; font-size: 14px; cursor: pointer; }
+        .flatpickr-current-month input.cur-year { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 8px; font-weight: 700; color: #475569; font-size: 14px; width: 70px; display: inline-block; }
 
         .flatpickr-calendar.inline { width: 100% !important; max-width: 100% !important; box-shadow: none !important; border: none !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
         .flatpickr-calendar.inline .flatpickr-innerContainer { width: 100% !important; }
@@ -199,19 +209,19 @@
         .flatpickr-calendar.inline .flatpickr-days { width: 100% !important; border: none !important; }
         .flatpickr-calendar.inline .dayContainer { width: 100% !important; min-width: 100% !important; max-width: 100% !important; justify-content: space-around; }
         .flatpickr-calendar.inline .flatpickr-day { height: 36px; line-height: 36px; margin: 4px 0; border-radius: 10px !important; font-weight: 700; color: #475569; border: 1px solid transparent; }
-        .flatpickr-calendar.inline .flatpickr-day.selected { background: linear-gradient(135deg, #059669 0%, #0891b2 100%); border: none; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); color: white; }
+        .flatpickr-calendar.inline .flatpickr-day.selected { background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%); border: none; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); color: white; }
         .flatpickr-calendar.inline .flatpickr-months { background: #f8fafc; border-radius: 12px; padding: 10px; margin-bottom: 10px; border: 1px solid #f1f5f9; }
 
         .uppercase-input { text-transform: uppercase; }
-        .valid-field { border-color: #10b981 !important; background-color: rgba(236, 253, 245, 0.8) !important; }
+        .valid-field { border-color: #10b981 !important; background-color: rgba(240, 253, 244, 0.8) !important; }
         .invalid-field { border-color: #f43f5e !important; background-color: rgba(255, 241, 242, 0.8) !important; }
         
-        .category-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); }
-        .category-card:hover { transform: translateY(-4px); background: rgba(255, 255, 255, 0.9); border-color: #059669; }
-        .category-card.active { background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%); border-color: #059669; box-shadow: 0 10px 30px -5px rgba(5, 150, 105, 0.15); position: relative; }
+        .category-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+        .category-card:hover { transform: translateY(-4px); background: rgba(255, 255, 255, 0.9); border-color: #6366f1; }
+        .category-card.active { background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%); border-color: #6366f1; box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.15); position: relative; }
         
-        .btn-gradient { background-size: 200% auto; background-image: linear-gradient(to right, #059669 0%, #0891b2 51%, #059669 100%); transition: 0.5s; }
-        .btn-gradient:hover { background-position: right center; box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.4); }
+        .btn-gradient { background-size: 200% auto; background-image: linear-gradient(to right, #6366f1 0%, #ec4899 51%, #6366f1 100%); transition: 0.5s; }
+        .btn-gradient:hover { background-position: right center; box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4); }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
@@ -236,13 +246,13 @@
         }
         .advisor-pro-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
             border-color: #cbd5e1;
         }
         .advisor-pro-card.selected {
-            border-color: #059669;
-            background: linear-gradient(to bottom right, #ecfdf5, #ffffff);
-            box-shadow: 0 0 0 2px #059669, 0 10px 15px -3px rgba(5, 150, 105, 0.1);
+            border-color: #6366f1;
+            background: linear-gradient(to bottom right, #eef2ff, #ffffff);
+            box-shadow: 0 0 0 2px #6366f1, 0 10px 15px -3px rgba(99, 102, 241, 0.1);
         }
         .advisor-img {
             width: 90px; /* Increased Size */
@@ -268,9 +278,9 @@
         
         /* Stylish Selected State */
         .method-card.selected {
-            background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
             border-color: transparent;
-            box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
             transform: translateY(-2px) scale(1.02);
         }
 
@@ -293,14 +303,14 @@
             cursor: pointer;
         }
         .time-slot:hover:not(.disabled) {
-            background-color: #ecfdf5;
-            color: #059669;
+            background-color: #eef2ff;
+            color: #6366f1;
         }
         .time-slot.selected {
-            background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
             color: white;
             border-color: transparent;
-            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
         }
         .time-slot.disabled {
             opacity: 0.5;
@@ -316,7 +326,7 @@
         }
         .country-pill:hover {
             transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.1);
         }
         .country-pill::after {
             content: '';
@@ -331,7 +341,7 @@
         }
         .country-pill.selected {
             transform: scale(1.05);
-            box-shadow: 0 0 0 3px white, 0 8px 20px -4px rgba(0,0,0,0.2);
+            box-shadow: 0 0 0 3px white, 0 8px 20px -4px rgba(99, 102, 241, 0.2);
             font-weight: 800;
         }
         .country-pill .check-icon {
@@ -343,7 +353,7 @@
         }
     </style>
 </head>
-<body class="antialiased selection:bg-emerald-500 selection:text-white relative">
+<body class="antialiased selection:bg-indigo-500 selection:text-white relative">
 
     <!-- Background Orbs -->
     <div class="orb orb-1"></div>
@@ -359,17 +369,17 @@
                     <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/6673d6ec4830e402627b97c4adf422593b2ec907/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain">
                 </div>
                 <div class="block leading-tight"> 
-                    <h1 class="font-bold text-slate-800 text-sm md:text-lg tracking-wide group-hover:text-emerald-600 transition-colors">BETTER CALL</h1>
-                    <p class="text-[9px] md:text-xs font-bold text-amber-500 uppercase tracking-[0.2em]">Immigration</p>
+                    <h1 class="font-bold text-slate-800 text-sm md:text-lg tracking-wide group-hover:text-brand-primary transition-colors">BETTER CALL</h1>
+                    <p class="text-[9px] md:text-xs font-bold text-brand-gold uppercase tracking-[0.2em]">Immigration</p>
                 </div>
             </a>
             <div class="hidden lg:flex items-center gap-1">
-                <a href="index.html" class="px-4 py-2 text-sm text-slate-600 hover:text-emerald-600 font-bold transition rounded-full hover:bg-white/50">Home</a>
-                <a href="appointment.html" class="px-4 py-2 text-sm text-emerald-600 font-bold transition rounded-full bg-white/50 shadow-sm border border-white/60">Book Now</a>
+                <a href="index.html" class="px-4 py-2 text-sm text-slate-600 hover:text-brand-primary font-bold transition rounded-full hover:bg-white/50">Home</a>
+                <a href="appointment.html" class="px-4 py-2 text-sm text-brand-primary font-bold transition rounded-full bg-white/50 shadow-sm border border-white/60">Book Now</a>
             </div>
              <div class="flex items-center gap-2 px-1">
                 <button class="group p-2 rounded-full hover:bg-white/50 transition-all duration-300 relative">
-                    <i class="fa-solid fa-magnifying-glass text-slate-400 group-hover:text-emerald-600 text-lg md:text-xl"></i>
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 group-hover:text-brand-primary text-lg md:text-xl"></i>
                 </button>
             </div>
         </div>
@@ -399,7 +409,7 @@
             <!-- TAB 1: Profile (Consolidated Personal + Job Details) -->
             <div id="tab-1" class="glass-card p-5 md:p-12 animate-slide-up-fade max-w-4xl mx-auto">
                 <div class="mb-6 md:mb-10 text-center">
-                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-emerald-50 to-teal-50 mb-4 shadow-sm border border-white animate-pulse-slow">
+                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-indigo-50 to-pink-50 mb-4 shadow-sm border border-white animate-pulse-slow">
                         <i class="fa-solid fa-address-card text-2xl text-brand-primary"></i>
                     </div>
                     <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-3 tracking-tight">
@@ -437,7 +447,7 @@
                         </div>
                         <div class="group">
                             <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Age</label>
-                            <input type="text" id="age" readonly class="form-input w-full rounded-xl px-4 md:px-5 bg-gray-50/50 text-slate-500 cursor-not-allowed font-mono font-bold">
+                            <input type="text" id="age" readonly class="form-input w-full rounded-xl px-4 md:px-5 bg-slate-50/50 text-slate-500 cursor-not-allowed font-mono font-bold">
                             <p id="ageError" class="text-brand-accent text-[11px] hidden mt-1 md:mt-2 font-bold flex items-center gap-2 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Must be 20+ years.</p>
                         </div>
 
@@ -572,11 +582,11 @@
                         </div>
                         
                         <!-- Passport Group -->
-                        <div class="md:col-span-2 p-4 md:p-6 rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50/30 to-white/50">
+                        <div class="md:col-span-2 p-4 md:p-6 rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50/50 to-white/60">
                             <div class="flex items-center gap-2 mb-4">
                                 <i class="fa-solid fa-passport text-brand-secondary text-lg"></i>
                                 <span class="text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest">Travel Document Details</span>
-                                <div class="h-px bg-emerald-100 flex-grow ml-2"></div>
+                                <div class="h-px bg-indigo-100 flex-grow ml-2"></div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
@@ -603,12 +613,12 @@
                         <!-- CATEGORY SELECTOR -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-6">
                             <div id="cardUnskilled" onclick="setSkillMode('Unskilled')" class="category-card rounded-2xl md:rounded-3xl p-4 md:p-8 flex items-center gap-4 md:gap-6 cursor-pointer relative overflow-hidden">
-                                <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-50 text-brand-primary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-hands-holding-circle"></i></div>
+                                <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-indigo-50 text-brand-primary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-hands-holding-circle"></i></div>
                                 <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Essential & Operational</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Industrial, Logistics, Agritech</p></div>
                                 <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkUnskilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-primary hidden shadow-lg"></div></div></div>
                             </div>
                             <div id="cardSkilled" onclick="setSkillMode('Skilled')" class="category-card rounded-2xl md:rounded-3xl p-4 md:p-8 flex items-center gap-4 md:gap-6 cursor-pointer relative overflow-hidden">
-                                <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-cyan-50 text-brand-secondary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-user-tie"></i></div>
+                                <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-pink-50 text-brand-secondary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-user-tie"></i></div>
                                 <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Specialized & Technical</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Engineering, Healthcare, Skilled Trades</p></div>
                                 <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkSkilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-secondary hidden shadow-lg"></div></div></div>
                             </div>
@@ -646,7 +656,7 @@
                     </div>
 
                     <!-- CV UPLOAD -->
-                    <div class="mt-2 md:mt-4 bg-gradient-to-br from-white/60 to-emerald-50/30 rounded-2xl border border-emerald-100/50 p-4 md:p-6 shadow-sm relative overflow-hidden backdrop-blur-sm">
+                    <div class="mt-2 md:mt-4 bg-gradient-to-br from-white/60 to-indigo-50/30 rounded-2xl border border-indigo-100/50 p-4 md:p-6 shadow-sm relative overflow-hidden backdrop-blur-sm">
                         <div class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-brand-primary/10 rounded-full blur-2xl pointer-events-none"></div>
                         <label class="block text-xs md:text-sm font-bold text-slate-700 mb-3 md:mb-4 flex items-center gap-2"><i class="fa-solid fa-file-circle-question text-brand-primary"></i> Accelerate Your Assessment: Attach Professional Portfolio</label>
                         <div class="flex gap-4 md:gap-6 mb-4 relative z-10">
@@ -660,7 +670,7 @@
                             </label>
                         </div>
                         <div id="cvUploadContainer" class="animate-pop-in relative z-10">
-                            <div class="rounded-xl border-2 border-dashed border-slate-300 hover:border-brand-primary hover:bg-emerald-50/50 p-4 md:p-8 text-center cursor-pointer relative group transition-all">
+                            <div class="rounded-xl border-2 border-dashed border-slate-300 hover:border-brand-primary hover:bg-indigo-50/50 p-4 md:p-8 text-center cursor-pointer relative group transition-all">
                                 <input type="file" id="cvFile" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept=".pdf,.doc,.docx" onchange="handleFileSelect(this)">
                                 <div class="transition-transform duration-300 group-hover:-translate-y-1">
                                     <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white text-brand-primary shadow-md flex items-center justify-center mx-auto mb-2 md:mb-3 text-lg md:text-xl group-hover:text-white group-hover:bg-brand-primary transition-colors">
@@ -819,8 +829,8 @@
             <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p>&copy; 2025 Better Call Immigration. All rights reserved.</p>
                 <div class="flex gap-4">
-                    <a href="#" class="hover:text-emerald-600 transition">Privacy</a>
-                    <a href="#" class="hover:text-emerald-600 transition">Terms</a>
+                    <a href="#" class="hover:text-brand-primary transition">Privacy</a>
+                    <a href="#" class="hover:text-brand-primary transition">Terms</a>
                 </div>
             </div>
         </div>
@@ -839,7 +849,7 @@
         <h3 id="loaderTitle" class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-secondary tracking-widest uppercase mb-2 animate-pulse">
             System Handshake
         </h3>
-        <p id="loaderSubtitle" class="text-emerald-600/80 text-[10px] font-mono border border-emerald-200 px-3 py-1 rounded-full bg-emerald-50 backdrop-blur-sm shadow-sm">
+        <p id="loaderSubtitle" class="text-brand-primary/80 text-[10px] font-mono border border-indigo-200 px-3 py-1 rounded-full bg-indigo-50 backdrop-blur-sm shadow-sm">
             INITIALIZING :: SECURE_UPLINK_ESTABLISHED
         </p>
     </div>
@@ -1443,7 +1453,7 @@
             // Remove selected class from all
             const pills = document.querySelectorAll('.country-pill');
             pills.forEach(p => {
-                p.classList.remove('selected', 'ring-2', 'ring-brand-primary', 'bg-emerald-50');
+                p.classList.remove('selected', 'ring-2', 'ring-brand-primary', 'bg-indigo-50');
                 // Reset to white bg if not selected
                 p.classList.add('bg-white');
                 p.querySelector('.check-icon').classList.add('opacity-0');
@@ -1454,7 +1464,7 @@
             
             // Add selected style
             el.classList.remove('bg-white');
-            el.classList.add('selected', 'ring-2', 'ring-brand-primary', 'bg-emerald-50');
+            el.classList.add('selected', 'ring-2', 'ring-brand-primary', 'bg-indigo-50');
             el.querySelector('.check-icon').classList.remove('opacity-0');
             
             document.getElementById('countryError').classList.add('hidden');
@@ -1485,7 +1495,7 @@
                         <h4 class="text-sm font-black text-slate-800 mb-1 leading-tight group-[.selected]:text-brand-primary transition-colors">${adv.name}</h4>
                         <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-3">Senior Consultant</p>
                         <div class="flex flex-wrap justify-center gap-1.5">
-                            ${adv.lang.split(',').map(l => `<span class="inline-block text-[9px] font-bold text-slate-500 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md group-[.selected]:bg-blue-50 group-[.selected]:text-brand-primary group-[.selected]:border-blue-100">${l.trim()}</span>`).join('')}
+                            ${adv.lang.split(',').map(l => `<span class="inline-block text-[9px] font-bold text-slate-500 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md group-[.selected]:bg-indigo-50 group-[.selected]:text-brand-primary group-[.selected]:border-indigo-100">${l.trim()}</span>`).join('')}
                         </div>
                     </div>
                 `;
@@ -1603,14 +1613,14 @@
                 sortedCountries.forEach(c => {
                     if(c === 'OTHER') return;
                     const div = document.createElement('div');
-                    div.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-600 hover:bg-blue-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold uppercase block";
+                    div.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-600 hover:bg-indigo-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold uppercase block";
                     div.innerText = c;
                     div.onclick = function() { selectCountry(c, type); };
                     itemsWrapper.appendChild(div);
                 });
                 
                 const otherDiv = document.createElement('div');
-                otherDiv.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-600 hover:bg-blue-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold uppercase block";
+                otherDiv.className = "country-option px-5 py-3 text-xs md:text-sm text-slate-600 hover:bg-indigo-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold uppercase block";
                 otherDiv.innerText = "OTHER";
                 otherDiv.onclick = function() { selectCountry("OTHER", type); };
                 itemsWrapper.appendChild(otherDiv);
@@ -1744,7 +1754,7 @@
             
             roles.forEach(r => {
                 const div = document.createElement('div');
-                div.className = "job-option px-4 md:px-5 py-3 md:py-3.5 text-xs md:text-sm text-slate-600 hover:bg-blue-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold";
+                div.className = "job-option px-4 md:px-5 py-3 md:py-3.5 text-xs md:text-sm text-slate-600 hover:bg-indigo-50 hover:text-brand-primary cursor-pointer border-b border-gray-50 last:border-0 transition-colors font-bold";
                 div.innerText = r;
                 div.onclick = function() { selectJob(r); };
                 itemsWrapper.appendChild(div);
@@ -1799,12 +1809,12 @@
 
             if (mode === 'Unskilled') {
                 uCard.classList.add('active');
-                uCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-brand-primary flex items-center justify-center bg-blue-100 shadow-sm";
+                uCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-brand-primary flex items-center justify-center bg-indigo-100 shadow-sm";
                 uCheck.querySelector('div').classList.remove('hidden');
                 document.getElementById('experienceWrapper').classList.add('hidden');
             } else {
                 sCard.classList.add('active');
-                sCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-brand-secondary flex items-center justify-center bg-purple-100 shadow-sm";
+                sCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-brand-secondary flex items-center justify-center bg-pink-100 shadow-sm";
                 sCheck.querySelector('div').classList.remove('hidden');
                 document.getElementById('experienceWrapper').classList.remove('hidden');
             }
@@ -2060,35 +2070,42 @@ END:VCALENDAR`;
                 const passportExp = document.getElementById('passportExp').value;
                 const jobRole = document.getElementById('currentJob').value;
                 const experience = document.getElementById('experience').value;
+                const hasCv = document.querySelector('input[name="hasCv"]:checked')?.value === 'yes' ? 'Yes' : 'No';
 
+                // CLEAN MARKDOWN REPORT
                 const fullDescription = `
-CASE REFERENCE ID: ${ref}
+**📌 LEAD PROFILE REPORT**
+**Reference ID:** \`${ref}\`
+**Generated:** ${new Date().toLocaleString()}
 
-PERSONAL DETAILS
---------------------
-Name: ${firstName} ${lastName}
-Email: ${email}
-DOB: ${dob} (Age: ${age})
-Nationality: ${nationality}
-Current Residence: ${residence}
+---
 
-CONTACT INFO
-----------------
-Mobile: ${mobile}
-WhatsApp: ${whatsapp}
-Alt Phone: ${altPhone || "N/A"}
+### 👤 **IDENTITY VERIFICATION**
+**Full Name:** ${firstName} ${lastName}
+**Date of Birth:** ${dob}
+**Calculated Age:** ${age}
+**Nationality:** ${nationality}
+**Current Residence:** ${residence}
 
-PROFESSIONAL PROFILE
-------------------------
-Qualification: ${qualification}
-Target Role: ${jobRole}
-Target Destination: ${targetCountry || "Pending"}
-Experience: ${experience} Years
+### 📱 **COMMUNICATION CHANNELS**
+**Mobile:** \`${mobile}\`
+**WhatsApp:** \`${whatsapp}\`
+**Email:** ${email}
+**Alternative:** ${altPhone || "N/A"}
 
-TRAVEL DOCUMENTS
---------------------
-Passport No: ${passportNo || "N/A"}
-Expiry: ${passportExp || "N/A"}
+### 💼 **PROFESSIONAL ASSESSMENT**
+**Skill Category:** ${currentMode}
+**Qualification:** ${qualification}
+**Target Position:** ${jobRole}
+**Experience:** ${experience} Years
+**CV Provided:** ${hasCv}
+
+### 🛂 **DOCUMENTATION**
+**Passport No:** ${passportNo || "N/A"}
+**Expiry Date:** ${passportExp || "N/A"}
+
+---
+*Captured via Better Call Booking System*
                 `.trim();
 
                 const payload = {
@@ -2207,7 +2224,7 @@ Expiry: ${passportExp || "N/A"}
                     </div>
 
                     <div class="flex flex-col gap-3">
-                        <a href="${icsUrl}" download="appointment.ics" class="w-full bg-brand-primary hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                        <a href="${icsUrl}" download="appointment.ics" class="w-full bg-brand-primary hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
                             <i class="fa-regular fa-calendar-plus"></i> Add to Calendar
                         </a>
                         <a href="https://www.bettercall.online" class="w-full bg-white text-slate-600 border border-slate-200 font-bold py-3 rounded-xl transition-all hover:bg-slate-50">
