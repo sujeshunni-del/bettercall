@@ -98,6 +98,7 @@
         .orb-3 { top: 40%; left: 30%; width: 30vw; height: 30vw; background: radial-gradient(circle, #9F1239 0%, transparent 70%); animation-delay: -5s; opacity: 0.2; }
         .orb-4 { display: none; } /* Removed 4th orb from previous theme */
 
+        /* Lenis smooth scrolling config */
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
@@ -124,6 +125,7 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
+        /* Form Inputs */
         .form-input, .date-input-container, .geo-input {
             height: 3rem; 
             background: rgba(255, 255, 255, 0.03);
@@ -183,7 +185,7 @@
         
         .category-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); }
         .category-card:hover { transform: translateY(-4px); background: rgba(255, 255, 255, 0.08); border-color: #D4AF37; }
-        .category-card.active { background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%); border-color: #D4AF37; box-shadow: 0 10px 30px -5px rgba(212, 175, 55, 0.1); position: relative; }
+        .category-card.active { background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%); border-color: #D4AF37; box-shadow: 0 0 30px rgba(212, 175, 55, 0.15); position: relative; }
         
         .btn-gradient { background-size: 200% auto; background-image: linear-gradient(to right, #D4AF37 0%, #F9E69D 51%, #D4AF37 100%); transition: 0.5s; color: #0B1121; }
         .btn-gradient:hover { background-position: right center; box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.4); }
@@ -886,6 +888,7 @@
         let appointmentRefId = Math.random().toString(36).substr(2, 9).toUpperCase();
 
         // CLICKUP FIELDS MAP (PLACEHOLDERS)
+        // These IDs map form data to specific custom fields in a ClickUp list.
         const CLICKUP_FIELDS = {
             "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",  
             "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115", 
@@ -909,6 +912,7 @@
             "DESTINATION": "dd59c787-da25-4760-ab85-2974e1ae8838"
         };
 
+        // Master list of job roles categorized by skill type
         const jobMasterList = [
             {r:"ACCOUNTANT",type:"S",c:"Netherlands"},
             {r:"ADMINISTRATIVE ASSISTANT",type:"S",c:"Germany"},
@@ -1149,6 +1153,7 @@
             {r:"WORKSHOP HELPER",type:"U",c:"Latvia"}
         ];
 
+        // Regex and hint data for phone number validation based on country
         const countryRules = {
             "AFGHANISTAN": { regex: /^\+93\d{9}$/, hint: "+93 700123456" },
             "ALBANIA": { regex: /^\+355\d{8,9}$/, hint: "+355 691234567" },
@@ -1319,6 +1324,7 @@
                         const errEl = document.getElementById('ageError');
                         el.value = age;
                         
+                        // Age validation logic
                         if(age < 21 || age > 50) {
                             el.classList.add('border-red-500');
                             errEl.classList.remove('hidden');
@@ -1342,11 +1348,13 @@
                 maxDate: maxBookingDate,
                 disableMobile: true,
                 animate: true,
+                // Disable Sundays
                 disable: [
                     function(date) { return (date.getDay() === 0); }
                 ]
             });
             
+            // PASSPORT EXPIRY PICKER
             flatpickr("#passportExp", { 
                 dateFormat: "d/m/Y", 
                 disableMobile: false,
@@ -1366,6 +1374,7 @@
         };
 
         function setupListeners() {
+            // Sync WhatsApp field with Mobile field
             document.getElementById('sameAsMobile').addEventListener('change', function() {
                 if(this.checked) {
                     const m = document.getElementById('mobile');
@@ -1396,6 +1405,7 @@
             });
         }
         
+        // Renders the advisor card(s)
         function renderAdvisors() {
             const grid = document.getElementById('advisorGrid');
             if(!grid) return;
@@ -1403,7 +1413,8 @@
             
             advisors.forEach(adv => {
                 const div = document.createElement('div');
-                div.className = "advisor-pro-card group selected"; // Auto-select since only one
+                // Auto-select since only one advisor is currently defined
+                div.className = "advisor-pro-card group selected"; 
                 div.onclick = () => selectAdvisor(adv.name, div);
                 
                 const imageContent = adv.image 
@@ -1437,22 +1448,25 @@
         }
 
         function selectAdvisor(name, el) {
+            // Note: Since only one advisor is available, this function primarily sets the value.
             document.getElementById('selectedAdvisor').value = name;
         }
         
-        // NEW: Destination Selection
+        // Selects the target destination country
         function selectDestination(country, el) {
             document.getElementById('selectedDestination').value = country;
             document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('selected'));
             el.classList.add('selected');
         }
 
+        // Selects the consultation method
         function selectMethod(method, el) {
             document.getElementById('selectedMethod').value = method;
             document.querySelectorAll('.method-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
         }
 
+        // Renders fixed time slots
         function renderTimeSlots() {
             const grid = document.getElementById('timeSlotGrid');
             if(!grid) return;
@@ -1464,7 +1478,12 @@
             
             for (let h = startHour; h < endHour; h++) {
                 for (let m = 0; m < 60; m += 15) {
-                    const timeStr = `${h > 12 ? h - 12 : h}:${m === 0 ? '00' : m} ${h >= 12 ? 'PM' : 'AM'}`;
+                    // Convert 24h to 12h format string
+                    const displayHour = h > 12 ? h - 12 : h;
+                    const displayMinute = m === 0 ? '00' : m;
+                    const modifier = h >= 12 ? 'PM' : 'AM';
+                    const timeStr = `${displayHour}:${displayMinute} ${modifier}`;
+                    
                     const btn = document.createElement('button');
                     btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-400 bg-white/5 border border-white/10";
                     btn.innerText = timeStr;
@@ -1480,12 +1499,14 @@
             grid.appendChild(btn);
         }
 
+        // Selects a time slot
         function selectTime(time, el) {
             document.getElementById('selectedTime').value = time;
             document.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
             el.classList.add('selected');
         }
 
+        // Transitions from Profile tab (1) to Booking tab (3)
         function goToBookingTab() {
             document.getElementById('tab-1').classList.add('hidden');
             document.getElementById('tab-3').classList.remove('hidden');
@@ -1502,27 +1523,39 @@
             }
         }
         
+        // Toggles the visibility of the CV upload field
         function toggleCvUpload(show) {
             const container = document.getElementById('cvUploadContainer');
             if(show) {
                 container.classList.remove('hidden');
             } else {
                 container.classList.add('hidden');
-                document.getElementById('cvFile').value = '';
+                document.getElementById('cvFile').value = ''; // Clear file selection
+                document.getElementById('fileNameDisplay').innerText = 'Upload Curriculum Vitae (PDF/DOC)';
+                document.getElementById('fileNameDisplay').classList.remove('text-brand-gold');
+                document.getElementById('fileNameDisplay').classList.add('text-slate-300');
             }
         }
         
+        // Handles the file selection for CV upload
         function handleFileSelect(input) {
             const file = input.files[0];
             const display = document.getElementById('fileNameDisplay');
             if(file) {
-                if(file.size > 5 * 1024 * 1024) { showModal("File size exceeds 5MB limit."); input.value = ''; return; }
+                if(file.size > 5 * 1024 * 1024) { 
+                    showModal("File size exceeds 5MB limit. Please upload a smaller file."); 
+                    input.value = ''; 
+                    display.innerText = 'Upload Curriculum Vitae (PDF/DOC)';
+                    display.classList.remove('text-brand-gold');
+                    return; 
+                }
                 display.innerText = file.name;
                 display.classList.remove('text-slate-300');
                 display.classList.add('text-brand-gold');
             }
         }
 
+        // Populates the Country selection dropdowns
         function populateCountryDropdowns() {
             const sortedCountries = Object.keys(countryRules).sort();
             
@@ -1531,6 +1564,7 @@
                 if(!list) return;
                 list.innerHTML = '';
                 
+                // Add search box (sticky)
                 const searchBox = document.createElement('div');
                 searchBox.className = "sticky top-0 bg-[#0F172A] backdrop-blur-sm p-3 border-b border-white/10 z-10";
                 searchBox.innerHTML = `
@@ -1568,6 +1602,7 @@
             buildList('residence');
         }
 
+        // Toggles visibility of the country dropdown lists
         function toggleCountryDropdown(type, event) {
             event.stopPropagation();
             const list = document.getElementById(type + 'List');
@@ -1588,6 +1623,7 @@
             }
         }
 
+        // Filters the country options based on search input
         function filterCountries(input, type) {
             const filter = input.value.toUpperCase();
             const list = document.getElementById(type + 'Items');
@@ -1604,6 +1640,7 @@
             }
         }
 
+        // Selects a country from the dropdown
         function selectCountry(val, type) {
             const hiddenInput = document.getElementById(type === 'nationality' ? 'nationality' : 'presentResidence');
             const display = document.getElementById(type + 'Display');
@@ -1625,6 +1662,7 @@
             }
         }
 
+        // Updates phone number validation based on selected residence country
         function handleResidenceChange() {
             const sel = document.getElementById('presentResidence');
             const country = sel ? (sel.value || "OTHER") : "OTHER";
@@ -1636,7 +1674,9 @@
             
             ['mobile', 'whatsapp', 'altPhone'].forEach(id => {
                 const el = document.getElementById(id);
+                // Only pre-fill the code if the field is nearly empty
                 if(el && el.value.length < 5) el.value = code;
+                validatePhone(id); // Re-validate existing numbers
             });
             
             const hintEl = document.getElementById('mobileHint');
@@ -1646,6 +1686,7 @@
             }
         }
 
+        // Toggles visibility of the Job Role dropdown list
         function toggleJobDropdown(e) {
             e.stopPropagation();
             const list = document.getElementById('jobDropdownList');
@@ -1654,6 +1695,7 @@
             icon.classList.toggle('rotate-180');
         }
 
+        // Selects a job role
         function selectJob(jobRole) {
             document.getElementById('currentJob').value = jobRole;
             document.getElementById('selectedJobText').innerText = jobRole;
@@ -1663,10 +1705,12 @@
             document.getElementById('jobDropdownIcon').classList.remove('rotate-180');
         }
 
+        // Populates the Job Role dropdown based on skill mode (Skilled/Unskilled)
         function populateDropdown(mode) {
             const listContainer = document.getElementById('jobDropdownList');
             listContainer.innerHTML = '';
             
+            // Add search box (sticky)
             const searchBox = document.createElement('div');
             searchBox.className = "sticky top-0 bg-[#0F172A] backdrop-blur-sm p-3 border-b border-white/10 z-10";
             searchBox.innerHTML = `
@@ -1698,6 +1742,7 @@
             document.getElementById('selectedJobText').innerText = "Select Job Role";
         }
 
+        // Filters job roles in the dropdown based on search input
         function filterJobs(input) {
             const filter = input.value.toUpperCase();
             const list = document.getElementById("jobItemsList");
@@ -1714,6 +1759,7 @@
                 }
             }
             
+            // Handle no results message
             let noRes = document.getElementById("noJobResults");
             if(visibleCount === 0) {
                 if(!noRes) {
@@ -1728,6 +1774,7 @@
             }
         }
 
+        // Sets the skill mode (Unskilled or Skilled)
         function setSkillMode(mode) {
             currentMode = mode;
             const uCard = document.getElementById('cardUnskilled');
@@ -1747,6 +1794,7 @@
                 document.getElementById('experienceWrapper').classList.add('hidden');
             } else {
                 sCard.classList.add('active');
+                uCard.classList.remove('active'); // Ensure unskilled is not active if skilled is selected
                 sCheck.className = "w-6 h-6 md:w-8 md:h-8 rounded-full border-brand-secondary flex items-center justify-center bg-brand-secondary shadow-[0_0_10px_#3F51B5]";
                 sCheck.querySelector('div').classList.remove('hidden');
                 document.getElementById('experienceWrapper').classList.remove('hidden');
@@ -1755,6 +1803,7 @@
             populateDropdown(mode); 
         }
 
+        // Shows/hides the loading overlay
         function toggleLoader(show, title = "Processing", subtitle = "Please wait...") {
             const loader = document.getElementById('loadingOverlay');
             const t = document.getElementById('loaderTitle');
@@ -1772,7 +1821,7 @@
             }
         }
 
-        // NEW: Proceed without Report Generation
+        // Validates form and moves to booking step
         async function proceedToBooking() {
             // 1. Manual check for Qualification (Radio buttons often fail checkValidity/reportValidity UI when hidden)
             const qualChecked = document.querySelector('input[name="qualification"]:checked');
@@ -1818,6 +1867,7 @@
             }
         }
 
+        // Cleans and formats phone number string
         function cleanPhoneNumber(phoneStr) {
             if(!phoneStr) return null;
             let cleaned = phoneStr.replace(/[^0-9+]/g, '');
@@ -1825,7 +1875,11 @@
             if(cleaned.length > 0 && !cleaned.startsWith('+')) cleaned = '+' + cleaned;
             return cleaned.length < 5 ? null : cleaned;
         }
+        
+        // Enforces phone number input format
         function enforcePhoneInput(el) { el.value = el.value.replace(/[^0-9+ ]/g, ''); }
+        
+        // Validates phone number against the country regex
         function validatePhone(id) {
             const el = document.getElementById(id);
             const rawVal = el.value.replace(/\s/g, '');
@@ -1843,6 +1897,8 @@
                 } else feedback.innerHTML = '';
             }
         }
+        
+        // Converts date string (d/m/Y) to Unix milliseconds
         function getUnixTime(dateStr) {
             if (!dateStr) return null;
             const parts = dateStr.split('/');
@@ -1851,6 +1907,8 @@
             // Convert to ClickUp's required milliseconds since epoch
             return date.getTime(); 
         }
+        
+        // Shows the custom modal (instead of alert)
         function showModal(msg) {
             const m = document.getElementById('messageModal');
             document.getElementById('modalContent').innerHTML = `
@@ -1866,11 +1924,15 @@
             m.classList.remove('hidden');
             setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
         }
+        
+        // Closes the custom modal
         function closeModal() {
             const m = document.getElementById('messageModal');
             m.classList.add('opacity-0'); m.querySelector('.modal-content').classList.remove('scale-100');
             setTimeout(() => m.classList.add('hidden'), 300);
         }
+        
+        // Shows the toast notification
         function showToast(msg) {
             const t = document.getElementById('toast');
             if(msg) document.getElementById('toastMsg').innerText = msg;
@@ -1878,7 +1940,7 @@
             setTimeout(() => t.classList.add('translate-y-32','opacity-0'), 3000);
         }
 
-        // CALENDAR HELPER
+        // Creates an ICS file content for calendar download
         function createICSFile(dateStr, timeStr, advisor) {
             const [day, month, year] = dateStr.split('/');
             let [time, modifier] = timeStr.split(' ');
@@ -1886,17 +1948,21 @@
             
             // Convert to 24-hour format
             hours = parseInt(hours, 10);
+            minutes = parseInt(minutes, 10);
             if (modifier === 'PM' && hours !== 12) {
                 hours += 12;
             } else if (modifier === 'AM' && hours === 12) {
                 hours = 0;
             }
-            hours = String(hours).padStart(2, '0');
             
-            const start = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00`);
+            const start = new Date(year, month - 1, day, hours, minutes);
             const end = new Date(start.getTime() + 30 * 60 * 1000); // 30 minute appointment
             
-            const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            // Format date to iCalendar DTSTART/DTEND format (YYYYMMDDTHHMMSSZ)
+            const fmt = (d) => {
+                const pad = (n) => String(n).padStart(2, '0');
+                return `${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
+            };
             
             return `BEGIN:VCALENDAR
 VERSION:2.0
@@ -1910,13 +1976,14 @@ SUMMARY:Strategy Session with ${advisor}
 DESCRIPTION:Immigration Consultation. Prepare your documents.
 LOCATION:Online / Phone
 URL:https://bettercall.online
-END:VEENT
+END:VEVENT
 END:VCALENDAR`;
         }
 
+        // Submits user data to ClickUp (Task Creation/Update)
         async function saveData(showSuccess = true, useLoader = true) {
-            // Skip if task already exists (only update on booking submission later)
-            if (globalTaskId) return true; // Return TRUE if already saved
+            // Return TRUE if task already exists (only updating is allowed later)
+            if (globalTaskId) return true; 
 
             if (useLoader) {
                 toggleLoader(true, "Synchronizing Profile", "ENCRYPTING DATA :: VERIFYING INTEGRITY");
@@ -1939,8 +2006,10 @@ END:VCALENDAR`;
                     { id: CLICKUP_FIELDS["Case Reference ID"], value: ref }
                 ];
 
+                // Filter out empty or null custom fields
                 customFieldsArray = customFieldsArray.filter(f => f.value !== null && f.value !== undefined && f.value !== "");
                 
+                // Get dropdown values and map to ClickUp ID if possible
                 try {
                     const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
                     
@@ -1950,10 +2019,12 @@ END:VCALENDAR`;
                             const fid = CLICKUP_FIELDS[key];
                             const def = fieldDefs.find(f => f.id === fid);
                             if(def && (def.type === 'drop_down' || def.type === 'labels') && val) {
+                                // Attempt to find the option ID by name (case-insensitive)
                                 const opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase()) 
                                          || def.type_config.options.find(o => o.name === "OTHER");
                                 if(opt) customFieldsArray.push({ id: fid, value: opt.id });
                             } else if (fid && val) {
+                                 // Fallback to raw value if field type is not a dropdown/label or field definition not found
                                  if (!def || (def.type !== 'drop_down' && def.type !== 'labels')) {
                                     customFieldsArray.push({ id: fid, value: val });
                                  }
@@ -1964,6 +2035,7 @@ END:VCALENDAR`;
                         addDropdown("QUALIFICATION", document.querySelector('input[name="qualification"]:checked')?.value);
                         addDropdown("JOB ROLE", document.getElementById('currentJob').value);
                     } else {
+                         // If field definition fetch failed, use raw text values for dropdowns
                          const qual = document.querySelector('input[name="qualification"]:checked')?.value;
                          const job = document.getElementById('currentJob').value;
                          if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
@@ -1977,6 +2049,7 @@ END:VCALENDAR`;
                      if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
                 }
 
+                // Prepare task details for description
                 const firstName = document.getElementById('firstName').value;
                 const lastName = document.getElementById('lastName').value;
                 const email = document.getElementById('email').value;
@@ -1992,39 +2065,59 @@ END:VCALENDAR`;
                 const jobRole = document.getElementById('currentJob').value;
                 const experience = document.getElementById('experience').value;
 
+                // --- ENHANCED DESCRIPTION GENERATION ---
+                const jobData = jobMasterList.find(j => j.r === jobRole);
+                const suggestedCountry = jobData ? jobData.c : "Europe (General)";
+                const categoryLabel = currentMode === 'Unskilled' ? "Operational & Essential Services" : "Specialized & Technical Professionals";
+                const visaType = currentMode === 'Unskilled' ? "Work Permit (Type D) / Seasonal" : "EU Blue Card / Specialist Visa";
+                
+                // Get unique countries for this category for suggestions
+                const typeChar = currentMode === 'Unskilled' ? 'U' : 'S';
+                const availableMarkets = [...new Set(jobMasterList.filter(j => j.type === typeChar).map(j => j.c))].join(', ');
+
                 const fullDescription = `
 **CASE REFERENCE ID:** ${ref}
+**SUBMISSION TIME:** ${new Date().toLocaleString()}
 
-**PERSONAL DETAILS**
---------------------
+**1. APPLICANT PROFILE**
+========================
 **Name:** ${firstName} ${lastName}
-**Email:** ${email}
-**DOB:** ${dob} (Age: ${age})
+**Age:** ${age} years (DOB: ${dob})
 **Nationality:** ${nationality}
 **Current Residence:** ${residence}
+**Passport:** ${passportNo ? passportNo : "Not Provided"} (Exp: ${passportExp || "N/A"})
 
-**CONTACT INFO**
-----------------
+**2. CONTACT COORDINATES**
+==========================
 **Mobile:** ${mobile}
 **WhatsApp:** ${whatsapp}
-**Alt Phone:** ${altPhone || "N/A"}
+**Email:** ${email}
+**Alt Contact:** ${altPhone || "N/A"}
 
-**PROFESSIONAL PROFILE**
-------------------------
+**3. PROFESSIONAL ASSESSMENT**
+==============================
+**Stream:** ${categoryLabel}
 **Qualification:** ${qualification}
 **Target Role:** ${jobRole}
 **Experience:** ${experience} Years
 
-**TRAVEL DOCUMENTS**
---------------------
-**Passport No:** ${passportNo || "N/A"}
-**Expiry:** ${passportExp || "N/A"}
+**4. SYSTEM SUGGESTIONS & MATCHING**
+====================================
+**Primary Destination Match:** ${suggestedCountry}
+**Recommended Visa Pathway:** ${visaType}
+**Eligible Markets:** ${availableMarkets}
+
+**NOTES:**
+----------
+* Profile automatically assessed for eligibility.
+* Please review attached CV for specific skills verification.
                 `.trim();
 
                 const payload = {
-                    name: firstName, 
+                    name: `${firstName} ${lastName} - ${jobRole} - ${ref}`, 
                     description: fullDescription, 
-                    custom_fields: customFieldsArray
+                    custom_fields: customFieldsArray,
+                    status: 'Profile Created'
                 };
 
                 if(CLICKUP_API_KEY && CLICKUP_LIST_ID) {
@@ -2038,8 +2131,9 @@ END:VCALENDAR`;
                         const data = await res.json();
                         globalTaskId = data.id; 
                         
+                        // Handle file upload
                         const cvFile = document.getElementById('cvFile').files[0];
-                        if (cvFile) {
+                        if (cvFile && document.querySelector('input[name="hasCv"]:checked')?.value === 'yes') {
                             const formData = new FormData();
                             formData.append("attachment", cvFile);
                             formData.append("filename", cvFile.name);
@@ -2052,26 +2146,27 @@ END:VCALENDAR`;
                     } else {
                         const err = await res.json();
                         console.error("ClickUp Error Response:", err);
-                        showModal("Submission Error: Task Creation Failed. " + (err.err || "Please check inputs"));
+                        showModal("Submission Error: Task Creation Failed. " + (err.err || "Please check inputs."));
                         return false; 
                     }
                 }
-                return false; 
+                // If no API key/list ID, treat as success to allow testing form flow
+                if(showSuccess) showToast("Form Flow Success (API Disabled)");
+                return true; 
             } catch(e) { 
-                console.error("Network Error:", e);
+                console.error("Network Error during save:", e);
                 showModal("Network Error. Please check your internet connection and try again.");
                 return false; 
             } finally {
                 if (useLoader) {
-                    setTimeout(() => {
-                        const loader = document.getElementById('loadingOverlay');
-                        loader.classList.add('opacity-0');
-                        setTimeout(() => loader.classList.add('hidden'), 500);
-                    }, 1500); 
+                    // Force a delay for loader visibility
+                    await new Promise(resolve => setTimeout(resolve, 1500)); 
+                    toggleLoader(false);
                 }
             }
         }
 
+        // Finalizes the booking
         async function submitBooking() {
             const advisor = document.getElementById('selectedAdvisor').value;
             const method = document.getElementById('selectedMethod').value;
@@ -2083,15 +2178,16 @@ END:VCALENDAR`;
             if(!destination) { showModal("Please select your Destination Country."); return; }
             if(!advisor) { showModal("Please select an Immigration Advisor to proceed."); return; }
             if(!method) { showModal("Please select a Consultation Mode."); return; }
-            if(!date) { showModal("Please select a Date for your appointment."); return; }
+            // Note: Flatpickr inline should ensure date is always selected on successful navigation
+            if(!date || date === 'Select Date') { showModal("Please select a Date for your appointment."); return; } 
             if(!time) { showModal("Please select a Time Slot."); return; }
 
             // Ensure Task Exists (Handle Page Refresh or missed SaveData)
             if (!globalTaskId) {
-                console.log("No Task ID found, attempting to recreate...");
+                console.log("No Task ID found, attempting to recreate profile data...");
                 // Attempt silent save if task ID is missing
-                await saveData(false, false); 
-                if(!globalTaskId) {
+                const success = await saveData(false, false); 
+                if(!success || !globalTaskId) {
                     showModal("Session Error. Please fill out your profile details first and try again."); return;
                 }
             }
@@ -2146,6 +2242,7 @@ END:VCALENDAR`;
             ];
 
             try {
+                // Fetch field definitions to map dropdown/label values if necessary
                 const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
                 
                 if (res.ok) {
@@ -2153,7 +2250,8 @@ END:VCALENDAR`;
 
                     const mapDropdown = (fid, val) => {
                         const def = fieldDefs.find(f => f.id === fid);
-                        if(def && (def.type === 'drop_down' || def.type === 'labels')) {
+                        if(def && (def.type === 'drop_down' || def.type === 'labels') && val) {
+                            // Find the option ID by name or partial name
                             let opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase());
                             if(!opt) opt = def.type_config.options.find(o => o.name.toLowerCase().includes(val.toLowerCase().split(' ')[0]));
                             
@@ -2167,6 +2265,7 @@ END:VCALENDAR`;
                     updateFields.push(mapDropdown(CLICKUP_FIELDS["BOOKING_TYPE"], method));
                     updateFields.push(mapDropdown(CLICKUP_FIELDS["DESTINATION"], destination)); 
                 } else {
+                    // Fallback to raw text values if field definitions are unavailable
                     updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: advisor });
                     updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
                     updateFields.push({ id: CLICKUP_FIELDS["DESTINATION"], value: destination });
@@ -2175,6 +2274,7 @@ END:VCALENDAR`;
                 const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nDestination: ${destination}\nMethod: ${method}\nDate: ${date}\nTime: ${time}`;
 
                 if(CLICKUP_API_KEY) {
+                    // Update custom fields individually
                     for (let f of updateFields) {
                         const updateRes = await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${f.id}`, {
                             method: 'POST',
@@ -2183,12 +2283,21 @@ END:VCALENDAR`;
                         });
                         if (!updateRes.ok) console.error(`Failed update field ${f.id}`, await updateRes.json());
                     }
+                    // Add comment to task
                     await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/comment`, {
                         method: 'POST',
                         headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
                         body: JSON.stringify({ comment_text: desc })
                     });
+                    
+                    // Update task status (optional but good practice)
+                    await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}`, {
+                        method: 'PUT',
+                        headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: 'Booked' })
+                    });
 
+                    // Update UI upon successful submission
                     toggleLoader(false);
 
                     const m = document.getElementById('messageModal');
@@ -2196,11 +2305,19 @@ END:VCALENDAR`;
                     m.classList.remove('hidden');
                     setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
                     
+                    // Disable the booking button
                     const submitButton = document.querySelector('button[onclick="submitBooking()"]');
                     if (submitButton) {
                         submitButton.disabled = true;
                         submitButton.innerHTML = 'BOOKED <i class="fa-solid fa-check"></i>';
                     }
+                } else {
+                    // UI success flow if API key is missing (for testing flow)
+                    toggleLoader(false);
+                    const m = document.getElementById('messageModal');
+                    document.getElementById('modalContent').innerHTML = successHtml;
+                    m.classList.remove('hidden');
+                    setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
                 }
             } catch(e) {
                 console.error("Booking submission failed:", e);
