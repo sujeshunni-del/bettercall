@@ -1331,6 +1331,15 @@
                 }
             });
             
+            // PASSPORT EXPIRY PICKER
+            flatpickr("#passportExp", { 
+                dateFormat: "d/m/Y", 
+                disableMobile: false,
+                altInput: true,
+                altFormat: "F j, Y",
+                minDate: "today"
+            });
+            
             // BOOKING DATE PICKER
             const maxBookingDate = new Date();
             maxBookingDate.setDate(maxBookingDate.getDate() + 20); 
@@ -1345,14 +1354,6 @@
                 disable: [
                     function(date) { return (date.getDay() === 0); }
                 ]
-            });
-            
-            flatpickr("#passportExp", { 
-                dateFormat: "d/m/Y", 
-                disableMobile: false,
-                altInput: true,
-                altFormat: "F j, Y",
-                minDate: "today"
             });
             
             handleResidenceChange();
@@ -1993,32 +1994,32 @@ END:VCALENDAR`;
                 const experience = document.getElementById('experience').value;
 
                 const fullDescription = `
-**CASE REFERENCE ID:** ${ref}
+CASE REFERENCE ID: ${ref}
 
-**PERSONAL DETAILS**
+PERSONAL DETAILS
 --------------------
-**Name:** ${firstName} ${lastName}
-**Email:** ${email}
-**DOB:** ${dob} (Age: ${age})
-**Nationality:** ${nationality}
-**Current Residence:** ${residence}
+Name: ${firstName} ${lastName}
+Email: ${email}
+DOB: ${dob} (Age: ${age})
+Nationality: ${nationality}
+Current Residence: ${residence}
 
-**CONTACT INFO**
+CONTACT INFO
 ----------------
-**Mobile:** ${mobile}
-**WhatsApp:** ${whatsapp}
-**Alt Phone:** ${altPhone || "N/A"}
+Mobile: ${mobile}
+WhatsApp: ${whatsapp}
+Alt Phone: ${altPhone || "N/A"}
 
-**PROFESSIONAL PROFILE**
+PROFESSIONAL PROFILE
 ------------------------
-**Qualification:** ${qualification}
-**Target Role:** ${jobRole}
-**Experience:** ${experience} Years
+Qualification: ${qualification}
+Target Role: ${jobRole}
+Experience: ${experience} Years
 
-**TRAVEL DOCUMENTS**
+TRAVEL DOCUMENTS
 --------------------
-**Passport No:** ${passportNo || "N/A"}
-**Expiry:** ${passportExp || "N/A"}
+Passport No: ${passportNo || "N/A"}
+Expiry: ${passportExp || "N/A"}
                 `.trim();
 
                 const payload = {
