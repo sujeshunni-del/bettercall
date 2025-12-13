@@ -408,16 +408,12 @@
         .advisor-details p { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         .lang-tag { display: inline-block; font-size: 10px; color: #475569; background: #f8fafc; padding: 2px 6px; border-radius: 4px; margin-top: 4px; border: 1px solid #e2e8f0; font-family: 'Noto Sans', sans-serif; }
 
+        /* Method Card styles are now handled dynamically via JS for the 'tinted' effect, 
+           but we keep base transitions here */
         .method-card {
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.6);
+            will-change: transform, background-color, border-color;
         }
-        .method-card.selected {
-            border-color: #7c3aed;
-            background: #f5f3ff;
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
-        }
+
         .time-slot {
             transition: all 0.2s;
             cursor: pointer;
@@ -993,24 +989,29 @@
                             <!-- 2. Consultation Mode -->
                             <div>
                                 <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-secondary text-white inline-flex items-center justify-center mr-2">2</span> Consultation Mode</h3>
-                                <div class="grid grid-cols-3 gap-2">
-                                    <div class="method-card p-3 rounded-xl bg-white/80 border border-slate-200 flex flex-col items-center text-center gap-2 group hover:border-brand-primary hover:shadow-md" onclick="selectMethod('In-Person', this)">
-                                        <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-slate-400 group-hover:text-brand-primary group-hover:scale-110 transition-all">
+                                <div class="grid grid-cols-3 gap-3">
+                                    <!-- In-Person -->
+                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex flex-col items-center text-center gap-3 cursor-pointer transition-all duration-300 hover:shadow-md group" onclick="selectMethod('In-Person', this)">
+                                        <div class="icon-wrapper w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-50 group-hover:text-blue-500">
                                             <i class="fa-solid fa-building text-sm"></i>
                                         </div>
-                                        <span class="text-[10px] font-bold text-slate-600">Office</span>
+                                        <span class="label-text text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider transition-colors duration-300 group-hover:text-blue-600">Office</span>
                                     </div>
-                                    <div class="method-card p-3 rounded-xl bg-white/80 border border-slate-200 flex flex-col items-center text-center gap-2 group hover:border-brand-primary hover:shadow-md" onclick="selectMethod('Phone Call', this)">
-                                        <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center text-slate-400 group-hover:text-green-600 group-hover:scale-110 transition-all">
+                                    
+                                    <!-- Phone -->
+                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex flex-col items-center text-center gap-3 cursor-pointer transition-all duration-300 hover:shadow-md group" onclick="selectMethod('Phone Call', this)">
+                                        <div class="icon-wrapper w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-emerald-50 group-hover:text-emerald-500">
                                             <i class="fa-solid fa-phone text-sm"></i>
                                         </div>
-                                        <span class="text-[10px] font-bold text-slate-600">Phone</span>
+                                        <span class="label-text text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider transition-colors duration-300 group-hover:text-emerald-600">Phone</span>
                                     </div>
-                                    <div class="method-card p-3 rounded-xl bg-white/80 border border-slate-200 flex flex-col items-center text-center gap-2 group hover:border-brand-primary hover:shadow-md" onclick="selectMethod('Video Call', this)">
-                                        <div class="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center text-slate-400 group-hover:text-purple-600 group-hover:scale-110 transition-all">
+                                    
+                                    <!-- Video -->
+                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex flex-col items-center text-center gap-3 cursor-pointer transition-all duration-300 hover:shadow-md group" onclick="selectMethod('Video Call', this)">
+                                        <div class="icon-wrapper w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-violet-50 group-hover:text-violet-500">
                                             <i class="fa-solid fa-video text-sm"></i>
                                         </div>
-                                        <span class="text-[10px] font-bold text-slate-600">Video</span>
+                                        <span class="label-text text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider transition-colors duration-300 group-hover:text-violet-600">Video</span>
                                     </div>
                                 </div>
                                 <input type="hidden" id="selectedMethod">
@@ -1063,7 +1064,8 @@
                                 <p class="text-[10px] text-slate-500">Instant confirmation via Email/SMS</p>
                             </div>
                         </div>
-                        <button onclick="submitBooking()" class="w-full md:w-auto bg-slate-900 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-3">
+                        <!-- UPDATED BUTTON COLOR -->
+                        <button onclick="submitBooking()" class="w-full md:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
                             <span>Book & Download Report</span>
                             <i class="fa-solid fa-file-arrow-down"></i>
                         </button>
@@ -1175,7 +1177,7 @@
             }
         }
 
-        // --- NEW CREATIVE PDF GENERATION (TWO PAGE REPORT) ---
+        // --- NEW CREATIVE PDF GENERATION (SINGLE PAGE HYBRID) ---
         async function generatePDF() {
             const btn = document.getElementById('btn-download-pdf');
             const originalBtnContent = btn ? btn.innerHTML : '';
@@ -1190,378 +1192,245 @@
                 });
 
                 // --- CONFIG & ASSETS ---
-                // Using RAW link for the PNG logo to ensure it loads in jsPDF
                 const logoUrl = "https://raw.githubusercontent.com/sujeshunni-del/bettercall/c19606d117949181f6a1868bad85bfb13fff4248/Bettercall%20Logo%20PNG%2001.png";
                 
-                // Color Palette
-                const navy = [15, 23, 42];      // Slate 900
-                const blue = [37, 99, 235];     // Brand Blue
+                // New Color Palette
+                const navy = [15, 23, 42];       // Slate 900 (Deep Dark)
+                const brightBlue = [59, 130, 246]; // Blue 500
                 const lightBlue = [239, 246, 255]; // Blue 50
-                const grey = [100, 116, 139];   // Slate 500
-                const lightGrey = [241, 245, 249]; // Slate 100
+                const slate = [100, 116, 139];     // Slate 500
+                const white = [255, 255, 255];
 
                 // ==========================================
-                //  PAGE 1: MIGRATION STRATEGY REPORT
+                //  SECTION 1: STRATEGIC REPORT (TOP 60%)
                 // ==========================================
+                let y = 15;
+                const margin = 15;
 
-                // 1. SIDEBAR (LEFT)
-                doc.setFillColor(...navy);
-                doc.rect(0, 0, 70, 297, 'F'); // Left column background
-
-                // 2. LOGO HANDLING (Top Left)
+                // 1. LOGO & HEADER
                 let logoData = null;
                 try {
                     logoData = await getBase64FromUrl(logoUrl);
                     if (logoData) {
-                        // Adjust dimensions to fit sidebar width
-                        doc.addImage(logoData, 'PNG', 10, 15, 50, 15, undefined, 'FAST'); 
-                    } else {
-                        throw new Error("Logo fetch failed");
+                        doc.addImage(logoData, 'PNG', margin, y, 45, 13, undefined, 'FAST'); 
                     }
-                } catch (e) {
-                    // Fallback Text Logo if image fails
-                    doc.setTextColor(255, 255, 255);
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(20);
-                    doc.text("BETTER CALL", 10, 25);
-                }
+                } catch (e) {}
 
-                // 3. SIDEBAR CONTENT (Candidate Info)
-                let y = 60;
-                const marginL = 10;
-                
-                // Avatar Placeholder
-                doc.setFillColor(255, 255, 255);
-                doc.circle(35, y, 12, 'F');
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(16);
-                doc.setTextColor(...blue);
-                const initial = document.getElementById('firstName').value.charAt(0);
-                doc.text(initial, 35, y+2, { align: 'center' });
-                y += 25;
-
-                // Profile Data Helper
-                const labelStyle = () => { doc.setFont("helvetica", "bold"); doc.setFontSize(7); doc.setTextColor(148, 163, 184); }; // Slate 400
-                const valStyle = () => { doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(255, 255, 255); };
-                
-                const addSidebarItem = (label, value) => {
-                    labelStyle();
-                    doc.text(label.toUpperCase(), marginL, y);
-                    y += 4;
-                    valStyle();
-                    // Split long text if needed
-                    const splitVal = doc.splitTextToSize(value || "-", 50);
-                    doc.text(splitVal, marginL, y);
-                    y += (splitVal.length * 4) + 6; 
-                };
-
-                const refIdVal = document.getElementById('refId').innerText;
-
-                addSidebarItem("Full Name", document.getElementById('reportName').innerText);
-                addSidebarItem("Nationality", document.getElementById('nationality').value);
-                addSidebarItem("Residence", document.getElementById('presentResidence').value);
-                addSidebarItem("Date of Birth", document.getElementById('dob').value);
-                addSidebarItem("Experience", document.getElementById('experience').value + " Years");
-                addSidebarItem("Contact", document.getElementById('mobile').value);
-                addSidebarItem("Email", document.getElementById('email').value);
-
-                // --- NEW: CREATIVE BARCODE & DATE SECTION ---
-                y = 225;
-                
-                // Divider
-                doc.setDrawColor(255, 255, 255);
-                doc.setLineWidth(0.1);
-                doc.line(10, y, 60, y);
-                y += 10;
-
-                // Date Label
-                doc.setFontSize(6);
-                doc.setTextColor(148, 163, 184); // Slate 400
-                doc.text("DATE OF ISSUE", 10, y);
-                y += 4;
-                // Date Value
-                doc.setFontSize(10);
-                doc.setTextColor(255, 255, 255);
-                doc.setFont("helvetica", "bold");
-                const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).toUpperCase();
-                doc.text(today, 10, y);
-                
-                y += 10;
-
-                // Ref Label
-                doc.setFontSize(6);
-                doc.setTextColor(148, 163, 184);
-                doc.text("CASE REFERENCE", 10, y);
-                y += 4;
-                // Ref Value
-                doc.setFontSize(12);
-                doc.setTextColor(56, 189, 248); // Sky 400 (Light Blue)
-                doc.setFont("courier", "bold"); // Monospace look
-                doc.text(refIdVal, 10, y);
-                
-                y += 6;
-
-                // Draw Creative Barcode (Pseudo-random based on RefID)
-                doc.setFillColor(255, 255, 255);
-                let bx = 10;
-                const barcodeWidth = 45;
-                for(let i=0; i<40; i++) {
-                    if(bx > 10 + barcodeWidth) break;
-                    // Use char code to determine width of bar (Deterministic visual)
-                    const charCode = refIdVal.charCodeAt(i % refIdVal.length) || 88;
-                    const w = (charCode % 4 + 1) * 0.3; // width between 0.3 and 1.2
-                    doc.rect(bx, y, w, 8, 'F');
-                    bx += w + 0.4; // gap
-                }
-
-                // Sidebar Footer (Moved down)
-                y = 285;
-                doc.setFontSize(5);
-                doc.setFont("helvetica", "normal");
-                doc.setTextColor(100, 116, 139);
-                doc.text("CONFIDENTIAL AUDIT DOCUMENT", 10, y);
-
-
-                // 4. MAIN CONTENT (RIGHT SIDE - PAGE 1)
-                const marginR = 80; 
-                y = 25;
-
-                // Header Title
-                doc.setTextColor(...navy);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(26);
-                doc.text("MIGRATION", marginR, y);
-                y += 10;
-                doc.text("STRATEGY AUDIT", marginR, y);
-                y += 8;
-                
-                // Status Badge
-                doc.setFillColor(220, 252, 231); // Green 100
-                doc.setDrawColor(22, 163, 74); // Green 600
-                doc.roundedRect(marginR, y, 35, 7, 3, 3, 'FD');
-                doc.setTextColor(22, 163, 74);
-                doc.setFontSize(8);
-                doc.text("ELIGIBILITY CONFIRMED", marginR + 17.5, y + 4.5, { align: 'center' });
-
-                y += 20;
-
-                // Match Analysis Header
-                doc.setFontSize(12);
-                doc.setTextColor(...navy);
-                doc.setFont("helvetica", "bold");
-                doc.text("ASSESSMENT RESULTS", marginR, y);
-                doc.setDrawColor(200, 200, 200);
-                doc.line(marginR, y+2, 200, y+2);
-                y += 15;
-
-                // Country Match Big
-                const country = document.getElementById('topMatchCountry').innerText;
-                doc.setFontSize(36);
-                doc.setTextColor(...blue);
-                doc.text(country, marginR, y);
-                y += 10;
-                doc.setFontSize(10);
-                doc.setTextColor(...grey);
-                doc.text("Primary Recommendation", marginR, y);
-
-                // Stats Grid
-                y += 15;
-                const role = document.getElementById('reportRole').innerText;
-                const salary = document.getElementById('mainSalaryRange').innerText;
-                
-                // Row 1
-                doc.setFontSize(8); doc.setTextColor(...grey); doc.text("TARGET POSITION", marginR, y);
-                doc.text("ESTIMATED SALARY", marginR + 60, y);
-                y += 5;
-                doc.setFontSize(11); doc.setTextColor(...navy); doc.setFont("helvetica", "bold");
-                
-                // Handle Role text wrap
-                const splitRole = doc.splitTextToSize(role, 55);
-                doc.text(splitRole, marginR, y);
-                
-                // Handle Salary text wrap
-                const splitSalary = doc.splitTextToSize(salary, 55);
-                doc.text(splitSalary, marginR + 60, y);
-                
-                // Adjust Y based on max lines
-                y += (Math.max(splitRole.length, splitSalary.length) * 5) + 10;
-                
-                // Row 2
-                doc.setFontSize(8); doc.setTextColor(...grey); doc.setFont("helvetica", "normal");
-                doc.text("VISA CATEGORY", marginR, y);
-                doc.text("PROCESSING TIMELINE", marginR + 60, y);
-                y += 5;
-                doc.setFontSize(11); doc.setTextColor(...navy); doc.setFont("helvetica", "bold");
-                doc.text("Work Permit (Type-D)", marginR, y);
-                doc.text("3 - 5 Months (Approx)", marginR + 60, y);
-
-                y += 20;
-
-                // Visual Match Bar
-                doc.setFontSize(9); doc.setTextColor(...navy);
-                doc.text("Algorithm Compatibility Score", marginR, y);
-                y += 3;
-                doc.setFillColor(226, 232, 240);
-                doc.roundedRect(marginR, y, 120, 4, 2, 2, 'F');
-                doc.setFillColor(...blue);
-                doc.roundedRect(marginR, y, 115, 4, 2, 2, 'F');
-                doc.setTextColor(...blue);
-                doc.text("98%", marginR + 122, y+3);
-
-                y += 15;
-
-                // AI Reasoning Box
-                doc.setFillColor(248, 250, 252); // Slate 50
-                doc.setDrawColor(226, 232, 240);
-                doc.roundedRect(marginR, y, 120, 40, 3, 3, 'FD');
-                
-                doc.setFontSize(8);
-                doc.setTextColor(...blue);
-                doc.setFont("helvetica", "bold");
-                doc.text("AI ANALYSIS NOTES:", marginR + 5, y + 8);
-                
-                doc.setFontSize(9);
-                doc.setTextColor(...grey);
-                doc.setFont("helvetica", "italic");
-                const reasoning = document.getElementById('aiReasoning').innerText;
-                const splitReasoning = doc.splitTextToSize(reasoning, 110);
-                doc.text(splitReasoning, marginR + 5, y + 14);
-
-                // Footer Page 1
-                doc.setFontSize(8);
-                doc.setTextColor(200, 200, 200);
-                doc.setFont("helvetica", "normal");
-                doc.text("Page 1 of 2", 200, 290, { align: 'right' });
-
-
-                // ==========================================
-                //  PAGE 2: APPOINTMENT RECEIPT
-                // ==========================================
-                doc.addPage();
-                
-                // 1. HEADER BAND
-                doc.setFillColor(...blue);
-                doc.rect(0, 0, 210, 50, 'F');
-                
-                // Logo on P2 (White)
-                doc.setTextColor(255, 255, 255);
+                // Title aligned right
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(22);
-                doc.text("APPOINTMENT", 105, 25, { align: "center" });
-                doc.setFontSize(10);
-                doc.setFont("helvetica", "normal");
-                doc.text("OFFICIAL BOOKING CONFIRMATION", 105, 33, { align: "center" });
+                doc.setTextColor(...navy);
+                doc.text("MIGRATION AUDIT", 210 - margin, y + 8, { align: "right" });
+                
+                doc.setFontSize(9);
+                doc.setTextColor(...brightBlue);
+                doc.setFont("courier", "bold");
+                const refIdVal = document.getElementById('refId').innerText;
+                doc.text(`REF: ${refIdVal}`, 210 - margin, y + 14, { align: "right" });
 
-                // 2. TICKET BOX
-                y = 65;
-                doc.setFillColor(255, 255, 255);
+                y += 25;
+
+                // 2. CANDIDATE DATA GRID (Gray Box)
+                doc.setFillColor(248, 250, 252);
+                doc.setDrawColor(226, 232, 240);
+                doc.roundedRect(margin, y, 180, 35, 3, 3, 'FD');
+                
+                let rowY = y + 8;
+                const col1 = margin + 5;
+                const col2 = margin + 65;
+                const col3 = margin + 125;
+
+                // Labels function
+                const drawField = (label, val, x, y) => {
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(7);
+                    doc.setTextColor(148, 163, 184); // Light Slate
+                    doc.text(label.toUpperCase(), x, y);
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(10);
+                    doc.setTextColor(...navy);
+                    doc.text(val, x, y + 5);
+                };
+
+                const name = document.getElementById('reportName').innerText;
+                const nation = document.getElementById('nationality').value;
+                const dob = document.getElementById('dob').value;
+                const role = document.getElementById('reportRole').innerText;
+                const exp = document.getElementById('experience').value + " Years";
+                const contact = document.getElementById('mobile').value;
+
+                drawField("Candidate Name", name, col1, rowY);
+                drawField("Nationality", nation, col2, rowY);
+                drawField("Date of Birth", dob, col3, rowY);
+                
+                rowY += 15;
+                drawField("Target Profession", role, col1, rowY);
+                drawField("Experience Level", exp, col2, rowY);
+                drawField("Contact", contact, col3, rowY);
+
+                y += 45;
+
+                // 3. AI ASSESSMENT RESULT
+                // Big Country Name
+                const country = document.getElementById('topMatchCountry').innerText;
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(40);
+                doc.setTextColor(...brightBlue);
+                doc.text(country, margin, y + 5);
+                
+                // Status Badge next to it
+                doc.setFillColor(220, 252, 231); // Green 100
+                doc.setDrawColor(22, 163, 74); // Green 600
+                doc.roundedRect(margin + 120, y - 5, 60, 10, 2, 2, 'FD');
+                doc.setTextColor(22, 163, 74);
+                doc.setFontSize(8);
+                doc.text("ELIGIBILITY CONFIRMED", margin + 150, y + 1.5, { align: "center" });
+
+                y += 20;
+
+                // Score Bar
+                doc.setFontSize(9);
+                doc.setTextColor(...navy);
+                doc.text("Algorithmic Compatibility Score", margin, y);
+                doc.text("98%", 210 - margin, y, { align: "right" });
+                
+                y += 3;
+                doc.setFillColor(226, 232, 240);
+                doc.roundedRect(margin, y, 180, 4, 2, 2, 'F');
+                doc.setFillColor(...brightBlue);
+                doc.roundedRect(margin, y, 176, 4, 2, 2, 'F'); // 98% width
+
+                y += 15;
+
+                // Reasoning Text
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(9);
+                doc.setTextColor(...navy);
+                doc.text("AI ANALYSIS SUMMARY:", margin, y);
+                y += 5;
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(...slate);
+                const reasoning = document.getElementById('aiReasoning').innerText;
+                const splitReasoning = doc.splitTextToSize(reasoning, 180);
+                doc.text(splitReasoning, margin, y);
+
+                y += 25;
+
+                // ==========================================
+                //  VISUAL SEPARATOR (Dashed Line)
+                // ==========================================
                 doc.setDrawColor(200, 200, 200);
                 doc.setLineWidth(0.5);
-                // Draw Ticket Outline
-                doc.roundedRect(20, y, 170, 70, 3, 3, 'S');
+                doc.setLineDash([3, 3], 0);
+                doc.line(0, y, 210, y);
+                doc.setLineDash([]); // Reset
                 
-                // Left Part (Date/Time)
-                doc.setFillColor(248, 250, 252); // Light bg
-                doc.rect(21, y+1, 60, 68, 'F'); 
-                
+                // Scissor Icon centered
+                doc.setFillColor(255, 255, 255);
+                doc.circle(105, y, 4, 'F');
+                doc.setFontSize(10);
+                doc.setTextColor(200, 200, 200);
+                doc.text("✂", 105, y + 1, { align: "center" }); // Simple scissor unicode
+
+                y += 10;
+
+                // ==========================================
+                //  SECTION 2: APPOINTMENT RECEIPT (BOTTOM 40%)
+                // ==========================================
+                // Dark Background for contrast
+                const bottomStart = y;
+                const pageHeight = 297;
+                doc.setFillColor(...navy);
+                doc.rect(0, bottomStart, 210, pageHeight - bottomStart, 'F');
+
+                y += 15;
+
+                // Receipt Header
+                doc.setTextColor(...white);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(16);
+                doc.text("OFFICIAL APPOINTMENT RECEIPT", margin, y);
+                doc.setFontSize(10);
+                doc.setTextColor(...brightBlue);
+                doc.text("Please present this at reception", margin, y + 6);
+
+                // Barcode on Right
+                const barcodeWidth = 40;
+                let bx = 210 - margin - barcodeWidth;
+                doc.setFillColor(...white);
+                // Creative Barcode
+                for(let i=0; i<30; i++) {
+                    const w = (refIdVal.charCodeAt(i % refIdVal.length) % 3 + 1) * 0.5;
+                    doc.rect(bx, y - 5, w, 12, 'F');
+                    bx += w + 0.8;
+                }
+
+                y += 25;
+
+                // Ticket Data Box
+                doc.setDrawColor(...brightBlue);
+                doc.setLineWidth(0.5);
+                doc.roundedRect(margin, y, 180, 50, 4, 4, 'S');
+
+                // Data inside box
                 const bookingDate = document.getElementById('bookingDate').value;
                 const bookingTime = document.getElementById('selectedTime').value;
                 const advisor = document.getElementById('selectedAdvisor').value;
                 const method = document.getElementById('selectedMethod').value;
 
-                // Date Block
-                doc.setTextColor(...blue);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(30);
-                doc.text(bookingDate.split('/')[0], 51, y+25, { align: "center" }); // Day
-                doc.setFontSize(10);
-                doc.setTextColor(...grey);
-                doc.text(bookingDate, 51, y+32, { align: "center" }); // Full Date
+                // Date & Time (Left Side)
+                doc.setTextColor(...white);
+                doc.setFontSize(32);
+                doc.text(bookingTime, margin + 10, y + 20);
                 
-                // Time Block
-                doc.setFontSize(16);
-                doc.setTextColor(...navy);
-                doc.text(bookingTime, 51, y+50, { align: "center" });
-
-                // Right Part (Advisor & Details)
-                const contentX = 90;
-                doc.setFontSize(8);
-                doc.setTextColor(...grey);
-                doc.text("IMMIGRATION ADVISOR", contentX, y+20);
-                doc.setFontSize(14);
-                doc.setTextColor(...navy);
-                doc.text(advisor, contentX, y+27);
-
-                doc.setFontSize(8);
-                doc.setTextColor(...grey);
-                doc.text("CONSULTATION MODE", contentX, y+45);
                 doc.setFontSize(12);
-                doc.setTextColor(...navy);
-                doc.text(method, contentX, y+52);
-
-                // 3. COMPANY & LOCATION DETAILS
-                y += 90;
-                
-                doc.setFontSize(14);
-                doc.setTextColor(...navy);
-                doc.setFont("helvetica", "bold");
-                doc.text("VISIT OUR HEADQUARTERS", 105, y, { align: "center" });
-                
-                y += 10;
-                
-                // Address Box
-                doc.setDrawColor(226, 232, 240);
-                doc.line(40, y, 170, y);
-                y += 10;
-                
-                doc.setFontSize(10);
-                doc.setTextColor(...navy);
-                doc.setFont("helvetica", "bold");
-                doc.text("BETTER CALL", 105, y, { align: "center" });
-                
-                y += 6;
-                doc.setFont("helvetica", "normal");
-                doc.setTextColor(...grey);
-                doc.text("R320-12th Floor, Citibank - Al Wasl Branch", 105, y, { align: "center" });
-                y += 5;
-                doc.text("Sheikh Rashid Road, Dubai Healthcare City, UAE", 105, y, { align: "center" });
-                
-                y += 10;
-                doc.setFont("helvetica", "bold");
-                doc.text("Contact Us:", 105, y, { align: "center" });
-                y += 5;
-                doc.setFont("helvetica", "normal");
-                doc.text("+971 50 366 6382  |  admin@thebettercall.com", 105, y, { align: "center" });
-
-                // 4. MAP LINK BUTTON
-                y += 15;
-                const linkX = 75;
-                const linkY = y;
-                const linkW = 60;
-                const linkH = 12;
-                
-                doc.setFillColor(...blue);
-                doc.roundedRect(linkX, linkY, linkW, linkH, 6, 6, 'F');
-                doc.setTextColor(255, 255, 255);
+                doc.setTextColor(...brightBlue);
+                doc.text(bookingDate, margin + 10, y + 30);
                 doc.setFontSize(9);
-                doc.setFont("helvetica", "bold");
-                doc.text("GET DIRECTIONS", 105, linkY + 8, { align: "center" });
-                
-                // Add clickable link area
-                doc.link(linkX, linkY, linkW, linkH, { url: 'https://maps.app.goo.gl/QLQFTuG9zw14L6aN8' });
+                doc.setTextColor(148, 163, 184); // Slate 400
+                doc.text("CONFIRMED SLOT", margin + 10, y + 40);
 
-                // Footer Page 2
+                // Vertical Divider
+                doc.setDrawColor(100, 116, 139);
+                doc.line(margin + 90, y + 10, margin + 90, y + 40);
+
+                // Advisor Info (Right Side)
+                const rightCol = margin + 100;
+                doc.setFontSize(9);
+                doc.setTextColor(148, 163, 184);
+                doc.text("IMMIGRATION ADVISOR", rightCol, y + 15);
+                doc.setFontSize(14);
+                doc.setTextColor(...white);
+                doc.text(advisor, rightCol, y + 22);
+
+                doc.setFontSize(9);
+                doc.setTextColor(148, 163, 184);
+                doc.text("CONSULTATION MODE", rightCol, y + 33);
+                doc.setFontSize(12);
+                doc.setTextColor(...white);
+                doc.text(method, rightCol, y + 40);
+
+                y += 65;
+
+                // Location Footer
                 doc.setFontSize(8);
-                doc.setTextColor(150, 150, 150);
-                doc.setFont("helvetica", "normal");
-                doc.text("Page 2 of 2", 200, 290, { align: 'right' });
-                doc.text("Generated by Better Call AI System", 105, 290, { align: 'center' });
+                doc.setTextColor(148, 163, 184);
+                doc.text("BETTER CALL HQ:", margin, y);
+                doc.setTextColor(...white);
+                doc.text("R320-12th Floor, Citibank - Al Wasl Branch, Dubai Healthcare City, UAE", margin, y + 5);
+                
+                // Map Link Button
+                doc.setFillColor(...brightBlue);
+                doc.roundedRect(210 - margin - 40, y - 5, 40, 10, 2, 2, 'F');
+                doc.setTextColor(...white);
+                doc.setFontSize(8);
+                doc.setFont("helvetica", "bold");
+                doc.text("GET DIRECTIONS", 210 - margin - 20, y + 1.5, { align: "center" });
+                doc.link(210 - margin - 40, y - 5, 40, 10, { url: 'https://maps.app.goo.gl/QLQFTuG9zw14L6aN8' });
 
 
                 // SAVE & UPLOAD
-                const refId = document.getElementById('refId').innerText;
-                const name = document.getElementById('firstName').value + "_" + document.getElementById('lastName').value;
-                const fileName = `${refId}_${name}_Assessment_Report.pdf`;
+                const fileName = `${refIdVal}_${name.replace(/\s+/g,'_')}_Report.pdf`;
 
                 // A. DOWNLOAD
                 doc.save(fileName);
@@ -1580,9 +1449,9 @@
                         });
                         
                         if(res.ok && btn) {
-                             btn.classList.remove('bg-slate-900', 'hover:bg-slate-800');
+                             btn.classList.remove('bg-gradient-to-r', 'from-blue-600', 'to-indigo-600');
                              btn.classList.add('bg-green-600', 'hover:bg-green-700');
-                             btn.innerHTML = '<span>Report Saved</span><i class="fa-solid fa-check"></i>';
+                             btn.innerHTML = '<span>Saved to Case File</span><i class="fa-solid fa-check"></i>';
                         }
                     } catch(e) { console.error(e); }
                 }
@@ -2250,8 +2119,58 @@
 
         function selectMethod(method, el) {
             document.getElementById('selectedMethod').value = method;
-            document.querySelectorAll('.method-card').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
+            const allCards = document.querySelectorAll('.method-card');
+            
+            // Reset All Cards to Default State
+            allCards.forEach(c => {
+                c.className = 'method-card p-4 rounded-2xl bg-white border border-slate-200 flex flex-col items-center text-center gap-3 cursor-pointer transition-all duration-300 hover:shadow-md group';
+                
+                // Reset Icon Wrapper
+                const wrapper = c.querySelector('.icon-wrapper');
+                // We keep the group-hover classes in the HTML, just reset base classes
+                wrapper.className = 'icon-wrapper w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 group-hover:scale-110';
+                
+                // Re-add hover specific classes based on card type (we infer from text content for simplicity or just generic hover)
+                const text = c.querySelector('.label-text').innerText;
+                if(text === 'OFFICE') wrapper.classList.add('group-hover:bg-blue-50', 'group-hover:text-blue-500');
+                if(text === 'PHONE') wrapper.classList.add('group-hover:bg-emerald-50', 'group-hover:text-emerald-500');
+                if(text === 'VIDEO') wrapper.classList.add('group-hover:bg-violet-50', 'group-hover:text-violet-500');
+
+                // Reset Text
+                const lbl = c.querySelector('.label-text');
+                lbl.className = 'label-text text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider transition-colors duration-300';
+                if(text === 'OFFICE') lbl.classList.add('group-hover:text-blue-600');
+                if(text === 'PHONE') lbl.classList.add('group-hover:text-emerald-600');
+                if(text === 'VIDEO') lbl.classList.add('group-hover:text-violet-600');
+            });
+
+            // Apply Active "Tinted" State
+            el.classList.remove('bg-white', 'border-slate-200');
+            el.classList.add('ring-2', 'shadow-lg', 'scale-[1.02]');
+            
+            const wrapper = el.querySelector('.icon-wrapper');
+            const lbl = el.querySelector('.label-text');
+            
+            // Remove hover classes to lock the style
+            wrapper.classList.remove('bg-slate-50', 'text-slate-400', 'group-hover:bg-blue-50', 'group-hover:bg-emerald-50', 'group-hover:bg-violet-50');
+            lbl.classList.remove('text-slate-500', 'group-hover:text-blue-600', 'group-hover:text-emerald-600', 'group-hover:text-violet-600');
+
+            if(method === 'In-Person') {
+                // Blue Theme
+                el.classList.add('bg-blue-50', 'border-blue-500', 'ring-blue-400');
+                wrapper.classList.add('bg-blue-500', 'text-white', 'shadow-lg', 'shadow-blue-200');
+                lbl.classList.add('text-blue-700');
+            } else if (method === 'Phone Call') {
+                // Emerald Theme
+                el.classList.add('bg-emerald-50', 'border-emerald-500', 'ring-emerald-400');
+                wrapper.classList.add('bg-emerald-500', 'text-white', 'shadow-lg', 'shadow-emerald-200');
+                lbl.classList.add('text-emerald-700');
+            } else { 
+                // Violet Theme (Video)
+                el.classList.add('bg-violet-50', 'border-violet-500', 'ring-violet-400');
+                wrapper.classList.add('bg-violet-500', 'text-white', 'shadow-lg', 'shadow-violet-200');
+                lbl.classList.add('text-violet-700');
+            }
         }
 
         function renderTimeSlots() {
@@ -3022,59 +2941,48 @@ ALTERNATIVE OPTIONS  : ${altMatches}
             const icsBlob = new Blob([icsContent], { type: 'text/calendar' });
             const icsUrl = URL.createObjectURL(icsBlob);
 
-            // CREATIVE SUCCESS HTML (Redesigned Ticket Style)
+            const firstName = document.getElementById('firstName').value;
+
+            // CREATIVE SUCCESS HTML (Updated Text Format)
             const successHtml = `
                 <div class="text-center p-0 md:p-2">
-                    <!-- Animated Success Icon -->
-                    <div class="relative w-24 h-24 mx-auto mb-6">
-                        <div class="absolute inset-0 bg-green-400 rounded-full animate-ping opacity-20"></div>
-                        <div class="absolute inset-2 bg-green-500 rounded-full animate-ping opacity-20 delay-150"></div>
-                        <div class="relative w-full h-full bg-gradient-to-tr from-green-400 to-emerald-600 rounded-full flex items-center justify-center text-white text-4xl shadow-2xl shadow-green-500/40 border-4 border-white">
-                            <i class="fa-solid fa-check"></i>
-                        </div>
+                    <!-- Success Icon -->
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5 shadow-xl shadow-green-100 border-4 border-white animate-[popIn_0.5s_ease-out]">
+                        <i class="fa-solid fa-check text-4xl text-green-600"></i>
                     </div>
-
-                    <h3 class="text-3xl font-black text-slate-900 mb-2 tracking-tight">Mission Confirmed!</h3>
-                    <p class="text-slate-500 text-sm font-medium mb-8 max-w-xs mx-auto">Your strategy session with <span class="text-brand-primary font-bold">${advisor}</span> has been secured.</p>
                     
-                    <!-- Ticket / Boarding Pass Style -->
-                    <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden mb-8 relative group hover:shadow-2xl transition-all duration-500 text-left">
-                        <!-- Top Decor -->
-                        <div class="h-2 bg-gradient-to-r from-brand-primary via-blue-400 to-brand-secondary"></div>
+                    <h3 class="text-xl md:text-2xl font-black text-slate-900 mb-6 px-4 leading-tight">Your Appointment with <span class="text-brand-primary">${advisor}</span> is Confirmed</h3>
+                    
+                    <!-- Message Card -->
+                    <div class="bg-slate-50 text-left rounded-2xl p-6 border border-slate-200 shadow-inner mb-6 relative overflow-hidden mx-1">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-brand-primary to-brand-secondary"></div>
                         
-                        <div class="p-6 relative z-10">
-                            <div class="flex justify-between items-start mb-6 border-b border-slate-100 pb-4">
-                                <div>
-                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">DATE</p>
-                                    <p class="text-xl font-black text-slate-800">${date.split('/')[0]} <span class="text-sm text-slate-500 font-bold uppercase">${new Date(getUnixTime(date)).toLocaleString('default', { month: 'short' })}</span></p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">TIME</p>
-                                    <p class="text-xl font-black text-brand-primary">${time}</p>
-                                </div>
+                        <p class="text-sm font-bold text-slate-800 mb-3">Hello ${firstName},</p>
+                        <p class="text-xs text-slate-500 mb-6 font-medium">This confirms your scheduled session with ${advisor}.</p>
+                        
+                        <div class="space-y-3 bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+                             <div class="flex items-center justify-between border-b border-slate-50 pb-2">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Date</span>
+                                <span class="text-xs font-bold text-slate-800">${date}</span>
                             </div>
-                            
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
-                                    <i class="fa-solid ${method.includes('Video') ? 'fa-video' : method.includes('Phone') ? 'fa-phone' : 'fa-building'}"></i>
-                                </div>
-                                <div>
-                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">CONSULTATION MODE</p>
-                                    <p class="text-sm font-bold text-slate-800">${method}</p>
-                                </div>
+                             <div class="flex items-center justify-between border-b border-slate-50 pb-2">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Time</span>
+                                <span class="text-xs font-bold text-brand-primary">${time}</span>
+                            </div>
+                             <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mode of Appointment</span>
+                                <span class="text-xs font-bold text-slate-800">${method}</span>
                             </div>
                         </div>
-
-                        <!-- Decorative Circles for "Ticket" effect -->
-                        <div class="absolute top-1/2 -translate-y-1/2 -left-3 w-6 h-6 bg-slate-50 rounded-full border border-slate-200 z-20"></div>
-                        <div class="absolute top-1/2 -translate-y-1/2 -right-3 w-6 h-6 bg-slate-50 rounded-full border border-slate-200 z-20"></div>
                     </div>
+                    
+                    <p class="text-xs font-bold text-brand-secondary mb-6 italic">We look forward to helping you!</p>
 
                     <!-- Actions -->
                     <div class="flex flex-col gap-3">
-                        <button id="btn-download-pdf" onclick="generatePDF()" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group relative overflow-hidden">
-                            <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                            <i class="fa-solid fa-file-pdf text-red-400 text-lg group-hover:scale-110 transition-transform"></i> 
+                        <button id="btn-download-pdf" onclick="generatePDF()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group relative overflow-hidden">
+                             <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                             <i class="fa-solid fa-file-pdf text-white/90 text-lg group-hover:scale-110 transition-transform relative z-10"></i> 
                             <span class="relative z-10">Download Official Report</span>
                         </button>
                         
