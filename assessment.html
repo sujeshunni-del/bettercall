@@ -472,7 +472,7 @@
     </nav>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-grow pt-24 md:pt-32 pb-12 px-2 md:px-4 relative z-10">
+    <main class="flex-grow pt-24 md:pt-32 pb-12 px-2 md:px-4 relative z-20">
         <div class="max-w-6xl mx-auto">
             
             <!-- Progress Steps (Compact) -->
@@ -1158,19 +1158,24 @@
         
         // --- HELPER: CONVERT IMAGE URL TO DATA URI ---
         const getBase64FromUrl = async (url) => {
-            const data = await fetch(url);
-            const blob = await data.blob();
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(blob);
-                reader.onloadend = () => {
-                    const base64data = reader.result;
-                    resolve(base64data);
-                }
-            });
+            try {
+                const data = await fetch(url);
+                const blob = await data.blob();
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = () => {
+                        const base64data = reader.result;
+                        resolve(base64data);
+                    }
+                });
+            } catch (e) {
+                console.warn("Image load failed", e);
+                return null;
+            }
         }
 
-        // --- NEW CREATIVE PDF GENERATION ---
+        // --- NEW CREATIVE PDF GENERATION (TWO PAGE REPORT) ---
         async function generatePDF() {
             const btn = document.getElementById('btn-download-pdf');
             const originalBtnContent = btn ? btn.innerHTML : '';
@@ -1185,7 +1190,8 @@
                 });
 
                 // --- CONFIG & ASSETS ---
-                const logoUrl = "https://raw.githubusercontent.com/sujeshunni-del/bettercall/e001a645d9c3a07ce312432e73f083d118b4afcc/Bettercall%20Logo%20SVG%2002.svg";
+                // Using RAW link for the PNG logo to ensure it loads in jsPDF
+                const logoUrl = "https://raw.githubusercontent.com/sujeshunni-del/bettercall/c19606d117949181f6a1868bad85bfb13fff4248/Bettercall%20Logo%20PNG%2001.png";
                 
                 // Color Palette
                 const navy = [15, 23, 42];      // Slate 900
@@ -1194,48 +1200,29 @@
                 const grey = [100, 116, 139];   // Slate 500
                 const lightGrey = [241, 245, 249]; // Slate 100
 
+                // ==========================================
+                //  PAGE 1: MIGRATION STRATEGY REPORT
+                // ==========================================
+
                 // 1. SIDEBAR (LEFT)
                 doc.setFillColor(...navy);
                 doc.rect(0, 0, 70, 297, 'F'); // Left column background
 
-                // 2. LOGO HANDLING
+                // 2. LOGO HANDLING (Top Left)
+                let logoData = null;
                 try {
-                    // Note: SVG in jsPDF requires canvas conversion. Since we are in a limited environment, 
-                    // we will attempt to load it into a hidden image, draw to canvas, then use. 
-                    // If complex CORS issues arise, we fallback to text.
-                    const imgData = await new Promise((resolve, reject) => {
-                        const img = new Image();
-                        img.crossOrigin = "Anonymous";
-                        img.onload = () => {
-                            const canvas = document.createElement('canvas');
-                            canvas.width = img.width;
-                            canvas.height = img.height;
-                            const ctx = canvas.getContext('2d');
-                            ctx.drawImage(img, 0, 0);
-                            resolve(canvas.toDataURL('image/png'));
-                        };
-                        img.onerror = reject;
-                        img.src = logoUrl;
-                    }).catch(() => null);
-
-                    if (imgData) {
-                        doc.addImage(imgData, 'PNG', 10, 15, 50, 15, undefined, 'FAST'); // Adjust aspect ratio as needed
+                    logoData = await getBase64FromUrl(logoUrl);
+                    if (logoData) {
+                        // Adjust dimensions to fit sidebar width
+                        doc.addImage(logoData, 'PNG', 10, 15, 50, 15, undefined, 'FAST'); 
                     } else {
-                        // Fallback Text Logo
-                        doc.setTextColor(255, 255, 255);
-                        doc.setFont("helvetica", "bold");
-                        doc.setFontSize(22);
-                        doc.text("BETTER", 10, 25);
-                        doc.text("CALL", 10, 33);
-                        doc.setFontSize(8);
-                        doc.setTextColor(37, 99, 235); // Blue Accent
-                        doc.text("IMMIGRATION INTELLIGENCE", 10, 38);
+                        throw new Error("Logo fetch failed");
                     }
                 } catch (e) {
-                    // Fallback if anything fails
+                    // Fallback Text Logo if image fails
                     doc.setTextColor(255, 255, 255);
                     doc.setFont("helvetica", "bold");
-                    doc.setFontSize(22);
+                    doc.setFontSize(20);
                     doc.text("BETTER CALL", 10, 25);
                 }
 
@@ -1253,7 +1240,7 @@
                 doc.text(initial, 35, y+2, { align: 'center' });
                 y += 25;
 
-                // Profile Data
+                // Profile Data Helper
                 const labelStyle = () => { doc.setFont("helvetica", "bold"); doc.setFontSize(7); doc.setTextColor(148, 163, 184); }; // Slate 400
                 const valStyle = () => { doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(255, 255, 255); };
                 
@@ -1262,11 +1249,14 @@
                     doc.text(label.toUpperCase(), marginL, y);
                     y += 4;
                     valStyle();
-                    doc.text(value || "-", marginL, y);
-                    y += 10;
+                    // Split long text if needed
+                    const splitVal = doc.splitTextToSize(value || "-", 50);
+                    doc.text(splitVal, marginL, y);
+                    y += (splitVal.length * 4) + 6; 
                 };
 
-                addSidebarItem("Reference ID", document.getElementById('refId').innerText);
+                const refIdVal = document.getElementById('refId').innerText;
+
                 addSidebarItem("Full Name", document.getElementById('reportName').innerText);
                 addSidebarItem("Nationality", document.getElementById('nationality').value);
                 addSidebarItem("Residence", document.getElementById('presentResidence').value);
@@ -1275,24 +1265,71 @@
                 addSidebarItem("Contact", document.getElementById('mobile').value);
                 addSidebarItem("Email", document.getElementById('email').value);
 
-                // Sidebar Footer
-                y = 270;
+                // --- NEW: CREATIVE BARCODE & DATE SECTION ---
+                y = 225;
+                
+                // Divider
                 doc.setDrawColor(255, 255, 255);
                 doc.setLineWidth(0.1);
                 doc.line(10, y, 60, y);
-                y += 5;
+                y += 10;
+
+                // Date Label
+                doc.setFontSize(6);
+                doc.setTextColor(148, 163, 184); // Slate 400
+                doc.text("DATE OF ISSUE", 10, y);
+                y += 4;
+                // Date Value
+                doc.setFontSize(10);
+                doc.setTextColor(255, 255, 255);
+                doc.setFont("helvetica", "bold");
+                const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).toUpperCase();
+                doc.text(today, 10, y);
+                
+                y += 10;
+
+                // Ref Label
                 doc.setFontSize(6);
                 doc.setTextColor(148, 163, 184);
-                doc.text("This document is strictly confidential\nand intended for the named applicant.", 10, y);
+                doc.text("CASE REFERENCE", 10, y);
+                y += 4;
+                // Ref Value
+                doc.setFontSize(12);
+                doc.setTextColor(56, 189, 248); // Sky 400 (Light Blue)
+                doc.setFont("courier", "bold"); // Monospace look
+                doc.text(refIdVal, 10, y);
+                
+                y += 6;
 
-                // 4. MAIN CONTENT (RIGHT SIDE)
-                const marginR = 80; // Start after sidebar
-                y = 20;
+                // Draw Creative Barcode (Pseudo-random based on RefID)
+                doc.setFillColor(255, 255, 255);
+                let bx = 10;
+                const barcodeWidth = 45;
+                for(let i=0; i<40; i++) {
+                    if(bx > 10 + barcodeWidth) break;
+                    // Use char code to determine width of bar (Deterministic visual)
+                    const charCode = refIdVal.charCodeAt(i % refIdVal.length) || 88;
+                    const w = (charCode % 4 + 1) * 0.3; // width between 0.3 and 1.2
+                    doc.rect(bx, y, w, 8, 'F');
+                    bx += w + 0.4; // gap
+                }
+
+                // Sidebar Footer (Moved down)
+                y = 285;
+                doc.setFontSize(5);
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(100, 116, 139);
+                doc.text("CONFIDENTIAL AUDIT DOCUMENT", 10, y);
+
+
+                // 4. MAIN CONTENT (RIGHT SIDE - PAGE 1)
+                const marginR = 80; 
+                y = 25;
 
                 // Header Title
                 doc.setTextColor(...navy);
                 doc.setFont("helvetica", "bold");
-                doc.setFontSize(28);
+                doc.setFontSize(26);
                 doc.text("MIGRATION", marginR, y);
                 y += 10;
                 doc.text("STRATEGY AUDIT", marginR, y);
@@ -1306,37 +1343,13 @@
                 doc.setFontSize(8);
                 doc.text("ELIGIBILITY CONFIRMED", marginR + 17.5, y + 4.5, { align: 'center' });
 
-                y += 25;
-
-                // Appointment Box
-                doc.setFillColor(...lightBlue);
-                doc.roundedRect(marginR, y, 120, 30, 3, 3, 'F');
-                
-                doc.setFontSize(8);
-                doc.setTextColor(...grey);
-                doc.text("CONFIRMED APPOINTMENT", marginR + 5, y + 8);
-                
-                doc.setFontSize(14);
-                doc.setTextColor(...blue);
-                doc.setFont("helvetica", "bold");
-                const bookingDate = document.getElementById('bookingDate').value;
-                const bookingTime = document.getElementById('selectedTime').value;
-                doc.text(`${bookingDate}  |  ${bookingTime}`, marginR + 5, y + 16);
-                
-                doc.setFontSize(10);
-                doc.setTextColor(...navy);
-                doc.setFont("helvetica", "normal");
-                const advisor = document.getElementById('selectedAdvisor').value;
-                const method = document.getElementById('selectedMethod').value;
-                doc.text(`Consultant: ${advisor} (${method})`, marginR + 5, y + 23);
-
-                y += 40;
+                y += 20;
 
                 // Match Analysis Header
                 doc.setFontSize(12);
                 doc.setTextColor(...navy);
                 doc.setFont("helvetica", "bold");
-                doc.text("AI ASSESSMENT RESULTS", marginR, y);
+                doc.text("ASSESSMENT RESULTS", marginR, y);
                 doc.setDrawColor(200, 200, 200);
                 doc.line(marginR, y+2, 200, y+2);
                 y += 15;
@@ -1361,10 +1374,17 @@
                 doc.text("ESTIMATED SALARY", marginR + 60, y);
                 y += 5;
                 doc.setFontSize(11); doc.setTextColor(...navy); doc.setFont("helvetica", "bold");
-                doc.text(role, marginR, y);
-                doc.text(salary, marginR + 60, y);
                 
-                y += 15;
+                // Handle Role text wrap
+                const splitRole = doc.splitTextToSize(role, 55);
+                doc.text(splitRole, marginR, y);
+                
+                // Handle Salary text wrap
+                const splitSalary = doc.splitTextToSize(salary, 55);
+                doc.text(splitSalary, marginR + 60, y);
+                
+                // Adjust Y based on max lines
+                y += (Math.max(splitRole.length, splitSalary.length) * 5) + 10;
                 
                 // Row 2
                 doc.setFontSize(8); doc.setTextColor(...grey); doc.setFont("helvetica", "normal");
@@ -1381,10 +1401,8 @@
                 doc.setFontSize(9); doc.setTextColor(...navy);
                 doc.text("Algorithm Compatibility Score", marginR, y);
                 y += 3;
-                // Background Bar
                 doc.setFillColor(226, 232, 240);
                 doc.roundedRect(marginR, y, 120, 4, 2, 2, 'F');
-                // Fill Bar (98%)
                 doc.setFillColor(...blue);
                 doc.roundedRect(marginR, y, 115, 4, 2, 2, 'F');
                 doc.setTextColor(...blue);
@@ -1395,7 +1413,7 @@
                 // AI Reasoning Box
                 doc.setFillColor(248, 250, 252); // Slate 50
                 doc.setDrawColor(226, 232, 240);
-                doc.roundedRect(marginR, y, 120, 35, 3, 3, 'FD');
+                doc.roundedRect(marginR, y, 120, 40, 3, 3, 'FD');
                 
                 doc.setFontSize(8);
                 doc.setTextColor(...blue);
@@ -1409,12 +1427,136 @@
                 const splitReasoning = doc.splitTextToSize(reasoning, 110);
                 doc.text(splitReasoning, marginR + 5, y + 14);
 
-                // Footer (Right Side)
+                // Footer Page 1
                 doc.setFontSize(8);
                 doc.setTextColor(200, 200, 200);
                 doc.setFont("helvetica", "normal");
-                doc.text("Better Call Immigration Intelligence Unit", marginR, 280);
-                doc.text("www.bettercall.online", 200, 280, { align: 'right' });
+                doc.text("Page 1 of 2", 200, 290, { align: 'right' });
+
+
+                // ==========================================
+                //  PAGE 2: APPOINTMENT RECEIPT
+                // ==========================================
+                doc.addPage();
+                
+                // 1. HEADER BAND
+                doc.setFillColor(...blue);
+                doc.rect(0, 0, 210, 50, 'F');
+                
+                // Logo on P2 (White)
+                doc.setTextColor(255, 255, 255);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(22);
+                doc.text("APPOINTMENT", 105, 25, { align: "center" });
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                doc.text("OFFICIAL BOOKING CONFIRMATION", 105, 33, { align: "center" });
+
+                // 2. TICKET BOX
+                y = 65;
+                doc.setFillColor(255, 255, 255);
+                doc.setDrawColor(200, 200, 200);
+                doc.setLineWidth(0.5);
+                // Draw Ticket Outline
+                doc.roundedRect(20, y, 170, 70, 3, 3, 'S');
+                
+                // Left Part (Date/Time)
+                doc.setFillColor(248, 250, 252); // Light bg
+                doc.rect(21, y+1, 60, 68, 'F'); 
+                
+                const bookingDate = document.getElementById('bookingDate').value;
+                const bookingTime = document.getElementById('selectedTime').value;
+                const advisor = document.getElementById('selectedAdvisor').value;
+                const method = document.getElementById('selectedMethod').value;
+
+                // Date Block
+                doc.setTextColor(...blue);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(30);
+                doc.text(bookingDate.split('/')[0], 51, y+25, { align: "center" }); // Day
+                doc.setFontSize(10);
+                doc.setTextColor(...grey);
+                doc.text(bookingDate, 51, y+32, { align: "center" }); // Full Date
+                
+                // Time Block
+                doc.setFontSize(16);
+                doc.setTextColor(...navy);
+                doc.text(bookingTime, 51, y+50, { align: "center" });
+
+                // Right Part (Advisor & Details)
+                const contentX = 90;
+                doc.setFontSize(8);
+                doc.setTextColor(...grey);
+                doc.text("IMMIGRATION ADVISOR", contentX, y+20);
+                doc.setFontSize(14);
+                doc.setTextColor(...navy);
+                doc.text(advisor, contentX, y+27);
+
+                doc.setFontSize(8);
+                doc.setTextColor(...grey);
+                doc.text("CONSULTATION MODE", contentX, y+45);
+                doc.setFontSize(12);
+                doc.setTextColor(...navy);
+                doc.text(method, contentX, y+52);
+
+                // 3. COMPANY & LOCATION DETAILS
+                y += 90;
+                
+                doc.setFontSize(14);
+                doc.setTextColor(...navy);
+                doc.setFont("helvetica", "bold");
+                doc.text("VISIT OUR HEADQUARTERS", 105, y, { align: "center" });
+                
+                y += 10;
+                
+                // Address Box
+                doc.setDrawColor(226, 232, 240);
+                doc.line(40, y, 170, y);
+                y += 10;
+                
+                doc.setFontSize(10);
+                doc.setTextColor(...navy);
+                doc.setFont("helvetica", "bold");
+                doc.text("BETTER CALL", 105, y, { align: "center" });
+                
+                y += 6;
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(...grey);
+                doc.text("R320-12th Floor, Citibank - Al Wasl Branch", 105, y, { align: "center" });
+                y += 5;
+                doc.text("Sheikh Rashid Road, Dubai Healthcare City, UAE", 105, y, { align: "center" });
+                
+                y += 10;
+                doc.setFont("helvetica", "bold");
+                doc.text("Contact Us:", 105, y, { align: "center" });
+                y += 5;
+                doc.setFont("helvetica", "normal");
+                doc.text("+971 50 366 6382  |  admin@thebettercall.com", 105, y, { align: "center" });
+
+                // 4. MAP LINK BUTTON
+                y += 15;
+                const linkX = 75;
+                const linkY = y;
+                const linkW = 60;
+                const linkH = 12;
+                
+                doc.setFillColor(...blue);
+                doc.roundedRect(linkX, linkY, linkW, linkH, 6, 6, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(9);
+                doc.setFont("helvetica", "bold");
+                doc.text("GET DIRECTIONS", 105, linkY + 8, { align: "center" });
+                
+                // Add clickable link area
+                doc.link(linkX, linkY, linkW, linkH, { url: 'https://maps.app.goo.gl/QLQFTuG9zw14L6aN8' });
+
+                // Footer Page 2
+                doc.setFontSize(8);
+                doc.setTextColor(150, 150, 150);
+                doc.setFont("helvetica", "normal");
+                doc.text("Page 2 of 2", 200, 290, { align: 'right' });
+                doc.text("Generated by Better Call AI System", 105, 290, { align: 'center' });
+
 
                 // SAVE & UPLOAD
                 const refId = document.getElementById('refId').innerText;
