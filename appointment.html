@@ -180,7 +180,7 @@
         .flatpickr-calendar.inline .flatpickr-days { width: 100% !important; border: none !important; }
         .flatpickr-calendar.inline .dayContainer { width: 100% !important; min-width: 100% !important; max-width: 100% !important; justify-content: space-around; }
         .flatpickr-calendar.inline .flatpickr-day { height: 36px; line-height: 36px; margin: 4px 0; border-radius: 10px !important; font-weight: 700; color: #475569; border: 1px solid transparent; }
-        .flatpickr-calendar.inline .flatpickr-day.selected { background: linear-gradient(135deg, #059669, #0891b2); border: none; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); color: white; }
+        .flatpickr-calendar.inline .flatpickr-day.selected { background: linear-gradient(135deg, #059669 0%, #0891b2 100%); border: none; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); color: white; }
         .flatpickr-calendar.inline .flatpickr-months { background: #f8fafc; border-radius: 12px; padding: 10px; margin-bottom: 10px; border: 1px solid #f1f5f9; }
 
         .uppercase-input { text-transform: uppercase; }
@@ -676,7 +676,7 @@
                         <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center justify-center md:justify-start">
                             <span class="w-5 h-5 rounded-full bg-brand-primary text-white inline-flex items-center justify-center mr-2">1</span> Select Target Destination
                         </h3>
-                        <div class="grid grid-cols-3 md:flex md:flex-wrap gap-2 md:gap-3 justify-center px-0 md:px-2" id="countryContainer">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 justify-center px-0 md:px-2" id="countryContainer">
                             <!-- Countries injected via JS -->
                         </div>
                         <input type="hidden" id="targetCountry" required>
@@ -2043,32 +2043,33 @@ END:VCALENDAR`;
                 const experience = document.getElementById('experience').value;
 
                 const fullDescription = `
-**CASE REFERENCE ID:** ${ref}
+CASE REFERENCE ID: ${ref}
 
-**PERSONAL DETAILS**
+PERSONAL DETAILS
 --------------------
-**Name:** ${firstName} ${lastName}
-**Email:** ${email}
-**DOB:** ${dob} (Age: ${age})
-**Nationality:** ${nationality}
-**Current Residence:** ${residence}
+Name: ${firstName} ${lastName}
+Email: ${email}
+DOB: ${dob} (Age: ${age})
+Nationality: ${nationality}
+Current Residence: ${residence}
 
-**CONTACT INFO**
+CONTACT INFO
 ----------------
-**Mobile:** ${mobile}
-**WhatsApp:** ${whatsapp}
-**Alt Phone:** ${altPhone || "N/A"}
+Mobile: ${mobile}
+WhatsApp: ${whatsapp}
+Alt Phone: ${altPhone || "N/A"}
 
-**PROFESSIONAL PROFILE**
+PROFESSIONAL PROFILE
 ------------------------
-**Qualification:** ${qualification}
-**Target Role:** ${jobRole}
-**Experience:** ${experience} Years
+Qualification: ${qualification}
+Target Role: ${jobRole}
+Target Destination: ${targetCountry || "Pending"}
+Experience: ${experience} Years
 
-**TRAVEL DOCUMENTS**
+TRAVEL DOCUMENTS
 --------------------
-**Passport No:** ${passportNo || "N/A"}
-**Expiry:** ${passportExp || "N/A"}
+Passport No: ${passportNo || "N/A"}
+Expiry: ${passportExp || "N/A"}
                 `.trim();
 
                 const payload = {
