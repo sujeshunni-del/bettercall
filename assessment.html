@@ -1192,7 +1192,7 @@
                 });
 
                 // --- CONFIG & ASSETS ---
-                const logoUrl = "https://raw.githubusercontent.com/sujeshunni-del/bettercall/c19606d117949181f6a1868bad85bfb13fff4248/Bettercall%20Logo%20PNG%2001.png";
+                // Logo URL removed as per request
                 
                 // New Color Palette
                 const navy = [15, 23, 42];       // Slate 900 (Deep Dark)
@@ -1207,19 +1207,14 @@
                 let y = 15;
                 const margin = 15;
 
-                // 1. LOGO & HEADER
-                let logoData = null;
-                try {
-                    logoData = await getBase64FromUrl(logoUrl);
-                    if (logoData) {
-                        doc.addImage(logoData, 'PNG', margin, y, 45, 13, undefined, 'FAST'); 
-                    }
-                } catch (e) {}
-
-                // Title aligned right
+                // 1. HEADER
+                // Brand Name (Top Left) - Replaces Logo
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(22);
                 doc.setTextColor(...navy);
+                doc.text("BETTER CALL", margin, y + 8);
+
+                // Title aligned right
                 doc.text("MIGRATION AUDIT", 210 - margin, y + 8, { align: "right" });
                 
                 doc.setFontSize(9);
