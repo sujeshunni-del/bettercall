@@ -1522,13 +1522,26 @@
             if(!grid) return;
             grid.innerHTML = '';
             
-            // Available time slots from 10:00 AM to 7:00 PM, every 15 minutes
+            // Available time slots from 10:00 AM to 7:00 PM, every 30 minutes
+            // Break from 1:00 PM to 2:00 PM (13:00 - 14:00)
             const startHour = 10;
-            const endHour = 19; 
+            const endHour = 19; // 7:00 PM
             
-            for (let h = startHour; h < endHour; h++) {
-                for (let m = 0; m < 60; m += 15) {
-                    const timeStr = `${h > 12 ? h - 12 : h}:${m === 0 ? '00' : m} ${h >= 12 ? 'PM' : 'AM'}`;
+            for (let h = startHour; h <= endHour; h++) {
+                for (let m = 0; m < 60; m += 30) {
+                    // Stop generating if we've passed the exact end time (e.g. 7:30 PM)
+                    if (h === endHour && m > 0) break;
+
+                    // Break Logic: Skip 1:00 PM (13:00) to 2:00 PM (14:00)
+                    // This skips 13:00 and 13:30 slots.
+                    if (h === 13) continue;
+
+                    const displayHour = h > 12 ? h - 12 : h;
+                    const suffix = h >= 12 ? 'PM' : 'AM';
+                    const minutes = m === 0 ? '00' : m;
+                    
+                    const timeStr = `${displayHour}:${minutes} ${suffix}`;
+                    
                     const btn = document.createElement('button');
                     btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-600 bg-white border border-slate-100";
                     btn.innerText = timeStr;
@@ -1536,12 +1549,6 @@
                     grid.appendChild(btn);
                 }
             }
-            // Add the 7:00 PM slot which is the end hour (19:00)
-            const btn = document.createElement('button');
-            btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-600 bg-white border border-slate-100";
-            btn.innerText = "7:00 PM";
-            btn.onclick = () => selectTime("7:00 PM", btn);
-            grid.appendChild(btn);
         }
 
         function selectTime(time, el) {
