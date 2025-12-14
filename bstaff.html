@@ -379,7 +379,20 @@
                                 <div><h3 class="text-xl font-bold text-slate-900">Activity Log</h3><p class="text-xs text-slate-500 mt-1 font-medium">Summary for <span id="logUserName" class="text-brand-gold font-bold">...</span></p></div>
                                 <button onclick="refreshLogs()" class="bg-white hover:bg-slate-50 px-4 py-2 rounded-lg text-brand-blue text-xs font-bold uppercase tracking-wider border border-slate-100 shadow-sm transition-all hover:shadow-md"><i class="fas fa-sync-alt mr-2"></i>Reset</button>
                             </div>
-                            <div class="overflow-x-auto"><table class="w-full text-left border-collapse"><tbody id="logsTableBody" class="text-sm"></tbody></table></div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-200">
+                                            <th class="py-3 px-4 bg-slate-50/50 rounded-tl-xl text-slate-500">Date & Day</th>
+                                            <th class="py-3 px-4 bg-slate-50/50 text-emerald-600">Clock In</th>
+                                            <th class="py-3 px-4 bg-slate-50/50 text-rose-500">Clock Out</th>
+                                            <th class="py-3 px-4 bg-slate-50/50 text-center text-brand-gold">Break</th>
+                                            <th class="py-3 px-4 bg-slate-50/50 text-right rounded-tr-xl text-brand-blue">Net Duration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="logsTableBody" class="text-sm font-medium"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -969,8 +982,37 @@
         }
 
         function renderTable(logs) {
-            const tbody = document.getElementById('logsTableBody'); if(!tbody) return; tbody.innerHTML = ''; if (logs.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-slate-400 italic">No activity found.</td></tr>`; return; }
-            getDailySummaries(logs).forEach(row => { const tr = document.createElement('tr'); tr.className = "group border-b border-slate-100 hover:bg-slate-50 transition-colors"; tr.innerHTML = `<td class="py-4 px-4 text-slate-600 font-mono text-xs">${row.date}</td><td class="py-4 px-4 font-mono text-emerald-600 text-xs font-bold">${row.checkIn}</td><td class="py-4 px-4 font-mono text-xs font-bold ${row.checkOut === 'Active Now' ? 'text-emerald-500 animate-pulse' : 'text-slate-800'}">${row.checkOut}</td><td class="py-4 px-4 font-mono text-brand-gold text-xs text-center">${row.breakTotal}</td><td class="py-4 px-4 font-mono text-brand-blue font-bold text-xs text-right">${row.netDuration}</td>`; tbody.appendChild(tr); });
+            const tbody = document.getElementById('logsTableBody'); if(!tbody) return; tbody.innerHTML = ''; 
+            if (logs.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-slate-400 italic">No activity found in this period.</td></tr>`; return; }
+            
+            getDailySummaries(logs).forEach(row => { 
+                const tr = document.createElement('tr'); 
+                tr.className = "group border-b border-slate-100 hover:bg-slate-50 transition-colors"; 
+                
+                // Determine styling for active status or overtime
+                let durationColor = 'text-slate-700';
+                if(row.overtime !== '-') durationColor = 'text-brand-blue font-bold';
+                
+                // Format Date for better readability (Mon, 01 Jan)
+                const dateObj = new Date(row.sortTime);
+                const dayName = dateObj.toLocaleDateString('en-US', {weekday: 'short'});
+                const dayNum = dateObj.getDate().toString().padStart(2, '0');
+                const monthName = dateObj.toLocaleDateString('en-US', {month: 'short'});
+
+                tr.innerHTML = `
+                    <td class="py-4 px-4">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-slate-800">${dayName}, ${dayNum} ${monthName}</span>
+                            <span class="text-[10px] text-slate-400 font-mono">${dateObj.getFullYear()}</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 font-mono text-emerald-600 text-xs font-bold">${row.checkIn}</td>
+                    <td class="py-4 px-4 font-mono text-xs font-bold ${row.checkOut === 'Active Now' ? 'text-brand-gold animate-pulse' : 'text-rose-500'}">${row.checkOut}</td>
+                    <td class="py-4 px-4 font-mono text-slate-500 text-xs text-center">${row.breakTotal !== '-' ? row.breakTotal : '<span class="text-slate-300">-</span>'}</td>
+                    <td class="py-4 px-4 font-mono ${durationColor} text-xs text-right bg-slate-50/50 rounded-l-lg">${row.netDuration}</td>
+                `; 
+                tbody.appendChild(tr); 
+            });
         }
         
         function renderCalendar() {
