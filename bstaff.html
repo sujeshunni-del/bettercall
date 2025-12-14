@@ -87,6 +87,21 @@
         .login-card-active { border-color: #3B82F6; box-shadow: 0 0 30px rgba(59, 130, 246, 0.15); }
         .flatpickr-calendar { font-family: 'Outfit', sans-serif !important; border-radius: 12px !important; border: none !important; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1) !important; }
         .flatpickr-day.selected { background: #3B82F6 !important; border-color: #3B82F6 !important; }
+        
+        /* Print Styles */
+        .print-container { width: 210mm; min-height: 297mm; padding: 15mm; background: white; font-family: 'Outfit', sans-serif; color: #0F172A; box-sizing: border-box; position: relative; }
+        .print-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #3B82F6; padding-bottom: 20px; margin-bottom: 30px; }
+        .print-logo-text { font-size: 24px; font-weight: 800; color: #0F172A; text-transform: uppercase; letter-spacing: 1px; }
+        .print-sub-text { font-size: 14px; color: #64748B; font-weight: 500; }
+        .print-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+        .print-card { background: #F8FAFC; border: 1px solid #E2E8F0; padding: 15px; border-radius: 8px; }
+        .print-card-label { font-size: 10px; color: #64748B; text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+        .print-card-value { font-size: 18px; color: #0F172A; font-weight: 800; }
+        .print-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .print-table th { background: #3B82F6; color: white; padding: 10px; text-align: left; font-weight: 700; text-transform: uppercase; }
+        .print-table td { padding: 10px; border-bottom: 1px solid #E2E8F0; color: #334155; }
+        .print-table tr:nth-child(even) { background: #F8FAFC; }
+        .print-footer { margin-top: 30px; text-align: center; font-size: 10px; color: #94A3B8; border-top: 1px solid #E2E8F0; padding-top: 15px; }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row bg-slate-bg">
@@ -654,7 +669,7 @@
             if (authResult.status !== 'success' && u) authResult = { status: 'success', role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), fullName: u, designation: 'Offline Mode' };
             setLoading(false);
             if (authResult.status === 'success') {
-                state.currentUser = u; state.currentFullName = authResult.fullName || u; state.role = authResult.role;
+                state.currentUser = u; state.currentFullName = auth.fullName || u; state.role = auth.role;
                 state.currentDesignation = authResult.designation || "Staff"; state.currentEmail = authResult.email || ""; state.currentPhone = authResult.phone || "";
                 storage.set('nexus_user', JSON.stringify({ username: state.currentUser, fullName: state.currentFullName, role: state.role, designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone }));
                 if(document.getElementById('displayUsername')) document.getElementById('displayUsername').textContent = state.currentFullName;
@@ -726,7 +741,34 @@
         }
 
         function startStopwatch() { if (state.timerInterval) clearInterval(state.timerInterval); state.timerInterval = setInterval(() => { state.elapsedSeconds++; const h = Math.floor(state.elapsedSeconds / 3600).toString().padStart(2, '0'); const m = Math.floor((state.elapsedSeconds % 3600) / 60).toString().padStart(2, '0'); const s = (state.elapsedSeconds % 60).toString().padStart(2, '0'); const timeStr = `${h}:${m}:${s}`; if(document.getElementById('stopwatch')) document.getElementById('stopwatch').textContent = timeStr; if(document.getElementById('stopwatchMini')) document.getElementById('stopwatchMini').textContent = timeStr; const effectiveTime = state.elapsedSeconds - state.breakSeconds; updateOvertimeDisplay(effectiveTime); }, 1000); }
-        function sendDataToSheet(type, time, lat, lng) { if (!state.scriptUrl) { logToConsole("Offline Mode."); return; } const payload = { action: 'log', name: state.currentFullName, uid: state.currentUser, type: type, time: time, lat: lat, lng: lng }; fetch(state.scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).then(() => { logToConsole(`${type} recorded.`); setTimeout(refreshLogs, 2000); }).catch(e => logToConsole("Sync Error: " + e)); }
+        
+        // --- UPDATED SEND FUNCTION (USE FORM DATA) ---
+        function sendDataToSheet(type, time, lat, lng) {
+            if (!state.scriptUrl) { logToConsole("Offline Mode."); return; }
+            
+            // NEW: Use URLSearchParams for robust GAS POST handling
+            const params = new URLSearchParams();
+            params.append('action', 'log');
+            params.append('uid', state.currentUser);
+            params.append('name', state.currentFullName); // Ensure script reads this
+            params.append('type', type);
+            params.append('time', time);
+            params.append('lat', lat || '');
+            params.append('lng', lng || '');
+
+            fetch(state.scriptUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: params.toString()
+            })
+            .then(() => {
+                logToConsole(`${type} recorded.`);
+                setTimeout(refreshLogs, 2000);
+            })
+            .catch(e => logToConsole("Sync Error: " + e));
+        }
+
         function filterHistoryByRange() { const selectedDates = state.historyFP.selectedDates; if (selectedDates.length !== 2) { alert("Select valid date range."); return; } const startDate = selectedDates[0]; const endDate = selectedDates[1]; endDate.setHours(23, 59, 59, 999); const filteredLogs = state.logsCache.filter(log => { let logTimestamp; if (log[4]) logTimestamp = new Date(log[4]); else logTimestamp = new Date(`${log[0]} ${log[3]}`); return logTimestamp >= startDate && logTimestamp <= endDate; }); renderTable(filteredLogs); if (document.getElementById('logUserName')) document.getElementById('logUserName').textContent = `${state.currentFullName} (Search)`; }
         
         async function refreshLogs() {
@@ -824,13 +866,22 @@
         async function loadLiveStatus() {
             const grid = document.getElementById('liveStatusGrid'); if(!grid) return; grid.innerHTML = '<div class="col-span-full flex justify-center py-8"><div class="loader"></div></div>';
             try {
+                // IMPORTANT: Fix User Matching here too
                 const [usersRes, logsRes] = await Promise.all([ fetch(state.scriptUrl + "?action=getUsers", { mode: 'cors', credentials: 'omit' }), fetch(state.scriptUrl + "?action=getLogs", { mode: 'cors', credentials: 'omit' }) ]);
                 const users = await usersRes.json(); const logs = await logsRes.json();
                 const userLatest = {}; logs.sort((a, b) => new Date(a[4]) - new Date(b[4])); // Sort by Timestamp (Col 4)
-                logs.forEach(l => userLatest[l[1]] = { status: l[2], time: l[3], timestamp: l[4] }); // Name[1], Action[2], Time[3], Timestamp[4]
+                
+                // Match logs to users robustly
+                logs.forEach(l => {
+                    const nameKey = l[1]; // Name from log
+                    userLatest[nameKey] = { status: l[2], time: l[3], timestamp: l[4] };
+                });
+                
                 grid.innerHTML = '';
                 users.forEach(user => {
-                    let last = userLatest[user.username] || userLatest[user.fullName]; 
+                    // Try to find by both ID (username) and Full Name to catch any mismatch
+                    let last = userLatest[user.username] || userLatest[user.fullName];
+                    
                     let statusColor = 'bg-slate-400', statusText = 'Offline', icon = 'fa-power-off', lastTime = '-', lastLabel = 'No Activity';
                     if (last) {
                         const isToday = new Date(last.timestamp).toDateString() === new Date().toDateString();
@@ -849,8 +900,26 @@
             const u = document.getElementById('newUsername').value, p = document.getElementById('newPassword').value, r = document.getElementById('newRole').value;
             const f = document.getElementById('newFullName').value, d = document.getElementById('newDesignation').value, ph = document.getElementById('newPhone').value, e = document.getElementById('newEmail').value;
             const action = state.editingUser ? 'updateUser' : 'register';
+            
+            // NEW: Use Form Data
+            const params = new URLSearchParams();
+            params.append('action', action);
+            params.append('username', state.editingUser || u);
+            params.append('newUsername', u); // For register/update
+            params.append('password', p);
+            params.append('role', r);
+            params.append('fullName', f);
+            params.append('designation', d);
+            params.append('phone', ph);
+            params.append('email', e);
+
             try {
-                await fetch(state.scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action, username: state.editingUser || u, newUsername: u, password: p, role: r, fullName: f, designation: d, phone: ph, email: e }) });
+                await fetch(state.scriptUrl, { 
+                    method: 'POST', 
+                    mode: 'no-cors', 
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: params.toString()
+                });
                 alert(`User ${state.editingUser ? 'updated' : 'created'}!`); cancelEditMode(); setTimeout(fetchUsersForReport, 2000);
             } catch (err) { alert("Error: " + err); }
         }
@@ -874,7 +943,17 @@
 
         async function deleteUser(username) {
             if(confirm(`Delete user ${username}?`)) {
-                await fetch(state.scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'deleteUser', targetUser: username }) });
+                // NEW: Use Form Data
+                const params = new URLSearchParams();
+                params.append('action', 'deleteUser');
+                params.append('targetUser', username);
+                
+                await fetch(state.scriptUrl, { 
+                    method: 'POST', 
+                    mode: 'no-cors', 
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: params.toString()
+                });
                 alert("Delete request sent."); setTimeout(fetchUsersForReport, 2000);
             }
         }
@@ -886,7 +965,6 @@
             try {
                 const res = await fetch(state.scriptUrl + "?action=getLogs", { mode: 'cors', credentials: 'omit' });
                 const logs = await res.json();
-                // Filter using index 4 (Timestamp) and index 1 (Name/ID)
                 const filtered = logs.filter(l => { const d = new Date(l[4]); return d >= start && d <= end && (user === 'all' || l[1] === user); });
                 state.adminReportData = getDailySummaries(filtered);
                 document.getElementById('summaryContent').textContent = `Generated Report\nUser: ${user}\nPeriod: ${formatDateDisplay(start)} - ${formatDateDisplay(end)}\nRecords: ${state.adminReportData.length}`;
