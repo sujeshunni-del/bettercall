@@ -539,20 +539,25 @@
             if (!storedUrl || storedUrl.includes('/library/')) { state.scriptUrl = DEFAULT_SCRIPT_URL; storage.set('nexus_script_url', DEFAULT_SCRIPT_URL); }
             if(document.getElementById('scriptUrl')) document.getElementById('scriptUrl').value = state.scriptUrl;
             
+            // MODIFIED: We check for saved user to pre-fill ID, but we DO NOT auto-login.
+            // This forces the login screen to appear every time the page loads.
             const savedUser = storage.get('nexus_user');
             if (savedUser) {
                 const userObj = JSON.parse(savedUser);
                 if(document.getElementById('username')) document.getElementById('username').value = userObj.username;
+                
+                // Pre-load state variables for convenience, but remain in "logged out" visual state
                 state.currentUser = userObj.username; state.currentFullName = userObj.fullName; state.role = userObj.role;
                 state.currentDesignation = userObj.designation; state.currentEmail = userObj.email; state.currentPhone = userObj.phone;
                 updateStaffProfileUI();
-                if(document.getElementById('displayUsername')) document.getElementById('displayUsername').textContent = state.currentFullName;
-                if(document.getElementById('avatarInitial')) document.getElementById('avatarInitial').textContent = (state.currentFullName || "U").charAt(0).toUpperCase();
-                if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
+                
                 const navAdmin = document.getElementById('nav-admin');
                 if (navAdmin) { if (state.role === 'admin') navAdmin.classList.remove('hidden'); else navAdmin.classList.add('hidden'); }
-                toggleLoginState(true); refreshLogs();
-            } else { toggleLoginState(false); }
+            }
+            
+            // Ensure login screen is shown initially
+            toggleLoginState(false);
+            
             state.currentPeriodStart = new Date(new Date().setHours(0, 0, 0, 0));
             initDatePickers();
         });
@@ -644,7 +649,13 @@
                 state.currentDesignation = auth.designation || "Staff Member"; state.currentEmail = auth.email || "No Email"; state.currentPhone = auth.phone || "No Phone";
                 storage.set('nexus_user', JSON.stringify({ username: state.currentUser, fullName: state.currentFullName, role: state.role, designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone }));
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
-                toggleLoginState(true); refreshLogs(); 
+                
+                // MODIFIED: Immediately switch to the main calendar view ("Show Everything")
+                // instead of showing the intermediate dashboard/kiosk screen.
+                toggleLoginState(true); 
+                refreshLogs();
+                switchTab('calendar');
+                 
             } else { showLoginError(); }
         }
 
