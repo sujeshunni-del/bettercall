@@ -91,7 +91,6 @@
         /* Print Styles */
         .print-container {
             width: 210mm;
-            /* A4 min height */
             min-height: 297mm;
             padding: 15mm;
             background: white;
@@ -543,7 +542,8 @@
             scriptUrl: storage.get('nexus_script_url') || DEFAULT_SCRIPT_URL,
             isClockedIn: false, isBreak: false, hasClockedInToday: false, hasClockedOutToday: false,
             logsCache: [], userListCache: [], editingUser: null, adminReportData: [], viewMode: 'day',
-            currentPeriodStart: new Date(new Date().setHours(0, 0, 0, 0)), calendarDisplayDate: new Date(), pendingAction: null, historyFP: null, reportFP: null
+            currentPeriodStart: new Date(new Date().setHours(0, 0, 0, 0)), calendarDisplayDate: new Date(), pendingAction: null, historyFP: null, reportFP: null,
+            pendingLog: null
         };
         
         function formatTime(totalSeconds) { const h = Math.floor(totalSeconds / 3600); const m = Math.floor((totalSeconds % 3600) / 60); return `${h}h ${m}m`; }
@@ -799,6 +799,19 @@
         
         function logTime(type, lat = null, lng = null) {
             const now = new Date(); const timeString = now.toLocaleTimeString();
+            
+            // Create pending log for optimistic updates
+            state.pendingLog = [
+                formatDateDisplay(now), // 0: Date
+                state.currentUser,      // 1: ID
+                state.currentFullName,  // 2: Name
+                type,                   // 3: Action
+                now.toLocaleTimeString(),// 4: Time
+                lat,                    // 5: Lat
+                lng,                    // 6: Lng
+                now.toISOString()       // 7: Timestamp
+            ];
+
             if (type === 'In') { state.startTime = now; state.isClockedIn = true; state.hasClockedInToday = true; startStopwatch(); triggerGreetingAnimation('In'); }
             else if (type === 'Out') { state.isClockedIn = false; state.hasClockedOutToday = true; clearInterval(state.timerInterval); stopBreakTimer(); state.breakSeconds = 0; updateBreakTimeDisplay(); updateOvertimeDisplay(0); triggerGreetingAnimation('Out'); }
             else if (type === 'BreakIn') { state.isBreak = true; state.breakCount++; if(document.getElementById('breakCountDisplay')) document.getElementById('breakCountDisplay').textContent = `${state.breakCount} / ${MAX_BREAKS}`; startBreakTimer(); }
@@ -825,7 +838,31 @@
             try {
                 const sep = state.scriptUrl.includes('?') ? '&' : '?'; const response = await fetch(`${state.scriptUrl}${sep}action=getLogs`, { method: 'GET', mode: 'cors', credentials: 'omit' });
                 if (!response.ok) throw new Error("HTTP " + response.status);
-                const data = await response.json(); const userAllLogs = data.filter(row => row[1] === state.currentUser); state.logsCache = userAllLogs; 
+                const data = await response.json(); const userAllLogs = data.filter(row => row[1] === state.currentUser);
+                
+                // --- OPTIMISTIC UPDATE LOGIC ---
+                if (state.pendingLog) {
+                    const lastServerLog = userAllLogs[userAllLogs.length - 1];
+                    const pendingTime = new Date(state.pendingLog[7]).getTime();
+                    let serverHasIt = false;
+                    
+                    if (lastServerLog) {
+                        const serverTime = new Date(lastServerLog[7]).getTime();
+                        // Check if server has a log within 5s of our pending log with same action
+                        if (Math.abs(serverTime - pendingTime) < 5000 && lastServerLog[3] === state.pendingLog[3]) {
+                            serverHasIt = true;
+                        }
+                    }
+                    
+                    if (serverHasIt) {
+                        state.pendingLog = null; // Server caught up
+                    } else {
+                        userAllLogs.push(state.pendingLog); // Force add local action
+                    }
+                }
+                // -------------------------------
+
+                state.logsCache = userAllLogs; 
                 const todayStart = new Date(); todayStart.setHours(0,0,0,0); const todayEnd = new Date(); todayEnd.setHours(23,59,59,999);
                 const todayLogs = userAllLogs.filter(row => { let logTime; if(row[7]) logTime = new Date(row[7]); else logTime = new Date(`${row[0]} ${row[4]}`); return logTime >= todayStart && logTime <= todayEnd; });
                 todayLogs.sort((a,b) => { const tA = a[7] ? new Date(a[7]) : new Date(`${a[0]} ${a[4]}`); const tB = b[7] ? new Date(b[7]) : new Date(`${b[0]} ${b[4]}`); return tA - tB; });
