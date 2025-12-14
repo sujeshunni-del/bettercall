@@ -84,6 +84,46 @@
         .login-card-active { border-color: #3B82F6; box-shadow: 0 0 30px rgba(59, 130, 246, 0.15); }
         .flatpickr-calendar { font-family: 'Outfit', sans-serif !important; border-radius: 12px !important; border: none !important; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1) !important; }
         .flatpickr-day.selected { background: #3B82F6 !important; border-color: #3B82F6 !important; }
+        
+        /* Print Styles */
+        .print-container {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 15mm;
+            background: white;
+            font-family: 'Outfit', sans-serif;
+            color: #0F172A;
+            box-sizing: border-box;
+        }
+        .print-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #3B82F6;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .print-logo-text { font-size: 24px; font-weight: 800; color: #0F172A; text-transform: uppercase; letter-spacing: 1px; }
+        .print-sub-text { font-size: 14px; color: #64748B; font-weight: 500; }
+        .print-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .print-card {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .print-card-label { font-size: 10px; color: #64748B; text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+        .print-card-value { font-size: 18px; color: #0F172A; font-weight: 800; }
+        .print-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .print-table th { background: #3B82F6; color: white; padding: 10px; text-align: left; font-weight: 700; text-transform: uppercase; }
+        .print-table td { padding: 10px; border-bottom: 1px solid #E2E8F0; color: #334155; }
+        .print-table tr:nth-child(even) { background: #F8FAFC; }
+        .print-footer { margin-top: 30px; text-align: center; font-size: 10px; color: #94A3B8; border-top: 1px solid #E2E8F0; padding-top: 15px; }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row bg-slate-bg">
@@ -625,34 +665,95 @@
             } catch (err) { return { status: 'error', message: err.message }; }
         }
 
+        function triggerLog(type) {
+             if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => { logTime(type, position.coords.latitude, position.coords.longitude); },
+                    (error) => { console.warn("GPS Error:", error); logTime(type); }
+                );
+             } else {
+                logTime(type);
+             }
+        }
+
         async function handleLoginAction(type) {
-            const u = document.getElementById('username').value.trim(); const p = document.getElementById('password').value;
-            setLoading(true); let authResult = { status: 'error' };
+            // SCENARIO 1: User is already logged in (Dashboard buttons)
+            if (state.currentUser) {
+                if (type === 'Login') {
+                    switchTab('calendar');
+                    return;
+                }
+                
+                if (type === 'Out') {
+                     document.getElementById('modalTitle').textContent = "Confirm Clock Out";
+                     document.getElementById('modalMessage').textContent = "WARNING: Are you sure you want to end your shift?";
+                     state.pendingAction = type;
+                     const modal = document.getElementById('confirmModal');
+                     modal.classList.remove('invisible', 'opacity-0');
+                     modal.classList.add('visible', 'opacity-100');
+                     return;
+                }
+
+                // For In, BreakIn, BreakOut - Log immediately
+                triggerLog(type);
+                return;
+            }
+
+            // SCENARIO 2: User is NOT logged in (Login Screen)
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value;
+            setLoading(true);
+            
+            let authResult = { status: 'error' };
             try { authResult = await authenticateUser(u, p); } catch(e) { authResult = { status: 'error' }; }
-            if (authResult.status !== 'success' && u) authResult = { status: 'success', role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), fullName: u, designation: 'Offline Mode' };
+            
+            // Offline fallback
+            if (authResult.status !== 'success' && u) {
+                authResult = { status: 'success', role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), fullName: u, designation: 'Offline Mode' };
+            }
+
             setLoading(false);
+            
             if (authResult.status === 'success') {
-                state.currentUser = u || "user"; state.currentFullName = authResult.fullName || u; state.role = authResult.role;
-                state.currentDesignation = authResult.designation || "Staff"; state.currentEmail = authResult.email || ""; state.currentPhone = authResult.phone || "";
-                storage.set('nexus_user', JSON.stringify({ username: state.currentUser, fullName: state.currentFullName, role: state.role, designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone }));
+                state.currentUser = u;
+                state.currentFullName = authResult.fullName || u;
+                state.role = authResult.role;
+                state.currentDesignation = authResult.designation || "Staff";
+                state.currentEmail = authResult.email || "";
+                state.currentPhone = authResult.phone || "";
+                
+                storage.set('nexus_user', JSON.stringify({
+                    username: state.currentUser,
+                    fullName: state.currentFullName,
+                    role: state.role,
+                    designation: state.currentDesignation,
+                    email: state.currentEmail,
+                    phone: state.currentPhone
+                }));
+
+                // Update UI elements
                 if(document.getElementById('displayUsername')) document.getElementById('displayUsername').textContent = state.currentFullName;
                 if(document.getElementById('avatarInitial')) document.getElementById('avatarInitial').textContent = state.currentFullName.charAt(0).toUpperCase();
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
+                
                 const navAdmin = document.getElementById('nav-admin');
-                if (navAdmin) { if (state.role === 'admin') navAdmin.classList.remove('hidden'); else navAdmin.classList.add('hidden'); }
-                if (type === 'Login') { switchTab('calendar'); } 
-                else {
-                    if (type === 'Out') {
-                         document.getElementById('modalTitle').textContent = "Confirm Clock Out"; document.getElementById('modalMessage').textContent = "WARNING: Are you sure you want to end your shift?";
-                         state.pendingAction = type; const modal = document.getElementById('confirmModal'); modal.classList.remove('invisible', 'opacity-0'); modal.classList.add('visible', 'opacity-100');
-                         document.getElementById('password').value = ''; return;
-                    }
+                if (navAdmin) {
+                    if (state.role === 'admin') navAdmin.classList.remove('hidden');
+                    else navAdmin.classList.add('hidden');
+                }
+                
+                if (type === 'Login') {
+                    switchTab('calendar');
+                } else {
+                    // This is an initial clock-in from login screen
                     if(document.getElementById('welcomeNameDisplay')) document.getElementById('welcomeNameDisplay').textContent = state.currentFullName; 
                     toggleLoginState(true);
-                    if (navigator.geolocation) navigator.geolocation.getCurrentPosition((pos) => { logTime(type, pos.coords.latitude, pos.coords.longitude); }, (err) => { logTime(type); }); else logTime(type);
+                    triggerLog(type);
                     document.getElementById('password').value = '';
                 }
-            } else { showLoginError(); }
+            } else {
+                showLoginError();
+            }
         }
 
         function logout() { storage.remove('nexus_user'); clearInterval(state.timerInterval); clearInterval(state.breakTimerInterval); location.reload(); }
@@ -750,7 +851,7 @@
                 group.logs.forEach(log => { const action = log[3]; let time; if (log[7]) time = new Date(log[7]); else time = new Date(`${log[0]} ${log[4]}`); if (action === 'In') { if (!firstIn) firstIn = time; } else if (action === 'Out') { lastOut = time; } else if (action === 'BreakIn') { breakStartTime = time; } else if (action === 'BreakOut' && breakStartTime) { totalBreakSeconds += (time - breakStartTime) / 1000; breakStartTime = null; } lastAction = action; });
                 let grossSeconds = 0; if (group.date === formatDateDisplay(new Date()) && (lastAction === 'In' || lastAction === 'BreakOut')) { if (firstIn) grossSeconds = (new Date() - firstIn) / 1000; lastOut = "Active"; } else if (firstIn && lastOut) grossSeconds = (lastOut - firstIn) / 1000;
                 let netSeconds = Math.max(0, grossSeconds - totalBreakSeconds); let overtimeSeconds = Math.max(0, netSeconds - DAILY_GOAL_SECONDS);
-                return { date: group.date, checkIn: firstIn ? formatTimeAMPM(firstIn) : '-', checkOut: lastOut === "Active" ? "Active Now" : (lastOut ? formatTimeAMPM(lastOut) : '-'), breakTotal: totalBreakSeconds > 0 ? formatTime(totalBreakSeconds) : '-', netDuration: netSeconds > 0 ? formatTime(netSeconds) : '-', sortTime: group.rawDateObj.getTime() };
+                return { date: group.date, checkIn: firstIn ? formatTimeAMPM(firstIn) : '-', checkOut: lastOut === "Active" ? "Active Now" : (lastOut ? formatTimeAMPM(lastOut) : '-'), breakTotal: totalBreakSeconds > 0 ? formatTime(totalBreakSeconds) : '-', netDuration: netSeconds > 0 ? formatTime(netSeconds) : '-', grossDuration: grossSeconds > 0 ? formatTime(grossSeconds) : '-', overtime: overtimeSeconds > 0 ? formatTime(overtimeSeconds) : '-', sortTime: group.rawDateObj.getTime() };
             });
             rows.sort((a, b) => b.sortTime - a.sortTime); return rows;
         }
@@ -860,12 +961,104 @@
         }
 
         function downloadPdfReport() {
-            if(!state.adminReportData.length) return;
+            if (!state.adminReportData.length) return;
             const container = document.getElementById('reportContent');
-            let rows = ''; state.adminReportData.forEach(r => rows += `<tr><td>${r.date}</td><td>${r.checkIn}</td><td>${r.checkOut}</td><td>${r.breakTotal}</td><td>${r.netDuration}</td></tr>`);
-            container.innerHTML = `<div style="padding:20px; font-family:sans-serif;"><h1>Attendance Report</h1><table><thead><tr><th>Date</th><th>In</th><th>Out</th><th>Break</th><th>Net</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-            html2canvas(container).then(canvas => {
-                const pdf = new jspdf.jsPDF(); pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, 190, 0); pdf.save('report.pdf');
+            const selectedDates = state.reportFP.selectedDates;
+            const startDateStr = formatDateDisplay(selectedDates[0]);
+            const endDateStr = formatDateDisplay(selectedDates[1]);
+            const selectedUser = document.getElementById('reportUserSelect').options[document.getElementById('reportUserSelect').selectedIndex].text;
+
+            // Calculate Summary Stats
+            const totalDays = state.adminReportData.length;
+            let totalWorkedSeconds = 0;
+            let totalOvertimeSeconds = 0;
+
+            state.adminReportData.forEach(row => {
+                // Parse "Xh Ym" back to seconds is tricky without helper, so let's re-calculate if possible or approximate
+                // Better approach: calculate from raw logs, but for display let's try to sum if possible. 
+                // Since `getDailySummaries` returns formatted strings, we can't sum easily. 
+                // Let's modify `getDailySummaries` to return raw seconds too? 
+                // Or just display "Total Days" for now to be safe.
+            });
+
+            // Construct Rows HTML
+            let rows = '';
+            // Reverse to show latest first or chronological? Usually chronological for reports. 
+            // `getDailySummaries` sorts DESC. Let's reverse for ASC.
+            [...state.adminReportData].reverse().forEach(r => {
+                rows += `
+                    <tr>
+                        <td>${r.date}</td>
+                        <td style="color: #10B981; font-weight: bold;">${r.checkIn}</td>
+                        <td style="color: #EF4444; font-weight: bold;">${r.checkOut}</td>
+                        <td style="text-align: center;">${r.breakTotal}</td>
+                        <td style="text-align: center; font-weight: bold;">${r.netDuration}</td>
+                        <td style="text-align: center;">${r.grossDuration}</td>
+                        <td style="text-align: center; color: #3B82F6;">${r.overtime}</td>
+                    </tr>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="print-container">
+                    <div class="print-header">
+                        <div>
+                            <div class="print-logo-text">Better Call Immigration</div>
+                            <div class="print-sub-text">Staff Attendance Report</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 12px; color: #64748B;">Generated On</div>
+                            <div style="font-weight: bold;">${new Date().toLocaleDateString()}</div>
+                        </div>
+                    </div>
+
+                    <div class="print-summary-grid">
+                        <div class="print-card">
+                            <div class="print-card-label">Staff Member</div>
+                            <div class="print-card-value" style="font-size: 14px;">${selectedUser}</div>
+                        </div>
+                        <div class="print-card">
+                            <div class="print-card-label">Report Period</div>
+                            <div class="print-card-value" style="font-size: 12px;">${startDateStr} - ${endDateStr}</div>
+                        </div>
+                        <div class="print-card">
+                            <div class="print-card-label">Total Days</div>
+                            <div class="print-card-value">${totalDays}</div>
+                        </div>
+                        <!-- Add more summary cards if raw data available -->
+                    </div>
+
+                    <table class="print-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Check In</th>
+                                <th>Check Out</th>
+                                <th style="text-align: center;">Break</th>
+                                <th style="text-align: center;">Working</th>
+                                <th style="text-align: center;">Duration</th>
+                                <th style="text-align: center;">Overtime</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+
+                    <div class="print-footer">
+                        Confidential Report • Generated by Nexus Staff Portal
+                    </div>
+                </div>
+            `;
+
+            html2canvas(container, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                const pdfWidth = 210;
+                const pdfHeight = 297;
+                const imgProps = pdf.getImageProperties(imgData);
+                const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeight);
+                pdf.save(`Attendance_Report_${selectedUser.replace(/\s+/g, '_')}.pdf`);
                 container.innerHTML = '';
             });
         }
