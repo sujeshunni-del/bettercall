@@ -1699,6 +1699,19 @@
             }
         }
         
+        // --- REPAIR FUNCTION ---
+        function fixDatabase() {
+             if(confirm("This will attempt to create 'Logs' and 'Users' sheets if they are missing. Continue?")) {
+                  fetch(state.scriptUrl + "?action=setup")
+                      .then(res => res.json())
+                      .then(d => {
+                           alert(d.message);
+                           location.reload();
+                      })
+                      .catch(e => alert("Setup failed: " + e.message));
+             }
+        }
+        
         async function refreshLogs() {
             if (!state.scriptUrl) { renderTable([]); return; }
             
@@ -1800,7 +1813,8 @@
                 if(tbody) {
                      tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-red-400 italic">
                         <i class="fas fa-exclamation-triangle mr-2"></i> Critical Error: "Logs" sheet missing? <br>
-                        <span class="text-xs text-gray-500 mt-2 inline-block">Please create a sheet named exactly <strong>Logs</strong> in your Google Sheet.</span>
+                        <span class="text-xs text-gray-500 mt-2 inline-block">Please create a sheet named exactly <strong>Logs</strong> in your Google Sheet.</span><br>
+                        <button onclick="fixDatabase()" class="mt-4 bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 px-4 py-2 rounded-lg text-xs font-bold uppercase hover:bg-emerald-500/30 transition">Attempt Auto-Fix</button>
                     </td></tr>`;
                 }
             }
