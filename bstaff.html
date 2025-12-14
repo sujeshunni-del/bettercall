@@ -5,35 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus Staff Portal - Light</title>
     
-    <!-- Fonts from Theme -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
+    <!-- Icons & Libraries -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- PDF Generation Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-    <!-- Flatpickr (Date Range Picker) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <!-- Theme Config -->
     <script>
-        // Check if Tailwind is loaded before configuring
         if (typeof tailwind !== 'undefined') {
             tailwind.config = {
                 theme: {
                     extend: {
-                        fontFamily: {
-                            sans: ['Outfit', 'sans-serif'],
-                            mono: ['JetBrains Mono', 'monospace'],
-                        },
+                        fontFamily: { sans: ['Outfit', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
                         colors: {
                             'slate-bg': '#F8FAFC',
                             'brand-blue': '#3B82F6',
@@ -48,136 +41,47 @@
                             'scan': 'scan 2s linear infinite',
                         },
                         keyframes: {
-                            float: {
-                                '0%, 100%': { transform: 'translateY(0)' },
-                                '50%': { transform: 'translateY(-20px)' },
-                            },
-                            'pulse-gold': {
-                                '0%, 100%': { opacity: 0.8, filter: 'drop-shadow(0 0 5px rgba(245, 158, 11, 0.5))' },
-                                '50%': { opacity: 1, filter: 'drop-shadow(0 0 15px rgba(245, 158, 11, 1))' }
-                            },
-                            fadeIn: {
-                                '0%': { opacity: '0', transform: 'translateY(10px)' },
-                                '100%': { opacity: '1', transform: 'translateY(0)' }
-                            },
-                            scan: {
-                                '0%': { top: '0%', opacity: 0 },
-                                '10%': { opacity: 1 },
-                                '90%': { opacity: 1 },
-                                '100%': { top: '100%', opacity: 0 }
-                            }
+                            float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
+                            'pulse-gold': { '0%, 100%': { opacity: 0.8 }, '50%': { opacity: 1 } },
+                            fadeIn: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                            scan: { '0%': { top: '0%', opacity: 0 }, '10%': { opacity: 1 }, '90%': { opacity: 1 }, '100%': { top: '100%', opacity: 0 } }
                         }
                     }
                 }
             }
-        } else {
-            console.warn('Tailwind CSS script not loaded. Styles may be missing.');
         }
     </script>
 
     <style>
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: #F8FAFC; 
-            color: #0F172A; 
-            overflow: hidden;
-        }
-        
-        /* Ambient Background */
-        .ambient-light {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.15;
-            will-change: transform; 
-        }
+        body { font-family: 'Outfit', sans-serif; background-color: #F8FAFC; color: #0F172A; overflow: hidden; }
+        .ambient-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; will-change: transform; }
         .orb-1 { top: -15%; left: -10%; width: 50vw; height: 50vw; background: #3B82F6; animation: float 14s infinite; }
         .orb-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #8B5CF6; animation: float 16s infinite reverse; }
         .orb-3 { top: 40%; left: 30%; width: 35vw; height: 35vw; background: #F59E0B; opacity: 0.1; animation: float 20s infinite; }
 
-        /* Glass Panel */
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; }
         
-        /* Modern Input Styling */
-        .glass-input {
-            background: #FFFFFF;
-            border: 1px solid #E2E8F0;
-            color: #0F172A;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-        .glass-input:focus {
-            border-color: #3B82F6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-            outline: none;
-            transform: translateY(-1px);
-        }
-        .glass-input::placeholder {
-            color: #94A3B8;
-        }
+        .glass-input { background: #FFFFFF; border: 1px solid #E2E8F0; color: #0F172A; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .glass-input:focus { border-color: #3B82F6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); outline: none; transform: translateY(-1px); }
+        .glass-input::placeholder { color: #94A3B8; }
         
-        /* Sidebar & Calendar */
-        .sidebar-item.active {
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-            color: #3B82F6;
-            border-left: 3px solid #3B82F6;
-        }
+        .sidebar-item.active { background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); color: #3B82F6; border-left: 3px solid #3B82F6; }
         .sidebar-item { border-left: 3px solid transparent; }
         .sidebar-item:hover { background: #F1F5F9; }
         
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-        
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
         
-        /* Overlay transitions */
-        #datePickerOverlay, #confirmModal, #welcomeOverlay {
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        #calendarDropdown {
-            transform: translateY(-10px);
-            transition: transform 0.3s ease;
-        }
+        #datePickerOverlay, #confirmModal, #welcomeOverlay { transition: opacity 0.3s ease, visibility 0.3s ease; }
+        #calendarDropdown { transform: translateY(-10px); transition: transform 0.3s ease; }
         #datePickerOverlay.active #calendarDropdown { transform: translateY(0); }
 
-        /* Animation Classes */
-        .scan-beam {
-            position: absolute;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #3B82F6, transparent);
-            box-shadow: 0 0 15px #3B82F6;
-            opacity: 0;
-            animation: scan 2s linear infinite;
-            z-index: 20;
-        }
-        
-        .login-card-active {
-            border-color: #3B82F6;
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
-        }
-
-        /* Flatpickr overrides */
+        .scan-beam { position: absolute; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, transparent, #3B82F6, transparent); box-shadow: 0 0 15px #3B82F6; opacity: 0; animation: scan 2s linear infinite; z-index: 20; }
+        .login-card-active { border-color: #3B82F6; box-shadow: 0 0 30px rgba(59, 130, 246, 0.15); }
         .flatpickr-calendar { font-family: 'Outfit', sans-serif !important; border-radius: 12px !important; border: none !important; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1) !important; }
         .flatpickr-day.selected { background: #3B82F6 !important; border-color: #3B82F6 !important; }
     </style>
@@ -194,7 +98,6 @@
     <div id="loginSection" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-50/80 backdrop-blur-md overflow-y-auto custom-scrollbar p-4">
         <div class="w-full max-w-2xl space-y-8 flex flex-col items-center">
             
-            <!-- Header -->
             <div class="text-center">
                 <div class="inline-flex items-center gap-3 mb-4 bg-white/80 backdrop-blur px-5 py-2 rounded-full border border-slate-200 shadow-sm animate-fade-in">
                     <i class="fas fa-bolt text-brand-gold text-sm"></i>
@@ -204,10 +107,8 @@
                 <div id="bigDate" class="text-brand-blue font-semibold text-lg mt-1 tracking-wide uppercase">Loading Date...</div>
             </div>
 
-            <!-- LOGIN CARD (Redesigned) -->
+            <!-- LOGIN CARD -->
             <div id="loginCard" class="w-full bg-white/90 backdrop-blur-xl rounded-[2rem] p-8 md:p-10 shadow-2xl border border-white relative overflow-hidden transition-all duration-300">
-                
-                <!-- Loading Overlay (Hidden by default) -->
                 <div id="scanningOverlay" class="absolute inset-0 bg-slate-900/5 backdrop-blur-[2px] z-20 hidden flex-col items-center justify-center">
                     <div class="relative w-32 h-32">
                         <i class="fas fa-fingerprint text-8xl text-brand-blue/20 absolute inset-0"></i>
@@ -245,9 +146,7 @@
                     </div>
 
                     <button type="button" onclick="checkCredentialsAndRefresh()" class="w-full bg-gradient-to-r from-slate-800 to-slate-900 hover:from-brand-blue hover:to-brand-purple text-white font-bold py-4 rounded-xl transition-all duration-300 shadow-lg shadow-slate-300/50 hover:shadow-brand-blue/30 transform hover:-translate-y-0.5 relative overflow-hidden group">
-                        <span class="relative z-10 flex items-center justify-center gap-2">
-                            Log In <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                        </span>
+                        <span class="relative z-10 flex items-center justify-center gap-2">Log In <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i></span>
                     </button>
                     
                     <div id="loginError" class="text-center text-rose-500 text-xs hidden font-bold animate-bounce bg-rose-50 py-2 rounded-lg border border-rose-100">
@@ -258,14 +157,10 @@
 
             <!-- USER DASHBOARD (Visible After Login) -->
             <div id="userDashboard" class="w-full hidden animate-fade-in space-y-6">
-                
-                <!-- 2 Column Grid for Tracker and Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                    
                     <!-- SESSION TRACKER -->
                     <div id="trackerPanel" class="glass rounded-[2rem] p-8 relative overflow-hidden group">
                         <div class="absolute top-0 right-0 w-64 h-64 bg-brand-blue/10 rounded-full mix-blend-multiply filter blur-3xl opacity-50 pointer-events-none"></div>
-                        
                         <div class="flex justify-between items-start mb-6 relative z-10">
                             <div>
                                 <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Current Status</p>
@@ -279,12 +174,10 @@
                                 <p id="trackerUserName" class="text-brand-blue font-bold text-sm truncate max-w-[120px]">---</p>
                             </div>
                         </div>
-
                         <div class="text-center py-4 relative z-10 bg-slate-50/50 rounded-2xl border border-slate-100 mb-6">
                             <div id="stopwatch" class="text-5xl font-black text-slate-800 font-mono tracking-tight tabular-nums">00:00:00</div>
                             <p class="text-brand-purple text-[10px] font-bold uppercase tracking-[0.3em] mt-1">Session Duration</p>
                         </div>
-
                         <div class="grid grid-cols-2 gap-3 relative z-10">
                             <button onclick="handleLoginAction('In')" id="btnIn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-500/20 active:scale-95 flex flex-col items-center justify-center gap-1 leading-none" disabled>
                                 <i class="fas fa-play text-sm"></i> <span class="text-xs uppercase tracking-wide">Clock In</span>
@@ -293,23 +186,16 @@
                                 <i class="fas fa-stop text-sm"></i> <span class="text-xs uppercase tracking-wide">Clock Out</span>
                             </button>
                         </div>
-
                         <div id="breakRow" class="grid grid-cols-2 gap-3 mt-3 hidden relative z-10">
-                            <button onclick="handleLoginAction('BreakIn')" id="btnBreakIn" class="bg-amber-100 hover:bg-amber-200 text-amber-700 font-bold py-3 rounded-xl border border-amber-200 shadow-sm text-sm">
-                                <i class="fas fa-mug-hot mr-1"></i> Break
-                            </button>
-                            <button onclick="handleLoginAction('BreakOut')" id="btnBreakOut" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl border border-slate-200 shadow-sm text-sm">
-                                <i class="fas fa-undo mr-1"></i> Resume
-                            </button>
+                            <button onclick="handleLoginAction('BreakIn')" id="btnBreakIn" class="bg-amber-100 hover:bg-amber-200 text-amber-700 font-bold py-3 rounded-xl border border-amber-200 shadow-sm text-sm"><i class="fas fa-mug-hot mr-1"></i> Break</button>
+                            <button onclick="handleLoginAction('BreakOut')" id="btnBreakOut" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl border border-slate-200 shadow-sm text-sm"><i class="fas fa-undo mr-1"></i> Resume</button>
                         </div>
                     </div>
 
                     <!-- DAILY STATS -->
                     <div id="statsPanel" class="glass rounded-[2rem] p-8 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                <i class="fas fa-chart-pie"></i> Daily Analytics
-                            </h3>
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><i class="fas fa-chart-pie"></i> Daily Analytics</h3>
                             <div class="space-y-3">
                                 <div class="flex justify-between p-3 bg-white rounded-xl border border-slate-100 shadow-sm">
                                     <span class="text-slate-500 text-xs font-medium">Net Worked</span>
@@ -329,7 +215,6 @@
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="mt-6">
                             <button onclick="handleLoginAction('Login')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-colors text-xs uppercase tracking-wider flex items-center justify-center gap-2 group">
                                 Open Portal <i class="fas fa-external-link-alt text-slate-400 group-hover:text-slate-600 transition-colors"></i>
@@ -338,68 +223,47 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
     <!-- MAIN APP LAYOUT (Hidden by default) -->
     <div id="appLayout" class="hidden flex-1 flex h-full relative z-10">
-        <!-- SIDEBAR -->
         <aside class="w-20 md:w-72 glass flex flex-col justify-between border-r border-slate-200 z-20">
             <div>
                 <div class="p-8 flex items-center gap-4">
-                    <div class="w-10 h-10 bg-brand-gold rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-brand-gold/20">
-                        <i class="fas fa-bolt text-white text-lg"></i>
-                    </div>
+                    <div class="w-10 h-10 bg-brand-gold rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-brand-gold/20"><i class="fas fa-bolt text-white text-lg"></i></div>
                     <span class="font-bold text-xl tracking-wide hidden md:block text-slate-800">BETTER CALL</span>
                 </div>
-                
                 <nav class="mt-8 space-y-2 px-4">
                     <button onclick="switchTab('calendar')" id="nav-calendar" class="sidebar-item w-full flex items-center gap-4 px-4 py-4 rounded-xl text-slate-500 hover:text-brand-blue transition-all group">
-                        <i class="fas fa-id-card-alt w-5 text-center group-hover:text-brand-purple transition-colors"></i>
-                        <span class="hidden md:block font-medium">Staff Panel</span>
+                        <i class="fas fa-id-card-alt w-5 text-center group-hover:text-brand-purple transition-colors"></i><span class="hidden md:block font-medium">Staff Panel</span>
                     </button>
                     <button onclick="switchTab('admin')" id="nav-admin" class="sidebar-item hidden w-full flex items-center gap-4 px-4 py-4 rounded-xl text-slate-500 hover:text-brand-gold transition-all group">
-                        <i class="fas fa-cog w-5 text-center transition-colors"></i>
-                        <span class="hidden md:block font-medium">Admin Setup</span>
+                        <i class="fas fa-cog w-5 text-center transition-colors"></i><span class="hidden md:block font-medium">Admin Setup</span>
                     </button>
                     <button onclick="logout()" class="sidebar-item w-full flex items-center gap-4 px-4 py-4 rounded-xl text-rose-500 hover:bg-rose-50 hover:text-rose-600 transition-all group mt-4">
-                        <i class="fas fa-sign-out-alt w-5 text-center"></i>
-                        <span class="hidden md:block font-medium">Back to Time Station</span>
+                        <i class="fas fa-sign-out-alt w-5 text-center"></i><span class="hidden md:block font-medium">Back to Time Station</span>
                     </button>
                 </nav>
             </div>
-
             <div class="p-6 border-t border-slate-200 bg-slate-50/50">
                 <div class="flex items-center gap-4 px-2">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-blue to-brand-purple flex items-center justify-center font-bold text-sm text-white shadow-md">
-                        <span id="avatarInitial">U</span>
-                    </div>
-                    <div class="hidden md:block overflow-hidden">
-                        <p id="displayUsername" class="text-sm font-bold text-slate-800 truncate">User</p>
-                        <p id="displayRole" class="text-xs text-brand-gold uppercase tracking-wider font-bold">Staff Member</p>
-                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-blue to-brand-purple flex items-center justify-center font-bold text-sm text-white shadow-md"><span id="avatarInitial">U</span></div>
+                    <div class="hidden md:block overflow-hidden"><p id="displayUsername" class="text-sm font-bold text-slate-800 truncate">User</p><p id="displayRole" class="text-xs text-brand-gold uppercase tracking-wider font-bold">Staff Member</p></div>
                 </div>
             </div>
         </aside>
 
-        <!-- CONTENT AREA -->
         <main class="flex-1 overflow-y-auto relative custom-scrollbar bg-slate-bg">
             <!-- TAB: STAFF PANEL -->
             <div id="tab-calendar" class="p-6 md:p-12 relative z-10 max-w-7xl mx-auto animate-fade-in">
-                <!-- Staff Profile -->
                 <div class="glass rounded-[2rem] p-8 mb-8 relative overflow-hidden bg-white">
                     <div class="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10">
                         <div class="w-32 h-32 rounded-full bg-gradient-to-br from-brand-blue to-brand-purple p-1 shadow-xl shrink-0">
-                            <div class="w-full h-full rounded-full bg-white flex items-center justify-center">
-                                <span id="profileAvatar" class="text-5xl font-bold text-brand-dark">U</span>
-                            </div>
+                            <div class="w-full h-full rounded-full bg-white flex items-center justify-center"><span id="profileAvatar" class="text-5xl font-bold text-brand-dark">U</span></div>
                         </div>
                         <div class="flex-1 text-center md:text-left space-y-4">
-                            <div>
-                                <h1 id="profileName" class="text-4xl font-bold text-slate-900 mb-1">Loading Name...</h1>
-                                <p id="profileDesignation" class="text-brand-gold text-lg font-bold tracking-wide uppercase">Staff Member</p>
-                            </div>
+                            <div><h1 id="profileName" class="text-4xl font-bold text-slate-900 mb-1">Loading Name...</h1><p id="profileDesignation" class="text-brand-gold text-lg font-bold tracking-wide uppercase">Staff Member</p></div>
                             <div class="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-slate-500">
                                 <div class="bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm flex items-center gap-2"><i class="fas fa-id-badge text-brand-purple"></i><span id="profileId">ID: ---</span></div>
                                 <div class="bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm flex items-center gap-2"><i class="fas fa-envelope text-brand-blue"></i><span id="profileEmail">---</span></div>
@@ -408,16 +272,10 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="mb-10 flex flex-col md:flex-row justify-between items-end gap-4">
-                    <div>
-                        <h2 class="text-2xl font-bold text-slate-900 mb-2">Attendance History</h2>
-                        <p class="text-slate-500 text-sm">Review your daily logs and timesheets</p>
-                    </div>
+                    <div><h2 class="text-2xl font-bold text-slate-900 mb-2">Attendance History</h2><p class="text-slate-500 text-sm">Review your daily logs and timesheets</p></div>
                 </div>
-
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    <!-- LEFT COL: Calendar -->
                     <div class="lg:col-span-4 sticky top-6">
                         <div id="calendar-view" class="glass rounded-[2rem] p-8 w-full bg-white">
                             <div class="flex justify-between items-center mb-8" id="calendar-nav">
@@ -438,8 +296,6 @@
                             <div id="calendarBody" class="calendar-grid"></div>
                         </div>
                     </div>
-
-                    <!-- RIGHT COL: Activity Log -->
                     <div class="lg:col-span-8">
                         <div class="glass rounded-[2rem] p-8 min-h-[500px] bg-white">
                             <div class="bg-slate-50 rounded-2xl p-6 mb-6 flex flex-col md:flex-row gap-4 items-center justify-between border border-slate-200">
@@ -465,41 +321,133 @@
                 </div>
             </div>
 
-            <!-- TAB: ADMIN -->
+            <!-- TAB: ADMIN (Fully Restored & Functional) -->
             <div id="tab-admin" class="hidden p-6 md:p-12 relative z-10 max-w-6xl mx-auto animate-fade-in">
-                <!-- Admin content remains same structure, just theme colors applied via bstaff_light base -->
-                <header class="mb-10"><h1 class="text-4xl font-bold text-slate-900 mb-2">Admin Dashboard</h1><p class="text-slate-500">System Management</p></header>
-                <div class="glass rounded-[2rem] p-8 space-y-6 bg-white mb-8">
-                    <div class="flex justify-between items-center border-b border-slate-200 pb-4">
-                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3"><i class="fas fa-users text-emerald-600"></i> Live Staff Status</h2>
-                        <button onclick="loadLiveStatus()" class="bg-slate-100 px-4 py-2 rounded-lg text-brand-blue font-bold text-xs">Refresh</button>
+                <header class="mb-10 flex flex-col md:flex-row justify-between items-end gap-4">
+                    <div>
+                        <h1 class="text-4xl font-bold text-slate-900 mb-2">Admin Dashboard</h1>
+                        <p class="text-slate-500">Manage users, reports, and system configurations</p>
                     </div>
-                    <div id="liveStatusGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+                </header>
+
+                <!-- SECTION 1: Live Staff Status -->
+                <div class="glass rounded-[2rem] p-8 space-y-6 bg-white mb-8 border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center shadow-inner"><i class="fas fa-users text-emerald-600 text-sm"></i></div>
+                            Live Staff Status
+                        </h2>
+                        <button onclick="loadLiveStatus()" class="text-xs bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition-colors text-brand-blue font-bold uppercase tracking-wider border border-slate-200">
+                            <i class="fas fa-sync-alt mr-2"></i> Refresh
+                        </button>
+                    </div>
+                    <div id="liveStatusGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="col-span-full text-center py-8 text-slate-400 italic">Waiting for data update...</div>
+                    </div>
                 </div>
-                <div class="glass rounded-[2rem] p-8 space-y-8 bg-white mb-8">
-                    <h2 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-4 flex items-center gap-3"><i class="fas fa-users-cog text-brand-purple"></i> User Management</h2>
+
+                <!-- SECTION 2: User Management -->
+                <div class="glass rounded-[2rem] p-8 space-y-8 bg-white mb-8 border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center shadow-inner"><i class="fas fa-users-cog text-brand-purple text-sm"></i></div>
+                            User Management
+                        </h2>
+                    </div>
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <div class="lg:col-span-1 bg-slate-50 rounded-2xl p-6 border border-slate-200">
-                            <form id="addUserForm" onsubmit="event.preventDefault(); handleUserFormSubmit();" class="space-y-3">
-                                <input type="text" id="newUsername" class="glass-input w-full p-2.5 rounded-xl text-sm" placeholder="User ID" required>
-                                <input type="text" id="newFullName" class="glass-input w-full p-2.5 rounded-xl text-sm" placeholder="Full Name" required>
-                                <input type="text" id="newDesignation" class="glass-input w-full p-2.5 rounded-xl text-sm" placeholder="Designation">
-                                <input type="password" id="newPassword" class="glass-input w-full p-2.5 rounded-xl text-sm" placeholder="Password">
-                                <select id="newRole" class="glass-input w-full p-2.5 rounded-xl text-sm"><option value="staff">Staff</option><option value="admin">Admin</option></select>
+                        <!-- Add/Edit User Form -->
+                        <div class="lg:col-span-1 bg-slate-50 rounded-2xl p-6 border border-slate-200 h-fit">
+                            <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-user-plus text-brand-gold"></i> Add / Edit User</h3>
+                            <form id="addUserForm" onsubmit="event.preventDefault(); handleUserFormSubmit();" class="space-y-3 relative">
+                                <div id="editModeIndicator" class="hidden absolute -top-10 right-0 bg-brand-gold text-white text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm"><i class="fas fa-pen"></i> Editing</div>
+                                <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">User ID</label><input type="text" id="newUsername" class="glass-input w-full p-2.5 rounded-xl text-sm disabled:opacity-50 disabled:cursor-not-allowed bg-white" required placeholder="e.g. jsmith"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Full Name</label><input type="text" id="newFullName" class="glass-input w-full p-2.5 rounded-xl text-sm bg-white" required placeholder="e.g. John Smith"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Designation</label><input type="text" id="newDesignation" class="glass-input w-full p-2.5 rounded-xl text-sm bg-white" placeholder="e.g. Senior Developer"></div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Phone</label><input type="tel" id="newPhone" class="glass-input w-full p-2.5 rounded-xl text-sm bg-white" placeholder="+1..."></div>
+                                    <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Email</label><input type="email" id="newEmail" class="glass-input w-full p-2.5 rounded-xl text-sm bg-white" placeholder="@..."></div>
+                                </div>
+                                <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Password</label><input type="password" id="newPassword" class="glass-input w-full p-2.5 rounded-xl text-sm bg-white" placeholder="Required for new users"></div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Role</label>
+                                    <select id="newRole" class="glass-input w-full p-2.5 rounded-xl text-sm bg-white"><option value="staff">Staff</option><option value="admin">Admin</option></select>
+                                </div>
                                 <div class="flex gap-2 pt-2">
-                                    <button type="button" id="cancelEditBtn" onclick="cancelEditMode()" class="hidden flex-1 bg-slate-300 text-slate-700 font-bold py-2 rounded-lg text-xs">Cancel</button>
-                                    <button type="submit" id="submitUserBtn" class="flex-1 bg-emerald-600 text-white font-bold py-2 rounded-lg text-xs">Create User</button>
+                                    <button type="button" id="cancelEditBtn" onclick="cancelEditMode()" class="hidden flex-1 bg-slate-300 hover:bg-slate-400 text-slate-700 font-bold py-2 rounded-lg transition-colors text-xs">Cancel</button>
+                                    <button type="submit" id="submitUserBtn" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-lg transition-colors shadow-lg shadow-emerald-500/20 text-xs uppercase tracking-wide">Create User</button>
                                 </div>
                             </form>
                         </div>
-                        <div class="lg:col-span-2 overflow-x-auto rounded-xl border border-slate-200 bg-white max-h-[500px]">
-                            <table class="w-full text-left"><tbody id="userListBody" class="text-sm divide-y divide-slate-100"></tbody></table>
+                        <!-- User Table -->
+                        <div class="lg:col-span-2 flex flex-col">
+                            <div class="overflow-x-auto custom-scrollbar rounded-xl border border-slate-200 bg-white max-h-[500px]">
+                                <table class="w-full text-left border-collapse">
+                                    <thead class="sticky top-0 bg-slate-50 z-10 shadow-sm">
+                                        <tr class="text-[10px] text-slate-500 border-b border-slate-200 uppercase tracking-wider">
+                                            <th class="py-3 px-4 font-bold bg-slate-50">User ID</th><th class="py-3 px-4 font-bold bg-slate-50">Full Name</th><th class="py-3 px-4 font-bold bg-slate-50">Designation</th><th class="py-3 px-4 font-bold bg-slate-50">Role</th><th class="py-3 px-4 font-bold text-right bg-slate-50">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="userListBody" class="text-sm divide-y divide-slate-100"><!-- Populated dynamically --></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="glass rounded-xl p-5 border border-slate-200 bg-white">
-                    <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase">System Logs</label>
-                    <div id="consoleLog" class="bg-slate-900 rounded-lg p-3 h-20 overflow-y-auto font-mono text-[10px] text-green-400"></div>
+
+                <!-- SECTION 3: Advanced Reporting -->
+                <div class="glass rounded-[2rem] p-8 space-y-8 bg-white mb-8 border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center shadow-inner"><i class="fas fa-file-alt text-brand-blue text-sm"></i></div>
+                            Advanced Reporting
+                        </h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                        <div class="md:col-span-4 space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">Staff Selection</label>
+                                <select id="reportUserSelect" class="glass-input w-full p-3 rounded-xl text-sm bg-white"><option value="all">All Staff</option></select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">Report Period</label>
+                                <div class="relative"><input id="reportRange" class="glass-input w-full pl-10 pr-4 py-3 rounded-xl focus:outline-none text-slate-800 text-sm cursor-pointer bg-white" placeholder="Select dates..."><i class="fas fa-calendar-alt absolute left-4 top-3.5 text-slate-400 text-xs"></i></div>
+                            </div>
+                            <button onclick="generateReportData()" class="w-full bg-brand-purple hover:bg-purple-600 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-brand-purple/20 text-sm flex items-center justify-center gap-2 group">
+                                <i class="fas fa-search group-hover:scale-110 transition-transform"></i> Fetch & Summarize
+                            </button>
+                        </div>
+                        <div class="md:col-span-8 bg-slate-50 rounded-2xl p-6 border border-slate-200 min-h-[200px] flex flex-col">
+                            <div id="reportSummary" class="hidden h-full flex flex-col">
+                                <h3 class="text-sm font-bold text-slate-900 mb-2 border-b border-slate-200 pb-2">Report Generated</h3>
+                                <div id="summaryContent" class="text-xs font-mono text-slate-600 mb-4 whitespace-pre-wrap flex-1 leading-relaxed"></div>
+                                <button onclick="downloadPdfReport()" id="downloadPdfButton" class="mt-auto w-full bg-white hover:bg-red-50 text-slate-700 font-bold py-3 rounded-xl transition-colors border border-slate-200 text-sm flex items-center justify-center gap-2 hover:border-red-200 hover:text-red-600 group shadow-sm">
+                                    <i class="fas fa-file-pdf text-red-500 group-hover:scale-110 transition-transform"></i> Download PDF Report
+                                </button>
+                            </div>
+                            <div id="reportPlaceholder" class="h-full flex flex-col items-center justify-center text-slate-400 text-sm italic gap-3">
+                                <div class="w-12 h-12 rounded-full bg-white shadow-sm border border-slate-200 flex items-center justify-center"><i class="fas fa-chart-bar text-slate-300"></i></div>
+                                <p>Select criteria and fetch data to view summary.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: Technical Footer -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 opacity-75 hover:opacity-100 transition-opacity relative z-0">
+                    <div class="glass rounded-xl p-5 border border-slate-200 bg-white flex flex-col justify-center">
+                        <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-link text-brand-gold"></i> Web App Connection</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="scriptUrl" class="glass-input w-full p-2 px-3 rounded-lg font-mono text-[10px] md:text-xs text-brand-blue bg-slate-50 border-slate-200 focus:border-brand-blue/50" placeholder="https://script.google.com/macros/s/...">
+                            <button onclick="saveSettings()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg font-bold transition-colors text-xs border border-slate-200">Save</button>
+                            <button onclick="testConnection()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 px-4 py-2 rounded-lg font-bold transition-colors text-xs border border-emerald-200" title="Verify connection">Test</button>
+                        </div>
+                    </div>
+                    <div class="glass rounded-xl p-5 border border-slate-200 bg-white">
+                        <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-terminal text-emerald-600"></i> System Logs</label>
+                        <div id="consoleLog" class="bg-slate-900 rounded-lg p-3 h-20 overflow-y-auto font-mono text-[10px] text-green-400 custom-scrollbar border border-slate-800 leading-relaxed shadow-inner">
+                            > System ready...<br>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -512,6 +460,19 @@
               <h2 id="welcomeTitle" class="text-4xl md:text-5xl font-bold text-slate-900 mb-2 tracking-tight">Welcome</h2>
               <p id="welcomeNameDisplay" class="text-2xl text-brand-blue font-medium"></p>
          </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm opacity-0 invisible transition-all">
+        <div class="glass p-8 rounded-2xl max-w-sm w-full mx-4 shadow-2xl bg-white border border-slate-100 transform scale-95 transition-transform duration-200">
+            <div class="w-16 h-16 rounded-full bg-rose-100 mx-auto flex items-center justify-center mb-4"><i class="fas fa-exclamation-triangle text-rose-500 text-2xl"></i></div>
+            <h3 id="modalTitle" class="text-xl font-bold text-slate-900 text-center mb-2">Confirm Action</h3>
+            <p id="modalMessage" class="text-slate-500 text-center text-sm mb-6">Are you sure?</p>
+            <div class="flex gap-3">
+                <button onclick="closeModal(false)" class="flex-1 py-3 rounded-xl bg-slate-100 text-slate-600 font-bold text-sm hover:bg-slate-200">Cancel</button>
+                <button onclick="closeModal(true)" id="modalConfirmBtn" class="flex-1 py-3 rounded-xl bg-rose-500 text-white font-bold text-sm hover:bg-rose-600">Confirm</button>
+            </div>
+        </div>
     </div>
 
     <!-- Hidden Print Container -->
@@ -540,43 +501,18 @@
             currentPeriodStart: new Date(new Date().setHours(0, 0, 0, 0)), calendarDisplayDate: new Date(), pendingAction: null, historyFP: null, reportFP: null
         };
         
-        function formatTime(totalSeconds) {
-            const h = Math.floor(totalSeconds / 3600); const m = Math.floor((totalSeconds % 3600) / 60);
-            return `${h}h ${m}m`;
-        }
-        function formatTimeDetailed(totalSeconds) {
-            const h = Math.floor(totalSeconds / 3600); const m = Math.floor((totalSeconds % 3600) / 60); const s = Math.floor(totalSeconds % 60);
-            return `${h}h ${m}m ${s}s`;
-        }
-        function formatDateDisplay(date) {
-            try {
-                const d = new Date(date); if (isNaN(d.getTime())) return String(date);
-                const day = String(d.getDate()).padStart(2, '0'); const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][d.getMonth()];
-                return `${day}/${month}/${d.getFullYear()}`;
-            } catch (e) { return String(date); }
-        }
-        function formatTimeDisplay(timeString) {
-            try {
-                const date = (typeof timeString === 'string' && timeString.includes('T')) ? new Date(timeString) : new Date(`2000-01-01 ${timeString}`);
-                if (!isNaN(date)) return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                return timeString;
-            } catch (e) { return timeString; }
-        }
-        function formatTimeAMPM(dateInput) {
-            try {
-                let dateObj = (dateInput instanceof Date) ? dateInput : new Date(`2000-01-01 ${dateInput}`);
-                if (isNaN(dateObj.getTime())) return dateInput;
-                return dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-            } catch (e) { return String(dateInput); }
-        }
+        function formatTime(totalSeconds) { const h = Math.floor(totalSeconds / 3600); const m = Math.floor((totalSeconds % 3600) / 60); return `${h}h ${m}m`; }
+        function formatTimeDetailed(totalSeconds) { const h = Math.floor(totalSeconds / 3600); const m = Math.floor((totalSeconds % 3600) / 60); const s = Math.floor(totalSeconds % 60); return `${h}h ${m}m ${s}s`; }
+        function formatDateDisplay(date) { try { const d = new Date(date); if (isNaN(d.getTime())) return String(date); const day = String(d.getDate()).padStart(2, '0'); const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][d.getMonth()]; return `${day}/${month}/${d.getFullYear()}`; } catch (e) { return String(date); } }
+        function formatTimeDisplay(timeString) { try { const date = (typeof timeString === 'string' && timeString.includes('T')) ? new Date(timeString) : new Date(`2000-01-01 ${timeString}`); if (!isNaN(date)) return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); return timeString; } catch (e) { return timeString; } }
+        function formatTimeAMPM(dateInput) { try { let dateObj = (dateInput instanceof Date) ? dateInput : new Date(`2000-01-01 ${dateInput}`); if (isNaN(dateObj.getTime())) return dateInput; return dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }); } catch (e) { return String(dateInput); } }
 
         document.addEventListener('DOMContentLoaded', () => {
             setInterval(updateBigClock, 1000); updateBigClock();
             document.getElementById('password').addEventListener('keyup', (e) => { if(e.key === 'Enter') checkCredentialsAndRefresh(); });
-            
             const storedUrl = storage.get('nexus_script_url');
             if (!storedUrl || storedUrl.includes('/library/')) { state.scriptUrl = DEFAULT_SCRIPT_URL; storage.set('nexus_script_url', DEFAULT_SCRIPT_URL); }
-            
+            if(document.getElementById('scriptUrl')) document.getElementById('scriptUrl').value = state.scriptUrl;
             const savedUser = storage.get('nexus_user');
             if (savedUser) {
                 const userObj = JSON.parse(savedUser);
@@ -589,12 +525,8 @@
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
                 const navAdmin = document.getElementById('nav-admin');
                 if (navAdmin) { if (state.role === 'admin') navAdmin.classList.remove('hidden'); else navAdmin.classList.add('hidden'); }
-                
-                toggleLoginState(true);
-                refreshLogs();
-            } else {
-                toggleLoginState(false);
-            }
+                toggleLoginState(true); refreshLogs();
+            } else { toggleLoginState(false); }
             state.currentPeriodStart = new Date(new Date().setHours(0, 0, 0, 0));
             initDatePickers();
         });
@@ -613,12 +545,13 @@
         function initDatePickers() {
             const baseConfig = { mode: "range", dateFormat: "Y-m-d", altInput: true, altFormat: "j M Y", static: false, animate: true };
             if(document.getElementById("historyRange")) state.historyFP = flatpickr("#historyRange", { ...baseConfig, showMonths: 2 });
+            if(document.getElementById("reportRange")) state.reportFP = flatpickr("#reportRange", { ...baseConfig, showMonths: 1 });
         }
 
         function setQuickDate(type) {
             if (!state.historyFP) return;
             const end = new Date(); const start = new Date();
-            if (type === 'week') start.setDate(end.getDate() - 7);
+            if (type === 'week') start.setDate(end.getDate() - 7); else if(type === 'month') start.setMonth(end.getMonth() - 1);
             state.historyFP.setDate([start, end], true);
         }
 
@@ -638,76 +571,48 @@
             });
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
             document.getElementById(`nav-${tabId}`).classList.add('active');
-            
-            if(tabId === 'calendar') {
-                state.viewMode = 'day';
-                state.currentPeriodStart = new Date(new Date().setHours(0, 0, 0, 0));
-                refreshLogs(); updateStaffProfileUI();
-            }
+            if(tabId === 'calendar') { state.viewMode = 'day'; state.currentPeriodStart = new Date(new Date().setHours(0, 0, 0, 0)); refreshLogs(); updateStaffProfileUI(); }
             if(tabId === 'admin') { fetchUsersForReport(); loadLiveStatus(); }
         }
         
-        function changePeriod(delta) {
-            state.currentPeriodStart.setDate(state.currentPeriodStart.getDate() + delta);
-            state.calendarDisplayDate = new Date(state.currentPeriodStart);
-            refreshLogs(); 
-        }
-
-        function toggleCalendarDropdown(show) {
-            const overlay = document.getElementById('datePickerOverlay');
-            if (show === undefined) show = !overlay.classList.contains('hidden');
-            if (show) { overlay.classList.remove('hidden'); renderMonth(state.currentPeriodStart); } else overlay.classList.add('hidden');
-        }
-
-        function navigateMonth(delta) {
-            state.calendarDisplayDate.setMonth(state.calendarDisplayDate.getMonth() + delta);
-            renderMonth(state.calendarDisplayDate);
-        }
-
-        function selectDate(day) {
-            const newDate = new Date(state.calendarDisplayDate.getFullYear(), state.calendarDisplayDate.getMonth(), day);
-            state.currentPeriodStart = new Date(newDate.setHours(0, 0, 0, 0));
-            toggleCalendarDropdown(false); refreshLogs();
-        }
-
+        function changePeriod(delta) { state.currentPeriodStart.setDate(state.currentPeriodStart.getDate() + delta); state.calendarDisplayDate = new Date(state.currentPeriodStart); refreshLogs(); }
+        function toggleCalendarDropdown(show) { const overlay = document.getElementById('datePickerOverlay'); if (show === undefined) show = !overlay.classList.contains('hidden'); if (show) { overlay.classList.remove('hidden'); renderMonth(state.currentPeriodStart); } else overlay.classList.add('hidden'); }
+        function navigateMonth(delta) { state.calendarDisplayDate.setMonth(state.calendarDisplayDate.getMonth() + delta); renderMonth(state.calendarDisplayDate); }
+        function selectDate(day) { const newDate = new Date(state.calendarDisplayDate.getFullYear(), state.calendarDisplayDate.getMonth(), day); state.currentPeriodStart = new Date(newDate.setHours(0, 0, 0, 0)); toggleCalendarDropdown(false); refreshLogs(); }
         function renderMonth(date) {
-            const grid = document.getElementById('calendarGridContent');
-            if (!grid) return;
-            grid.innerHTML = '';
-            document.getElementById('currentMonthYear').textContent = `${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
+            const grid = document.getElementById('calendarGridContent'); if (!grid) return;
+            grid.innerHTML = ''; document.getElementById('currentMonthYear').textContent = `${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
             const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
             const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
             for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
             for (let day = 1; day <= daysInMonth; day++) {
-                const btn = document.createElement('button');
-                btn.textContent = day;
+                const btn = document.createElement('button'); btn.textContent = day;
                 const isSelected = new Date(date.getFullYear(), date.getMonth(), day).toDateString() === state.currentPeriodStart.toDateString();
                 btn.className = `p-2 rounded-full font-semibold text-sm w-full transition-colors ${isSelected ? 'bg-brand-blue text-white shadow-md' : 'text-slate-700 hover:bg-slate-100'}`;
-                btn.onclick = () => selectDate(day);
-                grid.appendChild(btn);
+                btn.onclick = () => selectDate(day); grid.appendChild(btn);
             }
         }
+        
+        function closeModal(confirmed) {
+            const modal = document.getElementById('confirmModal'); modal.classList.remove('visible', 'opacity-100'); modal.classList.add('invisible', 'opacity-0');
+            if (confirmed && state.pendingAction) {
+                 if (navigator.geolocation) navigator.geolocation.getCurrentPosition((p) => { logTime(state.pendingAction, p.coords.latitude, p.coords.longitude); state.pendingAction = null; }, (e) => { logTime(state.pendingAction); state.pendingAction = null; });
+                 else { logTime(state.pendingAction); state.pendingAction = null; }
+            } else state.pendingAction = null;
+        }
 
-        // --- AUTH & ACTIONS ---
         async function checkCredentialsAndRefresh() {
             const u = document.getElementById('username').value.trim(); const p = document.getElementById('password').value;
-            if (!u || !p) return; 
-            setLoading(true);
+            if (!u || !p) return; setLoading(true);
             let auth = { status: 'error' };
-            try { auth = await authenticateUser(u, p); } catch(e) {
-                auth = { status: 'success', role: 'staff', fullName: u, designation: 'Offline User', email: '', phone: '' };
-            }
+            try { auth = await authenticateUser(u, p); } catch(e) { auth = { status: 'success', role: 'staff', fullName: u, designation: 'Offline User', email: '', phone: '' }; }
             setLoading(false);
             if (auth.status === 'success') {
                 state.currentUser = u; state.currentFullName = auth.fullName || u; state.role = auth.role;
                 state.currentDesignation = auth.designation || "Staff Member"; state.currentEmail = auth.email || "No Email"; state.currentPhone = auth.phone || "No Phone";
-                storage.set('nexus_user', JSON.stringify({
-                    username: state.currentUser, fullName: state.currentFullName, role: state.role,
-                    designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone
-                }));
+                storage.set('nexus_user', JSON.stringify({ username: state.currentUser, fullName: state.currentFullName, role: state.role, designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone }));
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
-                toggleLoginState(true);
-                refreshLogs(); 
+                toggleLoginState(true); refreshLogs(); 
             } else { showLoginError(); }
         }
 
@@ -716,67 +621,43 @@
             try {
                 const params = new URLSearchParams({ action: 'login', username: u, password: p });
                 const res = await fetch(`${state.scriptUrl}?${params.toString()}`, { method: 'GET', mode: 'cors', credentials: 'omit' });
-                if (!res.ok) throw new Error("Network");
-                return await res.json();
+                if (!res.ok) throw new Error("Network"); return await res.json();
             } catch (err) { return { status: 'error', message: err.message }; }
         }
 
         async function handleLoginAction(type) {
-            const u = document.getElementById('username').value.trim();
-            const p = document.getElementById('password').value;
-            setLoading(true);
-            let authResult = { status: 'error' };
+            const u = document.getElementById('username').value.trim(); const p = document.getElementById('password').value;
+            setLoading(true); let authResult = { status: 'error' };
             try { authResult = await authenticateUser(u, p); } catch(e) { authResult = { status: 'error' }; }
-            
-            if (authResult.status !== 'success' && u) {
-                authResult = { status: 'success', role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), fullName: u, designation: 'Offline Mode' };
-            }
-
+            if (authResult.status !== 'success' && u) authResult = { status: 'success', role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), fullName: u, designation: 'Offline Mode' };
             setLoading(false);
             if (authResult.status === 'success') {
                 state.currentUser = u || "user"; state.currentFullName = authResult.fullName || u; state.role = authResult.role;
                 state.currentDesignation = authResult.designation || "Staff"; state.currentEmail = authResult.email || ""; state.currentPhone = authResult.phone || "";
-                
-                storage.set('nexus_user', JSON.stringify({
-                    username: state.currentUser, fullName: state.currentFullName, role: state.role,
-                    designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone
-                }));
-
+                storage.set('nexus_user', JSON.stringify({ username: state.currentUser, fullName: state.currentFullName, role: state.role, designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone }));
                 if(document.getElementById('displayUsername')) document.getElementById('displayUsername').textContent = state.currentFullName;
                 if(document.getElementById('avatarInitial')) document.getElementById('avatarInitial').textContent = state.currentFullName.charAt(0).toUpperCase();
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
                 const navAdmin = document.getElementById('nav-admin');
                 if (navAdmin) { if (state.role === 'admin') navAdmin.classList.remove('hidden'); else navAdmin.classList.add('hidden'); }
-                
                 if (type === 'Login') { switchTab('calendar'); } 
                 else {
+                    if (type === 'Out') {
+                         document.getElementById('modalTitle').textContent = "Confirm Clock Out"; document.getElementById('modalMessage').textContent = "WARNING: Are you sure you want to end your shift?";
+                         state.pendingAction = type; const modal = document.getElementById('confirmModal'); modal.classList.remove('invisible', 'opacity-0'); modal.classList.add('visible', 'opacity-100');
+                         document.getElementById('password').value = ''; return;
+                    }
                     if(document.getElementById('welcomeNameDisplay')) document.getElementById('welcomeNameDisplay').textContent = state.currentFullName; 
                     toggleLoginState(true);
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(
-                            (pos) => { logTime(type, pos.coords.latitude, pos.coords.longitude); },
-                            (err) => { logTime(type); }
-                        );
-                    } else { logTime(type); }
+                    if (navigator.geolocation) navigator.geolocation.getCurrentPosition((pos) => { logTime(type, pos.coords.latitude, pos.coords.longitude); }, (err) => { logTime(type); }); else logTime(type);
                     document.getElementById('password').value = '';
                 }
             } else { showLoginError(); }
         }
 
-        function logout() {
-            storage.remove('nexus_user'); clearInterval(state.timerInterval); clearInterval(state.breakTimerInterval); location.reload();
-        }
-
-        function setLoading(isLoading) {
-            const overlay = document.getElementById('scanningOverlay');
-            if (isLoading) { overlay.classList.remove('hidden'); overlay.classList.add('flex'); } 
-            else { overlay.classList.add('hidden'); overlay.classList.remove('flex'); }
-        }
-
-        function showLoginError() {
-            const err = document.getElementById('loginError'); err.classList.remove('hidden'); setTimeout(() => err.classList.add('hidden'), 3000);
-        }
-        
+        function logout() { storage.remove('nexus_user'); clearInterval(state.timerInterval); clearInterval(state.breakTimerInterval); location.reload(); }
+        function setLoading(isLoading) { const overlay = document.getElementById('scanningOverlay'); if (isLoading) { overlay.classList.remove('hidden'); overlay.classList.add('flex'); } else { overlay.classList.add('hidden'); overlay.classList.remove('flex'); } }
+        function showLoginError() { const err = document.getElementById('loginError'); err.classList.remove('hidden'); setTimeout(() => err.classList.add('hidden'), 3000); }
         function updateStaffProfileUI() {
             if(document.getElementById('profileAvatar')) document.getElementById('profileAvatar').textContent = (state.currentFullName || "U").charAt(0).toUpperCase();
             if(document.getElementById('profileName')) document.getElementById('profileName').textContent = state.currentFullName || "Unknown";
@@ -785,302 +666,213 @@
             if(document.getElementById('profileEmail')) document.getElementById('profileEmail').textContent = state.currentEmail || "---";
             if(document.getElementById('profilePhone')) document.getElementById('profilePhone').textContent = state.currentPhone || "---";
         }
-
-        function updateBreakTimeDisplay() {
-            if(!document.getElementById('breakTimeDisplay')) return;
-            document.getElementById('breakTimeDisplay').textContent = formatTimeDetailed(state.breakSeconds);
-            if (state.breakSeconds > 3600) document.getElementById('breakTimeDisplay').classList.add('text-rose-500');
-            else document.getElementById('breakTimeDisplay').classList.remove('text-rose-500');
-        }
+        function updateBreakTimeDisplay() { if(!document.getElementById('breakTimeDisplay')) return; document.getElementById('breakTimeDisplay').textContent = formatTimeDetailed(state.breakSeconds); if (state.breakSeconds > 3600) document.getElementById('breakTimeDisplay').classList.add('text-rose-500'); else document.getElementById('breakTimeDisplay').classList.remove('text-rose-500'); }
+        function updateOvertimeDisplay(effectiveTime) { if(!document.getElementById('overtimeDisplay')) return; let overtimeSeconds = 0; if (effectiveTime > DAILY_GOAL_SECONDS) overtimeSeconds = effectiveTime - DAILY_GOAL_SECONDS; document.getElementById('overtimeDisplay').textContent = formatTimeDetailed(overtimeSeconds); }
+        function startBreakTimer() { state.lastBreakInTime = new Date(); if (state.breakTimerInterval) clearInterval(state.breakTimerInterval); state.breakTimerInterval = setInterval(() => { if (state.isBreak) { state.breakSeconds++; updateBreakTimeDisplay(); } }, 1000); }
+        function stopBreakTimer() { if (state.breakTimerInterval) { clearInterval(state.breakTimerInterval); state.breakTimerInterval = null; } state.lastBreakInTime = null; }
         
-        function updateOvertimeDisplay(effectiveTime) {
-            if(!document.getElementById('overtimeDisplay')) return;
-            let overtimeSeconds = 0;
-            if (effectiveTime > DAILY_GOAL_SECONDS) overtimeSeconds = effectiveTime - DAILY_GOAL_SECONDS;
-            document.getElementById('overtimeDisplay').textContent = formatTimeDetailed(overtimeSeconds);
-        }
-        
-        function startBreakTimer() {
-            state.lastBreakInTime = new Date();
-            if (state.breakTimerInterval) clearInterval(state.breakTimerInterval);
-            state.breakTimerInterval = setInterval(() => {
-                if (state.isBreak) { state.breakSeconds++; updateBreakTimeDisplay(); }
-            }, 1000);
-        }
-
-        function stopBreakTimer() {
-            if (state.breakTimerInterval) { clearInterval(state.breakTimerInterval); state.breakTimerInterval = null; }
-            state.lastBreakInTime = null;
-        }
-
         function updateUI() {
             const statusDot = document.getElementById('statusDot'); const statusText = document.getElementById('statusText');
-            const btnIn = document.getElementById('btnIn'); const btnOut = document.getElementById('btnOut');
-            const btnBreakIn = document.getElementById('btnBreakIn'); const btnBreakOut = document.getElementById('btnBreakOut');
-            const breakRow = document.getElementById('breakRow');
-
+            const btnIn = document.getElementById('btnIn'); const btnOut = document.getElementById('btnOut'); const btnBreakIn = document.getElementById('btnBreakIn'); const btnBreakOut = document.getElementById('btnBreakOut'); const breakRow = document.getElementById('breakRow');
             if(!statusDot) return;
-
-            statusDot.className = 'w-2.5 h-2.5 rounded-full';
-            statusText.classList.remove('text-emerald-500', 'text-rose-500', 'text-brand-gold', 'text-slate-800');
-            const setBtnState = (btn, enabled) => {
-                btn.disabled = !enabled; btn.classList.toggle('opacity-50', !enabled); btn.classList.toggle('cursor-not-allowed', !enabled);
-            };
-
+            statusDot.className = 'w-2.5 h-2.5 rounded-full'; statusText.classList.remove('text-emerald-500', 'text-rose-500', 'text-brand-gold', 'text-slate-800');
+            const setBtnState = (btn, enabled) => { btn.disabled = !enabled; btn.classList.toggle('opacity-50', !enabled); btn.classList.toggle('cursor-not-allowed', !enabled); };
             if (state.hasClockedOutToday) {
-                 statusDot.classList.add('bg-slate-500'); statusText.textContent = "Finished"; statusText.classList.add('text-slate-500');
-                 setBtnState(btnIn, false); setBtnState(btnOut, false); breakRow.classList.add('hidden');
+                 statusDot.classList.add('bg-slate-500'); statusText.textContent = "Finished"; statusText.classList.add('text-slate-500'); setBtnState(btnIn, false); setBtnState(btnOut, false); breakRow.classList.add('hidden');
             } else if (state.isClockedIn) {
                  breakRow.classList.remove('hidden');
                  if (state.isBreak) {
-                      statusDot.classList.add('bg-brand-gold', 'animate-pulse'); statusText.textContent = "On Break"; statusText.classList.add('text-brand-gold');
-                      setBtnState(btnIn, false); setBtnState(btnOut, false);
-                      btnBreakIn.classList.add('hidden'); btnBreakOut.classList.remove('hidden');
+                      statusDot.classList.add('bg-brand-gold', 'animate-pulse'); statusText.textContent = "On Break"; statusText.classList.add('text-brand-gold'); setBtnState(btnIn, false); setBtnState(btnOut, false); btnBreakIn.classList.add('hidden'); btnBreakOut.classList.remove('hidden');
                  } else {
-                      statusDot.classList.add('bg-emerald-500', 'animate-pulse'); statusText.textContent = "Clocked In"; statusText.classList.add('text-emerald-500');
-                      setBtnState(btnIn, false); setBtnState(btnOut, true);
-                      btnBreakIn.classList.remove('hidden'); btnBreakOut.classList.add('hidden');
+                      statusDot.classList.add('bg-emerald-500', 'animate-pulse'); statusText.textContent = "Clocked In"; statusText.classList.add('text-emerald-500'); setBtnState(btnIn, false); setBtnState(btnOut, true); btnBreakIn.classList.remove('hidden'); btnBreakOut.classList.add('hidden');
                  }
             } else {
-                 statusDot.classList.add('bg-slate-400'); statusText.textContent = "Ready"; statusText.classList.add('text-slate-700');
-                 setBtnState(btnIn, true); setBtnState(btnOut, false); breakRow.classList.add('hidden');
+                 statusDot.classList.add('bg-slate-400'); statusText.textContent = "Ready"; statusText.classList.add('text-slate-700'); setBtnState(btnIn, true); setBtnState(btnOut, false); breakRow.classList.add('hidden');
             }
         }
         
         function logTime(type, lat = null, lng = null) {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            if (type === 'In') {
-                state.startTime = now; state.isClockedIn = true; state.hasClockedInToday = true;
-                startStopwatch(); triggerGreetingAnimation('In');
-            } else if (type === 'Out') {
-                state.isClockedIn = false; state.hasClockedOutToday = true;
-                clearInterval(state.timerInterval); stopBreakTimer();
-                state.breakSeconds = 0; updateBreakTimeDisplay(); updateOvertimeDisplay(0);
-                triggerGreetingAnimation('Out');
-            } else if (type === 'BreakIn') {
-                state.isBreak = true; state.breakCount++;
-                if(document.getElementById('breakCountDisplay')) document.getElementById('breakCountDisplay').textContent = `${state.breakCount} / ${MAX_BREAKS}`;
-                startBreakTimer();
-            } else if (type === 'BreakOut') {
-                state.isBreak = false; stopBreakTimer();
-            }
+            const now = new Date(); const timeString = now.toLocaleTimeString();
+            if (type === 'In') { state.startTime = now; state.isClockedIn = true; state.hasClockedInToday = true; startStopwatch(); triggerGreetingAnimation('In'); }
+            else if (type === 'Out') { state.isClockedIn = false; state.hasClockedOutToday = true; clearInterval(state.timerInterval); stopBreakTimer(); state.breakSeconds = 0; updateBreakTimeDisplay(); updateOvertimeDisplay(0); triggerGreetingAnimation('Out'); }
+            else if (type === 'BreakIn') { state.isBreak = true; state.breakCount++; if(document.getElementById('breakCountDisplay')) document.getElementById('breakCountDisplay').textContent = `${state.breakCount} / ${MAX_BREAKS}`; startBreakTimer(); }
+            else if (type === 'BreakOut') { state.isBreak = false; stopBreakTimer(); }
             updateUI(); sendDataToSheet(type, timeString, lat, lng);
         }
 
         function triggerGreetingAnimation(type) {
-            const overlay = document.getElementById('welcomeOverlay');
-            const content = document.getElementById('welcomeContent');
-            const title = document.getElementById('welcomeTitle');
-            const icon = document.getElementById('welcomeIcon');
-            const now = new Date(); const hour = now.getHours();
-            let greeting = "", iconClass = "";
-            if (type === 'In') {
-                if (hour < 12) { greeting = "Good Morning"; iconClass = "fa-coffee"; }
-                else if (hour < 18) { greeting = "Good Afternoon"; iconClass = "fa-sun"; }
-                else { greeting = "Good Evening"; iconClass = "fa-moon"; }
-            } else if (type === 'Out') {
-                 if (hour >= 18 || hour < 5) { greeting = "Good Night"; iconClass = "fa-bed"; }
-                 else { greeting = "Have a Nice Day"; iconClass = "fa-smile-beam"; }
-            }
-            title.textContent = greeting;
-            icon.className = `fas ${iconClass} text-6xl text-brand-gold mb-6 animate-pulse-gold`;
-            overlay.classList.remove('opacity-0', 'pointer-events-none'); overlay.classList.add('opacity-100', 'pointer-events-auto');
-            content.classList.remove('scale-90'); content.classList.add('scale-100');
-            setTimeout(() => {
-                overlay.classList.remove('opacity-100', 'pointer-events-auto'); overlay.classList.add('opacity-0', 'pointer-events-none');
-                content.classList.remove('scale-100'); content.classList.add('scale-90');
-            }, 3000);
+            const overlay = document.getElementById('welcomeOverlay'); const content = document.getElementById('welcomeContent'); const title = document.getElementById('welcomeTitle'); const icon = document.getElementById('welcomeIcon'); const now = new Date(); const hour = now.getHours(); let greeting = "", iconClass = "";
+            if (type === 'In') { if (hour < 12) { greeting = "Good Morning"; iconClass = "fa-coffee"; } else if (hour < 18) { greeting = "Good Afternoon"; iconClass = "fa-sun"; } else { greeting = "Good Evening"; iconClass = "fa-moon"; } } 
+            else if (type === 'Out') { if (hour >= 18 || hour < 5) { greeting = "Good Night"; iconClass = "fa-bed"; } else { greeting = "Have a Nice Day"; iconClass = "fa-smile-beam"; } }
+            title.textContent = greeting; icon.className = `fas ${iconClass} text-6xl text-brand-gold mb-6 animate-pulse-gold`;
+            overlay.classList.remove('opacity-0', 'pointer-events-none'); overlay.classList.add('opacity-100', 'pointer-events-auto'); content.classList.remove('scale-90'); content.classList.add('scale-100');
+            setTimeout(() => { overlay.classList.remove('opacity-100', 'pointer-events-auto'); overlay.classList.add('opacity-0', 'pointer-events-none'); content.classList.remove('scale-100'); content.classList.add('scale-90'); }, 3000);
         }
 
-        function startStopwatch() {
-            if (state.timerInterval) clearInterval(state.timerInterval);
-            state.timerInterval = setInterval(() => {
-                state.elapsedSeconds++;
-                const h = Math.floor(state.elapsedSeconds / 3600).toString().padStart(2, '0');
-                const m = Math.floor((state.elapsedSeconds % 3600) / 60).toString().padStart(2, '0');
-                const s = (state.elapsedSeconds % 60).toString().padStart(2, '0');
-                const timeStr = `${h}:${m}:${s}`;
-                if(document.getElementById('stopwatch')) document.getElementById('stopwatch').textContent = timeStr;
-                if(document.getElementById('stopwatchMini')) document.getElementById('stopwatchMini').textContent = timeStr;
-                const effectiveTime = state.elapsedSeconds - state.breakSeconds; 
-                updateOvertimeDisplay(effectiveTime);
-            }, 1000);
-        }
-
-        function sendDataToSheet(type, time, lat, lng) {
-            if (!state.scriptUrl) { logToConsole("Offline Mode."); return; }
-            const payload = { action: 'log', name: state.currentFullName, uid: state.currentUser, type: type, time: time, lat: lat, lng: lng };
-            fetch(state.scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
-            .then(() => { logToConsole(`${type} recorded.`); setTimeout(refreshLogs, 2000); })
-            .catch(e => logToConsole("Sync Error: " + e));
-        }
-
-        function filterHistoryByRange() {
-            const selectedDates = state.historyFP.selectedDates;
-            if (selectedDates.length !== 2) { alert("Select valid date range."); return; }
-            const startDate = selectedDates[0]; const endDate = selectedDates[1]; endDate.setHours(23, 59, 59, 999); 
-            const filteredLogs = state.logsCache.filter(log => {
-                let logTimestamp; if (log[7]) logTimestamp = new Date(log[7]); else logTimestamp = new Date(`${log[0]} ${log[4]}`);
-                return logTimestamp >= startDate && logTimestamp <= endDate;
-            });
-            renderTable(filteredLogs);
-            if (document.getElementById('logUserName')) document.getElementById('logUserName').textContent = `${state.currentFullName} (Search)`;
-        }
+        function startStopwatch() { if (state.timerInterval) clearInterval(state.timerInterval); state.timerInterval = setInterval(() => { state.elapsedSeconds++; const h = Math.floor(state.elapsedSeconds / 3600).toString().padStart(2, '0'); const m = Math.floor((state.elapsedSeconds % 3600) / 60).toString().padStart(2, '0'); const s = (state.elapsedSeconds % 60).toString().padStart(2, '0'); const timeStr = `${h}:${m}:${s}`; if(document.getElementById('stopwatch')) document.getElementById('stopwatch').textContent = timeStr; if(document.getElementById('stopwatchMini')) document.getElementById('stopwatchMini').textContent = timeStr; const effectiveTime = state.elapsedSeconds - state.breakSeconds; updateOvertimeDisplay(effectiveTime); }, 1000); }
+        function sendDataToSheet(type, time, lat, lng) { if (!state.scriptUrl) { logToConsole("Offline Mode."); return; } const payload = { action: 'log', name: state.currentFullName, uid: state.currentUser, type: type, time: time, lat: lat, lng: lng }; fetch(state.scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).then(() => { logToConsole(`${type} recorded.`); setTimeout(refreshLogs, 2000); }).catch(e => logToConsole("Sync Error: " + e)); }
+        function filterHistoryByRange() { const selectedDates = state.historyFP.selectedDates; if (selectedDates.length !== 2) { alert("Select valid date range."); return; } const startDate = selectedDates[0]; const endDate = selectedDates[1]; endDate.setHours(23, 59, 59, 999); const filteredLogs = state.logsCache.filter(log => { let logTimestamp; if (log[7]) logTimestamp = new Date(log[7]); else logTimestamp = new Date(`${log[0]} ${log[4]}`); return logTimestamp >= startDate && logTimestamp <= endDate; }); renderTable(filteredLogs); if (document.getElementById('logUserName')) document.getElementById('logUserName').textContent = `${state.currentFullName} (Search)`; }
         
         async function refreshLogs() {
             if (!state.scriptUrl) { renderTable([]); return; }
             const tbody = document.getElementById('logsTableBody');
             try {
-                const sep = state.scriptUrl.includes('?') ? '&' : '?';
-                const response = await fetch(`${state.scriptUrl}${sep}action=getLogs`, { method: 'GET', mode: 'cors', credentials: 'omit' });
+                const sep = state.scriptUrl.includes('?') ? '&' : '?'; const response = await fetch(`${state.scriptUrl}${sep}action=getLogs`, { method: 'GET', mode: 'cors', credentials: 'omit' });
                 if (!response.ok) throw new Error("HTTP " + response.status);
-                const data = await response.json();
-                const userAllLogs = data.filter(row => row[1] === state.currentUser);
-                state.logsCache = userAllLogs; 
-                
+                const data = await response.json(); const userAllLogs = data.filter(row => row[1] === state.currentUser); state.logsCache = userAllLogs; 
                 const todayStart = new Date(); todayStart.setHours(0,0,0,0); const todayEnd = new Date(); todayEnd.setHours(23,59,59,999);
-                const todayLogs = userAllLogs.filter(row => {
-                     let logTime; if(row[7]) logTime = new Date(row[7]); else logTime = new Date(`${row[0]} ${row[4]}`);
-                     return logTime >= todayStart && logTime <= todayEnd;
-                });
-                
+                const todayLogs = userAllLogs.filter(row => { let logTime; if(row[7]) logTime = new Date(row[7]); else logTime = new Date(`${row[0]} ${row[4]}`); return logTime >= todayStart && logTime <= todayEnd; });
                 todayLogs.sort((a,b) => { const tA = a[7] ? new Date(a[7]) : new Date(`${a[0]} ${a[4]}`); const tB = b[7] ? new Date(b[7]) : new Date(`${b[0]} ${b[4]}`); return tA - tB; });
-                
                 state.hasClockedInToday = false; state.hasClockedOutToday = false; state.isClockedIn = false; state.isBreak = false; state.breakCount = 0;
                 let workSeconds = 0; let breakSeconds = 0; let lastInTime = null; let lastBreakInTime = null; let firstInTime = null;
-
                 todayLogs.forEach(log => {
                     const action = log[3]; const timestamp = new Date(log[7] || `${log[0]} ${log[4]}`).getTime(); 
-                    if (action === 'In') {
-                        state.hasClockedInToday = true; state.isClockedIn = true; lastInTime = timestamp;
-                        if (!firstInTime) { firstInTime = timestamp; state.startTime = new Date(log[7]); }
-                    } else if (action === 'Out') {
-                        state.hasClockedOutToday = true; state.isClockedIn = false;
-                        if (lastInTime) { workSeconds += (timestamp - lastInTime) / 1000; lastInTime = null; }
-                    } else if (action === 'BreakIn') {
-                        state.isBreak = true; state.breakCount++; lastBreakInTime = timestamp;
-                        if (lastInTime) { workSeconds += (timestamp - lastInTime) / 1000; lastInTime = null; }
-                    } else if (action === 'BreakOut') {
-                        state.isBreak = false;
-                        if (lastBreakInTime) { breakSeconds += (timestamp - lastBreakInTime) / 1000; lastBreakInTime = null; }
-                        lastInTime = timestamp; 
-                    }
+                    if (action === 'In') { state.hasClockedInToday = true; state.isClockedIn = true; lastInTime = timestamp; if (!firstInTime) { firstInTime = timestamp; state.startTime = new Date(log[7]); } } 
+                    else if (action === 'Out') { state.hasClockedOutToday = true; state.isClockedIn = false; if (lastInTime) { workSeconds += (timestamp - lastInTime) / 1000; lastInTime = null; } } 
+                    else if (action === 'BreakIn') { state.isBreak = true; state.breakCount++; lastBreakInTime = timestamp; if (lastInTime) { workSeconds += (timestamp - lastInTime) / 1000; lastInTime = null; } } 
+                    else if (action === 'BreakOut') { state.isBreak = false; if (lastBreakInTime) { breakSeconds += (timestamp - lastBreakInTime) / 1000; lastBreakInTime = null; } lastInTime = timestamp; }
                 });
-                
-                const now = new Date().getTime();
-                if (state.isClockedIn && state.isBreak && lastBreakInTime) { breakSeconds += (now - lastBreakInTime) / 1000; } 
-                else if (state.isClockedIn && !state.isBreak && lastInTime) { workSeconds += (now - lastInTime) / 1000; }
-                
+                const now = new Date().getTime(); if (state.isClockedIn && state.isBreak && lastBreakInTime) { breakSeconds += (now - lastBreakInTime) / 1000; } else if (state.isClockedIn && !state.isBreak && lastInTime) { workSeconds += (now - lastInTime) / 1000; }
                 state.elapsedSeconds = Math.floor(workSeconds); state.breakSeconds = Math.floor(breakSeconds);
                 if(document.getElementById('breakCountDisplay')) document.getElementById('breakCountDisplay').textContent = `${state.breakCount} / ${MAX_BREAKS}`;
-                updateUI(); updateBreakTimeDisplay();
-                if (state.isClockedIn && !state.isBreak) startStopwatch();
-                else if (state.isBreak) startBreakTimer();
-
-                const start = new Date(state.currentPeriodStart);
-                const monthStart = new Date(start.getFullYear(), start.getMonth(), 1);
-                const monthEnd = new Date(start.getFullYear(), start.getMonth() + 1, 0, 23, 59, 59);
-                const monthLogs = userAllLogs.filter(row => {
-                    let logTimestamp; if (row[7]) logTimestamp = new Date(row[7]); else logTimestamp = new Date(`${row[0]} ${row[4]}`);
-                    return logTimestamp >= monthStart && logTimestamp <= monthEnd;
-                });
-                renderTable(monthLogs); renderCalendar(); 
-                if (state.historyFP) state.historyFP.clear();
-                if (document.getElementById('logUserName')) document.getElementById('logUserName').textContent = state.currentFullName;
+                updateUI(); updateBreakTimeDisplay(); if (state.isClockedIn && !state.isBreak) startStopwatch(); else if (state.isBreak) startBreakTimer();
+                const start = new Date(state.currentPeriodStart); const monthStart = new Date(start.getFullYear(), start.getMonth(), 1); const monthEnd = new Date(start.getFullYear(), start.getMonth() + 1, 0, 23, 59, 59);
+                const monthLogs = userAllLogs.filter(row => { let logTimestamp; if (row[7]) logTimestamp = new Date(row[7]); else logTimestamp = new Date(`${row[0]} ${row[4]}`); return logTimestamp >= monthStart && logTimestamp <= monthEnd; });
+                renderTable(monthLogs); renderCalendar(); if (state.historyFP) state.historyFP.clear(); if (document.getElementById('logUserName')) document.getElementById('logUserName').textContent = state.currentFullName;
             } catch (error) { if(tbody) tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-rose-400 italic">Error connecting to database.</td></tr>`; }
         }
         
         function getDailySummaries(logs) {
-            const dailyGroups = {};
-            logs.sort((a, b) => { const tA = a[7] ? new Date(a[7]) : new Date(`${a[0]} ${a[4]}`); const tB = b[7] ? new Date(b[7]) : new Date(`${b[0]} ${b[4]}`); return tA - tB; });
-            logs.forEach(log => {
-                const dateStr = formatDateDisplay(log[0]);
-                if (!dailyGroups[dateStr]) dailyGroups[dateStr] = { date: dateStr, rawDateObj: log[7] ? new Date(log[7]) : new Date(log[0]), logs: [] };
-                dailyGroups[dateStr].logs.push(log);
-            });
+            const dailyGroups = {}; logs.sort((a, b) => { const tA = a[7] ? new Date(a[7]) : new Date(`${a[0]} ${a[4]}`); const tB = b[7] ? new Date(b[7]) : new Date(`${b[0]} ${b[4]}`); return tA - tB; });
+            logs.forEach(log => { const dateStr = formatDateDisplay(log[0]); if (!dailyGroups[dateStr]) dailyGroups[dateStr] = { date: dateStr, rawDateObj: log[7] ? new Date(log[7]) : new Date(log[0]), logs: [] }; dailyGroups[dateStr].logs.push(log); });
             const rows = Object.values(dailyGroups).map(group => {
                 let firstIn = null; let lastOut = null; let totalBreakSeconds = 0; let breakStartTime = null; let lastAction = null;
-                group.logs.forEach(log => {
-                    const action = log[3]; let time; if (log[7]) time = new Date(log[7]); else time = new Date(`${log[0]} ${log[4]}`);
-                    if (action === 'In') { if (!firstIn) firstIn = time; } 
-                    else if (action === 'Out') { lastOut = time; } 
-                    else if (action === 'BreakIn') { breakStartTime = time; } 
-                    else if (action === 'BreakOut' && breakStartTime) { totalBreakSeconds += (time - breakStartTime) / 1000; breakStartTime = null; }
-                    lastAction = action;
-                });
-                let grossSeconds = 0;
-                if (group.date === formatDateDisplay(new Date()) && (lastAction === 'In' || lastAction === 'BreakOut')) {
-                    if (firstIn) grossSeconds = (new Date() - firstIn) / 1000; lastOut = "Active"; 
-                } else if (firstIn && lastOut) grossSeconds = (lastOut - firstIn) / 1000;
-                
-                let netSeconds = Math.max(0, grossSeconds - totalBreakSeconds);
-                let overtimeSeconds = Math.max(0, netSeconds - DAILY_GOAL_SECONDS);
-                return {
-                    date: group.date, checkIn: firstIn ? formatTimeAMPM(firstIn) : '-', checkOut: lastOut === "Active" ? "Active Now" : (lastOut ? formatTimeAMPM(lastOut) : '-'),
-                    breakTotal: totalBreakSeconds > 0 ? formatTime(totalBreakSeconds) : '-', netDuration: netSeconds > 0 ? formatTime(netSeconds) : '-',
-                    sortTime: group.rawDateObj.getTime()
-                };
+                group.logs.forEach(log => { const action = log[3]; let time; if (log[7]) time = new Date(log[7]); else time = new Date(`${log[0]} ${log[4]}`); if (action === 'In') { if (!firstIn) firstIn = time; } else if (action === 'Out') { lastOut = time; } else if (action === 'BreakIn') { breakStartTime = time; } else if (action === 'BreakOut' && breakStartTime) { totalBreakSeconds += (time - breakStartTime) / 1000; breakStartTime = null; } lastAction = action; });
+                let grossSeconds = 0; if (group.date === formatDateDisplay(new Date()) && (lastAction === 'In' || lastAction === 'BreakOut')) { if (firstIn) grossSeconds = (new Date() - firstIn) / 1000; lastOut = "Active"; } else if (firstIn && lastOut) grossSeconds = (lastOut - firstIn) / 1000;
+                let netSeconds = Math.max(0, grossSeconds - totalBreakSeconds); let overtimeSeconds = Math.max(0, netSeconds - DAILY_GOAL_SECONDS);
+                return { date: group.date, checkIn: firstIn ? formatTimeAMPM(firstIn) : '-', checkOut: lastOut === "Active" ? "Active Now" : (lastOut ? formatTimeAMPM(lastOut) : '-'), breakTotal: totalBreakSeconds > 0 ? formatTime(totalBreakSeconds) : '-', netDuration: netSeconds > 0 ? formatTime(netSeconds) : '-', sortTime: group.rawDateObj.getTime() };
             });
-            rows.sort((a, b) => b.sortTime - a.sortTime);
-            return rows;
+            rows.sort((a, b) => b.sortTime - a.sortTime); return rows;
         }
 
         function renderTable(logs) {
-            const tbody = document.getElementById('logsTableBody');
-            if(!tbody) return; tbody.innerHTML = '';
-            if (logs.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-slate-400 italic">No activity found.</td></tr>`; return; }
-            getDailySummaries(logs).forEach(row => {
-                const tr = document.createElement('tr');
-                tr.className = "group border-b border-slate-100 hover:bg-slate-50 transition-colors";
-                tr.innerHTML = `<td class="py-4 px-4 text-slate-600 font-mono text-xs">${row.date}</td><td class="py-4 px-4 font-mono text-emerald-600 text-xs font-bold">${row.checkIn}</td><td class="py-4 px-4 font-mono text-xs font-bold ${row.checkOut === 'Active Now' ? 'text-emerald-500 animate-pulse' : 'text-slate-800'}">${row.checkOut}</td><td class="py-4 px-4 font-mono text-brand-gold text-xs text-center">${row.breakTotal}</td><td class="py-4 px-4 font-mono text-brand-blue font-bold text-xs text-right">${row.netDuration}</td>`;
-                tbody.appendChild(tr);
-            });
+            const tbody = document.getElementById('logsTableBody'); if(!tbody) return; tbody.innerHTML = ''; if (logs.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-slate-400 italic">No activity found.</td></tr>`; return; }
+            getDailySummaries(logs).forEach(row => { const tr = document.createElement('tr'); tr.className = "group border-b border-slate-100 hover:bg-slate-50 transition-colors"; tr.innerHTML = `<td class="py-4 px-4 text-slate-600 font-mono text-xs">${row.date}</td><td class="py-4 px-4 font-mono text-emerald-600 text-xs font-bold">${row.checkIn}</td><td class="py-4 px-4 font-mono text-xs font-bold ${row.checkOut === 'Active Now' ? 'text-emerald-500 animate-pulse' : 'text-slate-800'}">${row.checkOut}</td><td class="py-4 px-4 font-mono text-brand-gold text-xs text-center">${row.breakTotal}</td><td class="py-4 px-4 font-mono text-brand-blue font-bold text-xs text-right">${row.netDuration}</td>`; tbody.appendChild(tr); });
         }
         
         function renderCalendar() {
-            const body = document.getElementById('calendarBody');
-            if(!body) return; body.innerHTML = '';
-            const dayDate = new Date(state.currentPeriodStart);
-            if(document.getElementById('periodTitle')) document.getElementById('periodTitle').textContent = formatDateDisplay(dayDate); 
-            const cell = document.createElement('div');
-            cell.className = `glass rounded-2xl p-6 border border-slate-200 relative flex flex-col min-h-[400px] w-full bg-white`;
-            cell.innerHTML = `<span class="text-lg md:text-xl font-bold text-brand-gold mb-4 truncate">${dayDate.toLocaleDateString('en-US', {weekday: 'long'})}</span>`;
-            
-            const dayLogs = state.logsCache.filter(log => {
-                let logDate; if (log[7]) logDate = new Date(log[7]); else logDate = new Date(`${log[0]} ${log[4]}`);
-                return logDate.getDate() === dayDate.getDate() && logDate.getMonth() === dayDate.getMonth() && logDate.getFullYear() === dayDate.getFullYear();
-            });
-            
-            let summaryHtml = ''; let firstInTime = null; let lastOutTime = null; let totalBreakSeconds = 0; let workSeconds = 0; let lastInTimestamp = null;
+            const body = document.getElementById('calendarBody'); if(!body) return; body.innerHTML = '';
+            const dayDate = new Date(state.currentPeriodStart); if(document.getElementById('periodTitle')) document.getElementById('periodTitle').textContent = formatDateDisplay(dayDate); 
+            const cell = document.createElement('div'); cell.className = `glass rounded-2xl p-6 border border-slate-200 relative flex flex-col min-h-[400px] w-full bg-white`; cell.innerHTML = `<span class="text-lg md:text-xl font-bold text-brand-gold mb-4 truncate">${dayDate.toLocaleDateString('en-US', {weekday: 'long'})}</span>`;
+            const dayLogs = state.logsCache.filter(log => { let logDate; if (log[7]) logDate = new Date(log[7]); else logDate = new Date(`${log[0]} ${log[4]}`); return logDate.getDate() === dayDate.getDate() && logDate.getMonth() === dayDate.getMonth() && logDate.getFullYear() === dayDate.getFullYear(); });
+            let summaryHtml = ''; let firstInTime = null; let lastOutTime = null; 
             dayLogs.sort((a, b) => { const tA = a[7] ? new Date(a[7]) : new Date(`${a[0]} ${a[4]}`); const tB = b[7] ? new Date(b[7]) : new Date(`${b[0]} ${b[4]}`); return tA - tB; });
-            dayLogs.forEach(log => {
-                const action = log[3]; const time = log[4]; let timestamp; if (log[7]) timestamp = new Date(log[7]); else timestamp = new Date(`${log[0]} ${log[4]}`);
-                if (action === 'In') { if (!firstInTime) firstInTime = time; lastInTimestamp = timestamp; } 
-                else if (action === 'Out' && lastInTimestamp) { lastOutTime = time; workSeconds += (timestamp - lastInTimestamp) / 1000; lastInTimestamp = null; } 
-                else if (action === 'BreakIn') { lastInTimestamp = timestamp; } // Simplifying for display logic
-                else if (action === 'BreakOut') { totalBreakSeconds += (timestamp - lastInTimestamp) / 1000; }
-            });
-            const todayStr = new Date().toDateString(); const logDayStr = dayDate.toDateString();
-            if (lastInTimestamp && todayStr === logDayStr) { workSeconds += (new Date() - lastInTimestamp) / 1000; }
-            
-            if (dayLogs.length > 0) {
-                summaryHtml += `<div class="mb-6 space-y-2"><div class="flex justify-between items-center text-xs font-bold text-emerald-600">First In: <span class="font-mono text-slate-800">${formatTimeDisplay(firstInTime)}</span></div>`;
-                if (lastOutTime) summaryHtml += `<div class="flex justify-between items-center text-xs font-bold text-rose-500">Last Out: <span class="font-mono text-slate-800">${formatTimeDisplay(lastOutTime)}</span></div>`;
-                else summaryHtml += `<div class="flex justify-between items-center text-xs font-bold text-brand-gold animate-pulse">Status: <span class="font-mono text-slate-800">Active</span></div>`;
-                summaryHtml += `</div>`;
-            } else { summaryHtml = `<div class="mt-auto text-center text-slate-400 italic p-6 text-sm">No activity logged.</div>`; }
-            cell.innerHTML += `<div class="mt-auto space-y-4">${summaryHtml}</div>`;
-            body.appendChild(cell);
-            body.style.gridTemplateColumns = '1fr';
+            dayLogs.forEach(log => { const action = log[3]; const time = log[4]; if (action === 'In' && !firstInTime) firstInTime = time; else if (action === 'Out') lastOutTime = time; });
+            if (dayLogs.length > 0) { summaryHtml += `<div class="mb-6 space-y-2"><div class="flex justify-between items-center text-xs font-bold text-emerald-600">First In: <span class="font-mono text-slate-800">${formatTimeDisplay(firstInTime)}</span></div>`; if (lastOutTime) summaryHtml += `<div class="flex justify-between items-center text-xs font-bold text-rose-500">Last Out: <span class="font-mono text-slate-800">${formatTimeDisplay(lastOutTime)}</span></div>`; else summaryHtml += `<div class="flex justify-between items-center text-xs font-bold text-brand-gold animate-pulse">Status: <span class="font-mono text-slate-800">Active</span></div>`; summaryHtml += `</div>`; } else { summaryHtml = `<div class="mt-auto text-center text-slate-400 italic p-6 text-sm">No activity logged.</div>`; }
+            cell.innerHTML += `<div class="mt-auto space-y-4">${summaryHtml}</div>`; body.appendChild(cell); body.style.gridTemplateColumns = '1fr';
         }
 
-        async function fetchUsersForReport() { /* ... admin functions ... */ }
-        async function loadLiveStatus() { /* ... admin functions ... */ }
-        function logToConsole(msg) { 
-            const el = document.getElementById('consoleLog'); 
-            if(el) { el.innerHTML += `<span class="text-emerald-400">> ${msg}</span><br>`; el.scrollTop = el.scrollHeight; } 
+        // --- ADMIN FUNCTIONS ---
+        async function fetchUsersForReport() {
+            const select = document.getElementById('reportUserSelect'); const tbody = document.getElementById('userListBody');
+            if(select) select.innerHTML = '<option value="loading">Loading...</option>'; if(tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-slate-500">Loading...</td></tr>';
+            try {
+                const response = await fetch(state.scriptUrl + "?action=getUsers", { method: 'GET', mode: 'cors', credentials: 'omit' });
+                const users = await response.json(); state.userListCache = users; 
+                if(select) { select.innerHTML = '<option value="all">All Staff</option>'; users.forEach(u => select.innerHTML += `<option value="${u.username}">${u.fullName || u.username}</option>`); }
+                if(tbody) { tbody.innerHTML = ''; users.forEach(user => {
+                    const row = document.createElement('tr'); row.className = "border-b border-slate-100 hover:bg-slate-50 transition-colors";
+                    row.innerHTML = `<td class="py-3 px-4 text-slate-700 font-mono">${user.username}</td><td class="py-3 px-4 font-bold text-slate-900">${user.fullName || '-'}</td><td class="py-3 px-4 text-slate-500 text-xs">${user.designation || '-'}</td><td class="py-3 px-4"><span class="px-2 py-1 rounded text-xs uppercase font-bold ${user.role === 'admin' ? 'bg-brand-gold text-white' : 'bg-slate-200 text-slate-600'}">${user.role}</span></td><td class="py-3 px-4 flex gap-2"><button onclick="startEditUser('${user.username}')" class="text-brand-blue hover:text-blue-600 px-2 py-1 bg-brand-blue/10 rounded transition-colors" title="Edit"><i class="fas fa-pen text-xs"></i></button><button onclick="deleteUser('${user.username}')" class="text-rose-500 hover:text-rose-600 px-2 py-1 bg-rose-100 rounded transition-colors" title="Delete"><i class="fas fa-trash text-xs"></i></button></td>`;
+                    tbody.appendChild(row);
+                }); }
+            } catch (e) { logToConsole("Error fetching users: " + e); if(tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-rose-500">Error loading data</td></tr>'; }
         }
+
+        async function loadLiveStatus() {
+            const grid = document.getElementById('liveStatusGrid'); if(!grid) return; grid.innerHTML = '<div class="col-span-full flex justify-center py-8"><div class="loader"></div></div>';
+            try {
+                const [usersRes, logsRes] = await Promise.all([ fetch(state.scriptUrl + "?action=getUsers", { mode: 'cors', credentials: 'omit' }), fetch(state.scriptUrl + "?action=getLogs", { mode: 'cors', credentials: 'omit' }) ]);
+                const users = await usersRes.json(); const logs = await logsRes.json();
+                const userLatest = {}; logs.sort((a, b) => new Date(a[7]) - new Date(b[7]));
+                logs.forEach(l => userLatest[l[1]] = { status: l[3], time: l[4], timestamp: l[7] });
+                grid.innerHTML = '';
+                users.forEach(user => {
+                    const last = userLatest[user.username]; let statusColor = 'bg-slate-400', statusText = 'Offline', icon = 'fa-power-off', lastTime = '-', lastLabel = 'No Activity';
+                    if (last) {
+                        const isToday = new Date(last.timestamp).toDateString() === new Date().toDateString();
+                        lastTime = formatTimeDisplay(last.time); lastLabel = isToday ? 'Last Action' : 'Last Seen: ' + formatDateDisplay(last.timestamp);
+                        if (!isToday) { statusColor = 'bg-slate-300'; statusText = 'Absent Today'; icon = 'fa-calendar-times'; }
+                        else if (last.status === 'In' || last.status === 'BreakOut') { statusColor = 'bg-emerald-500'; statusText = 'Working'; icon = 'fa-check-circle'; }
+                        else if (last.status === 'BreakIn') { statusColor = 'bg-brand-gold'; statusText = 'On Break'; icon = 'fa-coffee'; }
+                        else if (last.status === 'Out') { statusColor = 'bg-rose-500'; statusText = 'Clocked Out'; icon = 'fa-sign-out-alt'; }
+                    }
+                    grid.innerHTML += `<div class="glass p-4 rounded-xl flex justify-between items-center bg-white border border-slate-200"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-700 relative">${(user.fullName || 'U').charAt(0).toUpperCase()}<div class="absolute bottom-0 right-0 w-3 h-3 rounded-full ${statusColor} border-2 border-white"></div></div><div><p class="font-bold text-slate-900 text-sm">${user.fullName}</p><p class="text-[10px] text-slate-500 uppercase"><i class="fas ${icon} mr-1"></i> ${statusText}</p></div></div><div class="text-right"><p class="text-xs font-mono text-slate-500">${lastTime}</p><p class="text-[10px] text-slate-400">${lastLabel}</p></div></div>`;
+                });
+            } catch (e) { grid.innerHTML = '<div class="col-span-full text-center text-rose-400">Error loading status.</div>'; }
+        }
+
+        async function handleUserFormSubmit() {
+            const u = document.getElementById('newUsername').value, p = document.getElementById('newPassword').value, r = document.getElementById('newRole').value;
+            const f = document.getElementById('newFullName').value, d = document.getElementById('newDesignation').value, ph = document.getElementById('newPhone').value, e = document.getElementById('newEmail').value;
+            const action = state.editingUser ? 'updateUser' : 'register';
+            try {
+                await fetch(state.scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action, username: state.editingUser || u, newUsername: u, password: p, role: r, fullName: f, designation: d, phone: ph, email: e }) });
+                alert(`User ${state.editingUser ? 'updated' : 'created'}!`); cancelEditMode(); setTimeout(fetchUsersForReport, 2000);
+            } catch (err) { alert("Error: " + err); }
+        }
+
+        function startEditUser(username) {
+            const user = state.userListCache.find(u => u.username === username); if (!user) return;
+            state.editingUser = username;
+            document.getElementById('newUsername').value = user.username; document.getElementById('newUsername').disabled = true;
+            document.getElementById('newFullName').value = user.fullName || ''; document.getElementById('newDesignation').value = user.designation || '';
+            document.getElementById('newPhone').value = user.phone || ''; document.getElementById('newEmail').value = user.email || '';
+            document.getElementById('newRole').value = user.role || 'staff';
+            document.getElementById('editModeIndicator').classList.remove('hidden'); document.getElementById('cancelEditBtn').classList.remove('hidden');
+            document.getElementById('submitUserBtn').textContent = "Update User";
+        }
+
+        function cancelEditMode() {
+            state.editingUser = null; document.getElementById('addUserForm').reset();
+            document.getElementById('newUsername').disabled = false; document.getElementById('editModeIndicator').classList.add('hidden');
+            document.getElementById('cancelEditBtn').classList.add('hidden'); document.getElementById('submitUserBtn').textContent = "Create User";
+        }
+
+        async function deleteUser(username) {
+            if(confirm(`Delete user ${username}?`)) {
+                await fetch(state.scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'deleteUser', targetUser: username }) });
+                alert("Delete request sent."); setTimeout(fetchUsersForReport, 2000);
+            }
+        }
+
+        async function generateReportData() {
+            if (!state.reportFP || state.reportFP.selectedDates.length !== 2) { alert("Select date range."); return; }
+            const start = state.reportFP.selectedDates[0], end = state.reportFP.selectedDates[1]; end.setHours(23,59,59);
+            const user = document.getElementById('reportUserSelect').value;
+            try {
+                const res = await fetch(state.scriptUrl + "?action=getLogs", { mode: 'cors', credentials: 'omit' });
+                const logs = await res.json();
+                const filtered = logs.filter(l => { const d = new Date(l[7]); return d >= start && d <= end && (user === 'all' || l[1] === user); });
+                state.adminReportData = getDailySummaries(filtered);
+                document.getElementById('summaryContent').textContent = `Generated Report\nUser: ${user}\nPeriod: ${formatDateDisplay(start)} - ${formatDateDisplay(end)}\nRecords: ${state.adminReportData.length}`;
+                document.getElementById('reportSummary').classList.remove('hidden');
+            } catch (e) { alert("Report error: " + e); }
+        }
+
+        function downloadPdfReport() {
+            if(!state.adminReportData.length) return;
+            const container = document.getElementById('reportContent');
+            let rows = ''; state.adminReportData.forEach(r => rows += `<tr><td>${r.date}</td><td>${r.checkIn}</td><td>${r.checkOut}</td><td>${r.breakTotal}</td><td>${r.netDuration}</td></tr>`);
+            container.innerHTML = `<div style="padding:20px; font-family:sans-serif;"><h1>Attendance Report</h1><table><thead><tr><th>Date</th><th>In</th><th>Out</th><th>Break</th><th>Net</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+            html2canvas(container).then(canvas => {
+                const pdf = new jspdf.jsPDF(); pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, 190, 0); pdf.save('report.pdf');
+                container.innerHTML = '';
+            });
+        }
+
+        function saveSettings() { localStorage.setItem('nexus_script_url', document.getElementById('scriptUrl').value); alert("Saved!"); location.reload(); }
+        function testConnection() { fetch(state.scriptUrl).then(r => r.ok ? alert("Connected!") : alert("Error")).catch(e => alert("Fail: " + e)); }
+        function logToConsole(msg) { const el = document.getElementById('consoleLog'); if(el) { el.innerHTML += `<span class="text-emerald-400">> ${msg}</span><br>`; el.scrollTop = el.scrollHeight; } }
     </script>
 </body>
 </html>
