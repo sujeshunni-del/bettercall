@@ -1221,9 +1221,28 @@
                 
                 // Filter
                 const filtered = logs.filter(l => { 
-                    const d = new Date(l[4]); // Timestamp at index 4
+                    // ROBUST DATE PARSING FIX
+                    let d;
+                    // Try timestamp at index 4 first
+                    if (l[4]) {
+                        d = new Date(l[4]);
+                    } 
+                    // Fallback: Combine Date (index 0) and Time (index 3)
+                    if (!d || isNaN(d.getTime())) {
+                        d = new Date(`${l[0]} ${l[3]}`);
+                    }
+                    
+                    // If still invalid, try just the date part (less precise but safer)
+                    if (isNaN(d.getTime())) {
+                        d = new Date(l[0]);
+                    }
+
                     // Match user by ID (l[1]) or fallback to name if needed, handle 'all'
                     const userMatch = (userVal === 'all') || (l[1] === userVal);
+                    
+                    // Final validity check before comparing
+                    if (isNaN(d.getTime())) return false;
+
                     return d >= start && d <= end && userMatch; 
                 });
                 
