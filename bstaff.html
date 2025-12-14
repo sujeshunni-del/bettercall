@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Staff Portal</title>
+    <title>Nexus Staff Portal - Light</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -139,7 +139,7 @@
                             <div class="absolute left-4 top-3.5 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 group-focus-within:bg-brand-blue/10 group-focus-within:text-brand-blue transition-colors">
                                 <i class="fas fa-id-badge text-sm"></i>
                             </div>
-                            <input type="text" id="username" class="glass-input w-full pl-14 pr-4 py-4 rounded-xl text-slate-900 font-medium" placeholder="Staff ID" required>
+                            <input type="text" id="username" name="username" autocomplete="username" class="glass-input w-full pl-14 pr-4 py-4 rounded-xl text-slate-900 font-medium" placeholder="Staff ID" required>
                         </div>
                     </div>
                     <div class="space-y-1">
@@ -147,7 +147,7 @@
                             <div class="absolute left-4 top-3.5 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 group-focus-within:bg-brand-blue/10 group-focus-within:text-brand-blue transition-colors">
                                 <i class="fas fa-key text-sm"></i>
                             </div>
-                            <input type="password" id="password" class="glass-input w-full pl-14 pr-4 py-4 rounded-xl text-slate-900 font-medium" placeholder="Password" required>
+                            <input type="password" id="password" name="password" autocomplete="current-password" class="glass-input w-full pl-14 pr-4 py-4 rounded-xl text-slate-900 font-medium" placeholder="Password" required>
                         </div>
                         <p class="text-[10px] text-slate-400 text-right pr-2">Press Enter ↵ to login</p>
                     </div>
@@ -162,8 +162,8 @@
                 </form>
             </div>
 
-            <!-- USER DASHBOARD -->
-            <div id="userDashboard" class="w-full hidden animate-fade-in space-y-6">
+            <!-- USER DASHBOARD (Strictly Hidden by Default) -->
+            <div id="userDashboard" class="w-full hidden animate-fade-in space-y-6" style="display: none;">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                     <!-- SESSION TRACKER -->
                     <div id="trackerPanel" class="glass rounded-[2rem] p-8 relative overflow-hidden group">
@@ -560,10 +560,16 @@
         function toggleLoginState(isLoggedIn) {
             const dashboard = document.getElementById('userDashboard');
             if (isLoggedIn) {
-                if(dashboard) dashboard.classList.remove('hidden');
+                if(dashboard) {
+                    dashboard.classList.remove('hidden');
+                    dashboard.style.display = ''; // Force remove inline style
+                }
                 document.getElementById('loginCard').classList.add('login-card-active');
             } else {
-                if(dashboard) dashboard.classList.add('hidden');
+                if(dashboard) {
+                    dashboard.classList.add('hidden');
+                    dashboard.style.display = 'none'; // Force inline style for strict hiding
+                }
                 document.getElementById('loginCard').classList.remove('login-card-active');
             }
         }
@@ -664,33 +670,83 @@
         }
 
         async function handleLoginAction(type) {
+            // SCENARIO 1: User is already logged in (Dashboard buttons)
             if (state.currentUser) {
-                if (type === 'Login') { switchTab('calendar'); return; }
-                if (type === 'Out') {
-                     document.getElementById('modalTitle').textContent = "Confirm Clock Out"; document.getElementById('modalMessage').textContent = "WARNING: Are you sure you want to end your shift?";
-                     state.pendingAction = type; const modal = document.getElementById('confirmModal'); modal.classList.remove('invisible', 'opacity-0'); modal.classList.add('visible', 'opacity-100'); return;
+                if (type === 'Login') {
+                    switchTab('calendar');
+                    return;
                 }
-                triggerLog(type); return;
+                
+                if (type === 'Out') {
+                     document.getElementById('modalTitle').textContent = "Confirm Clock Out";
+                     document.getElementById('modalMessage').textContent = "WARNING: Are you sure you want to end your shift?";
+                     state.pendingAction = type;
+                     const modal = document.getElementById('confirmModal');
+                     modal.classList.remove('invisible', 'opacity-0');
+                     modal.classList.add('visible', 'opacity-100');
+                     return;
+                }
+
+                // For In, BreakIn, BreakOut - Log immediately
+                triggerLog(type);
+                return;
             }
-            const u = document.getElementById('username').value.trim(); const p = document.getElementById('password').value; setLoading(true);
-            let authResult = { status: 'error' }; try { authResult = await authenticateUser(u, p); } catch(e) { authResult = { status: 'error' }; }
-            if (authResult.status !== 'success' && u) authResult = { status: 'success', role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), fullName: u, designation: 'Offline Mode' };
+
+            // SCENARIO 2: User is NOT logged in (Login Screen)
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value;
+            setLoading(true);
+            
+            let authResult = { status: 'error' };
+            try { authResult = await authenticateUser(u, p); } catch(e) { authResult = { status: 'error' }; }
+            
+            // Offline fallback
+            if (authResult.status !== 'success' && u) {
+                authResult = { status: 'success', role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), fullName: u, designation: 'Offline Mode' };
+            }
+
             setLoading(false);
+            
             if (authResult.status === 'success') {
-                state.currentUser = u; state.currentFullName = authResult.fullName || u; state.role = authResult.role;
-                state.currentDesignation = authResult.designation || "Staff"; state.currentEmail = authResult.email || ""; state.currentPhone = authResult.phone || "";
-                storage.set('nexus_user', JSON.stringify({ username: state.currentUser, fullName: state.currentFullName, role: state.role, designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone }));
+                state.currentUser = u;
+                state.currentFullName = authResult.fullName || u;
+                state.role = authResult.role;
+                state.currentDesignation = authResult.designation || "Staff";
+                state.currentEmail = authResult.email || "";
+                state.currentPhone = authResult.phone || "";
+                
+                storage.set('nexus_user', JSON.stringify({
+                    username: state.currentUser,
+                    fullName: state.currentFullName,
+                    role: state.role,
+                    designation: state.currentDesignation,
+                    email: state.currentEmail,
+                    phone: state.currentPhone
+                }));
+
+                // Update UI elements
                 if(document.getElementById('displayUsername')) document.getElementById('displayUsername').textContent = state.currentFullName;
                 if(document.getElementById('avatarInitial')) document.getElementById('avatarInitial').textContent = state.currentFullName.charAt(0).toUpperCase();
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
+                
                 const navAdmin = document.getElementById('nav-admin');
-                if (navAdmin) { if (state.role === 'admin') navAdmin.classList.remove('hidden'); else navAdmin.classList.add('hidden'); }
-                if (type === 'Login') { switchTab('calendar'); } 
-                else {
-                    if(document.getElementById('welcomeNameDisplay')) document.getElementById('welcomeNameDisplay').textContent = state.currentFullName; 
-                    toggleLoginState(true); triggerLog(type); document.getElementById('password').value = '';
+                if (navAdmin) {
+                    if (state.role === 'admin') navAdmin.classList.remove('hidden');
+                    else navAdmin.classList.add('hidden');
                 }
-            } else { showLoginError(); }
+                
+                if (type === 'Login') {
+                    switchTab('calendar');
+                } else {
+                    // This is an initial clock-in from login screen
+                    if(document.getElementById('welcomeNameDisplay')) document.getElementById('welcomeNameDisplay').textContent = state.currentFullName; 
+                    toggleLoginState(true);
+                    triggerLog(type);
+                    document.getElementById('password').value = '';
+                }
+            } else {
+                showLoginError();
+            }
         }
 
         function logout() { storage.remove('nexus_user'); clearInterval(state.timerInterval); clearInterval(state.breakTimerInterval); location.reload(); }
@@ -807,9 +863,15 @@
                     let serverHasIt = false;
                     if (lastServerLog) {
                         const serverTime = new Date(lastServerLog[4]).getTime();
-                        if (Math.abs(serverTime - pendingTime) < 5000 && lastServerLog[2] === state.pendingLog[2]) serverHasIt = true;
+                        if (Math.abs(serverTime - pendingTime) < 5000 && lastServerLog[2] === state.pendingLog[2]) { // Action at index 2
+                            serverHasIt = true;
+                        }
                     }
-                    if (serverHasIt) state.pendingLog = null; else userAllLogs.push(state.pendingLog);
+                    if (serverHasIt) {
+                        state.pendingLog = null; // Server caught up
+                    } else {
+                        userAllLogs.push(state.pendingLog); // Force add local action
+                    }
                 }
 
                 state.logsCache = userAllLogs; 
