@@ -15,8 +15,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- PDF Generation Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
@@ -88,12 +91,14 @@
         /* Print Styles */
         .print-container {
             width: 210mm;
+            /* A4 min height */
             min-height: 297mm;
             padding: 15mm;
             background: white;
             font-family: 'Outfit', sans-serif;
             color: #0F172A;
             box-sizing: border-box;
+            position: relative;
         }
         .print-header {
             display: flex;
@@ -970,21 +975,9 @@
 
             // Calculate Summary Stats
             const totalDays = state.adminReportData.length;
-            let totalWorkedSeconds = 0;
-            let totalOvertimeSeconds = 0;
-
-            state.adminReportData.forEach(row => {
-                // Parse "Xh Ym" back to seconds is tricky without helper, so let's re-calculate if possible or approximate
-                // Better approach: calculate from raw logs, but for display let's try to sum if possible. 
-                // Since `getDailySummaries` returns formatted strings, we can't sum easily. 
-                // Let's modify `getDailySummaries` to return raw seconds too? 
-                // Or just display "Total Days" for now to be safe.
-            });
-
+            
             // Construct Rows HTML
             let rows = '';
-            // Reverse to show latest first or chronological? Usually chronological for reports. 
-            // `getDailySummaries` sorts DESC. Let's reverse for ASC.
             [...state.adminReportData].reverse().forEach(r => {
                 rows += `
                     <tr>
@@ -1025,7 +1018,6 @@
                             <div class="print-card-label">Total Days</div>
                             <div class="print-card-value">${totalDays}</div>
                         </div>
-                        <!-- Add more summary cards if raw data available -->
                     </div>
 
                     <table class="print-table">
@@ -1049,11 +1041,14 @@
                 </div>
             `;
 
+            // Safely get jsPDF constructor
+            const { jsPDF } = window.jspdf;
+            if (!jsPDF) { alert("PDF library not loaded. Please refresh."); return; }
+
             html2canvas(container, { scale: 2 }).then(canvas => {
                 const imgData = canvas.toDataURL('image/png');
-                const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                const pdf = new jsPDF('p', 'mm', 'a4');
                 const pdfWidth = 210;
-                const pdfHeight = 297;
                 const imgProps = pdf.getImageProperties(imgData);
                 const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
                 
