@@ -650,11 +650,10 @@
                 storage.set('nexus_user', JSON.stringify({ username: state.currentUser, fullName: state.currentFullName, role: state.role, designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone }));
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
                 
-                // MODIFIED: Immediately switch to the main calendar view ("Show Everything")
-                // instead of showing the intermediate dashboard/kiosk screen.
+                // MODIFIED: Update to stay on Dashboard (Analytics/Status) instead of auto-switching
                 toggleLoginState(true); 
                 refreshLogs();
-                switchTab('calendar');
+                // switchTab('calendar'); // REMOVED to show analytics/status first
                  
             } else { showLoginError(); }
         }
