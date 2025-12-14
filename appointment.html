@@ -1520,20 +1520,20 @@
         function renderTimeSlots() {
             const grid = document.getElementById('timeSlotGrid');
             if(!grid) return;
+            
+            // "Creative" Fit: Change to 4 columns to create a perfect 4x4 square for the 16 slots
+            grid.className = "grid grid-cols-4 gap-2 overflow-y-auto custom-scrollbar pr-1 max-h-[400px] content-start";
             grid.innerHTML = '';
             
-            // Available time slots from 10:00 AM to 7:00 PM, every 30 minutes
+            // Available time slots from 10:00 AM to 6:30 PM
             // Break from 1:00 PM to 2:00 PM (13:00 - 14:00)
             const startHour = 10;
-            const endHour = 19; // 7:00 PM
+            const endHour = 18; // Ends at 18:30 (6:30 PM)
             
             for (let h = startHour; h <= endHour; h++) {
                 for (let m = 0; m < 60; m += 30) {
-                    // Stop generating if we've passed the exact end time (e.g. 7:30 PM)
-                    if (h === endHour && m > 0) break;
-
-                    // Break Logic: Skip 1:00 PM (13:00) to 2:00 PM (14:00)
-                    // This skips 13:00 and 13:30 slots.
+                    
+                    // Break Logic: Skip 13:00 and 13:30
                     if (h === 13) continue;
 
                     const displayHour = h > 12 ? h - 12 : h;
@@ -1543,7 +1543,8 @@
                     const timeStr = `${displayHour}:${minutes} ${suffix}`;
                     
                     const btn = document.createElement('button');
-                    btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-600 bg-white border border-slate-100";
+                    // Compact styling for 4-column grid
+                    btn.className = "time-slot py-2 rounded-lg text-[9px] font-extrabold text-slate-600 bg-white border border-slate-100 hover:border-brand-primary hover:shadow-sm transition-all";
                     btn.innerText = timeStr;
                     btn.onclick = () => selectTime(timeStr, btn);
                     grid.appendChild(btn);
