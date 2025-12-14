@@ -15,11 +15,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- PDF Generation Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
@@ -682,83 +679,33 @@
         }
 
         async function handleLoginAction(type) {
-            // SCENARIO 1: User is already logged in (Dashboard buttons)
             if (state.currentUser) {
-                if (type === 'Login') {
-                    switchTab('calendar');
-                    return;
-                }
-                
+                if (type === 'Login') { switchTab('calendar'); return; }
                 if (type === 'Out') {
-                     document.getElementById('modalTitle').textContent = "Confirm Clock Out";
-                     document.getElementById('modalMessage').textContent = "WARNING: Are you sure you want to end your shift?";
-                     state.pendingAction = type;
-                     const modal = document.getElementById('confirmModal');
-                     modal.classList.remove('invisible', 'opacity-0');
-                     modal.classList.add('visible', 'opacity-100');
-                     return;
+                     document.getElementById('modalTitle').textContent = "Confirm Clock Out"; document.getElementById('modalMessage').textContent = "WARNING: Are you sure you want to end your shift?";
+                     state.pendingAction = type; const modal = document.getElementById('confirmModal'); modal.classList.remove('invisible', 'opacity-0'); modal.classList.add('visible', 'opacity-100'); return;
                 }
-
-                // For In, BreakIn, BreakOut - Log immediately
-                triggerLog(type);
-                return;
+                triggerLog(type); return;
             }
-
-            // SCENARIO 2: User is NOT logged in (Login Screen)
-            const u = document.getElementById('username').value.trim();
-            const p = document.getElementById('password').value;
-            setLoading(true);
-            
-            let authResult = { status: 'error' };
-            try { authResult = await authenticateUser(u, p); } catch(e) { authResult = { status: 'error' }; }
-            
-            // Offline fallback
-            if (authResult.status !== 'success' && u) {
-                authResult = { status: 'success', role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), fullName: u, designation: 'Offline Mode' };
-            }
-
+            const u = document.getElementById('username').value.trim(); const p = document.getElementById('password').value; setLoading(true);
+            let authResult = { status: 'error' }; try { authResult = await authenticateUser(u, p); } catch(e) { authResult = { status: 'error' }; }
+            if (authResult.status !== 'success' && u) authResult = { status: 'success', role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), fullName: u, designation: 'Offline Mode' };
             setLoading(false);
-            
             if (authResult.status === 'success') {
-                state.currentUser = u;
-                state.currentFullName = authResult.fullName || u;
-                state.role = authResult.role;
-                state.currentDesignation = authResult.designation || "Staff";
-                state.currentEmail = authResult.email || "";
-                state.currentPhone = authResult.phone || "";
-                
-                storage.set('nexus_user', JSON.stringify({
-                    username: state.currentUser,
-                    fullName: state.currentFullName,
-                    role: state.role,
-                    designation: state.currentDesignation,
-                    email: state.currentEmail,
-                    phone: state.currentPhone
-                }));
-
-                // Update UI elements
+                state.currentUser = u; state.currentFullName = authResult.fullName || u; state.role = authResult.role;
+                state.currentDesignation = authResult.designation || "Staff"; state.currentEmail = authResult.email || ""; state.currentPhone = authResult.phone || "";
+                storage.set('nexus_user', JSON.stringify({ username: state.currentUser, fullName: state.currentFullName, role: state.role, designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone }));
                 if(document.getElementById('displayUsername')) document.getElementById('displayUsername').textContent = state.currentFullName;
                 if(document.getElementById('avatarInitial')) document.getElementById('avatarInitial').textContent = state.currentFullName.charAt(0).toUpperCase();
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
-                
                 const navAdmin = document.getElementById('nav-admin');
-                if (navAdmin) {
-                    if (state.role === 'admin') navAdmin.classList.remove('hidden');
-                    else navAdmin.classList.add('hidden');
-                }
-                
-                if (type === 'Login') {
-                    switchTab('calendar');
-                } else {
-                    // This is an initial clock-in from login screen
+                if (navAdmin) { if (state.role === 'admin') navAdmin.classList.remove('hidden'); else navAdmin.classList.add('hidden'); }
+                if (type === 'Login') { switchTab('calendar'); } 
+                else {
                     if(document.getElementById('welcomeNameDisplay')) document.getElementById('welcomeNameDisplay').textContent = state.currentFullName; 
-                    toggleLoginState(true);
-                    triggerLog(type);
-                    document.getElementById('password').value = '';
+                    toggleLoginState(true); triggerLog(type); document.getElementById('password').value = '';
                 }
-            } else {
-                showLoginError();
-            }
+            } else { showLoginError(); }
         }
 
         function logout() { storage.remove('nexus_user'); clearInterval(state.timerInterval); clearInterval(state.breakTimerInterval); location.reload(); }
@@ -799,19 +746,7 @@
         
         function logTime(type, lat = null, lng = null) {
             const now = new Date(); const timeString = now.toLocaleTimeString();
-            
-            // Create pending log for optimistic updates
-            state.pendingLog = [
-                formatDateDisplay(now), // 0: Date
-                state.currentUser,      // 1: ID
-                state.currentFullName,  // 2: Name
-                type,                   // 3: Action
-                now.toLocaleTimeString(),// 4: Time
-                lat,                    // 5: Lat
-                lng,                    // 6: Lng
-                now.toISOString()       // 7: Timestamp
-            ];
-
+            state.pendingLog = [ formatDateDisplay(now), state.currentUser, type, now.toLocaleTimeString(), now.toISOString() ]; // INDEX FIX: 0=Date, 1=Name, 2=Action, 3=Time, 4=Timestamp
             if (type === 'In') { state.startTime = now; state.isClockedIn = true; state.hasClockedInToday = true; startStopwatch(); triggerGreetingAnimation('In'); }
             else if (type === 'Out') { state.isClockedIn = false; state.hasClockedOutToday = true; clearInterval(state.timerInterval); stopBreakTimer(); state.breakSeconds = 0; updateBreakTimeDisplay(); updateOvertimeDisplay(0); triggerGreetingAnimation('Out'); }
             else if (type === 'BreakIn') { state.isBreak = true; state.breakCount++; if(document.getElementById('breakCountDisplay')) document.getElementById('breakCountDisplay').textContent = `${state.breakCount} / ${MAX_BREAKS}`; startBreakTimer(); }
@@ -830,7 +765,7 @@
 
         function startStopwatch() { if (state.timerInterval) clearInterval(state.timerInterval); state.timerInterval = setInterval(() => { state.elapsedSeconds++; const h = Math.floor(state.elapsedSeconds / 3600).toString().padStart(2, '0'); const m = Math.floor((state.elapsedSeconds % 3600) / 60).toString().padStart(2, '0'); const s = (state.elapsedSeconds % 60).toString().padStart(2, '0'); const timeStr = `${h}:${m}:${s}`; if(document.getElementById('stopwatch')) document.getElementById('stopwatch').textContent = timeStr; if(document.getElementById('stopwatchMini')) document.getElementById('stopwatchMini').textContent = timeStr; const effectiveTime = state.elapsedSeconds - state.breakSeconds; updateOvertimeDisplay(effectiveTime); }, 1000); }
         function sendDataToSheet(type, time, lat, lng) { if (!state.scriptUrl) { logToConsole("Offline Mode."); return; } const payload = { action: 'log', name: state.currentFullName, uid: state.currentUser, type: type, time: time, lat: lat, lng: lng }; fetch(state.scriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).then(() => { logToConsole(`${type} recorded.`); setTimeout(refreshLogs, 2000); }).catch(e => logToConsole("Sync Error: " + e)); }
-        function filterHistoryByRange() { const selectedDates = state.historyFP.selectedDates; if (selectedDates.length !== 2) { alert("Select valid date range."); return; } const startDate = selectedDates[0]; const endDate = selectedDates[1]; endDate.setHours(23, 59, 59, 999); const filteredLogs = state.logsCache.filter(log => { let logTimestamp; if (log[7]) logTimestamp = new Date(log[7]); else logTimestamp = new Date(`${log[0]} ${log[4]}`); return logTimestamp >= startDate && logTimestamp <= endDate; }); renderTable(filteredLogs); if (document.getElementById('logUserName')) document.getElementById('logUserName').textContent = `${state.currentFullName} (Search)`; }
+        function filterHistoryByRange() { const selectedDates = state.historyFP.selectedDates; if (selectedDates.length !== 2) { alert("Select valid date range."); return; } const startDate = selectedDates[0]; const endDate = selectedDates[1]; endDate.setHours(23, 59, 59, 999); const filteredLogs = state.logsCache.filter(log => { let logTimestamp; if (log[4]) logTimestamp = new Date(log[4]); else logTimestamp = new Date(`${log[0]} ${log[3]}`); return logTimestamp >= startDate && logTimestamp <= endDate; }); renderTable(filteredLogs); if (document.getElementById('logUserName')) document.getElementById('logUserName').textContent = `${state.currentFullName} (Search)`; }
         
         async function refreshLogs() {
             if (!state.scriptUrl) { renderTable([]); return; }
@@ -838,39 +773,32 @@
             try {
                 const sep = state.scriptUrl.includes('?') ? '&' : '?'; const response = await fetch(`${state.scriptUrl}${sep}action=getLogs`, { method: 'GET', mode: 'cors', credentials: 'omit' });
                 if (!response.ok) throw new Error("HTTP " + response.status);
-                const data = await response.json(); const userAllLogs = data.filter(row => row[1] === state.currentUser);
+                const data = await response.json(); 
+                const userAllLogs = data.filter(row => row[1] === state.currentUser || row[1] === state.currentFullName); // Name at Index 1
                 
-                // --- OPTIMISTIC UPDATE LOGIC ---
+                // Optimistic Logic (Updated Indices: Timestamp=4, Action=2)
                 if (state.pendingLog) {
                     const lastServerLog = userAllLogs[userAllLogs.length - 1];
-                    const pendingTime = new Date(state.pendingLog[7]).getTime();
+                    const pendingTime = new Date(state.pendingLog[4]).getTime(); 
                     let serverHasIt = false;
-                    
                     if (lastServerLog) {
-                        const serverTime = new Date(lastServerLog[7]).getTime();
-                        // Check if server has a log within 5s of our pending log with same action
-                        if (Math.abs(serverTime - pendingTime) < 5000 && lastServerLog[3] === state.pendingLog[3]) {
-                            serverHasIt = true;
-                        }
+                        const serverTime = new Date(lastServerLog[4]).getTime();
+                        if (Math.abs(serverTime - pendingTime) < 5000 && lastServerLog[2] === state.pendingLog[2]) serverHasIt = true;
                     }
-                    
-                    if (serverHasIt) {
-                        state.pendingLog = null; // Server caught up
-                    } else {
-                        userAllLogs.push(state.pendingLog); // Force add local action
-                    }
+                    if (serverHasIt) state.pendingLog = null; else userAllLogs.push(state.pendingLog);
                 }
-                // -------------------------------
 
                 state.logsCache = userAllLogs; 
                 const todayStart = new Date(); todayStart.setHours(0,0,0,0); const todayEnd = new Date(); todayEnd.setHours(23,59,59,999);
-                const todayLogs = userAllLogs.filter(row => { let logTime; if(row[7]) logTime = new Date(row[7]); else logTime = new Date(`${row[0]} ${row[4]}`); return logTime >= todayStart && logTime <= todayEnd; });
-                todayLogs.sort((a,b) => { const tA = a[7] ? new Date(a[7]) : new Date(`${a[0]} ${a[4]}`); const tB = b[7] ? new Date(b[7]) : new Date(`${b[0]} ${b[4]}`); return tA - tB; });
+                const todayLogs = userAllLogs.filter(row => { let logTime; if(row[4]) logTime = new Date(row[4]); else logTime = new Date(`${row[0]} ${row[3]}`); return logTime >= todayStart && logTime <= todayEnd; }); // Time=3, Timestamp=4
+                todayLogs.sort((a,b) => { const tA = a[4] ? new Date(a[4]) : new Date(`${a[0]} ${a[3]}`); const tB = b[4] ? new Date(b[4]) : new Date(`${b[0]} ${b[3]}`); return tA - tB; });
+                
                 state.hasClockedInToday = false; state.hasClockedOutToday = false; state.isClockedIn = false; state.isBreak = false; state.breakCount = 0;
                 let workSeconds = 0; let breakSeconds = 0; let lastInTime = null; let lastBreakInTime = null; let firstInTime = null;
                 todayLogs.forEach(log => {
-                    const action = log[3]; const timestamp = new Date(log[7] || `${log[0]} ${log[4]}`).getTime(); 
-                    if (action === 'In') { state.hasClockedInToday = true; state.isClockedIn = true; lastInTime = timestamp; if (!firstInTime) { firstInTime = timestamp; state.startTime = new Date(log[7]); } } 
+                    const action = log[2]; // Action at 2
+                    const timestamp = new Date(log[4] || `${log[0]} ${log[3]}`).getTime(); // Timestamp at 4
+                    if (action === 'In') { state.hasClockedInToday = true; state.isClockedIn = true; lastInTime = timestamp; if (!firstInTime) { firstInTime = timestamp; state.startTime = new Date(log[4]); } } 
                     else if (action === 'Out') { state.hasClockedOutToday = true; state.isClockedIn = false; if (lastInTime) { workSeconds += (timestamp - lastInTime) / 1000; lastInTime = null; } } 
                     else if (action === 'BreakIn') { state.isBreak = true; state.breakCount++; lastBreakInTime = timestamp; if (lastInTime) { workSeconds += (timestamp - lastInTime) / 1000; lastInTime = null; } } 
                     else if (action === 'BreakOut') { state.isBreak = false; if (lastBreakInTime) { breakSeconds += (timestamp - lastBreakInTime) / 1000; lastBreakInTime = null; } lastInTime = timestamp; }
@@ -880,17 +808,17 @@
                 if(document.getElementById('breakCountDisplay')) document.getElementById('breakCountDisplay').textContent = `${state.breakCount} / ${MAX_BREAKS}`;
                 updateUI(); updateBreakTimeDisplay(); if (state.isClockedIn && !state.isBreak) startStopwatch(); else if (state.isBreak) startBreakTimer();
                 const start = new Date(state.currentPeriodStart); const monthStart = new Date(start.getFullYear(), start.getMonth(), 1); const monthEnd = new Date(start.getFullYear(), start.getMonth() + 1, 0, 23, 59, 59);
-                const monthLogs = userAllLogs.filter(row => { let logTimestamp; if (row[7]) logTimestamp = new Date(row[7]); else logTimestamp = new Date(`${row[0]} ${row[4]}`); return logTimestamp >= monthStart && logTimestamp <= monthEnd; });
+                const monthLogs = userAllLogs.filter(row => { let logTimestamp; if (row[4]) logTimestamp = new Date(row[4]); else logTimestamp = new Date(`${row[0]} ${row[3]}`); return logTimestamp >= monthStart && logTimestamp <= monthEnd; });
                 renderTable(monthLogs); renderCalendar(); if (state.historyFP) state.historyFP.clear(); if (document.getElementById('logUserName')) document.getElementById('logUserName').textContent = state.currentFullName;
             } catch (error) { if(tbody) tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-rose-400 italic">Error connecting to database.</td></tr>`; }
         }
         
         function getDailySummaries(logs) {
-            const dailyGroups = {}; logs.sort((a, b) => { const tA = a[7] ? new Date(a[7]) : new Date(`${a[0]} ${a[4]}`); const tB = b[7] ? new Date(b[7]) : new Date(`${b[0]} ${b[4]}`); return tA - tB; });
-            logs.forEach(log => { const dateStr = formatDateDisplay(log[0]); if (!dailyGroups[dateStr]) dailyGroups[dateStr] = { date: dateStr, rawDateObj: log[7] ? new Date(log[7]) : new Date(log[0]), logs: [] }; dailyGroups[dateStr].logs.push(log); });
+            const dailyGroups = {}; logs.sort((a, b) => { const tA = a[4] ? new Date(a[4]) : new Date(`${a[0]} ${a[3]}`); const tB = b[4] ? new Date(b[4]) : new Date(`${b[0]} ${b[3]}`); return tA - tB; });
+            logs.forEach(log => { const dateStr = formatDateDisplay(log[0]); if (!dailyGroups[dateStr]) dailyGroups[dateStr] = { date: dateStr, rawDateObj: log[4] ? new Date(log[4]) : new Date(log[0]), logs: [] }; dailyGroups[dateStr].logs.push(log); });
             const rows = Object.values(dailyGroups).map(group => {
                 let firstIn = null; let lastOut = null; let totalBreakSeconds = 0; let breakStartTime = null; let lastAction = null;
-                group.logs.forEach(log => { const action = log[3]; let time; if (log[7]) time = new Date(log[7]); else time = new Date(`${log[0]} ${log[4]}`); if (action === 'In') { if (!firstIn) firstIn = time; } else if (action === 'Out') { lastOut = time; } else if (action === 'BreakIn') { breakStartTime = time; } else if (action === 'BreakOut' && breakStartTime) { totalBreakSeconds += (time - breakStartTime) / 1000; breakStartTime = null; } lastAction = action; });
+                group.logs.forEach(log => { const action = log[2]; let time; if (log[4]) time = new Date(log[4]); else time = new Date(`${log[0]} ${log[3]}`); if (action === 'In') { if (!firstIn) firstIn = time; } else if (action === 'Out') { lastOut = time; } else if (action === 'BreakIn') { breakStartTime = time; } else if (action === 'BreakOut' && breakStartTime) { totalBreakSeconds += (time - breakStartTime) / 1000; breakStartTime = null; } lastAction = action; });
                 let grossSeconds = 0; if (group.date === formatDateDisplay(new Date()) && (lastAction === 'In' || lastAction === 'BreakOut')) { if (firstIn) grossSeconds = (new Date() - firstIn) / 1000; lastOut = "Active"; } else if (firstIn && lastOut) grossSeconds = (lastOut - firstIn) / 1000;
                 let netSeconds = Math.max(0, grossSeconds - totalBreakSeconds); let overtimeSeconds = Math.max(0, netSeconds - DAILY_GOAL_SECONDS);
                 return { date: group.date, checkIn: firstIn ? formatTimeAMPM(firstIn) : '-', checkOut: lastOut === "Active" ? "Active Now" : (lastOut ? formatTimeAMPM(lastOut) : '-'), breakTotal: totalBreakSeconds > 0 ? formatTime(totalBreakSeconds) : '-', netDuration: netSeconds > 0 ? formatTime(netSeconds) : '-', grossDuration: grossSeconds > 0 ? formatTime(grossSeconds) : '-', overtime: overtimeSeconds > 0 ? formatTime(overtimeSeconds) : '-', sortTime: group.rawDateObj.getTime() };
@@ -907,10 +835,10 @@
             const body = document.getElementById('calendarBody'); if(!body) return; body.innerHTML = '';
             const dayDate = new Date(state.currentPeriodStart); if(document.getElementById('periodTitle')) document.getElementById('periodTitle').textContent = formatDateDisplay(dayDate); 
             const cell = document.createElement('div'); cell.className = `glass rounded-2xl p-6 border border-slate-200 relative flex flex-col min-h-[400px] w-full bg-white`; cell.innerHTML = `<span class="text-lg md:text-xl font-bold text-brand-gold mb-4 truncate">${dayDate.toLocaleDateString('en-US', {weekday: 'long'})}</span>`;
-            const dayLogs = state.logsCache.filter(log => { let logDate; if (log[7]) logDate = new Date(log[7]); else logDate = new Date(`${log[0]} ${log[4]}`); return logDate.getDate() === dayDate.getDate() && logDate.getMonth() === dayDate.getMonth() && logDate.getFullYear() === dayDate.getFullYear(); });
+            const dayLogs = state.logsCache.filter(log => { let logDate; if (log[4]) logDate = new Date(log[4]); else logDate = new Date(`${log[0]} ${log[3]}`); return logDate.getDate() === dayDate.getDate() && logDate.getMonth() === dayDate.getMonth() && logDate.getFullYear() === dayDate.getFullYear(); });
             let summaryHtml = ''; let firstInTime = null; let lastOutTime = null; 
-            dayLogs.sort((a, b) => { const tA = a[7] ? new Date(a[7]) : new Date(`${a[0]} ${a[4]}`); const tB = b[7] ? new Date(b[7]) : new Date(`${b[0]} ${b[4]}`); return tA - tB; });
-            dayLogs.forEach(log => { const action = log[3]; const time = log[4]; if (action === 'In' && !firstInTime) firstInTime = time; else if (action === 'Out') lastOutTime = time; });
+            dayLogs.sort((a, b) => { const tA = a[4] ? new Date(a[4]) : new Date(`${a[0]} ${a[3]}`); const tB = b[4] ? new Date(b[4]) : new Date(`${b[0]} ${b[3]}`); return tA - tB; });
+            dayLogs.forEach(log => { const action = log[2]; const time = log[3]; if (action === 'In' && !firstInTime) firstInTime = time; else if (action === 'Out') lastOutTime = time; });
             if (dayLogs.length > 0) { summaryHtml += `<div class="mb-6 space-y-2"><div class="flex justify-between items-center text-xs font-bold text-emerald-600">First In: <span class="font-mono text-slate-800">${formatTimeDisplay(firstInTime)}</span></div>`; if (lastOutTime) summaryHtml += `<div class="flex justify-between items-center text-xs font-bold text-rose-500">Last Out: <span class="font-mono text-slate-800">${formatTimeDisplay(lastOutTime)}</span></div>`; else summaryHtml += `<div class="flex justify-between items-center text-xs font-bold text-brand-gold animate-pulse">Status: <span class="font-mono text-slate-800">Active</span></div>`; summaryHtml += `</div>`; } else { summaryHtml = `<div class="mt-auto text-center text-slate-400 italic p-6 text-sm">No activity logged.</div>`; }
             cell.innerHTML += `<div class="mt-auto space-y-4">${summaryHtml}</div>`; body.appendChild(cell); body.style.gridTemplateColumns = '1fr';
         }
@@ -936,11 +864,12 @@
             try {
                 const [usersRes, logsRes] = await Promise.all([ fetch(state.scriptUrl + "?action=getUsers", { mode: 'cors', credentials: 'omit' }), fetch(state.scriptUrl + "?action=getLogs", { mode: 'cors', credentials: 'omit' }) ]);
                 const users = await usersRes.json(); const logs = await logsRes.json();
-                const userLatest = {}; logs.sort((a, b) => new Date(a[7]) - new Date(b[7]));
-                logs.forEach(l => userLatest[l[1]] = { status: l[3], time: l[4], timestamp: l[7] });
+                const userLatest = {}; logs.sort((a, b) => new Date(a[4]) - new Date(b[4])); // Sort by Timestamp (Col 4)
+                logs.forEach(l => userLatest[l[1]] = { status: l[2], time: l[3], timestamp: l[4] }); // Name[1], Action[2], Time[3], Timestamp[4]
                 grid.innerHTML = '';
                 users.forEach(user => {
-                    const last = userLatest[user.username]; let statusColor = 'bg-slate-400', statusText = 'Offline', icon = 'fa-power-off', lastTime = '-', lastLabel = 'No Activity';
+                    let last = userLatest[user.username] || userLatest[user.fullName]; 
+                    let statusColor = 'bg-slate-400', statusText = 'Offline', icon = 'fa-power-off', lastTime = '-', lastLabel = 'No Activity';
                     if (last) {
                         const isToday = new Date(last.timestamp).toDateString() === new Date().toDateString();
                         lastTime = formatTimeDisplay(last.time); lastLabel = isToday ? 'Last Action' : 'Last Seen: ' + formatDateDisplay(last.timestamp);
@@ -995,7 +924,8 @@
             try {
                 const res = await fetch(state.scriptUrl + "?action=getLogs", { mode: 'cors', credentials: 'omit' });
                 const logs = await res.json();
-                const filtered = logs.filter(l => { const d = new Date(l[7]); return d >= start && d <= end && (user === 'all' || l[1] === user); });
+                // Filter using index 4 (Timestamp) and index 1 (Name/ID)
+                const filtered = logs.filter(l => { const d = new Date(l[4]); return d >= start && d <= end && (user === 'all' || l[1] === user); });
                 state.adminReportData = getDailySummaries(filtered);
                 document.getElementById('summaryContent').textContent = `Generated Report\nUser: ${user}\nPeriod: ${formatDateDisplay(start)} - ${formatDateDisplay(end)}\nRecords: ${state.adminReportData.length}`;
                 document.getElementById('reportSummary').classList.remove('hidden');
