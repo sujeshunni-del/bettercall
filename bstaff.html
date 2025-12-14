@@ -974,7 +974,7 @@
         const MAX_BREAKS = 4;
         const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        // Pre-fill your URL
+        // Pre-fill your URL - UPDATED TO CORRECT /exec LINK
         const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzmYu05RsZGnIShDRkDfRbTXXAwkwjJrb2ijMAcNvJgBA8SOeyuPqQ3KWRnB5UBKQdI/exec";
 
         // --- SAFE STORAGE HELPER (Prevents "Tracking Prevention" errors) ---
@@ -1107,11 +1107,15 @@
             document.getElementById('password').addEventListener('keyup', (e) => {
                 if(e.key === 'Enter') checkCredentialsAndRefresh();
             });
-            // Ensure default URL is set if empty
-            if(!state.scriptUrl) {
+
+            // FIX: Ensure correct URL is set if stored one is a LIBRARY link (bad)
+            const storedUrl = storage.get('nexus_script_url');
+            if (!storedUrl || storedUrl.includes('/library/')) {
+                console.warn("Detected invalid or missing script URL. Resetting to default.");
                 state.scriptUrl = DEFAULT_SCRIPT_URL;
                 storage.set('nexus_script_url', DEFAULT_SCRIPT_URL);
             }
+            
             if(document.getElementById('scriptUrl')) document.getElementById('scriptUrl').value = state.scriptUrl;
             
             const savedUser = storage.get('nexus_user');
@@ -1342,25 +1346,17 @@
             if (!u || !p) return; 
             setLoading(true);
             
-            // Try to authenticate. If it fails (e.g. offline), we fall back.
+            // Try to authenticate.
             let auth = { status: 'error' };
             try {
                 auth = await authenticateUser(u, p);
             } catch(e) {
-                // If offline but valid user input, force entry to app (Emergency Mode)
-                auth = { 
-                    status: 'success', 
-                    role: 'staff', 
-                    fullName: u, 
-                    designation: 'Offline User',
-                    email: '', 
-                    phone: '' 
-                };
+                // If network failure
+                auth = { status: 'error', message: 'Connection Failed' };
             }
 
             setLoading(false);
             
-            // Even if auth fails from server, if it's CORS issue, we might want to let them in for demo
             if (auth.status === 'success') {
                 state.currentUser = u;
                 state.currentFullName = auth.fullName || u;
@@ -1381,8 +1377,6 @@
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
                 refreshLogs(); 
             } else {
-                // Try force entry if strictly offline demo desired? 
-                // No, user said "not in demo mode". So standard error.
                 showLoginError();
             }
         }
@@ -1400,7 +1394,7 @@
                 
                 const res = await fetch(`${state.scriptUrl}?${params.toString()}`, {
                     method: 'GET',
-                    mode: 'cors' // Try CORS first
+                    // mode: 'cors' is default
                 });
                 
                 if (!res.ok) throw new Error("Network response was not ok");
@@ -1423,22 +1417,9 @@
             try {
                  authResult = await authenticateUser(u, p);
             } catch(e) {
-                 // Fallback if auth throws completely
                  authResult = { status: 'error' };
             }
             
-            // EMERGENCY FALLBACK: If Login fails but User ID exists, allow entry in 'Offline Mode'
-            // This is crucial if CORS blocks the read but we know the backend is there.
-            if (authResult.status !== 'success' && u) {
-                console.warn("Login failed validation. Entering Offline Mode.");
-                authResult = { 
-                    status: 'success', 
-                    role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), 
-                    fullName: u, 
-                    designation: 'Offline Mode' 
-                };
-            }
-
             setLoading(false);
             if (authResult.status === 'success') {
                 state.currentUser = u || "user";
