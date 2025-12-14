@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Staff Portal - Light</title>
+    <title>Nexus Staff Portal</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,20 +88,9 @@
         .flatpickr-calendar { font-family: 'Outfit', sans-serif !important; border-radius: 12px !important; border: none !important; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1) !important; }
         .flatpickr-day.selected { background: #3B82F6 !important; border-color: #3B82F6 !important; }
         
-        /* Print Styles */
-        .print-container { width: 210mm; min-height: 297mm; padding: 15mm; background: white; font-family: 'Outfit', sans-serif; color: #0F172A; box-sizing: border-box; position: relative; }
-        .print-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #3B82F6; padding-bottom: 20px; margin-bottom: 30px; }
-        .print-logo-text { font-size: 24px; font-weight: 800; color: #0F172A; text-transform: uppercase; letter-spacing: 1px; }
-        .print-sub-text { font-size: 14px; color: #64748B; font-weight: 500; }
-        .print-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
-        .print-card { background: #F8FAFC; border: 1px solid #E2E8F0; padding: 15px; border-radius: 8px; }
-        .print-card-label { font-size: 10px; color: #64748B; text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
-        .print-card-value { font-size: 18px; color: #0F172A; font-weight: 800; }
-        .print-table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        .print-table th { background: #3B82F6; color: white; padding: 10px; text-align: left; font-weight: 700; text-transform: uppercase; }
-        .print-table td { padding: 10px; border-bottom: 1px solid #E2E8F0; color: #334155; }
-        .print-table tr:nth-child(even) { background: #F8FAFC; }
-        .print-footer { margin-top: 30px; text-align: center; font-size: 10px; color: #94A3B8; border-top: 1px solid #E2E8F0; padding-top: 15px; }
+        /* Status Toast */
+        #statusToast { transform: translateY(150%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        #statusToast.active { transform: translateY(0); }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row bg-slate-bg">
@@ -168,12 +157,12 @@
                     </button>
                     
                     <div id="loginError" class="text-center text-rose-500 text-xs hidden font-bold animate-bounce bg-rose-50 py-2 rounded-lg border border-rose-100">
-                        <i class="fas fa-exclamation-circle mr-1"></i> Invalid credentials
+                        <i class="fas fa-exclamation-circle mr-1"></i> <span id="loginErrorMsg">Invalid credentials</span>
                     </div>
                 </form>
             </div>
 
-            <!-- USER DASHBOARD (Visible After Login) -->
+            <!-- USER DASHBOARD -->
             <div id="userDashboard" class="w-full hidden animate-fade-in space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                     <!-- SESSION TRACKER -->
@@ -492,6 +481,12 @@
             </div>
         </div>
     </div>
+    
+    <!-- Status Toast -->
+    <div id="statusToast" class="fixed bottom-6 right-6 z-[80] glass p-4 rounded-xl shadow-2xl border border-emerald-500/20 bg-emerald-50 text-emerald-700 font-bold text-sm flex items-center gap-3">
+        <i class="fas fa-check-circle text-lg"></i>
+        <span id="statusToastMsg">Action Saved</span>
+    </div>
 
     <!-- Hidden Print Container -->
     <div id="reportContent" style="position: absolute; left: -9999px;"></div>
@@ -520,11 +515,22 @@
             pendingLog: null
         };
         
+        // --- UTILS ---
         function formatTime(totalSeconds) { const h = Math.floor(totalSeconds / 3600); const m = Math.floor((totalSeconds % 3600) / 60); return `${h}h ${m}m`; }
         function formatTimeDetailed(totalSeconds) { const h = Math.floor(totalSeconds / 3600); const m = Math.floor((totalSeconds % 3600) / 60); const s = Math.floor(totalSeconds % 60); return `${h}h ${m}m ${s}s`; }
         function formatDateDisplay(date) { try { const d = new Date(date); if (isNaN(d.getTime())) return String(date); const day = String(d.getDate()).padStart(2, '0'); const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][d.getMonth()]; return `${day}/${month}/${d.getFullYear()}`; } catch (e) { return String(date); } }
         function formatTimeDisplay(timeString) { try { const date = (typeof timeString === 'string' && timeString.includes('T')) ? new Date(timeString) : new Date(`2000-01-01 ${timeString}`); if (!isNaN(date)) return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); return timeString; } catch (e) { return timeString; } }
         function formatTimeAMPM(dateInput) { try { let dateObj = (dateInput instanceof Date) ? dateInput : new Date(`2000-01-01 ${dateInput}`); if (isNaN(dateObj.getTime())) return dateInput; return dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }); } catch (e) { return String(dateInput); } }
+        function showToast(msg, isError = false) {
+            const t = document.getElementById('statusToast');
+            const tm = document.getElementById('statusToastMsg');
+            tm.textContent = msg;
+            t.className = isError 
+                ? "fixed bottom-6 right-6 z-[80] glass p-4 rounded-xl shadow-2xl border border-rose-500/20 bg-rose-50 text-rose-700 font-bold text-sm flex items-center gap-3 active"
+                : "fixed bottom-6 right-6 z-[80] glass p-4 rounded-xl shadow-2xl border border-emerald-500/20 bg-emerald-50 text-emerald-700 font-bold text-sm flex items-center gap-3 active";
+            t.innerHTML = isError ? `<i class="fas fa-exclamation-circle text-lg"></i><span>${msg}</span>` : `<i class="fas fa-check-circle text-lg"></i><span>${msg}</span>`;
+            setTimeout(() => t.classList.remove('active'), 3000);
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             setInterval(updateBigClock, 1000); updateBigClock();
@@ -532,6 +538,7 @@
             const storedUrl = storage.get('nexus_script_url');
             if (!storedUrl || storedUrl.includes('/library/')) { state.scriptUrl = DEFAULT_SCRIPT_URL; storage.set('nexus_script_url', DEFAULT_SCRIPT_URL); }
             if(document.getElementById('scriptUrl')) document.getElementById('scriptUrl').value = state.scriptUrl;
+            
             const savedUser = storage.get('nexus_user');
             if (savedUser) {
                 const userObj = JSON.parse(savedUser);
@@ -639,6 +646,7 @@
             if (!state.scriptUrl) return { status: 'error', message: 'No Script URL' };
             try {
                 const params = new URLSearchParams({ action: 'login', username: u, password: p });
+                // Use GET to enable reading response
                 const res = await fetch(`${state.scriptUrl}?${params.toString()}`, { method: 'GET', mode: 'cors', credentials: 'omit' });
                 if (!res.ok) throw new Error("Network"); return await res.json();
             } catch (err) { return { status: 'error', message: err.message }; }
@@ -669,7 +677,7 @@
             if (authResult.status !== 'success' && u) authResult = { status: 'success', role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), fullName: u, designation: 'Offline Mode' };
             setLoading(false);
             if (authResult.status === 'success') {
-                state.currentUser = u; state.currentFullName = auth.fullName || u; state.role = auth.role;
+                state.currentUser = u; state.currentFullName = authResult.fullName || u; state.role = authResult.role;
                 state.currentDesignation = authResult.designation || "Staff"; state.currentEmail = authResult.email || ""; state.currentPhone = authResult.phone || "";
                 storage.set('nexus_user', JSON.stringify({ username: state.currentUser, fullName: state.currentFullName, role: state.role, designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone }));
                 if(document.getElementById('displayUsername')) document.getElementById('displayUsername').textContent = state.currentFullName;
@@ -742,31 +750,43 @@
 
         function startStopwatch() { if (state.timerInterval) clearInterval(state.timerInterval); state.timerInterval = setInterval(() => { state.elapsedSeconds++; const h = Math.floor(state.elapsedSeconds / 3600).toString().padStart(2, '0'); const m = Math.floor((state.elapsedSeconds % 3600) / 60).toString().padStart(2, '0'); const s = (state.elapsedSeconds % 60).toString().padStart(2, '0'); const timeStr = `${h}:${m}:${s}`; if(document.getElementById('stopwatch')) document.getElementById('stopwatch').textContent = timeStr; if(document.getElementById('stopwatchMini')) document.getElementById('stopwatchMini').textContent = timeStr; const effectiveTime = state.elapsedSeconds - state.breakSeconds; updateOvertimeDisplay(effectiveTime); }, 1000); }
         
-        // --- UPDATED SEND FUNCTION (USE FORM DATA) ---
+        // --- UPDATED SEND FUNCTION (USE GET to bypass POST CORS issues) ---
         function sendDataToSheet(type, time, lat, lng) {
             if (!state.scriptUrl) { logToConsole("Offline Mode."); return; }
             
-            // NEW: Use URLSearchParams for robust GAS POST handling
+            // USE GET params
             const params = new URLSearchParams();
             params.append('action', 'log');
             params.append('uid', state.currentUser);
-            params.append('name', state.currentFullName); // Ensure script reads this
+            params.append('name', state.currentFullName);
             params.append('type', type);
             params.append('time', time);
             params.append('lat', lat || '');
             params.append('lng', lng || '');
 
-            fetch(state.scriptUrl, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: params.toString()
+            fetch(`${state.scriptUrl}?${params.toString()}`, {
+                method: 'GET',
+                mode: 'cors',
+                credentials: 'omit'
             })
-            .then(() => {
-                logToConsole(`${type} recorded.`);
-                setTimeout(refreshLogs, 2000);
+            .then(res => {
+                if(!res.ok) throw new Error("Network error");
+                return res.json();
             })
-            .catch(e => logToConsole("Sync Error: " + e));
+            .then(data => {
+                if(data.status === 'success') {
+                    logToConsole(`${type} recorded.`);
+                    showToast(`${type} Successful`);
+                    setTimeout(refreshLogs, 2000);
+                } else {
+                    logToConsole("Save failed: " + data.message);
+                    showToast("Save Failed!", true);
+                }
+            })
+            .catch(e => {
+                logToConsole("Sync Error: " + e);
+                showToast("Connection Error", true);
+            });
         }
 
         function filterHistoryByRange() { const selectedDates = state.historyFP.selectedDates; if (selectedDates.length !== 2) { alert("Select valid date range."); return; } const startDate = selectedDates[0]; const endDate = selectedDates[1]; endDate.setHours(23, 59, 59, 999); const filteredLogs = state.logsCache.filter(log => { let logTimestamp; if (log[4]) logTimestamp = new Date(log[4]); else logTimestamp = new Date(`${log[0]} ${log[3]}`); return logTimestamp >= startDate && logTimestamp <= endDate; }); renderTable(filteredLogs); if (document.getElementById('logUserName')) document.getElementById('logUserName').textContent = `${state.currentFullName} (Search)`; }
@@ -901,7 +921,7 @@
             const f = document.getElementById('newFullName').value, d = document.getElementById('newDesignation').value, ph = document.getElementById('newPhone').value, e = document.getElementById('newEmail').value;
             const action = state.editingUser ? 'updateUser' : 'register';
             
-            // NEW: Use Form Data
+            // NEW: Use GET params for save
             const params = new URLSearchParams();
             params.append('action', action);
             params.append('username', state.editingUser || u);
@@ -914,13 +934,16 @@
             params.append('email', e);
 
             try {
-                await fetch(state.scriptUrl, { 
-                    method: 'POST', 
-                    mode: 'no-cors', 
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: params.toString()
-                });
-                alert(`User ${state.editingUser ? 'updated' : 'created'}!`); cancelEditMode(); setTimeout(fetchUsersForReport, 2000);
+                const res = await fetch(`${state.scriptUrl}?${params.toString()}`, { method: 'GET', mode: 'cors', credentials: 'omit' });
+                const data = await res.json();
+                
+                if (data.status === 'success') {
+                    showToast(`User ${state.editingUser ? 'updated' : 'created'}!`);
+                    cancelEditMode(); 
+                    setTimeout(fetchUsersForReport, 2000);
+                } else {
+                    alert("Error: " + data.message);
+                }
             } catch (err) { alert("Error: " + err); }
         }
 
@@ -943,18 +966,21 @@
 
         async function deleteUser(username) {
             if(confirm(`Delete user ${username}?`)) {
-                // NEW: Use Form Data
+                // NEW: Use GET params
                 const params = new URLSearchParams();
                 params.append('action', 'deleteUser');
                 params.append('targetUser', username);
                 
-                await fetch(state.scriptUrl, { 
-                    method: 'POST', 
-                    mode: 'no-cors', 
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: params.toString()
-                });
-                alert("Delete request sent."); setTimeout(fetchUsersForReport, 2000);
+                try {
+                    const res = await fetch(`${state.scriptUrl}?${params.toString()}`, { method: 'GET', mode: 'cors', credentials: 'omit' });
+                    const data = await res.json();
+                    if(data.status === 'success') {
+                         showToast("User deleted");
+                         setTimeout(fetchUsersForReport, 2000);
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                } catch(e) { alert("Error: " + e); }
             }
         }
 
