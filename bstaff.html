@@ -1708,8 +1708,12 @@
             }
 
             try {
-                // Try fetching - GET avoids CORS preflight issues on many servers
-                const response = await fetch(state.scriptUrl, {
+                // EXPLICIT ACTION: Ask for 'getLogs' (or default)
+                // Use a separator based on existing query params
+                const sep = state.scriptUrl.includes('?') ? '&' : '?';
+                const fetchUrl = `${state.scriptUrl}${sep}action=getLogs`; // Specific action
+
+                const response = await fetch(fetchUrl, {
                      method: 'GET',
                      mode: 'cors',
                      credentials: 'omit' // CRITICAL: Omit cookies to prevent 401s from Google
@@ -1790,14 +1794,13 @@
                 
             } catch (error) { 
                 logToConsole("Error fetching logs (CORS or Network): " + error); 
-                console.error("Connection Failed, checking mock mode", error);
+                console.error("Connection Failed", error);
                 
-                // MOCK DATA FALLBACK removed as requested by user ("not in demo mode")
-                // Instead, clear table and show error
+                // SPECIFIC DIAGNOSTIC FOR USER
                 if(tbody) {
                      tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-red-400 italic">
-                        <i class="fas fa-wifi mr-2"></i> Connection Failed. <br>
-                        <span class="text-xs text-gray-500 mt-2 inline-block">Unable to fetch logs from server.</span>
+                        <i class="fas fa-exclamation-triangle mr-2"></i> Critical Error: "Logs" sheet missing? <br>
+                        <span class="text-xs text-gray-500 mt-2 inline-block">Please create a sheet named exactly <strong>Logs</strong> in your Google Sheet.</span>
                     </td></tr>`;
                 }
             }
