@@ -1713,12 +1713,13 @@
                 const todayStart = new Date(); todayStart.setHours(0,0,0,0);
                 const todayEnd = new Date(); todayEnd.setHours(23,59,59,999);
                 
+                // --- ROBUSTNESS FIX: Filter carefully to avoid crash on bad dates ---
                 const todayLogs = userAllLogs.filter(row => {
                      let logTime;
                      if(row[7]) logTime = new Date(row[7]);
                      else logTime = new Date(`${row[0]} ${row[4]}`);
                      
-                     if (isNaN(logTime.getTime())) return false; 
+                     if (isNaN(logTime.getTime())) return false; // Skip invalid
                      return logTime >= todayStart && logTime <= todayEnd;
                 });
                 
@@ -1733,7 +1734,7 @@
 
                 todayLogs.forEach(log => {
                     const action = log[3]; 
-                    const timestamp = new Date(log[7] || `${log[0]} ${log[4]}`).getTime(); 
+                    const timestamp = new Date(log[7] || `${log[0]} ${log[4]}`).getTime(); // Fallback
                     
                     if (action === 'In') {
                         state.hasClockedInToday = true; state.isClockedIn = true; lastInTime = timestamp;
@@ -1777,7 +1778,7 @@
                 if (document.getElementById('logUserName')) document.getElementById('logUserName').textContent = state.currentFullName;
                 
             } catch (error) { 
-                logToConsole("Error fetching logs: " + error); 
+                logToConsole("Error fetching logs (CORS or Network): " + error); 
                 console.error("Connection Failed, checking mock mode", error);
                 
                 // MOCK DATA FALLBACK removed as requested by user ("not in demo mode")
