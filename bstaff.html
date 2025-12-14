@@ -709,6 +709,14 @@
                 state.currentDesignation = auth.designation || "Staff Member"; state.currentEmail = auth.email || "No Email"; state.currentPhone = auth.phone || "No Phone";
                 storage.set('nexus_user', JSON.stringify({ username: state.currentUser, fullName: state.currentFullName, role: state.role, designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone }));
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
+                
+                // Show Admin Panel if applicable
+                const navAdmin = document.getElementById('nav-admin');
+                if (navAdmin) {
+                    if (state.role === 'admin') navAdmin.classList.remove('hidden');
+                    else navAdmin.classList.add('hidden');
+                }
+
                 toggleLoginState(true); 
                 refreshLogs();
             } else { showLoginError(); }
