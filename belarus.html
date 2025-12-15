@@ -153,41 +153,94 @@
 
         /* Mobile Dock Styles (Updated) */
         .glass-panel-dock {
-            background: rgba(11, 17, 32, 0.85); /* Slightly darker/richer background */
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            /* Dual colored glow shadow for Belarus theme */
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8),
-                        0 0 20px -5px rgba(210, 39, 48, 0.2), 
-                        0 0 20px -5px rgba(0, 151, 57, 0.2);
+            background: rgba(10, 15, 30, 0.65); /* Deep Glass */
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            
+            /* Glowing Border Effect */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 0 15px rgba(59, 130, 246, 0.5), /* Blue Border Glow */
+                0 0 30px rgba(139, 92, 246, 0.3), /* Purple Ambient Glow */
+                inset 0 0 20px rgba(255, 255, 255, 0.05); /* Inner Glass Reflection */
+                
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
-            overflow: hidden; /* For the shine effect */
+            overflow: visible; /* Allow explore button to pop out */
         }
 
-        /* Top Border Gradient Line */
+        /* Pulsating Rim Light */
         .glass-panel-dock::before {
             content: "";
             position: absolute;
-            top: 0; left: 10%; right: 10%; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(210, 39, 48, 0.8), rgba(0, 151, 57, 0.8), transparent);
+            inset: -2px;
+            background: linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.6), rgba(139, 92, 246, 0.6), transparent);
+            z-index: -1;
+            border-radius: 9999px;
             opacity: 0.6;
+            filter: blur(5px);
+            animation: glowPulse 4s infinite alternate;
+        }
+        
+        @keyframes glowPulse {
+            0% { opacity: 0.4; filter: blur(5px); }
+            100% { opacity: 0.8; filter: blur(8px); }
         }
 
-        /* Shine Animation */
-        .dock-shine {
-            position: absolute;
-            top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.05), transparent);
-            transform: skewX(-25deg);
-            animation: dockShine 5s infinite;
-            pointer-events: none;
+        /* Icon Styling */
+        .dock-icon-btn {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: #94A3B8; /* Slate-400 */
+        }
+        
+        .dock-icon-btn:active {
+            transform: scale(0.9);
         }
 
-        @keyframes dockShine {
-            0%, 40% { left: -100%; }
-            100% { left: 200%; }
+        .dock-icon-btn:hover {
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        /* Specific Icon Glows on Hover */
+        .dock-icon-btn:hover i.fa-house { text-shadow: 0 0 15px #3B82F6; color: #3B82F6; }
+        .dock-icon-btn:hover i.fa-language { text-shadow: 0 0 15px #FFD700; color: #FFD700; }
+        .dock-icon-btn:hover i.fa-paper-plane { text-shadow: 0 0 15px #14B8A6; color: #14B8A6; }
+        .dock-icon-btn:hover i.fa-whatsapp { text-shadow: 0 0 15px #25D366; color: #25D366; }
+
+        /* Center Explore Button - Floating Orb */
+        .explore-btn-wrapper {
+            position: relative;
+            top: -20px; /* Slightly lower to reduce overall visual height */
+            width: 50px; /* Slightly smaller orb */
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .explore-btn-wrapper:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4), inset 0 2px 5px rgba(255,255,255,0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .explore-icon {
+            font-size: 20px; /* Adjusted icon size */
+            background: linear-gradient(to bottom, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
         .lang-option-mobile, .dest-option-mobile {
@@ -359,39 +412,75 @@
 
     <!-- NEW MOBILE DOCK (Visible only on mobile) -->
     <div class="fixed bottom-4 inset-x-0 z-[90] md:hidden flex justify-center pointer-events-none animate-fade-in-up">
-        <!-- Main Dock Container: Floating Pill Shape -->
-        <div class="pointer-events-auto glass-panel-dock px-6 py-3 rounded-full flex justify-between items-center gap-6 relative z-50 w-auto min-w-[320px]">
-            <div class="dock-shine"></div>
+        <!-- Main Dock Container: Crystal Prism Pill - Wide & Compact -->
+        <div class="pointer-events-auto glass-panel-dock px-6 py-2 rounded-full flex justify-between items-end w-[96%] max-w-md relative z-50 shadow-2xl">
             
             <!-- Home Link -->
-            <a href="index.html" class="min-w-[40px] group flex flex-col items-center justify-center hover:scale-110 transition-all duration-300">
-                <i class="fa-solid fa-house text-xl mb-1 text-gray-400 group-hover:text-belarus-red transition-colors"></i>
-                <span class="text-[9px] font-bold uppercase tracking-wider leading-none text-gray-500 group-hover:text-white transition-colors">Home</span>
+            <a href="index.html" class="dock-icon-btn flex-1 group mb-1">
+                <i class="fa-solid fa-house text-lg mb-1 transition-all duration-300"></i>
+                <span class="text-[9px] font-bold uppercase tracking-widest transition-colors duration-300">Home</span>
             </a>
             
             <!-- Language Toggle -->
-            <button onclick="toggleMobileLanguage()" class="min-w-[40px] group flex flex-col items-center justify-center hover:scale-110 transition-all duration-300">
-                <i class="fa-solid fa-language text-xl mb-1 text-gray-400 group-hover:text-belarus-green transition-colors"></i>
-                <span class="text-[9px] font-bold uppercase tracking-wider leading-none text-gray-500 group-hover:text-white transition-colors">Lang</span>
+            <button onclick="toggleMobileLanguage()" class="dock-icon-btn flex-1 group mb-1">
+                <i class="fa-solid fa-language text-lg mb-1 transition-all duration-300"></i>
+                <span class="text-[9px] font-bold uppercase tracking-widest transition-colors duration-300">Lang</span>
             </button>
             
-            <!-- Countries/Explore Toggle -->
-            <button onclick="toggleMobileDestinations()" class="min-w-[40px] group flex flex-col items-center justify-center hover:scale-110 transition-all duration-300">
-                <i class="fa-solid fa-earth-europe text-xl mb-1 text-gray-400 group-hover:text-brand-gold transition-colors"></i>
-                <span class="text-[9px] font-bold uppercase tracking-wider leading-none text-gray-500 group-hover:text-white transition-colors">Explore</span>
+            <!-- Center Action (Explore) - Floating Orb -->
+            <div class="relative w-12 flex justify-center">
+                <button onclick="toggleMobileDestinations()" class="group flex flex-col items-center justify-end absolute bottom-1">
+                    <div class="explore-btn-wrapper">
+                        <i class="fa-solid fa-earth-europe explore-icon"></i>
+                    </div>
+                    <span class="text-[8px] font-bold uppercase tracking-widest text-white/80 mt-1">Explore</span>
+                </button>
+            </div>
+            
+            <!-- Apply Button (Changed to Button for Toggle) -->
+            <button onclick="toggleMobileApply()" class="dock-icon-btn flex-1 group mb-1">
+                <i class="fa-solid fa-paper-plane text-lg mb-1 transition-all duration-300"></i>
+                <span class="text-[9px] font-bold uppercase tracking-widest transition-colors duration-300">Apply</span>
             </button>
             
-            <!-- Action Button 1 -->
-            <a href="assessment.html" class="min-w-[40px] group flex flex-col items-center justify-center hover:scale-110 transition-all duration-300">
-                <i class="fa-solid fa-paper-plane text-xl mb-1 text-gray-400 group-hover:text-belarus-red transition-colors"></i>
-                <span class="text-[9px] font-bold uppercase tracking-wider leading-none text-gray-500 group-hover:text-white transition-colors">Apply</span>
+            <!-- Chat Button -->
+            <a href="https://wa.me/971503666382" target="_blank" class="dock-icon-btn flex-1 group mb-1">
+                <i class="fa-brands fa-whatsapp text-lg mb-1 transition-all duration-300"></i>
+                <span class="text-[9px] font-bold uppercase tracking-widest transition-colors duration-300">Chat</span>
             </a>
-            
-            <!-- Action Button 2 -->
-            <a href="https://wa.me/971503666382" target="_blank" class="min-w-[40px] group flex flex-col items-center justify-center hover:scale-110 transition-all duration-300">
-                <i class="fa-brands fa-whatsapp text-xl mb-1 text-gray-400 group-hover:text-[#25D366] transition-colors"></i>
-                <span class="text-[9px] font-bold uppercase tracking-wider leading-none text-gray-500 group-hover:text-white transition-colors">Chat</span>
-            </a>
+        </div>
+
+        <!-- NEW Apply Options Menu -->
+        <div id="mobile-apply-menu" class="pointer-events-auto absolute bottom-[calc(100%+20px)] w-[90%] max-w-sm p-4 rounded-[2rem] bg-[#0F172A]/95 backdrop-blur-xl border border-white/10 shadow-2xl opacity-0 invisible transition-all duration-300 transform translate-y-10 origin-bottom z-40">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-white/10">
+                <span class="text-sm font-bold text-white uppercase tracking-widest pl-2">Start Your Journey</span>
+                <button onclick="toggleMobileApply()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="flex flex-col gap-3">
+                <!-- Assessment Option -->
+                <a href="assessment.html" class="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/5 hover:border-brand-blue/50 transition-all group active:scale-95">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-brand-blue to-brand-purple flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-clipboard-list text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-base leading-tight">Free Assessment</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Check your eligibility instantly</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-gray-600 ml-auto group-hover:text-brand-blue transition-colors"></i>
+                </a>
+
+                <!-- Appointment Option -->
+                <a href="book.html" class="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-white/5 hover:border-brand-gold/50 transition-all group active:scale-95">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-brand-gold to-orange-500 flex items-center justify-center text-deep-space shadow-lg shadow-orange-500/20 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-calendar-check text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-base leading-tight">Book Appointment</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Schedule a consultation</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-gray-600 ml-auto group-hover:text-brand-gold transition-colors"></i>
+                </a>
+            </div>
         </div>
 
         <!-- Language Popup Menu (Positioned relative to screen center) -->
@@ -1123,9 +1212,11 @@
         function toggleMobileDestinations() {
             const menu = document.getElementById('mobile-destinations-menu');
             const langMenu = document.getElementById('mobile-language-menu');
+            const applyMenu = document.getElementById('mobile-apply-menu');
             
-            // Close language menu if open
+            // Close others
             if (langMenu) langMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
+            if (applyMenu) applyMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
             
             // Toggle current menu
             menu.classList.toggle('invisible');
@@ -1136,9 +1227,26 @@
         function toggleMobileLanguage() {
             const menu = document.getElementById('mobile-language-menu');
             const destMenu = document.getElementById('mobile-destinations-menu');
+            const applyMenu = document.getElementById('mobile-apply-menu');
             
-            // Close destination menu if open
+            // Close others
             if (destMenu) destMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
+            if (applyMenu) applyMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
+            
+            // Toggle current menu
+            menu.classList.toggle('invisible');
+            menu.classList.toggle('opacity-0');
+            menu.classList.toggle('translate-y-10');
+        }
+
+        function toggleMobileApply() {
+            const menu = document.getElementById('mobile-apply-menu');
+            const destMenu = document.getElementById('mobile-destinations-menu');
+            const langMenu = document.getElementById('mobile-language-menu');
+            
+            // Close others
+            if (destMenu) destMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
+            if (langMenu) langMenu.classList.add('invisible', 'opacity-0', 'translate-y-10');
             
             // Toggle current menu
             menu.classList.toggle('invisible');
@@ -1151,19 +1259,27 @@
             const dock = event.target.closest('.glass-panel-dock');
             const destMenu = document.getElementById('mobile-destinations-menu');
             const langMenu = document.getElementById('mobile-language-menu');
+            const applyMenu = document.getElementById('mobile-apply-menu');
             
             // Only proceed if a mobile menu is visible and the click is outside all relevant areas
-            if (
-                (destMenu && !destMenu.classList.contains('invisible') && !destMenu.contains(event.target) && !dock) ||
-                (langMenu && !langMenu.classList.contains('invisible') && !langMenu.contains(event.target) && !dock)
-            ) {
-                // Close if active and click is outside the menu/dock area
-                if (destMenu && !destMenu.classList.contains('invisible')) {
-                    toggleMobileDestinations();
+            const isDestOpen = destMenu && !destMenu.classList.contains('invisible');
+            const isLangOpen = langMenu && !langMenu.classList.contains('invisible');
+            const isApplyOpen = applyMenu && !applyMenu.classList.contains('invisible');
+
+            if ((isDestOpen || isLangOpen || isApplyOpen) && !dock) {
+                // If click is inside any menu, do nothing
+                if (
+                    (isDestOpen && destMenu.contains(event.target)) ||
+                    (isLangOpen && langMenu.contains(event.target)) ||
+                    (isApplyOpen && applyMenu.contains(event.target))
+                ) {
+                    return;
                 }
-                if (langMenu && !langMenu.classList.contains('invisible')) {
-                    toggleMobileLanguage();
-                }
+
+                // Close all
+                if (isDestOpen) toggleMobileDestinations();
+                if (isLangOpen) toggleMobileLanguage();
+                if (isApplyOpen) toggleMobileApply();
             }
         });
 
