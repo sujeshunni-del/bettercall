@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+     <!-- Google Tag Manager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GMYZGXFPCE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-GMYZGXFPCE');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Belarus Program | Better Call Immigration</title>
@@ -141,7 +149,7 @@
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        /* --- LENIS SMOOTH SCROLL CSS --- */
+        /* --- LENIS SMOOTH SCROLL CSS (Desktop Only) --- */
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
@@ -508,8 +516,8 @@
         </div>
     </div>
 
-    <!-- MOBILE DOCK (Visible only on mobile) - FROSTED -->
-    <div class="fixed bottom-6 inset-x-0 z-[90] md:hidden flex justify-center pointer-events-none animate-slide-up">
+       <!-- MOBILE DOCK (Visible only on mobile) - FROSTED -->
+    <div class="fixed bottom-2 inset-x-0 z-[90] md:hidden flex justify-center pointer-events-none animate-slide-up">
         <div class="pointer-events-auto glass-panel-dock px-8 py-3 flex justify-between items-center w-[85%] max-w-sm relative z-50 shadow-2xl shadow-blue-900/10">
             
             <a href="index.html" class="dock-icon-btn flex-1 group text-center flex flex-col items-center justify-center transition-transform active:scale-95">
@@ -543,16 +551,14 @@
                 <span class="text-xs font-bold text-slate-800 uppercase tracking-widest pl-2">Start Journey</span>
                 <button onclick="toggleMobileApply()" class="w-8 h-8 rounded-full bg-slate-50/50 flex items-center justify-center text-slate-400 hover:text-slate-800"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="flex flex-col gap-3">
-                <a href="assessment.html" class="flex items-center gap-4 p-4 rounded-2xl bg-white/40 border border-white/60 hover:border-blue-200 transition-all group backdrop-blur-sm">
-                    <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-brand-blue"><i class="fa-solid fa-clipboard-list text-lg"></i></div>
-                    <div><h4 class="text-slate-900 font-bold text-base">Free Assessment</h4><p class="text-[10px] text-slate-500 uppercase tracking-wider">Check eligibility</p></div>
-                    <i class="fa-solid fa-chevron-right ml-auto text-slate-300 group-hover:text-brand-blue"></i>
+            <div class="grid grid-cols-2 gap-3">
+                <a href="assessment.html" class="flex flex-col items-center justify-center p-4 rounded-xl bg-white/40 border border-transparent hover:border-blue-200 hover:bg-blue-50/50 transition group text-center aspect-square">
+                    <div class="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-brand-blue mb-2 text-xl group-hover:scale-110 transition-transform"><i class="fa-solid fa-clipboard-list"></i></div>
+                    <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Assessment</span>
                 </a>
-                <a href="https://www.bettercall.online/appointment" class="flex items-center gap-4 p-4 rounded-2xl bg-white/40 border border-white/60 hover:border-amber-200 transition-all group backdrop-blur-sm">
-                    <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-brand-gold"><i class="fa-solid fa-calendar-check text-lg"></i></div>
-                    <div><h4 class="text-slate-900 font-bold text-base">Book Appointment</h4><p class="text-[10px] text-slate-500 uppercase tracking-wider">Schedule consultation</p></div>
-                    <i class="fa-solid fa-chevron-right ml-auto text-slate-300 group-hover:text-brand-gold"></i>
+                <a href="book.html" class="flex flex-col items-center justify-center p-4 rounded-xl bg-white/40 border border-transparent hover:border-amber-200 hover:bg-amber-50/50 transition group text-center aspect-square">
+                    <div class="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-brand-gold mb-2 text-xl group-hover:scale-110 transition-transform"><i class="fa-solid fa-calendar-check"></i></div>
+                    <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Book Now</span>
                 </a>
             </div>
         </div>
@@ -564,13 +570,13 @@
                 <button onclick="toggleMobileLanguage()" class="w-8 h-8 rounded-full bg-slate-50/50 flex items-center justify-center text-slate-400 hover:text-slate-800"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="grid grid-cols-2 gap-2 max-h-[40vh] overflow-y-auto">
-                <button onclick="setLanguage('en', this); toggleMobileLanguage()" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60">English</button>
-                <button onclick="setLanguage('ml', this); toggleMobileLanguage()" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60 font-['Noto_Sans_Malayalam']">മലയാളം</button>
-                <button onclick="setLanguage('hi', this); toggleMobileLanguage()" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60">हिंदी</button>
-                <button onclick="setLanguage('ta', this); toggleMobileLanguage()" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60 font-['Noto_Sans_Tamil']">தமிழ்</button>
-                <button onclick="setLanguage('tl', this); toggleMobileLanguage()" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60">Filipino</button>
-                <button onclick="setLanguage('si', this); toggleMobileLanguage()" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60 font-['Noto_Sans_Sinhala']">සිංහල</button>
-                <button onclick="setLanguage('sw', this); toggleMobileLanguage()" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60">Swahili</button>
+                <button onclick="setLanguage('en', this)" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60">English</button>
+                <button onclick="setLanguage('ml', this)" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60 font-['Noto_Sans_Malayalam']">മലയാളം</button>
+                <button onclick="setLanguage('hi', this)" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60">हिंदी</button>
+                <button onclick="setLanguage('ta', this)" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60 font-['Noto_Sans_Tamil']">தமிழ்</button>
+                <button onclick="setLanguage('tl', this)" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60">Filipino</button>
+                <button onclick="setLanguage('si', this)" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60 font-['Noto_Sans_Sinhala']">සිංහල</button>
+                <button onclick="setLanguage('sw', this)" class="text-left p-3 rounded-xl hover:bg-white/40 text-sm text-slate-700 font-bold border border-transparent hover:border-white/60">Swahili</button>
             </div>
         </div>
 
@@ -641,7 +647,10 @@
     </div>
 
     <script>
-        // --- GLOBAL HEADER & FOOTER INJECTION (Restored Logo & Vibrant & Creative Mobile Menu) ---
+        // ====================================================================
+        // 1. GLOBAL CONSTANTS (URLs and Static Markup)
+        // ====================================================================
+
         const LOGO_URL = "https://raw.githubusercontent.com/thebettercall/app/9ca2db3d96700f0412c9f2f420422ed1ccfb52bb/Bettercall%20Logo%20SVG%2003.svg";
         
         const GLOBAL_HEADER = `
@@ -937,7 +946,10 @@
         document.body.insertAdjacentHTML('afterbegin', GLOBAL_HEADER);
         document.body.insertAdjacentHTML('beforeend', GLOBAL_FOOTER);
 
-        // --- MERGED TRANSLATION DATA ---
+        // ====================================================================
+        // 2. DATA MODELS (Translations, Jobs, Timeline, Search)
+        // ====================================================================
+
         const translations = {
             en: {
                 // Global (From Template)
@@ -1282,7 +1294,6 @@
             }
         };
 
-        // --- PAGE SPECIFIC DATA ---
         const jobsData = [
             { i18n_id: "job_agri_gen", i18n_dept: "cat_agri", cat: "Agriculture", euro: "€700 - €1,200", exp: "Seasonal/Full-time", icon: "fa-solid fa-wheat-awn text-green-500", bg: "bg-green-50/70" },
             { i18n_id: "job_tractor", i18n_dept: "cat_farm", cat: "Farming", euro: "€700 - €1,200", exp: "License Req", icon: "fa-solid fa-tractor text-amber-500", bg: "bg-amber-50/70" },
@@ -1306,7 +1317,6 @@
             { step: "5", key: "step_5_title", descKey: "step_5_desc", fee: "Permit" }
         ];
         
-        // --- SEARCH DATA ---
         const searchData = [
             // --- GERMANY (Healthcare, Corporate, General Labor) ---
             { title: "Registered Nurse", type: "Job", url: "germany.html", icon: "👩‍⚕️", keywords: "health, medical, care home, germany, hospital, nurse" },
@@ -1495,13 +1505,110 @@
             { title: "Free Assessment", type: "Tool", url: "assessment.html", icon: "📝", keywords: "check, eligibility" }
         ];
 
-        // --- STATE ---
+        // ====================================================================
+        // 3. STATE MANAGEMENT
+        // ====================================================================
+
         let currentLang = 'en';
         let currentFilter = 'All';
         let ticking = false;
+        // Search elements populated in initSearchElements()
+        let searchOverlay, searchInput, searchResults, dynamicResults, noResults; 
 
-        // --- FUNCTIONS ---
-        
+        // ====================================================================
+        // 4. UTILITY FUNCTIONS (Translation, Modal)
+        // ====================================================================
+
+        /** Gets the translated string for a key, falling back to English or the key itself. */
+        function t(key) {
+            const langData = translations[currentLang];
+            const enData = translations['en'];
+            if (langData && langData[key]) {
+                return langData[key];
+            } else if (enData && enData[key]) {
+                return enData[key];
+            } else {
+                return key;
+            }
+        }
+
+        /** Sets the global language and updates all translatable elements. */
+        function setLanguage(lang, element) {
+            currentLang = lang;
+            
+            // Update Body Font Class/Style for RTL/specific fonts
+            document.body.className = `antialiased min-h-screen flex flex-col relative bg-page-bg lang-${lang}`;
+            if (lang === 'hi') document.body.style.fontFamily = "'Noto Sans Devanagari', sans-serif";
+            else if (lang === 'ml') document.body.style.fontFamily = "'Noto Sans Malayalam', sans-serif";
+            else if (lang === 'ta') document.body.style.fontFamily = "'Noto Sans Tamil', sans-serif";
+            else if (lang === 'si') document.body.style.fontFamily = "'Noto Sans Sinhala', sans-serif";
+            else document.body.style.fontFamily = "'Inter', sans-serif";
+
+            // Update UI Selection
+            document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
+            if(element) element.classList.add('active');
+
+            // Update Text
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(t(key)) {
+                    // Quick fade effect for text change
+                    el.style.opacity = '0';
+                    setTimeout(() => {
+                        if(el.tagName === 'INPUT') el.placeholder = t(key);
+                        else el.innerHTML = t(key);
+                        el.style.opacity = '1';
+                    }, 200);
+                }
+            });
+            
+            document.querySelectorAll('[data-placeholder-i18n]').forEach(el => {
+                const key = el.getAttribute('data-placeholder-i18n');
+                if(t(key)) el.placeholder = t(key);
+            });
+
+            // Re-render dynamic components
+            setTimeout(() => {
+                renderCategoryChips();
+                filterPageJobs();
+                renderTimeline();
+            }, 200);
+
+            // Close menu logic
+             const dropdown = document.getElementById('language-dropdown');
+             if(dropdown) dropdown.classList.add('invisible', 'opacity-0');
+        }
+
+        /** Opens the job modal with data populated from the jobsData array index. */
+        function openJobModal(index) {
+            const job = jobsData[index];
+            document.getElementById('modalTitle').innerText = t(job.i18n_id) || job.i18n_id;
+            document.getElementById('modalDept').innerText = t(job.i18n_dept);
+            document.getElementById('modalSalary').innerText = job.euro;
+            
+            document.getElementById('modalDocs').innerHTML = documentsData.map(doc => `
+                <div class="flex items-center gap-4 p-3.5 rounded-xl border border-white/60 hover:border-brand-blue/30 hover:bg-blue-50/30 transition group bg-white/40 backdrop-blur-sm">
+                    <div class="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition"><i class="${doc.icon} text-lg"></i></div>
+                    <div>
+                        <p class="text-sm text-slate-900 font-bold group-hover:text-brand-blue transition">${t(doc.i18n_id)}</p>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-wide font-medium">${t(doc.desc) || doc.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('jobModal').classList.remove('hidden');
+        }
+
+        /** Closes the job modal. */
+        function closeModal() {
+            document.getElementById('jobModal').classList.add('hidden');
+        }
+
+        // ====================================================================
+        // 5. NAVIGATION & UI HANDLERS
+        // ====================================================================
+
+        /** Handles hiding/showing the desktop language dropdown. */
         function toggleLanguageDropdown(event) {
             const dropdown = document.getElementById('language-dropdown');
             const button = document.getElementById('lang-toggle-btn');
@@ -1526,125 +1633,7 @@
             document.addEventListener('click', closeMenu);
         }
 
-        function t(key) {
-            const langData = translations[currentLang];
-            const enData = translations['en'];
-            if (langData && langData[key]) {
-                return langData[key];
-            } else if (enData && enData[key]) {
-                return enData[key];
-            } else {
-                return key;
-            }
-        }
-
-        function setLanguage(lang, element) {
-            currentLang = lang;
-            
-            // Body Font Class
-            document.body.className = `antialiased min-h-screen flex flex-col relative bg-page-bg lang-${lang}`;
-            if (lang === 'hi') document.body.style.fontFamily = "'Noto Sans Devanagari', sans-serif";
-            else if (lang === 'ml') document.body.style.fontFamily = "'Noto Sans Malayalam', sans-serif";
-            else if (lang === 'ta') document.body.style.fontFamily = "'Noto Sans Tamil', sans-serif";
-            else if (lang === 'si') document.body.style.fontFamily = "'Noto Sans Sinhala', sans-serif";
-            else document.body.style.fontFamily = "'Inter', sans-serif";
-
-            // Update UI Selection
-            document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
-            if(element) element.classList.add('active');
-
-            // Update Text
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if(t(key)) {
-                    el.style.opacity = '0';
-                    setTimeout(() => {
-                        if(el.tagName === 'INPUT') el.placeholder = t(key);
-                        else el.innerHTML = t(key);
-                        el.style.opacity = '1';
-                    }, 200);
-                }
-            });
-            
-            document.querySelectorAll('[data-placeholder-i18n]').forEach(el => {
-                const key = el.getAttribute('data-placeholder-i18n');
-                if(t(key)) el.placeholder = t(key);
-            });
-
-            // Re-render
-            setTimeout(() => {
-                renderCategoryChips();
-                filterPageJobs();
-                renderTimeline();
-            }, 200);
-
-            // Close menu logic
-             const dropdown = document.getElementById('language-dropdown');
-             if(dropdown) dropdown.classList.add('invisible', 'opacity-0');
-        }
-
-        // --- MOBILE DOCK LOGIC ---
-        function toggleMobileDestinations() { toggleMobileMenuId('mobile-destinations-menu'); }
-        function toggleMobileLanguage() { toggleMobileMenuId('mobile-language-menu'); }
-        function toggleMobileApply() { toggleMobileMenuId('mobile-apply-menu'); }
-        
-        function toggleMobileMenuId(id) {
-            const target = document.getElementById(id);
-            const others = ['mobile-destinations-menu', 'mobile-language-menu', 'mobile-apply-menu'].filter(x => x !== id);
-            
-            others.forEach(oid => {
-                document.getElementById(oid).classList.add('invisible', 'opacity-0', 'translate-y-4');
-            });
-            
-            if (target.classList.contains('invisible')) {
-                target.classList.remove('invisible', 'opacity-0', 'translate-y-4');
-            } else {
-                target.classList.add('invisible', 'opacity-0', 'translate-y-4');
-            }
-        }
-
-        document.addEventListener('click', function(event) {
-            const dock = event.target.closest('.glass-panel-dock');
-            if (!dock && !event.target.closest('.mobile-menu-active')) {
-                ['mobile-destinations-menu', 'mobile-language-menu', 'mobile-apply-menu'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el && !el.contains(event.target)) {
-                         el.classList.add('invisible', 'opacity-0', 'translate-y-4');
-                    }
-                });
-            }
-        });
-
-        // --- SCROLL HANDLING ---
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const nav = document.getElementById('navbar');
-                    if(nav) {
-                        if (window.scrollY > 10) {
-                            nav.classList.add('scrolled');
-                        } else {
-                            nav.classList.remove('scrolled');
-                        }
-                    }
-
-                    // Auto-hide Search
-                    const searchSection = document.getElementById('job-search-section');
-                    const jobContainer = document.getElementById('jobContainer');
-                    if (searchSection && jobContainer) {
-                        const jobRect = jobContainer.getBoundingClientRect();
-                        if (jobRect.bottom < 100) { 
-                            searchSection.classList.add('search-hidden');
-                        } else {
-                            searchSection.classList.remove('search-hidden');
-                        }
-                    }
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-        
+        /** Toggles the main mobile menu (hamburger menu). */
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             if (menu.classList.contains('translate-y-full')) {
@@ -1654,7 +1643,150 @@
             }
         }
 
-        // --- RENDERERS ---
+        // --- Mobile Dock Handlers ---
+        function toggleMobileDestinations() { toggleMobileMenuId('mobile-destinations-menu'); }
+        function toggleMobileLanguage() { toggleMobileMenuId('mobile-language-menu'); }
+        function toggleMobileApply() { toggleMobileMenuId('mobile-apply-menu'); }
+        
+        /** Toggles visibility for a specific mobile dock menu by ID, ensuring others are closed. */
+        function toggleMobileMenuId(id) {
+            const target = document.getElementById(id);
+            const others = ['mobile-destinations-menu', 'mobile-language-menu', 'mobile-apply-menu'].filter(x => x !== id);
+            
+            others.forEach(oid => {
+                const el = document.getElementById(oid);
+                if (el) el.classList.add('invisible', 'opacity-0', 'translate-y-4');
+            });
+            
+            if (target.classList.contains('invisible')) {
+                target.classList.remove('invisible', 'opacity-0', 'translate-y-4');
+            } else {
+                target.classList.add('invisible', 'opacity-0', 'translate-y-4');
+            }
+        }
+
+        // Global click listener to close mobile dock menus if clicking outside
+        document.addEventListener('click', function(event) {
+            const dock = event.target.closest('.glass-panel-dock');
+            if (!dock && !event.target.closest('.mobile-menu-active')) {
+                ['mobile-destinations-menu', 'mobile-language-menu', 'mobile-apply-menu'].forEach(id => {
+                    const el = document.getElementById(id);
+                    // Check if element exists and doesn't contain the click target
+                    if (el && !el.contains(event.target)) {
+                         el.classList.add('invisible', 'opacity-0', 'translate-y-4');
+                    }
+                });
+            }
+        });
+
+
+        // --- Search Overlay Handlers ---
+
+        /** Initializes references to search UI elements. */
+        function initSearchElements() {
+             searchOverlay = document.getElementById('search-overlay');
+             searchInput = document.getElementById('global-search-input');
+             searchResults = document.getElementById('search-results');
+             dynamicResults = document.getElementById('dynamic-results');
+             noResults = document.getElementById('no-results');
+
+            if(searchInput) {
+                 searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    if (query.length === 0) {
+                        dynamicResults.classList.add('hidden');
+                        noResults.classList.add('hidden');
+                        return;
+                    }
+                    const filtered = searchData.filter(item => 
+                        item.title.toLowerCase().includes(query) || 
+                        item.keywords.toLowerCase().includes(query) ||
+                        item.type.toLowerCase().includes(query)
+                    );
+                    renderResults(filtered, query);
+                });
+            }
+        }
+        
+        /** Toggles the global search overlay visibility. */
+        function toggleSearch() {
+            if(!searchOverlay) initSearchElements();
+            const isActive = !searchOverlay.classList.contains('invisible');
+            if (isActive) {
+                searchOverlay.classList.add('invisible', 'opacity-0');
+                document.body.style.overflow = ''; 
+                searchInput.value = ''; // Clear search input on close
+                dynamicResults.innerHTML = ''; // Clear results
+            } else {
+                searchOverlay.classList.remove('invisible', 'opacity-0');
+                document.body.style.overflow = 'hidden'; 
+                setTimeout(() => searchInput.focus(), 100);
+            }
+        }
+
+        /** Highlights matching text within search results. */
+        function highlightMatch(text, query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="bg-yellow-200/80 text-brand-black px-0.5 rounded">$1</span>');
+        }
+
+        /** Renders dynamic search results. */
+        function renderResults(results, query) {
+            dynamicResults.innerHTML = '';
+            if (results.length === 0) {
+                dynamicResults.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+            dynamicResults.classList.remove('hidden');
+
+            results.forEach((result, idx) => {
+                const div = document.createElement('a');
+                div.href = result.url;
+                div.className = "flex items-center gap-4 p-4 rounded-2xl hover:bg-white/40 transition border border-transparent hover:border-white/60 group animate-fade-in glass-frosted";
+                div.style.animationDelay = `${idx * 50}ms`;
+                
+                const highlightedTitle = highlightMatch(result.title, query);
+                
+                div.innerHTML = `
+                    <div class="w-12 h-12 rounded-xl bg-white/70 shadow-sm flex items-center justify-center text-2xl border border-white/50 group-hover:scale-110 transition-transform">${result.icon}</div>
+                    <div class="flex-1">
+                        <h4 class="text-brand-black font-bold text-lg group-hover:text-brand-blue transition">${highlightedTitle}</h4>
+                        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider border border-white/50 px-2 py-0.5 rounded-md bg-white/40">${result.type}</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-brand-blue transition-colors"></i>
+                `;
+                dynamicResults.appendChild(div);
+            });
+        }
+        
+        // --- Event Listeners for Keyboard Shortcuts ---
+        document.addEventListener('keydown', (e) => {
+            // CMD/CTRL + K to open/close search
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                toggleSearch();
+            }
+            // ESC to close search
+            if (e.key === 'Escape' && searchOverlay && !searchOverlay.classList.contains('invisible')) {
+                toggleSearch();
+            }
+        });
+
+
+        // ====================================================================
+        // 6. RENDERER FUNCTIONS
+        // ====================================================================
+
+        /** Sets the active job category filter and triggers re-render. */
+        function setCategory(catId) {
+            currentFilter = catId;
+            renderCategoryChips();
+            filterPageJobs();
+        }
+
+        /** Renders interactive category filter chips. */
         function renderCategoryChips() {
             const categories = [
                 { id: "All", key: "cat_all" },
@@ -1673,12 +1805,7 @@
             }).join('');
         }
 
-        function setCategory(catId) {
-            currentFilter = catId;
-            renderCategoryChips();
-            filterPageJobs();
-        }
-
+        /** Filters and renders job cards based on search query and category filter. */
         function filterPageJobs() {
             const input = document.getElementById('pageSearchInput');
             if(!input) return;
@@ -1725,6 +1852,7 @@
             }).join('');
         }
 
+        /** Renders the step-by-step process timeline. */
         function renderTimeline() {
             const container = document.getElementById('timelineContainer');
             if(!container) return;
@@ -1751,119 +1879,14 @@
                 </div>
             `}).join('');
         }
-
-        function openJobModal(index) {
-            const job = jobsData[index];
-            document.getElementById('modalTitle').innerText = t(job.i18n_id) || job.i18n_id;
-            document.getElementById('modalDept').innerText = t(job.i18n_dept);
-            document.getElementById('modalSalary').innerText = job.euro;
-            
-            document.getElementById('modalDocs').innerHTML = documentsData.map(doc => `
-                <div class="flex items-center gap-4 p-3.5 rounded-xl border border-white/60 hover:border-brand-blue/30 hover:bg-blue-50/30 transition group bg-white/40 backdrop-blur-sm">
-                    <div class="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition"><i class="${doc.icon} text-lg"></i></div>
-                    <div>
-                        <p class="text-sm text-slate-900 font-bold group-hover:text-brand-blue transition">${t(doc.i18n_id)}</p>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-wide font-medium">${t(doc.desc) || doc.desc}</p>
-                    </div>
-                </div>
-            `).join('');
-
-            document.getElementById('jobModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('jobModal').classList.add('hidden');
-        }
-
-        // --- SEARCH ---
-        let searchOverlay, searchInput, searchResults, dynamicResults, noResults;
-
-        function initSearchElements() {
-             searchOverlay = document.getElementById('search-overlay');
-             searchInput = document.getElementById('global-search-input');
-             searchResults = document.getElementById('search-results');
-             dynamicResults = document.getElementById('dynamic-results');
-             noResults = document.getElementById('no-results');
-
-            if(searchInput) {
-                 searchInput.addEventListener('input', (e) => {
-                    const query = e.target.value.toLowerCase().trim();
-                    if (query.length === 0) {
-                        dynamicResults.classList.add('hidden');
-                        noResults.classList.add('hidden');
-                        return;
-                    }
-                    const filtered = searchData.filter(item => 
-                        item.title.toLowerCase().includes(query) || 
-                        item.keywords.toLowerCase().includes(query) ||
-                        item.type.toLowerCase().includes(query)
-                    );
-                    renderResults(filtered, query);
-                });
-            }
-        }
         
-        function toggleSearch() {
-            if(!searchOverlay) initSearchElements();
-            const isActive = !searchOverlay.classList.contains('invisible');
-            if (isActive) {
-                searchOverlay.classList.add('invisible', 'opacity-0');
-                document.body.style.overflow = ''; 
-            } else {
-                searchOverlay.classList.remove('invisible', 'opacity-0');
-                document.body.style.overflow = 'hidden'; 
-                setTimeout(() => searchInput.focus(), 100);
-            }
-        }
+        // ====================================================================
+        // 7. INITIALIZATION
+        // ====================================================================
 
-        function highlightMatch(text, query) {
-            const regex = new RegExp(`(${query})`, 'gi');
-            return text.replace(regex, '<span class="bg-yellow-200/80 text-brand-black px-0.5 rounded">$1</span>');
-        }
-
-        function renderResults(results, query) {
-            dynamicResults.innerHTML = '';
-            if (results.length === 0) {
-                dynamicResults.classList.add('hidden');
-                noResults.classList.remove('hidden');
-                return;
-            }
-            noResults.classList.add('hidden');
-            dynamicResults.classList.remove('hidden');
-
-            results.forEach((result, idx) => {
-                const div = document.createElement('a');
-                div.href = result.url;
-                div.className = "flex items-center gap-4 p-4 rounded-2xl hover:bg-white/40 transition border border-transparent hover:border-white/60 group animate-fade-in glass-frosted";
-                div.style.animationDelay = `${idx * 50}ms`;
-                
-                const highlightedTitle = highlightMatch(result.title, query);
-                
-                div.innerHTML = `
-                    <div class="w-12 h-12 rounded-xl bg-white/70 shadow-sm flex items-center justify-center text-2xl border border-white/50 group-hover:scale-110 transition-transform">${result.icon}</div>
-                    <div class="flex-1">
-                        <h4 class="text-brand-black font-bold text-lg group-hover:text-brand-blue transition">${highlightedTitle}</h4>
-                        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider border border-white/50 px-2 py-0.5 rounded-md bg-white/40">${result.type}</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-brand-blue transition-colors"></i>
-                `;
-                dynamicResults.appendChild(div);
-            });
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-                e.preventDefault();
-                toggleSearch();
-            }
-            if (e.key === 'Escape' && searchOverlay && !searchOverlay.classList.contains('invisible')) {
-                toggleSearch();
-            }
-        });
-
-        // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof Lenis !== 'undefined') {
+            // Initialize Lenis smooth scroll for desktop only (window.innerWidth >= 768)
+            if (typeof Lenis !== 'undefined' && window.innerWidth >= 768) {
                 const lenis = new Lenis({ duration: 1.2, smooth: true });
                 function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
                 requestAnimationFrame(raf);
@@ -1873,9 +1896,39 @@
             renderCategoryChips();
             renderTimeline();
             filterPageJobs();
-            initSearchElements();
+            initSearchElements(); // Initialize search variables/listeners
             
-            // Reveal animations
+            // Global Scroll Behavior Handler
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const nav = document.getElementById('navbar');
+                        if(nav) {
+                            if (window.scrollY > 10) {
+                                nav.classList.add('scrolled');
+                            } else {
+                                nav.classList.remove('scrolled');
+                            }
+                        }
+
+                        // Auto-hide Search Bar on scroll down past hero section
+                        const searchSection = document.getElementById('job-search-section');
+                        const jobContainer = document.getElementById('jobContainer');
+                        if (searchSection && jobContainer) {
+                            const jobRect = jobContainer.getBoundingClientRect();
+                            if (jobRect.bottom < 100) { 
+                                searchSection.classList.add('search-hidden');
+                            } else {
+                                searchSection.classList.remove('search-hidden');
+                            }
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            // Intersection Observer for reveal animations
             const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 }; 
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
