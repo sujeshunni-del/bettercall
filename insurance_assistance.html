@@ -71,12 +71,28 @@
         .lang-toggle-btn { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid #CBD5E1; padding: 0.75rem 1.25rem; border-radius: 9999px; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .language-dropdown { position: absolute; bottom: 100%; left: 0; margin-bottom: 1rem; width: 12rem; background: #FFFFFF; border: 1px solid #CBD5E1; padding: 0.5rem; border-radius: 1rem; opacity: 0; visibility: hidden; transform: scale(0.9); transition: all 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .lang-toggle-btn.active + .language-dropdown { opacity: 1; visibility: visible; transform: scale(1); }
-        .lang-option { padding: 0.5rem 1rem; color: #64748B; font-size: 0.875rem; border-radius: 0.5rem; width: 100%; text-align: left; }
+        .lang-option { padding: 0.5rem 1rem; color: #64748B; font-size: 0.875rem; border-radius: 0.5rem; width: 100%; text-align: left; transition: background 0.2s; }
         .lang-option:hover { background: #E2E8F0; color: #21468B; }
+        .lang-option.active { background: rgba(33, 70, 139, 0.1); color: #21468B; font-weight: 700; }
 
-        /* Mobile Popups */
-        .glass-creative-popup { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 -15px 50px -10px rgba(0, 0, 0, 0.1); transform-origin: bottom center; }
-        .glass-pad-btn { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px) saturate(120%); border: 1px solid rgba(255, 255, 255, 0.3); transition: all 0.4s; }
+        /* Mobile Popups - Restored Glass Transparency */
+        .glass-creative-popup { 
+            background: rgba(255, 255, 255, 0.25); 
+            backdrop-filter: blur(24px) saturate(180%); 
+            -webkit-backdrop-filter: blur(24px) saturate(180%); 
+            border: 1px solid rgba(255, 255, 255, 0.4); 
+            box-shadow: 0 -15px 50px -10px rgba(33, 70, 139, 0.15); 
+            transform-origin: bottom center; 
+        }
+        .glass-pad-btn { 
+            background: rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(10px) saturate(140%); 
+            border: 1px solid rgba(255, 255, 255, 0.4); 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s; 
+        }
+        .glass-pad-btn:active { background: rgba(255, 255, 255, 0.4); transform: scale(0.98); }
+
         .visible { opacity: 1 !important; visibility: visible !important; transform: translate(-50%, 0) scale(1) !important; }
         #mobileMenu.visible { transform: scale(1) !important; left: 0.75rem !important; right: 0.75rem !important; visibility: visible !important; opacity: 1 !important; }
         
@@ -89,7 +105,7 @@
 </head>
 <body class="antialiased min-h-screen flex flex-col relative" id="page-body">
 
-    <main class="flex-grow w-full max-w-7xl mx-auto relative z-10 space-y-16 pt-24 md:pt-32 pb-32 md:pb-12 px-4 sm:px-6">
+    <main class="flex-grow w-full max-w-7xl mx-auto relative z-10 space-y-16 pt-24 md:pt-32 pb-32 md:pb-12 px-4 sm:px-6 text-left">
         
         <!-- Hero Section -->
         <header class="text-center space-y-4 animate-fade-in-up">
@@ -134,8 +150,8 @@
                         </div>
                         <div class="hidden md:block h-20 w-px bg-slate-200"></div>
                         <div class="text-center">
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Status</p>
-                            <span class="px-3 py-1 rounded-full bg-green-100 text-green-600 text-[10px] font-black uppercase">Verified Compliant</span>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1" data-i18n="status_label">Status</p>
+                            <span class="px-3 py-1 rounded-full bg-green-100 text-green-600 text-[10px] font-black uppercase" data-i18n="verified_compliant">Verified Compliant</span>
                         </div>
                     </div>
                 </div>
@@ -148,34 +164,34 @@
                 <h3 class="text-xl font-bold text-brand-black mb-2" data-i18n="pkg_schengen">Schengen Visa</h3>
                 <p class="text-sm text-slate-500 mb-6" data-i18n="pkg_schengen_desc">Mandatory for short-stay tourist and business visas.</p>
                 <ul class="space-y-4 text-sm text-slate-600 mb-8">
-                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-primary"></i> €30,000 Minimum Coverage</li>
-                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-primary"></i> Zero Deductible Plans</li>
-                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-primary"></i> Repatriation Included</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-primary"></i> <span data-i18n="benefit_min_cover">€30,000 Minimum Coverage</span></li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-primary"></i> <span data-i18n="benefit_zero_ded">Zero Deductible Plans</span></li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-primary"></i> <span data-i18n="benefit_repat">Repatriation Included</span></li>
                 </ul>
-                <a href="https://wa.me/971503666382?text=Schengen%20Insurance" class="block w-full py-3 rounded-xl bg-slate-50 border border-slate-200 text-center text-sm font-bold text-theme-primary hover:bg-theme-primary hover:text-white transition-all">Select Plan</a>
+                <a href="https://wa.me/971503666382?text=Schengen%20Insurance" class="block w-full py-3 rounded-xl bg-slate-50 border border-slate-200 text-center text-sm font-bold text-theme-primary hover:bg-theme-primary hover:text-white transition-all" data-i18n="btn_select">Select Plan</a>
             </div>
 
             <div class="glass-frosted p-8 rounded-3xl border-t-4 border-theme-secondary relative scale-105 shadow-2xl z-10 reveal-item">
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-theme-secondary text-white text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest">Recommended</div>
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-theme-secondary text-white text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest" data-i18n="badge_recommended">Recommended</div>
                 <h3 class="text-xl font-bold text-brand-black mb-2" data-i18n="pkg_platinum">Platinum Travel</h3>
                 <p class="text-sm text-slate-500 mb-6" data-i18n="pkg_platinum_desc">Comprehensive protection for high-value trips and families.</p>
                 <ul class="space-y-4 text-sm text-slate-600 mb-8">
-                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-secondary"></i> $100k+ Medical Cover</li>
-                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-secondary"></i> COVID-19 Full Coverage</li>
-                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-secondary"></i> 24/7 Global Concierge</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-secondary"></i> <span data-i18n="benefit_high_medical">$100k+ Medical Cover</span></li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-secondary"></i> <span data-i18n="benefit_covid">COVID-19 Full Coverage</span></li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-secondary"></i> <span data-i18n="benefit_assist">24/7 Global Concierge</span></li>
                 </ul>
-                <a href="https://wa.me/971503666382?text=Platinum%20Insurance" class="block w-full py-3 rounded-xl bg-theme-secondary text-center text-sm font-bold text-white hover:opacity-90 transition-all shadow-lg shadow-amber-500/30">Select Platinum</a>
+                <a href="https://wa.me/971503666382?text=Platinum%20Insurance" class="block w-full py-3 rounded-xl bg-theme-secondary text-center text-sm font-bold text-white hover:opacity-90 transition-all shadow-lg shadow-amber-500/30" data-i18n="btn_platinum">Select Platinum</a>
             </div>
 
             <div class="glass-frosted p-8 rounded-3xl border-t-4 border-theme-accent reveal-item">
                 <h3 class="text-xl font-bold text-brand-black mb-2" data-i18n="pkg_student">Student / Expat</h3>
                 <p class="text-sm text-slate-500 mb-6" data-i18n="pkg_student_desc">Extended coverage for study abroad and long-term residency.</p>
                 <ul class="space-y-4 text-sm text-slate-600 mb-8">
-                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-accent"></i> 3-12 Month Long-term</li>
-                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-accent"></i> University Compliant</li>
-                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-accent"></i> Pre-existing Condition Cover</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-accent"></i> <span data-i18n="benefit_long_term">3-12 Month Long-term</span></li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-accent"></i> <span data-i18n="benefit_uni">University Compliant</span></li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-theme-accent"></i> <span data-i18n="benefit_pre_exist">Pre-existing Condition Cover</span></li>
                 </ul>
-                <a href="https://wa.me/971503666382?text=Student%20Insurance" class="block w-full py-3 rounded-xl bg-slate-50 border border-slate-200 text-center text-sm font-bold text-theme-accent hover:bg-theme-accent hover:text-white transition-all">Select Plan</a>
+                <a href="https://wa.me/971503666382?text=Student%20Insurance" class="block w-full py-3 rounded-xl bg-slate-50 border border-slate-200 text-center text-sm font-bold text-theme-accent hover:bg-theme-accent hover:text-white transition-all" data-i18n="btn_explore">Select Plan</a>
             </div>
         </section>
 
@@ -189,13 +205,13 @@
             <i class="fa-solid fa-chevron-up text-xs opacity-50 transition-transform duration-300"></i>
         </div>
         <div id="language-dropdown" class="language-dropdown">
-            <button onclick="setLanguage('en', this);" class="lang-option active">English</button>
-            <button onclick="setLanguage('ml', this);" class="lang-option">മലയാളം</button>
-            <button onclick="setLanguage('hi', this);" class="lang-option">हिंदी</button>
-            <button onclick="setLanguage('ta', this);" class="lang-option">தமிழ்</button>
-            <button onclick="setLanguage('fil', this);" class="lang-option">Filipino</button>
-            <button onclick="setLanguage('si', this);" class="lang-option">සිංහල</button>
-            <button onclick="setLanguage('sw', this);" class="lang-option">Swahili</button>
+            <button onclick="setLanguage('en', this);" class="lang-option active"><span>English</span> <span class="text-[10px] text-slate-400">EN</span></button>
+            <button onclick="setLanguage('ml', this);" class="lang-option"><span>മലയാളം</span> <span class="text-[10px] text-slate-400">ML</span></button>
+            <button onclick="setLanguage('hi', this);" class="lang-option"><span>हिंदी</span> <span class="text-[10px] text-slate-400">HI</span></button>
+            <button onclick="setLanguage('ta', this);" class="lang-option"><span>தமிழ்</span> <span class="text-[10px] text-slate-400">TA</span></button>
+            <button onclick="setLanguage('fil', this);" class="lang-option"><span>Filipino</span> <span class="text-[10px] text-slate-400">FIL</span></button>
+            <button onclick="setLanguage('si', this);" class="lang-option"><span>සිංහල</span> <span class="text-[10px] text-slate-400">SI</span></button>
+            <button onclick="setLanguage('sw', this);" class="lang-option"><span>Swahili</span> <span class="text-[10px] text-slate-400">SW</span></button>
         </div>
     </div>
 
@@ -236,30 +252,28 @@
     </div>
 
     <!-- Mobile Popups -->
-    <div id="mobile-apply-menu" class="pointer-events-auto fixed bottom-28 left-1/2 -translate-x-1/2 w-[90%] max-w-[340px] p-4 rounded-[2rem] glass-creative-popup opacity-0 invisible transition-all duration-300 transform translate-y-8 scale-90 z-[130]">
-        <div class="flex justify-between items-center mb-4 pb-2 border-b border-white/20">
-            <span class="text-xs font-black text-slate-800 uppercase tracking-widest pl-2" data-i18n="start_journey">Start Journey</span>
-            <button onclick="toggleMobileApply()" class="w-8 h-8 rounded-full bg-white/40 flex items-center justify-center text-slate-700"><i class="fa-solid fa-xmark"></i></button>
+    <div id="mobile-apply-menu" class="pointer-events-auto fixed bottom-28 left-1/2 -translate-x-1/2 w-[90%] max-w-[340px] p-6 rounded-[2rem] glass-creative-popup opacity-0 invisible transition-all duration-300 transform translate-y-8 scale-90 z-[130]">
+        <div class="mb-4 text-center">
+            <span class="text-[10px] font-black text-slate-600 uppercase tracking-widest" data-i18n="start_journey">Start Journey</span>
         </div>
         <div class="grid grid-cols-2 gap-3">
             <a href="assessment.html" class="flex flex-col items-center justify-center p-4 rounded-2xl glass-pad-btn text-center aspect-square">
-                <div class="w-12 h-12 rounded-full bg-white/80 shadow-sm flex items-center justify-center text-theme-primary mb-2 text-xl"><i class="fa-solid fa-clipboard-list"></i></div>
+                <div class="w-12 h-12 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-theme-primary mb-2 text-xl"><i class="fa-solid fa-clipboard-list"></i></div>
                 <span class="text-[10px] font-bold text-slate-800 uppercase tracking-wider" data-i18n="nav_assessment">Assess</span>
             </a>
             <a href="book.html" class="flex flex-col items-center justify-center p-4 rounded-2xl glass-pad-btn text-center aspect-square">
-                <div class="w-12 h-12 rounded-full bg-white/80 shadow-sm flex items-center justify-center text-theme-secondary mb-2 text-xl"><i class="fa-solid fa-calendar-check"></i></div>
+                <div class="w-12 h-12 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-theme-secondary mb-2 text-xl"><i class="fa-solid fa-calendar-check"></i></div>
                 <span class="text-[10px] font-bold text-slate-800 uppercase tracking-wider" data-i18n="nav_book">Book Now</span>
             </a>
         </div>
     </div>
 
-    <div id="mobile-language-menu" class="pointer-events-auto fixed bottom-28 left-1/2 -translate-x-1/2 w-[90%] max-w-[340px] p-4 rounded-[2rem] glass-creative-popup opacity-0 invisible transition-all duration-300 transform translate-y-8 scale-90 z-[130]">
-        <div class="flex justify-between items-center mb-4 pb-2 border-b border-white/20">
-            <span class="text-xs font-black text-slate-800 uppercase tracking-widest pl-2">Select Language</span>
-            <button onclick="toggleMobileLanguage()" class="w-8 h-8 rounded-full bg-white/40 flex items-center justify-center text-slate-700"><i class="fa-solid fa-xmark"></i></button>
+    <div id="mobile-language-menu" class="pointer-events-auto fixed bottom-28 left-1/2 -translate-x-1/2 w-[90%] max-w-[340px] p-6 rounded-[2rem] glass-creative-popup opacity-0 invisible transition-all duration-300 transform translate-y-8 scale-90 z-[130]">
+        <div class="mb-4 text-center">
+            <span class="text-[10px] font-black text-slate-600 uppercase tracking-widest">Select Language</span>
         </div>
         <div class="grid grid-cols-2 gap-2 max-h-[40vh] overflow-y-auto pr-1 custom-scrollbar">
-            <button onclick="setLanguage('en', this)" class="text-left p-3 rounded-xl glass-pad-btn text-sm font-bold border border-transparent">English</button>
+            <button onclick="setLanguage('en', this)" class="text-left p-3 rounded-xl glass-pad-btn text-sm font-bold">English</button>
             <button onclick="setLanguage('ml', this)" class="text-left p-3 rounded-xl glass-pad-btn text-sm font-bold font-['Noto_Sans_Malayalam']">മലയാളം</button>
             <button onclick="setLanguage('hi', this)" class="text-left p-3 rounded-xl glass-pad-btn text-sm font-bold">हिंदी</button>
             <button onclick="setLanguage('ta', this)" class="text-left p-3 rounded-xl glass-pad-btn text-sm font-bold font-['Noto_Sans_Tamil']">தமிழ்</button>
@@ -270,27 +284,26 @@
     </div>
 
     <div id="mobile-destinations-menu" class="pointer-events-auto fixed bottom-28 left-1/2 -translate-x-1/2 w-[90%] max-w-[340px] p-4 rounded-[2rem] glass-creative-popup opacity-0 invisible transition-all duration-300 transform translate-y-8 scale-90 z-[130]">
-        <div class="flex justify-between items-center mb-4 pb-2 border-b border-white/20">
-            <span class="text-xs font-black text-slate-800 uppercase tracking-widest pl-2">Select Country</span>
-            <button onclick="toggleMobileDestinations()" class="w-8 h-8 rounded-full bg-white/40 flex items-center justify-center text-slate-700"><i class="fa-solid fa-xmark"></i></button>
+        <div class="mb-4 text-center border-b border-white/20 pb-2">
+            <span class="text-[10px] font-black text-slate-600 uppercase tracking-widest">Select Destination</span>
         </div>
-        <div class="grid grid-cols-4 gap-3 max-h-[50vh] overflow-y-auto p-2 custom-scrollbar">
-            <a href="croatia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border-2 border-theme-primary">🇭🇷</div><span class="text-[9px] font-bold text-theme-primary">HR</span></a>
-            <a href="slovakia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇸🇰</div><span class="text-[9px] font-bold text-slate-600">SK</span></a>
-            <a href="germany.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇩🇪</div><span class="text-[9px] font-bold text-slate-600">DE</span></a>
-            <a href="finland.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇫🇮</div><span class="text-[9px] font-bold text-slate-600">FI</span></a>
-            <a href="sweden.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇸🇪</div><span class="text-[9px] font-bold text-slate-600">SE</span></a>
-            <a href="netherlands.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇳🇱</div><span class="text-[9px] font-bold text-slate-600">NL</span></a>
-            <a href="italy.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇮🇹</div><span class="text-[9px] font-bold text-slate-600">IT</span></a>
-            <a href="france.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇫🇷</div><span class="text-[9px] font-bold text-slate-600">FR</span></a>
-            <a href="poland.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇵🇱</div><span class="text-[9px] font-bold text-slate-600">PL</span></a>
-            <a href="czech.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇨🇿</div><span class="text-[9px] font-bold text-slate-600">CZ</span></a>
-            <a href="latvia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇱🇻</div><span class="text-[9px] font-bold text-slate-600">LV</span></a>
-            <a href="montenegro.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇲🇪</div><span class="text-[9px] font-bold text-slate-600">ME</span></a>
-            <a href="serbia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇷🇸</div><span class="text-[9px] font-bold text-slate-600">RS</span></a>
-            <a href="macedonia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇲🇰</div><span class="text-[9px] font-bold text-slate-600">MK</span></a>
-            <a href="albania.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇦🇱</div><span class="text-[9px] font-bold text-slate-600">AL</span></a>
-            <a href="belarus.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">🇧🇾</div><span class="text-[9px] font-bold text-slate-600">BY</span></a>
+        <div class="grid grid-cols-4 gap-3 max-h-[50vh] overflow-y-auto p-2 custom-scrollbar text-left">
+            <a href="croatia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border-2 border-theme-primary">🇭🇷</div><span class="text-[9px] font-bold text-theme-primary">HR</span></a>
+            <a href="slovakia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇸🇰</div><span class="text-[9px] font-bold text-slate-500">SK</span></a>
+            <a href="germany.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇩🇪</div><span class="text-[9px] font-bold text-slate-500">DE</span></a>
+            <a href="finland.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇫🇮</div><span class="text-[9px] font-bold text-slate-500">FI</span></a>
+            <a href="sweden.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇸🇪</div><span class="text-[9px] font-bold text-slate-500">SE</span></a>
+            <a href="netherlands.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇳🇱</div><span class="text-[9px] font-bold text-slate-500">NL</span></a>
+            <a href="italy.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇮🇹</div><span class="text-[9px] font-bold text-slate-500">IT</span></a>
+            <a href="france.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇫🇷</div><span class="text-[9px] font-bold text-slate-500">FR</span></a>
+            <a href="poland.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇵🇱</div><span class="text-[9px] font-bold text-slate-500">PL</span></a>
+            <a href="czech.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇨🇿</div><span class="text-[9px] font-bold text-slate-500">CZ</span></a>
+            <a href="latvia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇱🇻</div><span class="text-[9px] font-bold text-slate-500">LV</span></a>
+            <a href="montenegro.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇲🇪</div><span class="text-[9px] font-bold text-slate-500">ME</span></a>
+            <a href="serbia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇷🇸</div><span class="text-[9px] font-bold text-slate-500">RS</span></a>
+            <a href="macedonia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇲🇰</div><span class="text-[9px] font-bold text-slate-500">MK</span></a>
+            <a href="albania.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇦🇱</div><span class="text-[9px] font-bold text-slate-500">AL</span></a>
+            <a href="belarus.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇧🇾</div><span class="text-[9px] font-bold text-slate-500">BY</span></a>
         </div>
     </div>
 
@@ -306,7 +319,9 @@
                 pkg_schengen: "Schengen Visa", pkg_schengen_desc: "Mandatory for short-stay tourist and business visas.",
                 pkg_platinum: "Platinum Travel", pkg_platinum_desc: "Comprehensive protection for high-value trips and families.",
                 pkg_student: "Student / Expat", pkg_student_desc: "Extended coverage for study abroad and long-term residency.",
-                start_journey: "Start Journey", modal_apply: "Apply Now",
+                start_journey: "Start Journey", modal_apply: "Apply Now", status_label: "Status", verified_compliant: "Verified Compliant",
+                benefit_min_cover: "€30,000 Minimum Coverage", benefit_zero_ded: "Zero Deductible Plans", benefit_repat: "Repatriation Included", benefit_high_medical: "$100k+ Medical Cover", benefit_covid: "COVID-19 Full Coverage", benefit_assist: "24/7 Global Concierge", benefit_long_term: "3-12 Month Long-term", benefit_uni: "University Compliant", benefit_pre_exist: "Pre-existing Condition Cover",
+                btn_select: "Select Plan", btn_platinum: "Select Platinum", btn_explore: "Explore Plan",
                 footer_office: "Office", footer_rights: "All rights reserved.", footer_destinations: "Destinations",
                 country_germany: "Germany", country_finland: "Finland", country_sweden: "Sweden", country_italy: "Italy", country_france: "France", country_poland: "Poland", country_czech: "Czech Republic", country_latvia: "Latvia", country_croatia: "Croatia", country_slovakia: "Slovakia", country_netherlands: "Netherlands", country_montenegro: "Montenegro", country_serbia: "Serbia", country_macedonia: "Macedonia", country_albania: "Albania", country_belarus: "Belarus",
                 serv_visa_appt: "Visa Appointment", serv_visa_doc: "Visa Documentation", serv_travel: "Travel Assistance", serv_insurance: "Insurance Assistance", serv_medical: "Medical Assistance", serv_corp: "Corporate B2B Solution",
@@ -322,15 +337,63 @@
                 pkg_platinum: "പ്ലാറ്റിനം ട്രാവൽ", pkg_platinum_desc: "ഉയർന്ന മൂല്യമുള്ള യാത്രകൾക്കും കുടുംബങ്ങൾക്കും വേണ്ടിയുള്ള സുരക്ഷ.",
                 pkg_student: "സ്റ്റുഡന്റ് / എക്സ്പാറ്റ്", pkg_student_desc: "വിദേശപഠനത്തിനും ദീർഘകാല താമസത്തിനും വേണ്ടിയുള്ള പ്ലാനുകൾ.",
                 start_journey: "യാത്ര ആരംഭിക്കൂ", modal_apply: "അപേക്ഷിക്കൂ", footer_destinations: "രാജ്യങ്ങൾ",
-                footer_story: "ഞങ്ങളുടെ കഥ", footer_office: "ഓഫീസ്"
+                footer_story: "ഞങ്ങളുടെ കഥ", footer_office: "ഓഫീസ്", status_label: "നില", verified_compliant: "അംഗീകരിക്കപ്പെട്ടത്"
+            },
+            hi: {
+                nav_home: "होम", nav_programs: "कार्यक्रम", nav_services: "सेवाएं", nav_assessment: "निःशुल्क मूल्यांकन", nav_about: "हमारे बारे में", nav_book: "बुक करें",
+                insurance_badge: "अनिवार्य वीजा सुरक्षा", ins_hero_1: "व्यापक", ins_hero_2: "इमिग्रेशन बीमा",
+                ins_hero_subtitle: "100% दूतावास-अनुपालन यात्रा नीतियां और छात्र स्वास्थ्य कवरेज। आपकी यात्रा को सुरक्षित बनाना।",
+                view_plans: "प्लान देखें", get_quote: "कोट प्राप्त करें", guardian_title: "गार्जियन कवरेज", guardian_desc: "दुनिया भर में सभी शेंगेन, छात्र और कार्य वीजा आवश्यकताओं को पूरा करता है।",
+                pkg_schengen: "शेंगेन वीजा", pkg_schengen_desc: "पर्यटक और व्यावसायिक वीजा के लिए अनिवार्य।",
+                pkg_platinum: "प्लैटिनम यात्रा", pkg_platinum_desc: "उच्च मूल्य वाली यात्राओं और परिवारों के लिए सुरक्षा।",
+                pkg_student: "छात्र / प्रवासी", pkg_student_desc: "विदेश में पढ़ाई और लंबी अवधि के प्रवास के लिए कवरेज।",
+                start_journey: "यात्रा शुरू करें", modal_apply: "अभी आवेदन करें", status_label: "स्थिति", verified_compliant: "सत्यापित अनुपालन"
+            },
+            ta: {
+                nav_home: "முகப்பு", nav_programs: "திட்டங்கள்", nav_services: "சேவைகள்", nav_assessment: "மதிப்பீடு", nav_about: "எங்களைப் பற்றி", nav_book: "பதிவு செய்க",
+                insurance_badge: "கட்டாய விசா பாதுகாப்பு", ins_hero_1: "விரிவான", ins_hero_2: "குடியேற்ற காப்பீடு",
+                ins_hero_subtitle: "100% தூதரக-இணக்கமான பயணக் கொள்கைகள் மற்றும் மாணவர் சுகாதார காப்பீடு. உங்கள் பயணத்தைப் பாதுகாக்கவும்.",
+                view_plans: "திட்டங்களைப் பார்க்க", get_quote: "விலைப்புள்ளி பெறுக", guardian_title: "கார்டியன் கவரேஜ்", guardian_desc: "உலகளாவிய விசா தேவைகளைப் பூர்த்தி செய்கிறது.",
+                pkg_schengen: "ஷெங்கன் விசா", pkg_schengen_desc: "சுற்றுலா மற்றும் வணிக விசாக்களுக்கு கட்டாயமானது.",
+                pkg_platinum: "பிளாட்டினம் பயணம்", pkg_platinum_desc: "குடும்பங்களுக்கான விரிவான பாதுகாப்பு.",
+                pkg_student: "மாணவர் / புலம்பெயர்ந்தோர்", pkg_student_desc: "நீண்ட கால தங்குவதற்கான காப்பீடு.",
+                start_journey: "பயணத்தைத் தொடங்கவும்", modal_apply: "விண்ணப்பிக்கவும்"
+            },
+            fil: {
+                nav_home: "Home", nav_programs: "Mga Programa", nav_services: "Serbisyo", nav_assessment: "Libreng Pagsusuri", nav_about: "Tungkol sa Amin", nav_book: "Mag-book Ngayon",
+                insurance_badge: "Mandatory Visa Protection", ins_hero_1: "Komprehensibong", ins_hero_2: "Insurance sa Imigrasyon",
+                ins_hero_subtitle: "100% Embassy-compliant na mga polisiya sa paglalakbay at proteksyong pangkalusugan para sa mga mag-aaral.",
+                view_plans: "Tingnan ang mga Plano", get_quote: "Kumuha ng Quote", guardian_title: "Guardian Coverage", guardian_desc: "Tumutugon sa lahat ng Schengen, Student, at Work Visa requirements sa buong mundo.",
+                pkg_schengen: "Schengen Visa", pkg_schengen_desc: "Mandatory para sa mga tourist at business visas.",
+                pkg_platinum: "Platinum Travel", pkg_platinum_desc: "Kumpletong proteksyon para sa mga pamilya at mamahaling biyahe.",
+                pkg_student: "Estudyante / Expat", pkg_student_desc: "Proteksyon para sa mahabang pananatili sa ibang bansa.",
+                start_journey: "Simulan ang Biyahe", modal_apply: "Mag-apply Ngayon"
+            },
+            si: {
+                nav_home: "මුල් පිටුව", nav_programs: "වැඩසටහන්", nav_services: "සේවා", nav_assessment: "නොමිලේ ඇගයීම", nav_about: "අපි ගැන", nav_book: "වෙන්කරවා ගන්න",
+                insurance_badge: "අනිවාර්ය වීසා ආරක්ෂාව", ins_hero_1: "සමස්ත", ins_hero_2: "සංක්‍රමණ රක්ෂණය",
+                ins_hero_subtitle: "තානාපති කාර්යාල අනුමත සංචාරක සහ ශිෂ්‍ය සෞඛ්‍ය රක්ෂණ සැලසුම්.",
+                view_plans: "සැලසුම් බලන්න", get_quote: "මිල ගණන් ලබා ගන්න", guardian_title: "ගාඩියන් ආවරණය", guardian_desc: "ලෝක ව්යාප්ත වීසා අවශ්යතා සපුරාලයි.",
+                pkg_schengen: "ෂෙන්ගන් වීසා", pkg_schengen_desc: "සංචාරක සහ ව්‍යාපාරික වීසා සඳහා අනිවාර්ය වේ.",
+                pkg_platinum: "ප්ලැටිනම් සංචාරක", pkg_platinum_desc: "පවුල් සහ ඉහළ වටිනාකමකින් යුත් සංචාර සඳහා පූර්ණ ආරක්ෂාව.",
+                pkg_student: "ශිෂ්‍ය / විදේශික", pkg_student_desc: "දිගුකාලීන පදිංචිය සඳහා රක්ෂණ ආවරණ.",
+                start_journey: "ගමන ආරම්භ කරන්න", modal_apply: "අයදුම් කරන්න"
+            },
+            sw: {
+                nav_home: "Nyumbani", nav_programs: "Programu", nav_services: "Huduma", nav_assessment: "Tathmini", nav_about: "Kutuhusu", nav_book: "Weka Nafasi",
+                insurance_badge: "Ulinzi wa Lazima wa Visa", ins_hero_1: "Bima ya", ins_hero_2: "Uhamiaji ya Kina",
+                ins_hero_subtitle: "Sera za usafiri zinazotambuliwa na ubalozi na bima ya afya kwa wanafunzi.",
+                view_plans: "Angalia Mipango", get_quote: "Pata Makadirio", guardian_title: "Guardian Coverage", guardian_desc: "Inakidhi mahitaji yote ya Visa duniani kote.",
+                pkg_schengen: "Visa ya Schengen", pkg_schengen_desc: "Lazima kwa visa vya utalii na biashara.",
+                pkg_platinum: "Safari ya Platinum", pkg_platinum_desc: "Ulinzi kamili kwa familia na safari za thamani.",
+                pkg_student: "Mwanafunzi / Mgeni", pkg_student_desc: "Ulinzi kwa makazi ya muda mrefu.",
+                start_journey: "Anza Safari", modal_apply: "Tuma Ombi Sasa"
             }
         };
 
-        let currentLang = 'en';
-
         const GLOBAL_HEADER = `
         <nav class="fixed top-2 md:top-4 left-0 right-0 z-50 flex justify-center px-2 md:px-4" id="navbar-container">
-            <div class="floating-nav w-full max-w-7xl px-3 py-1.5 md:px-4 md:py-2.5 flex justify-between items-center transition-all duration-300 shadow-lg" id="navbar">
+            <div class="floating-nav w-full max-w-7xl px-3 py-1.5 md:px-4 md:py-2.5 flex justify-between items-center transition-all duration-300 shadow-lg text-left" id="navbar">
                 <a href="index.html" class="flex items-center gap-1.5 md:gap-4 group px-2 text-left">
                     <div class="w-7 h-7 md:w-11 md:h-11 rounded-full flex items-center justify-center bg-white/70 backdrop-blur-md p-1 border border-white/50">
                         <img src="${LOGO_URL}" alt="Logo" class="w-full h-full object-contain">
@@ -340,7 +403,7 @@
                         <p class="text-[7px] md:text-xs font-bold text-brand-gold uppercase tracking-[0.2em]">Immigration</p>
                     </div>
                 </a>
-                <div class="hidden lg:flex items-center gap-1">
+                <div class="hidden lg:flex items-center gap-1 text-left">
                     <a href="index.html" data-i18n="nav_home" class="px-4 py-2 text-base text-brand-black hover:text-brand-blue font-medium transition rounded-full hover:bg-white/70">Home</a>
                     <div class="relative group">
                         <button class="px-4 py-2 text-base text-brand-black hover:text-brand-blue font-medium transition rounded-full hover:bg-white/70 flex items-center gap-1">Programs <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i></button>
@@ -348,22 +411,22 @@
                             <div class="w-2/3 border-r border-slate-100 pr-6 text-left">
                                 <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 flex items-center gap-2"><span class="w-1.5 h-4 rounded-full bg-blue-500"></span> Schengen Area</h3>
                                 <div class="grid grid-cols-2 gap-y-1 gap-x-4">
-                                    <a href="germany.html" data-i18n="country_germany" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item">Germany <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
-                                    <a href="slovakia.html" data-i18n="country_slovakia" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item">Slovakia <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
-                                    <a href="finland.html" data-i18n="country_finland" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item">Finland <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
-                                    <a href="sweden.html" data-i18n="country_sweden" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item">Sweden <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
-                                    <a href="netherlands.html" data-i18n="country_netherlands" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item">Netherlands <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
-                                    <a href="italy.html" data-i18n="country_italy" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item">Italy <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
-                                    <a href="france.html" data-i18n="country_france" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item">France <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
-                                    <a href="poland.html" data-i18n="country_poland" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item">Poland <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
-                                    <a href="czech.html" data-i18n="country_czech" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item">Czech Republic <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
-                                    <a href="latvia.html" data-i18n="country_latvia" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item">Latvia <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
-                                    <a href="croatia.html" data-i18n="country_croatia" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item">Croatia <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
+                                    <a href="germany.html" data-i18n="country_germany" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item text-left">Germany <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
+                                    <a href="slovakia.html" data-i18n="country_slovakia" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item text-left">Slovakia <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
+                                    <a href="finland.html" data-i18n="country_finland" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item text-left">Finland <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
+                                    <a href="sweden.html" data-i18n="country_sweden" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item text-left">Sweden <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
+                                    <a href="netherlands.html" data-i18n="country_netherlands" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item text-left">Netherlands <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
+                                    <a href="italy.html" data-i18n="country_italy" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item text-left">Italy <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
+                                    <a href="france.html" data-i18n="country_france" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item text-left">France <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
+                                    <a href="poland.html" data-i18n="country_poland" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item text-left">Poland <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
+                                    <a href="czech.html" data-i18n="country_czech" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item text-left">Czech Republic <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
+                                    <a href="latvia.html" data-i18n="country_latvia" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item text-left">Latvia <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
+                                    <a href="croatia.html" data-i18n="country_croatia" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-blue hover:bg-blue-50 transition-all flex items-center justify-between group/item text-left">Croatia <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover/item:opacity-100 transition-all transform -translate-x-2 group-hover/item:translate-x-0"></i></a>
                                 </div>
                             </div>
                             <div class="w-1/3 text-left">
                                 <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 flex items-center gap-2"><span class="w-1.5 h-4 rounded-full bg-theme-secondary"></span> Non-EU</h3>
-                                <div class="flex flex-col gap-1">
+                                <div class="flex flex-col gap-1 text-left">
                                     <a href="montenegro.html" data-i18n="country_montenegro" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-theme-secondary hover:bg-theme-secondary/5 transition-all text-left">Montenegro</a>
                                     <a href="serbia.html" data-i18n="country_serbia" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-theme-secondary hover:bg-theme-secondary/5 transition-all text-left">Serbia</a>
                                     <a href="macedonia.html" data-i18n="country_macedonia" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-theme-secondary hover:bg-theme-secondary/5 transition-all text-left">Macedonia</a>
@@ -373,7 +436,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="relative group">
+                    <div class="relative group text-left">
                         <button data-i18n="nav_services" class="px-4 py-2 text-base text-brand-black hover:text-brand-blue font-medium transition rounded-full hover:bg-white/70 flex items-center gap-1 text-left">Services <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i></button>
                         <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-3 w-72 dropdown-glass rounded-3xl p-2 flex flex-col gap-1 shadow-2xl z-50 text-left">
                             <a href="vfs.html" data-i18n="serv_visa_appt" class="px-4 py-3 rounded-2xl text-sm font-semibold text-vfs-teal hover:bg-vfs-teal/10 transition-all flex items-center justify-between text-left">Visa Appointment <i class="fa-solid fa-calendar-check text-vfs-teal/50"></i></a>
@@ -395,16 +458,16 @@
                 </div>
             </div>
             
-            <div id="mobileMenu" class="pointer-events-auto fixed top-16 left-3 right-3 max-h-[75vh] bg-white/70 backdrop-blur-3xl rounded-[2rem] border border-white/40 shadow-2xl z-[120] opacity-0 invisible scale-95 transition-all duration-300 ease-out flex flex-col md:hidden overflow-hidden">
+            <div id="mobileMenu" class="pointer-events-auto fixed top-16 left-3 right-3 max-h-[85vh] bg-white/40 backdrop-blur-3xl rounded-[2rem] border border-white/40 shadow-2xl z-[120] opacity-0 invisible scale-95 transition-all duration-300 ease-out flex flex-col md:hidden overflow-hidden">
                 <div class="p-3 grid grid-cols-2 gap-2 border-b border-white/20">
-                    <a href="index.html" class="flex flex-col items-center justify-center p-3 rounded-2xl glass-pad-btn group relative overflow-hidden">
+                    <a href="index.html" class="flex flex-col items-center justify-center p-3 rounded-2xl glass-pad-btn group relative overflow-hidden text-center">
                         <div class="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <i class="fa-solid fa-house text-xl mb-1 text-brand-blue group-hover:scale-110 transition-transform relative z-10"></i>
+                        <i class="fa-solid fa-house text-xl mb-1 text-brand-blue group-hover:scale-110 transition-transform relative z-10 mx-auto"></i>
                         <span class="text-[9px] font-bold uppercase tracking-wider text-slate-800 relative z-10" data-i18n="nav_home">Home</span>
                     </a>
-                    <a href="assessment.html" class="flex flex-col items-center justify-center p-3 rounded-2xl glass-pad-btn group relative overflow-hidden">
+                    <a href="assessment.html" class="flex flex-col items-center justify-center p-3 rounded-2xl glass-pad-btn group relative overflow-hidden text-center">
                         <div class="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <i class="fa-solid fa-clipboard-check text-xl mb-1 text-theme-secondary group-hover:scale-110 transition-transform relative z-10"></i>
+                        <i class="fa-solid fa-clipboard-check text-xl mb-1 text-theme-secondary group-hover:scale-110 transition-transform relative z-10 mx-auto"></i>
                         <span class="text-[9px] font-bold uppercase tracking-wider text-slate-800 relative z-10" data-i18n="nav_assessment">Assess</span>
                     </a>
                 </div>
@@ -414,59 +477,59 @@
                         <i class="fa-solid fa-arrow-right-long text-slate-300 text-[10px]"></i>
                     </div>
                     <div class="px-3 pb-1 text-left">
-                        <div class="text-[8px] font-bold text-blue-500/80 uppercase tracking-wider mb-2 pl-2 border-l-2 border-blue-500 flex items-center gap-2">Schengen Area <i class="fa-solid fa-passport text-[8px]"></i></div>
+                        <div class="text-[8px] font-bold text-blue-500 uppercase tracking-wider mb-2 pl-2 border-l-2 border-blue-500 flex items-center gap-2">Schengen Area <i class="fa-solid fa-passport text-[8px]"></i></div>
                         <div class="grid grid-cols-4 gap-y-2 gap-x-2">
-                            <a href="slovakia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇸🇰</div><span class="text-[9px] font-bold text-slate-500">SK</span></a>
-                            <a href="germany.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇩🇪</div><span class="text-[9px] font-bold text-slate-500">DE</span></a>
-                            <a href="finland.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇫🇮</div><span class="text-[9px] font-bold text-slate-500">FI</span></a>
-                            <a href="sweden.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇸🇪</div><span class="text-[9px] font-bold text-slate-500">SE</span></a>
-                            <a href="netherlands.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇳🇱</div><span class="text-[9px] font-bold text-slate-500">NL</span></a>
-                            <a href="italy.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇮🇹</div><span class="text-[9px] font-bold text-slate-500">IT</span></a>
-                            <a href="france.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇫🇷</div><span class="text-[9px] font-bold text-slate-500">FR</span></a>
-                            <a href="poland.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇵🇱</div><span class="text-[9px] font-bold text-slate-500">PL</span></a>
-                            <a href="czech.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇨🇿</div><span class="text-[9px] font-bold text-slate-500">CZ</span></a>
-                            <a href="latvia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇱🇻</div><span class="text-[9px] font-bold text-slate-500">LV</span></a>
-                            <a href="croatia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border-2 border-theme-primary group-hover:scale-110 transition-transform">🇭🇷</div><span class="text-[9px] font-bold text-theme-primary">HR</span></a>
+                            <a href="slovakia.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇸🇰</div><span class="text-[9px] font-bold text-slate-500">SK</span></a>
+                            <a href="germany.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇩🇪</div><span class="text-[9px] font-bold text-slate-500">DE</span></a>
+                            <a href="finland.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇫🇮</div><span class="text-[9px] font-bold text-slate-500">FI</span></a>
+                            <a href="sweden.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇸🇪</div><span class="text-[9px] font-bold text-slate-500">SE</span></a>
+                            <a href="netherlands.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇳🇱</div><span class="text-[9px] font-bold text-slate-500">NL</span></a>
+                            <a href="italy.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇮🇹</div><span class="text-[9px] font-bold text-slate-500">IT</span></a>
+                            <a href="france.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇫🇷</div><span class="text-[9px] font-bold text-slate-500">FR</span></a>
+                            <a href="poland.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇵🇱</div><span class="text-[9px] font-bold text-slate-500">PL</span></a>
+                            <a href="czech.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇨🇿</div><span class="text-[9px] font-bold text-slate-500">CZ</span></a>
+                            <a href="latvia.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇱🇻</div><span class="text-[9px] font-bold text-slate-500">LV</span></a>
+                            <a href="croatia.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border-2 border-theme-primary group-hover:scale-110 transition-transform">🇭🇷</div><span class="text-[9px] font-bold text-theme-primary">HR</span></a>
                         </div>
                     </div>
                     <div class="px-3 pb-1 mt-1 text-left">
-                        <div class="text-[8px] font-bold text-theme-secondary/80 uppercase tracking-wider mb-2 pl-2 border-l-2 border-theme-secondary flex items-center gap-2">Non-EU Opportunities <i class="fa-solid fa-star text-[8px]"></i></div>
+                        <div class="text-[8px] font-bold text-theme-secondary uppercase tracking-wider mb-2 pl-2 border-l-2 border-theme-secondary flex items-center gap-2">Non-EU Opportunities <i class="fa-solid fa-star text-[8px]"></i></div>
                         <div class="grid grid-cols-4 gap-y-2 gap-x-2">
-                            <a href="montenegro.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇲🇪</div><span class="text-[9px] font-bold text-slate-600">ME</span></a>
-                            <a href="serbia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇷🇸</div><span class="text-[9px] font-bold text-slate-600">RS</span></a>
-                            <a href="macedonia.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇲🇰</div><span class="text-[9px] font-bold text-slate-600">MK</span></a>
-                            <a href="albania.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇦🇱</div><span class="text-[9px] font-bold text-slate-600">AL</span></a>
-                            <a href="belarus.html" class="flex flex-col items-center gap-1 group"><div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇧🇾</div><span class="text-[9px] font-bold text-slate-600">BY</span></a>
+                            <a href="montenegro.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇲🇪</div><span class="text-[9px] font-bold text-slate-600">ME</span></a>
+                            <a href="serbia.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇷🇸</div><span class="text-[9px] font-bold text-slate-600">RS</span></a>
+                            <a href="macedonia.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇲🇰</div><span class="text-[9px] font-bold text-slate-600">MK</span></a>
+                            <a href="albania.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇦🇱</div><span class="text-[9px] font-bold text-slate-600">AL</span></a>
+                            <a href="belarus.html" class="flex flex-col items-center gap-1 group text-left"><div class="w-10 h-10 rounded-full bg-white/60 shadow-sm flex items-center justify-center text-lg border border-white/60 group-hover:scale-110 transition-transform">🇧🇾</div><span class="text-[9px] font-bold text-slate-600">BY</span></a>
                         </div>
                     </div>
                 </div>
-                <div class="px-3 pb-3 bg-white/10 pt-3 border-t border-white/20 backdrop-blur-sm">
-                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 block px-1 text-left" data-i18n="nav_services">Services</span>
+                <div class="px-3 pb-3 bg-white/20 pt-3 border-t border-white/20 backdrop-blur-sm">
+                    <span class="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-2 block px-1 text-left" data-i18n="nav_services">Services</span>
                     <div class="grid grid-cols-3 gap-2">
-                        <a href="vfs.html" class="p-2 rounded-xl glass-pad-btn text-center group hover:bg-white/60 transition-colors">
-                            <i class="fa-solid fa-calendar-check text-vfs-teal text-sm mb-0.5 block group-hover:scale-110 transition-transform"></i>
-                            <span class="text-[8px] font-bold text-slate-600 block" data-i18n="serv_visa_appt">Visa Appt</span>
+                        <a href="vfs.html" class="p-2 rounded-xl glass-pad-btn text-center group transition-colors text-left">
+                            <i class="fa-solid fa-calendar-check text-vfs-teal text-sm mb-0.5 block group-hover:scale-110 transition-transform mx-auto"></i>
+                            <span class="text-[8px] font-bold text-slate-700 block text-center" data-i18n="serv_visa_appt">Visa Appt</span>
                         </a>
-                        <a href="visa_documentation.html" class="p-2 rounded-xl glass-pad-btn text-center group hover:bg-white/60 transition-colors">
-                            <i class="fa-solid fa-file-contract text-brand-blue text-sm mb-0.5 block group-hover:scale-110 transition-transform"></i>
-                            <span class="text-[8px] font-bold text-slate-600 block" data-i18n="serv_visa_doc">Docs</span>
+                        <a href="visa_documentation.html" class="p-2 rounded-xl glass-pad-btn text-center group transition-colors text-left">
+                            <i class="fa-solid fa-file-contract text-brand-blue text-sm mb-0.5 block group-hover:scale-110 transition-transform mx-auto"></i>
+                            <span class="text-[8px] font-bold text-slate-700 block text-center" data-i18n="serv_visa_doc">Docs</span>
                         </a>
-                        <a href="travel_assistance.html" class="p-2 rounded-xl glass-pad-btn text-center group hover:bg-white/60 transition-colors">
-                            <i class="fa-solid fa-plane text-brand-purple text-sm mb-0.5 block group-hover:scale-110 transition-transform"></i>
-                            <span class="text-[8px] font-bold text-slate-600 block" data-i18n="serv_travel">Travel</span>
+                        <a href="travel_assistance.html" class="p-2 rounded-xl glass-pad-btn text-center group transition-colors text-left">
+                            <i class="fa-solid fa-plane text-brand-purple text-sm mb-0.5 block group-hover:scale-110 transition-transform mx-auto"></i>
+                            <span class="text-[8px] font-bold text-slate-700 block text-center" data-i18n="serv_travel">Travel</span>
                         </a>
                     </div>
                 </div>
                 <div class="p-3 bg-white/30 backdrop-blur-md border-t border-white/20 flex justify-between items-center">
                     <a href="about.html" class="text-[10px] font-bold text-slate-600 hover:text-brand-black transition" data-i18n="nav_about">About Us</a>
-                    <a href="book.html" class="px-5 py-2 rounded-xl bg-brand-black text-white text-[10px] font-bold shadow-lg hover:bg-slate-800 transition uppercase tracking-wider" data-i18n="nav_book">Book Now</a>
+                    <a href="book.html" class="px-5 py-2 rounded-xl bg-brand-black text-white text-[10px] font-bold shadow-lg transition uppercase tracking-wider" data-i18n="nav_book">Book Now</a>
                 </div>
             </div>
         </nav>
         `;
 
         const GLOBAL_FOOTER = `
-        <footer class="bg-white/60 backdrop-blur-md border-t border-slate-200/50 pt-20 pb-10 text-left">
+        <footer class="hidden md:block bg-white/60 backdrop-blur-md border-t border-slate-200/50 pt-20 pb-10 text-left">
             <div class="container mx-auto px-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-20">
                     <div class="lg:col-span-2 text-left">
@@ -521,9 +584,9 @@
                     <div class="text-left">
                         <h4 class="font-bold text-brand-black text-xs mb-6 uppercase tracking-widest" data-i18n="footer_office">Office</h4>
                         <ul class="space-y-4 text-sm text-slate-500 font-medium text-left">
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-location-dot text-brand-gold mt-0.5"></i><span>R320-12th Floor<br>Dubai Healthcare City<br>UAE</span></li>
-                            <li class="flex items-center gap-3"><i class="fa-solid fa-phone text-brand-gold"></i><span>+971 50 366 6382</span></li>
-                            <li class="flex items-center gap-3"><i class="fa-solid fa-envelope text-brand-gold"></i><span>admin@thebettercall.com</span></li>
+                            <li class="flex items-start gap-3 text-left"><i class="fa-solid fa-location-dot text-brand-gold mt-0.5"></i><span>R320-12th Floor<br>Dubai Healthcare City<br>UAE</span></li>
+                            <li class="flex items-center gap-3 text-left"><i class="fa-solid fa-phone text-brand-gold"></i><span>+971 50 366 6382</span></li>
+                            <li class="flex items-center gap-3 text-left"><i class="fa-solid fa-envelope text-brand-gold"></i><span>admin@thebettercall.com</span></li>
                         </ul>
                     </div>
                 </div>
@@ -536,7 +599,9 @@
         `;
 
         function t(key) {
-            return (translations[currentLang] && translations[currentLang][key]) ? translations[currentLang][key] : (translations['en'][key] || key);
+            const langData = translations[currentLang];
+            const enData = translations['en'];
+            return (langData && langData[key]) ? langData[key] : (enData && enData[key]) ? enData[key] : key;
         }
 
         function setLanguage(lang, element) {
@@ -546,12 +611,29 @@
             
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                const val = t(key);
-                if(el.tagName === 'INPUT') el.placeholder = val;
-                else el.innerHTML = val;
+                const text = t(key);
+                if (text) {
+                    if (el.tagName === 'INPUT') {
+                        el.placeholder = text;
+                    } else {
+                        el.innerHTML = text;
+                    }
+                }
             });
+            
+            // Handle Font Families for Specific Scripts
+            if (['hi', 'ml', 'ta', 'si'].includes(lang)) {
+                if (lang === 'hi') document.body.style.fontFamily = "'Noto Sans Devanagari', sans-serif";
+                if (lang === 'ml') document.body.style.fontFamily = "'Noto Sans Malayalam', sans-serif";
+                if (lang === 'ta') document.body.style.fontFamily = "'Noto Sans Tamil', sans-serif";
+                if (lang === 'si') document.body.style.fontFamily = "'Noto Sans Sinhala', sans-serif";
+            } else {
+                document.body.style.fontFamily = "'Outfit', sans-serif";
+            }
+            
             closeAllMobilePopups();
-            document.getElementById('lang-toggle-btn').classList.remove('active');
+            const btn = document.getElementById('lang-toggle-btn');
+            if(btn) btn.classList.remove('active');
         }
 
         function toggleLanguageDropdown(e) {
@@ -580,14 +662,15 @@
                 if(el) { el.classList.add('invisible', 'opacity-0', 'translate-y-8', 'scale-90'); el.classList.remove('visible'); }
             });
             const menu = document.getElementById('mobileMenu');
-            if(menu) {
-                menu.classList.add('invisible', 'opacity-0', 'scale-95');
+            if(menu && menu.classList.contains('visible')) {
                 menu.classList.remove('visible', 'opacity-100', 'scale-100');
+                menu.classList.add('invisible', 'opacity-0', 'scale-95');
             }
         }
 
         function toggleMobilePopup(id) {
             const target = document.getElementById(id);
+            if(!target) return;
             const isHidden = target.classList.contains('invisible');
             closeAllMobilePopups();
             if (isHidden) { target.classList.remove('invisible', 'opacity-0', 'translate-y-8', 'scale-90'); target.classList.add('visible'); }
@@ -596,6 +679,25 @@
         window.toggleMobileDestinations = () => toggleMobilePopup('mobile-destinations-menu');
         window.toggleMobileLanguage = () => toggleMobilePopup('mobile-language-menu');
         window.toggleMobileApply = () => toggleMobilePopup('mobile-apply-menu');
+
+        // Outside click handler for all menus and popups
+        document.addEventListener('click', (e) => {
+            const menuIds = ['mobile-destinations-menu', 'mobile-language-menu', 'mobile-apply-menu', 'mobileMenu', 'language-dropdown'];
+            
+            let clickedInsideAnyMenu = false;
+            menuIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.contains(e.target)) clickedInsideAnyMenu = true;
+            });
+
+            const isTrigger = e.target.closest('button') || e.target.closest('.lang-toggle-btn') || e.target.closest('a');
+
+            if (!clickedInsideAnyMenu && !isTrigger) {
+                closeAllMobilePopups();
+                const langBtn = document.getElementById('lang-toggle-btn');
+                if(langBtn) langBtn.classList.remove('active');
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             document.body.insertAdjacentHTML('afterbegin', GLOBAL_HEADER);
