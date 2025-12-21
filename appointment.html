@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Consultation | Better Call Immigration</title>
     <meta name="description" content="Schedule your immigration strategy session">
+    <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/sujeshunni-del/bettercall/6673d6ec4830e402627b97c4adf422593b2ec907/Bettercall%20Logo%20SVG%2003.svg">
 
     <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -614,12 +615,18 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-6">
                             <div id="cardUnskilled" onclick="setSkillMode('Unskilled')" class="category-card rounded-2xl md:rounded-3xl p-4 md:p-8 flex items-center gap-4 md:gap-6 cursor-pointer relative overflow-hidden">
                                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-indigo-50 text-brand-primary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-hands-holding-circle"></i></div>
-                                <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Essential & Operational</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Industrial, Logistics, Agritech</p></div>
+                                <div class="z-10">
+                                    <h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Unskilled / Non-Experienced</h3>
+                                    <p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Industrial, Logistics, Agritech</p>
+                                </div>
                                 <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkUnskilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-primary hidden shadow-lg"></div></div></div>
                             </div>
                             <div id="cardSkilled" onclick="setSkillMode('Skilled')" class="category-card rounded-2xl md:rounded-3xl p-4 md:p-8 flex items-center gap-4 md:gap-6 cursor-pointer relative overflow-hidden">
                                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-pink-50 text-brand-secondary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-user-tie"></i></div>
-                                <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Specialized & Technical</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Engineering, Healthcare, Skilled Trades</p></div>
+                                <div class="z-10">
+                                    <h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Experienced / Skilled</h3>
+                                    <p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Engineering, Healthcare, Skilled Trades</p>
+                                </div>
                                 <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkSkilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-secondary hidden shadow-lg"></div></div></div>
                             </div>
                         </div>
@@ -705,9 +712,30 @@
                         <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center justify-center md:justify-start">
                             <span class="w-5 h-5 rounded-full bg-brand-primary text-white inline-flex items-center justify-center mr-2">1</span> Select Target Destination
                         </h3>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 justify-center px-0 md:px-2" id="countryContainer">
-                            <!-- Countries injected via JS -->
+                        
+                        <div class="space-y-6">
+                            <!-- Schengen Zone Section -->
+                            <div class="rounded-3xl bg-indigo-50/40 p-4 border border-indigo-100 relative overflow-hidden group hover:bg-indigo-50/60 transition-colors">
+                                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-brand-primary/5 rounded-full blur-xl"></div>
+                                <h4 class="text-[10px] font-black text-brand-primary uppercase tracking-widest mb-3 flex items-center gap-2 relative z-10">
+                                    <span class="text-lg">🇪🇺</span> Schengen Zone
+                                </h4>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3" id="schengenContainer">
+                                    <!-- Schengen Countries injected here -->
+                                </div>
+                            </div>
+
+                            <!-- Non-Schengen Section -->
+                            <div class="rounded-3xl bg-slate-50/60 p-4 border border-slate-100 relative overflow-hidden group hover:bg-slate-100/50 transition-colors">
+                                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2 relative z-10">
+                                    <i class="fa-solid fa-globe text-slate-400"></i> Non-Schengen
+                                </h4>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3" id="nonSchengenContainer">
+                                    <!-- Non-Schengen Countries injected here -->
+                                </div>
+                            </div>
                         </div>
+
                         <input type="hidden" id="targetCountry" required>
                         <p id="countryError" class="text-center text-brand-accent text-[11px] hidden mt-2 font-bold flex items-center justify-center gap-2 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Please select a destination.</p>
                     </div>
@@ -742,15 +770,7 @@
                                             <span class="block text-[10px] text-slate-400 font-medium">Face to face</span>
                                         </div>
                                     </div>
-                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex items-center gap-4 group hover:border-brand-primary hover:shadow-md transition-all cursor-pointer" onclick="selectMethod('Phone Call', this)">
-                                        <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-slate-400 group-hover:text-green-600 group-hover:scale-110 transition-all shrink-0">
-                                            <i class="fa-solid fa-phone text-sm"></i>
-                                        </div>
-                                        <div class="text-left">
-                                            <span class="block text-xs font-bold text-slate-700">Phone Call</span>
-                                            <span class="block text-[10px] text-slate-400 font-medium">Voice call</span>
-                                        </div>
-                                    </div>
+                                    <!-- PHONE CALL OPTION REMOVED AS REQUESTED -->
                                     <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex items-center gap-4 group hover:border-brand-primary hover:shadow-md transition-all cursor-pointer" onclick="selectMethod('Video Call', this)">
                                         <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-slate-400 group-hover:text-purple-600 group-hover:scale-110 transition-all shrink-0">
                                             <i class="fa-solid fa-video text-sm"></i>
@@ -796,6 +816,8 @@
                                             <!-- JS Generated -->
                                         </div>
                                         <input type="hidden" id="selectedTime">
+                                        <!-- NEW: Hidden input to store exact ISO time for API booking -->
+                                        <input type="hidden" id="selectedTimeIso">
                                     </div>
                                 </div>
                             </div>
@@ -919,19 +941,27 @@
         };
 
         const targetCountries = [
-            { name: "SWEDEN", color: "hover:shadow-blue-300 hover:border-blue-400", bg: "bg-blue-50", icon: "🇸🇪" },
-            { name: "FINLAND", color: "hover:shadow-sky-200 hover:border-sky-300", bg: "bg-sky-50", icon: "🇫🇮" },
-            { name: "NETHERLANDS", color: "hover:shadow-orange-300 hover:border-orange-400", bg: "bg-orange-50", icon: "🇳🇱" },
-            { name: "GERMANY", color: "hover:shadow-yellow-400 hover:border-yellow-500", bg: "bg-yellow-50", icon: "🇩🇪" },
-            { name: "ITALY", color: "hover:shadow-green-300 hover:border-green-400", bg: "bg-green-50", icon: "🇮🇹" },
-            { name: "FRANCE", color: "hover:shadow-blue-400 hover:border-blue-500", bg: "bg-indigo-50", icon: "🇫🇷" },
-            { name: "CROATIA", color: "hover:shadow-red-300 hover:border-red-400", bg: "bg-red-50", icon: "🇭🇷" },
-            { name: "LATVIA", color: "hover:shadow-rose-400 hover:border-rose-500", bg: "bg-rose-50", icon: "🇱🇻" },
-            { name: "POLAND", color: "hover:shadow-red-400 hover:border-red-500", bg: "bg-red-50", icon: "🇵🇱" },
-            { name: "CZECH REPUBLIC", color: "hover:shadow-blue-300 hover:border-blue-400", bg: "bg-blue-50", icon: "🇨🇿" },
-            { name: "SERBIA", color: "hover:shadow-red-300 hover:border-red-400", bg: "bg-red-50", icon: "🇷🇸" },
-            { name: "ALBANIA", color: "hover:shadow-red-500 hover:border-red-600", bg: "bg-red-50", icon: "🇦🇱" },
-            { name: "MACEDONIA", color: "hover:shadow-yellow-300 hover:border-yellow-400", bg: "bg-yellow-50", icon: "🇲🇰" }
+            { name: "SWEDEN", type: "schengen", color: "hover:shadow-blue-300 hover:border-blue-400", bg: "bg-blue-50", icon: "🇸🇪" },
+            { name: "FINLAND", type: "schengen", color: "hover:shadow-sky-200 hover:border-sky-300", bg: "bg-sky-50", icon: "🇫🇮" },
+            { name: "NETHERLANDS", type: "schengen", color: "hover:shadow-orange-300 hover:border-orange-400", bg: "bg-orange-50", icon: "🇳🇱" },
+            { name: "GERMANY", type: "schengen", color: "hover:shadow-yellow-400 hover:border-yellow-500", bg: "bg-yellow-50", icon: "🇩🇪" },
+            { name: "ITALY", type: "schengen", color: "hover:shadow-green-300 hover:border-green-400", bg: "bg-green-50", icon: "🇮🇹" },
+            { name: "FRANCE", type: "schengen", color: "hover:shadow-blue-400 hover:border-blue-500", bg: "bg-indigo-50", icon: "🇫🇷" },
+            { name: "CROATIA", type: "schengen", color: "hover:shadow-red-300 hover:border-red-400", bg: "bg-red-50", icon: "🇭🇷" },
+            { name: "LATVIA", type: "schengen", color: "hover:shadow-rose-400 hover:border-rose-500", bg: "bg-rose-50", icon: "🇱🇻" },
+            { name: "POLAND", type: "schengen", color: "hover:shadow-red-400 hover:border-red-500", bg: "bg-red-50", icon: "🇵🇱" },
+            { name: "CZECH REPUBLIC", type: "schengen", color: "hover:shadow-blue-300 hover:border-blue-400", bg: "bg-blue-50", icon: "🇨🇿" },
+            /* Disabled Countries 
+            { name: "LITHUANIA", type: "schengen", color: "hover:shadow-yellow-400 hover:border-yellow-500", bg: "bg-yellow-50", icon: "🇱🇹" },
+            { name: "ROMANIA", type: "schengen", color: "hover:shadow-blue-400 hover:border-blue-500", bg: "bg-blue-50", icon: "🇷🇴" },
+            { name: "HUNGARY", type: "schengen", color: "hover:shadow-green-400 hover:border-green-500", bg: "bg-green-50", icon: "🇭🇺" },
+            */
+            { name: "SLOVAKIA", type: "schengen", color: "hover:shadow-blue-300 hover:border-blue-400", bg: "bg-blue-50", icon: "🇸🇰" },
+            { name: "SERBIA", type: "non-schengen", color: "hover:shadow-red-300 hover:border-red-400", bg: "bg-red-50", icon: "🇷🇸" },
+            { name: "ALBANIA", type: "non-schengen", color: "hover:shadow-red-500 hover:border-red-600", bg: "bg-red-50", icon: "🇦🇱" },
+            { name: "MACEDONIA", type: "non-schengen", color: "hover:shadow-yellow-300 hover:border-yellow-400", bg: "bg-yellow-50", icon: "🇲🇰" },
+            { name: "MONTENEGRO", type: "non-schengen", color: "hover:shadow-red-400 hover:border-red-500", bg: "bg-red-50", icon: "🇲🇪" },
+            { name: "BELARUS", type: "non-schengen", color: "hover:shadow-green-300 hover:border-green-400", bg: "bg-green-50", icon: "🇧🇾" }
         ];
 
         const jobMasterList = [
@@ -1285,12 +1315,20 @@
         };
 
         const advisors = [
-            { name: "Benetta", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം)", image: null },
+            { name: "Benitta", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം)", image: null },
             { name: "Anju M Nair", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം), Hindi (हिंदी), English", image: "https://raw.githubusercontent.com/sujeshunni-del/bettercall/bb687d0a11a26c558eb8dfa3486bd809e75379e8/Untitled-1-01.png" },
-            { name: "Budhunpa", country: "Sri Lanka", flag: "🇱🇰", lang: "English, Sinhala (සිංහල)", image: null },
-            { name: "Roniee Lee", country: "Philippines", flag: "🇵🇭", lang: "English, Tagalog", image: null },
+            { name: "Better Call", country: "Philippines", flag: "🇵🇭", lang: "English, Malayalam", image: "https://raw.githubusercontent.com/sujeshunni-del/bettercall/6673d6ec4830e402627b97c4adf422593b2ec907/Bettercall%20Logo%20SVG%2003.svg" },
             { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Kiswahili", image: "https://raw.githubusercontent.com/sujeshunni-del/bettercall/110817d3ca6fd4e0321185ce6e4c3c15e28de1af/kingo.png" }
         ];
+
+        // CAL.COM INTEGRATION CONFIG
+        const CAL_CONFIG = {
+            "Better Call": "cal_live_56464d96cd70d67aa7588d6735ad55ed",
+            "Anju M Nair": "cal_live_82b9340d588920d9c9270052d13db98a",
+            "Benitta": "cal_live_005b958e38d7722c363233d6b97a4ce4",
+            "Eunice Kingoo": "cal_live_9489b42b4b6e4cdb8c144e8150fa62c9"
+        };
+        const eventTypeCache = {}; // Cache to store eventTypeIds to reduce API calls
 
         let currentMode = 'Unskilled';
         let currentPhoneRegex = null;
@@ -1303,7 +1341,8 @@
             populateCountryDropdowns();
             renderTargetCountries();
             renderAdvisors();
-            renderTimeSlots();
+            // Initial render of static slots or clear
+            updateTimeSlots();
             
             // Populate Experience (1-30 Years)
             const expSelect = document.getElementById('experience');
@@ -1370,7 +1409,12 @@
                 disable: [
                     function(date) { return (date.getDay() === 0); }
                 ],
-                theme: "airbnb"
+                theme: "airbnb",
+                onChange: function(selectedDates, dateStr) {
+                    // Trigger slot update when date changes
+                    document.getElementById('bookingDate').value = dateStr; // Ensure value is set
+                    updateTimeSlots();
+                }
             });
             
             flatpickr("#passportExp", { 
@@ -1424,14 +1468,18 @@
         }
         
         function renderTargetCountries() {
-            const container = document.getElementById('countryContainer');
-            if(!container) return;
-            container.innerHTML = '';
+            const schengenContainer = document.getElementById('schengenContainer');
+            const nonSchengenContainer = document.getElementById('nonSchengenContainer');
+            
+            if(!schengenContainer || !nonSchengenContainer) return;
+            
+            schengenContainer.innerHTML = '';
+            nonSchengenContainer.innerHTML = '';
             
             targetCountries.forEach(tc => {
                 const btn = document.createElement('div');
                 // Base classes adjusted for mobile grid (flex-col on mobile)
-                let classes = "country-pill flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 p-2 md:px-4 md:py-2 rounded-xl bg-white border border-slate-200 cursor-pointer shadow-sm text-[10px] md:text-xs font-bold text-slate-600 select-none w-full h-full text-center";
+                let classes = "country-pill flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 p-2 md:px-4 md:py-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer shadow-sm text-[10px] md:text-xs font-bold text-slate-600 select-none w-full h-full text-center";
                 // Add hover effect classes
                 classes += ` ${tc.color} hover:border-2`;
                 
@@ -1444,7 +1492,12 @@
                     </div>
                 `;
                 btn.onclick = () => selectTargetCountry(tc.name, btn);
-                container.appendChild(btn);
+                
+                if (tc.type === 'schengen') {
+                    schengenContainer.appendChild(btn);
+                } else {
+                    nonSchengenContainer.appendChild(btn);
+                }
             });
         }
 
@@ -1493,7 +1546,6 @@
                     </div>
                     <div class="w-full">
                         <h4 class="text-sm font-black text-slate-800 mb-1 leading-tight group-[.selected]:text-brand-primary transition-colors">${adv.name}</h4>
-                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-3">Senior Consultant</p>
                         <div class="flex flex-wrap justify-center gap-1.5">
                             ${adv.lang.split(',').map(l => `<span class="inline-block text-[9px] font-bold text-slate-500 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md group-[.selected]:bg-indigo-50 group-[.selected]:text-brand-primary group-[.selected]:border-indigo-100">${l.trim()}</span>`).join('')}
                         </div>
@@ -1509,33 +1561,149 @@
                 c.classList.remove('selected');
             });
             el.classList.add('selected');
+            updateTimeSlots(); // Trigger update
         }
 
         function selectMethod(method, el) {
             document.getElementById('selectedMethod').value = method;
             document.querySelectorAll('.method-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
+            updateTimeSlots(); // Trigger update
         }
 
-        function renderTimeSlots() {
+        // UPDATED: Central logic to choose between API and Static slots
+        async function updateTimeSlots() {
+            const advisor = document.getElementById('selectedAdvisor').value;
+            const dateStr = document.getElementById('bookingDate').value;
+            const method = document.getElementById('selectedMethod').value;
+            const grid = document.getElementById('timeSlotGrid');
+
+            // 1. Basic Requirements Check
+            if (!dateStr) {
+                grid.innerHTML = '<div class="col-span-4 text-center p-6 text-slate-400 text-xs font-bold">Select a date to view slots</div>';
+                return;
+            }
+
+            // 2. Check if selected advisor uses Cal.com
+            if (advisor && CAL_CONFIG[advisor]) {
+                // Determine Slug based on method
+                // https://cal.com/anju-m-nair-better-call-5djvlm/google-meet (Video)
+                // https://cal.com/anju-m-nair-better-call-5djvlm/30min (Direct/Office)
+                let slug = '30min'; 
+                if (method === 'Video Call') slug = 'google-meet';
+
+                await fetchAndRenderCalSlots(advisor, dateStr, slug);
+            } else {
+                // 3. Fallback to Static Generator
+                renderStaticTimeSlots();
+            }
+        }
+
+        // NEW: Fetch from Cal.com API
+        async function fetchAndRenderCalSlots(advisorName, dateStr, slug) {
+            const apiKey = CAL_CONFIG[advisorName];
+            const grid = document.getElementById('timeSlotGrid');
+            
+            // Show Loading State
+            grid.innerHTML = '<div class="col-span-4 text-center p-8 flex flex-col items-center justify-center"><i class="fa-solid fa-circle-notch fa-spin text-brand-primary text-2xl mb-2"></i><p class="text-xs text-slate-400 font-bold tracking-wide">SYNCING WITH CALENDAR...</p></div>';
+
+            try {
+                // A. Get Event Type ID (if not cached)
+                let eventTypeId = eventTypeCache[`${advisorName}_${slug}`];
+                if (!eventTypeId) {
+                    const typeRes = await fetch(`https://api.cal.com/v1/event-types?apiKey=${apiKey}`);
+                    if(!typeRes.ok) throw new Error("Failed to fetch event types");
+                    
+                    const typeData = await typeRes.json();
+                    const typeObj = typeData.event_types.find(t => t.slug === slug);
+                    
+                    if (typeObj) {
+                        eventTypeId = typeObj.id;
+                        eventTypeCache[`${advisorName}_${slug}`] = eventTypeId;
+                    } else {
+                        // If specific slug not found, try to fallback to first available or standard '30min'
+                        const fallback = typeData.event_types.find(t => t.slug === '30min') || typeData.event_types[0];
+                        if(fallback) {
+                            eventTypeId = fallback.id;
+                            eventTypeCache[`${advisorName}_${slug}`] = eventTypeId;
+                        } else {
+                            throw new Error("No matching event type found");
+                        }
+                    }
+                }
+
+                // B. Prepare Date Range (00:00 to 23:59 of selected date)
+                const [day, month, year] = dateStr.split('/');
+                const startDate = new Date(`${year}-${month}-${day}T00:00:00Z`);
+                const endDate = new Date(`${year}-${month}-${day}T23:59:59Z`);
+                
+                const startTimeIso = startDate.toISOString();
+                const endTimeIso = endDate.toISOString();
+
+                // C. Fetch Slots
+                const slotsUrl = `https://api.cal.com/v1/slots?apiKey=${apiKey}&eventTypeId=${eventTypeId}&startTime=${startTimeIso}&endTime=${endTimeIso}`;
+                const slotsRes = await fetch(slotsUrl);
+                if(!slotsRes.ok) throw new Error("Failed to fetch slots");
+                
+                const slotsData = await slotsRes.json();
+                
+                // Parse Response { slots: { "2023-10-10": [ { time: "..." } ] } }
+                // Find key that matches our date (API returns YYYY-MM-DD keys)
+                const apiDateKey = `${year}-${month}-${day}`;
+                const rawSlots = slotsData.slots ? (slotsData.slots[apiDateKey] || []) : [];
+
+                if (rawSlots.length === 0) {
+                    grid.innerHTML = '<div class="col-span-4 text-center p-6 text-slate-400 text-xs font-bold">No slots available for this date.</div>';
+                    return;
+                }
+
+                // Render
+                grid.innerHTML = '';
+                // UPDATED GRID: Bigger slots (3 columns instead of 4)
+                grid.className = "grid grid-cols-3 gap-3 overflow-y-auto custom-scrollbar pr-1 max-h-[400px] content-start";
+                
+                rawSlots.forEach(slot => {
+                    const slotDate = new Date(slot.time);
+                    // Format: "10:30 AM"
+                    const timeStr = slotDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                    
+                    const btn = document.createElement('button');
+                    // UPDATED BUTTON: Bigger padding (py-4), larger font (text-sm), shadow
+                    btn.className = "time-slot py-4 rounded-xl text-sm font-bold text-slate-600 bg-white border border-slate-200 hover:border-brand-primary hover:shadow-md transition-all transform hover:-translate-y-0.5";
+                    btn.innerText = timeStr;
+                    // UPDATED: Pass slot.time (ISO string) to selectTime
+                    btn.onclick = () => selectTime(timeStr, btn, slot.time);
+                    grid.appendChild(btn);
+                });
+
+            } catch (e) {
+                console.error("Cal.com sync failed:", e);
+                // Fallback to static if API fails so user isn't stuck
+                renderStaticTimeSlots(); 
+                // Optional: Show small warning
+                const warn = document.createElement('div');
+                warn.className = "col-span-4 text-[9px] text-red-400 text-center font-bold mt-1";
+                warn.innerText = "Offline Mode (Live sync failed)";
+                grid.appendChild(warn);
+            }
+        }
+
+        // Renamed previous renderTimeSlots to renderStaticTimeSlots
+        function renderStaticTimeSlots() {
             const grid = document.getElementById('timeSlotGrid');
             if(!grid) return;
             
-            // "Creative" Fit: Change to 4 columns to create a perfect 4x4 square for the 16 slots
-            grid.className = "grid grid-cols-4 gap-2 overflow-y-auto custom-scrollbar pr-1 max-h-[400px] content-start";
+            // UPDATED GRID: Bigger slots (3 columns instead of 4)
+            grid.className = "grid grid-cols-3 gap-3 overflow-y-auto custom-scrollbar pr-1 max-h-[400px] content-start";
             grid.innerHTML = '';
             
             // Available time slots from 10:00 AM to 6:30 PM
-            // Break from 1:00 PM to 2:00 PM (13:00 - 14:00)
             const startHour = 10;
             const endHour = 18; // Ends at 18:30 (6:30 PM)
             
             for (let h = startHour; h <= endHour; h++) {
                 for (let m = 0; m < 60; m += 30) {
                     
-                    // Break Logic: Skip 13:00 and 13:30
-                    if (h === 13) continue;
-
                     const displayHour = h > 12 ? h - 12 : h;
                     const suffix = h >= 12 ? 'PM' : 'AM';
                     const minutes = m === 0 ? '00' : m;
@@ -1543,17 +1711,25 @@
                     const timeStr = `${displayHour}:${minutes} ${suffix}`;
                     
                     const btn = document.createElement('button');
-                    // Compact styling for 4-column grid
-                    btn.className = "time-slot py-2 rounded-lg text-[9px] font-extrabold text-slate-600 bg-white border border-slate-100 hover:border-brand-primary hover:shadow-sm transition-all";
+                    // UPDATED BUTTON: Bigger padding (py-4), larger font (text-sm), shadow
+                    btn.className = "time-slot py-4 rounded-xl text-sm font-bold text-slate-600 bg-white border border-slate-200 hover:border-brand-primary hover:shadow-md transition-all transform hover:-translate-y-0.5";
                     btn.innerText = timeStr;
-                    btn.onclick = () => selectTime(timeStr, btn);
+                    // Static slots don't have ISO time (or we'd have to generate it), passing null for now
+                    btn.onclick = () => selectTime(timeStr, btn, null);
                     grid.appendChild(btn);
                 }
             }
         }
 
-        function selectTime(time, el) {
+        // Kept for backward compatibility if called elsewhere, but now delegates
+        function renderTimeSlots() {
+            updateTimeSlots();
+        }
+
+        // UPDATED: Accepts ISO time
+        function selectTime(time, el, isoTime) {
             document.getElementById('selectedTime').value = time;
+            document.getElementById('selectedTimeIso').value = isoTime || ""; 
             document.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
             el.classList.add('selected');
         }
@@ -1991,6 +2167,56 @@ END:VEVENT
 END:VCALENDAR`;
         }
 
+        // NEW: Helper function to generate the candidate report (Markdown)
+        // Used by both saveData (for internal records) and submitBooking (for Cal.com notes)
+        function generateProfileReport() {
+            const ref = appointmentRefId;
+            const firstName = document.getElementById('firstName').value || "N/A";
+            const lastName = document.getElementById('lastName').value || "N/A";
+            const email = document.getElementById('email').value || "N/A";
+            const dob = document.getElementById('dob').value || "N/A";
+            const age = document.getElementById('age').value || "N/A";
+            const residence = document.getElementById('presentResidence').value || "N/A";
+            const nationality = document.getElementById('nationality').value || "N/A";
+            const mobile = document.getElementById('mobile').value || "N/A";
+            const whatsapp = document.getElementById('whatsapp').value || "N/A";
+            const altPhone = document.getElementById('altPhone').value || "N/A";
+            const qualification = document.querySelector('input[name="qualification"]:checked')?.value || "Not Selected";
+            const jobRole = document.getElementById('currentJob').value || "N/A";
+            const experience = document.getElementById('experience').value || "0";
+            const hasCv = document.querySelector('input[name="hasCv"]:checked')?.value === 'yes' ? 'Yes' : 'No';
+            const passportNo = document.getElementById('passportNo').value || "N/A";
+            const passportExp = document.getElementById('passportExp').value || "N/A";
+
+            return `
+CANDIDATE PROFILE REPORT
+Reference: ${ref}
+
+[ IDENTITY ]
+Name: ${firstName} ${lastName}
+DOB: ${dob} (Age: ${age})
+Origin: ${nationality}
+Residence: ${residence}
+
+[ CONTACT ]
+Email: ${email}
+Mobile: ${mobile}
+WhatsApp: ${whatsapp}
+Alt Phone: ${altPhone}
+
+[ PROFESSIONAL ]
+Category: ${currentMode}
+Qualification: ${qualification}
+Target Role: ${jobRole}
+Experience: ${experience} Years
+CV Provided: ${hasCv}
+
+[ DOCUMENTS ]
+Passport No: ${passportNo}
+Expiry: ${passportExp}
+            `.trim();
+        }
+
         async function saveData(showSuccess = true, useLoader = true) {
             // Skip if task already exists (only update on booking submission later)
             if (globalTaskId) return true; // Return TRUE if already saved
@@ -2062,62 +2288,12 @@ END:VCALENDAR`;
                      if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
                      if(targetCountry) customFieldsArray.push({ id: CLICKUP_FIELDS["TARGET_COUNTRY"], value: targetCountry });
                 }
-
-                // Construct Full Description for the task
-                const firstName = document.getElementById('firstName').value;
-                const lastName = document.getElementById('lastName').value;
-                const email = document.getElementById('email').value;
-                const dob = document.getElementById('dob').value;
-                const age = document.getElementById('age').value;
-                const residence = document.getElementById('presentResidence').value;
-                const nationality = document.getElementById('nationality').value;
-                const whatsapp = document.getElementById('whatsapp').value;
-                const altPhone = document.getElementById('altPhone').value;
-                const qualification = document.querySelector('input[name="qualification"]:checked')?.value || "Not Selected";
-                const passportNo = document.getElementById('passportNo').value;
-                const passportExp = document.getElementById('passportExp').value;
-                const jobRole = document.getElementById('currentJob').value;
-                const experience = document.getElementById('experience').value;
-                const hasCv = document.querySelector('input[name="hasCv"]:checked')?.value === 'yes' ? 'Yes' : 'No';
-
-                // CLEAN MARKDOWN REPORT
-                const fullDescription = `
-**📌 LEAD PROFILE REPORT**
-**Reference ID:** \`${ref}\`
-**Generated:** ${new Date().toLocaleString()}
-
----
-
-### 👤 **IDENTITY VERIFICATION**
-**Full Name:** ${firstName} ${lastName}
-**Date of Birth:** ${dob}
-**Calculated Age:** ${age}
-**Nationality:** ${nationality}
-**Current Residence:** ${residence}
-
-### 📱 **COMMUNICATION CHANNELS**
-**Mobile:** \`${mobile}\`
-**WhatsApp:** \`${whatsapp}\`
-**Email:** ${email}
-**Alternative:** ${altPhone || "N/A"}
-
-### 💼 **PROFESSIONAL ASSESSMENT**
-**Skill Category:** ${currentMode}
-**Qualification:** ${qualification}
-**Target Position:** ${jobRole}
-**Experience:** ${experience} Years
-**CV Provided:** ${hasCv}
-
-### 🛂 **DOCUMENTATION**
-**Passport No:** ${passportNo || "N/A"}
-**Expiry Date:** ${passportExp || "N/A"}
-
----
-*Captured via Better Call Booking System*
-                `.trim();
+                
+                // Construct Full Description using the shared helper
+                const fullDescription = generateProfileReport();
 
                 const payload = {
-                    name: firstName, 
+                    name: document.getElementById('firstName').value, 
                     description: fullDescription, 
                     custom_fields: customFieldsArray
                 };
@@ -2158,6 +2334,7 @@ END:VCALENDAR`;
                     }
                 }
                 return false; // No API Key
+
             } catch(e) { 
                 console.error("Network Error:", e);
                 showModal("Network Error. Please check your internet connection and try again.");
@@ -2169,7 +2346,7 @@ END:VCALENDAR`;
                         const loader = document.getElementById('loadingOverlay');
                         loader.classList.add('opacity-0');
                         setTimeout(() => loader.classList.add('hidden'), 500);
-                    }, 1500); 
+                    }, 500); 
                 }
             }
         }
@@ -2179,6 +2356,7 @@ END:VCALENDAR`;
             const method = document.getElementById('selectedMethod').value;
             const date = document.getElementById('bookingDate').value;
             const time = document.getElementById('selectedTime').value;
+            const isoTime = document.getElementById('selectedTimeIso').value; // Get ISO time for API
             const targetCountry = document.getElementById('targetCountry').value;
 
             // Strict Validation including Country
@@ -2191,14 +2369,13 @@ END:VCALENDAR`;
             // Ensure Task Exists (Handle Page Refresh or missed SaveData)
             if (!globalTaskId) {
                 console.log("No Task ID found, attempting to recreate...");
-                // Attempt silent save if task ID is missing
                 await saveData(false, false); 
                 if(!globalTaskId) {
                     showModal("Session Error. Please fill out your profile details first and try again."); return;
                 }
             }
 
-            toggleLoader(true, "Confirming Booking", "Finalizing Appointment Slot...");
+            toggleLoader(true, "Confirming Booking", "Syncing with Calendar System...");
 
             // Create ICS file for download
             const icsContent = createICSFile(date, time, advisor);
@@ -2242,87 +2419,160 @@ END:VCALENDAR`;
                 </div>
             `;
 
-            // Prepare Update Payload
-            let updateFields = [
-                { id: CLICKUP_FIELDS["BOOKING_DATE"], value: getUnixTime(date) },
-                { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time },
-                { id: CLICKUP_FIELDS["TARGET_COUNTRY"], value: targetCountry } // Ensure country is updated
-            ];
-
             try {
-                // Try to fetch field definitions to map dropdown options
-                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
-                
-                if (res.ok) {
-                    const fieldDefs = (await res.json()).fields || [];
+                // ---------------------------------------------------------
+                // CAL.COM BOOKING LOGIC
+                // ---------------------------------------------------------
+                if (CAL_CONFIG[advisor]) {
+                    const apiKey = CAL_CONFIG[advisor];
+                    
+                    // Re-determine slug to find correct Event Type ID
+                    let slug = '30min'; 
+                    if (method === 'Video Call') slug = 'google-meet';
+                    const eventTypeId = eventTypeCache[`${advisor}_${slug}`]; // Should be cached from slot fetching step
 
-                    const mapDropdown = (fid, val) => {
-                        const def = fieldDefs.find(f => f.id === fid);
-                        if(def && (def.type === 'drop_down' || def.type === 'labels')) {
-                            // Match the value to an option ID
-                            let opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase());
-                            if(!opt) opt = def.type_config.options.find(o => o.name.toLowerCase().includes(val.toLowerCase().split(' ')[0]));
-                            
-                            if(opt) return { id: fid, value: opt.id };
-                            console.warn(`Dropdown option not found for: ${val} in field ${fid}`);
+                    if (isoTime && eventTypeId) {
+                        const profileReport = generateProfileReport();
+                        
+                        // FIX: Handle empty fields for testing (Cal.com requires Name/Email)
+                        const fName = document.getElementById('firstName').value.trim();
+                        const lName = document.getElementById('lastName').value.trim();
+                        const emailVal = document.getElementById('email').value.trim();
+
+                        // Use actual values if present, otherwise use "Guest" placeholders for testing
+                        const candidateName = (fName || lName) ? (fName + " " + lName).toUpperCase() : "VALUED GUEST";
+                        const candidateEmail = emailVal || "guest@bettercall.online";
+
+                        const calPayload = {
+                            eventTypeId: eventTypeId,
+                            start: isoTime,
+                            responses: {
+                                name: candidateName,
+                                email: candidateEmail,
+                                notes: profileReport, // Puts full details in description
+                                guests: []
+                            },
+                            timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                            language: "en",
+                            metadata: {
+                                "referenceId": appointmentRefId,
+                                "targetCountry": targetCountry
+                            }
+                        };
+
+                        // FIX: Handle Location Object correctly for API
+                        // Only send 'location' response if it's a Phone Call.
+                        // For Video (Google Meet) and In-Person, relying on the Event Type default prevents 400 errors.
+                        if (method === 'Phone Call') {
+                            const mobileVal = document.getElementById('mobile').value;
+                            // Ensure we have a value to send
+                            if(mobileVal) {
+                                calPayload.responses.location = {
+                                    value: 'phone',
+                                    optionValue: mobileVal
+                                };
+                            }
+                        } 
+                        // For 'Video Call' (Google Meet) and 'In-Person', we omit the location object
+                        // so Cal.com uses the default configuration for that Event Type.
+
+                        const calRes = await fetch(`https://api.cal.com/v1/bookings?apiKey=${apiKey}`, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify(calPayload)
+                        });
+
+                        if (!calRes.ok) {
+                            const calErr = await calRes.json();
+                            console.error("Cal.com Booking Error:", calErr);
+                            // Throw error to trigger the catch block and show the error modal
+                            // This prevents the "Success" screen from showing if the calendar update failed
+                            throw new Error(`Calendar Update Failed: ${calErr.message || "Unknown API Error"}`);
+                        } else {
+                            // Booking Success
                         }
-                        return { id: fid, value: val }; 
-                    };
-
-                    updateFields.push(mapDropdown(CLICKUP_FIELDS["ADVISOR"], advisor));
-                    updateFields.push(mapDropdown(CLICKUP_FIELDS["BOOKING_TYPE"], method));
-                } else {
-                    // Fallback to sending raw values if definitions fail
-                    updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: advisor });
-                    updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
+                    } else {
+                        console.warn("Skipping Cal.com booking: Missing ISO time or EventTypeID.");
+                        if(CAL_CONFIG[advisor]) {
+                             throw new Error("Unable to sync slot. Please re-select a time.");
+                        }
+                    }
                 }
+                // ---------------------------------------------------------
 
-                const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nMethod: ${method}\nDate: ${date}\nTime: ${time}\nTarget Country: ${targetCountry}`;
+                // Prepare Update Payload (Paused ClickUp Logic)
+                let updateFields = [
+                    { id: CLICKUP_FIELDS["BOOKING_DATE"], value: getUnixTime(date) },
+                    { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time },
+                    { id: CLICKUP_FIELDS["TARGET_COUNTRY"], value: targetCountry }
+                ];
 
                 // ClickUp API Call: Update Task Fields & Add Comment
+                // MODIFIED: Only execute API calls if NOT in temp mode
                 if(CLICKUP_API_KEY) {
+                    try {
+                        const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
+                        if (res.ok) {
+                            const fieldDefs = (await res.json()).fields || [];
+                            const mapDropdown = (fid, val) => {
+                                const def = fieldDefs.find(f => f.id === fid);
+                                if(def && (def.type === 'drop_down' || def.type === 'labels')) {
+                                    let opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase());
+                                    if(!opt) opt = def.type_config.options.find(o => o.name.toLowerCase().includes(val.toLowerCase().split(' ')[0]));
+                                    if(opt) return { id: fid, value: opt.id };
+                                }
+                                return { id: fid, value: val }; 
+                            };
+                            updateFields.push(mapDropdown(CLICKUP_FIELDS["ADVISOR"], advisor));
+                            updateFields.push(mapDropdown(CLICKUP_FIELDS["BOOKING_TYPE"], method));
+                        } else {
+                            throw new Error("Field definition fetch failed");
+                        }
+                    } catch(err) {
+                        updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: advisor });
+                        updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
+                    }
+
+                    // ... existing ClickUp update logic ...
                     for (let f of updateFields) {
-                        // Note: ClickUp API requires separate calls for each custom field update
-                        const updateRes = await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${f.id}`, {
-                            method: 'POST',
-                            headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                        await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${f.id}`, {
+                            method: 'POST', headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
                             body: JSON.stringify({ value: f.value })
                         });
-                        if (!updateRes.ok) console.error(`Failed update field ${f.id}`, await updateRes.json());
                     }
-                    // Add comment to track the booking details
+                    const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nMethod: ${method}\nDate: ${date}\nTime: ${time}\nTarget Country: ${targetCountry}`;
                     await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/comment`, {
-                        method: 'POST',
-                        headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                        method: 'POST', headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
                         body: JSON.stringify({ comment_text: desc })
                     });
+                } 
 
-                    toggleLoader(false);
+                // --- UI SUCCESS LOGIC (Always runs) ---
+                toggleLoader(false);
 
-                    // Meta Pixel Event: Schedule (Appointment Booked)
-                    if(typeof fbq === 'function') fbq('track', 'Schedule');
+                // Meta Pixel Event: Schedule (Appointment Booked)
+                if(typeof fbq === 'function') fbq('track', 'Schedule');
 
-                    // Show success modal
-                    const m = document.getElementById('messageModal');
-                    document.getElementById('modalContent').innerHTML = successHtml;
-                    m.classList.remove('hidden');
-                    setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
-                    
-                    // Disable button to prevent double submission
-                    const submitButton = document.querySelector('button[onclick="submitBooking()"]');
-                    if (submitButton) {
-                        submitButton.disabled = true;
-                        submitButton.innerHTML = 'BOOKED <i class="fa-solid fa-check"></i>';
-                    }
+                // Show success modal
+                const m = document.getElementById('messageModal');
+                document.getElementById('modalContent').innerHTML = successHtml;
+                m.classList.remove('hidden');
+                setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
+                
+                // Disable button to prevent double submission
+                const submitButton = document.querySelector('button[onclick="submitBooking()"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = 'BOOKED <i class="fa-solid fa-check"></i>';
                 }
+                
             } catch(e) {
                 console.error("Booking submission failed:", e);
                 toggleLoader(false);
-                showModal("Connection Error. Your appointment could not be finalized. Please contact support.");
+                showModal("Connection Error. Your appointment could not be finalized. Please contact support.\n" + (e.message || "Unknown error"));
             }
         }
         
-        console.log("Appointment Script Loaded");
     </script>
 </body>
 </html>
