@@ -2391,32 +2391,38 @@
             if(cleaned.length > 0 && !cleaned.startsWith('+')) cleaned = '+' + cleaned;
             return cleaned.length < 5 ? null : cleaned;
         }
-        function enforcePhoneInput(el) { el.value = el.value.replace(/[^0-9+ ]/g, ''); }
+        
+        function enforcePhoneInput(el) { 
+            el.value = el.value.replace(/[^0-9+ ]/g, ''); 
+        }
+        
         function validatePhone(id) {
             const el = document.getElementById(id);
+            if (!el) return;
             const rawVal = el.value.replace(/\s/g, '');
             const feedback = document.getElementById(id === 'mobile' ? 'mobileFeedback' : id === 'whatsapp' ? 'waFeedback' : 'altPhoneFeedback');
             if (!currentPhoneRegex) return;
             if (currentPhoneRegex.test(rawVal)) {
                 el.classList.add('valid-field'); el.classList.remove('invalid-field');
-                feedback.innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i>';
-                if(id==='mobile') document.getElementById('mobileError').classList.add('hidden');
+                if(feedback) feedback.innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i>';
+                if(id==='mobile') { const err = document.getElementById('mobileError'); if(err) err.classList.add('hidden'); }
             } else {
                 el.classList.remove('valid-field');
                 if(rawVal.length > 6) {
                     el.classList.add('invalid-field');
-                    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
-                } else feedback.innerHTML = '';
+                    if(feedback) feedback.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
+                } else if(feedback) feedback.innerHTML = '';
             }
         }
+        
         function getUnixTime(dateStr) {
             if (!dateStr) return null;
             const parts = dateStr.split('/');
             return (parts.length === 3) ? new Date(parts[2], parts[1] - 1, parts[0]).getTime() : null;
         }
+        
         function showModal(msg) {
             const m = document.getElementById('messageModal');
-            // Reset to default simple modal for generic messages
             document.getElementById('modalContent').innerHTML = `
                 <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
                     <i class="fa-solid fa-circle-exclamation"></i>
@@ -2430,16 +2436,30 @@
             m.classList.remove('hidden');
             setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
         }
+        
         function closeModal() {
             const m = document.getElementById('messageModal');
             m.classList.add('opacity-0'); m.querySelector('.modal-content').classList.remove('scale-100');
             setTimeout(() => m.classList.add('hidden'), 300);
         }
+        
         function showToast(msg) {
             const t = document.getElementById('toast');
             if(msg) document.getElementById('toastMsg').innerText = msg;
             t.classList.remove('translate-y-32','opacity-0');
             setTimeout(() => t.classList.add('translate-y-32','opacity-0'), 3000);
+        }
+
+        // Helper for casing (Smart Title Case with Acronym Support)
+        function toTitleCase(str) {
+            if(!str) return "";
+            str = str.trim();
+            const acronyms = ['UAE', 'USA', 'UK', 'KSA', 'GCC', 'US'];
+            if (acronyms.includes(str.toUpperCase())) return str.toUpperCase();
+            
+            return str.replace(/\w\S*/g, function(txt){
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
         }
 
         // --- CLICKUP INTEGRATION ---
@@ -2473,7 +2493,6 @@
                 customFieldsArray = customFieldsArray.filter(f => f.value !== null && f.value !== undefined && f.value !== "");
                 
                 // CLICKUP SAVE RESTORED
-                // Fetch Field Definitions logic (Existing logic kept same)
                 try {
                     const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
                     if(res.ok) {
