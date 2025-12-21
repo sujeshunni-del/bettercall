@@ -1913,8 +1913,21 @@
             const qual = document.querySelector('input[name="qualification"]:checked')?.value || "";
             params.append("qualification", qual);
             params.append("job_role", val('currentJob'));
-            params.append("experience", val('experience'));
-            params.append("category", currentMode); 
+            
+            // Handle Experience & Category Mapping based on User Request
+            let exp = val('experience');
+            let cat = currentMode; // 'Skilled' or 'Unskilled' by default
+
+            if (currentMode === 'Unskilled') {
+                cat = "Unskilled / Non-Experienced";
+                exp = "0"; // Reset experience for unskilled
+            } else {
+                cat = "Experienced / Skilled";
+            }
+            
+            params.append("experience", exp);
+            params.append("category", cat);
+            params.append("profile_type", cat); // Redundancy
             
             // 4. Assessment Results & Context
             params.append("ref_id", document.getElementById('refId').innerText);
