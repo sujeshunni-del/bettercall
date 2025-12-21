@@ -2326,6 +2326,65 @@
             toggleLoader(false);
         }
 
+        // --- VALIDATORS & UTILS (RESTORED) ---
+        function cleanPhoneNumber(phoneStr) {
+            if(!phoneStr) return null;
+            let cleaned = phoneStr.replace(/[^0-9+]/g, '');
+            if(cleaned.startsWith('00')) cleaned = '+' + cleaned.substring(2);
+            if(cleaned.length > 0 && !cleaned.startsWith('+')) cleaned = '+' + cleaned;
+            return cleaned.length < 5 ? null : cleaned;
+        }
+        function enforcePhoneInput(el) { el.value = el.value.replace(/[^0-9+ ]/g, ''); }
+        function validatePhone(id) {
+            const el = document.getElementById(id);
+            const rawVal = el.value.replace(/\s/g, '');
+            const feedback = document.getElementById(id === 'mobile' ? 'mobileFeedback' : id === 'whatsapp' ? 'waFeedback' : 'altPhoneFeedback');
+            if (!currentPhoneRegex) return;
+            if (currentPhoneRegex.test(rawVal)) {
+                el.classList.add('valid-field'); el.classList.remove('invalid-field');
+                feedback.innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i>';
+                if(id==='mobile') document.getElementById('mobileError').classList.add('hidden');
+            } else {
+                el.classList.remove('valid-field');
+                if(rawVal.length > 6) {
+                    el.classList.add('invalid-field');
+                    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
+                } else feedback.innerHTML = '';
+            }
+        }
+        function getUnixTime(dateStr) {
+            if (!dateStr) return null;
+            const parts = dateStr.split('/');
+            return (parts.length === 3) ? new Date(parts[2], parts[1] - 1, parts[0]).getTime() : null;
+        }
+        function showModal(msg) {
+            const m = document.getElementById('messageModal');
+            // Reset to default simple modal for generic messages
+            document.getElementById('modalContent').innerHTML = `
+                <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Attention Needed</h3>
+                <p id="modalText" class="text-slate-500 text-sm mb-6">${msg}</p>
+                <button onclick="closeModal()" class="w-full bg-brand-accent hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
+                    UNDERSTOOD
+                </button>
+            `;
+            m.classList.remove('hidden');
+            setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
+        }
+        function closeModal() {
+            const m = document.getElementById('messageModal');
+            m.classList.add('opacity-0'); m.querySelector('.modal-content').classList.remove('scale-100');
+            setTimeout(() => m.classList.add('hidden'), 300);
+        }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            if(msg) document.getElementById('toastMsg').innerText = msg;
+            t.classList.remove('translate-y-32','opacity-0');
+            setTimeout(() => t.classList.add('translate-y-32','opacity-0'), 3000);
+        }
+
         // --- CLICKUP INTEGRATION ---
 
         async function saveData(showSuccess = true, useLoader = true) {
