@@ -1813,19 +1813,20 @@
         
         // --- NAVIGATION & FLOW ---
         function goToStep2() {
-            // VALIDATION ENABLED
+            // 1. AGE VALIDATION
             const age = parseInt(document.getElementById('age').value);
-            // Updated validation check for 21-50 years
             if(isNaN(age) || age < 21 || age > 50) { 
                 showModal("Sorry, you are not eligible for the immigration process. (Age requirement: 21-50)"); return; 
             }
+
+            // 2. PHONE VALIDATION
             const mEl = document.getElementById('mobile');
             const rawVal = mEl.value.replace(/\s/g, '');
             if(currentPhoneRegex && !currentPhoneRegex.test(rawVal)) {
                 showModal("Invalid Mobile Number Format."); return;
             }
 
-            // Alternative Phone Validation
+            // 3. ALT PHONE VALIDATION
             const altEl = document.getElementById('altPhone');
             if(altEl && altEl.value.length > 5) {
                 const altVal = altEl.value.replace(/\s/g, '');
@@ -1835,6 +1836,36 @@
                 }
             }
 
+            // 4. COUNTRY DROPDOWN VALIDATION (FIX FOR EMPTY NATIONALITY)
+            const nat = document.getElementById('nationality').value;
+            const res = document.getElementById('presentResidence').value;
+            
+            if(!nat || nat === "") {
+                showModal("Please select your Nationality.");
+                const wrapper = document.getElementById('nationalityWrapper');
+                if(wrapper) {
+                    wrapper.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    // Visual cue
+                    const btn = wrapper.querySelector('button');
+                    btn.classList.add('ring-2', 'ring-brand-accent', 'bg-red-50');
+                    setTimeout(() => btn.classList.remove('ring-2', 'ring-brand-accent', 'bg-red-50'), 2000);
+                }
+                return;
+            }
+
+            if(!res || res === "") {
+                showModal("Please select your Present Residence.");
+                const wrapper = document.getElementById('residenceWrapper');
+                if(wrapper) {
+                    wrapper.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    const btn = wrapper.querySelector('button');
+                    btn.classList.add('ring-2', 'ring-brand-accent', 'bg-red-50');
+                    setTimeout(() => btn.classList.remove('ring-2', 'ring-brand-accent', 'bg-red-50'), 2000);
+                }
+                return;
+            }
+
+            // 5. FORM VALIDATION
             if(!document.getElementById('personalForm').checkValidity()) {
                 document.getElementById('personalForm').reportValidity(); return;
             }
@@ -1849,6 +1880,12 @@
             document.getElementById('reportName').innerText = name;
             document.getElementById('avatarInitial').innerText = name.charAt(0);
             document.getElementById('reportDate').innerText = new Date().toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        // Helper for casing
+        function toTitleCase(str) {
+            if(!str) return "";
+            return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
         }
 
         function redirectToAppointment() {
@@ -1868,9 +1905,9 @@
             params.append("dob", val('dob'));
             params.append("age", val('age'));
             
-            // 2. Geography
-            params.append("nationality", val('nationality'));
-            params.append("residence", val('presentResidence'));
+            // 2. Geography (Apply Title Case for better matching)
+            params.append("nationality", toTitleCase(val('nationality')));
+            params.append("residence", toTitleCase(val('presentResidence')));
             
             // 3. Professional
             const qual = document.querySelector('input[name="qualification"]:checked')?.value || "";
