@@ -1882,10 +1882,15 @@
             document.getElementById('reportDate').innerText = new Date().toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
 
-        // Helper for casing
+        // Helper for casing (Smart Title Case with Acronym Support)
         function toTitleCase(str) {
             if(!str) return "";
-            return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+            const acronyms = ['UAE', 'USA', 'UK', 'KSA', 'GCC'];
+            if (acronyms.includes(str.toUpperCase())) return str.toUpperCase();
+            
+            return str.replace(/\w\S*/g, function(txt){
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
         }
 
         function redirectToAppointment() {
@@ -1898,6 +1903,7 @@
             // 1. Personal Details (Inject to first tab of appointment page)
             params.append("first_name", val('firstName'));
             params.append("last_name", val('lastName'));
+            params.append("fullname", val('firstName') + ' ' + val('lastName')); // Added Full Name
             params.append("email", val('email'));
             params.append("mobile", val('mobile')); 
             params.append("phone", val('mobile')); // Duplicate for safety
@@ -1905,7 +1911,7 @@
             params.append("dob", val('dob'));
             params.append("age", val('age'));
             
-            // 2. Geography (Apply Title Case for better matching)
+            // 2. Geography (Apply Smart Casing: India -> India, UAE -> UAE)
             params.append("nationality", toTitleCase(val('nationality')));
             params.append("residence", toTitleCase(val('presentResidence')));
             
@@ -1913,6 +1919,7 @@
             const qual = document.querySelector('input[name="qualification"]:checked')?.value || "";
             params.append("qualification", qual);
             params.append("job_role", val('currentJob'));
+            params.append("role", val('currentJob')); // Redundancy
             
             // Handle Experience & Category Mapping based on User Request
             let exp = val('experience');
