@@ -21,19 +21,28 @@
                         sans: ['Outfit', 'sans-serif'],
                     },
                     colors: {
-                        'deep-space': '#050B14',
-                        'space-indigo': '#1C2B4C', 
+                        'glass-surface': 'rgba(255, 255, 255, 0.65)',
+                        'glass-border': 'rgba(255, 255, 255, 0.8)',
+                        'text-primary': '#1e293b', // Slate 800
+                        'text-secondary': '#64748b', // Slate 500
                         'brand-blue': '#3B82F6',      
                         'brand-purple': '#8B5CF6',     
-                        'brand-gold': '#FFD700',
-                        'brand-white': '#FFFFFF',
-                        'vfs-teal': '#14B8A6',
-                        'phase-green': '#22c55e',
+                        'brand-gold': '#eab308',
+                        'phase-green': '#10b981',
+                        'phase-teal': '#0d9488',
                         'phase-orange': '#f97316',
+                        'phase-cyan': '#06b6d4',
+                        'phase-indigo': '#6366f1',
+                        'phase-pink': '#ec4899',
                         'phase-red': '#ef4444',
                     },
                     backgroundImage: {
-                        'grid-pattern': "linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)",
+                        'subtle-grid': "radial-gradient(#cbd5e1 1px, transparent 1px)",
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.10)',
+                        'glass-hover': '0 8px 32px 0 rgba(31, 38, 135, 0.20)',
+                        'glow': '0 0 20px rgba(59, 130, 246, 0.5)'
                     }
                 }
             }
@@ -42,23 +51,40 @@
 
     <style>
         body {
-            background-color: #050B14;
-            color: #E2E8F0;
+            background-color: #f0f4f8;
+            color: #1e293b;
             font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.10) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.10) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(34, 197, 94, 0.10) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(249, 115, 22, 0.10) 0px, transparent 50%);
+            background-attachment: fixed;
         }
         
+        /* Glassmorphism 2.0 Card */
         .glass-card {
-            background: rgba(13, 19, 31, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 
+                0 4px 6px -1px rgba(0, 0, 0, 0.05), 
+                0 2px 4px -1px rgba(0, 0, 0, 0.03),
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 1rem;
         }
+        
         .glass-card:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-4px) scale(1.005);
+            box-shadow: 
+                0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+                0 10px 10px -5px rgba(0, 0, 0, 0.04),
+                inset 0 0 20px rgba(255, 255, 255, 0.8);
+            border-color: #fff;
         }
 
         /* Timeline Specifics */
@@ -67,16 +93,22 @@
             left: 2rem;
             top: 0;
             bottom: 0;
-            width: 2px;
+            width: 3px;
             background: linear-gradient(to bottom, 
-                rgba(34, 197, 94, 0.5) 0%, 
-                rgba(255, 215, 0, 0.5) 20%, 
-                rgba(249, 115, 22, 0.5) 40%, 
-                rgba(59, 130, 246, 0.5) 60%, 
-                rgba(139, 92, 246, 0.5) 80%, 
-                rgba(239, 68, 68, 0.5) 100%
+                #10b981 0%, 
+                #0d9488 15%,
+                #eab308 25%, 
+                #f97316 35%,
+                #64748b 45%,
+                #06b6d4 55%, 
+                #6366f1 70%, 
+                #8B5CF6 80%, 
+                #ec4899 90%,
+                #ef4444 100%
             );
             z-index: 0;
+            border-radius: 99px;
+            opacity: 0.6;
         }
         
         @media (min-width: 768px) {
@@ -86,74 +118,77 @@
             }
         }
 
-        .timeline-node {
-            position: relative;
-            z-index: 10;
+        /* Floating Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating-icon {
+            animation: float 6s ease-in-out infinite;
         }
 
-        .ambient-glow {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%);
-            pointer-events: none;
-            z-index: -1;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { 
+            background: #cbd5e1; 
+            border-radius: 5px; 
+            border: 2px solid #f1f5f9;
         }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #050B14; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
         @media print {
             .no-print { display: none !important; }
             .timeline-line { border-left: 2px solid #ccc; background: none; left: 1rem; }
-            .glass-card { border: 1px solid #000; box-shadow: none; color: black; background: white; }
-            body { color: black; background: white; }
-            .timeline-node { break-inside: avoid; }
+            .glass-card { border: 1px solid #000; box-shadow: none; color: black; background: white; break-inside: avoid; }
+            body { color: black; background: white; background-image: none; }
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col">
+<body class="antialiased min-h-screen flex flex-col bg-slate-50">
 
-    <div class="fixed inset-0 bg-grid-pattern bg-[length:40px_40px] pointer-events-none opacity-20"></div>
-    <div class="ambient-glow"></div>
+    <!-- Subtle Grid Background -->
+    <div class="fixed inset-0 bg-subtle-grid bg-[length:30px_30px] pointer-events-none opacity-40"></div>
+    
+    <!-- Floating Orbs (Decoration) -->
+    <div class="fixed top-20 left-10 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl pointer-events-none mix-blend-multiply animate-pulse"></div>
+    <div class="fixed bottom-20 right-10 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl pointer-events-none mix-blend-multiply"></div>
 
     <!-- Sticky Header -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#050B14]/90 backdrop-blur-xl border-b border-white/5 no-print">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/40 shadow-sm no-print">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-gradient-to-br from-brand-blue to-brand-purple rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                <div class="w-10 h-10 bg-gradient-to-br from-brand-blue to-brand-purple rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-brand-blue/30">
                     BC
                 </div>
-                <div>
-                    <h1 class="font-bold text-white text-base tracking-wide leading-none">BETTER CALL</h1>
-                    <span class="text-[9px] text-brand-gold font-bold uppercase tracking-widest">Internal SOP</span>
+                <div class="flex flex-col">
+                    <h1 class="font-bold text-slate-800 text-lg tracking-tight leading-none">BETTER CALL</h1>
+                    <span class="text-[10px] text-brand-purple font-bold uppercase tracking-widest mt-0.5">SOP Workflow v3.0</span>
                 </div>
             </div>
-            <div class="flex items-center gap-4 text-xs font-medium text-gray-400">
-                <span class="hidden md:inline">Last Updated: Dec 2025</span>
-                <div class="h-4 w-px bg-white/10 hidden md:block"></div>
-                <a href="#guidelines" class="hover:text-white transition">Guidelines</a>
+            <div class="flex items-center gap-4 text-xs font-semibold text-slate-500">
+                <span class="hidden md:inline bg-slate-100 px-3 py-1 rounded-full border border-slate-200">Updated: Dec 2025</span>
+                <a href="#guidelines" class="hover:text-brand-blue transition bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-100">Guidelines</a>
             </div>
         </div>
     </nav>
 
-    <main class="flex-grow pt-24 pb-20 relative">
+    <main class="flex-grow pt-32 pb-20 relative">
         
         <!-- Objective Header -->
-        <header class="container mx-auto px-6 mb-16 text-center max-w-3xl relative z-10">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-brand-blue mb-6">
+        <header class="container mx-auto px-6 mb-20 text-center max-w-4xl relative z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-blue-100 text-xs font-bold text-brand-blue mb-6 shadow-sm">
                 <span class="w-2 h-2 rounded-full bg-brand-blue animate-pulse"></span>
-                Consultant & Documentation Team
+                Case Processing Unit
             </div>
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                Case Management <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-purple">Workflow</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight tracking-tight">
+                Case Management <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-phase-teal via-brand-purple to-phase-pink">Master Workflow</span>
             </h1>
-            <p class="text-gray-400 text-lg leading-relaxed">
-                Objective: To standardize the workflow from lead generation to deployment, ensuring high conversion rates, accurate documentation, and strict adherence to payment milestones.
+            <p class="text-slate-500 text-lg leading-relaxed max-w-2xl mx-auto font-medium">
+                From acquisition to deployment. A 9-phase protocol ensuring accuracy, compliance, and client success.
             </p>
         </header>
 
@@ -163,371 +198,452 @@
             <!-- The Central Line -->
             <div class="timeline-line"></div>
 
-            <!-- PHASE 1: GREEN -->
-            <div class="relative mb-16 timeline-section">
-                <!-- Milestone Marker -->
-                <div class="flex items-center md:justify-center mb-8 relative z-20">
-                    <div class="w-16 h-16 rounded-full bg-[#050B14] border-4 border-phase-green flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.3)] ml-0 md:ml-0">
-                        <i class="fa-solid fa-users-viewfinder text-xl text-phase-green"></i>
+            <!-- PHASE 1: GREEN (Acquisition) -->
+            <div class="relative mb-20 timeline-section">
+                <!-- Milestone -->
+                <div class="flex items-center md:justify-center mb-12 relative z-20">
+                    <div class="floating-icon w-20 h-20 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-lg shadow-green-500/10 ml-0 md:ml-0 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent"></div>
+                        <span class="text-2xl font-bold text-phase-green relative z-10">01</span>
                     </div>
-                    <div class="absolute left-20 md:left-auto md:top-20 md:text-center w-full md:w-auto">
-                        <h2 class="text-2xl font-bold text-white">Phase 1</h2>
-                        <span class="text-sm text-phase-green font-medium uppercase tracking-wider">Acquisition & Triage</span>
+                    <div class="absolute left-24 md:left-auto md:top-24 md:text-center w-full md:w-auto">
+                        <h2 class="text-2xl font-bold text-slate-800">Acquisition & Triage</h2>
+                        <span class="text-xs text-phase-green font-bold uppercase tracking-widest bg-green-50 px-2 py-1 rounded-md">Inquiry Phase</span>
                     </div>
                 </div>
 
-                <!-- Steps Container -->
-                <div class="space-y-8 md:space-y-0 relative">
-                    
+                <div class="space-y-8 relative">
                     <!-- Step 1 (Left) -->
-                    <div class="md:flex md:justify-between md:items-center w-full mb-8">
-                        <div class="md:w-[45%] pl-12 md:pl-0 md:pr-8">
-                            <div class="glass-card rounded-xl p-6 border-l-4 border-l-phase-green relative">
-                                <span class="absolute -left-3 top-6 w-6 h-6 bg-[#050B14] border-2 border-phase-green rounded-full flex items-center justify-center text-[10px] text-white font-bold z-20 md:hidden">1</span>
-                                <h3 class="text-lg font-bold text-white mb-3">Step 1: Promotion & Inquiry</h3>
-                                <p class="text-sm text-gray-400 mb-4">Monitor channels continuously for incoming leads.</p>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div class="bg-white/5 p-2 rounded text-xs text-gray-300"><i class="fa-solid fa-robot mr-1 text-phase-green"></i> ClickUp (Auto)</div>
-                                    <div class="bg-white/5 p-2 rounded text-xs text-gray-300"><i class="fa-brands fa-whatsapp mr-1 text-phase-green"></i> Wati API</div>
-                                    <div class="bg-white/5 p-2 rounded text-xs text-gray-300"><i class="fa-solid fa-phone mr-1 text-phase-green"></i> Direct Calls</div>
-                                    <div class="bg-white/5 p-2 rounded text-xs text-gray-300"><i class="fa-solid fa-envelope mr-1 text-phase-green"></i> Email Inbox</div>
+                    <div class="md:flex md:justify-between md:items-start w-full">
+                        <div class="md:w-[45%] pl-12 md:pl-0 md:pr-12">
+                            <div class="glass-card p-6 border-l-[6px] border-l-phase-green relative group">
+                                <h3 class="text-lg font-bold text-slate-800 mb-2">Promotion & Inquiry</h3>
+                                <p class="text-sm text-slate-500 mb-4 font-medium">Monitor channels continuously for incoming leads.</p>
+                                
+                                <div class="bg-slate-50 rounded-xl border border-slate-100 p-3 mb-3">
+                                    <div class="flex items-center gap-2 mb-2 border-b border-slate-200 pb-2">
+                                        <div class="w-2 h-2 rounded-full bg-phase-green"></div>
+                                        <strong class="text-xs text-slate-700">ClickUp</strong>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <span class="text-[10px] bg-white px-2 py-1 rounded border border-slate-200 text-slate-500">Appointments Booking</span>
+                                        <span class="text-[10px] bg-white px-2 py-1 rounded border border-slate-200 text-slate-500">Assessment Data</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-3 py-1 rounded-full"><i class="fa-brands fa-whatsapp text-green-500 mr-1"></i> Wati API</span>
+                                    <span class="text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-3 py-1 rounded-full"><i class="fa-solid fa-phone text-blue-500 mr-1"></i> Direct Calls</span>
+                                    <span class="text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-3 py-1 rounded-full"><i class="fa-solid fa-envelope text-orange-500 mr-1"></i> Inbox</span>
                                 </div>
                             </div>
                         </div>
                         <div class="hidden md:block md:w-[10%]"></div>
                         <div class="md:w-[45%]"></div>
                     </div>
+                </div>
+            </div>
 
+            <!-- PHASE 2: TEAL (Consultation) -->
+            <div class="relative mb-20 timeline-section">
+                <!-- Milestone -->
+                <div class="flex items-center md:justify-center mb-12 relative z-20">
+                    <div class="floating-icon w-20 h-20 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-lg shadow-teal-500/10 ml-0 md:ml-0 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent"></div>
+                        <span class="text-2xl font-bold text-phase-teal relative z-10">02</span>
+                    </div>
+                    <div class="absolute left-24 md:left-auto md:top-24 md:text-center w-full md:w-auto">
+                        <h2 class="text-2xl font-bold text-slate-800">The Consultation</h2>
+                        <span class="text-xs text-phase-teal font-bold uppercase tracking-widest bg-teal-50 px-2 py-1 rounded-md">Analysis Phase</span>
+                    </div>
+                </div>
+
+                <div class="space-y-8 relative">
                     <!-- Step 2 (Right) -->
-                    <div class="md:flex md:justify-between md:items-center w-full mb-8">
+                    <div class="md:flex md:justify-between md:items-start w-full">
                         <div class="md:w-[45%]"></div>
                         <div class="hidden md:block md:w-[10%]"></div>
-                        <div class="md:w-[45%] pl-12 md:pl-8 md:pr-0">
-                            <div class="glass-card rounded-xl p-6 border-l-4 border-l-phase-green relative">
-                                <span class="absolute -left-3 top-6 w-6 h-6 bg-[#050B14] border-2 border-phase-green rounded-full flex items-center justify-center text-[10px] text-white font-bold z-20 md:hidden">2</span>
-                                <h3 class="text-lg font-bold text-white mb-3">Step 2: Qualify & Analyze</h3>
-                                <p class="text-sm text-gray-300 italic mb-3">"Don't just say Hello. Ask qualifying questions."</p>
-                                <ul class="space-y-2 text-sm text-gray-400">
-                                    <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-phase-green mt-1.5"></span> <strong>Qualification:</strong> Degree/Diploma?</li>
-                                    <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-phase-green mt-1.5"></span> <strong>Skills:</strong> Trade or Professional?</li>
-                                    <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-phase-green mt-1.5"></span> <strong>Budget:</strong> Financially capable?</li>
-                                    <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-phase-green mt-1.5"></span> <strong>Destination:</strong> Want vs Can go?</li>
+                        <div class="md:w-[45%] pl-12 md:pl-12 md:pr-0">
+                            <div class="glass-card p-6 border-l-[6px] border-l-phase-teal relative group">
+                                <div class="flex gap-2 mb-4">
+                                    <div class="bg-teal-50 text-teal-700 px-3 py-1 rounded-full text-xs font-bold"><i class="fa-solid fa-phone mr-1"></i> Phone</div>
+                                    <div class="bg-teal-50 text-teal-700 px-3 py-1 rounded-full text-xs font-bold"><i class="fa-solid fa-user mr-1"></i> Direct</div>
+                                    <div class="bg-teal-50 text-teal-700 px-3 py-1 rounded-full text-xs font-bold"><i class="fa-solid fa-video mr-1"></i> Zoom/Meet</div>
+                                </div>
+                                
+                                <h3 class="text-lg font-bold text-slate-800 mb-3">Assessment Protocol</h3>
+                                <ul class="space-y-2 text-sm text-slate-600 mb-4">
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-teal-500 mt-1"></i> Suggest <strong>Most Suitable</strong> country & position.</li>
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-teal-500 mt-1"></i> Provide complete process overview.</li>
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-teal-500 mt-1"></i> Use assessment tools.</li>
                                 </ul>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Step 3 (Left) -->
-                    <div class="md:flex md:justify-between md:items-center w-full">
-                        <div class="md:w-[45%] pl-12 md:pl-0 md:pr-8">
-                            <div class="glass-card rounded-xl p-6 border-l-4 border-l-phase-green relative">
-                                <h3 class="text-lg font-bold text-white mb-2">Step 3: Prelim Assessment</h3>
-                                <p class="text-sm text-gray-400 mb-3">Suggest the <strong>most suitable</strong> country & position. Provide process overview.</p>
-                                <div class="bg-phase-green/10 text-phase-green text-xs p-3 rounded border border-phase-green/20">
-                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i>
-                                    <strong>Realistic:</strong> If they don't meet criteria, advise honestly to save time.
+                                <div class="grid grid-cols-3 gap-2 text-center">
+                                    <div class="bg-white p-2 rounded border border-slate-100">
+                                        <div class="text-[10px] uppercase text-slate-400 font-bold">Qual</div>
+                                        <div class="text-xs font-bold text-slate-700">Degree/Dip</div>
+                                    </div>
+                                    <div class="bg-white p-2 rounded border border-slate-100">
+                                        <div class="text-[10px] uppercase text-slate-400 font-bold">Skills</div>
+                                        <div class="text-xs font-bold text-slate-700">Trade/Prof</div>
+                                    </div>
+                                    <div class="bg-white p-2 rounded border border-slate-100">
+                                        <div class="text-[10px] uppercase text-slate-400 font-bold">Budget</div>
+                                        <div class="text-xs font-bold text-slate-700">Capable?</div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 bg-red-50 border border-red-100 p-3 rounded-lg text-xs text-red-600 flex items-start gap-2">
+                                    <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                                    <span><strong>Realistic Expectation:</strong> If criteria not met, advise honestly to save time for both parties.</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="hidden md:block md:w-[10%]"></div>
-                        <div class="md:w-[45%]"></div>
                     </div>
-
                 </div>
             </div>
 
-            <!-- PHASE 2: GOLD -->
-            <div class="relative mb-16 timeline-section">
-                <!-- Milestone Marker -->
-                <div class="flex items-center md:justify-center mb-8 relative z-20">
-                    <div class="w-16 h-16 rounded-full bg-[#050B14] border-4 border-brand-gold flex items-center justify-center shadow-[0_0_30px_rgba(255,215,0,0.3)] ml-0 md:ml-0">
-                        <i class="fa-solid fa-calendar-check text-xl text-brand-gold"></i>
+            <!-- PHASE 3: GOLD (Agreement) -->
+            <div class="relative mb-20 timeline-section">
+                <!-- Milestone -->
+                <div class="flex items-center md:justify-center mb-12 relative z-20">
+                    <div class="floating-icon w-20 h-20 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-lg shadow-yellow-500/10 ml-0 md:ml-0 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-yellow-50 to-transparent"></div>
+                        <span class="text-2xl font-bold text-brand-gold relative z-10">03</span>
                     </div>
-                    <div class="absolute left-20 md:left-auto md:top-20 md:text-center w-full md:w-auto">
-                        <h2 class="text-2xl font-bold text-white">Phase 2</h2>
-                        <span class="text-sm text-brand-gold font-medium uppercase tracking-wider">The Consultation</span>
+                    <div class="absolute left-24 md:left-auto md:top-24 md:text-center w-full md:w-auto">
+                        <h2 class="text-2xl font-bold text-slate-800">Agreement</h2>
+                        <span class="text-xs text-brand-gold font-bold uppercase tracking-widest bg-yellow-50 px-2 py-1 rounded-md">Onboarding Phase</span>
                     </div>
                 </div>
 
-                <div class="space-y-8 md:space-y-0 relative">
+                <div class="space-y-8 relative">
                     
-                    <!-- Step 4 (Right) -->
-                    <div class="md:flex md:justify-between md:items-center w-full mb-8">
-                        <div class="md:w-[45%]"></div>
-                        <div class="hidden md:block md:w-[10%]"></div>
-                        <div class="md:w-[45%] pl-12 md:pl-8 md:pr-0">
-                            <div class="glass-card rounded-xl p-6 border-l-4 border-l-brand-gold relative">
-                                <h3 class="text-lg font-bold text-white mb-2">Step 4: Booking (Setmore)</h3>
-                                <div class="flex gap-4 mt-4">
-                                    <div class="flex-1 text-center bg-white/5 p-3 rounded">
-                                        <i class="fa-solid fa-building text-brand-gold mb-2"></i>
-                                        <div class="text-xs text-gray-300">In-Office (Local)</div>
+                    <!-- Pre-Agreement Docs (Center) -->
+                    <div class="relative w-full mb-8 pl-12 md:pl-0">
+                        <div class="glass-card p-6 border border-yellow-200 bg-yellow-50/20 max-w-2xl mx-auto">
+                            <h3 class="text-sm font-bold text-brand-gold uppercase tracking-wider mb-4 text-center">Before Agreement: Collect Basic Docs</h3>
+                            <div class="flex flex-wrap justify-center gap-3">
+                                <span class="bg-white px-3 py-1.5 rounded shadow-sm text-xs font-medium text-slate-600 border border-slate-100"><i class="fa-regular fa-file-lines mr-1 text-brand-gold"></i> Updated CV</span>
+                                <span class="bg-white px-3 py-1.5 rounded shadow-sm text-xs font-medium text-slate-600 border border-slate-100"><i class="fa-solid fa-passport mr-1 text-brand-gold"></i> Passport Scan</span>
+                                <span class="bg-white px-3 py-1.5 rounded shadow-sm text-xs font-medium text-slate-600 border border-slate-100"><i class="fa-solid fa-graduation-cap mr-1 text-brand-gold"></i> Degree/Diploma</span>
+                                <span class="bg-white px-3 py-1.5 rounded shadow-sm text-xs font-medium text-slate-600 border border-slate-100"><i class="fa-solid fa-certificate mr-1 text-brand-gold"></i> Exp. Certs</span>
+                                <span class="bg-white px-3 py-1.5 rounded shadow-sm text-xs font-medium text-slate-600 border border-slate-100"><i class="fa-solid fa-id-card mr-1 text-brand-gold"></i> National IDs</span>
+                                <span class="bg-white px-3 py-1.5 rounded shadow-sm text-xs font-medium text-slate-600 border border-slate-100"><i class="fa-solid fa-image mr-1 text-brand-gold"></i> Photo (300DPI)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Agreement Process (Left) -->
+                    <div class="md:flex md:justify-between md:items-start w-full mb-8">
+                        <div class="md:w-[45%] pl-12 md:pl-0 md:pr-12">
+                            <div class="glass-card p-6 border-l-[6px] border-l-brand-gold relative">
+                                <h3 class="text-lg font-bold text-slate-800 mb-4">Sign-Off Procedure</h3>
+                                
+                                <!-- In Office -->
+                                <div class="mb-4 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <i class="fa-solid fa-building text-brand-gold"></i>
+                                        <strong class="text-sm text-slate-800">In-Office (Direct)</strong>
                                     </div>
-                                    <div class="flex-1 text-center bg-white/5 p-3 rounded">
-                                        <i class="fa-solid fa-video text-brand-gold mb-2"></i>
-                                        <div class="text-xs text-gray-300">Zoom/Meet (Remote)</div>
+                                    <ul class="text-xs text-slate-600 space-y-1 ml-6 list-disc">
+                                        <li>Face to Face agreement signing.</li>
+                                        <li>Payment as per country options.</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Remote -->
+                                <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <i class="fa-solid fa-laptop-house text-brand-gold"></i>
+                                        <strong class="text-sm text-slate-800">Remote</strong>
                                     </div>
+                                    <ol class="text-xs text-slate-600 space-y-2 ml-4 list-decimal">
+                                        <li>Call / Zoom / Meet.</li>
+                                        <li>Send copy &rarr; Client prints & signs &rarr; Scans back.</li>
+                                        <li>Company seals & signs &rarr; Send copy back.</li>
+                                        <li><em>Alt:</em> Collect via connected person.</li>
+                                    </ol>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 5 (Center - Important) -->
-                    <div class="relative w-full mb-8 pl-12 md:pl-0">
-                        <div class="glass-card rounded-xl p-6 border border-brand-gold/30 bg-brand-gold/5 max-w-2xl mx-auto relative z-20">
-                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-black text-xs font-bold px-3 py-1 rounded-full uppercase">Critical</div>
-                            <h3 class="text-lg font-bold text-white text-center mb-4">Step 5: Pre-Appointment "Assessment Set"</h3>
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs">
-                                <div class="p-2 bg-black/40 rounded text-gray-300 border border-white/5">1. Updated CV</div>
-                                <div class="p-2 bg-black/40 rounded text-gray-300 border border-white/5">2. Passport (Scan)</div>
-                                <div class="p-2 bg-black/40 rounded text-gray-300 border border-white/5">3. Degree/Diploma</div>
-                                <div class="p-2 bg-black/40 rounded text-gray-300 border border-white/5">4. Exp. Certificates</div>
-                                <div class="p-2 bg-black/40 rounded text-gray-300 border border-white/5">5. National IDs</div>
-                                <div class="p-2 bg-brand-gold/20 text-brand-gold rounded border border-brand-gold/30 font-bold">6. Photo (Digital 300DPI)</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 6 (Left) -->
-                    <div class="md:flex md:justify-between md:items-center w-full">
-                        <div class="md:w-[45%] pl-12 md:pl-0 md:pr-8">
-                            <div class="glass-card rounded-xl p-6 border-l-4 border-l-brand-gold relative">
-                                <h3 class="text-lg font-bold text-white mb-2">Step 6: 09:00 AM Routine</h3>
-                                <ul class="space-y-2 text-sm text-gray-400">
-                                    <li><i class="fa-solid fa-check text-brand-gold w-5"></i> Review Setmore schedule.</li>
-                                    <li><i class="fa-solid fa-check text-brand-gold w-5"></i> <strong>Message to Confirm</strong> attendance.</li>
-                                    <li><i class="fa-solid fa-check text-brand-gold w-5"></i> Organize desk and files.</li>
-                                </ul>
+                                
+                                <div class="mt-4 p-2 bg-blue-50 text-blue-700 text-xs rounded border border-blue-100 text-center font-semibold">
+                                    <i class="fa-brands fa-google mr-1"></i> Ask for Google Review while paperwork preps.
+                                </div>
                             </div>
                         </div>
                         <div class="hidden md:block md:w-[10%]"></div>
                         <div class="md:w-[45%]"></div>
                     </div>
-                </div>
-            </div>
 
-            <!-- PHASE 3: ORANGE -->
-            <div class="relative mb-16 timeline-section">
-                <!-- Milestone -->
-                <div class="flex items-center md:justify-center mb-8 relative z-20">
-                    <div class="w-16 h-16 rounded-full bg-[#050B14] border-4 border-phase-orange flex items-center justify-center shadow-[0_0_30px_rgba(249,115,22,0.3)] ml-0 md:ml-0">
-                        <i class="fa-solid fa-handshake text-xl text-phase-orange"></i>
-                    </div>
-                    <div class="absolute left-20 md:left-auto md:top-20 md:text-center w-full md:w-auto">
-                        <h2 class="text-2xl font-bold text-white">Phase 3</h2>
-                        <span class="text-sm text-phase-orange font-medium uppercase tracking-wider">Agreement & Onboarding</span>
-                    </div>
-                </div>
-
-                <div class="space-y-8 md:space-y-0 relative">
-                    <!-- Step 7 (Right) -->
-                    <div class="md:flex md:justify-between md:items-center w-full mb-8">
-                        <div class="md:w-[45%]"></div>
-                        <div class="hidden md:block md:w-[10%]"></div>
-                        <div class="md:w-[45%] pl-12 md:pl-8 md:pr-0">
-                            <div class="glass-card rounded-xl p-6 border-l-4 border-l-phase-orange relative">
-                                <h3 class="text-lg font-bold text-white mb-2">Step 7: The Agreement</h3>
-                                <p class="text-sm text-gray-400 mb-3">Review docs. Sign <strong>Client Contract</strong>.</p>
-                                <div class="bg-gradient-to-r from-brand-blue/20 to-transparent p-3 rounded border border-brand-blue/30">
-                                    <div class="text-xs text-brand-blue font-bold uppercase mb-1">Mandatory Review</div>
-                                    <p class="text-xs text-gray-300 mb-2">Ask candidate to review on Google while paperwork preps.</p>
-                                    <a href="https://g.page/r/CRUu6qbaj7R0EBM/review" target="_blank" class="text-xs text-white bg-brand-blue px-2 py-1 rounded inline-block hover:bg-blue-600 transition">Open Link <i class="fa-solid fa-external-link-alt ml-1"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 8 (Left) -->
-                    <div class="md:flex md:justify-between md:items-center w-full">
-                        <div class="md:w-[45%] pl-12 md:pl-0 md:pr-8">
-                            <div class="glass-card rounded-xl p-6 border-l-4 border-l-phase-orange relative">
-                                <h3 class="text-lg font-bold text-white mb-2">Step 8: Milestone 1 Payment</h3>
-                                <ul class="space-y-2 text-sm text-gray-400">
-                                    <li>1. Explain payment breakdown.</li>
-                                    <li>2. Collect <strong>Advance Amount</strong>.</li>
-                                    <li>3. Issue Payment Receipt.</li>
-                                    <li>4. ClickUp Status -> <span class="text-white font-bold">"Active Client"</span>.</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="hidden md:block md:w-[10%]"></div>
-                        <div class="md:w-[45%]"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PHASE 4: BLUE -->
-            <div class="relative mb-16 timeline-section">
-                <!-- Milestone -->
-                <div class="flex items-center md:justify-center mb-8 relative z-20">
-                    <div class="w-16 h-16 rounded-full bg-[#050B14] border-4 border-brand-blue flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.3)] ml-0 md:ml-0">
-                        <i class="fa-solid fa-rocket text-xl text-brand-blue"></i>
-                    </div>
-                    <div class="absolute left-20 md:left-auto md:top-20 md:text-center w-full md:w-auto">
-                        <h2 class="text-2xl font-bold text-white">Phase 4</h2>
-                        <span class="text-sm text-brand-blue font-medium uppercase tracking-wider">Docs & Launch</span>
-                    </div>
-                </div>
-
-                <div class="space-y-8 md:space-y-0 relative">
-                    <!-- Step 9 (Center) -->
-                    <div class="relative w-full mb-8 pl-12 md:pl-0">
-                        <div class="glass-card rounded-xl p-6 border-l-4 border-l-brand-blue max-w-3xl mx-auto">
-                            <h3 class="text-lg font-bold text-white mb-4">Step 9: Client Education Checklist</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-white/5 p-3 rounded">
-                                    <strong class="text-brand-blue text-sm block">Financials</strong>
-                                    <span class="text-xs text-gray-400">Min balance & tenure maintenance.</span>
-                                </div>
-                                <div class="bg-white/5 p-3 rounded">
-                                    <strong class="text-brand-blue text-sm block">Legal (PCC)</strong>
-                                    <span class="text-xs text-gray-400">Police Clearance Certificate.</span>
-                                </div>
-                                <div class="bg-white/5 p-3 rounded">
-                                    <strong class="text-brand-blue text-sm block">Attestations</strong>
-                                    <span class="text-xs text-gray-400">Apostille / MOFA / Notary.</span>
-                                </div>
-                                <div class="bg-white/5 p-3 rounded">
-                                    <strong class="text-brand-blue text-sm block">Communication</strong>
-                                    <span class="text-xs text-gray-400">Update client weekly ("Time to time").</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 10 (Right) -->
+                    <!-- Payment (Right) -->
                     <div class="md:flex md:justify-between md:items-center w-full">
                         <div class="md:w-[45%]"></div>
                         <div class="hidden md:block md:w-[10%]"></div>
-                        <div class="md:w-[45%] pl-12 md:pl-8 md:pr-0">
-                            <div class="glass-card rounded-xl p-6 border border-brand-blue/50 bg-brand-blue/10 relative">
-                                <h3 class="text-lg font-bold text-white mb-2">Step 10: Milestone 2</h3>
-                                <p class="text-sm text-gray-300 mb-2"><strong>Trigger:</strong> Work Permit Digital Copy Arrives.</p>
-                                <ol class="list-decimal list-inside text-sm text-gray-300 space-y-1">
-                                    <li>Inform client with enthusiasm.</li>
-                                    <li class="font-bold text-brand-gold">Collect Next Payment.</li>
-                                    <li>Prep file for Visa Submission.</li>
-                                </ol>
+                        <div class="md:w-[45%] pl-12 md:pl-12 md:pr-0">
+                            <div class="glass-card p-6 border-l-[6px] border-l-brand-gold bg-gradient-to-r from-yellow-50/50 to-transparent">
+                                <h3 class="text-lg font-bold text-slate-800 mb-2">Payment Finalization</h3>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center font-bold text-sm">1</span>
+                                    <span class="text-sm text-slate-600">Explain Payment Breakdown.</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center font-bold text-sm">2</span>
+                                    <span class="text-sm text-slate-600">Issue Payment Receipt.</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
-            <!-- PHASE 5: PURPLE -->
-            <div class="relative mb-16 timeline-section">
+            <!-- PHASE 4: SLATE/ORANGE (Handover) -->
+            <div class="relative mb-20 timeline-section">
                 <!-- Milestone -->
-                <div class="flex items-center md:justify-center mb-8 relative z-20">
-                    <div class="w-16 h-16 rounded-full bg-[#050B14] border-4 border-brand-purple flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.3)] ml-0 md:ml-0">
-                        <i class="fa-solid fa-file-contract text-xl text-brand-purple"></i>
+                <div class="flex items-center md:justify-center mb-12 relative z-20">
+                    <div class="floating-icon w-20 h-20 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-lg shadow-orange-500/10 ml-0 md:ml-0 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent"></div>
+                        <span class="text-2xl font-bold text-phase-orange relative z-10">04</span>
                     </div>
-                    <div class="absolute left-20 md:left-auto md:top-20 md:text-center w-full md:w-auto">
-                        <h2 class="text-2xl font-bold text-white">Phase 5</h2>
-                        <span class="text-sm text-brand-purple font-medium uppercase tracking-wider">Submission</span>
-                    </div>
-                </div>
-
-                <div class="space-y-8 md:space-y-0 relative">
-                    <!-- Step 11 (Left) -->
-                    <div class="md:flex md:justify-between md:items-center w-full mb-8">
-                        <div class="md:w-[45%] pl-12 md:pl-0 md:pr-8">
-                            <div class="glass-card rounded-xl p-6 border-l-4 border-l-brand-purple relative">
-                                <h3 class="text-lg font-bold text-white mb-2">Step 11: Booking</h3>
-                                <p class="text-sm text-gray-400">Book VFS/BLS slot.</p>
-                                <p class="text-xs text-red-400 mt-2 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Check daily if slots scarce.</p>
-                            </div>
-                        </div>
-                        <div class="hidden md:block md:w-[10%]"></div>
-                        <div class="md:w-[45%]"></div>
-                    </div>
-
-                    <!-- Step 12 (Center - Packet) -->
-                    <div class="relative w-full mb-8 pl-12 md:pl-0">
-                        <div class="glass-card rounded-xl p-6 border border-brand-purple/30 max-w-2xl mx-auto">
-                            <h3 class="text-lg font-bold text-white mb-1">Step 12: Final File Verification</h3>
-                            <p class="text-xs text-gray-400 mb-4 uppercase tracking-wider">Double-Check: Case Officer + Team Lead</p>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-2 text-sm text-gray-300">
-                                <div class="flex items-center"><i class="fa-regular fa-square-check text-brand-purple mr-2"></i> Application Form</div>
-                                <div class="flex items-center"><i class="fa-regular fa-square-check text-brand-purple mr-2"></i> Edu & Exp Certificates</div>
-                                <div class="flex items-center"><i class="fa-regular fa-square-check text-brand-purple mr-2"></i> Cover Letter</div>
-                                <div class="flex items-center"><i class="fa-regular fa-square-check text-brand-purple mr-2"></i> Photographs</div>
-                                <div class="flex items-center"><i class="fa-regular fa-square-check text-brand-purple mr-2"></i> Original Work Permit</div>
-                                <div class="flex items-center"><i class="fa-regular fa-square-check text-brand-purple mr-2"></i> Travel Insurance</div>
-                                <div class="flex items-center"><i class="fa-regular fa-square-check text-brand-purple mr-2"></i> Employment Contract</div>
-                                <div class="flex items-center"><i class="fa-regular fa-square-check text-brand-purple mr-2"></i> Flight Itinerary</div>
-                                <div class="flex items-center"><i class="fa-regular fa-square-check text-brand-purple mr-2"></i> Accommodation Proof</div>
-                                <div class="flex items-center"><i class="fa-regular fa-square-check text-brand-purple mr-2"></i> PCC & Affidavits</div>
-                            </div>
-                        </div>
-                    </div>
-
-                     <!-- Step 13 (Right) -->
-                     <div class="md:flex md:justify-between md:items-center w-full">
-                        <div class="md:w-[45%]"></div>
-                        <div class="hidden md:block md:w-[10%]"></div>
-                        <div class="md:w-[45%] pl-12 md:pl-8 md:pr-0">
-                            <div class="glass-card rounded-xl p-6 border-l-4 border-l-brand-purple relative">
-                                <h3 class="text-lg font-bold text-white mb-2">Step 13: Submission Briefing</h3>
-                                <ul class="space-y-2 text-sm text-gray-400">
-                                    <li><strong>Procedure:</strong> What happens inside.</li>
-                                    <li><strong>Fees:</strong> Cash/Card needed?</li>
-                                    <li><strong>Dress Code:</strong> Formal.</li>
-                                    <li><strong>Interview:</strong> Q&A Prep.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PHASE 6: RED -->
-            <div class="relative mb-16 timeline-section">
-                <!-- Milestone -->
-                <div class="flex items-center md:justify-center mb-8 relative z-20">
-                    <div class="w-16 h-16 rounded-full bg-[#050B14] border-4 border-phase-red flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.3)] ml-0 md:ml-0">
-                        <i class="fa-solid fa-plane-departure text-xl text-phase-red"></i>
-                    </div>
-                    <div class="absolute left-20 md:left-auto md:top-20 md:text-center w-full md:w-auto">
-                        <h2 class="text-2xl font-bold text-white">Phase 6</h2>
-                        <span class="text-sm text-phase-red font-medium uppercase tracking-wider">Post-Submission</span>
+                    <div class="absolute left-24 md:left-auto md:top-24 md:text-center w-full md:w-auto">
+                        <h2 class="text-2xl font-bold text-slate-800">Data Handover</h2>
+                        <span class="text-xs text-phase-orange font-bold uppercase tracking-widest bg-orange-50 px-2 py-1 rounded-md">Transition Phase</span>
                     </div>
                 </div>
 
                 <div class="relative w-full pl-12 md:pl-0">
-                    <h3 class="text-xl font-bold text-white text-center mb-6">Step 14: Outcome</h3>
+                    <div class="glass-card p-8 border border-orange-200 max-w-xl mx-auto text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-red-400"></div>
+                        <i class="fa-solid fa-server text-4xl text-orange-200 mb-4 block"></i>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">CRM Update</h3>
+                        <p class="text-sm text-slate-500 mb-4">Update candidate data in CRM system.</p>
+                        <div class="inline-flex items-center gap-2 bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide">
+                            Hand Over to Processing Dept <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHASE 5: CYAN (Docs & Launch) -->
+            <div class="relative mb-20 timeline-section">
+                <!-- Milestone -->
+                <div class="flex items-center md:justify-center mb-12 relative z-20">
+                    <div class="floating-icon w-20 h-20 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-lg shadow-cyan-500/10 ml-0 md:ml-0 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-50 to-transparent"></div>
+                        <span class="text-2xl font-bold text-phase-cyan relative z-10">05</span>
+                    </div>
+                    <div class="absolute left-24 md:left-auto md:top-24 md:text-center w-full md:w-auto">
+                        <h2 class="text-2xl font-bold text-slate-800">Docs & Launch</h2>
+                        <span class="text-xs text-phase-cyan font-bold uppercase tracking-widest bg-cyan-50 px-2 py-1 rounded-md">Education Phase</span>
+                    </div>
+                </div>
+
+                <div class="relative w-full pl-12 md:pl-0">
+                    <div class="glass-card p-6 border-l-[6px] border-l-phase-cyan max-w-3xl mx-auto">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4">Client Education Checklist</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 rounded bg-white border border-slate-100 shadow-sm">
+                                <strong class="text-phase-cyan text-xs block mb-1">Financials</strong>
+                                <span class="text-xs text-slate-500">Min balance & tenure maintenance explanation.</span>
+                            </div>
+                            <div class="p-3 rounded bg-white border border-slate-100 shadow-sm">
+                                <strong class="text-phase-cyan text-xs block mb-1">Legal (PCC)</strong>
+                                <span class="text-xs text-slate-500">Police Clearance Certificate procedures.</span>
+                            </div>
+                            <div class="p-3 rounded bg-white border border-slate-100 shadow-sm">
+                                <strong class="text-phase-cyan text-xs block mb-1">Attestations</strong>
+                                <span class="text-xs text-slate-500">Apostille / MOFA / Notary requirements.</span>
+                            </div>
+                            <div class="p-3 rounded bg-white border border-slate-100 shadow-sm">
+                                <strong class="text-phase-cyan text-xs block mb-1">Communication</strong>
+                                <span class="text-xs text-slate-500">Set expectations: Updates are "Time to time".</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHASE 6: INDIGO (Trigger) -->
+            <div class="relative mb-20 timeline-section">
+                <!-- Milestone -->
+                <div class="flex items-center md:justify-center mb-12 relative z-20">
+                    <div class="floating-icon w-20 h-20 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-lg shadow-indigo-500/10 ml-0 md:ml-0 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 to-transparent"></div>
+                        <span class="text-2xl font-bold text-phase-indigo relative z-10">06</span>
+                    </div>
+                    <div class="absolute left-24 md:left-auto md:top-24 md:text-center w-full md:w-auto">
+                        <h2 class="text-2xl font-bold text-slate-800">Permit Arrives</h2>
+                        <span class="text-xs text-phase-indigo font-bold uppercase tracking-widest bg-indigo-50 px-2 py-1 rounded-md">Trigger Phase</span>
+                    </div>
+                </div>
+
+                <div class="md:flex md:justify-between md:items-center w-full">
+                    <div class="md:w-[45%] pl-12 md:pl-0 md:pr-12">
+                        <div class="glass-card p-6 border-l-[6px] border-l-phase-indigo relative">
+                            <div class="flex items-center gap-3 mb-4">
+                                <i class="fa-solid fa-bell text-phase-indigo text-xl animate-bounce"></i>
+                                <h3 class="text-lg font-bold text-slate-800">Work Permit Digital Copy</h3>
+                            </div>
+                            <ol class="space-y-3 relative border-l border-slate-200 ml-2">
+                                <li class="ml-4">
+                                    <div class="absolute w-2 h-2 bg-indigo-400 rounded-full -left-1 top-2"></div>
+                                    <span class="text-sm text-slate-600">Inform client with enthusiasm!</span>
+                                </li>
+                                <li class="ml-4">
+                                    <div class="absolute w-2 h-2 bg-brand-gold rounded-full -left-1 top-2"></div>
+                                    <span class="text-sm text-slate-900 font-bold">Collect Next Payment.</span>
+                                </li>
+                                <li class="ml-4">
+                                    <div class="absolute w-2 h-2 bg-indigo-400 rounded-full -left-1 top-2"></div>
+                                    <span class="text-sm text-slate-600">Prep file for Visa Submission.</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="hidden md:block md:w-[10%]"></div>
+                    <div class="md:w-[45%]"></div>
+                </div>
+            </div>
+
+            <!-- PHASE 7: PURPLE (Submission) -->
+            <div class="relative mb-20 timeline-section">
+                <!-- Milestone -->
+                <div class="flex items-center md:justify-center mb-12 relative z-20">
+                    <div class="floating-icon w-20 h-20 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-lg shadow-purple-500/10 ml-0 md:ml-0 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent"></div>
+                        <span class="text-2xl font-bold text-brand-purple relative z-10">07</span>
+                    </div>
+                    <div class="absolute left-24 md:left-auto md:top-24 md:text-center w-full md:w-auto">
+                        <h2 class="text-2xl font-bold text-slate-800">Submission</h2>
+                        <span class="text-xs text-brand-purple font-bold uppercase tracking-widest bg-purple-50 px-2 py-1 rounded-md">Verification Phase</span>
+                    </div>
+                </div>
+
+                <div class="space-y-8 relative">
+                    <!-- Booking (Right) -->
+                    <div class="md:flex md:justify-between md:items-start w-full">
+                        <div class="md:w-[45%]"></div>
+                        <div class="hidden md:block md:w-[10%]"></div>
+                        <div class="md:w-[45%] pl-12 md:pl-12 md:pr-0">
+                            <div class="glass-card p-6 border-l-[6px] border-l-brand-purple mb-8">
+                                <h3 class="text-lg font-bold text-slate-800 mb-2">Booking</h3>
+                                <p class="text-sm text-slate-600 mb-2">Book VFS/BLS slot immediately.</p>
+                                <span class="text-xs text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Check daily if slots scarce.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Checklist (Center) -->
+                    <div class="relative w-full pl-12 md:pl-0">
+                        <div class="glass-card p-6 border border-purple-200 max-w-2xl mx-auto shadow-lg">
+                            <div class="flex justify-between items-center mb-4 pb-2 border-b border-purple-100">
+                                <h3 class="text-lg font-bold text-slate-800">Final File Verification</h3>
+                                <span class="text-[10px] bg-slate-800 text-white px-2 py-1 rounded">Case Officer + Team Lead</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs text-slate-600">
+                                <div class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Application Form</div>
+                                <div class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Edu & Exp Certificates</div>
+                                <div class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Cover Letter</div>
+                                <div class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Photographs</div>
+                                <div class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Original Work Permit</div>
+                                <div class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Travel Insurance</div>
+                                <div class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Employment Contract</div>
+                                <div class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Flight Itinerary</div>
+                                <div class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Accommodation Proof</div>
+                                <div class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> PCC & Affidavits</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHASE 8: PINK (Briefing) -->
+            <div class="relative mb-20 timeline-section">
+                <!-- Milestone -->
+                <div class="flex items-center md:justify-center mb-12 relative z-20">
+                    <div class="floating-icon w-20 h-20 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-lg shadow-pink-500/10 ml-0 md:ml-0 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-pink-50 to-transparent"></div>
+                        <span class="text-2xl font-bold text-phase-pink relative z-10">08</span>
+                    </div>
+                    <div class="absolute left-24 md:left-auto md:top-24 md:text-center w-full md:w-auto">
+                        <h2 class="text-2xl font-bold text-slate-800">Submission Briefing</h2>
+                        <span class="text-xs text-phase-pink font-bold uppercase tracking-widest bg-pink-50 px-2 py-1 rounded-md">Prep Phase</span>
+                    </div>
+                </div>
+
+                <div class="md:flex md:justify-between md:items-center w-full">
+                    <div class="md:w-[45%] pl-12 md:pl-0 md:pr-12">
+                        <div class="glass-card p-6 border-l-[6px] border-l-phase-pink">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-pink-50/50 p-3 rounded-lg border border-pink-100">
+                                    <strong class="text-xs text-pink-700 block mb-1">Procedure</strong>
+                                    <span class="text-xs text-slate-500">What happens inside.</span>
+                                </div>
+                                <div class="bg-pink-50/50 p-3 rounded-lg border border-pink-100">
+                                    <strong class="text-xs text-pink-700 block mb-1">Fees</strong>
+                                    <span class="text-xs text-slate-500">Cash/Card needed?</span>
+                                </div>
+                                <div class="bg-pink-50/50 p-3 rounded-lg border border-pink-100">
+                                    <strong class="text-xs text-pink-700 block mb-1">Dress Code</strong>
+                                    <span class="text-xs text-slate-500">Formal Attire.</span>
+                                </div>
+                                <div class="bg-pink-50/50 p-3 rounded-lg border border-pink-100">
+                                    <strong class="text-xs text-pink-700 block mb-1">Interview</strong>
+                                    <span class="text-xs text-slate-500">Q&A Preparation.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden md:block md:w-[10%]"></div>
+                    <div class="md:w-[45%]"></div>
+                </div>
+            </div>
+
+            <!-- PHASE 9: RED (Outcome) -->
+            <div class="relative mb-20 timeline-section">
+                <!-- Milestone -->
+                <div class="flex items-center md:justify-center mb-12 relative z-20">
+                    <div class="floating-icon w-20 h-20 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-lg shadow-red-500/10 ml-0 md:ml-0 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-transparent"></div>
+                        <span class="text-2xl font-bold text-phase-red relative z-10">09</span>
+                    </div>
+                    <div class="absolute left-24 md:left-auto md:top-24 md:text-center w-full md:w-auto">
+                        <h2 class="text-2xl font-bold text-slate-800">Post-Submission</h2>
+                        <span class="text-xs text-phase-red font-bold uppercase tracking-widest bg-red-50 px-2 py-1 rounded-md">Outcome Phase</span>
+                    </div>
+                </div>
+
+                <div class="relative w-full pl-12 md:pl-0">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Success Card -->
-                        <div class="glass-card rounded-xl p-6 border-t-4 border-t-phase-green relative overflow-hidden group">
-                            <div class="absolute inset-0 bg-phase-green/5 group-hover:bg-phase-green/10 transition"></div>
+                        <div class="glass-card p-6 border-t-4 border-t-phase-green relative overflow-hidden group hover:bg-green-50/30 transition">
                             <div class="relative z-10">
-                                <h4 class="text-phase-green font-bold text-lg mb-4 flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-check"></i> Scenario A: Approved
+                                <h4 class="text-phase-green font-bold text-xl mb-4 flex items-center gap-3">
+                                    <i class="fa-solid fa-circle-check text-2xl"></i> Scenario A: Approved
                                 </h4>
-                                <ul class="space-y-3 text-sm text-gray-300">
-                                    <li>1. Receive stamped passport.</li>
-                                    <li class="bg-phase-green/10 p-2 rounded border border-phase-green/20">
-                                        <strong>2. Collect Milestone 3.</strong>
-                                        <div class="text-[10px] mt-1 opacity-70">Strict: No money, no passport.</div>
+                                <ul class="space-y-3 text-sm text-slate-600">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400 text-xs"></i> Receive stamped passport.</li>
+                                    <li class="bg-green-100 p-3 rounded-lg border border-green-200">
+                                        <strong class="block text-green-800">2. Collect Milestone 3.</strong>
+                                        <div class="text-[10px] text-green-700 mt-1 font-medium">Strict: No money, no passport.</div>
                                     </li>
-                                    <li>3. Flight booking assistance.</li>
-                                    <li>4. Pre-Departure Orientation (PDO).</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400 text-xs"></i> Flight booking assistance.</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400 text-xs"></i> Pre-Departure Orientation (PDO).</li>
                                 </ul>
                             </div>
                         </div>
 
                         <!-- Failure Card -->
-                        <div class="glass-card rounded-xl p-6 border-t-4 border-t-phase-red relative overflow-hidden group">
-                            <div class="absolute inset-0 bg-phase-red/5 group-hover:bg-phase-red/10 transition"></div>
+                        <div class="glass-card p-6 border-t-4 border-t-phase-red relative overflow-hidden group hover:bg-red-50/30 transition">
                             <div class="relative z-10">
-                                <h4 class="text-phase-red font-bold text-lg mb-4 flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-xmark"></i> Scenario B: Rejected
+                                <h4 class="text-phase-red font-bold text-xl mb-4 flex items-center gap-3">
+                                    <i class="fa-solid fa-circle-xmark text-2xl"></i> Scenario B: Rejected
                                 </h4>
-                                <ul class="space-y-3 text-sm text-gray-300">
-                                    <li>1. Analyze refusal letter.</li>
-                                    <li>2. Consult <strong>Case Study Team</strong>.</li>
-                                    <li>3. Strategy: Re-apply or Appeal.</li>
-                                    <li>4. Communicate supportively.</li>
+                                <ul class="space-y-3 text-sm text-slate-600">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-arrow-right text-red-300 text-xs"></i> Analyze refusal letter.</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-arrow-right text-red-300 text-xs"></i> Consult <strong>Case Study Team</strong>.</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-arrow-right text-red-300 text-xs"></i> Strategy: Re-apply or Appeal.</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-heart text-red-300 text-xs"></i> Communicate supportively.</li>
                                 </ul>
                             </div>
                         </div>
@@ -536,23 +652,23 @@
             </div>
 
             <!-- Guidelines Footer -->
-            <div id="guidelines" class="relative mt-20 p-8 glass-card rounded-2xl border-t border-brand-gold/30">
-                <div class="flex items-center gap-3 mb-6">
-                    <i class="fa-solid fa-scale-balanced text-2xl text-brand-gold"></i>
-                    <h2 class="text-2xl font-bold text-white">General Protocol</h2>
+            <div id="guidelines" class="relative mt-24 p-8 glass-card rounded-3xl border border-white/60 bg-white/40">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-brand-gold"><i class="fa-solid fa-scale-balanced text-lg"></i></div>
+                    <h2 class="text-2xl font-bold text-slate-800">General Protocol</h2>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="p-4 bg-white/5 rounded-xl border border-white/5">
-                        <h4 class="text-brand-white font-bold mb-2">Payment Discipline</h4>
-                        <p class="text-sm text-gray-400">Strict adherence. No file moves to next stage without cleared payment.</p>
+                    <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <h4 class="text-slate-800 font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-money-bill-wave text-green-500"></i> Payment Discipline</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed">Strict adherence. No file moves to next stage without cleared payment.</p>
                     </div>
-                    <div class="p-4 bg-white/5 rounded-xl border border-white/5">
-                        <h4 class="text-brand-white font-bold mb-2">Documentation</h4>
-                        <p class="text-sm text-gray-400">High-res scans only. Upload everything to cloud/server immediately.</p>
+                    <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <h4 class="text-slate-800 font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up text-blue-500"></i> Documentation</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed">High-res scans only. Upload everything to cloud/server immediately.</p>
                     </div>
-                    <div class="p-4 bg-white/5 rounded-xl border border-white/5">
-                        <h4 class="text-brand-white font-bold mb-2">Responsiveness</h4>
-                        <p class="text-sm text-gray-400">Return missed calls within 60 minutes.</p>
+                    <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <h4 class="text-slate-800 font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-clock text-orange-500"></i> Responsiveness</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed">Return missed calls within 60 minutes. Keep the communication loop tight.</p>
                     </div>
                 </div>
             </div>
@@ -560,7 +676,7 @@
         </div>
     </main>
 
-    <footer class="bg-[#050B14] border-t border-white/5 py-8 text-center text-gray-600 text-xs no-print">
+    <footer class="bg-white border-t border-slate-200 py-10 text-center text-slate-400 text-xs no-print">
         <p>&copy; 2025 Better Call Immigration. Internal Use Only.</p>
     </footer>
 
