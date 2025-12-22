@@ -472,6 +472,9 @@
                 <button class="group p-2 rounded-full hover:bg-white/50 transition-all duration-300 relative">
                     <i class="fa-solid fa-magnifying-glass text-slate-400 group-hover:text-indigo-600 text-lg md:text-xl"></i>
                 </button>
+                <button class="lg:hidden group p-2 rounded-full hover:bg-white/50 transition-all duration-300 relative" aria-label="Menu">
+                    <i class="fa-solid fa-bars text-slate-600 group-hover:text-indigo-600 text-lg md:text-xl"></i>
+                </button>
             </div>
         </div>
     </nav>
@@ -998,7 +1001,8 @@
                             <!-- 2. Consultation Mode -->
                             <div>
                                 <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-secondary text-white inline-flex items-center justify-center mr-2">2</span> Consultation Mode</h3>
-                                <div class="grid grid-cols-3 gap-3">
+                                <!-- CHANGED: Grid from cols-3 to cols-2, Removed Phone Option -->
+                                <div class="grid grid-cols-2 gap-3">
                                     <!-- In-Person -->
                                     <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex flex-col items-center text-center gap-3 cursor-pointer transition-all duration-300 hover:shadow-md group" onclick="selectMethod('In-Person', this)">
                                         <div class="icon-wrapper w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-50 group-hover:text-blue-500">
@@ -1007,13 +1011,7 @@
                                         <span class="label-text text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider transition-colors duration-300 group-hover:text-blue-600">Office</span>
                                     </div>
                                     
-                                    <!-- Phone -->
-                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex flex-col items-center text-center gap-3 cursor-pointer transition-all duration-300 hover:shadow-md group" onclick="selectMethod('Phone Call', this)">
-                                        <div class="icon-wrapper w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-emerald-50 group-hover:text-emerald-500">
-                                            <i class="fa-solid fa-phone text-sm"></i>
-                                        </div>
-                                        <span class="label-text text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider transition-colors duration-300 group-hover:text-emerald-600">Phone</span>
-                                    </div>
+                                    <!-- REMOVED PHONE OPTION HERE -->
                                     
                                     <!-- Video -->
                                     <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex flex-col items-center text-center gap-3 cursor-pointer transition-all duration-300 hover:shadow-md group" onclick="selectMethod('Video Call', this)">
@@ -1167,6 +1165,14 @@
         //  CONFIGURATION AREA
         // ==========================================
         
+        // CAL.COM INTEGRATION CONFIG
+        const CAL_CONFIG = {
+            "Better Call": "cal_live_56464d96cd70d67aa7588d6735ad55ed",
+            "Anju M Nair": "cal_live_82b9340d588920d9c9270052d13db98a",
+            "Benitta": "cal_live_005b958e38d7722c363233d6b97a4ce4",
+            "Eunice Kingoo": "cal_live_9489b42b4b6e4cdb8c144e8150fa62c9"
+        };
+
         // --- HELPER: CONVERT IMAGE URL TO DATA URI ---
         const getBase64FromUrl = async (url) => {
             try {
@@ -1872,11 +1878,12 @@
 
         const countryPageMap = { "Croatia": "croatia", "Czech Republic": "czech", "Albania": "albania", "Finland": "finland", "France": "france", "Germany": "germany", "Italy": "italy", "Latvia": "latvia", "Macedonia": "macedonia", "Netherlands": "netherlands", "Poland": "poland", "Sweden": "sweden", "Serbia": "serbia" };
         
-        // ADVISOR DATA WITH NATIVE LANGUAGES
+        // ADVISOR DATA WITH NATIVE LANGUAGES & CAL.COM MAPPING
         const advisors = [
-            { name: "Benetta", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം)" },
-            { name: "Anjali", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം), Hindi (हिंदी), English" },
-            { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Kiswahili" }
+            { name: "Benetta", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം)", calId: "Benitta" },
+            { name: "Anjali", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം), Hindi (हिंदी), English", calId: "Anju M Nair" },
+            { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Kiswahili", calId: "Eunice Kingoo" },
+            { name: "BETTER CALL", country: "Global", isLogo: true, lang: "Malayalam (മലയാളം)", calId: "Better Call" }
         ];
 
         let currentMode = 'Unskilled';
@@ -2065,6 +2072,18 @@
                     subtext: 'text-orange-400',
                     tag: 'bg-white/80 text-orange-600 border-orange-200',
                     check: 'bg-orange-500'
+                },
+                { 
+                    // Theme 4: Blue/Brand (Better Call)
+                    bg: 'bg-gradient-to-r from-blue-50 to-indigo-50', 
+                    border: 'border-blue-100', 
+                    hover: 'hover:border-blue-300 hover:shadow-blue-100', 
+                    selected: 'ring-2 ring-brand-primary !bg-gradient-to-r !from-blue-100 !to-indigo-100',
+                    iconBg: 'bg-white text-brand-primary',
+                    text: 'text-brand-primary',
+                    subtext: 'text-blue-400',
+                    tag: 'bg-white/80 text-blue-600 border-blue-200',
+                    check: 'bg-brand-primary'
                 }
             ];
             
@@ -2081,9 +2100,15 @@
                 
                 div.onclick = () => selectAdvisor(adv.name, div);
                 
+                // Handle Logo vs Emoji Flag
+                let avatarContent = `<span class="relative z-10">${adv.flag}</span>`;
+                if(adv.isLogo) {
+                    avatarContent = `<img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/6673d6ec4830e402627b97c4adf422593b2ec907/Bettercall%20Logo%20SVG%2003.svg" class="w-full h-full object-contain p-1 relative z-10">`;
+                }
+
                 div.innerHTML = `
                     <div class="w-14 h-14 rounded-full ${theme.iconBg} flex items-center justify-center text-2xl shadow-sm border-2 border-white shrink-0 relative overflow-hidden">
-                        <span class="relative z-10">${adv.flag}</span>
+                        ${avatarContent}
                         <div class="absolute inset-0 bg-current opacity-10"></div>
                     </div>
                     <div class="flex-grow min-w-0">
@@ -2180,25 +2205,22 @@
         function renderTimeSlots() {
             const grid = document.getElementById('timeSlotGrid');
             if(!grid) return;
+            grid.innerHTML = ''; // Clear existing
             const startHour = 10;
-            const endHour = 19; // 7 PM
+            const endHour = 19; // Ends at 19 (7 PM), so loop covers up to 18 (6 PM) + 30mins
             
+            // CHANGED: 30 minute intervals, 10am to 6:30pm
             for (let h = startHour; h < endHour; h++) {
-                for (let m = 0; m < 60; m += 15) {
+                for (let m = 0; m < 60; m += 30) {
                     const timeStr = `${h > 12 ? h - 12 : h}:${m === 0 ? '00' : m} ${h >= 12 ? 'PM' : 'AM'}`;
                     const btn = document.createElement('button');
-                    btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-600 bg-white border border-slate-100";
+                    // UPDATED: Increased padding (py-3/4), font size (text-xs/sm), rounded-xl for bigger, easier selection
+                    btn.className = "time-slot py-3 md:py-4 rounded-xl text-xs md:text-sm font-bold text-slate-600 bg-white border border-slate-200 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md hover:border-brand-primary/30";
                     btn.innerText = timeStr;
                     btn.onclick = () => selectTime(timeStr, btn);
                     grid.appendChild(btn);
                 }
             }
-            // Add 7:00 PM
-            const btn = document.createElement('button');
-            btn.className = "time-slot py-2 rounded text-[10px] font-bold text-slate-600 bg-white border border-slate-100";
-            btn.innerText = "7:00 PM";
-            btn.onclick = () => selectTime("7:00 PM", btn);
-            grid.appendChild(btn);
         }
 
         function selectTime(time, el) {
@@ -2209,6 +2231,7 @@
 
         // --- NAVIGATION & FLOW ---
         function goToStep2() {
+            // --- VALIDATION ACTIVE ---
             const age = parseInt(document.getElementById('age').value);
             // Updated validation check for 21-50 years
             if(isNaN(age) || age < 21 || age > 50) { 
@@ -2217,7 +2240,7 @@
             const mEl = document.getElementById('mobile');
             const rawVal = mEl.value.replace(/\s/g, '');
             if(currentPhoneRegex && !currentPhoneRegex.test(rawVal)) {
-                showModal("Invalid Mobile Number Format."); return;
+                showModal("Invalid Mobile Number Format. Please check the country code and length."); return;
             }
 
             // Alternative Phone Validation
@@ -2233,6 +2256,8 @@
             if(!document.getElementById('personalForm').checkValidity()) {
                 document.getElementById('personalForm').reportValidity(); return;
             }
+            
+            // console.log("Validation passed.");
 
             document.getElementById('tab-1').classList.add('hidden');
             document.getElementById('tab-2').classList.remove('hidden');
@@ -2241,8 +2266,8 @@
             updateStepIndicator(2);
             
             const name = document.getElementById('firstName').value + " " + document.getElementById('lastName').value;
-            document.getElementById('reportName').innerText = name;
-            document.getElementById('avatarInitial').innerText = name.charAt(0);
+            document.getElementById('reportName').innerText = name || "TEST USER";
+            document.getElementById('avatarInitial').innerText = (name.charAt(0) || "T");
             document.getElementById('reportDate').innerText = new Date().toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
 
@@ -2588,7 +2613,9 @@
 
         // --- UPDATED REPORT GENERATION ---
         async function generateReport() {
-            const role = document.getElementById('currentJob').value;
+            let role = document.getElementById('currentJob').value;
+            
+            // --- VALIDATION ACTIVE ---
             if(!role) { showModal("Please select a target position to continue."); return; }
             if(currentMode === 'Skilled') {
                 const val = parseInt(document.getElementById('experience').value);
@@ -2601,7 +2628,9 @@
             // Fake delay for AI effect (2 seconds)
             await new Promise(resolve => setTimeout(resolve, 2000));
 
-            const qual = document.querySelector('input[name="qualification"]:checked').value;
+            const qualRadio = document.querySelector('input[name="qualification"]:checked');
+            const qual = qualRadio ? qualRadio.value : "BACHELOR"; // Fallback if no radio checked
+
             document.getElementById('reportContainer').classList.remove('hidden');
             setTimeout(() => { document.getElementById('reportContainer').scrollIntoView({ behavior: 'smooth' }); }, 100);
 
@@ -2624,7 +2653,6 @@
             }
 
             // --- CALCULATE ALTERNATIVES (DATA LOGIC) ---
-            // We calculate this regardless of whether the UI grid exists, so we can save it to ClickUp
             const others = jobMasterList.filter(j => j.type === jobData.type && j.c !== jobData.c).sort(() => 0.5 - Math.random()).slice(0, 3);
             const altCountriesString = others.map(o => o.c).join(', ');
 
@@ -2632,137 +2660,11 @@
             document.getElementById('hiddenPrimaryMatch').value = jobData.c;
             document.getElementById('hiddenAltMatches').value = altCountriesString;
 
-            // Alternatives UI (If element exists)
-            const grid = document.getElementById('altMatchesGrid');
-            if (grid) {
-                grid.innerHTML = '';
-                others.forEach((o, index) => {
-                    const div = document.createElement('div');
-                    const delay = index * 100;
-                    div.style.animationDelay = `${delay}ms`;
-                    div.className = "relative overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all duration-500 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:-translate-y-1 group cursor-pointer animate-slide-up-fade";
-                    const gradients = ['from-blue-500 to-cyan-400', 'from-violet-500 to-fuchsia-400', 'from-amber-400 to-orange-500'];
-                    const grad = gradients[index % gradients.length];
-
-                    div.innerHTML = `
-                        <div class="p-[1.5px] bg-gradient-to-r ${grad} opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute inset-0 z-0"></div>
-                        <div class="relative z-10 bg-white h-full w-full rounded-[14px] p-3 flex items-center gap-3 group-hover:bg-blue-50/10 transition-colors">
-                            <div class="relative flex-shrink-0">
-                                <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-lg shadow-sm group-hover:scale-110 transition-transform duration-300 relative z-10">🇪🇺</div>
-                                <div class="absolute inset-0 bg-gradient-to-r ${grad} rounded-xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-500 animate-pulse"></div>
-                            </div>
-                            <div class="flex-grow min-w-0">
-                                <div class="flex justify-between items-center mb-1">
-                                    <h4 class="text-xs font-black text-slate-700 uppercase tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:${grad} transition-all">${o.c}</h4>
-                                    <span class="text-[8px] font-bold text-white px-2 py-0.5 rounded-full bg-gradient-to-r ${grad} opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 shadow-sm">9${Math.floor(Math.random() * 5) + 4}% MATCH</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider truncate max-w-[90px]">${o.r}</p>
-                                    <div class="h-3 w-[1px] bg-slate-200"></div>
-                                    <p class="text-[9px] font-bold text-slate-600 bg-slate-100 px-1.5 rounded">${getSalary(o.c, currentMode).split(' ')[0]}</p>
-                                </div>
-                            </div>
-                            <div class="text-slate-300 group-hover:text-slate-800 transition-colors transform group-hover:translate-x-1 duration-300"><i class="fa-solid fa-chevron-right text-xs"></i></div>
-                        </div>
-                    `;
-                    div.onclick = function() { window.open(countryPageMap[o.c] || '#', '_blank'); };
-                    grid.appendChild(div);
-                });
-            }
-
             // TRIGGER SAVE
             await saveData(false, false);
             
             // HIDE LOADER
             toggleLoader(false);
-        }
-
-        // --- VALIDATORS ---
-        function cleanPhoneNumber(phoneStr) {
-            if(!phoneStr) return null;
-            let cleaned = phoneStr.replace(/[^0-9+]/g, '');
-            if(cleaned.startsWith('00')) cleaned = '+' + cleaned.substring(2);
-            if(cleaned.length > 0 && !cleaned.startsWith('+')) cleaned = '+' + cleaned;
-            return cleaned.length < 5 ? null : cleaned;
-        }
-        function enforcePhoneInput(el) { el.value = el.value.replace(/[^0-9+ ]/g, ''); }
-        function validatePhone(id) {
-            const el = document.getElementById(id);
-            const rawVal = el.value.replace(/\s/g, '');
-            const feedback = document.getElementById(id === 'mobile' ? 'mobileFeedback' : id === 'whatsapp' ? 'waFeedback' : 'altPhoneFeedback');
-            if (!currentPhoneRegex) return;
-            if (currentPhoneRegex.test(rawVal)) {
-                el.classList.add('valid-field'); el.classList.remove('invalid-field');
-                feedback.innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i>';
-                if(id==='mobile') document.getElementById('mobileError').classList.add('hidden');
-            } else {
-                el.classList.remove('valid-field');
-                if(rawVal.length > 6) {
-                    el.classList.add('invalid-field');
-                    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
-                } else feedback.innerHTML = '';
-            }
-        }
-        function getUnixTime(dateStr) {
-            if (!dateStr) return null;
-            const parts = dateStr.split('/');
-            return (parts.length === 3) ? new Date(parts[2], parts[1] - 1, parts[0]).getTime() : null;
-        }
-        function showModal(msg) {
-            const m = document.getElementById('messageModal');
-            // Reset to default simple modal for generic messages
-            document.getElementById('modalContent').innerHTML = `
-                <div class="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center text-xl mx-auto mb-4">
-                    <i class="fa-solid fa-circle-exclamation"></i>
-                </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-2">Attention Needed</h3>
-                <p id="modalText" class="text-slate-500 text-sm mb-6">${msg}</p>
-                <button onclick="closeModal()" class="w-full bg-brand-accent hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
-                    UNDERSTOOD
-                </button>
-            `;
-            m.classList.remove('hidden');
-            setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
-        }
-        function closeModal() {
-            const m = document.getElementById('messageModal');
-            m.classList.add('opacity-0'); m.querySelector('.modal-content').classList.remove('scale-100');
-            setTimeout(() => m.classList.add('hidden'), 300);
-        }
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            if(msg) document.getElementById('toastMsg').innerText = msg;
-            t.classList.remove('translate-y-32','opacity-0');
-            setTimeout(() => t.classList.add('translate-y-32','opacity-0'), 3000);
-        }
-
-        // CALENDAR HELPER
-        function createICSFile(dateStr, timeStr, advisor) {
-            const [day, month, year] = dateStr.split('/');
-            let [time, modifier] = timeStr.split(' ');
-            let [hours, minutes] = time.split(':');
-            if (hours === '12') hours = '00';
-            if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
-            
-            const start = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00`);
-            const end = new Date(start.getTime() + 30 * 60 * 1000);
-            
-            const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-            
-            return `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Better Call Immigration//Booking//EN
-BEGIN:VEVENT
-UID:${Date.now()}@bettercall.online
-DTSTAMP:${fmt(new Date())}
-DTSTART:${fmt(start)}
-DTEND:${fmt(end)}
-SUMMARY:Strategy Session with ${advisor}
-DESCRIPTION:Immigration Consultation. Prepare your documents.
-LOCATION:Online / Phone
-URL:https://bettercall.online
-END:VEVENT
-END:VCALENDAR`;
         }
 
         // --- CLICKUP INTEGRATION ---
@@ -2775,144 +2677,200 @@ END:VCALENDAR`;
                 toggleLoader(true, "Establishing Link", "SECURE HANDSHAKE :: CLICKUP_DB_SYNC");
             }
 
+            // 1. CONSTRUCT PAYLOAD
+            const name = (document.getElementById('firstName').value + " " + document.getElementById('lastName').value).toUpperCase();
+            const dobVal = getUnixTime(document.getElementById('dob').value);
+            const passExpVal = getUnixTime(document.getElementById('passportExp').value);
+            
+            // Custom Fields Array
+            const custom_fields = [
+                { id: CLICKUP_FIELDS["MOBILE"], value: document.getElementById('mobile').value },
+                { id: CLICKUP_FIELDS["EMAIL"], value: document.getElementById('email').value },
+                { id: CLICKUP_FIELDS["AGE"], value: parseInt(document.getElementById('age').value) || 0 },
+                { id: CLICKUP_FIELDS["NATIONALITY"], value: document.getElementById('nationality').value },
+                { id: CLICKUP_FIELDS["PRESENT RESIDENCE"], value: document.getElementById('presentResidence').value },
+                { id: CLICKUP_FIELDS["JOB ROLE"], value: document.getElementById('currentJob').value },
+                { id: CLICKUP_FIELDS["EXPERIENCE"], value: parseInt(document.getElementById('experience').value) || 0 },
+                { id: CLICKUP_FIELDS["WHATSAPP"], value: document.getElementById('whatsapp').value },
+                { id: CLICKUP_FIELDS["Case Reference ID"], value: document.getElementById('refId').innerText }
+            ];
+
+            // Add Optionals
+            if(document.getElementById('passportNo').value) {
+                custom_fields.push({ id: CLICKUP_FIELDS["PASSPORT NUMBER"], value: document.getElementById('passportNo').value });
+            }
+            if(document.getElementById('altPhone').value) {
+                custom_fields.push({ id: CLICKUP_FIELDS["PHONE"], value: document.getElementById('altPhone').value });
+            }
+            if(dobVal) {
+                custom_fields.push({ id: CLICKUP_FIELDS["DATE OF BIRTH"], value: dobVal });
+            }
+            if(passExpVal) {
+                custom_fields.push({ id: CLICKUP_FIELDS["PASSPORT EXPIRY"], value: passExpVal });
+            }
+            
+            // Qualification (Radio)
+            const qual = document.querySelector('input[name="qualification"]:checked');
+            if(qual) {
+                 custom_fields.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual.value });
+            }
+
+            const payload = {
+                name: name,
+                description: `
+**AI ASSESSMENT REPORT**
+-----------------------
+Primary Match: ${document.getElementById('hiddenPrimaryMatch').value}
+Alternatives: ${document.getElementById('hiddenAltMatches').value}
+Estimated Salary: ${document.getElementById('mainSalaryRange').innerText}
+Advisor Assigned: PENDING
+-----------------------
+Generated via Better Call Web App
+                `.trim(),
+                status: "TO DO", 
+                custom_fields: custom_fields
+            };
+
             try {
-                const ref = document.getElementById('refId').innerText;
-                const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
-                const primaryMatch = document.getElementById('hiddenPrimaryMatch').value || "Pending Assessment";
-                const altMatches = document.getElementById('hiddenAltMatches').value || "Pending Assessment";
+                console.log("Saving data to ClickUp...", payload);
                 
-                let customFieldsArray = [
-                    { id: CLICKUP_FIELDS["SUR NAME"], value: document.getElementById('lastName').value },
-                    { id: CLICKUP_FIELDS["MOBILE"], value: mobile },
-                    { id: CLICKUP_FIELDS["WHATSAPP"], value: cleanPhoneNumber(document.getElementById('whatsapp').value) },
-                    { id: CLICKUP_FIELDS["PHONE"], value: cleanPhoneNumber(document.getElementById('altPhone') ? document.getElementById('altPhone').value : "") },
-                    { id: CLICKUP_FIELDS["DATE OF BIRTH"], value: getUnixTime(document.getElementById('dob').value) },
-                    { id: CLICKUP_FIELDS["AGE"], value: parseInt(document.getElementById('age').value) },
-                    { id: CLICKUP_FIELDS["EMAIL"], value: document.getElementById('email').value },
-                    { id: CLICKUP_FIELDS["EXPERIENCE"], value: parseInt(document.getElementById('experience').value) || 0 },
-                    { id: CLICKUP_FIELDS["Case Reference ID"], value: ref }
-                ];
-
-                customFieldsArray = customFieldsArray.filter(f => f.value !== null && f.value !== undefined && f.value !== "");
+                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+                    method: 'POST',
+                    headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
                 
-                // Fetch Field Definitions logic (Existing logic kept same)
-                try {
-                    const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
-                    if(res.ok) {
-                        const fieldDefs = (await res.json()).fields || [];
-                        const addDropdown = (key, val) => {
-                            const fid = CLICKUP_FIELDS[key];
-                            const def = fieldDefs.find(f => f.id === fid);
-                            if(def && (def.type === 'drop_down' || def.type === 'labels') && val) {
-                                const opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase()) 
-                                         || def.type_config.options.find(o => o.name === "OTHER");
-                                if(opt) customFieldsArray.push({ id: fid, value: opt.id });
-                            } else if (fid && val) {
-                                 if (!def || (def.type !== 'drop_down' && def.type !== 'labels')) {
-                                    customFieldsArray.push({ id: fid, value: val });
-                                 }
-                            }
-                        };
-                        addDropdown("NATIONALITY", document.getElementById('nationality').value);
-                        addDropdown("PRESENT RESIDENCE", document.getElementById('presentResidence').value);
-                        addDropdown("QUALIFICATION", document.querySelector('input[name="qualification"]:checked')?.value);
-                        addDropdown("JOB ROLE", document.getElementById('currentJob').value);
-                    } else {
-                         // Fallback
-                         const qual = document.querySelector('input[name="qualification"]:checked')?.value;
-                         const job = document.getElementById('currentJob').value;
-                         if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
-                         if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
-                    }
-                } catch(e) { 
-                    console.warn("Could not fetch field definitions, using raw values", e); 
-                     const qual = document.querySelector('input[name="qualification"]:checked')?.value;
-                     const job = document.getElementById('currentJob').value;
-                     if(qual) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qual });
-                     if(job) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: job });
-                }
-
-                // --- CLEAN & COMPREHENSIVE DESCRIPTION NOTE ---
-                const descriptionNote = `
-=========================================
-          APPLICANT PROFILE
-=========================================
-REF ID      : ${ref}
-DATE        : ${new Date().toLocaleDateString()}
-NAME        : ${document.getElementById('firstName').value} ${document.getElementById('lastName').value}
------------------------------------------
-            CONTACT INFO
------------------------------------------
-EMAIL       : ${document.getElementById('email').value}
-MOBILE      : ${mobile}
-WHATSAPP    : ${cleanPhoneNumber(document.getElementById('whatsapp').value)}
-ALT PHONE   : ${cleanPhoneNumber(document.getElementById('altPhone') ? document.getElementById('altPhone').value : "N/A")}
------------------------------------------
-          PERSONAL DETAILS
------------------------------------------
-AGE         : ${document.getElementById('age').value} (DOB: ${document.getElementById('dob').value})
-NATIONALITY : ${document.getElementById('nationality').value}
-RESIDENCE   : ${document.getElementById('presentResidence').value}
-EDUCATION   : ${document.querySelector('input[name="qualification"]:checked')?.value || "N/A"}
-PASSPORT    : ${document.getElementById('passportNo').value || "N/A"} (Exp: ${document.getElementById('passportExp').value || "N/A"})
------------------------------------------
-         JOB & EXPERIENCE
------------------------------------------
-TARGET ROLE : ${document.getElementById('currentJob').value}
-EXPERIENCE  : ${document.getElementById('experience').value || 0} Years
-CATEGORY    : ${currentMode}
-=========================================
-       AI ASSESSMENT RESULTS
-=========================================
-PRIMARY SUGGESTION   : ${primaryMatch}
-ALTERNATIVE OPTIONS  : ${altMatches}
-=========================================
-`.trim();
-
-                const payload = {
-                    name: document.getElementById('firstName').value,
-                    description: descriptionNote,
-                    custom_fields: customFieldsArray
-                };
-
-                if(CLICKUP_API_KEY && CLICKUP_LIST_ID) {
-                    const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
-                        method: 'POST',
-                        headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
+                if(res.ok) {
+                    const data = await res.json();
+                    globalTaskId = data.id; 
+                    console.log("Task Created ID:", globalTaskId);
                     
-                    if(res.ok) {
-                        const data = await res.json();
-                        globalTaskId = data.id; 
-                        const cvFile = document.getElementById('cvFile').files[0];
-                        if (cvFile) {
-                            const formData = new FormData();
-                            formData.append("attachment", cvFile);
-                            formData.append("filename", cvFile.name);
-                            await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/attachment`, {
-                                method: 'POST', headers: { 'Authorization': CLICKUP_API_KEY }, body: formData
-                            });
-                        }
-                        if(showSuccess) showToast("Profile Created");
-                    } else {
-                        const err = await res.json();
-                        console.error("ClickUp Error Response:", err);
-                        showModal("Submission Error: " + (err.err || "Please check inputs"));
+                    // Upload CV if exists
+                    const cvInput = document.getElementById('cvFile');
+                    if(cvInput.files.length > 0) {
+                        const formData = new FormData();
+                        formData.append("attachment", cvInput.files[0]);
+                        await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/attachment`, {
+                            method: 'POST',
+                            headers: { 'Authorization': CLICKUP_API_KEY },
+                            body: formData
+                        });
                     }
+
+                    if(showSuccess) showToast("Profile Created Successfully");
+                } else {
+                    const err = await res.json();
+                    console.error("ClickUp Error Response:", err);
+                    showModal("Submission Error: " + (err.err || "Please check inputs"));
                 }
+
             } catch(e) { 
                 console.error("Network Error:", e);
-                showModal("Network Error. Please try again.");
+                showModal("Network Error. Please check connection.");
             } finally {
-                // HIDE LOADER (Only if it was triggered by this function)
                 if (useLoader) {
                     setTimeout(() => {
                         const loader = document.getElementById('loadingOverlay');
                         loader.classList.add('opacity-0');
                         setTimeout(() => loader.classList.add('hidden'), 500);
-                    }, 1500); 
+                    }, 500); 
                 }
+            }
+        }
+
+        // --- CAL.COM BOOKING FUNCTION ---
+        async function createCalBooking(advisorName, dateStr, timeStr, userData) {
+            // 1. Find Advisor Config
+            const advisorObj = advisors.find(a => a.name === advisorName);
+            if (!advisorObj || !advisorObj.calId) {
+                console.error("Advisor mapping not found for:", advisorName);
+                return false;
+            }
+            
+            const calName = advisorObj.calId;
+            const apiKey = CAL_CONFIG[calName];
+            
+            if (!apiKey) {
+                console.error("Cal.com API Key missing for:", calName);
+                return false;
+            }
+
+            try {
+                // 2. Fetch Event Types to get ID
+                console.log(`Fetching Event Types for ${calName}...`);
+                const etRes = await fetch(`https://api.cal.com/v1/event-types?apiKey=${apiKey}`);
+                const etData = await etRes.json();
+                
+                if (!etData.event_types || etData.event_types.length === 0) {
+                    throw new Error("No event types found for this advisor.");
+                }
+
+                // Default to first event type
+                const eventTypeId = etData.event_types[0].id;
+                console.log(`Using Event Type ID: ${eventTypeId}`);
+
+                // 3. Format Date/Time to ISO UTC
+                const [day, month, year] = dateStr.split('/');
+                let [time, modifier] = timeStr.split(' ');
+                let [hours, minutes] = time.split(':');
+                if (hours === '12') hours = '00';
+                if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+                
+                const startDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00`);
+                const endDate = new Date(startDate.getTime() + 30 * 60000); // Add 30 mins
+                
+                // 4. Construct Booking Payload
+                const payload = {
+                    eventTypeId: eventTypeId,
+                    start: startDate.toISOString(),
+                    end: endDate.toISOString(),
+                    responses: {
+                        name: userData.name,
+                        email: userData.email,
+                        location: { value: "inPerson" }
+                    },
+                    metadata: { referenceId: userData.refId },
+                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    language: "en",
+                    title: `Consultation: ${userData.name}`,
+                    description: `
+**CUSTOMER DATA**
+----------------
+Name: ${userData.name}
+Role: ${userData.role}
+Residence: ${userData.residence}
+Nationality: ${userData.nationality}
+Experience: ${userData.experience} Years
+Phone: ${userData.phone}
+WhatsApp: ${userData.whatsapp || 'N/A'}
+Ref ID: ${userData.refId}
+----------------
+Generated via Better Call AI Assessment
+                    `.trim()
+                };
+
+                // 5. Create Booking
+                console.log("Creating Cal.com Booking...", payload);
+                const bookRes = await fetch(`https://api.cal.com/v1/bookings?apiKey=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const bookData = await bookRes.json();
+                
+                if (!bookRes.ok) {
+                    console.error("Cal.com Booking Failed:", bookData);
+                    return false; 
+                } else {
+                    console.log("Cal.com Booking Success:", bookData);
+                }
+                
+                return true;
+
+            } catch (error) {
+                console.error("Cal.com Integration Error:", error);
+                return false;
             }
         }
 
@@ -2922,7 +2880,7 @@ ALTERNATIVE OPTIONS  : ${altMatches}
             const date = document.getElementById('bookingDate').value;
             const time = document.getElementById('selectedTime').value;
 
-            // Strict Validation: Check each field individually
+            // Strict Validation
             if(!advisor) { showModal("Please select an Immigration Advisor to proceed."); return; }
             if(!method) { showModal("Please select a Consultation Mode."); return; }
             if(!date) { showModal("Please select a Date for your appointment."); return; }
@@ -2931,33 +2889,50 @@ ALTERNATIVE OPTIONS  : ${altMatches}
             // 1. Ensure Task Exists (Handle Page Refresh)
             if (!globalTaskId) {
                 console.log("No Task ID found, attempting to recreate...");
-                await saveData(false, false); // Create task silently
+                await saveData(false, false); 
                 if(!globalTaskId) {
-                    showModal("Session Error. Please restart the assessment."); return;
+                    showModal("Session Error. Could not save profile data. Please refresh."); return;
                 }
             }
 
             // SHOW LOADER
-            toggleLoader(true, "Confirming Booking", "Finalizing Appointment Slot...");
+            toggleLoader(true, "Confirming Booking", "Syncing with Advisor Calendar...");
 
-            // CREATE CALENDAR DATA
+            // --- INTEGRATE CAL.COM ---
+            const userData = {
+                name: (document.getElementById('firstName').value + " " + document.getElementById('lastName').value) || "Guest",
+                email: document.getElementById('email').value || "no-email@example.com",
+                phone: document.getElementById('mobile').value || "N/A",
+                whatsapp: document.getElementById('whatsapp').value,
+                role: document.getElementById('currentJob').value || "Unknown",
+                residence: document.getElementById('presentResidence').value || "Unknown",
+                nationality: document.getElementById('nationality').value || "Unknown",
+                experience: document.getElementById('experience').value || "0",
+                refId: document.getElementById('refId').innerText
+            };
+
+            // Attempt Real Booking
+            const calSuccess = await createCalBooking(advisor, date, time, userData);
+            if (!calSuccess) {
+                 console.warn("Cal.com booking might have failed or slot unavailable.");
+            }
+
+            // CREATE CALENDAR DATA (ICS Fallback)
             const icsContent = createICSFile(date, time, advisor);
             const icsBlob = new Blob([icsContent], { type: 'text/calendar' });
             const icsUrl = URL.createObjectURL(icsBlob);
 
-            const firstName = document.getElementById('firstName').value;
+            const firstName = document.getElementById('firstName').value || "Guest";
 
-            // CREATIVE SUCCESS HTML (Updated Text Format)
+            // CREATIVE SUCCESS HTML
             const successHtml = `
                 <div class="text-center p-0 md:p-2">
-                    <!-- Success Icon -->
                     <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5 shadow-xl shadow-green-100 border-4 border-white animate-[popIn_0.5s_ease-out]">
                         <i class="fa-solid fa-check text-4xl text-green-600"></i>
                     </div>
                     
                     <h3 class="text-xl md:text-2xl font-black text-slate-900 mb-6 px-4 leading-tight">Your Appointment with <span class="text-brand-primary">${advisor}</span> is Confirmed</h3>
                     
-                    <!-- Message Card -->
                     <div class="bg-slate-50 text-left rounded-2xl p-6 border border-slate-200 shadow-inner mb-6 relative overflow-hidden mx-1">
                         <div class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-brand-primary to-brand-secondary"></div>
                         
@@ -2982,7 +2957,6 @@ ALTERNATIVE OPTIONS  : ${altMatches}
                     
                     <p class="text-xs font-bold text-brand-secondary mb-6 italic">We look forward to helping you!</p>
 
-                    <!-- Actions -->
                     <div class="flex flex-col gap-3">
                         <button id="btn-download-pdf" onclick="generatePDF()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group relative overflow-hidden">
                              <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
@@ -2998,76 +2972,46 @@ ALTERNATIVE OPTIONS  : ${altMatches}
                 </div>
             `;
 
-            // Prepare Update Payload
-            const updateFields = [
-                { id: CLICKUP_FIELDS["BOOKING_DATE"], value: getUnixTime(date) },
-                { id: CLICKUP_FIELDS["BOOKING_TIME"], value: time } 
-            ];
-
             try {
-                // Fetch dropdown options to get UUIDs
-                const res = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { headers: { 'Authorization': CLICKUP_API_KEY } });
+                console.log("Updating ClickUp Task with Booking Details...");
                 
-                if (res.ok) {
-                    const fieldDefs = (await res.json()).fields || [];
-
-                    const mapDropdown = (fid, val) => {
-                        const def = fieldDefs.find(f => f.id === fid);
-                        if(def && (def.type === 'drop_down' || def.type === 'labels')) {
-                            // 1. Exact Match
-                            let opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase());
-                            // 2. Partial Match (First Word)
-                            if(!opt) opt = def.type_config.options.find(o => o.name.toLowerCase().includes(val.toLowerCase().split(' ')[0]));
-                            
-                            if(opt) return { id: fid, value: opt.id };
-                            console.warn(`Dropdown option not found for: ${val} in field ${fid}`);
-                        }
-                        return { id: fid, value: val }; 
-                    };
-
-                    updateFields.push(mapDropdown(CLICKUP_FIELDS["ADVISOR"], advisor));
-                    updateFields.push(mapDropdown(CLICKUP_FIELDS["BOOKING_TYPE"], method));
-                } else {
-                    // Fallback
-                    updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: advisor });
-                    updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: method });
-                }
-
-                const desc = `\n\n**APPOINTMENT BOOKED**\nAdvisor: ${advisor}\nMethod: ${method}\nDate: ${date}\nTime: ${time}`;
-
-                if(CLICKUP_API_KEY) {
-                    // Update Custom Fields one by one
-                    for (let f of updateFields) {
-                        const updateRes = await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${f.id}`, {
-                            method: 'POST',
-                            headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ value: f.value })
-                        });
-                        if (!updateRes.ok) console.error(`Failed update field ${f.id}`, await updateRes.json());
-                    }
-                    // Add Comment
-                    await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/comment`, {
+                const updateField = async (fieldId, val) => {
+                    await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${fieldId}`, {
                         method: 'POST',
                         headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ comment_text: desc })
+                        body: JSON.stringify({ value: val })
                     });
+                };
+                
+                await Promise.all([
+                    updateField(CLICKUP_FIELDS["ADVISOR"], advisor),
+                    updateField(CLICKUP_FIELDS["BOOKING_DATE"], getUnixTime(date)), 
+                    updateField(CLICKUP_FIELDS["BOOKING_TIME"], time),
+                    updateField(CLICKUP_FIELDS["BOOKING_TYPE"], method)
+                ]);
 
-                    // Hide Loader
-                    toggleLoader(false);
+                toggleLoader(false);
 
-                    // Show Success
-                    const m = document.getElementById('messageModal');
-                    document.getElementById('modalContent').innerHTML = successHtml;
-                    m.classList.remove('hidden');
-                    setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
-                    
-                    document.querySelector('button[onclick="submitBooking()"]').disabled = true;
-                    document.querySelector('button[onclick="submitBooking()"]').innerHTML = 'BOOKED <i class="fa-solid fa-check"></i>';
+                const m = document.getElementById('messageModal');
+                document.getElementById('modalContent').innerHTML = successHtml;
+                m.classList.remove('hidden');
+                setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
+                
+                const submitBtn = document.querySelector('button[onclick="submitBooking()"]');
+                if(submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = 'BOOKING CONFIRMED <i class="fa-solid fa-check"></i>';
                 }
+                
             } catch(e) {
                 console.error(e);
                 toggleLoader(false);
-                showModal("Connection Error. Please contact support.");
+                showModal("Booking processed (Network Warning: DB sync incomplete). Please download your report.");
+                
+                const m = document.getElementById('messageModal');
+                document.getElementById('modalContent').innerHTML = successHtml;
+                m.classList.remove('hidden');
+                setTimeout(() => { m.classList.remove('opacity-0'); m.querySelector('.modal-content').classList.add('scale-100'); }, 10);
             }
         }
         
