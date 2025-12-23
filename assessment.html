@@ -563,12 +563,12 @@
                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-6 md:mb-10 max-w-4xl mx-auto">
                     <div id="cardUnskilled" onclick="setSkillMode('Unskilled')" class="category-card rounded-2xl md:rounded-3xl p-4 md:p-8 flex items-center gap-4 md:gap-6 cursor-pointer relative overflow-hidden">
                         <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-blue-50 text-brand-primary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-hands-holding-circle"></i></div>
-                        <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Essential & Operational</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Industrial, Logistics, Agritech</p></div>
+                        <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Unskilled - Non Experience</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Industrial, Logistics, Agritech</p></div>
                         <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkUnskilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-primary hidden shadow-lg"></div></div></div>
                     </div>
                     <div id="cardSkilled" onclick="setSkillMode('Skilled')" class="category-card rounded-2xl md:rounded-3xl p-4 md:p-8 flex items-center gap-4 md:gap-6 cursor-pointer relative overflow-hidden">
                         <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-purple-50 text-brand-secondary flex items-center justify-center text-2xl md:text-3xl shadow-sm"><i class="fa-solid fa-user-tie"></i></div>
-                        <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Specialized & Technical</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Engineering, Healthcare, Skilled Trades</p></div>
+                        <div class="z-10"><h3 class="text-base md:text-xl font-bold text-slate-800 mb-1">Skilled - Experience</h3><p class="text-[10px] md:text-xs text-slate-500 tracking-wide font-medium">Engineering, Healthcare, Skilled Trades</p></div>
                         <div class="ml-auto z-10"><div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all" id="checkSkilled"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-brand-secondary hidden shadow-lg"></div></div></div>
                     </div>
                 </div>
@@ -590,7 +590,7 @@
                         </div>
 
                         <div id="experienceWrapper" class="hidden animate-pop-in">
-                            <label class="block text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Professional Tenure</label>
+                            <label class="block text-[10px] md:text-xs font-bold text-brand-secondary uppercase tracking-widest mb-1.5 md:mb-3 ml-1">Years of Experience</label>
                             <div class="relative">
                                 <select id="experience" class="form-input w-full rounded-xl px-4 md:px-5 py-2 md:py-4 font-bold text-lg h-12 md:h-auto appearance-none cursor-pointer bg-white/60 focus:bg-white transition-colors text-slate-700 shadow-sm">
                                 </select>
@@ -734,7 +734,7 @@
 
                                                 <div class="mb-5">
                                                     <h4 class="text-xl font-black tracking-tight mb-1 text-slate-900">Expert Advisor</h4>
-                                                    <p class="text-[10px] uppercase tracking-widest text-brand-secondary font-bold mb-3">Global Mobility Team</p>
+                                                    <p class="text-[10px] uppercase tracking-widest text-brand-secondary font-bold mb-3">Connect</p>
                                                     <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 border border-slate-200 backdrop-blur-md">
                                                         <i class="fa-solid fa-earth-americas text-xs text-brand-primary"></i>
                                                         <span class="text-[10px] font-medium text-slate-600/90">Multi-Lingual Support</span>
@@ -778,81 +778,113 @@
                         <p class="text-slate-500 text-xs md:text-sm tracking-wide font-medium">Select your advisor and preferred slot to lock in your strategy session.</p>
                     </div>
 
+                    <!-- 1. COUNTRY SELECTOR (Consolidated Box) -->
                     <div class="mb-8 md:mb-10">
                         <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center justify-center md:justify-start">
                             <span class="w-5 h-5 rounded-full bg-brand-primary text-white inline-flex items-center justify-center mr-2">1</span> Select Target Destination
                         </h3>
                         
-                        <div class="space-y-6">
-                            <div class="rounded-3xl bg-indigo-50/40 p-4 border border-indigo-100 relative overflow-hidden group hover:bg-indigo-50/60 transition-colors">
-                                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-brand-primary/5 rounded-full blur-xl"></div>
-                                <h4 class="text-[10px] font-black text-brand-primary uppercase tracking-widest mb-3 flex items-center gap-2 relative z-10">
+                        <!-- SINGLE BOX CONTAINER -->
+                        <div class="rounded-3xl bg-white border border-slate-200 shadow-sm relative overflow-hidden">
+                            <!-- Background Elements -->
+                            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-brand-primary/5 rounded-full blur-xl"></div>
+                            
+                            <div class="p-5 md:p-6">
+                                <!-- Schengen Section -->
+                                <h4 class="text-[10px] font-black text-brand-primary uppercase tracking-widest mb-4 flex items-center gap-2">
                                     <span class="text-lg">🇪🇺</span> Schengen Zone
                                 </h4>
-                                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3" id="schengenContainer">
+                                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 md:gap-3" id="schengenContainer">
+                                    <!-- Schengen Countries injected here -->
                                 </div>
-                            </div>
 
-                            <div class="rounded-3xl bg-slate-50/60 p-4 border border-slate-100 relative overflow-hidden group hover:bg-slate-100/50 transition-colors">
-                                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2 relative z-10">
+                                <!-- DIVIDER LINE -->
+                                <div class="w-full h-px bg-slate-100 my-6 md:my-8 relative">
+                                    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-[9px] font-bold text-slate-300 uppercase tracking-widest">
+                                        Or
+                                    </div>
+                                </div>
+
+                                <!-- Non-Schengen Section -->
+                                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
                                     <i class="fa-solid fa-globe text-slate-400"></i> Non-Schengen
                                 </h4>
-                                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3" id="nonSchengenContainer">
+                                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 md:gap-3" id="nonSchengenContainer">
+                                    <!-- Non-Schengen Countries injected here -->
                                 </div>
                             </div>
                         </div>
 
                         <input type="hidden" id="targetCountry" required>
+                        <p id="countryError" class="text-center text-brand-accent text-[11px] hidden mt-2 font-bold flex items-center justify-center gap-2 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Please select a destination.</p>
                     </div>
 
+                    <!-- 2. ADVISOR SELECTION -->
+                    <div class="mb-8 md:mb-10">
+                        <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center justify-center md:justify-start">
+                            <span class="w-5 h-5 rounded-full bg-brand-primary text-white inline-flex items-center justify-center mr-2">2</span> Select Immigration Advisor
+                        </h3>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" id="advisorGrid">
+                            <!-- Professional Advisors injected via JS -->
+                        </div>
+                        <input type="hidden" id="selectedAdvisor">
+                    </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
-                        <div class="lg:col-span-4 flex flex-col gap-6">
+                        
+                        <!-- LEFT COLUMN: Consultation Method (Span 3) -->
+                        <div class="lg:col-span-3 flex flex-col gap-6">
                             
-                            <div>
-                                <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-primary text-white inline-flex items-center justify-center mr-2">2</span> Select Immigration Advisor</h3>
-                                <!-- UPDATED: Two Column Grid for Advisors -->
-                                <div class="grid grid-cols-2 gap-3" id="advisorGrid">
-                                </div>
-                                <input type="hidden" id="selectedAdvisor">
-                            </div>
-
+                            <!-- 3. Consultation Mode -->
                             <div>
                                 <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-4"><span class="w-5 h-5 rounded-full bg-brand-secondary text-white inline-flex items-center justify-center mr-2">3</span> Consultation Mode</h3>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex flex-col items-center text-center gap-3 cursor-pointer transition-all duration-300 hover:shadow-md group" onclick="selectMethod('In-Person', this)">
-                                        <div class="icon-wrapper w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-50 group-hover:text-blue-500">
+                                <div class="grid grid-cols-1 gap-3"> <!-- Vertical Stack for this narrow column -->
+                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex items-center gap-4 group hover:border-brand-primary hover:shadow-md transition-all cursor-pointer" onclick="selectMethod('In-Person', this)">
+                                        <!-- ADDED CLASS: icon-wrapper -->
+                                        <div class="icon-wrapper w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-slate-400 group-hover:text-brand-primary group-hover:scale-110 transition-all shrink-0">
                                             <i class="fa-solid fa-building text-sm"></i>
                                         </div>
-                                        <span class="label-text text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider transition-colors duration-300 group-hover:text-blue-600">Office</span>
+                                        <div class="text-left">
+                                            <!-- ADDED CLASS: label-text -->
+                                            <span class="label-text block text-xs font-bold text-slate-700">In-Office</span>
+                                            <span class="block text-[10px] text-slate-400 font-medium">Face to face</span>
+                                        </div>
                                     </div>
-                                    
-                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex flex-col items-center text-center gap-3 cursor-pointer transition-all duration-300 hover:shadow-md group" onclick="selectMethod('Video Call', this)">
-                                        <div class="icon-wrapper w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-violet-50 group-hover:text-violet-500">
+                                    <div class="method-card p-4 rounded-2xl bg-white border border-slate-200 flex items-center gap-4 group hover:border-brand-primary hover:shadow-md transition-all cursor-pointer" onclick="selectMethod('Video Call', this)">
+                                        <!-- ADDED CLASS: icon-wrapper -->
+                                        <div class="icon-wrapper w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-slate-400 group-hover:text-purple-600 group-hover:scale-110 transition-all shrink-0">
                                             <i class="fa-solid fa-video text-sm"></i>
                                         </div>
-                                        <span class="label-text text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider transition-colors duration-300 group-hover:text-violet-600">Video</span>
+                                        <div class="text-left">
+                                            <!-- ADDED CLASS: label-text -->
+                                            <span class="label-text block text-xs font-bold text-slate-700">Video Call</span>
+                                            <span class="block text-[10px] text-slate-400 font-medium">Zoom / GMeet</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <input type="hidden" id="selectedMethod">
                             </div>
                         </div>
 
-                        <div class="lg:col-span-8">
+                        <!-- RIGHT COLUMN: Calendar & Time (Span 9) -->
+                        <div class="lg:col-span-9">
                             <div class="bg-white rounded-[2rem] border border-slate-200 p-6 md:p-8 shadow-sm h-full flex flex-col">
                                 <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-6"><span class="w-5 h-5 rounded-full bg-brand-gold text-white inline-flex items-center justify-center mr-2">4</span> Select Date & Time</h3>
                                 
                                 <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 flex-grow">
+                                    <!-- Calendar Side -->
                                     <div class="lg:w-1/2 flex flex-col">
-                                        <!-- UPDATED: Make calendar container height fixed on desktop for alignment -->
                                         <div class="bg-slate-50 rounded-3xl p-4 border border-slate-100 flex-grow h-full max-h-[400px] flex items-center justify-center">
                                             <input type="text" id="bookingDate" class="hidden" placeholder="Select Date">
                                         </div>
                                         <p class="text-center text-[10px] text-slate-400 font-bold mt-4"><i class="fa-solid fa-circle-info text-brand-primary mr-1"></i> Times displayed in your local timezone</p>
                                     </div>
 
+                                    <!-- Divider -->
                                     <div class="hidden lg:block w-px bg-slate-100 my-2"></div>
 
+                                    <!-- Time Side -->
                                     <div class="lg:w-1/2 flex flex-col h-full">
                                         <div class="flex justify-between items-center mb-4">
                                             <span class="text-xs font-bold text-slate-700">Available Slots</span>
@@ -862,8 +894,8 @@
                                             </div>
                                         </div>
                                         
-                                        <!-- UPDATED: Fixed height container for slots to match calendar -->
                                         <div class="grid grid-cols-3 gap-3 overflow-y-auto custom-scrollbar pr-2 h-[340px] content-start" id="timeSlotGrid">
+                                            <!-- JS Generated -->
                                         </div>
                                         <input type="hidden" id="selectedTime">
                                         <input type="hidden" id="selectedTimeIso">
@@ -873,17 +905,18 @@
                         </div>
                     </div>
                     
+                    <!-- Confirmation -->
                     <div class="mt-8 pt-6 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full bg-blue-50 text-brand-primary flex items-center justify-center"><i class="fa-solid fa-shield-halved"></i></div>
                             <div>
                                 <p class="text-xs font-bold text-slate-900">Secure Booking</p>
-                                <p class="text-[10px] text-slate-500">Instant confirmation via Email/SMS</p>
+                                <p class="text-[10px] text-slate-500">Instant confirmation via Email</p>
                             </div>
                         </div>
-                        <button onclick="submitBooking()" class="w-full md:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
-                            <span>Book & Download Report</span>
-                            <i class="fa-solid fa-file-arrow-down"></i>
+                        <button onclick="submitBooking()" class="w-full md:w-auto bg-slate-900 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-3">
+                            <span>CONFIRM APPOINTMENT</span>
+                            <i class="fa-solid fa-check"></i>
                         </button>
                     </div>
 
@@ -1032,22 +1065,23 @@
         let globalTaskId = null; 
         let currentMode = 'Unskilled';
         let currentPhoneRegex = null;
-
+        // CAL.COM INTEGRATION CONFIG
         const CAL_CONFIG = {
             "Better Call": "cal_live_56464d96cd70d67aa7588d6735ad55ed",
             "Anju M Nair": "cal_live_82b9340d588920d9c9270052d13db98a",
-            "Benitta": "cal_live_005b958e38d7722c363233d6b97a4ce4",
+            "Benitta": "cal_live_005b958e38d7722c363233d6b97a4ce4", // Confirmed Key
             "Eunice Kingoo": "cal_live_9489b42b4b6e4cdb8c144e8150fa62c9"
         };
         const eventTypeCache = {};
 
         const advisors = [
-            { name: "Benitta", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം)", calId: "Benitta" },
-            { name: "Anju M Nair", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം), Hindi (हिंदी), English", calId: "Anju M Nair" },
-            { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Kiswahili", calId: "Eunice Kingoo" },
-            { name: "Better Call", country: "Global", isLogo: true, lang: "Malayalam (മലയാളം)", calId: "Better Call" }
+            { name: "Benitta", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം)", image: "https://raw.githubusercontent.com/sujeshunni-del/bettercall/b12a70e6439f530d20db63dae86358a47793a4f3/Bettercall%20Logo%20SVG%2003.svg", calId: "Benitta" },
+            { name: "Anju M Nair", country: "India", flag: "🇮🇳", lang: "Malayalam (മലയാളം), Hindi (हिंदी), English", image: "https://raw.githubusercontent.com/sujeshunni-del/bettercall/b12a70e6439f530d20db63dae86358a47793a4f3/Bettercall%20Logo%20SVG%2003.svg", calId: "Anju M Nair" },
+            { name: "Better Call", country: "Philippines", flag: "🇵🇭", lang: "English, Malayalam", image: "https://raw.githubusercontent.com/sujeshunni-del/bettercall/b12a70e6439f530d20db63dae86358a47793a4f3/Bettercall%20Logo%20SVG%2003.svg", calId: "Better Call" },
+            { name: "Eunice Kingoo", country: "Africa", flag: "🌍", lang: "English, Kiswahili", image: "https://raw.githubusercontent.com/sujeshunni-del/bettercall/b12a70e6439f530d20db63dae86358a47793a4f3/Bettercall%20Logo%20SVG%2003.svg", calId: "Eunice Kingoo" }
         ];
 
+        // CLICKUP FIELDS CONFIGURATION
         const CLICKUP_FIELDS = {
             "SUR NAME": "34d446a2-fe50-45bc-8e3b-64660ebdd6f7",  
             "MOBILE": "5693724c-ee50-469b-a4a9-3848fe6d3115", 
@@ -1634,7 +1668,6 @@
             "KUWAIT": { regex: /^\+965\d{8}$/, hint: "+965 91234567" },
             "KYRGYZSTAN": { regex: /^\+996\d{9}$/, hint: "+996 555123456" },
             "LAOS": { regex: /^\+85620\d{8}$/, hint: "+856 2012345678" },
-            "LATVIA": { regex: /^\+3712\d{7}$/, hint: "+371 21234567" },
             "LEBANON": { regex: /^\+961\d{7,8}$/, hint: "+961 70123456" },
             "LESOTHO": { regex: /^\+266\d{8}$/, hint: "+266 58123456" },
             "LIBERIA": { regex: /^\+231\d{8,9}$/, hint: "+231 77123456" },
@@ -1725,335 +1758,6 @@
             "ZIMBABWE": { regex: /^\+2637\d{8}$/, hint: "+263 771234567" },
             "OTHER": { regex: /^\+\d{8,15}$/, hint: "+ [CountryCode][Number]" }
         };
-
-        function setLanguage(lang, el) { console.log("Language set to:", lang); }
-    
-        function getUnixTime(dateStr) {
-            if(!dateStr) return null;
-            const parts = dateStr.split('/');
-            if(parts.length !== 3) return null;
-            const d = new Date(parts[2], parts[1] - 1, parts[0]);
-            return d.getTime();
-        }
-
-        // STRICT VALIDATION
-        function validateName(el, errId) {
-            const err = document.getElementById(errId);
-            const regex = /^[A-Z\s-]+$/;
-            if (el.value.length > 0 && !regex.test(el.value)) {
-                el.classList.add('invalid-field');
-                el.classList.remove('valid-field');
-                err.classList.remove('hidden');
-            } else {
-                el.classList.remove('invalid-field');
-                if(el.value.length > 0) el.classList.add('valid-field');
-                err.classList.add('hidden');
-            }
-        }
-
-        function validateEmail(el, errId, isBlur = false) {
-            const err = document.getElementById(errId);
-            const val = el.value;
-            if (val.includes(' ')) {
-                el.classList.add('invalid-field');
-                err.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> No spaces allowed.';
-                err.classList.remove('hidden');
-                return;
-            }
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (val.length > 0) {
-                if (!regex.test(val)) {
-                    el.classList.add('invalid-field');
-                    el.classList.remove('valid-field');
-                    err.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Invalid email format.';
-                    err.classList.remove('hidden');
-                } else {
-                    el.classList.remove('invalid-field');
-                    el.classList.add('valid-field');
-                    err.classList.add('hidden');
-                }
-            } else {
-                err.classList.add('hidden');
-                el.classList.remove('invalid-field');
-            }
-        }
-
-        function enforcePhoneInput(el) {
-            el.value = el.value.replace(/[^0-9+]/g, '');
-        }
-
-        function validatePhone(type) {
-            const el = document.getElementById(type);
-            if(!el) return;
-            const val = el.value.replace(/\s/g, ''); 
-            let feedbackEl, hintEl;
-            if(type === 'mobile') hintEl = document.getElementById('mobileError');
-            const regex = currentPhoneRegex || /^\+\d{8,15}$/;
-            const feedbackContainer = document.getElementById(type === 'mobile' ? 'mobileFeedback' : (type === 'whatsapp' ? 'waFeedback' : 'altPhoneFeedback'));
-            
-            if(regex.test(val)) {
-                el.classList.remove('invalid-field');
-                el.classList.add('valid-field');
-                if(hintEl) hintEl.classList.add('hidden');
-                if(feedbackContainer) feedbackContainer.innerHTML = '<i class="fa-solid fa-check text-green-500"></i>';
-            } else {
-                el.classList.remove('valid-field');
-                if(val.length > 0) {
-                     el.classList.add('invalid-field');
-                     if(hintEl) hintEl.classList.remove('hidden');
-                } else {
-                     el.classList.remove('invalid-field');
-                     if(hintEl) hintEl.classList.add('hidden');
-                }
-                if(feedbackContainer) feedbackContainer.innerHTML = '';
-            }
-        }
-
-        async function generatePDF() {
-            const btn = document.getElementById('btn-download-pdf');
-            let originalBtnContent = "";
-            if(btn) {
-                originalBtnContent = btn.innerHTML;
-                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i><span>Generating...</span>';
-            }
-
-            try {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                const brightBlue = [37, 99, 235]; 
-                const navy = [30, 41, 59];
-                const slate = [100, 116, 139];
-                const white = [255, 255, 255];
-                
-                const margin = 20;
-                let y = 20;
-
-                const name = (document.getElementById('firstName').value + " " + document.getElementById('lastName').value).toUpperCase();
-                const role = document.getElementById('currentJob').value || "N/A";
-                const exp = document.getElementById('experience').value + " Years" || "N/A";
-                const contact = document.getElementById('mobile').value || "N/A";
-                const refIdVal = document.getElementById('refId').innerText;
-
-                doc.setFontSize(10);
-                doc.setTextColor(...slate);
-                doc.setFont("helvetica", "bold");
-                doc.text("BETTER CALL IMMIGRATION", margin, y);
-                doc.setFontSize(8);
-                doc.setFont("helvetica", "normal");
-                doc.text("Global Mobility Intelligence Unit", margin, y + 5);
-                doc.setFontSize(10);
-                doc.setFont("courier", "bold");
-                doc.text(`REF: ${refIdVal}`, 210 - margin, y, { align: "right" });
-
-                y += 20;
-
-                doc.setDrawColor(226, 232, 240);
-                doc.setFillColor(248, 250, 252);
-                doc.roundedRect(margin, y, 170, 35, 3, 3, 'FD');
-                
-                let rowY = y + 10;
-                const col1 = margin + 10;
-                const col2 = margin + 70;
-                const col3 = margin + 130;
-
-                doc.setFontSize(8);
-                doc.setTextColor(...slate);
-                doc.text("CANDIDATE", col1, rowY);
-                doc.text("EXPERIENCE", col2, rowY);
-                doc.text("CONTACT", col3, rowY);
-                
-                rowY += 5;
-                doc.setFontSize(10);
-                doc.setTextColor(...navy);
-                doc.setFont("helvetica", "bold");
-                doc.text(name, col1, rowY);
-                doc.text(exp, col2, rowY);
-                doc.text(contact, col3, rowY);
-                
-                rowY += 10;
-                doc.setFontSize(8);
-                doc.setTextColor(...slate);
-                doc.text("TARGET PROFESSION", col1, rowY);
-                
-                rowY += 5;
-                doc.setFontSize(10);
-                doc.setTextColor(...navy);
-                doc.setFont("helvetica", "bold");
-                doc.text(role, col1, rowY);
-
-                y += 45;
-
-                const country = document.getElementById('topMatchCountry').innerText;
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(40);
-                doc.setTextColor(...brightBlue);
-                doc.text(country, margin, y + 5);
-                
-                doc.setFillColor(220, 252, 231);
-                doc.setDrawColor(22, 163, 74);
-                doc.roundedRect(margin + 120, y - 5, 60, 10, 2, 2, 'FD');
-                doc.setTextColor(22, 163, 74);
-                doc.setFontSize(8);
-                doc.text("ELIGIBILITY CONFIRMED", margin + 150, y + 1.5, { align: "center" });
-
-                y += 20;
-
-                doc.setFontSize(9);
-                doc.setTextColor(...navy);
-                doc.text("Algorithmic Compatibility Score", margin, y);
-                doc.text("98%", 210 - margin, y, { align: "right" });
-                
-                y += 3;
-                doc.setFillColor(226, 232, 240);
-                doc.roundedRect(margin, y, 180, 4, 2, 2, 'F');
-                doc.setFillColor(...brightBlue);
-                doc.roundedRect(margin, y, 176, 4, 2, 2, 'F');
-
-                y += 15;
-
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(9);
-                doc.setTextColor(...navy);
-                doc.text("AI ANALYSIS SUMMARY:", margin, y);
-                y += 5;
-                doc.setFont("helvetica", "normal");
-                doc.setTextColor(...slate);
-                const reasoning = document.getElementById('aiReasoning').innerText;
-                const splitReasoning = doc.splitTextToSize(reasoning, 180);
-                doc.text(splitReasoning, margin, y);
-
-                y += 25;
-
-                doc.setDrawColor(200, 200, 200);
-                doc.setLineWidth(0.5);
-                doc.setLineDash([3, 3], 0);
-                doc.line(0, y, 210, y);
-                doc.setLineDash([]);
-                doc.setFillColor(255, 255, 255);
-                doc.circle(105, y, 4, 'F');
-                doc.setFontSize(10);
-                doc.setTextColor(200, 200, 200);
-                doc.text("✂", 105, y + 1, { align: "center" });
-
-                y += 10;
-
-                const bottomStart = y;
-                const pageHeight = 297;
-                doc.setFillColor(...navy);
-                doc.rect(0, bottomStart, 210, pageHeight - bottomStart, 'F');
-
-                y += 15;
-
-                doc.setTextColor(...white);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(16);
-                doc.text("OFFICIAL APPOINTMENT RECEIPT", margin, y);
-                doc.setFontSize(10);
-                doc.setTextColor(...brightBlue);
-                doc.text("Please present this at reception", margin, y + 6);
-
-                const barcodeWidth = 40;
-                let bx = 210 - margin - barcodeWidth;
-                doc.setFillColor(...white);
-                for(let i=0; i<30; i++) {
-                    const w = (refIdVal.charCodeAt(i % refIdVal.length) % 3 + 1) * 0.5;
-                    doc.rect(bx, y - 5, w, 12, 'F');
-                    bx += w + 0.8;
-                }
-
-                y += 25;
-
-                doc.setDrawColor(...brightBlue);
-                doc.setLineWidth(0.5);
-                doc.roundedRect(margin, y, 180, 50, 4, 4, 'S');
-
-                const bookingDate = document.getElementById('bookingDate').value;
-                const bookingTime = document.getElementById('selectedTime').value;
-                const advisor = document.getElementById('selectedAdvisor').value;
-                const method = document.getElementById('selectedMethod').value;
-
-                doc.setTextColor(...white);
-                doc.setFontSize(32);
-                doc.text(bookingTime, margin + 10, y + 20);
-                
-                doc.setFontSize(12);
-                doc.setTextColor(...brightBlue);
-                doc.text(bookingDate, margin + 10, y + 30);
-                doc.setFontSize(9);
-                doc.setTextColor(148, 163, 184);
-                doc.text("CONFIRMED SLOT", margin + 10, y + 40);
-
-                doc.setDrawColor(100, 116, 139);
-                doc.line(margin + 90, y + 10, margin + 90, y + 40);
-
-                const rightCol = margin + 100;
-                doc.setFontSize(9);
-                doc.setTextColor(148, 163, 184);
-                doc.text("IMMIGRATION ADVISOR", rightCol, y + 15);
-                doc.setFontSize(14);
-                doc.setTextColor(...white);
-                doc.text(advisor, rightCol, y + 22);
-
-                doc.setFontSize(9);
-                doc.setTextColor(148, 163, 184);
-                doc.text("CONSULTATION MODE", rightCol, y + 33);
-                doc.setFontSize(12);
-                doc.setTextColor(...white);
-                doc.text(method, rightCol, y + 40);
-
-                y += 65;
-
-                doc.setFontSize(8);
-                doc.setTextColor(148, 163, 184);
-                doc.text("BETTER CALL HQ:", margin, y);
-                doc.setTextColor(...white);
-                doc.text("R320-12th Floor, Citibank - Al Wasl Branch, Dubai Healthcare City, UAE", margin, y + 5);
-                
-                doc.setFillColor(...brightBlue);
-                doc.roundedRect(210 - margin - 40, y - 5, 40, 10, 2, 2, 'F');
-                doc.setTextColor(...white);
-                doc.setFontSize(8);
-                doc.setFont("helvetica", "bold");
-                doc.text("GET DIRECTIONS", 210 - margin - 20, y + 1.5, { align: "center" });
-                doc.link(210 - margin - 40, y - 5, 40, 10, { url: 'https://maps.app.goo.gl/QLQFTuG9zw14L6aN8' });
-
-                const fileName = `${refIdVal}_${name.replace(/\s+/g,'_')}_Report.pdf`;
-
-                doc.save(fileName);
-
-                if (globalTaskId && CLICKUP_API_KEY) {
-                    try {
-                        const pdfBlob = doc.output('blob');
-                        const formData = new FormData();
-                        formData.append("attachment", pdfBlob, fileName);
-
-                        const res = await fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/attachment`, {
-                            method: 'POST',
-                            headers: { 'Authorization': CLICKUP_API_KEY },
-                            body: formData
-                        });
-                        
-                        if(res.ok && btn) {
-                             btn.classList.remove('bg-gradient-to-r', 'from-blue-600', 'to-indigo-600');
-                             btn.classList.add('bg-green-600', 'hover:bg-green-700');
-                             btn.innerHTML = '<span>Saved to Case File</span><i class="fa-solid fa-check"></i>';
-                        }
-                    } catch(e) { console.error(e); }
-                }
-            } catch (err) {
-                console.error("PDF Gen Error:", err);
-                alert("Could not generate PDF. Please try again.");
-            } finally {
-                if(btn && btn.innerHTML.includes('spin')) btn.innerHTML = originalBtnContent;
-            }
-        }
-
-        function validateExperienceInput(el) {
-            let val = parseInt(el.value);
-            if(isNaN(val) || val < 1) el.value = 1;
-            else if(val > 30) el.value = 30;
-        }
 
         window.onload = function() {
             setSkillMode('Unskilled'); 
@@ -2347,39 +2051,53 @@
             document.getElementById('selectedMethod').value = method;
             const allCards = document.querySelectorAll('.method-card');
             allCards.forEach(c => {
-                c.className = 'method-card p-4 rounded-2xl bg-white border border-slate-200 flex flex-col items-center text-center gap-3 cursor-pointer transition-all duration-300 hover:shadow-md group';
+                // Reset card base style
+                c.className = 'method-card p-4 rounded-2xl bg-white border border-slate-200 flex items-center gap-4 cursor-pointer transition-all duration-300 hover:shadow-md group';
+                
                 const wrapper = c.querySelector('.icon-wrapper');
-                wrapper.className = 'icon-wrapper w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 group-hover:scale-110';
-                const text = c.querySelector('.label-text').innerText;
-                if(text === 'OFFICE') wrapper.classList.add('group-hover:bg-blue-50', 'group-hover:text-blue-500');
-                if(text === 'PHONE') wrapper.classList.add('group-hover:bg-emerald-50', 'group-hover:text-emerald-500');
-                if(text === 'VIDEO') wrapper.classList.add('group-hover:bg-violet-50', 'group-hover:text-violet-500');
+                if (wrapper) {
+                    wrapper.className = 'icon-wrapper w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 group-hover:scale-110 shrink-0';
+                }
+                
                 const lbl = c.querySelector('.label-text');
-                lbl.className = 'label-text text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider transition-colors duration-300';
-                if(text === 'OFFICE') lbl.classList.add('group-hover:text-blue-600');
-                if(text === 'PHONE') lbl.classList.add('group-hover:text-emerald-600');
-                if(text === 'VIDEO') lbl.classList.add('group-hover:text-violet-600');
+                const text = lbl ? lbl.innerText : '';
+                
+                // Add specific hover colors based on type
+                if(text === 'In-Office' && wrapper) {
+                    wrapper.classList.add('group-hover:text-brand-primary', 'bg-blue-50');
+                }
+                if(text === 'Video Call' && wrapper) {
+                    wrapper.classList.add('group-hover:text-purple-600', 'bg-purple-50');
+                }
+                
+                if (lbl) {
+                    lbl.className = 'label-text block text-xs font-bold text-slate-700 transition-colors duration-300';
+                }
             });
 
+            // Active State for Selected Card
             el.classList.remove('bg-white', 'border-slate-200');
             el.classList.add('ring-2', 'shadow-lg', 'scale-[1.02]');
+            
             const wrapper = el.querySelector('.icon-wrapper');
             const lbl = el.querySelector('.label-text');
-            wrapper.classList.remove('bg-slate-50', 'text-slate-400', 'group-hover:bg-blue-50', 'group-hover:bg-emerald-50', 'group-hover:bg-violet-50');
-            lbl.classList.remove('text-slate-500', 'group-hover:text-blue-600', 'group-hover:text-emerald-600', 'group-hover:text-violet-600');
+            
+            if (wrapper) {
+                wrapper.classList.remove('bg-slate-50', 'text-slate-400');
+            }
+            if (lbl) {
+                lbl.classList.remove('text-slate-700');
+            }
 
             if(method === 'In-Person') {
                 el.classList.add('bg-blue-50', 'border-blue-500', 'ring-blue-400');
-                wrapper.classList.add('bg-blue-500', 'text-white', 'shadow-lg', 'shadow-blue-200');
-                lbl.classList.add('text-blue-700');
-            } else if (method === 'Phone Call') {
-                el.classList.add('bg-emerald-50', 'border-emerald-500', 'ring-emerald-400');
-                wrapper.classList.add('bg-emerald-500', 'text-white', 'shadow-lg', 'shadow-emerald-200');
-                lbl.classList.add('text-emerald-700');
+                if(wrapper) wrapper.classList.add('bg-blue-500', 'text-white', 'shadow-lg', 'shadow-blue-200');
+                if(lbl) lbl.classList.add('text-blue-700');
             } else { 
-                el.classList.add('bg-violet-50', 'border-violet-500', 'ring-violet-400');
-                wrapper.classList.add('bg-violet-500', 'text-white', 'shadow-lg', 'shadow-violet-200');
-                lbl.classList.add('text-violet-700');
+                // Video Call
+                el.classList.add('bg-purple-50', 'border-purple-500', 'ring-purple-400');
+                if(wrapper) wrapper.classList.add('bg-purple-500', 'text-white', 'shadow-lg', 'shadow-purple-200');
+                if(lbl) lbl.classList.add('text-purple-700');
             }
             
             updateTimeSlots();
@@ -3230,6 +2948,234 @@ END:VEVENT
 END:VCALENDAR`;
         }
 
+        // ADDED: generatePDF function to fix ReferenceError
+        async function generatePDF() {
+            const btn = document.getElementById('btn-download-pdf');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Generating Report...';
+            btn.disabled = true;
+
+            try {
+                if (!window.jspdf) throw new Error("PDF Library not loaded");
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // --- CONFIGURATION ---
+                const primaryColor = [99, 102, 241]; // Indigo 500 (#6366f1)
+                const secondaryColor = [236, 72, 153]; // Pink 500 (#ec4899)
+                const slateDark = [30, 41, 59]; // Slate 800
+                const slateGray = [100, 116, 139]; // Slate 500
+                const lightBg = [248, 250, 252]; // Slate 50
+                
+                const margin = 20;
+                let y = 0;
+
+                // --- DATA COLLECTION ---
+                const firstName = document.getElementById('firstName').value.toUpperCase() || "CANDIDATE";
+                const lastName = document.getElementById('lastName').value.toUpperCase();
+                const fullName = firstName + " " + lastName;
+                const refId = document.getElementById('refId').innerText;
+                const reportDate = document.getElementById('reportDate').innerText;
+                
+                const age = document.getElementById('age').value || "N/A";
+                const nationality = document.getElementById('nationality').value || "N/A";
+                const residence = document.getElementById('presentResidence').value || "N/A";
+                const qual = document.querySelector('input[name="qualification"]:checked')?.value || "N/A";
+                
+                const targetJob = document.getElementById('currentJob').value || "N/A";
+                const experience = document.getElementById('experience').value || "0";
+                const expString = currentMode === 'Unskilled' ? "Entry Level / Non-Experienced" : `${experience} Years`;
+                
+                const targetCountry = document.getElementById('topMatchCountry').innerText;
+                const salary = document.getElementById('mainSalaryRange').innerText;
+
+                // --- PDF GENERATION ---
+
+                // 1. HEADER BRANDING
+                doc.setFillColor(...primaryColor);
+                doc.rect(0, 0, 210, 45, 'F');
+                
+                // Add Logo/Brand Text
+                doc.setTextColor(255, 255, 255);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(24);
+                doc.text("BETTER CALL", margin, 22);
+                
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                doc.setCharSpace(2); // Tracking
+                doc.text("IMMIGRATION SERVICES", margin, 30);
+                
+                doc.setFontSize(9);
+                doc.setCharSpace(0);
+                doc.text("Global Mobility Intelligence Unit", 210 - margin, 22, { align: "right" });
+                doc.text("www.bettercall.online", 210 - margin, 30, { align: "right" });
+
+                y = 65;
+
+                // 2. REPORT TITLE & REF
+                doc.setTextColor(...slateDark);
+                doc.setFontSize(18);
+                doc.setFont("helvetica", "bold");
+                doc.text("MIGRATION VIABILITY ASSESSMENT", margin, y);
+                
+                y += 8;
+                doc.setFontSize(10);
+                doc.setTextColor(...slateGray);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Reference ID: ${refId}  |  Date: ${reportDate}`, margin, y);
+
+                y += 15;
+
+                // 3. CANDIDATE PROFILE SECTION
+                // Draw Box
+                doc.setDrawColor(226, 232, 240); // border-slate-200
+                doc.setFillColor(...lightBg);
+                doc.rect(margin, y, 170, 45, 'FD'); // Fill and Draw
+                
+                let profileY = y + 10;
+                
+                // Column 1 Labels
+                doc.setFontSize(9);
+                doc.setTextColor(...slateGray);
+                doc.text("FULL NAME", margin + 5, profileY);
+                doc.text("AGE", margin + 5, profileY + 12);
+                doc.text("NATIONALITY", margin + 5, profileY + 24);
+                
+                // Column 1 Values
+                doc.setFontSize(11);
+                doc.setTextColor(...slateDark);
+                doc.setFont("helvetica", "bold");
+                doc.text(fullName, margin + 5, profileY + 5);
+                doc.text(age + " Years", margin + 5, profileY + 17);
+                doc.text(nationality, margin + 5, profileY + 29);
+
+                // Column 2 Labels
+                doc.setFontSize(9);
+                doc.setTextColor(...slateGray);
+                doc.setFont("helvetica", "normal");
+                doc.text("QUALIFICATION", margin + 80, profileY);
+                doc.text("CURRENT RESIDENCE", margin + 80, profileY + 12);
+                
+                // Column 2 Values
+                doc.setFontSize(11);
+                doc.setTextColor(...slateDark);
+                doc.setFont("helvetica", "bold");
+                doc.text(qual, margin + 80, profileY + 5);
+                doc.text(residence, margin + 80, profileY + 17);
+
+                y += 60;
+
+                // 4. PROFESSIONAL EVALUATION
+                doc.setFontSize(14);
+                doc.setTextColor(...slateDark);
+                doc.text("PROFESSIONAL EVALUATION", margin, y);
+                doc.setLineWidth(0.5);
+                doc.setDrawColor(...primaryColor);
+                doc.line(margin, y + 2, margin + 70, y + 2); // Underline
+
+                y += 15;
+
+                // Job Details
+                doc.setFontSize(10);
+                doc.setTextColor(...slateGray);
+                doc.setFont("helvetica", "normal");
+                doc.text("Target Position:", margin, y);
+                doc.text("Experience Level:", margin, y + 10);
+                
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(...slateDark);
+                doc.text(targetJob, margin + 40, y);
+                doc.text(expString, margin + 40, y + 10);
+
+                y += 25;
+
+                // 5. AI MATCH RESULTS
+                doc.setFillColor(240, 253, 244); // Green-50 bg
+                doc.setDrawColor(22, 163, 74); // Green-600 border
+                doc.roundedRect(margin, y, 170, 35, 3, 3, 'FD');
+
+                doc.setTextColor(22, 163, 74); // Green text
+                doc.setFontSize(9);
+                doc.setFont("helvetica", "bold");
+                doc.text("PRIMARY MATCH IDENTIFIED", margin + 10, y + 8);
+
+                doc.setTextColor(...primaryColor);
+                doc.setFontSize(22);
+                doc.text(targetCountry, margin + 10, y + 20);
+
+                doc.setTextColor(...slateDark);
+                doc.setFontSize(12);
+                doc.text(salary, margin + 100, y + 20);
+                doc.setFontSize(8);
+                doc.setTextColor(...slateGray);
+                doc.text("ESTIMATED MONTHLY SALARY", margin + 100, y + 12);
+
+                y += 50;
+
+                // 6. AI REASONING
+                doc.setFontSize(12);
+                doc.setTextColor(...slateDark);
+                doc.text("AI ANALYSIS SUMMARY", margin, y);
+                y += 7;
+                
+                doc.setFontSize(10);
+                doc.setTextColor(...slateGray);
+                doc.setFont("helvetica", "normal");
+                
+                const reasoning = document.getElementById('aiReasoning').innerText;
+                const splitReasoning = doc.splitTextToSize(reasoning, 170);
+                doc.text(splitReasoning, margin, y);
+
+                y += 40;
+
+                // 7. APPOINTMENT (If Scheduled)
+                const bookingDate = document.getElementById('bookingDate').value;
+                const bookingTime = document.getElementById('selectedTime').value;
+                const advisor = document.getElementById('selectedAdvisor').value;
+
+                if(bookingDate && bookingTime) {
+                    doc.setDrawColor(...slateGray);
+                    doc.setLineDash([2, 2], 0);
+                    doc.line(margin, y, 190, y); // Dashed separator
+                    doc.setLineDash([]);
+                    y += 10;
+
+                    doc.setFontSize(12);
+                    doc.setFont("helvetica", "bold");
+                    doc.setTextColor(...slateDark);
+                    doc.text("APPOINTMENT CONFIRMED", margin, y);
+                    y += 10;
+
+                    doc.setFontSize(10);
+                    doc.setFont("helvetica", "normal");
+                    doc.text(`Advisor: ${advisor}`, margin, y);
+                    doc.text(`Date: ${bookingDate}   |   Time: ${bookingTime}`, margin, y + 6);
+                }
+
+                // FOOTER
+                doc.setFontSize(8);
+                doc.setTextColor(150, 150, 150);
+                doc.text("Generated by Better Call Intelligence Unit. This document is for informational purposes only.", 105, 280, { align: "center" });
+                doc.text(`Doc Ref: ${refId}-${Date.now()}`, 105, 285, { align: "center" });
+
+                // SAVE FILE
+                // Format: FIRSTNAME_REFID.pdf
+                const cleanName = firstName.replace(/[^a-zA-Z0-9]/g, '');
+                const fileName = `${cleanName}_${refId}.pdf`;
+                doc.save(fileName);
+
+                showToast("Report Downloaded Successfully");
+
+            } catch (e) {
+                console.error("PDF Generation Error:", e);
+                showModal("Could not generate PDF. Please try again.");
+            } finally {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }
+        }
+
         function showModal(msg) {
              const m = document.getElementById('messageModal');
             document.getElementById('modalText').innerText = msg;
@@ -3416,10 +3362,11 @@ END:VCALENDAR`;
                 toggleLoader(false);
                 console.error("Critical Booking Error:", e);
                 // Fallback success message if Cal.com succeeded but something else failed
+                // Check if we reached a point where it should be considered success?
+                // For safety, show a generic error but instruct user to check email if payment/booking went through.
                 showModal("Booking process encountered an error. If you receive a confirmation email, your booking is secure. Otherwise, please contact support.");
             }
         }
-        
     </script>
 </body>
 </html>
