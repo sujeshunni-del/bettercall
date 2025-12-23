@@ -299,7 +299,7 @@
 
             <h1 class="text-4xl md:text-8xl font-black text-brand-black tracking-tight leading-[1.05] drop-shadow-sm animate-fade-in-up" style="animation-delay: 0.2s;">
                 <span data-i18n="hero_title_1">Global</span> 
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-theme-primary to-theme-secondary" data-i18n="hero_title_2">Work Programs</span>
+                <span class="text-theme-primary" data-i18n="hero_title_2">Work Programs</span>
             </h1>
 
             <p class="text-base md:text-xl text-slate-600 max-w-2xl mx-auto mb-2 md:mb-10 font-light animate-fade-in-up leading-relaxed" style="animation-delay: 0.3s;" data-i18n="hero_subtitle">
@@ -1130,6 +1130,37 @@
             // 3. Initial Render (Default to English)
             setLanguage('en', document.querySelector('.lang-option.active'));
             
+            // NEW: Close dropdowns when clicking outside
+            document.addEventListener('click', function(event) {
+                // Desktop Language FAB
+                const fab = document.querySelector('.lang-fab-new');
+                const dropdown = document.getElementById('language-dropdown');
+                const btn = document.getElementById('lang-toggle-btn');
+                
+                if (fab && !fab.contains(event.target) && dropdown && !dropdown.classList.contains('invisible')) {
+                    dropdown.classList.add('invisible');
+                    if(btn) btn.classList.remove('active');
+                }
+
+                // Mobile Popups
+                const mobileDock = document.querySelector('.fixed.bottom-2'); 
+                const isClickInsideDock = mobileDock && mobileDock.contains(event.target);
+                
+                // Check if click is inside any open mobile popup
+                const mobileMenuIds = ['mobile-destinations-menu', 'mobile-language-menu', 'mobile-apply-menu'];
+                let isClickInsidePopup = false;
+                mobileMenuIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.contains(event.target) && el.classList.contains('visible')) {
+                        isClickInsidePopup = true;
+                    }
+                });
+
+                if (!isClickInsideDock && !isClickInsidePopup) {
+                    closeAllMobilePopups();
+                }
+            });
+
             // 5. Mobile Menu Link Handling (UPDATED FOR LENIS COMPATIBILITY)
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
