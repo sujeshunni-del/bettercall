@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Staff Portal - Light</title>
+    <title>Better Call Staff Attendance</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,12 @@
                             'pulse-gold': { '0%, 100%': { opacity: 0.8, transform: 'scale(1)' }, '50%': { opacity: 1, transform: 'scale(1.1)' } },
                             fadeIn: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
                             scan: { '0%': { top: '0%', opacity: 0 }, '10%': { opacity: 1 }, '90%': { opacity: 1 }, '100%': { top: '100%', opacity: 0 } },
-                            shimmer: { '0%': { backgroundPosition: '-1000px 0' }, '100%': { backgroundPosition: '1000px 0' } }
+                            shimmer: { '0%': { backgroundPosition: '-1000px 0' }, '100%': { backgroundPosition: '1000px 0' } },
+                            // New Animations
+                            'beam-up': { '0%': { height: '0%', opacity: 0 }, '10%': { opacity: 1 }, '100%': { height: '200%', opacity: 0 } },
+                            'icon-pop': { '0%': { transform: 'scale(0) rotate(-45deg)', opacity: 0 }, '70%': { transform: 'scale(1.2) rotate(0deg)' }, '100%': { transform: 'scale(1) rotate(0deg)', opacity: 1 } },
+                            'shut-h': { '0%': { transform: 'scaleY(1)' }, '100%': { transform: 'scaleY(0.005)' } },
+                            'shut-v': { '0%': { transform: 'scaleX(1)' }, '100%': { transform: 'scaleX(0)' } }
                         }
                     }
                 }
@@ -137,6 +142,18 @@
         .scan-beam { position: absolute; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, transparent, #3B82F6, transparent); box-shadow: 0 0 15px #3B82F6; opacity: 0; animation: scan 2s linear infinite; z-index: 20; }
         .login-card-active { border-color: #3B82F6; box-shadow: 0 0 40px rgba(59, 130, 246, 0.2); }
         
+        /* New Creative Animation Styles */
+        .sync-beam-container { position: fixed; inset: 0; pointer-events: none; z-index: 90; overflow: hidden; display: none; justify-content: center; align-items: center; }
+        .sync-beam-container.active { display: flex; }
+        .sync-beam { width: 100px; background: linear-gradient(to top, transparent, rgba(16, 185, 129, 0.8), transparent); position: absolute; bottom: 0; animation: beam-up 1.5s ease-out forwards; filter: blur(10px); }
+        .sync-icon { z-index: 92; animation: icon-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s forwards; opacity: 0; }
+        
+        .shutdown-container { position: fixed; inset: 0; z-index: 90; pointer-events: none; display: none; }
+        .shutdown-container.active { display: block; }
+        .shut-panel { background: #0f172a; position: absolute; inset: 0; transform-origin: center; animation: shut-h 0.4s ease-in-out forwards 2s; }
+        .shut-bar { background: #f43f5e; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; z-index: 91; transform: scaleX(0); transition: transform 0.3s; }
+        .shutdown-container.active .shut-bar { transform: scaleX(1); transition-delay: 0.1s; }
+        
         .flatpickr-calendar { font-family: 'Outfit', sans-serif !important; border-radius: 16px !important; border: none !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important; background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px) !important; }
         .flatpickr-day.selected { background: linear-gradient(135deg, #3B82F6, #2563EB) !important; border-color: transparent !important; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3); }
         
@@ -184,7 +201,7 @@
                         <i class="fas fa-user-astronaut"></i>
                     </div>
                     <h3 class="text-3xl font-bold text-slate-800 tracking-tight">Staff Portal</h3>
-                    <p class="text-slate-500 font-medium text-sm mt-2">Secure Access Point</p>
+                    <p class="text-slate-500 font-medium text-sm mt-2">Secure Access Area</p>
                 </div>
                 
                 <form id="loginForm" class="space-y-6" onsubmit="event.preventDefault();">
@@ -193,6 +210,7 @@
                             <div class="absolute left-4 top-4 w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-focus-within:bg-brand-blue/10 group-focus-within:text-brand-blue transition-colors duration-300">
                                 <i class="fas fa-id-badge text-sm"></i>
                             </div>
+                            <!-- RESTORED REQUIRED -->
                             <input type="text" id="username" name="username" autocomplete="username" class="glass-input w-full pl-16 pr-6 py-5 rounded-2xl text-slate-900 font-bold text-lg" placeholder="Staff ID" required>
                         </div>
                     </div>
@@ -201,11 +219,12 @@
                             <div class="absolute left-4 top-4 w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-focus-within:bg-brand-blue/10 group-focus-within:text-brand-blue transition-colors duration-300">
                                 <i class="fas fa-key text-sm"></i>
                             </div>
+                            <!-- RESTORED REQUIRED -->
                             <input type="password" id="password" name="password" autocomplete="current-password" class="glass-input w-full pl-16 pr-6 py-5 rounded-2xl text-slate-900 font-bold text-lg" placeholder="Password" required>
                         </div>
                     </div>
 
-                    <button type="button" onclick="checkCredentialsAndRefresh()" class="w-full bg-gradient-to-r from-slate-800 to-slate-900 hover:from-brand-blue hover:to-brand-purple text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/20 hover:shadow-brand-blue/40 transform hover:-translate-y-1 relative overflow-hidden group mt-4">
+                    <button type="submit" onclick="checkCredentialsAndRefresh()" class="w-full bg-gradient-to-r from-slate-800 to-slate-900 hover:from-brand-blue hover:to-brand-purple text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/20 hover:shadow-brand-blue/40 transform hover:-translate-y-1 relative overflow-hidden group mt-4">
                         <span class="relative z-10 flex items-center justify-center gap-3 text-lg">Authenticate <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i></span>
                         <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                     </button>
@@ -299,7 +318,8 @@
                     <button onclick="switchTab('calendar')" id="nav-calendar" class="sidebar-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-slate-500 hover:text-brand-blue transition-all group">
                         <i class="fas fa-id-card-alt w-5 text-center text-lg group-hover:scale-110 transition-transform"></i><span class="hidden md:block font-bold">Staff Panel</span>
                     </button>
-                    <button onclick="switchTab('admin')" id="nav-admin" class="sidebar-item hidden w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-slate-500 hover:text-brand-gold transition-all group">
+                    <!-- RESTORED: Hidden by default -->
+                    <button onclick="switchTab('admin')" id="nav-admin" class="sidebar-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-slate-500 hover:text-brand-gold transition-all group hidden">
                         <i class="fas fa-cog w-5 text-center text-lg group-hover:rotate-90 transition-transform"></i><span class="hidden md:block font-bold">Admin Setup</span>
                     </button>
                     <button onclick="logout()" class="sidebar-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-rose-500 hover:bg-rose-50 hover:text-rose-600 transition-all group mt-8 border border-transparent hover:border-rose-100">
@@ -398,7 +418,7 @@
                 </div>
             </div>
 
-            <!-- TAB: ADMIN (Fully Restored & Functional) -->
+            <!-- TAB: ADMIN (Requires Role) -->
             <div id="tab-admin" class="hidden p-6 md:p-12 relative z-10 max-w-6xl mx-auto animate-fade-in">
                 <header class="mb-10 flex flex-col md:flex-row justify-between items-end gap-4">
                     <div>
@@ -558,7 +578,7 @@
                                     
                                     <div class="p-4 bg-slate-50/50 border-t border-slate-200/60 rounded-b-[2rem] flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
                                         <span>Total Records: <span id="reportCount" class="text-slate-800">0</span></span>
-                                        <span class="text-brand-blue">Nexus Reporting</span>
+                                        <span class="text-brand-blue">Better Call Staff Attendance</span>
                                     </div>
                                 </div>
                             </div>
@@ -613,6 +633,33 @@
     <div id="statusToast" class="fixed bottom-6 right-6 z-[80] glass p-5 rounded-2xl shadow-2xl border border-white/50 bg-white/80 backdrop-blur-md text-emerald-700 font-bold text-sm flex items-center gap-4">
         <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0"><i class="fas fa-check text-emerald-600"></i></div>
         <span id="statusToastMsg">Action Saved</span>
+    </div>
+
+    <!-- NEW CREATIVE ANIMATION OVERLAYS -->
+    <!-- 1. Clock In: Data Uplink Beam -->
+    <div id="animClockIn" class="sync-beam-container">
+        <div class="absolute inset-0 bg-emerald-900/20 backdrop-blur-sm transition-opacity duration-500"></div>
+        <div class="sync-beam"></div>
+        <div class="sync-icon flex flex-col items-center gap-4">
+            <div class="w-32 h-32 rounded-full bg-emerald-500 flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.5)] border-4 border-white">
+                <i class="fas fa-satellite-dish text-6xl text-white animate-pulse"></i>
+            </div>
+            <h2 class="text-4xl font-black text-white tracking-tighter uppercase drop-shadow-lg">Data Synced</h2>
+            <p class="text-emerald-300 font-mono font-bold tracking-widest bg-black/50 px-4 py-1 rounded-full">CHECK IN COMPLETE</p>
+        </div>
+    </div>
+
+    <!-- 2. Clock Out: Secure Shutdown -->
+    <div id="animClockOut" class="sync-beam-container">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-md transition-opacity duration-500"></div>
+        <div class="shut-bar"></div>
+        <div class="sync-icon flex flex-col items-center gap-4 relative z-50">
+            <div class="w-32 h-32 rounded-2xl bg-rose-600 flex items-center justify-center shadow-[0_0_50px_rgba(225,29,72,0.5)] border-4 border-slate-900 rotate-12">
+                <i class="fas fa-lock text-6xl text-white"></i>
+            </div>
+            <h2 class="text-4xl font-black text-white tracking-tighter uppercase drop-shadow-lg">Session Ended</h2>
+            <p class="text-rose-300 font-mono font-bold tracking-widest bg-black/50 px-4 py-1 rounded-full">DATA SAVED TO EXCEL</p>
+        </div>
     </div>
 
     <!-- Hidden Print Container -->
@@ -683,8 +730,15 @@
                 state.currentDesignation = userObj.designation; state.currentEmail = userObj.email; state.currentPhone = userObj.phone;
                 updateStaffProfileUI();
                 
+                // RESTORED: Only show admin nav if role is admin
                 const navAdmin = document.getElementById('nav-admin');
-                if (navAdmin) { if (state.role === 'admin') navAdmin.classList.remove('hidden'); else navAdmin.classList.add('hidden'); }
+                if (navAdmin) {
+                     if (state.role === 'admin') {
+                        navAdmin.classList.remove('hidden');
+                     } else {
+                        navAdmin.classList.add('hidden');
+                     }
+                }
             }
             
             toggleLoginState(false);
@@ -729,7 +783,9 @@
         }
 
         function switchTab(tabId) {
+            // RESTORED: Admin check active
             if (tabId === 'admin' && state.role !== 'admin') { alert("Access Denied: Admin privileges required."); return; }
+            
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('appLayout').classList.remove('hidden');
             ['calendar', 'admin'].forEach(id => {
@@ -770,21 +826,30 @@
 
         async function checkCredentialsAndRefresh() {
             const u = document.getElementById('username').value.trim(); const p = document.getElementById('password').value;
-            if (!u || !p) return; setLoading(true);
+            // RESTORED: Validation
+            if (!u || !p) return; 
+            
+            setLoading(true);
             let auth = { status: 'error' };
-            try { auth = await authenticateUser(u, p); } catch(e) { auth = { status: 'success', role: 'staff', fullName: u, designation: 'Offline User', email: '', phone: '' }; }
+            try { 
+                auth = await authenticateUser(u, p);
+            } catch(e) { 
+                console.error("Auth error:", e);
+                auth = { status: 'error', message: 'Connection Failed' };
+            }
+            
             setLoading(false);
             if (auth.status === 'success') {
-                state.currentUser = u; state.currentFullName = auth.fullName || u; state.role = auth.role;
-                state.currentDesignation = auth.designation || "Staff Member"; state.currentEmail = auth.email || "No Email"; state.currentPhone = auth.phone || "No Phone";
+                state.currentUser = u; state.currentFullName = auth.fullName; state.role = auth.role;
+                state.currentDesignation = auth.designation; state.currentEmail = auth.email; state.currentPhone = auth.phone;
                 storage.set('nexus_user', JSON.stringify({ username: state.currentUser, fullName: state.currentFullName, role: state.role, designation: state.currentDesignation, email: state.currentEmail, phone: state.currentPhone }));
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
                 
-                // Show Admin Panel if applicable
+                // RESTORED: Show Admin Panel ONLY if admin
                 const navAdmin = document.getElementById('nav-admin');
                 if (navAdmin) {
-                    if (state.role === 'admin') navAdmin.classList.remove('hidden');
-                    else navAdmin.classList.add('hidden');
+                     if (state.role === 'admin') navAdmin.classList.remove('hidden');
+                     else navAdmin.classList.add('hidden');
                 }
 
                 toggleLoginState(true); 
@@ -830,20 +895,23 @@
                 triggerLog(type);
                 return;
             }
+            
             const u = document.getElementById('username').value.trim();
             const p = document.getElementById('password').value;
+            
+            // RESTORED: Validation
+            if (!u || !p) { showLoginError(); return; }
+
             setLoading(true);
             let authResult = { status: 'error' };
-            try { authResult = await authenticateUser(u, p); } catch(e) { authResult = { status: 'error' }; }
-            if (authResult.status !== 'success' && u) {
-                authResult = { status: 'success', role: (u.toLowerCase() === 'admin' ? 'admin' : 'staff'), fullName: u, designation: 'Offline Mode' };
-            }
+            try { authResult = await authenticateUser(u, p); } catch(e) { console.error(e); }
+            
             setLoading(false);
             if (authResult.status === 'success') {
                 state.currentUser = u;
-                state.currentFullName = authResult.fullName || u;
+                state.currentFullName = authResult.fullName;
                 state.role = authResult.role;
-                state.currentDesignation = authResult.designation || "Staff";
+                state.currentDesignation = authResult.designation;
                 state.currentEmail = authResult.email || "";
                 state.currentPhone = authResult.phone || "";
                 storage.set('nexus_user', JSON.stringify({
@@ -857,11 +925,14 @@
                 if(document.getElementById('displayUsername')) document.getElementById('displayUsername').textContent = state.currentFullName;
                 if(document.getElementById('avatarInitial')) document.getElementById('avatarInitial').textContent = state.currentFullName.charAt(0).toUpperCase();
                 if(document.getElementById('trackerUserName')) document.getElementById('trackerUserName').textContent = state.currentFullName;
+                
+                // RESTORED: Show Admin Panel ONLY if admin
                 const navAdmin = document.getElementById('nav-admin');
                 if (navAdmin) {
-                    if (state.role === 'admin') navAdmin.classList.remove('hidden');
-                    else navAdmin.classList.add('hidden');
+                     if (state.role === 'admin') navAdmin.classList.remove('hidden');
+                     else navAdmin.classList.add('hidden');
                 }
+                
                 if (type === 'Login') {
                     switchTab('calendar');
                 } else {
@@ -878,14 +949,31 @@
         function logout() { storage.remove('nexus_user'); clearInterval(state.timerInterval); clearInterval(state.breakTimerInterval); location.reload(); }
         function setLoading(isLoading) { const overlay = document.getElementById('scanningOverlay'); if (isLoading) { overlay.classList.remove('hidden'); overlay.classList.add('flex'); } else { overlay.classList.add('hidden'); overlay.classList.remove('flex'); } }
         function showLoginError() { const err = document.getElementById('loginError'); err.classList.remove('hidden'); setTimeout(() => err.classList.add('hidden'), 3000); }
+        
         function updateStaffProfileUI() {
+            // Update Avatar & Name
             if(document.getElementById('profileAvatar')) document.getElementById('profileAvatar').textContent = (state.currentFullName || "U").charAt(0).toUpperCase();
             if(document.getElementById('profileName')) document.getElementById('profileName').textContent = state.currentFullName || "Unknown";
-            if(document.getElementById('profileDesignation')) document.getElementById('profileDesignation').textContent = state.currentDesignation || "Staff Member";
+            
+            // --- NEW ROLE DISPLAY LOGIC ---
+            // If Admin -> Show "Administrator"
+            // If Staff -> Show Designation (if exists) OR "Staff Member"
+            const isAdmin = state.role === 'admin';
+            const displayTitle = isAdmin ? "Administrator" : (state.currentDesignation || "Staff Member");
+            const sidebarRole = isAdmin ? "Administrator" : "Staff Member";
+
+            // Update Main Panel Header
+            if(document.getElementById('profileDesignation')) document.getElementById('profileDesignation').textContent = displayTitle;
+            
+            // Update Sidebar Label
+            if(document.getElementById('displayRole')) document.getElementById('displayRole').textContent = sidebarRole;
+            // -----------------------------
+
             if(document.getElementById('profileId')) document.getElementById('profileId').textContent = "ID: " + (state.currentUser || "---");
             if(document.getElementById('profileEmail')) document.getElementById('profileEmail').textContent = state.currentEmail || "---";
             if(document.getElementById('profilePhone')) document.getElementById('profilePhone').textContent = state.currentPhone || "---";
         }
+
         function updateBreakTimeDisplay() { if(!document.getElementById('breakTimeDisplay')) return; document.getElementById('breakTimeDisplay').textContent = formatTimeDetailed(state.breakSeconds); if (state.breakSeconds > 3600) document.getElementById('breakTimeDisplay').classList.add('text-rose-500'); else document.getElementById('breakTimeDisplay').classList.remove('text-rose-500'); }
         function updateOvertimeDisplay(effectiveTime) { if(!document.getElementById('overtimeDisplay')) return; let overtimeSeconds = 0; if (effectiveTime > DAILY_GOAL_SECONDS) overtimeSeconds = effectiveTime - DAILY_GOAL_SECONDS; document.getElementById('overtimeDisplay').textContent = formatTimeDetailed(overtimeSeconds); }
         function startBreakTimer() { state.lastBreakInTime = new Date(); if (state.breakTimerInterval) clearInterval(state.breakTimerInterval); state.breakTimerInterval = setInterval(() => { if (state.isBreak) { state.breakSeconds++; updateBreakTimeDisplay(); } }, 1000); }
@@ -914,20 +1002,58 @@
         function logTime(type, lat = null, lng = null) {
             const now = new Date(); const timeString = now.toLocaleTimeString();
             state.pendingLog = [ formatDateDisplay(now), state.currentUser, type, now.toLocaleTimeString(), now.toISOString() ]; // INDEX FIX: 0=Date, 1=Name, 2=Action, 3=Time, 4=Timestamp
-            if (type === 'In') { state.startTime = now; state.isClockedIn = true; state.hasClockedInToday = true; startStopwatch(); triggerGreetingAnimation('In'); }
-            else if (type === 'Out') { state.isClockedIn = false; state.hasClockedOutToday = true; clearInterval(state.timerInterval); stopBreakTimer(); state.breakSeconds = 0; updateBreakTimeDisplay(); updateOvertimeDisplay(0); triggerGreetingAnimation('Out'); }
+            if (type === 'In') { state.startTime = now; state.isClockedIn = true; state.hasClockedInToday = true; startStopwatch(); triggerCreativeAnimation('In'); }
+            else if (type === 'Out') { state.isClockedIn = false; state.hasClockedOutToday = true; clearInterval(state.timerInterval); stopBreakTimer(); state.breakSeconds = 0; updateBreakTimeDisplay(); updateOvertimeDisplay(0); triggerCreativeAnimation('Out'); }
             else if (type === 'BreakIn') { state.isBreak = true; state.breakCount++; if(document.getElementById('breakCountDisplay')) document.getElementById('breakCountDisplay').textContent = `${state.breakCount} / ${MAX_BREAKS}`; startBreakTimer(); }
             else if (type === 'BreakOut') { state.isBreak = false; stopBreakTimer(); }
             updateUI(); sendDataToSheet(type, timeString, lat, lng);
         }
 
+        function triggerCreativeAnimation(type) {
+            let elId = null;
+            
+            // Determine which animation to play
+            if (type === 'In') {
+                elId = 'animClockIn';
+            } else if (type === 'Out') {
+                elId = 'animClockOut';
+            } else {
+                // Fallback for breaks using the old greeting style
+                triggerGreetingAnimation(type); 
+                return;
+            }
+
+            const el = document.getElementById(elId);
+            if (!el) return;
+
+            // Activate
+            el.classList.add('active');
+
+            // Play Sound Effect (Optional visual trigger for sound)
+            // if(window.navigator && window.navigator.vibrate) window.navigator.vibrate([100, 50, 100]);
+
+            // Deactivate after animation completes (approx 2.5s)
+            setTimeout(() => {
+                el.classList.add('opacity-0'); // Fade out smoothly
+                setTimeout(() => {
+                    el.classList.remove('active', 'opacity-0'); // Reset
+                }, 500);
+            }, 2500);
+        }
+
+        // Kept for Break In/Out fallbacks
         function triggerGreetingAnimation(type) {
             const overlay = document.getElementById('welcomeOverlay'); const content = document.getElementById('welcomeContent'); const title = document.getElementById('welcomeTitle'); const icon = document.getElementById('welcomeIcon'); const now = new Date(); const hour = now.getHours(); let greeting = "", iconClass = "";
             if (type === 'In') { if (hour < 12) { greeting = "Good Morning"; iconClass = "fa-coffee"; } else if (hour < 18) { greeting = "Good Afternoon"; iconClass = "fa-sun"; } else { greeting = "Good Evening"; iconClass = "fa-moon"; } } 
             else if (type === 'Out') { if (hour >= 18 || hour < 5) { greeting = "Good Night"; iconClass = "fa-bed"; } else { greeting = "Have a Nice Day"; iconClass = "fa-smile-beam"; } }
-            title.textContent = greeting; icon.className = `fas ${iconClass} text-6xl text-brand-gold mb-6 animate-pulse-gold`;
-            overlay.classList.remove('opacity-0', 'pointer-events-none'); overlay.classList.add('opacity-100', 'pointer-events-auto'); content.classList.remove('scale-90'); content.classList.add('scale-100');
-            setTimeout(() => { overlay.classList.remove('opacity-100', 'pointer-events-auto'); overlay.classList.add('opacity-0', 'pointer-events-none'); content.classList.remove('scale-100'); content.classList.add('scale-90'); }, 3000);
+            
+            // Only run if not break (since breaks don't have creative animations yet)
+            if(type.includes('Break')) {
+                 title.textContent = type === 'BreakIn' ? "Enjoy your break" : "Welcome Back";
+                 icon.className = `fas ${type === 'BreakIn' ? 'fa-mug-hot' : 'fa-bolt'} text-6xl text-brand-gold mb-6 animate-pulse-gold`;
+                 overlay.classList.remove('opacity-0', 'pointer-events-none'); overlay.classList.add('opacity-100', 'pointer-events-auto'); content.classList.remove('scale-90'); content.classList.add('scale-100');
+                 setTimeout(() => { overlay.classList.remove('opacity-100', 'pointer-events-auto'); overlay.classList.add('opacity-0', 'pointer-events-none'); content.classList.remove('scale-100'); content.classList.add('scale-90'); }, 2000);
+            }
         }
 
         function startStopwatch() { if (state.timerInterval) clearInterval(state.timerInterval); state.timerInterval = setInterval(() => { state.elapsedSeconds++; const h = Math.floor(state.elapsedSeconds / 3600).toString().padStart(2, '0'); const m = Math.floor((state.elapsedSeconds % 3600) / 60).toString().padStart(2, '0'); const s = (state.elapsedSeconds % 60).toString().padStart(2, '0'); const timeStr = `${h}:${m}:${s}`; if(document.getElementById('stopwatch')) document.getElementById('stopwatch').textContent = timeStr; if(document.getElementById('stopwatchMini')) document.getElementById('stopwatchMini').textContent = timeStr; const effectiveTime = state.elapsedSeconds - state.breakSeconds; updateOvertimeDisplay(effectiveTime); }, 1000); }
@@ -1025,7 +1151,7 @@
             } catch (error) { if(tbody) tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-rose-400 italic">Error connecting to database.</td></tr>`; }
         }
         
-        function getDailySummaries(logs) {
+        function getDailySummaries(logs, sortAscending = false) {
             const dailyGroups = {}; logs.sort((a, b) => { const tA = a[4] ? new Date(a[4]) : new Date(`${a[0]} ${a[3]}`); const tB = b[4] ? new Date(b[4]) : new Date(`${b[0]} ${b[3]}`); return tA - tB; });
             logs.forEach(log => { const dateStr = formatDateDisplay(log[0]); if (!dailyGroups[dateStr]) dailyGroups[dateStr] = { date: dateStr, rawDateObj: log[4] ? new Date(log[4]) : new Date(log[0]), logs: [] }; dailyGroups[dateStr].logs.push(log); });
             const rows = Object.values(dailyGroups).map(group => {
@@ -1035,7 +1161,9 @@
                 let netSeconds = Math.max(0, grossSeconds - totalBreakSeconds); let overtimeSeconds = Math.max(0, netSeconds - DAILY_GOAL_SECONDS);
                 return { date: group.date, checkIn: firstIn ? formatTimeAMPM(firstIn) : '-', checkOut: lastOut === "Active" ? "Active Now" : (lastOut ? formatTimeAMPM(lastOut) : '-'), breakTotal: totalBreakSeconds > 0 ? formatTime(totalBreakSeconds) : '-', netDuration: netSeconds > 0 ? formatTime(netSeconds) : '-', grossDuration: grossSeconds > 0 ? formatTime(grossSeconds) : '-', overtime: overtimeSeconds > 0 ? formatTime(overtimeSeconds) : '-', sortTime: group.rawDateObj.getTime() };
             });
-            rows.sort((a, b) => b.sortTime - a.sortTime); return rows;
+            // Sort by sortTime: Ascending if requested, otherwise Descending (default)
+            rows.sort((a, b) => sortAscending ? a.sortTime - b.sortTime : b.sortTime - a.sortTime); 
+            return rows;
         }
 
         function renderTable(logs) {
@@ -1206,11 +1334,11 @@
             
             const start = state.reportFP.selectedDates[0];
             const end = state.reportFP.selectedDates[1]; 
-            end.setHours(23,59,59);
+            end.setHours(23,59,59,999); // Ensure end of day covers everything
             
             const userSelect = document.getElementById('reportUserSelect');
             const userVal = userSelect.value;
-            const userText = userSelect.options[userSelect.selectedIndex].text;
+            const userText = userSelect.options[userSelect.selectedIndex].text; // Get the visible name
 
             // UI Loading State
             document.getElementById('reportPlaceholder').innerHTML = `<div class="loader mb-4"></div><p class="text-xs font-bold text-brand-blue animate-pulse">Fetching Data...</p>`;
@@ -1219,34 +1347,98 @@
                 const res = await fetch(state.scriptUrl + "?action=getLogs", { mode: 'cors', credentials: 'omit' });
                 const logs = await res.json();
                 
+                // Helper to validate date
+                const isValidDate = (d) => d instanceof Date && !isNaN(d.getTime());
+
+                // Helper to parse DD/MMM/YYYY or DD/MM/YYYY
+                const parseCustomDate = (dateStr, timeStr = '00:00:00') => {
+                    if (!dateStr) return null;
+                    // Clean inputs
+                    dateStr = String(dateStr).trim();
+                    timeStr = String(timeStr).trim();
+                    
+                    // Try Standard 1: ISO or Browser Native
+                    let d = new Date(`${dateStr} ${timeStr}`);
+                    if (isValidDate(d)) return d;
+
+                    // Try Standard 2: Just Date
+                    d = new Date(dateStr);
+                    if (isValidDate(d)) {
+                         // Add time manually if needed, but usually we just need the date for filtering
+                         return d;
+                    }
+
+                    // Try Manual Parse: DD/MMM/YYYY or DD/MM/YYYY
+                    if (dateStr.includes('/')) {
+                        const parts = dateStr.split('/');
+                        if (parts.length === 3) {
+                            // Assume [DD, Mon/MM, YYYY] based on app format
+                            const day = parseInt(parts[0], 10);
+                            const monthRaw = parts[1];
+                            const year = parseInt(parts[2], 10);
+                            let monthIdx = -1;
+
+                            // Check if month is name or number
+                            if (isNaN(monthRaw)) {
+                                const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+                                monthIdx = months.findIndex(m => m.toLowerCase() === monthRaw.toLowerCase());
+                            } else {
+                                monthIdx = parseInt(monthRaw, 10) - 1;
+                            }
+
+                            if (monthIdx >= 0 && monthIdx <= 11) {
+                                d = new Date(year, monthIdx, day);
+                                // Add time if available
+                                if (timeStr) {
+                                    const timeParts = timeStr.match(/(\d+):(\d+)(?::(\d+))?\s*(AM|PM)?/i);
+                                    if (timeParts) {
+                                        let hours = parseInt(timeParts[1], 10);
+                                        const minutes = parseInt(timeParts[2], 10);
+                                        const seconds = timeParts[3] ? parseInt(timeParts[3], 10) : 0;
+                                        const mer = timeParts[4] ? timeParts[4].toLowerCase() : null;
+                                        if (mer === 'pm' && hours < 12) hours += 12;
+                                        if (mer === 'am' && hours === 12) hours = 0;
+                                        d.setHours(hours, minutes, seconds);
+                                    }
+                                }
+                                return d;
+                            }
+                        }
+                    }
+                    return null;
+                };
+
                 // Filter
                 const filtered = logs.filter(l => { 
-                    // ROBUST DATE PARSING FIX
-                    let d;
-                    // Try timestamp at index 4 first
+                    // 1. User Match: Check ID (l[1]) against Value AND Text (Name)
+                    // This handles cases where logs store "Full Name" but dropdown values are "usernames"
+                    const logIdentifier = String(l[1]).toLowerCase();
+                    const isUserMatch = (userVal === 'all') || 
+                                      (logIdentifier === userVal.toLowerCase()) || 
+                                      (logIdentifier === userText.toLowerCase());
+                    
+                    if (!isUserMatch) return false;
+
+                    // 2. Date Parsing
+                    let d = null;
+                    
+                    // Try Index 4 (Timestamp) first - usually ISO and most reliable
                     if (l[4]) {
                         d = new Date(l[4]);
                     } 
-                    // Fallback: Combine Date (index 0) and Time (index 3)
-                    if (!d || isNaN(d.getTime())) {
-                        d = new Date(`${l[0]} ${l[3]}`);
-                    }
                     
-                    // If still invalid, try just the date part (less precise but safer)
-                    if (isNaN(d.getTime())) {
-                        d = new Date(l[0]);
+                    // Fallback to Index 0 (Date) + Index 3 (Time)
+                    if (!isValidDate(d)) {
+                        d = parseCustomDate(l[0], l[3]);
                     }
 
-                    // Match user by ID (l[1]) or fallback to name if needed, handle 'all'
-                    const userMatch = (userVal === 'all') || (l[1] === userVal);
-                    
-                    // Final validity check before comparing
-                    if (isNaN(d.getTime())) return false;
+                    // Final Check
+                    if (!isValidDate(d)) return false;
 
-                    return d >= start && d <= end && userMatch; 
+                    return d >= start && d <= end; 
                 });
                 
-                state.adminReportData = getDailySummaries(filtered);
+                state.adminReportData = getDailySummaries(filtered, true); // True = Ascending Order
                 
                 // Save metadata
                 state.lastReportDates = { start: formatDateDisplay(start), end: formatDateDisplay(end), user: userText };
@@ -1335,7 +1527,7 @@
                 
                 doc.setFontSize(10);
                 doc.setTextColor(148, 163, 184); // Slate 400
-                doc.text("Generated by Nexus Portal", 15, 28);
+                doc.text("Generated by Better Call Staff Attendance", 15, 28);
                 
                 // Info Box
                 doc.setFillColor(241, 245, 249); // Slate 100
