@@ -831,10 +831,10 @@
                         <input type="hidden" id="selectedAdvisor">
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
                         
-                        <!-- LEFT COLUMN: Consultation Method (Span 3) -->
-                        <div class="lg:col-span-3 flex flex-col gap-6">
+                        <!-- LEFT COLUMN: Consultation Method (Span 3 on LG, 4 on MD) -->
+                        <div class="md:col-span-4 lg:col-span-3 flex flex-col gap-6">
                             
                             <!-- 3. Consultation Mode -->
                             <div>
@@ -867,16 +867,33 @@
                             </div>
                         </div>
 
-                        <!-- RIGHT COLUMN: Calendar & Time (Span 9) -->
-                        <div class="lg:col-span-9">
+                        <!-- RIGHT COLUMN: Calendar & Time (Span 9 on LG, 8 on MD) -->
+                        <div class="md:col-span-8 lg:col-span-9">
                             <div class="bg-white rounded-[2rem] border border-slate-200 p-6 md:p-8 shadow-sm h-full flex flex-col">
                                 <h3 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mb-6"><span class="w-5 h-5 rounded-full bg-brand-gold text-white inline-flex items-center justify-center mr-2">4</span> Select Date & Time</h3>
                                 
+                                <!-- Calendar Internal Layout: Stack on MD, Side-by-side on LG -->
                                 <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 flex-grow">
                                     <!-- Calendar Side -->
-                                    <div class="lg:w-1/2 flex flex-col">
-                                        <div class="bg-slate-50 rounded-3xl p-4 border border-slate-100 flex-grow h-full max-h-[400px] flex items-center justify-center">
+                                    <div class="lg:w-1/2 flex flex-col relative">
+                                        <div class="bg-slate-50 rounded-3xl p-4 border border-slate-100 flex-grow h-full max-h-[400px] flex items-center justify-center relative overflow-hidden">
                                             <input type="text" id="bookingDate" class="hidden" placeholder="Select Date">
+                                            
+                                            <!-- CREATIVE LOCK OVERLAY -->
+                                            <div id="calendarOverlay" class="absolute inset-0 z-20 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6 transition-all duration-500">
+                                                <div class="relative mb-4 group cursor-help">
+                                                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center shadow-inner transition-transform group-hover:scale-105">
+                                                        <i class="fa-solid fa-lock text-slate-300 text-2xl group-hover:text-slate-400 transition-colors"></i>
+                                                    </div>
+                                                    <div class="absolute -bottom-1 -right-1 w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center text-white animate-bounce shadow-lg border-2 border-white">
+                                                        <i class="fa-solid fa-key text-[10px]"></i>
+                                                    </div>
+                                                </div>
+                                                <h4 class="text-slate-800 font-bold text-sm uppercase tracking-wider mb-2">Timeline Locked</h4>
+                                                <p class="text-slate-500 text-[10px] md:text-xs max-w-[220px] leading-relaxed font-medium">
+                                                    Unlock the calendar by selecting an <span class="text-brand-primary font-bold border-b border-brand-primary/30">Advisor</span> & <span class="text-brand-secondary font-bold border-b border-brand-secondary/30">Consultation Mode</span>.
+                                                </p>
+                                            </div>
                                         </div>
                                         <p class="text-center text-[10px] text-slate-400 font-bold mt-4"><i class="fa-solid fa-circle-info text-brand-primary mr-1"></i> Times displayed in your local timezone</p>
                                     </div>
@@ -1125,32 +1142,36 @@
         ];
 
         const salaryDb = {
-            "SWEDEN": { u: "€1,300 - €1,900", s: "€2,200 - €6,300" },
-            "FINLAND": { u: "€1,000 - €1,500", s: "€2,000 - €5,000" },
+            "SWEDEN": { u: "€1,800 - €2,200", s: "€2,700 - €6,500" },
+            "FINLAND": { u: "€1,500 - €2,000", s: "€2,500 - €5,000" },
             "NETHERLANDS": { u: "€2,200 - €2,800", s: "€5,000+" },
             "GERMANY": { u: "€2,000 - €2,600", s: "€5,000+" },
-            "ITALY": { u: "€1,200 - €1,600", s: "€1,500 - €3,500" },
-            "FRANCE": { u: "€1,200 - €1,600", s: "€1,600 - €3,500" },
+            "ITALY": { u: "€1,200 - €1,600", s: "€1,800 - €3,500" },
+            "FRANCE": { u: "€1,200 - €1,600", s: "€1,800 - €3,500" },
             "CROATIA": { u: "€600 - €1,200", s: "€800 - €1,500" },
-            "LATVIA": { u: "€1,000 - €1,500", s: "€1,500 - €5,000" },
-            "POLAND": { u: "€900 - €1,300", s: "€1,300 - €2,000" },
-            "CZECH REPUBLIC": { u: "€900 - €1,400", s: "€1,400 - €5,000" },
+            "LATVIA": { u: "€1,000 - €1,500", s: "€1,537 - €5,000" },
+            "POLAND": { u: "4,000 - 5,500 PLN", s: "5,500 - 8,000+ PLN" },
+            "CZECH REPUBLIC": { u: "€900 - €1,300", s: "€1,400 - €5,000" },
             "SLOVAKIA": { u: "€900 - €1,200", s: "€1,250 - €1,500" },
             "SERBIA": { u: "€340 - €600", s: "€500 - €1,500" },
             "MACEDONIA": { u: "€400 - €700", s: "€550 - €1,200" },
-            "ALBANIA": { u: "€600 - €1,200", s: "€800 - €1,500" },
+            "ALBANIA": { u: "€600 - €1,200", s: "€600 - €1,200" },
             "BELARUS": { u: "€700 - €1,200", s: "€700 - €1,200" },
             "MONTENEGRO": { u: "€700 - €1,000", s: "€900 - €1,000" }
         };
 
         const jobMasterList = [
-            // SWEDEN
+            // --- SWEDEN ---
             {r:"Civil Engineer",type:"S",c:"SWEDEN"},
             {r:"Civil Draughtsman",type:"S",c:"SWEDEN"},
             {r:"Land Surveyor",type:"S",c:"SWEDEN"},
             {r:"Civil Site Supervisor",type:"S",c:"SWEDEN"},
             {r:"Construction Safety Engineer",type:"S",c:"SWEDEN"},
             {r:"Construction Safety Officer",type:"S",c:"SWEDEN"},
+            {r:"Welder",type:"S",c:"SWEDEN"},
+            {r:"Fabricator",type:"S",c:"SWEDEN"},
+            {r:"Scaffolder",type:"S",c:"SWEDEN"},
+            {r:"RCC Fitter",type:"S",c:"SWEDEN"},
             {r:"Wall Painter",type:"S",c:"SWEDEN"},
             {r:"Concrete Mix Operator",type:"S",c:"SWEDEN"},
             {r:"Dozer Operator",type:"S",c:"SWEDEN"},
@@ -1163,37 +1184,10 @@
             {r:"Mechanical Supervisor",type:"S",c:"SWEDEN"},
             {r:"Diesel Mechanical Technician",type:"S",c:"SWEDEN"},
             {r:"Mechanical Draughtsman",type:"S",c:"SWEDEN"},
-            {r:"Hydraulic Mechanic",type:"S",c:"SWEDEN"},
-            {r:"Pump Motor Mechanic",type:"S",c:"SWEDEN"},
-            {r:"Certified Welder",type:"S",c:"SWEDEN"},
-            {r:"Spray Painter",type:"S",c:"SWEDEN"},
-            {r:"Auto Electrician",type:"S",c:"SWEDEN"},
-            {r:"Tinker",type:"S",c:"SWEDEN"},
-            {r:"Tinker/Welder",type:"S",c:"SWEDEN"},
-            {r:"Tire Man",type:"S",c:"SWEDEN"},
-            {r:"Electrical Engineer",type:"S",c:"SWEDEN"},
-            {r:"Electrical Supervisor",type:"S",c:"SWEDEN"},
-            {r:"Electrical Draughtsman",type:"S",c:"SWEDEN"},
-            {r:"Electrician",type:"S",c:"SWEDEN"},
-            {r:"Fire Alarm Technician",type:"S",c:"SWEDEN"},
-            {r:"Electrical Technician High Voltage",type:"S",c:"SWEDEN"},
-            {r:"HVAC Technician",type:"S",c:"SWEDEN"},
-            {r:"Air Conditioning Technician",type:"S",c:"SWEDEN"},
-            {r:"Plumber",type:"S",c:"SWEDEN"},
-            {r:"Fire & Safety Officer",type:"S",c:"SWEDEN"},
-            {r:"RO Water Technician",type:"S",c:"SWEDEN"},
-            {r:"BMS Operator",type:"S",c:"SWEDEN"},
-            {r:"Mason",type:"S",c:"SWEDEN"},
-            {r:"Carpenter Shuttering",type:"S",c:"SWEDEN"},
-            {r:"Carpenter Joinery Furniture",type:"S",c:"SWEDEN"},
-            {r:"Auto Spray Painter",type:"S",c:"SWEDEN"},
             {r:"CCTV Technician",type:"S",c:"SWEDEN"},
             {r:"Generator Mechanic",type:"S",c:"SWEDEN"},
             {r:"Lift Technician",type:"S",c:"SWEDEN"},
             {r:"Alarm Technician",type:"S",c:"SWEDEN"},
-            {r:"Loading/Unloading Worker",type:"U",c:"SWEDEN"},
-            {r:"Aircraft Cleaning Worker",type:"U",c:"SWEDEN"},
-            {r:"Trolley Helper",type:"U",c:"SWEDEN"},
             {r:"Store Keeper",type:"S",c:"SWEDEN"},
             {r:"Data Entry Operator",type:"S",c:"SWEDEN"},
             {r:"Office Assistant",type:"S",c:"SWEDEN"},
@@ -1208,24 +1202,26 @@
             {r:"Radiology X-Ray Technician",type:"S",c:"SWEDEN"},
             {r:"Chief Pharmacist",type:"S",c:"SWEDEN"},
             {r:"Ambulance Driver",type:"S",c:"SWEDEN"},
-            {r:"Ward Assistant",type:"U",c:"SWEDEN"},
-            {r:"Sweeper",type:"U",c:"SWEDEN"},
+            {r:"Ward Assistant",type:"S",c:"SWEDEN"},
             {r:"Assistant Pharmacist",type:"S",c:"SWEDEN"},
-            {r:"Veterinary Technician",type:"S",c:"SWEDEN"},
-            {r:"Veterinary Pharmacist",type:"S",c:"SWEDEN"},
-            {r:"Fabricator",type:"S",c:"SWEDEN"},
-            {r:"Scaffolder",type:"S",c:"SWEDEN"},
-            {r:"RCC Fitter",type:"S",c:"SWEDEN"},
+            {r:"Loading/Unloading Worker",type:"U",c:"SWEDEN"},
+            {r:"Aircraft Cleaning Worker",type:"U",c:"SWEDEN"},
+            {r:"Trolley Helper",type:"U",c:"SWEDEN"},
+            {r:"Sweeper",type:"U",c:"SWEDEN"},
 
-            // FINLAND
+            // --- FINLAND ---
             {r:"Sales Supervisor",type:"S",c:"FINLAND"},
             {r:"Cam Supervisor",type:"S",c:"FINLAND"},
             {r:"Transport Supervisor",type:"S",c:"FINLAND"},
             {r:"Laundry Supervisor",type:"S",c:"FINLAND"},
             {r:"System Engineer",type:"S",c:"FINLAND"},
             {r:"System Operator",type:"S",c:"FINLAND"},
+            {r:"Data Entry Operator",type:"S",c:"FINLAND"},
+            {r:"Accountant",type:"S",c:"FINLAND"},
             {r:"Sales Workers",type:"S",c:"FINLAND"},
             {r:"Office Clerk",type:"S",c:"FINLAND"},
+            {r:"Office Assistant",type:"S",c:"FINLAND"},
+            {r:"Store Keeper",type:"S",c:"FINLAND"},
             {r:"Time Keeper",type:"S",c:"FINLAND"},
             {r:"Security Guard",type:"S",c:"FINLAND"},
             {r:"Laundry Worker",type:"S",c:"FINLAND"},
@@ -1233,14 +1229,6 @@
             {r:"Staff Bus Driver Head Duty",type:"S",c:"FINLAND"},
             {r:"Driver Light Duty",type:"S",c:"FINLAND"},
             {r:"Forklift Operator",type:"S",c:"FINLAND"},
-            {r:"Packing Helper",type:"U",c:"FINLAND"},
-            {r:"Loading Unloading Workers",type:"U",c:"FINLAND"},
-            {r:"Cleaning Helper",type:"U",c:"FINLAND"},
-            {r:"Sales and Marketing Executive",type:"S",c:"FINLAND"},
-            {r:"Office Clerk / Receptionist",type:"S",c:"FINLAND"},
-            {r:"Cashier",type:"U",c:"FINLAND"},
-            {r:"Cashier (Duty-Free)",type:"U",c:"FINLAND"},
-            {r:"Sales Workers (Duty-Free)",type:"S",c:"FINLAND"},
             {r:"Restaurant Supervisor",type:"S",c:"FINLAND"},
             {r:"Bar Supervisor",type:"S",c:"FINLAND"},
             {r:"Housekeeping Supervisor",type:"S",c:"FINLAND"},
@@ -1252,7 +1240,6 @@
             {r:"Assistant Cook",type:"S",c:"FINLAND"},
             {r:"Head Chef",type:"S",c:"FINLAND"},
             {r:"Assistant Chef",type:"S",c:"FINLAND"},
-            {r:"Kitchen Helper",type:"U",c:"FINLAND"},
             {r:"Baker/Pastry Chef",type:"S",c:"FINLAND"},
             {r:"Food and Beverage",type:"S",c:"FINLAND"},
             {r:"Waiter",type:"S",c:"FINLAND"},
@@ -1262,19 +1249,15 @@
             {r:"Pizza Makers",type:"S",c:"FINLAND"},
             {r:"Chef de Partie",type:"S",c:"FINLAND"},
             {r:"Bartender / Barman",type:"S",c:"FINLAND"},
-            {r:"Housekeeping Worker",type:"S",c:"FINLAND"},
-            {r:"Dishwasher",type:"U",c:"FINLAND"},
-            {r:"Juice Maker",type:"U",c:"FINLAND"},
-            {r:"Chapathi / Parotta Maker",type:"U",c:"FINLAND"},
-            {r:"Continental Cook",type:"S",c:"FINLAND"},
-            {r:"Commis Chef",type:"S",c:"FINLAND"},
-            {r:"Office Assistant",type:"S",c:"FINLAND"},
-            {r:"Data Entry Operator",type:"S",c:"FINLAND"},
-            {r:"Accountant",type:"S",c:"FINLAND"},
-            {r:"Store Keeper",type:"S",c:"FINLAND"},
+            {r:"Packing Helper",type:"U",c:"FINLAND"},
             {r:"Trolley Helper",type:"U",c:"FINLAND"},
+            {r:"Loading Unloading Workers",type:"U",c:"FINLAND"},
+            {r:"Cleaning Helper",type:"U",c:"FINLAND"},
+            {r:"Kitchen Helper",type:"U",c:"FINLAND"},
 
-            // NETHERLANDS
+            // --- NETHERLANDS ---
+            {r:"Office Clerk / Receptionist",type:"S",c:"NETHERLANDS"},
+            {r:"Accountant",type:"S",c:"NETHERLANDS"},
             {r:"Manager",type:"S",c:"NETHERLANDS"},
             {r:"HR Assistant / Executive",type:"S",c:"NETHERLANDS"},
             {r:"Administrative Assistant",type:"S",c:"NETHERLANDS"},
@@ -1286,52 +1269,33 @@
             {r:"Customer Service Executive",type:"S",c:"NETHERLANDS"},
             {r:"Call Centre Executive",type:"S",c:"NETHERLANDS"},
             {r:"IT Professional",type:"S",c:"NETHERLANDS"},
-            {r:"Engineer",type:"S",c:"NETHERLANDS"},
+            {r:"Engineer (Various Disciplines)",type:"S",c:"NETHERLANDS"},
             {r:"Project Coordinator",type:"S",c:"NETHERLANDS"},
+            {r:"Data Entry Operator",type:"S",c:"NETHERLANDS"},
             {r:"Logistics Coordinator",type:"S",c:"NETHERLANDS"},
             {r:"Store Supervisor",type:"S",c:"NETHERLANDS"},
-            {r:"Procurement / Purchase Assistant",type:"S",c:"NETHERLANDS"},
-            {r:"Agriculture Farm Supervisor",type:"S",c:"NETHERLANDS"},
-            {r:"Poultry Farm Supervisor",type:"S",c:"NETHERLANDS"},
-            {r:"Dairy Farm Supervisor",type:"S",c:"NETHERLANDS"},
-            {r:"Agriculture Field Officer",type:"S",c:"NETHERLANDS"},
-            {r:"Agriculture Pharmacist Technician",type:"S",c:"NETHERLANDS"},
-            {r:"Food Quality Inspection Officer",type:"S",c:"NETHERLANDS"},
-            {r:"Bank Assistant / Finance Executive",type:"S",c:"NETHERLANDS"},
             {r:"Agriculture Farm Workers",type:"U",c:"NETHERLANDS"},
             {r:"Poultry Farm Worker",type:"U",c:"NETHERLANDS"},
-            {r:"Dairy Farm Worker",type:"U",c:"NETHERLANDS"},
             {r:"Greenhouse Worker",type:"U",c:"NETHERLANDS"},
-            {r:"Fruit Picker",type:"U",c:"NETHERLANDS"},
             {r:"Vegetable Packer",type:"U",c:"NETHERLANDS"},
-            {r:"Captain (Ship/Flight Related)",type:"S",c:"NETHERLANDS"},
-            {r:"Office Clerk / Receptionist",type:"S",c:"NETHERLANDS"},
-            {r:"Accountant",type:"S",c:"NETHERLANDS"},
-            {r:"Data Entry Operator",type:"S",c:"NETHERLANDS"},
 
-            // CZECH REPUBLIC
-            {r:"Production Line Worker",type:"U",c:"CZECH REPUBLIC"},
-            {r:"Warehouse Staff",type:"S",c:"CZECH REPUBLIC"},
-            {r:"Construction Helper",type:"U",c:"CZECH REPUBLIC"},
-            {r:"CNC Operator",type:"S",c:"CZECH REPUBLIC"},
-            {r:"Automotive Technician",type:"S",c:"CZECH REPUBLIC"},
-            {r:"Heavy Goods Driver (C+E)",type:"S",c:"CZECH REPUBLIC"},
-            {r:"Software Developer",type:"S",c:"CZECH REPUBLIC"},
-            {r:"Machine Operator",type:"S",c:"CZECH REPUBLIC"},
-            {r:"Fabricator",type:"S",c:"CZECH REPUBLIC"},
-            {r:"Glass Cutter",type:"S",c:"CZECH REPUBLIC"},
-            {r:"Packing Helper",type:"U",c:"CZECH REPUBLIC"},
-            {r:"Welder (Certified)",type:"S",c:"CZECH REPUBLIC"},
-            {r:"Auto Electrician",type:"S",c:"CZECH REPUBLIC"},
+            // --- FRANCE ---
+            {r:"Office Clerk / Receptionist",type:"S",c:"FRANCE"},
+            {r:"Accountant",type:"S",c:"FRANCE"},
+            {r:"Manager",type:"S",c:"FRANCE"},
+            {r:"HR Assistant",type:"S",c:"FRANCE"},
+            {r:"Sales & Marketing Exec",type:"S",c:"FRANCE"},
+            {r:"Business Development",type:"S",c:"FRANCE"},
+            {r:"IT Professional",type:"S",c:"FRANCE"},
+            {r:"Engineer",type:"S",c:"FRANCE"},
+            {r:"Logistics Coordinator",type:"S",c:"FRANCE"},
+            {r:"Store Supervisor",type:"S",c:"FRANCE"},
+            {r:"Care Home Assistant",type:"U",c:"FRANCE"},
+            {r:"Nursing Assistant",type:"U",c:"FRANCE"},
+            {r:"Elderly Care Staff",type:"U",c:"FRANCE"},
+            {r:"Healthcare Support",type:"U",c:"FRANCE"},
 
-            // GERMANY
-            {r:"Care Home Jobs",type:"U",c:"GERMANY"},
-            {r:"Office Manager",type:"S",c:"GERMANY"},
-            {r:"Engineer (Various Disciplines)",type:"S",c:"GERMANY"},
-            {r:"IT Specialist",type:"S",c:"GERMANY"},
-            {r:"Welder",type:"S",c:"GERMANY"},
-            {r:"Automotive Mechanic",type:"S",c:"GERMANY"},
-            {r:"Harvester Machine Mechanic",type:"S",c:"GERMANY"},
+            // --- GERMANY ---
             {r:"Office Clerk / Receptionist",type:"S",c:"GERMANY"},
             {r:"Accountant",type:"S",c:"GERMANY"},
             {r:"Manager",type:"S",c:"GERMANY"},
@@ -1345,23 +1309,15 @@
             {r:"Customer Service Executive",type:"S",c:"GERMANY"},
             {r:"Call Centre Executive",type:"S",c:"GERMANY"},
             {r:"IT Professional",type:"S",c:"GERMANY"},
+            {r:"Engineer (Various Disciplines)",type:"S",c:"GERMANY"},
             {r:"Project Coordinator",type:"S",c:"GERMANY"},
             {r:"Data Entry Operator",type:"S",c:"GERMANY"},
             {r:"Logistics Coordinator",type:"S",c:"GERMANY"},
             {r:"Store Supervisor",type:"S",c:"GERMANY"},
             {r:"Procurement / Purchase Assistant",type:"S",c:"GERMANY"},
+            {r:"Care Home Jobs",type:"U",c:"GERMANY"},
 
-            // ITALY
-            {r:"Care Home Assistant",type:"U",c:"ITALY"},
-            {r:"Nursing Assistant",type:"U",c:"ITALY"},
-            {r:"Elderly Care Staff",type:"U",c:"ITALY"},
-            {r:"Healthcare Support",type:"U",c:"ITALY"},
-            {r:"Sales Executive",type:"S",c:"ITALY"},
-            {r:"Hair Stylist (Barber)",type:"S",c:"ITALY"},
-            {r:"Tailor",type:"S",c:"ITALY"},
-            {r:"Pizza Chef",type:"S",c:"ITALY"},
-            {r:"Hotel & Hospitality Jobs",type:"U",c:"ITALY"},
-            {r:"Barista",type:"U",c:"ITALY"},
+            // --- ITALY ---
             {r:"Office Clerk / Receptionist",type:"S",c:"ITALY"},
             {r:"Accountant",type:"S",c:"ITALY"},
             {r:"Manager",type:"S",c:"ITALY"},
@@ -1372,213 +1328,129 @@
             {r:"Engineer",type:"S",c:"ITALY"},
             {r:"Logistics Coordinator",type:"S",c:"ITALY"},
             {r:"Store Supervisor",type:"S",c:"ITALY"},
+            {r:"Care Home Assistant",type:"U",c:"ITALY"},
+            {r:"Nursing Assistant",type:"U",c:"ITALY"},
+            {r:"Elderly Care Staff",type:"U",c:"ITALY"},
+            {r:"Healthcare Support",type:"U",c:"ITALY"},
 
-            // FRANCE
-            {r:"Business Development",type:"S",c:"FRANCE"},
-            {r:"Sales & Marketing Exec",type:"S",c:"FRANCE"},
-            {r:"HR Assistant",type:"S",c:"FRANCE"},
-            {r:"Chef / Cook",type:"S",c:"FRANCE"},
-            {r:"Professional Cook",type:"S",c:"FRANCE"},
-            {r:"Pastry Chef",type:"S",c:"FRANCE"},
-            {r:"Sous Chef",type:"S",c:"FRANCE"},
-            {r:"Commis I, II",type:"U",c:"FRANCE"},
-            {r:"Waiter/Waitress",type:"U",c:"FRANCE"},
-            {r:"Care Home Assistant",type:"U",c:"FRANCE"},
-            {r:"Nursing Assistant",type:"U",c:"FRANCE"},
-            {r:"Elderly Care Staff",type:"U",c:"FRANCE"},
-            {r:"Healthcare Support",type:"U",c:"FRANCE"},
-            {r:"Office Clerk / Receptionist",type:"S",c:"FRANCE"},
-            {r:"Accountant",type:"S",c:"FRANCE"},
-            {r:"Manager",type:"S",c:"FRANCE"},
-            {r:"IT Professional",type:"S",c:"FRANCE"},
-            {r:"Engineer",type:"S",c:"FRANCE"},
-            {r:"Logistics Coordinator",type:"S",c:"FRANCE"},
-            {r:"Store Supervisor",type:"S",c:"FRANCE"},
-            {r:"Commis III",type:"U",c:"FRANCE"},
-            {r:"Kitchen Helper",type:"U",c:"FRANCE"},
-            {r:"Assistant Cook",type:"U",c:"FRANCE"},
+            // --- CZECH REPUBLIC ---
+            {r:"Warehouse Staff",type:"S",c:"CZECH REPUBLIC"},
+            {r:"Welder (Certified)",type:"S",c:"CZECH REPUBLIC"},
+            {r:"CNC Operator",type:"S",c:"CZECH REPUBLIC"},
+            {r:"Auto Electrician",type:"S",c:"CZECH REPUBLIC"},
+            {r:"Automotive Technician",type:"S",c:"CZECH REPUBLIC"},
+            {r:"Heavy Goods Driver (C+E)",type:"S",c:"CZECH REPUBLIC"},
+            {r:"Software Developer",type:"S",c:"CZECH REPUBLIC"},
+            {r:"Production Line Worker",type:"U",c:"CZECH REPUBLIC"},
+            {r:"Construction Helper",type:"U",c:"CZECH REPUBLIC"},
 
-            // CROATIA
-            {r:"Construction Worker",type:"U",c:"CROATIA"},
+            // --- CROATIA ---
             {r:"Truck Driver",type:"S",c:"CROATIA"},
-            {r:"Hospitality Staff",type:"U",c:"CROATIA"},
+            {r:"Welder",type:"S",c:"CROATIA"},
+            {r:"Construction Worker",type:"U",c:"CROATIA"},
+            {r:"Hotel Staff",type:"U",c:"CROATIA"},
             {r:"Warehouse Packer",type:"U",c:"CROATIA"},
             {r:"Farm Worker",type:"U",c:"CROATIA"},
-            {r:"Butcher",type:"S",c:"CROATIA"},
-            {r:"Delivery Driver",type:"U",c:"CROATIA"},
-            {r:"Tailor Cutting Master",type:"S",c:"CROATIA"},
-            {r:"Bartender / Barman",type:"U",c:"CROATIA"},
-            {r:"Food & Beverage Staff",type:"U",c:"CROATIA"},
-            {r:"General Laborer",type:"U",c:"CROATIA"},
-            {r:"Construction Helper",type:"U",c:"CROATIA"},
-            {r:"Agriculture Worker",type:"U",c:"CROATIA"},
-            {r:"Water Service Station Helper",type:"U",c:"CROATIA"},
-            {r:"Welder",type:"S",c:"CROATIA"},
-            {r:"Hotel Staff",type:"U",c:"CROATIA"},
-            {r:"Land Surveyor",type:"S",c:"CROATIA"},
-            {r:"Carpenter Joinery Furniture",type:"S",c:"CROATIA"},
-            {r:"Carpenter Shuttering",type:"S",c:"CROATIA"},
-            {r:"Excavator Operator",type:"S",c:"CROATIA"},
-            {r:"Mason",type:"S",c:"CROATIA"},
-            {r:"Office Clerk",type:"S",c:"CROATIA"},
-            {r:"Steward Supervisor",type:"S",c:"CROATIA"},
-            {r:"Veterinary Technician",type:"S",c:"CROATIA"},
-            {r:"Tire Man",type:"S",c:"CROATIA"},
-            {r:"Pump Motor Mechanic",type:"S",c:"CROATIA"},
-            {r:"Concrete Mix Operator",type:"S",c:"CROATIA"},
-            {r:"Sales Workers",type:"S",c:"CROATIA"},
+            {r:"Butcher",type:"U",c:"CROATIA"},
 
-            // LATVIA
+            // --- LATVIA ---
             {r:"Welder / Fitter",type:"S",c:"LATVIA"},
             {r:"Electrician (Certified)",type:"S",c:"LATVIA"},
             {r:"Bricklayer / Mason",type:"S",c:"LATVIA"},
+            {r:"CNC Operator",type:"S",c:"LATVIA"},
             {r:"Aircraft Mechanic",type:"S",c:"LATVIA"},
             {r:"Truck Driver (Code 95)",type:"S",c:"LATVIA"},
-            {r:"IT Systems Analyst",type:"S",c:"LATVIA"},
-            {r:"Specialist Doctor",type:"S",c:"LATVIA"},
-            {r:"Fuel Station Worker",type:"U",c:"LATVIA"},
-            {r:"Stewards",type:"U",c:"LATVIA"},
-            {r:"Workshop Helper",type:"U",c:"LATVIA"},
-            {r:"Poultry Farm Worker",type:"U",c:"LATVIA"},
-            {r:"Call Centre Executive",type:"S",c:"LATVIA"},
-            {r:"Customer Service Executive",type:"S",c:"LATVIA"},
-            {r:"Warehouse Assistant",type:"U",c:"LATVIA"},
-            {r:"CNC Operator",type:"S",c:"LATVIA"},
             {r:"Warehouse Packer",type:"S",c:"LATVIA"},
             {r:"Software Developer",type:"S",c:"LATVIA"},
+            {r:"IT Systems Analyst",type:"S",c:"LATVIA"},
+            {r:"Specialist Doctor",type:"S",c:"LATVIA"},
             {r:"Chef / Cook",type:"S",c:"LATVIA"},
-            {r:"Computer Operator",type:"S",c:"LATVIA"},
-            {r:"Data Entry Operator",type:"S",c:"LATVIA"},
-            {r:"RO Water Technician",type:"S",c:"LATVIA"},
-            {r:"HR Assistant",type:"S",c:"LATVIA"},
-            {r:"Office Assistant",type:"S",c:"LATVIA"},
-            {r:"Front Office Executive",type:"S",c:"LATVIA"},
-            {r:"Secretary / Personal Assistant",type:"S",c:"LATVIA"},
-            {r:"Time Keeper",type:"S",c:"LATVIA"},
-            {r:"Laundry Worker",type:"U",c:"LATVIA"},
 
-            // POLAND
-            {r:"Quality Control (QC)",type:"S",c:"POLAND"},
+            // --- POLAND ---
+            {r:"Machine Operator",type:"S",c:"POLAND"},
+            {r:"Forklift Operator",type:"S",c:"POLAND"},
+            {r:"Inventory Clerk",type:"S",c:"POLAND"},
+            {r:"Welder (Certified)",type:"S",c:"POLAND"},
+            {r:"Electrician",type:"S",c:"POLAND"},
+            {r:"Mason / Plasterer",type:"S",c:"POLAND"},
+            {r:"Scaffolder",type:"S",c:"POLAND"},
+            {r:"Production Line Worker",type:"U",c:"POLAND"},
+            {r:"Quality Control (QC)",type:"U",c:"POLAND"},
             {r:"Packaging Staff",type:"U",c:"POLAND"},
             {r:"Assembly Operator",type:"U",c:"POLAND"},
             {r:"Picker / Packer",type:"U",c:"POLAND"},
-            {r:"Inventory Clerk",type:"S",c:"POLAND"},
-            {r:"Mason / Plasterer",type:"S",c:"POLAND"},
-            {r:"Scaffolder",type:"S",c:"POLAND"},
-            {r:"Harvesting Worker",type:"U",c:"POLAND"},
-            {r:"Egg Collector",type:"U",c:"POLAND"},
-            {r:"Egg Packer",type:"U",c:"POLAND"},
-            {r:"Poultry Farm Hand",type:"U",c:"POLAND"},
-            {r:"Tractor Driver",type:"S",c:"POLAND"},
-            {r:"Food Packing Worker",type:"U",c:"POLAND"},
-            {r:"Fuel Station Operator",type:"U",c:"POLAND"},
-            {r:"Battery Mechanic",type:"S",c:"POLAND"},
-            {r:"Sprayer Mechanic",type:"S",c:"POLAND"},
-            {r:"Warehouse & Factory Workers",type:"U",c:"POLAND"},
-            {r:"Production Line Worker",type:"U",c:"POLAND"},
-            {r:"Machine Operator",type:"S",c:"POLAND"},
-            {r:"Forklift Operator",type:"S",c:"POLAND"},
             {r:"Warehouse Assistant",type:"U",c:"POLAND"},
-            {r:"Welder (Certified)",type:"S",c:"POLAND"},
-            {r:"Electrician",type:"S",c:"POLAND"},
             {r:"General Laborer",type:"U",c:"POLAND"},
-            {r:"Agriculture Farm Workers",type:"U",c:"POLAND"},
-            {r:"Butcher",type:"S",c:"POLAND"},
-            {r:"Certified Welder",type:"S",c:"POLAND"},
-            {r:"Construction Worker",type:"U",c:"POLAND"},
-            {r:"Driver Light Duty",type:"U",c:"POLAND"},
-            {r:"Grader Operator",type:"S",c:"POLAND"},
-            {r:"Heavy Goods Driver (C+E)",type:"S",c:"POLAND"},
-            {r:"Loading Unloading Workers",type:"U",c:"POLAND"},
-            {r:"Mobile Crane Operator",type:"S",c:"POLAND"},
-            {r:"RCC Fitter",type:"S",c:"POLAND"},
-            {r:"Steel Fixer",type:"S",c:"POLAND"},
-            {r:"Tanker Driver / Heavy Duty",type:"S",c:"POLAND"},
-            {r:"Veterinary Pharmacist",type:"S",c:"POLAND"},
+            {r:"Harvesting Worker",type:"U",c:"POLAND"},
 
-            // SLOVAKIA
-            {r:"Automotive Assembly Operator",type:"S",c:"SLOVAKIA"},
-            {r:"Chassis Line Worker",type:"S",c:"SLOVAKIA"},
-            {r:"Quality Control Specialist",type:"S",c:"SLOVAKIA"},
-            {r:"Paint Shop Assistant",type:"S",c:"SLOVAKIA"},
-            {r:"Production Line Operator",type:"U",c:"SLOVAKIA"},
-            {r:"CNC Machine Operator",type:"S",c:"SLOVAKIA"},
-            {r:"Electronics Assembler",type:"S",c:"SLOVAKIA"},
-            {r:"Warehouse Associate",type:"U",c:"SLOVAKIA"},
-            {r:"Loader / Unloader",type:"U",c:"SLOVAKIA"},
-            {r:"Construction Specialist",type:"S",c:"SLOVAKIA"},
-            {r:"Site Support Worker",type:"S",c:"SLOVAKIA"},
-            {r:"Factory Assistant",type:"U",c:"SLOVAKIA"},
-            {r:"Packaging Helper",type:"U",c:"SLOVAKIA"},
-            {r:"Maintenance Helper",type:"U",c:"SLOVAKIA"},
-            {r:"Forklift Operator",type:"S",c:"SLOVAKIA"},
-
-            // SERBIA
-            {r:"Warehouse Staff",type:"U",c:"SERBIA"},
-            {r:"Professional Cook",type:"S",c:"SERBIA"},
-            {r:"Roller Operator",type:"S",c:"SERBIA"},
-            {r:"Mason Plaster / Tiles",type:"S",c:"SERBIA"},
-            {r:"Sprayer Operator",type:"S",c:"SERBIA"},
-            {r:"TV Mechanic",type:"S",c:"SERBIA"},
-            {r:"Warehouse Packer",type:"U",c:"SERBIA"},
-            {r:"Construction Helpers",type:"U",c:"SERBIA"},
-            {r:"Poultry Yard Cleaner",type:"U",c:"SERBIA"},
-            {r:"Truck Driver",type:"S",c:"SERBIA"},
-            {r:"Delivery Driver",type:"S",c:"SERBIA"},
-            {r:"Certified Welder",type:"S",c:"SERBIA"},
-            {r:"Automotive Mechanic",type:"S",c:"SERBIA"},
-            {r:"Hospitality Staff",type:"S",c:"SERBIA"},
-            {r:"Agriculture Worker",type:"U",c:"SERBIA"},
-            {r:"Agriculture Workers",type:"U",c:"SERBIA"},
-            {r:"Construction Helper",type:"U",c:"SERBIA"},
-            {r:"Dozer Operator",type:"S",c:"SERBIA"},
-            {r:"Food and Beverage",type:"U",c:"SERBIA"},
-            {r:"Generator Mechanic",type:"S",c:"SERBIA"},
-            {r:"Loading/Unloading Worker",type:"U",c:"SERBIA"},
-            {r:"Store Keeper",type:"U",c:"SERBIA"},
-            {r:"Tinker",type:"S",c:"SERBIA"},
-
-            // MACEDONIA
-            {r:"Assembly Worker",type:"U",c:"MACEDONIA"},
-            {r:"Hotel Staff",type:"S",c:"MACEDONIA"},
+            // --- MACEDONIA ---
             {r:"Welder",type:"S",c:"MACEDONIA"},
             {r:"Electrician",type:"S",c:"MACEDONIA"},
             {r:"Plumber",type:"S",c:"MACEDONIA"},
             {r:"Mason",type:"S",c:"MACEDONIA"},
             {r:"Machine Operator",type:"S",c:"MACEDONIA"},
             {r:"Chef / Cook",type:"S",c:"MACEDONIA"},
+            {r:"Hotel Staff",type:"S",c:"MACEDONIA"},
+            {r:"Assembly Worker",type:"U",c:"MACEDONIA"},
             {r:"General Laborer",type:"U",c:"MACEDONIA"},
 
-            // ALBANIA
-            {r:"Construction Worker",type:"U",c:"ALBANIA"},
+            // --- SERBIA ---
+            {r:"Truck Driver",type:"S",c:"SERBIA"},
+            {r:"Delivery Driver",type:"S",c:"SERBIA"},
+            {r:"Warehouse Staff",type:"S",c:"SERBIA"},
+            {r:"Certified Welder",type:"S",c:"SERBIA"},
+            {r:"Automotive Mechanic",type:"S",c:"SERBIA"},
+            {r:"Professional Cook",type:"S",c:"SERBIA"},
+            {r:"Hospitality Staff",type:"S",c:"SERBIA"},
+            {r:"Agriculture Worker",type:"U",c:"SERBIA"},
+
+            // --- ALBANIA ---
             {r:"Truck Driver",type:"S",c:"ALBANIA"},
             {r:"Welder",type:"S",c:"ALBANIA"},
             {r:"Hotel Staff",type:"S",c:"ALBANIA"},
+            {r:"Construction Worker",type:"U",c:"ALBANIA"},
             {r:"Warehouse Packer",type:"U",c:"ALBANIA"},
             {r:"Farm Worker",type:"U",c:"ALBANIA"},
-            {r:"Butcher",type:"S",c:"ALBANIA"},
+            {r:"Butcher",type:"U",c:"ALBANIA"},
 
-            // BELARUS
-            {r:"General Agriculture",type:"U",c:"BELARUS"},
-            {r:"Dairy Farm Worker",type:"U",c:"BELARUS"},
+            // --- BELARUS ---
+            {r:"Tractor Driver",type:"S",c:"BELARUS"},
             {r:"Professional Tailor",type:"S",c:"BELARUS"},
             {r:"Seamstress",type:"S",c:"BELARUS"},
             {r:"Textile Worker",type:"S",c:"BELARUS"},
-            {r:"Tractor Driver",type:"S",c:"BELARUS"},
+            {r:"General Agriculture",type:"U",c:"BELARUS"},
+            {r:"Dairy Farm Worker",type:"U",c:"BELARUS"},
 
-            // MONTENEGRO
+            // --- SLOVAKIA ---
+            {r:"Automotive Assembly Operator",type:"S",c:"SLOVAKIA"},
+            {r:"Chassis Line Worker",type:"S",c:"SLOVAKIA"},
+            {r:"Quality Control Specialist",type:"S",c:"SLOVAKIA"},
+            {r:"Paint Shop Assistant",type:"S",c:"SLOVAKIA"},
+            {r:"CNC Machine Operator",type:"S",c:"SLOVAKIA"},
+            {r:"Electronics Assembler",type:"S",c:"SLOVAKIA"},
+            {r:"Forklift Operator",type:"S",c:"SLOVAKIA"},
+            {r:"Construction Specialist",type:"S",c:"SLOVAKIA"},
+            {r:"Site Support Worker",type:"S",c:"SLOVAKIA"},
+            {r:"Production Line Operator",type:"U",c:"SLOVAKIA"},
+            {r:"Warehouse Associate",type:"U",c:"SLOVAKIA"},
+            {r:"Loader / Unloader",type:"U",c:"SLOVAKIA"},
+            {r:"Factory Assistant",type:"U",c:"SLOVAKIA"},
+            {r:"Packaging Helper",type:"U",c:"SLOVAKIA"},
+            {r:"Maintenance Helper",type:"U",c:"SLOVAKIA"},
+
+            // --- MONTENEGRO ---
+            {r:"Machine Operator",type:"S",c:"MONTENEGRO"},
             {r:"General Worker",type:"U",c:"MONTENEGRO"},
             {r:"Cleaner",type:"U",c:"MONTENEGRO"},
             {r:"Maintenance Helper",type:"U",c:"MONTENEGRO"},
+            {r:"Construction Helper",type:"U",c:"MONTENEGRO"},
             {r:"Factory Worker",type:"U",c:"MONTENEGRO"},
             {r:"Assembly Line Worker",type:"U",c:"MONTENEGRO"},
             {r:"Production Assistant",type:"U",c:"MONTENEGRO"},
-            {r:"Logistics Helper",type:"U",c:"MONTENEGRO"},
-            {r:"Construction Helper",type:"U",c:"MONTENEGRO"},
-            {r:"Machine Operator",type:"S",c:"MONTENEGRO"},
             {r:"Packing Helper",type:"U",c:"MONTENEGRO"},
             {r:"Warehouse Assistant",type:"U",c:"MONTENEGRO"},
-            {r:"Loader / Unloader",type:"U",c:"MONTENEGRO"}
+            {r:"Loader / Unloader",type:"U",c:"MONTENEGRO"},
+            {r:"Logistics Helper",type:"U",c:"MONTENEGRO"}
         ];
 
         const countryRules = {
@@ -1860,6 +1732,9 @@
             
             handleResidenceChange();
             
+            // Initial check to lock calendar
+            checkCalendarLock();
+
             if (typeof Lenis !== 'undefined') {
                 const lenis = new Lenis({ duration: 1.2, smooth: true });
                 function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
@@ -2044,6 +1919,7 @@
             el.classList.add(...activeClasses);
             el.classList.add('selected-card');
             
+            checkCalendarLock(); // Check if we can unlock
             updateTimeSlots();
         }
 
@@ -2051,6 +1927,7 @@
             document.getElementById('selectedMethod').value = method;
             const allCards = document.querySelectorAll('.method-card');
             allCards.forEach(c => {
+                // ... existing styles reset ...
                 // Reset card base style
                 c.className = 'method-card p-4 rounded-2xl bg-white border border-slate-200 flex items-center gap-4 cursor-pointer transition-all duration-300 hover:shadow-md group';
                 
@@ -2100,7 +1977,24 @@
                 if(lbl) lbl.classList.add('text-purple-700');
             }
             
+            checkCalendarLock(); // Check if we can unlock
             updateTimeSlots();
+        }
+
+        function checkCalendarLock() {
+            const advisor = document.getElementById('selectedAdvisor').value;
+            const method = document.getElementById('selectedMethod').value;
+            const overlay = document.getElementById('calendarOverlay');
+            
+            if (advisor && method) {
+                // Unlock
+                overlay.classList.add('opacity-0', 'pointer-events-none', 'scale-90');
+                overlay.classList.remove('backdrop-blur-sm');
+            } else {
+                // Lock
+                overlay.classList.remove('opacity-0', 'pointer-events-none', 'scale-90');
+                overlay.classList.add('backdrop-blur-sm');
+            }
         }
 
         async function updateTimeSlots() {
@@ -2299,7 +2193,7 @@
         function goToStep3() {
             document.getElementById('tab-2').classList.add('hidden');
             document.getElementById('tab-3').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo(0, 0); // Instant scroll to top to prevent "coming down" issue
             updateStepIndicator(3);
         }
         
@@ -2580,6 +2474,20 @@
 
         function getSalary(c, s) { const k=s==='Unskilled'?'u':'s'; return (salaryDb[c] && salaryDb[c][k]) ? salaryDb[c][k]+" / Month" : "€800 - €2,000 / Month"; }
 
+        // NEW: Helper to determine sector for smarter AI reasoning
+        function getJobSector(role) {
+            const r = role.toLowerCase();
+            if(r.includes('engineer') || r.includes('technician') || r.includes('mechanic') || r.includes('electrician') || r.includes('operator')) return 'Industrial & Technical';
+            if(r.includes('nurse') || r.includes('doctor') || r.includes('pharmacist') || r.includes('care') || r.includes('medical')) return 'Healthcare & Medical';
+            if(r.includes('driver') || r.includes('transport') || r.includes('logistics')) return 'Logistics & Transport';
+            if(r.includes('cook') || r.includes('chef') || r.includes('waiter') || r.includes('restaurant') || r.includes('hotel') || r.includes('bar')) return 'Hospitality & Tourism';
+            if(r.includes('farm') || r.includes('agriculture') || r.includes('picker') || r.includes('harvest') || r.includes('greenhouse')) return 'Agriculture & Farming';
+            if(r.includes('mason') || r.includes('carpenter') || r.includes('welder') || r.includes('construction') || r.includes('plumber') || r.includes('painter') || r.includes('steel')) return 'Construction & Infrastructure';
+            if(r.includes('sales') || r.includes('manager') || r.includes('accountant') || r.includes('office') || r.includes('admin') || r.includes('clerk')) return 'Business & Administration';
+            if(r.includes('warehouse') || r.includes('packer') || r.includes('loader')) return 'Warehousing & Supply Chain';
+            return 'General Services';
+        }
+
         function toggleLoader(show, title = "Processing", subtitle = "Please wait...") {
               const loader = document.getElementById('loadingOverlay');
             const t = document.getElementById('loaderTitle');
@@ -2599,30 +2507,92 @@
          async function generateReport() {
             let role = document.getElementById('currentJob').value;
             if(!role) { showModal("Please select a target position to continue."); return; }
+            
+            let yearsExp = 0;
             if(currentMode === 'Skilled') {
-                const val = parseInt(document.getElementById('experience').value);
-                if(isNaN(val) || val < 1 || val > 30) { showModal("Valid experience (1-30 yrs) required for Skilled Migration."); return; }
+                yearsExp = parseInt(document.getElementById('experience').value);
+                if(isNaN(yearsExp) || yearsExp < 1 || yearsExp > 30) { showModal("Valid experience (1-30 yrs) required for Skilled Migration."); return; }
             }
+            
             toggleLoader(true, "Report Generating", "Analyzing Global Compatibility...");
             await new Promise(resolve => setTimeout(resolve, 2000));
+            
             const qualRadio = document.querySelector('input[name="qualification"]:checked');
             const qual = qualRadio ? qualRadio.value : "BACHELOR"; 
+            const age = parseInt(document.getElementById('age').value) || 30;
+            
             document.getElementById('reportContainer').classList.remove('hidden');
             setTimeout(() => { document.getElementById('reportContainer').scrollIntoView({ behavior: 'smooth' }); }, 100);
+            
             const jobData = jobMasterList.find(j => j.r === role);
+            const sector = getJobSector(role);
+            
+            // 1. DYNAMIC SCORE CALCULATION
+            let score = 82; // Base score
+            
+            // Age Weighting
+            if(age >= 24 && age <= 35) score += 8;
+            else if(age >= 36 && age <= 45) score += 5;
+            else if(age > 50) score -= 5;
+            
+            // Experience Weighting (Dependent on Mode)
+            if(currentMode === 'Skilled') {
+                if(yearsExp >= 5) score += 8;
+                else if(yearsExp >= 3) score += 5;
+                else if(yearsExp < 2) score -= 3;
+            } else {
+                // Unskilled: Less focus on exp, more on age/fitness implied by age
+                if(age < 40) score += 5;
+            }
+            
+            // Country Specific Weighting (Sample logic)
+            if(['GERMANY', 'SWEDEN', 'NETHERLANDS'].includes(jobData.c) && currentMode === 'Skilled') score -= 2; // Harder entry
+            if(['POLAND', 'CROATIA', 'LITHUANIA'].includes(jobData.c)) score += 3; // Easier entry
+            
+            // Cap Score
+            score = Math.min(Math.max(score, 65), 99);
+            
+            // UPDATE SCORE UI
+            const scoreEl = document.querySelector('.text-3xl.font-black.text-brand-primary.tracking-tighter');
+            const barEl = document.querySelector('.w-\\[98\\%\\]'); // Selector for the bar inside the rounded-full div
+            
+            if(scoreEl) scoreEl.innerText = score + "%";
+            // Find the progress bar inner div safely
+            const progressContainer = scoreEl.parentElement.nextElementSibling; 
+            if(progressContainer) {
+                const bar = progressContainer.firstElementChild;
+                if(bar) bar.style.width = score + "%";
+            }
+
+            // 2. FILL DATA
             document.getElementById('topMatchCountry').innerText = jobData.c;
             document.getElementById('reportRole').innerText = role;
             document.getElementById('reportQualification').innerText = qual;
             document.getElementById('topMatchRole_2').innerText = role;
             document.getElementById('mainSalaryRange').innerText = getSalary(jobData.c, currentMode);
+            
+            let expDisplay = currentMode === 'Unskilled' ? "Entry Level" : yearsExp + " Years";
+            document.getElementById('reportExp').innerText = expDisplay;
+
+            // 3. GENERATE REASONING
             const reasoning = document.getElementById('aiReasoning');
-            let exp = currentMode === 'Unskilled' ? "Entry Level" : document.getElementById('experience').value + " Years";
-            document.getElementById('reportExp').innerText = exp;
+            let text = "";
+            
             if(currentMode === 'Unskilled') {
-                reasoning.innerText = `Based on current labor shortages in the ${jobData.c} general labor market, candidates applying for ${role} have a high success rate. No specific experience verification is typically required for this visa category.`;
+                text = `The ${sector} sector in ${jobData.c} is currently experiencing critical labor shortages. `;
+                text += `Candidates applying for ${role} roles have a high approval probability (${score}%) regardless of prior academic tenure. `;
+                text += `Your profile matches the demand criteria for the D-Type work permit category.`;
             } else {
-                reasoning.innerText = `With ${exp} of specialized experience as a ${role}, you meet the skilled migration criteria for ${jobData.c}. This pathway offers long-term residency options for qualified professionals.`;
+                text = `Your profile indicates strong potential for the ${sector} industry in ${jobData.c}. `;
+                if(yearsExp > 4) {
+                    text += `With ${yearsExp} years of specialized experience, you qualify as a High-Value Professional, increasing visa priority. `;
+                } else {
+                    text += `With ${yearsExp} years experience, you meet the essential skilled migration threshold. `;
+                }
+                text += `The ${jobData.c} market offers long-term residency pathways for ${role}s with your specific qualification background.`;
             }
+            reasoning.innerText = text;
+
             const others = jobMasterList.filter(j => j.type === jobData.type && j.c !== jobData.c).sort(() => 0.5 - Math.random()).slice(0, 3);
             const altCountriesString = others.map(o => o.c).join(', ');
             document.getElementById('hiddenPrimaryMatch').value = jobData.c;
@@ -2844,35 +2814,22 @@ Generated via Better Call Web App
                      locationData = { value: "phone", optionValue: safePhone || "+971500000000" }; 
                 } 
 
+                // COMPACT NOTE FORMAT TO PREVENT API CHAR LIMIT ERRORS
+                const aiSummary = (userData.aiAnalysis || "N/A").substring(0, 200) + (userData.aiAnalysis?.length > 200 ? "..." : "");
+                
                 const descriptionNote = `
-**🚀 GLOBAL MOBILITY ASSESSMENT REPORT**
-----------------------------------------
-**👤 CANDIDATE IDENTITY**
-• Name: ${userData.name}
-• Age: ${userData.age} years (DOB: ${userData.dob})
-• Nationality: ${userData.nationality}
-• Current Residence: ${userData.residence}
-• Passport No: ${userData.passportNo} (Exp: ${userData.passportExp})
+CANDIDATE: ${userData.name} (${userData.age} / ${userData.nationality})
+RESIDENCE: ${userData.residence}
+ROLE: ${userData.role} (${userData.experience} Yrs)
+TARGET: ${userData.targetCountry} | SALARY: ${userData.salaryRange}
 
-**💼 PROFESSIONAL PROFILE**
-• Target Role: ${userData.role}
-• Qualification: ${userData.qualification}
-• Experience: ${userData.experience} Years
-• Target Destination: ${userData.targetCountry}
-• Est. Market Salary: ${userData.salaryRange}
+CONTACT
+Mobile: ${userData.phone}
+Email: ${userData.email}
+WhatsApp: ${userData.whatsapp || 'N/A'}
 
-**📞 CONTACT DETAILS**
-• Mobile: ${userData.phone}
-• WhatsApp: ${userData.whatsapp || 'Same as Mobile'}
-• Alt. Phone: ${userData.altPhone}
-• Email: ${userData.email}
-
-**🤖 AI ANALYSIS SUMMARY**
-• Reference ID: ${userData.refId}
-• Insight: "${userData.aiAnalysis}"
-
-----------------------------------------
-Generated via Better Call Intelligence Unit
+AI INSIGHT (REF:${userData.refId})
+${aiSummary}
 `.trim();
 
                 const payload = {
@@ -2904,7 +2861,10 @@ Generated via Better Call Intelligence Unit
                 
                 if (!bookRes.ok) {
                     console.error("Cal.com Booking Failed:", bookData);
-                    return { success: false, msg: bookData.message || "Booking API rejected request" }; 
+                    // Extract meaningful error message
+                    let errMsg = bookData.message || "Booking API rejected request";
+                    if(errMsg.includes('max_characters_allowed')) errMsg = "Booking notes too long (Character Limit Exceeded).";
+                    return { success: false, msg: errMsg }; 
                 } 
                 return { success: true, data: bookData };
 
@@ -2960,216 +2920,252 @@ END:VCALENDAR`;
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
                 
-                // --- CONFIGURATION ---
-                const primaryColor = [99, 102, 241]; // Indigo 500 (#6366f1)
-                const secondaryColor = [236, 72, 153]; // Pink 500 (#ec4899)
-                const slateDark = [30, 41, 59]; // Slate 800
-                const slateGray = [100, 116, 139]; // Slate 500
-                const lightBg = [248, 250, 252]; // Slate 50
+                // --- DESIGN CONFIG ---
+                const brandPrimary = [37, 99, 235];   // #2563eb
+                const brandSecondary = [124, 58, 237]; // #7c3aed
+                const brandDark = [15, 23, 42];       // #0f172a
+                const textGray = [71, 85, 105];       // #475569
+                const bgLight = [248, 250, 252];      // #f8fafc
                 
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const pageHeight = doc.internal.pageSize.getHeight();
                 const margin = 20;
                 let y = 0;
 
-                // --- DATA COLLECTION ---
-                const firstName = document.getElementById('firstName').value.toUpperCase() || "CANDIDATE";
+                // --- DATA FETCH ---
+                const firstName = document.getElementById('firstName').value.toUpperCase();
                 const lastName = document.getElementById('lastName').value.toUpperCase();
                 const fullName = firstName + " " + lastName;
                 const refId = document.getElementById('refId').innerText;
-                const reportDate = document.getElementById('reportDate').innerText;
+                const reportDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
                 
                 const age = document.getElementById('age').value || "N/A";
                 const nationality = document.getElementById('nationality').value || "N/A";
                 const residence = document.getElementById('presentResidence').value || "N/A";
                 const qual = document.querySelector('input[name="qualification"]:checked')?.value || "N/A";
+                const role = document.getElementById('currentJob').value || "N/A";
+                const exp = document.getElementById('experience').value || "0";
                 
-                const targetJob = document.getElementById('currentJob').value || "N/A";
-                const experience = document.getElementById('experience').value || "0";
-                const expString = currentMode === 'Unskilled' ? "Entry Level / Non-Experienced" : `${experience} Years`;
-                
-                const targetCountry = document.getElementById('topMatchCountry').innerText;
-                const salary = document.getElementById('mainSalaryRange').innerText;
+                // CRITICAL FIX: Ensure PDF data matches the FINAL selection, not just the initial AI report
+                const selectedCountry = document.getElementById('targetCountry').value;
+                const initialMatchCountry = document.getElementById('topMatchCountry').innerText;
+                const finalCountry = selectedCountry || initialMatchCountry;
 
-                // --- PDF GENERATION ---
+                // RECALCULATE SALARY based on final country (Fixes Sweden Header + Latvia Salary bug)
+                let finalSalary = "TBD";
+                if(salaryDb[finalCountry]) {
+                     finalSalary = currentMode === 'Unskilled' ? salaryDb[finalCountry].u : salaryDb[finalCountry].s;
+                     if(!finalSalary.includes("Month")) finalSalary += " / Month";
+                } else {
+                    finalSalary = document.getElementById('mainSalaryRange').innerText;
+                }
 
-                // 1. HEADER BRANDING
-                doc.setFillColor(...primaryColor);
-                doc.rect(0, 0, 210, 45, 'F');
+                // RECALCULATE REASONING based on final country
+                let finalAiText = document.getElementById('aiReasoning').innerText;
+                // If the text mentions a country that isn't our final country, regenerate a generic specific string
+                if(!finalAiText.includes(finalCountry) && selectedCountry) {
+                     const sector = getJobSector(role);
+                     if(currentMode === 'Unskilled') {
+                        finalAiText = `The ${sector} sector in ${finalCountry} is currently experiencing labor shortages. Candidates applying for ${role} roles have a high approval probability regardless of prior academic tenure. Your profile matches the demand criteria for the ${finalCountry} work permit category.`;
+                    } else {
+                        finalAiText = `Your profile indicates strong potential for the ${sector} industry in ${finalCountry}. The ${finalCountry} market offers long-term residency pathways for ${role}s with your specific qualification background. With ${exp} years experience, you meet the essential skilled migration threshold.`;
+                    }
+                }
+
+                const score = document.querySelector('.text-3xl.font-black.text-brand-primary')?.innerText || "85%";
+
+                // Appointment Data
+                const advisor = document.getElementById('selectedAdvisor').value;
+                const bookDate = document.getElementById('bookingDate').value;
+                const bookTime = document.getElementById('selectedTime').value;
+                const bookMode = document.getElementById('selectedMethod').value;
+
+                // --- RENDER HELPERS ---
+                const drawSectionHeader = (text, yPos) => {
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(11);
+                    doc.setTextColor(...brandPrimary);
+                    doc.text(text.toUpperCase(), margin, yPos);
+                    doc.setDrawColor(200, 200, 200);
+                    doc.setLineWidth(0.5);
+                    doc.line(margin, yPos + 3, pageWidth - margin, yPos + 3);
+                };
+
+                const drawLabelVal = (label, value, x, y) => {
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(7);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text(label.toUpperCase(), x, y);
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(10);
+                    doc.setTextColor(...brandDark);
+                    doc.text(value.toString(), x, y + 5);
+                };
+
+                // --- 1. HEADER ---
+                // Header Background
+                doc.setFillColor(...brandPrimary);
+                doc.rect(0, 0, pageWidth, 40, 'F');
                 
-                // Add Logo/Brand Text
-                doc.setTextColor(255, 255, 255);
+                // Logo Area
+                doc.setFillColor(255, 255, 255);
+                doc.roundedRect(margin, 10, 20, 20, 2, 2, 'F');
                 doc.setFont("helvetica", "bold");
-                doc.setFontSize(24);
-                doc.text("BETTER CALL", margin, 22);
-                
-                doc.setFontSize(10);
-                doc.setFont("helvetica", "normal");
-                doc.setCharSpace(2); // Tracking
-                doc.text("IMMIGRATION SERVICES", margin, 30);
-                
-                doc.setFontSize(9);
-                doc.setCharSpace(0);
-                doc.text("Global Mobility Intelligence Unit", 210 - margin, 22, { align: "right" });
-                doc.text("www.bettercall.online", 210 - margin, 30, { align: "right" });
+                doc.setFontSize(16);
+                doc.setTextColor(...brandPrimary);
+                doc.text("BC", margin + 5, 22); // Fake Logo Text
 
-                y = 65;
-
-                // 2. REPORT TITLE & REF
-                doc.setTextColor(...slateDark);
+                // Company Name
+                doc.setFont("helvetica", "bold");
                 doc.setFontSize(18);
-                doc.setFont("helvetica", "bold");
-                doc.text("MIGRATION VIABILITY ASSESSMENT", margin, y);
-                
-                y += 8;
-                doc.setFontSize(10);
-                doc.setTextColor(...slateGray);
-                doc.setFont("helvetica", "normal");
-                doc.text(`Reference ID: ${refId}  |  Date: ${reportDate}`, margin, y);
-
-                y += 15;
-
-                // 3. CANDIDATE PROFILE SECTION
-                // Draw Box
-                doc.setDrawColor(226, 232, 240); // border-slate-200
-                doc.setFillColor(...lightBg);
-                doc.rect(margin, y, 170, 45, 'FD'); // Fill and Draw
-                
-                let profileY = y + 10;
-                
-                // Column 1 Labels
+                doc.setTextColor(255, 255, 255);
+                doc.text("BETTER CALL", margin + 25, 18);
                 doc.setFontSize(9);
-                doc.setTextColor(...slateGray);
-                doc.text("FULL NAME", margin + 5, profileY);
-                doc.text("AGE", margin + 5, profileY + 12);
-                doc.text("NATIONALITY", margin + 5, profileY + 24);
-                
-                // Column 1 Values
-                doc.setFontSize(11);
-                doc.setTextColor(...slateDark);
-                doc.setFont("helvetica", "bold");
-                doc.text(fullName, margin + 5, profileY + 5);
-                doc.text(age + " Years", margin + 5, profileY + 17);
-                doc.text(nationality, margin + 5, profileY + 29);
-
-                // Column 2 Labels
-                doc.setFontSize(9);
-                doc.setTextColor(...slateGray);
                 doc.setFont("helvetica", "normal");
-                doc.text("QUALIFICATION", margin + 80, profileY);
-                doc.text("CURRENT RESIDENCE", margin + 80, profileY + 12);
+                doc.text("GLOBAL IMMIGRATION INTELLIGENCE", margin + 25, 25);
                 
-                // Column 2 Values
-                doc.setFontSize(11);
-                doc.setTextColor(...slateDark);
+                // Report Details (Top Right)
+                doc.setFontSize(8);
+                doc.text("REPORT REFERENCE", pageWidth - margin, 15, { align: "right" });
                 doc.setFont("helvetica", "bold");
-                doc.text(qual, margin + 80, profileY + 5);
-                doc.text(residence, margin + 80, profileY + 17);
+                doc.text(refId, pageWidth - margin, 20, { align: "right" });
+                
+                doc.setFont("helvetica", "normal");
+                doc.text(reportDate, pageWidth - margin, 28, { align: "right" });
 
-                y += 60;
+                y = 60;
 
-                // 4. PROFESSIONAL EVALUATION
-                doc.setFontSize(14);
-                doc.setTextColor(...slateDark);
-                doc.text("PROFESSIONAL EVALUATION", margin, y);
-                doc.setLineWidth(0.5);
-                doc.setDrawColor(...primaryColor);
-                doc.line(margin, y + 2, margin + 70, y + 2); // Underline
-
+                // --- 2. CANDIDATE PROFILE ---
+                drawSectionHeader("Professional Profile", y);
                 y += 15;
-
-                // Job Details
-                doc.setFontSize(10);
-                doc.setTextColor(...slateGray);
-                doc.setFont("helvetica", "normal");
-                doc.text("Target Position:", margin, y);
-                doc.text("Experience Level:", margin, y + 10);
                 
-                doc.setFont("helvetica", "bold");
-                doc.setTextColor(...slateDark);
-                doc.text(targetJob, margin + 40, y);
-                doc.text(expString, margin + 40, y + 10);
+                // Data Grid for Profile
+                drawLabelVal("Full Name", fullName, margin, y);
+                drawLabelVal("Nationality", nationality, margin + 60, y);
+                drawLabelVal("Residence", residence, margin + 120, y);
+                
+                y += 15;
+                drawLabelVal("Target Role", role, margin, y);
+                drawLabelVal("Qualification", qual, margin + 60, y);
+                drawLabelVal("Experience", `${exp} Years`, margin + 120, y);
 
                 y += 25;
 
-                // 5. AI MATCH RESULTS
-                doc.setFillColor(240, 253, 244); // Green-50 bg
-                doc.setDrawColor(22, 163, 74); // Green-600 border
-                doc.roundedRect(margin, y, 170, 35, 3, 3, 'FD');
+                // --- 3. AI ASSESSMENT ---
+                drawSectionHeader("Strategic Viability Assessment", y);
+                y += 15;
 
-                doc.setTextColor(22, 163, 74); // Green text
-                doc.setFontSize(9);
+                // Assessment Box
+                doc.setDrawColor(230, 230, 230);
+                doc.setFillColor(...bgLight);
+                doc.roundedRect(margin, y - 5, pageWidth - (margin * 2), 60, 3, 3, 'FD');
+
+                // Country & Salary
                 doc.setFont("helvetica", "bold");
-                doc.text("PRIMARY MATCH IDENTIFIED", margin + 10, y + 8);
-
-                doc.setTextColor(...primaryColor);
-                doc.setFontSize(22);
-                doc.text(targetCountry, margin + 10, y + 20);
-
-                doc.setTextColor(...slateDark);
-                doc.setFontSize(12);
-                doc.text(salary, margin + 100, y + 20);
+                doc.setFontSize(24);
+                doc.setTextColor(...brandPrimary);
+                doc.text(finalCountry, margin + 10, y + 10);
+                
                 doc.setFontSize(8);
-                doc.setTextColor(...slateGray);
-                doc.text("ESTIMATED MONTHLY SALARY", margin + 100, y + 12);
+                doc.setTextColor(...textGray);
+                doc.text("PRIMARY MARKET MATCH", margin + 10, y + 16);
 
-                y += 50;
-
-                // 6. AI REASONING
-                doc.setFontSize(12);
-                doc.setTextColor(...slateDark);
-                doc.text("AI ANALYSIS SUMMARY", margin, y);
-                y += 7;
-                
                 doc.setFontSize(10);
-                doc.setTextColor(...slateGray);
-                doc.setFont("helvetica", "normal");
-                
-                const reasoning = document.getElementById('aiReasoning').innerText;
-                const splitReasoning = doc.splitTextToSize(reasoning, 170);
-                doc.text(splitReasoning, margin, y);
+                doc.setTextColor(...brandDark);
+                doc.text(`Estimated Salary: ${finalSalary}`, margin + 10, y + 26);
 
+                // Score Badge (Right Side of Box)
+                doc.setFillColor(...brandPrimary);
+                doc.circle(pageWidth - margin - 30, y + 15, 16, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text(score, pageWidth - margin - 30, y + 17, { align: "center" });
+                doc.setFontSize(6);
+                doc.text("MATCH", pageWidth - margin - 30, y + 22, { align: "center" });
+
+                // AI Text Body
+                y += 35;
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(9);
+                doc.setTextColor(...textGray);
+                const splitAI = doc.splitTextToSize(finalAiText, pageWidth - (margin * 2) - 20);
+                doc.text(splitAI, margin + 10, y);
+                
                 y += 40;
 
-                // 7. APPOINTMENT (If Scheduled)
-                const bookingDate = document.getElementById('bookingDate').value;
-                const bookingTime = document.getElementById('selectedTime').value;
-                const advisor = document.getElementById('selectedAdvisor').value;
+                // --- 4. APPOINTMENT CONFIRMATION (Redesigned) ---
+                if (advisor && bookDate && bookTime) {
+                    drawSectionHeader("Appointment Details", y);
+                    y += 15;
 
-                if(bookingDate && bookingTime) {
-                    doc.setDrawColor(...slateGray);
-                    doc.setLineDash([2, 2], 0);
-                    doc.line(margin, y, 190, y); // Dashed separator
-                    doc.setLineDash([]);
-                    y += 10;
+                    // Ticket Container
+                    doc.setDrawColor(...brandPrimary);
+                    doc.setLineWidth(0.5);
+                    doc.setFillColor(255, 255, 255);
+                    doc.roundedRect(margin, y, pageWidth - (margin * 2), 45, 2, 2, 'FD');
 
-                    doc.setFontSize(12);
+                    // Left Block (Advisor)
+                    doc.setFillColor(...brandPrimary);
+                    doc.rect(margin, y, 4, 45, 'F'); // Blue strip
+
                     doc.setFont("helvetica", "bold");
-                    doc.setTextColor(...slateDark);
-                    doc.text("APPOINTMENT CONFIRMED", margin, y);
-                    y += 10;
+                    doc.setFontSize(8);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text("IMMIGRATION ADVISOR", margin + 12, y + 10);
+                    
+                    doc.setFontSize(12);
+                    doc.setTextColor(...brandDark);
+                    doc.text(advisor, margin + 12, y + 18);
+                    
+                    doc.setFontSize(8);
+                    doc.setTextColor(...brandSecondary);
+                    doc.text("Senior Consultant", margin + 12, y + 23);
 
+                    // Divider Line
+                    doc.setDrawColor(220, 220, 220);
+                    doc.setLineWidth(0.2);
+                    doc.line(margin + 80, y + 5, margin + 80, y + 40);
+
+                    // Middle Block (Time/Date)
+                    drawLabelVal("Date", bookDate, margin + 90, y + 10);
+                    drawLabelVal("Time", bookTime, margin + 90, y + 25);
+                    
+                    // Divider Line 2
+                    doc.line(margin + 130, y + 5, margin + 130, y + 40);
+
+                    // Right Block (Status & Mode)
+                    drawLabelVal("Mode", bookMode, margin + 140, y + 10);
+                    
+                    // Status Badge (Visual)
+                    doc.setFillColor(220, 252, 231); // Green bg
+                    doc.roundedRect(margin + 140, y + 25, 25, 8, 1, 1, 'F');
+                    doc.setTextColor(22, 101, 52); // Green text
+                    doc.setFontSize(7);
+                    doc.text("CONFIRMED", margin + 142, y + 30);
+
+                } else {
+                    doc.setFont("helvetica", "italic");
                     doc.setFontSize(10);
-                    doc.setFont("helvetica", "normal");
-                    doc.text(`Advisor: ${advisor}`, margin, y);
-                    doc.text(`Date: ${bookingDate}   |   Time: ${bookingTime}`, margin, y + 6);
+                    doc.setTextColor(...textGray);
+                    doc.text("Consultation Pending.", margin, y + 10);
                 }
-
-                // FOOTER
+                
+                // Footer
                 doc.setFontSize(8);
-                doc.setTextColor(150, 150, 150);
-                doc.text("Generated by Better Call Intelligence Unit. This document is for informational purposes only.", 105, 280, { align: "center" });
-                doc.text(`Doc Ref: ${refId}-${Date.now()}`, 105, 285, { align: "center" });
+                doc.setTextColor(180, 180, 180);
+                doc.text("Better Call Immigration Services | Automated Report System", margin, pageHeight - 10);
+                doc.text(`Page 1 of 1`, pageWidth - margin, pageHeight - 10, { align: "right" });
 
-                // SAVE FILE
-                // Format: FIRSTNAME_REFID.pdf
+                // --- SAVE ---
                 const cleanName = firstName.replace(/[^a-zA-Z0-9]/g, '');
-                const fileName = `${cleanName}_${refId}.pdf`;
-                doc.save(fileName);
+                doc.save(`BetterCall_Report_${cleanName}.pdf`);
+                
+                showToast("PDF Report Downloaded");
 
-                showToast("Report Downloaded Successfully");
-
-            } catch (e) {
-                console.error("PDF Generation Error:", e);
-                showModal("Could not generate PDF. Please try again.");
+            } catch (err) {
+                console.error("PDF Gen Error:", err);
+                showModal("Failed to generate PDF. Please try again.");
             } finally {
                 btn.innerHTML = originalContent;
                 btn.disabled = false;
@@ -3332,6 +3328,28 @@ END:VCALENDAR`;
                     ];
 
                     if(CLICKUP_API_KEY) {
+                        // Fetch field defs to map dropdowns for Advisor/Type
+                        const fieldRes = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { 
+                            headers: { 'Authorization': CLICKUP_API_KEY } 
+                        });
+                        
+                        if(fieldRes.ok) {
+                            const fieldData = await fieldRes.json();
+                            const fieldDefs = fieldData.fields || [];
+
+                            const getVal = (fid, val) => {
+                                const def = fieldDefs.find(f => f.id === fid);
+                                if(def && (def.type === 'drop_down' || def.type === 'labels')) {
+                                    const opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase());
+                                    return opt ? opt.id : val;
+                                }
+                                return val;
+                            };
+
+                            updateFields.push({ id: CLICKUP_FIELDS["ADVISOR"], value: getVal(CLICKUP_FIELDS["ADVISOR"], advisor) });
+                            updateFields.push({ id: CLICKUP_FIELDS["BOOKING_TYPE"], value: getVal(CLICKUP_FIELDS["BOOKING_TYPE"], method) });
+                        }
+
                         for (let f of updateFields) {
                             // Non-blocking fetch
                             fetch(`https://api.clickup.com/api/v2/task/${globalTaskId}/field/${f.id}`, {
