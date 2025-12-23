@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <!-- Google Tag Manager -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GMYZGXFPCE"></script>
@@ -141,7 +141,7 @@
         .creative-card {
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
-            border-radius: 32px; /* Increased border radius for curved box support */
+            border-radius: 20px; /* Reduced for mobile */
             overflow: hidden;
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             box-shadow: 
@@ -152,6 +152,11 @@
             flex-direction: column;
             position: relative;
             transform-style: preserve-3d;
+        }
+        @media (min-width: 768px) {
+            .creative-card {
+                border-radius: 32px;
+            }
         }
         .creative-card::before {
             content: '';
@@ -326,7 +331,7 @@
                 </div>
             </div>
             
-            <div id="nordic-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+            <div id="nordic-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 lg:gap-8">
                 <!-- Cards Injected Here -->
             </div>
         </section>
@@ -341,7 +346,7 @@
                 </div>
             </div>
             
-            <div id="premium-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+            <div id="premium-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 lg:gap-8">
                 <!-- Cards Injected Here -->
             </div>
         </section>
@@ -356,7 +361,7 @@
                 </div>
             </div>
             
-            <div id="fasttrack-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+            <div id="fasttrack-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 lg:gap-8">
                 <!-- Cards Injected Here -->
             </div>
         </section>
@@ -371,7 +376,7 @@
                 </div>
             </div>
             
-            <div id="entry-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+            <div id="entry-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 lg:gap-8">
                 <!-- Cards Injected Here -->
             </div>
         </section>
@@ -385,7 +390,7 @@
             <span class="font-bold text-sm uppercase tracking-wider hidden sm:block">Language</span>
             <i class="fa-solid fa-chevron-up text-xs opacity-70 transition-transform duration-300"></i>
         </div>
-        <div id="language-dropdown" class="language-dropdown">
+        <div id="language-dropdown" class="language-dropdown invisible">
             <button onclick="setLanguage('en', this);" class="lang-option active"><span>English</span></button>
             <button onclick="setLanguage('ml', this);" class="lang-option font-['Noto_Sans_Malayalam']"><span>മലയാളം</span></button>
             <button onclick="setLanguage('hi', this);" class="lang-option"><span>हिंदी</span></button>
@@ -706,7 +711,7 @@
                 </div>
                 <div class="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between text-xs text-slate-400 font-medium">
                     <p>&copy; 2025 Better Call Immigration. All rights reserved.</p>
-                    <div class="flex gap-6 mt-4 md:mt-0"><a href="privacy_policy.html" class="hover:text-brand-black transition">Privacy Policy</a><a href="terms.html" class="hover:text-brand-black transition">Terms of Service</a></div>
+                    <div class="flex gap-6 mt-4 md:mt-0"><a href="https://bettercall.online/privacy_policy.html" class="hover:text-brand-black transition">Privacy Policy</a><a href="https://bettercall.online/terms" class="hover:text-brand-black transition">Terms of Service</a></div>
                 </div>
             </div>
         </footer>
@@ -936,41 +941,44 @@
                     <i class="fa-solid fa-crown text-8xl text-current" style="color: ${p.color}"></i>
                 </div>
 
-                <div class="p-6 flex flex-col h-full relative z-10">
+                <div class="p-3 md:p-6 flex flex-col h-full relative z-10">
                     <!-- Icon & Flag Header -->
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="w-14 h-14 rounded-2xl bg-white shadow-md flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-500 border border-slate-100" style="color: ${p.color}">
+                    <div class="flex justify-between items-start mb-3 md:mb-6">
+                        <div class="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-white shadow-md flex items-center justify-center text-lg md:text-2xl group-hover:scale-110 transition-transform duration-500 border border-slate-100" style="color: ${p.color}">
                             <i class="fa-solid ${p.icon}"></i>
                         </div>
-                        <span class="text-5xl filter drop-shadow-sm group-hover:scale-110 transition-transform duration-500 group-hover:rotate-6">${p.flag}</span>
+                        <span class="text-3xl md:text-5xl filter drop-shadow-sm group-hover:scale-110 transition-transform duration-500 group-hover:rotate-6">${p.flag}</span>
                     </div>
                     
                     <!-- Title & Summary -->
-                    <h3 class="text-2xl font-black mb-3 text-brand-black group-hover:text-brand-blue transition-colors leading-tight">${p.name}</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-6 flex-grow font-medium border-l-2 border-slate-200 pl-3 group-hover:border-${p.name === 'Netherlands' || p.name === 'Germany' ? 'theme-secondary' : 'theme-primary'} transition-colors">${p.summary}</p>
+                    <h3 class="text-lg md:text-2xl font-black mb-1 md:mb-3 text-brand-black group-hover:text-brand-blue transition-colors leading-tight">${p.name}</h3>
+                    <p class="text-slate-500 text-xs md:text-sm leading-relaxed mb-3 md:mb-6 flex-grow font-medium border-l-2 border-slate-200 pl-2 md:pl-3 group-hover:border-${p.name === 'Netherlands' || p.name === 'Germany' ? 'theme-secondary' : 'theme-primary'} transition-colors">${p.summary}</p>
                     
                      <!-- Divider -->
-                    <div class="h-px w-full bg-slate-100 my-4"></div>
+                    <div class="h-px w-full bg-slate-100 my-2 md:my-4"></div>
 
                     <!-- Highlights -->
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        ${p.highlights.map(h => `<span class="text-[10px] font-bold uppercase tracking-wider bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 group-hover:border-${p.name === 'Netherlands' || p.name === 'Germany' ? 'orange-400' : 'blue-400'} group-hover:text-brand-black transition-colors shadow-sm">${h}</span>`).join('')}
+                    <div class="flex flex-wrap gap-1.5 md:gap-2 mb-3 md:mb-6">
+                        ${p.highlights.map(h => `<span class="text-[9px] md:text-[10px] font-bold uppercase tracking-wider bg-slate-50 px-1.5 py-1 md:px-2.5 md:py-1.5 rounded-lg border border-slate-200 text-slate-600 group-hover:border-${p.name === 'Netherlands' || p.name === 'Germany' ? 'orange-400' : 'blue-400'} group-hover:text-brand-black transition-colors shadow-sm">${h}</span>`).join('')}
                     </div>
                     
                     <!-- Action -->
                     <div class="mt-auto pt-2 flex items-center justify-between group/btn">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest group-hover:text-brand-blue transition-colors">${langBtnText}</span>
-                        <div class="w-10 h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-brand-blue group-hover:text-white group-hover:border-brand-blue transition-all shadow-sm group-hover:shadow-md group-hover:translate-x-1">
-                            <i class="fa-solid fa-arrow-right"></i>
+                        <span class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest group-hover:text-brand-blue transition-colors">${langBtnText}</span>
+                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-brand-blue group-hover:text-white group-hover:border-brand-blue transition-all shadow-sm group-hover:shadow-md group-hover:translate-x-1">
+                            <i class="fa-solid fa-arrow-right text-xs md:text-base"></i>
                         </div>
                     </div>
                 </div>
             </a>`;
         }
 
+        // Global Lenis Instance
+        let lenis;
+
         function initSmoothScroll() {
             if (typeof Lenis !== 'undefined' && window.innerWidth >= 768) {
-                const lenis = new Lenis({
+                lenis = new Lenis({
                     duration: 1.2,
                     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
                     direction: 'vertical',
@@ -1076,8 +1084,12 @@
             if (lang === 'hi') document.body.classList.add('font-["Noto_Sans_Devanagari"]');
 
             // Close mobile menu if open
+            // Ensure desktop dropdown is closed
             const dropdown = document.getElementById('language-dropdown');
-            if(dropdown && !dropdown.classList.contains('invisible')) toggleLanguageDropdown();
+            const btn = document.getElementById('lang-toggle-btn');
+            if(dropdown) dropdown.classList.add('invisible');
+            if(btn) btn.classList.remove('active');
+            
             closeAllMobilePopups();
 
             // 6. Re-attach Observer
@@ -1118,13 +1130,22 @@
             // 3. Initial Render (Default to English)
             setLanguage('en', document.querySelector('.lang-option.active'));
             
-            // 5. Mobile Menu Link Handling
+            // 5. Mobile Menu Link Handling (UPDATED FOR LENIS COMPATIBILITY)
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('href');
                     if (targetId && targetId !== '#' && document.querySelector(targetId)) {
-                        document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Check if Lenis is active (Desktop)
+                        if (typeof lenis !== 'undefined' && lenis) {
+                             lenis.scrollTo(targetId);
+                        } else {
+                            // Fallback to native smooth scroll (Mobile)
+                            document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+                        }
+
+                        // Close menus if open
                         const menu = document.getElementById('mobileMenu');
                         if(!menu.classList.contains('invisible')) toggleMobileMenu();
                     }
