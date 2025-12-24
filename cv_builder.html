@@ -30,7 +30,7 @@
         /* A4 Page Container */
         .a4-page {
             width: 210mm;
-            min-height: 297mm;
+            min-height: 297mm; /* Ensure at least one full page */
             background: white;
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
             margin: 0 auto;
@@ -38,7 +38,9 @@
             transform-origin: top center;
             display: flex;
             flex-direction: column; 
-            color: #1e293b; 
+            color: #1e293b;
+            /* Allow height to grow for preview, print will handle pages */
+            height: auto; 
         }
 
         #preview-container-wrapper {
@@ -49,6 +51,30 @@
             padding: 40px;
             box-sizing: border-box;
             background-color: #e2e8f0; 
+        }
+
+        /* Page Break Marker for Preview */
+        .page-break-marker {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 0;
+            border-top: 2px dashed #f87171; /* Red dashed line */
+            z-index: 50;
+            pointer-events: none;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .page-break-label {
+            background: #fef2f2;
+            color: #ef4444;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 0 0 4px 4px;
+            margin-right: 10px;
+            border: 1px solid #fca5a5;
+            border-top: none;
         }
 
         /* Custom Date Picker Styles */
@@ -133,7 +159,7 @@
                 padding: 0 !important;
             }
             /* Hide all UI elements */
-            header, aside, main, #print-tip, .no-print, .flatpickr-calendar { 
+            header, aside, main, #print-tip, .no-print, .flatpickr-calendar, .page-break-marker { 
                 display: none !important; 
             }
             
@@ -146,27 +172,31 @@
                 background: white !important; 
                 overflow: visible !important; 
                 display: block !important;
-                position: static !important;
+                position: absolute !important;
+                top: 0;
+                left: 0;
             }
             
             #preview-container-wrapper {
                 padding: 0 !important;
                 background: white !important;
                 display: block !important;
+                width: 210mm !important;
+                margin: 0 auto !important;
             }
             
             /* The CV Page */
             .a4-page { 
                 width: 210mm !important; 
-                min-height: 297mm !important;
+                /* Allow height to be auto for printing to handle multipage */
                 height: auto !important; 
+                min-height: 297mm !important;
                 box-shadow: none !important; 
                 transform: none !important; 
                 margin: 0 !important;
-                /* Static position allows flow across multiple pages if content is long */
-                position: static !important; 
+                position: relative !important; 
                 print-color-adjust: exact;
-                display: flex !important;
+                display: block !important; /* Block allows natural flow */
             }
             
             .break-inside-avoid { page-break-inside: avoid; }
@@ -340,6 +370,7 @@
 
         // 2. UPDATED DUMMY INTERNATIONAL DATA (ISO Dates)
         const INITIAL_DATA = {
+            cvType: 'experienced', // New field: 'experienced' or 'fresher'
             personal: {
                 fullName: "JOHNATHAN DOE",
                 title: "PROJECT MANAGER",
@@ -400,7 +431,9 @@
                     school: "New York University", 
                     website: "https://nyu.edu", 
                     year: "2015-05-20", 
-                    category: "Academic" 
+                    category: "Academic",
+                    cgpa: "3.8/4.0", // New field for Fresher
+                    coursework: "Strategic Management, Organizational Behavior" // New field for Fresher
                 },
                 { 
                     id: 2, 
@@ -409,10 +442,13 @@
                     school: "Project Management Institute (PMI)", 
                     website: "", 
                     year: "2016-08-15", 
-                    category: "Certification" 
+                    category: "Certification",
+                    cgpa: "",
+                    coursework: ""
                 }
             ],
             skills: ["Project Management", "Agile & Scrum", "Risk Management", "Budgeting & Forecasting", "Team Leadership", "JIRA & Confluence", "Stakeholder Management", "Strategic Planning"],
+            hobbies: ["Photography", "Traveling", "Chess", "Reading Tech Blogs"], // Added hobbies
             languages: [
                 { id: 1, name: "English", read: "Native", write: "Native", speak: "Native" },
                 { id: 2, name: "Spanish", read: "Fluent", write: "Fluent", speak: "Fluent" },
@@ -434,6 +470,9 @@
             cropper: { img: null, zoom: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0 },
 
             init() {
+                // Ensure cvType exists for older saves
+                if (!this.data.cvType) this.data.cvType = 'experienced';
+                
                 if (!TEMPLATES.find(t => t.id === this.template)) this.template = 'euro';
                 this.renderTabs();
                 this.renderEditor();
@@ -452,6 +491,8 @@
             save() {
                 localStorage.setItem('cv_builder_data', JSON.stringify(this.data));
                 this.renderPreview();
+                // Re-render tabs if CV type changes to show/hide Experience tab
+                this.renderTabs();
             },
 
             // --- DATE HELPER ---
@@ -483,13 +524,37 @@
                 });
             },
 
+            // --- PAGE BREAK VISUALIZATION ---
+            drawPageBreaks() {
+                const container = document.getElementById('preview-container');
+                // Remove existing markers
+                const existing = container.querySelectorAll('.page-break-marker');
+                existing.forEach(el => el.remove());
+
+                const A4_HEIGHT_PX = 1123; 
+                const totalHeight = container.scrollHeight;
+                
+                if (totalHeight <= A4_HEIGHT_PX) return;
+
+                const pages = Math.ceil(totalHeight / A4_HEIGHT_PX);
+
+                for (let i = 1; i < pages; i++) {
+                    const top = i * A4_HEIGHT_PX;
+                    const marker = document.createElement('div');
+                    marker.className = 'page-break-marker';
+                    marker.style.top = `${top}px`;
+                    marker.innerHTML = `<div class="page-break-label">End of Page ${i}</div>`;
+                    container.appendChild(marker);
+                }
+            },
+
             // --- DOWNLOAD PDF FUNCTION (VIA NATIVE PRINT) ---
             downloadPDF() {
                 // Show tip
                 const tip = document.getElementById('print-tip');
                 tip.classList.remove('hidden');
                 
-                // Trigger print after a brief delay to allow toast to render (though no-print hides it in print)
+                // Trigger print after a brief delay
                 setTimeout(() => {
                     window.print();
                 }, 500);
@@ -567,10 +632,6 @@
                     this.recognition.onresult = (event) => {
                         const transcript = event.results[0][0].transcript;
                         if (this.listeningTarget) {
-                           // For rich text, simple append might break HTML structure, but simplistic approach:
-                           // If listening target is description (rich text), just append text.
-                           // Actually rich text contenteditable handles this better manually.
-                           // Keeping simple string append for now as fallback.
                            const currentVal = this.listeningTarget.type === 'summary' ? this.data.personal.summary : this.data.experience.find(i=>i.id===this.listeningTarget.id).description;
                            const newVal = (currentVal ? currentVal + " " : "") + transcript;
                            
@@ -603,9 +664,27 @@
             setTemplate(id) { this.template = id; this.renderEditor(); this.renderPreview(); },
             setColor(c) { this.data.theme.color = c; this.save(); this.renderEditor(); this.renderPreview(); },
             setFont(f) { this.data.theme.font = f; this.save(); this.renderEditor(); this.renderPreview(); },
+            setCvType(type) {
+                this.data.cvType = type;
+                this.save(); // This triggers renderTabs and renderPreview
+                this.renderEditor();
+            },
 
             renderTabs() {
-                const tabs = [{id:'personal',label:'Info',icon:'user'},{id:'experience',label:'Work',icon:'briefcase'},{id:'education',label:'Edu',icon:'graduation-cap'},{id:'skills',label:'Skills',icon:'wrench'},{id:'design',label:'Style',icon:'palette'},{id:'cover_letter',label:'Letter',icon:'file-text'}];
+                let tabs = [
+                    {id:'personal',label:'Info',icon:'user'},
+                    {id:'experience',label:'Work',icon:'briefcase'},
+                    {id:'education',label:'Edu',icon:'graduation-cap'},
+                    {id:'skills',label:'Skills',icon:'wrench'},
+                    {id:'design',label:'Style',icon:'palette'},
+                    {id:'cover_letter',label:'Letter',icon:'file-text'}
+                ];
+                
+                // HIDE Work Tab if Fresher
+                if (this.data.cvType === 'fresher') {
+                    tabs = tabs.filter(t => t.id !== 'experience');
+                }
+
                 document.getElementById('tabs-container').innerHTML = tabs.map(t => `
                     <button onclick="app.setTab('${t.id}')" class="w-full flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-200 group ${this.activeTab === t.id ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}">
                         <i data-lucide="${t.icon}" width="20" height="20"></i>
@@ -705,6 +784,8 @@
                     item.degree = "Degree";
                     item.website = "";
                     item.category = "Academic";
+                    item.cgpa = "";
+                    item.coursework = "";
                 }
                 this.data[section].push(item);
                 this.renderEditor();
@@ -719,6 +800,11 @@
 
             updateSkills(value) {
                 this.data.skills = value.split(',').map(s => s.trim());
+                this.save();
+            },
+            
+            updateHobbies(value) {
+                this.data.hobbies = value.split(',').map(s => s.trim());
                 this.save();
             },
 
@@ -736,6 +822,15 @@
                 if (this.activeTab === 'personal') {
                     html = `
                     <div class="space-y-6 animate-in fade-in slide-in-from-left-4">
+                        <!-- MODE TOGGLE -->
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-center justify-between">
+                            <span class="text-xs font-bold text-blue-800 uppercase tracking-wide">CV Type</span>
+                            <div class="flex bg-white rounded-lg p-1 border border-blue-100 shadow-sm">
+                                <button onclick="app.setCvType('experienced')" class="px-3 py-1 rounded-md text-[10px] font-bold transition-all ${this.data.cvType === 'experienced' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-600'}">Experienced</button>
+                                <button onclick="app.setCvType('fresher')" class="px-3 py-1 rounded-md text-[10px] font-bold transition-all ${this.data.cvType === 'fresher' ? 'bg-green-500 text-white shadow' : 'text-slate-400 hover:text-slate-600'}">Fresher</button>
+                            </div>
+                        </div>
+
                         <div class="flex items-center gap-5 p-4 bg-slate-50 rounded-xl border border-slate-100">
                             <!-- Photo Indicator (Image hidden in editor, shown only on template) -->
                             <div class="w-20 h-20 rounded-full bg-white border-2 border-white shadow-md overflow-hidden shrink-0 flex items-center justify-center">
@@ -836,6 +931,7 @@
                             </div>
                         </div>`}).join('')}</div>`;
                 } else if (this.activeTab === 'education') {
+                    const isFresher = this.data.cvType === 'fresher';
                     html = `<div class="flex justify-between items-center mb-6"><h2 class="text-sm font-bold text-slate-700 uppercase">Education</h2><button onclick="app.addItem('education')" class="bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold shadow-md hover:bg-blue-700 transition-all">Add</button></div>
                         <div class="space-y-4">${this.data.education.map(edu => `
                         <div class="bg-white p-5 rounded-xl border border-slate-200 relative shadow-sm">
@@ -852,6 +948,20 @@
                                         <input type="text" value="${edu.year}" oninput="app.updateArray('education', ${edu.id}, 'year', this.value)" class="input-creative date-picker w-full p-2.5 rounded-lg text-sm" placeholder="Select Date">
                                     </div>
                                 </div>
+                                ${isFresher ? `
+                                <div class="grid grid-cols-1 gap-4 pt-2 border-t border-slate-100 animate-in fade-in">
+                                    <div class="flex gap-4">
+                                        <div class="w-1/3">
+                                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">CGPA / Grade</label>
+                                            <input value="${edu.cgpa || ''}" oninput="app.updateArray('education', ${edu.id}, 'cgpa', this.value)" class="input-creative w-full p-2 rounded-lg text-sm" placeholder="e.g. 3.8/4.0">
+                                        </div>
+                                        <div class="w-2/3">
+                                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Relevant Coursework / Projects</label>
+                                            <input value="${edu.coursework || ''}" oninput="app.updateArray('education', ${edu.id}, 'coursework', this.value)" class="input-creative w-full p-2 rounded-lg text-sm" placeholder="e.g. Data Structures, Marketing 101">
+                                        </div>
+                                    </div>
+                                </div>
+                                ` : ''}
                             </div>
                         </div>`).join('')}</div>`;
                 } else if (this.activeTab === 'skills') {
@@ -864,6 +974,15 @@
                             <textarea oninput="app.updateSkills(this.value)" rows="4" class="input-creative w-full p-3 rounded-lg text-sm" placeholder="Comma separated list...">${this.data.skills.join(', ')}</textarea>
                             <div class="flex flex-wrap gap-2 mt-4">${this.data.skills.filter(s=>s).map(s => `<span class="bg-white border border-slate-200 text-slate-600 px-3 py-1 rounded-full text-xs font-medium shadow-sm">${s}</span>`).join('')}</div>
                         </div>
+
+                         <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                            <div class="flex justify-between items-center mb-2">
+                                <h2 class="text-sm font-bold text-slate-700 flex items-center gap-2"><i data-lucide="smile" width="16"></i> Hobbies & Interests</h2>
+                            </div>
+                            <textarea oninput="app.updateHobbies(this.value)" rows="3" class="input-creative w-full p-3 rounded-lg text-sm" placeholder="Reading, Traveling...">${(this.data.hobbies || []).join(', ')}</textarea>
+                            <div class="flex flex-wrap gap-2 mt-4">${(this.data.hobbies || []).filter(s=>s).map(s => `<span class="bg-white border border-slate-200 text-slate-600 px-3 py-1 rounded-full text-xs font-medium shadow-sm">${s}</span>`).join('')}</div>
+                        </div>
+
                         <div class="space-y-4">
                             <div class="flex justify-between items-center"><h2 class="text-sm font-bold text-slate-700 flex items-center gap-2"><i data-lucide="globe" width="16"></i> Languages</h2><button onclick="app.addItem('languages')" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs font-bold flex items-center gap-1 transition-colors"><i data-lucide="plus" width="14"></i> Add</button></div>
                             <div class="space-y-3">${(this.data.languages || []).map(l => `<div class="bg-white p-4 rounded-xl border border-slate-200 relative group shadow-sm hover:border-blue-300 transition-colors"><button onclick="app.removeItem('languages', ${l.id})" class="absolute top-3 right-3 text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" width="14"></i></button><div class="mb-3 pr-8"><input value="${l.name}" oninput="app.updateArray('languages', ${l.id}, 'name', this.value)" class="input-creative w-full p-2 rounded-lg text-sm font-bold" placeholder="Language Name"></div><div class="grid grid-cols-3 gap-2">${this.levelSelect(l.id, 'read', l.read, 'book-open')}${this.levelSelect(l.id, 'write', l.write, 'pen-tool')}${this.levelSelect(l.id, 'speak', l.speak, 'mic')}</div></div>`).join('')}</div>
@@ -879,6 +998,7 @@
                 container.innerHTML = html;
                 if (window.lucide) lucide.createIcons();
                 this.initDatePickers(); // Initialize Flatpickr after DOM update
+                this.drawPageBreaks(); // Draw page markers
             },
 
             // --- RENDER PREVIEW (Fixed A4 & Sidebar) ---
@@ -887,13 +1007,14 @@
                 const p = this.data.personal;
                 const theme = this.data.theme.color;
                 const fontClass = this.data.theme.font || 'font-inter';
+                const isFresher = this.data.cvType === 'fresher';
                 
                 container.className = `a4-page transition-transform duration-200 origin-top ${fontClass} text-slate-800`;
 
                 if (this.activeTab === 'cover_letter') {
                     container.innerHTML = `
-                    <div class="p-16 h-full flex flex-col font-sans">
-                        <div class="border-b-2 pb-8 mb-10" style="border-color:${theme}">
+                    <div class="px-12 py-12 h-full flex flex-col font-sans">
+                        <div class="border-b-2 pb-6 mb-8" style="border-color:${theme}">
                             <h1 class="text-5xl font-bold uppercase tracking-tight text-gray-900" style="color:${theme}">${p.fullName}</h1>
                             <p class="text-xl text-gray-600 font-medium mt-2">${p.title}</p>
                             <div class="flex flex-wrap gap-6 text-sm text-gray-500 mt-4">
@@ -902,8 +1023,8 @@
                                 ${p.location ? `<span class="flex items-center gap-2"><i data-lucide="map-pin" width="14"></i> ${p.location}</span>` : ''}
                             </div>
                         </div>
-                        <div class="mb-10 font-bold">${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
-                        <div class="mb-8 text-gray-900">
+                        <div class="mb-8 font-bold">${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                        <div class="mb-6 text-gray-900">
                             <p class="font-bold">${this.data.coverLetter.recipient}</p>
                             <p class="font-medium text-gray-600">${this.data.coverLetter.companyName}</p>
                         </div>
@@ -916,49 +1037,53 @@
                 const formatList = (items) => items.map(s => `<span class="border border-slate-200 px-2 py-0.5 rounded-md text-[10px] bg-slate-50">${s}</span>`).join('');
 
                 if (this.template === 'euro') {
-                    // Update: Sidebar content stays at top (Page 1), background stretches
+                    // Update: COMPACT LAYOUT (Reduced padding/margins everywhere)
                     html = `
-                    <div class="grid grid-cols-12 flex-1 min-h-[297mm] text-slate-800">
-                        <div class="col-span-4 bg-slate-50 p-6 border-r border-slate-200 text-xs">
-                            ${p.photo ? `<div class="flex justify-center mb-6"><img src="${p.photo}" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"></div>` : ''}
-                            <h1 class="text-xl font-bold uppercase mb-2 leading-tight" style="color:${theme}">${p.fullName}</h1>
-                            <p class="text-sm font-bold text-slate-500 uppercase mb-6 tracking-wider">${p.title}</p>
+                    <div class="grid grid-cols-12 flex-1 min-h-[297mm] text-slate-800 relative" style="background: linear-gradient(to right, #f8fafc 33.333333%, #ffffff 33.333333%);">
+                        <!-- SIDEBAR: Padding adjusted to px-5 py-5 for better fit -->
+                        <div class="col-span-4 px-5 py-5 border-r border-slate-200 text-[10px] flex flex-col leading-tight">
+                            ${p.photo ? 
+                                `<div class="flex justify-center mb-4"><img src="${p.photo}" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md"></div>` : 
+                                `<div class="flex justify-center mb-4"><div class="w-24 h-24 rounded-full bg-slate-200 border-4 border-white shadow-md flex items-center justify-center text-slate-400"><i data-lucide="user" width="36" height="36"></i></div></div>`
+                            }
+                            <h1 class="text-lg font-bold uppercase mb-1 leading-tight text-center break-words" style="color:${theme}">${p.fullName}</h1>
+                            <p class="text-[10px] font-bold text-slate-500 uppercase mb-4 tracking-wider text-center">${p.title}</p>
                             
-                            <div class="space-y-6">
+                            <div class="space-y-4">
                                 <!-- Contact -->
-                                <div class="space-y-2">
-                                    <h3 class="font-bold uppercase border-b border-slate-300 pb-1 mb-2" style="color:${theme}">Contact</h3>
-                                    <p class="flex items-center gap-2"><i data-lucide="phone" width="12" style="color:${theme}"></i> ${p.phone}</p>
-                                    ${p.whatsapp ? `<p class="flex items-center gap-2"><i data-lucide="message-circle" width="12" style="color:${theme}"></i> ${p.whatsapp}</p>` : ''}
-                                    ${p.alternativePhone ? `<p class="flex items-center gap-2"><i data-lucide="phone-call" width="12" style="color:${theme}"></i> ${p.alternativePhone}</p>` : ''}
-                                    <p class="flex items-center gap-2 break-all"><i data-lucide="mail" width="12" style="color:${theme}"></i> ${p.email}</p>
-                                    <p class="flex items-center gap-2"><i data-lucide="map-pin" width="12" style="color:${theme}"></i> ${p.location}</p>
+                                <div class="space-y-1.5">
+                                    <h3 class="font-bold uppercase border-b border-slate-300 pb-0.5 mb-1.5 text-[10px]" style="color:${theme}">Contact</h3>
+                                    <p class="flex items-center gap-2"><i data-lucide="phone" width="10" style="color:${theme}"></i> ${p.phone}</p>
+                                    ${p.whatsapp ? `<p class="flex items-center gap-2"><i data-lucide="message-circle" width="10" style="color:${theme}"></i> ${p.whatsapp}</p>` : ''}
+                                    ${p.alternativePhone ? `<p class="flex items-center gap-2"><i data-lucide="phone-call" width="10" style="color:${theme}"></i> ${p.alternativePhone}</p>` : ''}
+                                    <p class="flex items-center gap-2 break-all"><i data-lucide="mail" width="10" style="color:${theme}"></i> ${p.email}</p>
+                                    <p class="flex items-center gap-2"><i data-lucide="map-pin" width="10" style="color:${theme}"></i> ${p.location}</p>
                                 </div>
 
                                 <!-- Socials -->
-                                <div class="space-y-2">
-                                    <h3 class="font-bold uppercase border-b border-slate-300 pb-1 mb-2" style="color:${theme}">Socials</h3>
-                                    ${p.linkedin ? `<a href="${p.linkedin}" target="_blank" class="flex items-center gap-2 hover:underline"><i data-lucide="linkedin" width="12" style="color:${theme}"></i> LinkedIn</a>` : ''}
-                                    ${p.facebook ? `<a href="${p.facebook}" target="_blank" class="flex items-center gap-2 hover:underline"><i data-lucide="facebook" width="12" style="color:${theme}"></i> Facebook</a>` : ''}
-                                    ${p.instagram ? `<a href="${p.instagram}" target="_blank" class="flex items-center gap-2 hover:underline"><i data-lucide="instagram" width="12" style="color:${theme}"></i> Instagram</a>` : ''}
-                                </div>
-
-                                <!-- Skills -->
-                                <div>
-                                    <h3 class="font-bold uppercase mb-2 border-b border-slate-300 pb-1" style="color:${theme}">Skills</h3>
-                                    <div class="flex flex-wrap gap-1">${this.data.skills.map(s => `<span class="bg-white border border-slate-300 px-2 py-1 rounded shadow-sm">${s}</span>`).join('')}</div>
+                                <div class="space-y-1.5">
+                                    <h3 class="font-bold uppercase border-b border-slate-300 pb-0.5 mb-1.5 text-[10px]" style="color:${theme}">Socials</h3>
+                                    ${p.linkedin ? `<a href="${p.linkedin}" target="_blank" class="flex items-center gap-2 hover:underline"><i data-lucide="linkedin" width="10" style="color:${theme}"></i> LinkedIn</a>` : ''}
+                                    ${p.facebook ? `<a href="${p.facebook}" target="_blank" class="flex items-center gap-2 hover:underline"><i data-lucide="facebook" width="10" style="color:${theme}"></i> Facebook</a>` : ''}
+                                    ${p.instagram ? `<a href="${p.instagram}" target="_blank" class="flex items-center gap-2 hover:underline"><i data-lucide="instagram" width="10" style="color:${theme}"></i> Instagram</a>` : ''}
                                 </div>
 
                                 <!-- Languages -->
                                 <div>
-                                    <h3 class="font-bold uppercase mb-2 border-b border-slate-300 pb-1" style="color:${theme}">Languages</h3>
-                                    ${(this.data.languages || []).map(l => `<div class="mb-2 flex justify-between items-center"><strong>${l.name}</strong><span class="opacity-70 text-[10px] bg-slate-200 px-1.5 py-0.5 rounded">${l.speak}</span></div>`).join('')}
+                                    <h3 class="font-bold uppercase mb-1.5 border-b border-slate-300 pb-0.5 text-[10px]" style="color:${theme}">Languages</h3>
+                                    ${(this.data.languages || []).map(l => `<div class="mb-1 flex justify-between items-center"><strong>${l.name}</strong><span class="opacity-70 text-[9px] bg-slate-200 px-1.5 py-0 rounded">${l.speak}</span></div>`).join('')}
                                 </div>
 
-                                <!-- Personal Details (Moved directly after Languages, removed mt-auto) -->
-                                <div class="pt-6 border-t border-slate-200">
-                                    <h3 class="font-bold uppercase mb-3 text-slate-400 tracking-wider text-[10px]">Personal Details</h3>
-                                    <div class="space-y-2 text-[10px] text-slate-600">
+                                <!-- Hobbies -->
+                                <div>
+                                    <h3 class="font-bold uppercase mb-1.5 border-b border-slate-300 pb-0.5 text-[10px]" style="color:${theme}">Hobbies</h3>
+                                    <div class="flex flex-wrap gap-1">${(this.data.hobbies || []).map(s => `<span class="bg-white border border-slate-300 px-1.5 py-0.5 rounded shadow-sm text-[9px]">${s}</span>`).join('')}</div>
+                                </div>
+
+                                <!-- Personal Details -->
+                                <div class="pt-4 border-t border-slate-200">
+                                    <h3 class="font-bold uppercase mb-2 text-slate-400 tracking-wider text-[9px]">Personal Details</h3>
+                                    <div class="space-y-1 text-[9px] text-slate-600">
                                         <div class="flex justify-between items-center"><span class="font-bold text-slate-700">Passport:</span> <span>${p.passportNumber || '-'}</span></div>
                                         <div class="flex justify-between items-center"><span class="font-bold text-slate-700">DOB:</span> <span>${p.dob || '-'}</span></div>
                                         <div class="flex justify-between items-center"><span class="font-bold text-slate-700">Nationality:</span> <span>${p.nationality || '-'}</span></div>
@@ -969,52 +1094,68 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-span-8 p-8 flex flex-col">
-                            <div class="mb-8">
-                                <h3 class="font-bold text-slate-900 uppercase border-b-2 border-slate-300 pb-1 mb-3 flex items-center gap-2" style="color:${theme}"><i data-lucide="user" width="16"></i> About Me</h3>
-                                <div class="text-sm text-justify leading-relaxed rich-content">${p.summary}</div>
+
+                        <!-- MAIN CONTENT: Padding adjusted to px-6 py-5 -->
+                        <div class="col-span-8 px-6 py-5 flex flex-col">
+                            <!-- About Me -->
+                            <div class="mb-4">
+                                <h3 class="font-bold text-xs text-slate-900 uppercase border-b-2 border-slate-300 pb-0.5 mb-2 flex items-center gap-2" style="color:${theme}"><i data-lucide="user" width="12"></i> About Me</h3>
+                                <div class="text-[10px] text-justify leading-tight rich-content">${p.summary}</div>
                             </div>
-                            <div class="mb-8">
-                                <h3 class="font-bold text-slate-900 uppercase border-b-2 border-slate-300 pb-1 mb-4 flex items-center gap-2" style="color:${theme}"><i data-lucide="briefcase" width="16"></i> Experience</h3>
+
+                            <!-- Experience: HIDDEN if Fresher -->
+                            ${!isFresher ? `
+                            <div class="mb-3">
+                                <h3 class="font-bold text-xs text-slate-900 uppercase border-b-2 border-slate-300 pb-0.5 mb-2 flex items-center gap-2" style="color:${theme}"><i data-lucide="briefcase" width="12"></i> Experience</h3>
                                 ${this.data.experience.map(e => `
-                                    <div class="mb-5 break-inside-avoid">
-                                        <div class="flex justify-between items-baseline mb-1">
+                                    <div class="mb-2.5 break-inside-avoid">
+                                        <div class="flex justify-between items-baseline mb-0.5">
                                             <div class="flex-1">
                                                 ${e.website 
-                                                    ? `<a href="${e.website}" target="_blank" class="font-bold text-sm uppercase text-slate-800 inline-block mr-2 hover:underline flex items-center gap-1 group">${e.company} <i data-lucide="external-link" width="10" class="opacity-0 group-hover:opacity-100 transition-opacity"></i></a>` 
-                                                    : `<h4 class="font-bold text-sm uppercase text-slate-800 inline-block mr-2">${e.company}</h4>`
+                                                    ? `<a href="${e.website}" target="_blank" class="font-bold text-xs uppercase text-slate-800 inline-block mr-2 hover:underline flex items-center gap-1 group">${e.company} <i data-lucide="external-link" width="10" class="opacity-0 group-hover:opacity-100 transition-opacity"></i></a>` 
+                                                    : `<h4 class="font-bold text-xs uppercase text-slate-800 inline-block mr-2">${e.company}</h4>`
                                                 }
-                                                <span class="text-xs text-slate-500 italic block sm:inline-block">${e.location || ''}</span>
+                                                <span class="text-[9px] text-slate-500 italic block sm:inline-block">${e.location || ''}</span>
                                             </div>
-                                            <span class="text-xs font-bold text-slate-500 whitespace-nowrap ml-4">${app.formatDate(e.start)} - ${app.formatDate(e.end)}</span>
+                                            <span class="text-[9px] font-bold text-slate-500 whitespace-nowrap ml-2">${app.formatDate(e.start)} - ${app.formatDate(e.end)}</span>
                                         </div>
-                                        <p class="text-sm font-bold mb-1 italic" style="color:${theme}">${e.role}</p>
-                                        <div class="text-xs text-justify leading-relaxed text-slate-600 rich-content">${e.description}</div>
+                                        <p class="text-[10px] font-bold mb-0.5 italic" style="color:${theme}">${e.role}</p>
+                                        <div class="text-[10px] text-justify leading-tight text-slate-600 rich-content">${e.description}</div>
                                     </div>
                                 `).join('')}
-                            </div>
-                            <div class="mb-8">
-                                <h3 class="font-bold text-slate-900 uppercase border-b-2 border-slate-300 pb-1 mb-4 flex items-center gap-2" style="color:${theme}"><i data-lucide="graduation-cap" width="16"></i> Education</h3>
+                            </div>` : ''}
+
+                            <!-- Education -->
+                            <div class="mb-4">
+                                <h3 class="font-bold text-xs text-slate-900 uppercase border-b-2 border-slate-300 pb-0.5 mb-2 flex items-center gap-2" style="color:${theme}"><i data-lucide="graduation-cap" width="12"></i> Education</h3>
                                 ${this.data.education.map(e => `
-                                    <div class="mb-3 break-inside-avoid">
-                                        <div class="flex justify-between text-xs font-bold text-slate-500"><span>${app.formatDate(e.year)}</span></div>
-                                        <div class="font-bold text-sm text-slate-800 uppercase">${e.degree}</div>
-                                        <div class="text-xs">
+                                    <div class="mb-2 break-inside-avoid">
+                                        <div class="flex justify-between text-[9px] font-bold text-slate-500"><span>${app.formatDate(e.year)}</span></div>
+                                        <div class="font-bold text-[11px] text-slate-800 uppercase">${e.degree}</div>
+                                        <div class="text-[10px] flex gap-2 items-center">
                                             ${e.website 
                                                 ? `<a href="${e.website}" target="_blank" class="hover:underline flex items-center gap-1 group">${e.school} <i data-lucide="external-link" width="8" class="opacity-0 group-hover:opacity-100 transition-opacity"></i></a>` 
                                                 : e.school
                                             }
                                         </div>
+                                        ${isFresher && e.cgpa ? `<div class="text-[10px] mt-0.5"><strong>Grade/CGPA:</strong> ${e.cgpa}</div>` : ''}
+                                        ${isFresher && e.coursework ? `<div class="text-[10px] text-slate-600 mt-0.5"><strong>Coursework:</strong> ${e.coursework}</div>` : ''}
                                     </div>
                                 `).join('')}
+                            </div>
+
+                            <!-- Technical Skills -->
+                            <div class="mb-4">
+                                <h3 class="font-bold text-xs text-slate-900 uppercase border-b-2 border-slate-300 pb-0.5 mb-2 flex items-center gap-2" style="color:${theme}"><i data-lucide="code" width="12"></i> Technical Skills</h3>
+                                <div class="flex flex-wrap gap-1">${this.data.skills.map(s => `<span class="bg-white border border-slate-300 px-1.5 py-0.5 rounded shadow-sm text-[9px]">${s}</span>`).join('')}</div>
                             </div>
                         </div>
                     </div>`;
                 } else {
-                    // ATS Template
+                    // ATS Template - Reduced padding (px-12 py-10)
                     html = `
-                    <div class="p-12 flex-1 min-h-[297mm] text-black leading-tight flex flex-col">
-                        <div class="text-center border-b pb-4 mb-6" style="border-color:${theme}">
+                    <div class="px-12 py-10 flex-1 min-h-[297mm] text-black leading-tight flex flex-col">
+                        <div class="text-center border-b pb-4 mb-5" style="border-color:${theme}">
                             <h1 class="text-3xl font-bold uppercase tracking-wide mb-1" style="color:${theme}">${p.fullName}</h1>
                             <p class="text-lg font-bold mb-2">${p.title}</p>
                             <div class="text-sm flex justify-center gap-4 flex-wrap mt-2">
@@ -1026,15 +1167,13 @@
                                 ${p.instagram ? `| <span><a href="${p.instagram}" class="text-inherit no-underline">Instagram</a></span>` : ''}
                             </div>
                         </div>
-                        <div class="mb-6 break-inside-avoid">
+                        <div class="mb-5 break-inside-avoid">
                             <h3 class="font-bold uppercase text-sm border-b mb-2" style="border-color:${theme}; color:${theme}">Summary</h3>
                             <div class="text-sm text-justify rich-content">${p.summary}</div>
                         </div>
-                        <div class="mb-6 break-inside-avoid">
-                            <h3 class="font-bold uppercase text-sm border-b mb-2" style="border-color:${theme}; color:${theme}">Professional Skills</h3>
-                            <p class="text-sm leading-relaxed">${this.data.skills.join(' • ')}</p>
-                        </div>
-                        <div class="mb-6">
+                        
+                        <!-- Reduced Margin Below (mb-3) -->
+                        <div class="mb-3">
                             <h3 class="font-bold uppercase text-sm border-b mb-3" style="border-color:${theme}; color:${theme}">Job and Duty</h3>
                             ${this.data.experience.map(e => `
                                 <div class="mb-4 break-inside-avoid">
@@ -1052,7 +1191,7 @@
                                 </div>
                             `).join('')}
                         </div>
-                        <div class="mb-6 break-inside-avoid">
+                        <div class="mb-5 break-inside-avoid">
                             <h3 class="font-bold uppercase text-sm border-b mb-2" style="border-color:${theme}; color:${theme}">Qualification</h3>
                             ${this.data.education.map(e => `
                                 <div class="flex justify-between text-sm mb-1">
@@ -1061,9 +1200,23 @@
                                         ${e.website ? `<a href="${e.website}" class="text-inherit underline">${e.school}</a>` : e.school}, ${app.formatDate(e.year)}
                                     </span>
                                 </div>
+                                ${isFresher ? `
+                                    <div class="text-xs mb-3 pl-2 border-l-2 border-gray-100">
+                                        ${e.cgpa ? `<div><strong>Grade:</strong> ${e.cgpa}</div>` : ''}
+                                        ${e.coursework ? `<div><strong>Coursework:</strong> ${e.coursework}</div>` : ''}
+                                    </div>
+                                ` : ''}
                             `).join('')}
                         </div>
-                        <div class="mb-6 break-inside-avoid">
+                        <div class="mb-5 break-inside-avoid">
+                            <h3 class="font-bold uppercase text-sm border-b mb-2" style="border-color:${theme}; color:${theme}">Professional Skills</h3>
+                            <p class="text-sm leading-relaxed">${this.data.skills.join(' • ')}</p>
+                        </div>
+                         <div class="mb-5 break-inside-avoid">
+                            <h3 class="font-bold uppercase text-sm border-b mb-2" style="border-color:${theme}; color:${theme}">Hobbies & Interests</h3>
+                            <p class="text-sm leading-relaxed">${(this.data.hobbies || []).join(' • ')}</p>
+                        </div>
+                        <div class="mb-5 break-inside-avoid">
                             <h3 class="font-bold uppercase text-sm border-b mb-2" style="border-color:${theme}; color:${theme}">Language Skills</h3>
                             <div class="text-sm">${(this.data.languages || []).map(l => l.name).join(' • ')}</div>
                         </div>
@@ -1072,6 +1225,8 @@
 
                 container.innerHTML = html;
                 if(window.lucide) lucide.createIcons();
+                this.initDatePickers(); // Initialize Flatpickr after DOM update
+                this.drawPageBreaks(); // Draw page markers
             },
 
             // --- IMAGE & JSON HELPERS ---
