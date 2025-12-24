@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Builder Ultimate</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&family=Roboto+Mono:wght@400;500&family=Lato:wght@300;400;700&family=Open+Sans:wght@300;400;600&family=Roboto:wght@300;400;500;700&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&family=Poppins:wght@300;400;600&family=Lora:wght@400;600&family=Raleway:wght@300;400;600&display=swap');
+        
+        /* Font Family Classes */
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .font-merriweather { font-family: 'Merriweather', serif; }
+        .font-roboto-mono { font-family: 'Roboto Mono', monospace; }
+        .font-lato { font-family: 'Lato', sans-serif; }
+        .font-open-sans { font-family: 'Open Sans', sans-serif; }
+        .font-roboto { font-family: 'Roboto', sans-serif; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-source-sans { font-family: 'Source Sans Pro', sans-serif; }
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .font-lora { font-family: 'Lora', serif; }
+        .font-raleway { font-family: 'Raleway', sans-serif; }
+
+        /* Font Sizes Scaling Classes */
+        .text-scale-sm { font-size: 0.875rem; } 
+        .text-scale-md { font-size: 1rem; }     
+        .text-scale-lg { font-size: 1.125rem; } 
+        .text-scale-xl { font-size: 1.25rem; }  
+
+        /* A4 Page Logic */
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 0 20px rgba(0,0,0,0.05);
+            margin: 0 auto;
+            position: relative;
+            transform-origin: top center;
+            overflow: hidden; 
+            flex-shrink: 0;
+            line-height: 1.5;
+        }
+
+        /* Container Wrapper */
+        #preview-container-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100%;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        @media print {
+            @page { margin: 0; size: A4; }
+            body { 
+                background: white; 
+                height: auto; 
+                overflow: visible; 
+                -webkit-print-color-adjust: exact;
+            }
+            .no-print { display: none !important; }
+            
+            #preview-wrapper { 
+                padding: 0 !important; 
+                margin: 0 !important; 
+                height: auto !important; 
+                overflow: visible !important; 
+                display: block !important;
+                background: white !important;
+            }
+             #preview-container-wrapper {
+                padding: 0 !important;
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+            }
+            .a4-page { 
+                width: 100% !important;
+                height: auto !important; 
+                min-height: auto !important;
+                box-shadow: none !important;
+                transform: none !important;
+                margin: 0 !important;
+                border: none !important;
+                overflow: visible !important;
+                display: block !important; 
+            }
+            .break-inside-avoid { page-break-inside: avoid; }
+        }
+        
+        /* Custom Scrollbar */
+        .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Smooth transitions */
+        .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 200ms; }
+        
+        /* Glassy Inputs */
+        .input-creative {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+        .input-creative:focus {
+            background: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        /* Range Input */
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #2563eb; cursor: pointer; margin-top: -6px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #e2e8f0; border-radius: 2px; }
+    </style>
+</head>
+<body class="bg-slate-100 h-screen flex flex-col overflow-hidden text-slate-800 font-inter">
+
+    <!-- Top Bar -->
+    <header class="bg-white border-b border-slate-200 h-16 flex justify-between items-center px-6 shadow-sm z-40 shrink-0 no-print">
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-600 text-white p-2 rounded-lg shadow-lg shadow-blue-600/20">
+                <i data-lucide="file-text" width="20" height="20"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight text-slate-800">CV Builder <span class="text-blue-600">Ultimate</span></h1>
+                <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">v7.3 Refined Templates</p>
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <label class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-full text-sm font-medium transition-colors cursor-pointer shadow-sm">
+                <i data-lucide="upload" width="16"></i> Restore
+                <input type="file" accept=".json" onchange="app.importJSON(this)" class="hidden" />
+            </label>
+            <button onclick="app.downloadJSON()" class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 hover:text-green-600 hover:border-green-200 hover:bg-green-50 text-slate-600 rounded-full text-sm font-medium transition-colors shadow-sm">
+                <i data-lucide="save" width="16"></i> Backup
+            </button>
+            <button onclick="window.print()" class="flex items-center gap-2 px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-full text-sm font-medium transition-colors shadow-lg shadow-slate-900/20">
+                <i data-lucide="printer" width="16"></i> Export PDF
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <!-- 1. Navigation Sidebar -->
+        <aside class="w-20 bg-slate-900 flex flex-col items-center py-6 gap-4 z-30 shadow-xl overflow-y-auto no-print shrink-0">
+            <div id="tabs-container" class="flex flex-col w-full gap-2 px-2"></div>
+        </aside>
+
+        <!-- 2. Editor Panel -->
+        <main class="w-[450px] bg-white border-r border-slate-200 flex flex-col z-20 shadow-[4px_0_24px_rgba(0,0,0,0.02)] no-print shrink-0 relative transition-all duration-300">
+            <div class="h-16 border-b border-slate-100 flex items-center justify-between px-6 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+                <h2 id="section-title" class="text-lg font-bold text-slate-800">Editor</h2>
+            </div>
+            <div id="editor-content" class="flex-1 overflow-y-auto p-6 scrollbar-thin"></div>
+        </main>
+
+        <!-- 3. Preview Panel -->
+        <section class="flex-1 bg-slate-200 relative overflow-hidden flex flex-col items-center">
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+            
+            <div id="preview-wrapper" class="flex-1 w-full overflow-y-auto overflow-x-hidden relative z-0 flex justify-center pt-8 pb-32">
+                 <div id="preview-container-wrapper">
+                    <div id="preview-container" class="a4-page transition-transform duration-200 origin-top">
+                        <!-- Template Renders Here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Zoom Controls -->
+            <div class="absolute bottom-6 right-6 flex items-center gap-2 bg-white p-2 rounded-full shadow-lg border border-slate-200 no-print z-50">
+                <button class="p-2 hover:bg-slate-100 rounded-full text-slate-500" onclick="app.adjustScale(-0.1)"><i data-lucide="minus" width="16"></i></button>
+                <span class="text-xs font-mono w-12 text-center" id="zoom-level">100%</span>
+                <button class="p-2 hover:bg-slate-100 rounded-full text-slate-500" onclick="app.adjustScale(0.1)"><i data-lucide="plus" width="16"></i></button>
+                <button class="p-2 hover:bg-slate-100 rounded-full text-slate-500 border-l border-slate-200 ml-1 pl-3" onclick="app.autoFit()" title="Fit to Screen"><i data-lucide="maximize" width="16"></i></button>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Cropper Modal -->
+    <div id="cropper-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-[1000] p-4 hidden transition-opacity opacity-0 no-print">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md transform scale-95 transition-transform">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold flex items-center gap-2 text-slate-800"><i data-lucide="crop"></i> Adjust Photo</h3>
+                <button onclick="app.closeCropper()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" width="20"></i></button>
+            </div>
+            <div class="flex justify-center mb-8">
+                <div id="crop-area" class="w-64 h-64 rounded-full border-[6px] border-white ring-4 ring-blue-500/20 shadow-xl overflow-hidden relative bg-slate-100 cursor-move">
+                    <img id="crop-img" src="" class="absolute max-w-none origin-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" draggable="false">
+                </div>
+            </div>
+            <div class="mb-8 space-y-2">
+                <div class="flex items-center gap-4 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                    <i data-lucide="zoom-in" class="text-slate-400" width="16"></i>
+                    <input type="range" min="0.5" max="3" step="0.1" value="1" id="zoom-slider" class="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="app.closeCropper()" class="flex-1 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-semibold border border-slate-200 transition-colors">Cancel</button>
+                <button onclick="app.saveCrop()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2"><i data-lucide="check" width="18"></i> Save Photo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURES ---
+        const JOB_DB = {
+            "Management": ["Manager", "Director", "CEO", "CFO", "CTO", "Team Leader", "Supervisor", "Executive"],
+            "IT": ["Software Engineer", "Developer", "Designer", "System Admin", "Data Scientist", "Product Manager"],
+            "Medical": ["Doctor", "Nurse", "Surgeon", "Pharmacist", "Dentist", "Therapist", "Paramedic"],
+            "Construction": ["Architect", "Engineer", "Worker", "Electrician", "Plumber", "Carpenter", "Foreman"],
+            "Sales": ["Sales Rep", "Account Manager", "Business Development", "Cashier", "Store Manager"],
+            "Others": ["Teacher", "Driver", "Artist", "Writer", "Chef", "Waiter"]
+        };
+
+        const EDU_CATEGORIES = ["Academic", "Technical", "Training", "Certification"];
+        const GENDER_OPTS = ["Male", "Female", "Non-Binary", "Prefer not to say"];
+        const MARITAL_OPTS = ["Single", "Married", "Divorced", "Widowed"];
+        
+        // --- FONT OPTIONS ---
+        const FONT_OPTIONS = [
+            { id: 'font-inter', label: 'Inter', class: 'font-inter' },
+            { id: 'font-roboto', label: 'Roboto', class: 'font-roboto' },
+            { id: 'font-open-sans', label: 'Open Sans', class: 'font-open-sans' },
+            { id: 'font-lato', label: 'Lato', class: 'font-lato' },
+            { id: 'font-montserrat', label: 'Montserrat', class: 'font-montserrat' },
+            { id: 'font-poppins', label: 'Poppins', class: 'font-poppins' },
+            { id: 'font-source-sans', label: 'Source Sans', class: 'font-source-sans' },
+            { id: 'font-raleway', label: 'Raleway', class: 'font-raleway' },
+            { id: 'font-merriweather', label: 'Merriweather', class: 'font-merriweather' },
+            { id: 'font-playfair', label: 'Playfair', class: 'font-playfair' },
+            { id: 'font-lora', label: 'Lora', class: 'font-lora' },
+            { id: 'font-roboto-mono', label: 'Mono', class: 'font-roboto-mono' }
+        ];
+
+        const INITIAL_DATA = {
+            personal: {
+                fullName: "ALEX MORGAN",
+                title: "SENIOR SALES EXECUTIVE",
+                email: "alex.morgan@example.com",
+                phone: "+971 50 123 4567",
+                whatsapp: "+971 50 123 4567",
+                location: "Dubai, UAE",
+                postalAddress: "P.O. Box 12345, Dubai, UAE",
+                nationality: "Indian",
+                passportNumber: "N1234567",
+                passportExpiry: "2030-01-01",
+                passportIssued: "2020-01-01",
+                dob: "1994-09-02",
+                placeOfBirth: "Kerala, India",
+                gender: "Male",
+                maritalStatus: "Single",
+                linkedin: "linkedin.com/in/alexmorgan",
+                instagram: "",
+                facebook: "",
+                portfolio: "",
+                photo: null, 
+                summary: "Proactive and results-driven Sales Executive with extensive experience in retail sales, showroom management, and customer engagement. Skilled in consultative selling, upselling, cross-selling, and walk-in customer handling to consistently achieve sales targets."
+            },
+            coverLetter: {
+                companyName: "TechCorp Inc.",
+                recipient: "Hiring Manager",
+                jobDescription: "",
+                content: "Dear Hiring Manager..."
+            },
+            experience: [
+                { id: 1, role: "Sales Executive", company: "Automotive Co.", start: "May 2021", end: "Oct 2023", employmentType: "Full-time", locationType: "On-site", description: "Identified customer needs and recommended suitable vehicle models. Conducted test drives and explained technical features. Collaborated with finance partners." }
+            ],
+            education: [
+                { id: 1, degree: "BA English Literature", field: "Literature", school: "University of Calicut", year: "2018", type: "Bachelor's", category: "Academic" }
+            ],
+            skills: ["Sales & Operations", "Customer Service", "MS Office", "CRM Systems", "Inventory Management"],
+            languages: [
+                { id: 1, name: "English", read: "Fluent", write: "Fluent", speak: "Fluent" },
+                { id: 2, name: "Malayalam", read: "Native", write: "Native", speak: "Native" }
+            ],
+            theme: { color: "#2563eb", font: "font-inter" }
+        };
+
+        const TEMPLATES = [
+            { id: 'euro', name: 'Euro-Style', desc: 'Structured & Detailed' },
+            { id: 'ats', name: 'ATS-Standard', desc: 'Clean Text Format' },
+            { id: 'modern', name: 'Modern', desc: 'Clean Sidebar Layout' },
+            { id: 'creative', name: 'Creative', desc: 'Bold Colors & Header' },
+            { id: 'professional', name: 'Professional', desc: 'Classic Executive' },
+            { id: 'vibrant', name: 'Vibrant', desc: 'Dynamic & Colorful' }
+        ];
+
+        // --- APP LOGIC ---
+        const app = {
+            data: JSON.parse(localStorage.getItem('cv_builder_data')) || INITIAL_DATA,
+            activeTab: 'personal',
+            template: 'euro',
+            scale: 1,
+            cropper: { img: null, zoom: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0 },
+
+            init() {
+                this.renderTabs();
+                this.renderEditor();
+                this.renderPreview();
+                setTimeout(() => this.autoFit(), 100);
+                window.addEventListener('resize', () => this.autoFit());
+                this.setupCropperEvents();
+                lucide.createIcons();
+            },
+
+            save() {
+                localStorage.setItem('cv_builder_data', JSON.stringify(this.data));
+                this.renderPreview();
+            },
+
+            update(path, value) {
+                const keys = path.split('.');
+                let obj = this.data;
+                for (let i = 0; i < keys.length - 1; i++) obj = obj[keys[i]];
+                obj[keys[keys.length - 1]] = value;
+                this.save();
+            },
+
+            updateArray(section, id, field, value) {
+                const item = this.data[section].find(i => i.id === id);
+                if (item) { item[field] = value; this.save(); }
+            },
+
+            addItem(section) {
+                const newItems = {
+                    experience: { id: Date.now(), role: "New Role", company: "Company", start: "", end: "", description: "" },
+                    education: { id: Date.now(), degree: "Degree", school: "School", year: "", type: "Degree", category: "Academic" },
+                    languages: { id: Date.now(), name: "Language", read: "Intermediate", write: "Intermediate", speak: "Intermediate" }
+                };
+                this.data[section].push(newItems[section]);
+                this.renderEditor();
+                this.save();
+            },
+
+            removeItem(section, id) {
+                this.data[section] = this.data[section].filter(i => i.id !== id);
+                this.renderEditor();
+                this.save();
+            },
+
+            updateSkills(value) {
+                this.data.skills = value.split(',').map(s => s.trim());
+                this.save();
+            },
+
+            renderTabs() {
+                const tabs = [
+                    { id: 'personal', label: 'Personal', icon: 'user' },
+                    { id: 'experience', label: 'Work', icon: 'briefcase' },
+                    { id: 'education', label: 'Edu', icon: 'graduation-cap' },
+                    { id: 'skills', label: 'Skills', icon: 'wrench' },
+                    { id: 'cover_letter', label: 'Letter', icon: 'file-text' },
+                    { id: 'design', label: 'Design', icon: 'palette' }
+                ];
+                const container = document.getElementById('tabs-container');
+                container.innerHTML = tabs.map(t => `
+                    <button onclick="app.setTab('${t.id}')" class="w-full flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-200 group ${this.activeTab === t.id ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}">
+                        <i data-lucide="${t.icon}" width="20" height="20" class="mb-1"></i>
+                        <span class="text-[10px] font-medium tracking-wide">${t.label}</span>
+                    </button>
+                `).join('');
+                lucide.createIcons();
+                
+                const activeLabel = tabs.find(t => t.id === this.activeTab)?.label || 'Editor';
+                document.getElementById('section-title').innerText = activeLabel + ' Details';
+            },
+
+            setTab(id) { this.activeTab = id; this.renderTabs(); this.renderEditor(); this.renderPreview(); },
+            setTemplate(id) { this.template = id; this.renderEditor(); this.renderPreview(); },
+            setColor(c) { this.data.theme.color = c; this.save(); this.renderEditor(); this.renderPreview(); },
+            setFont(f) { this.data.theme.font = f; this.save(); this.renderEditor(); this.renderPreview(); },
+
+            // --- Render Editor ---
+            renderEditor() {
+                const container = document.getElementById('editor-content');
+                let html = '';
+                const p = this.data.personal;
+
+                if (this.activeTab === 'personal') {
+                    html = `
+                        <div class="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
+                            <div class="flex items-center gap-5 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                                <div class="w-20 h-20 rounded-full bg-white border-2 border-white shadow-md overflow-hidden relative group shrink-0">
+                                    ${p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center text-slate-300"><i data-lucide="user" width="32"></i></div>`}
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-sm font-bold text-slate-800 mb-1">Profile Photo</h3>
+                                    <div class="flex gap-2">
+                                        <label class="cursor-pointer bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-50 transition-colors shadow-sm"><i data-lucide="camera" width="14"></i> Upload<input type="file" accept="image/*" class="hidden" onchange="app.handleImageUpload(this)"></label>
+                                        ${p.photo ? `<button onclick="app.update('personal.photo', null)" class="text-red-500 text-xs px-2 hover:bg-red-50 rounded-lg transition-colors">Remove</button>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            ${this.input('Full Name', p.fullName, 'personal.fullName')}
+                            ${this.input('Job Title', p.title, 'personal.title')}
+                            <div class="grid grid-cols-2 gap-4">${this.input('Email', p.email, 'personal.email')}${this.input('Phone', p.phone, 'personal.phone')}</div>
+                            <div class="grid grid-cols-2 gap-4">${this.input('Location', p.location, 'personal.location')}${this.input('WhatsApp', p.whatsapp, 'personal.whatsapp')}</div>
+                            ${this.textarea('Address', p.postalAddress, 'personal.postalAddress')}
+                            
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-4">
+                                <h3 class="text-xs font-bold uppercase text-slate-400 tracking-wider flex items-center gap-2"><i data-lucide="user-check" width="12"></i> Details</h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    ${this.input('Date of Birth', p.dob, 'personal.dob', 'date')}
+                                    ${this.input('Place of Birth', p.placeOfBirth, 'personal.placeOfBirth')}
+                                    ${this.select('Gender', p.gender, 'personal.gender', GENDER_OPTS)}
+                                    ${this.select('Marital Status', p.maritalStatus, 'personal.maritalStatus', MARITAL_OPTS)}
+                                </div>
+                            </div>
+                             <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-4">
+                                <h3 class="text-xs font-bold uppercase text-slate-400 tracking-wider flex items-center gap-2"><i data-lucide="credit-card" width="12"></i> Passport</h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    ${this.input('Nationality', p.nationality, 'personal.nationality')}
+                                    ${this.input('Passport No', p.passportNumber, 'personal.passportNumber')}
+                                    ${this.input('Issued', p.passportIssued, 'personal.passportIssued', 'date')}
+                                    ${this.input('Expiry', p.passportExpiry, 'personal.passportExpiry', 'date')}
+                                </div>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-4">
+                                <h3 class="text-xs font-bold uppercase text-slate-400 tracking-wider flex items-center gap-2"><i data-lucide="globe" width="12"></i> Socials</h3>
+                                ${this.input('LinkedIn', p.linkedin, 'personal.linkedin')}
+                                ${this.input('Portfolio', p.portfolio, 'personal.portfolio')}
+                            </div>
+                            <div class="pt-2">
+                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Summary</label>
+                                <textarea oninput="app.update('personal.summary', this.value)" rows="5" class="input-creative w-full p-3 rounded-xl text-sm leading-relaxed mt-1">${p.summary || ''}</textarea>
+                            </div>
+                        </div>`;
+                } else if (this.activeTab === 'experience') {
+                    html = `<div class="flex justify-between items-center mb-6"><p class="text-sm text-slate-500">Work History</p><button onclick="app.addItem('experience')" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm font-bold flex items-center gap-1"><i data-lucide="plus" width="16"></i> Add</button></div>
+                        <div class="space-y-6">${this.data.experience.map(exp => `
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative group hover:border-blue-400 transition-colors">
+                                <button onclick="app.removeItem('experience', ${exp.id})" class="absolute top-4 right-4 text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" width="16"></i></button>
+                                <div class="space-y-3">
+                                    <div class="grid grid-cols-2 gap-4 pr-8"><input value="${exp.role}" oninput="app.updateArray('experience', ${exp.id}, 'role', this.value)" class="input-creative w-full p-2.5 rounded-lg font-bold text-sm" placeholder="Job Title"><input value="${exp.company}" oninput="app.updateArray('experience', ${exp.id}, 'company', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm" placeholder="Company Name"></div>
+                                    <div class="grid grid-cols-2 gap-4"><input value="${exp.start}" oninput="app.updateArray('experience', ${exp.id}, 'start', this.value)" class="input-creative p-2.5 rounded-lg text-sm" placeholder="Start Date"><input value="${exp.end}" oninput="app.updateArray('experience', ${exp.id}, 'end', this.value)" class="input-creative p-2.5 rounded-lg text-sm" placeholder="End Date"></div>
+                                    <textarea oninput="app.updateArray('experience', ${exp.id}, 'description', this.value)" rows="3" class="input-creative w-full p-3 rounded-lg text-sm leading-relaxed" placeholder="Responsibilities...">${exp.description}</textarea>
+                                </div>
+                            </div>`).join('')}</div>`;
+                } else if (this.activeTab === 'education') {
+                     html = `<div class="flex justify-between items-center mb-6"><p class="text-sm text-slate-500">Education & Training</p><button onclick="app.addItem('education')" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm font-bold flex items-center gap-1"><i data-lucide="plus" width="16"></i> Add</button></div>
+                        <div class="space-y-4">${this.data.education.map(edu => `
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative group hover:border-blue-400 transition-colors">
+                                <button onclick="app.removeItem('education', ${edu.id})" class="absolute top-4 right-4 text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" width="16"></i></button>
+                                <div class="space-y-3">
+                                    <div class="pr-8"><label class="text-[10px] uppercase font-bold text-slate-400">Category</label><select onchange="app.updateArray('education', ${edu.id}, 'category', this.value)" class="input-creative w-full p-2 rounded-lg text-sm mb-2">${EDU_CATEGORIES.map(c => `<option value="${c}" ${edu.category === c ? 'selected' : ''}>${c}</option>`).join('')}</select><input value="${edu.school}" oninput="app.updateArray('education', ${edu.id}, 'school', this.value)" class="input-creative w-full p-2.5 rounded-lg font-bold text-sm" placeholder="School"></div>
+                                    <div class="grid grid-cols-3 gap-3"><div class="col-span-2"><input value="${edu.degree}" oninput="app.updateArray('education', ${edu.id}, 'degree', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm" placeholder="Degree"></div><input value="${edu.year}" oninput="app.updateArray('education', ${edu.id}, 'year', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm" placeholder="Year"></div>
+                                </div>
+                            </div>`).join('')}</div>`;
+                } else if (this.activeTab === 'skills') {
+                    html = `<div class="space-y-8 animate-in fade-in slide-in-from-left-4 duration-300"><div class="bg-slate-50 p-5 rounded-xl border border-slate-100"><h2 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2"><i data-lucide="code" width="16"></i> Technical Skills</h2><textarea oninput="app.updateSkills(this.value)" rows="4" class="input-creative w-full p-3 rounded-lg text-sm" placeholder="Comma separated...">${this.data.skills.join(', ')}</textarea><div class="flex flex-wrap gap-2 mt-4">${this.data.skills.filter(s=>s).map(s => `<span class="bg-white border border-slate-200 text-slate-600 px-3 py-1 rounded-full text-xs font-medium shadow-sm">${s}</span>`).join('')}</div></div><div class="space-y-4"><div class="flex justify-between items-center"><h2 class="text-sm font-bold text-slate-700 flex items-center gap-2"><i data-lucide="globe" width="16"></i> Languages</h2><button onclick="app.addItem('languages')" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs font-bold flex items-center gap-1 transition-colors"><i data-lucide="plus" width="14"></i> Add</button></div><div class="space-y-3">${(this.data.languages || []).map(l => `<div class="bg-white p-4 rounded-xl border border-slate-200 relative group shadow-sm hover:border-blue-300 transition-colors"><button onclick="app.removeItem('languages', ${l.id})" class="absolute top-3 right-3 text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" width="14"></i></button><div class="mb-3 pr-8"><input value="${l.name}" oninput="app.updateArray('languages', ${l.id}, 'name', this.value)" class="input-creative w-full p-2 rounded-lg text-sm font-bold" placeholder="Language Name"></div><div class="grid grid-cols-3 gap-2">${this.levelSelect(l.id, 'read', l.read, 'book-open')}${this.levelSelect(l.id, 'write', l.write, 'pen-tool')}${this.levelSelect(l.id, 'speak', l.speak, 'mic')}</div></div>`).join('')}</div></div></div>`;
+                } else if (this.activeTab === 'cover_letter') {
+                    const cl = this.data.coverLetter;
+                    html = `
+                        <div class="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
+                            <div class="bg-purple-50 p-5 rounded-xl border border-purple-100">
+                                <h2 class="text-sm font-bold text-purple-900 mb-4 flex items-center gap-2"><i data-lucide="sparkles" width="16"></i> AI Generator</h2>
+                                <div class="space-y-3">
+                                    ${this.input('Company Name', cl.companyName, 'coverLetter.companyName')}
+                                    ${this.input('Recipient (e.g. Hiring Manager)', cl.recipient, 'coverLetter.recipient')}
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1 tracking-wide">Job Description</label>
+                                        <textarea oninput="app.update('coverLetter.jobDescription', this.value)" rows="3" class="input-creative w-full p-3 rounded-lg text-sm" placeholder="Paste the job description here...">${cl.jobDescription || ''}</textarea>
+                                    </div>
+                                    <button onclick="app.generateCoverLetter()" class="w-full py-3 bg-purple-600 text-white rounded-xl text-sm font-bold hover:bg-purple-700 flex justify-center gap-2 items-center shadow-lg shadow-purple-600/20 transition-transform active:scale-95">
+                                        <i data-lucide="wand-2" width="16"></i> Generate Letter
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2 tracking-wide">Letter Content</label>
+                                <textarea oninput="app.update('coverLetter.content', this.value)" rows="12" class="input-creative w-full p-4 rounded-xl text-sm leading-relaxed">${cl.content}</textarea>
+                            </div>
+                        </div>
+                    `;
+                } else if (this.activeTab === 'design') {
+                    html = `
+                        <div class="space-y-8 animate-in fade-in slide-in-from-left-4 duration-300">
+                            <div>
+                                <h2 class="text-sm font-bold text-slate-700 mb-4 uppercase tracking-wide">Typography</h2>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        ${FONT_OPTIONS.map(f => `
+                                            <button onclick="app.setFont('${f.class}')" class="p-3 border rounded-lg text-xs font-medium hover:border-blue-400 transition-colors text-left flex items-center justify-between group ${this.data.theme.font === f.class ? 'border-blue-600 bg-white shadow-sm text-blue-700 ring-1 ring-blue-600' : 'bg-white text-slate-600 border-slate-200'}">
+                                                <span class="${f.class} truncate">${f.label}</span>
+                                                ${this.data.theme.font === f.class ? '<i data-lucide="check" width="14"></i>' : ''}
+                                            </button>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h2 class="text-sm font-bold text-slate-700 mb-4 uppercase tracking-wide">Choose Template</h2>
+                                <div class="grid grid-cols-2 gap-3">
+                                    ${TEMPLATES.map(t => `
+                                        <button onclick="app.setTemplate('${t.id}')" class="p-4 border-2 rounded-xl text-left transition-all duration-200 relative overflow-hidden group ${this.template === t.id ? 'border-blue-600 bg-blue-50 shadow-md ring-1 ring-blue-600' : 'border-slate-100 hover:border-slate-300 bg-white'}">
+                                            <span class="font-bold text-sm block relative z-10 ${this.template === t.id ? 'text-blue-700' : 'text-slate-700'}">${t.name}</span>
+                                            <span class="text-[10px] text-slate-400 block mt-1">${t.desc}</span>
+                                            ${this.template === t.id ? '<div class="absolute top-2 right-2 text-blue-600"><i data-lucide="check-circle-2" width="16"></i></div>' : ''}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h2 class="text-sm font-bold text-slate-700 mb-4 uppercase tracking-wide">Accent Color</h2>
+                                <div class="flex flex-wrap gap-3 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                                    ${['#2563eb', '#059669', '#dc2626', '#d97706', '#7c3aed', '#db2777', '#111827'].map(c => `
+                                        <button onclick="app.setColor('${c}')" class="w-10 h-10 rounded-full border-4 transition-transform hover:scale-110 shadow-sm ${this.data.theme.color === c ? 'border-slate-300 scale-110 ring-2 ring-offset-2 ring-slate-300' : 'border-transparent'}" style="background-color: ${c}"></button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = html;
+                lucide.createIcons();
+            },
+
+            // --- Helper Methods ---
+            input(label, value, path, type = 'text') {
+                return `<div><label class="block text-xs font-bold text-slate-500 uppercase mb-1 tracking-wide">${label}</label><input type="${type}" value="${value || ''}" oninput="app.update('${path}', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm"></div>`;
+            },
+            textarea(label, value, path) {
+                return `<div><label class="block text-xs font-bold text-slate-500 uppercase mb-1 tracking-wide">${label}</label><textarea oninput="app.update('${path}', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm resize-none" rows="2">${value || ''}</textarea></div>`;
+            },
+            select(label, value, path, options) {
+                return `
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1 tracking-wide">${label}</label>
+                    <select onchange="app.update('${path}', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm bg-white cursor-pointer">
+                        <option value="">Select...</option>
+                        ${options.map(opt => `<option value="${opt}" ${value === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                    </select>
+                </div>`;
+            },
+            levelSelect(id, field, value, icon) {
+                const levels = ["Beginner", "Intermediate", "Advanced", "Fluent", "Native"];
+                return `
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-slate-400 flex items-center gap-1 uppercase tracking-wide"><i data-lucide="${icon}" width="10"></i> ${field}</label>
+                        <select onchange="app.updateArray('languages', ${id}, '${field}', this.value)" class="w-full p-1.5 border border-slate-200 rounded-lg text-xs bg-slate-50 hover:bg-white cursor-pointer focus:ring-2 focus:ring-blue-100 outline-none">
+                            ${levels.map(l => `<option value="${l}" ${value === l ? 'selected' : ''}>${l}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+            },
+
+            setTemplate(id) { this.template = id; this.renderEditor(); this.renderPreview(); },
+            setColor(c) { this.data.theme.color = c; this.save(); this.renderEditor(); this.renderPreview(); },
+            setFont(f) { this.data.theme.font = f; this.save(); this.renderEditor(); this.renderPreview(); },
+            
+            aiAssist(type, id) {
+                const texts = ["Spearheaded key initiatives.", "Optimized workflows by 20%.", "Collaborated with stakeholders.", "Led a team of 5."];
+                const text = texts[Math.floor(Math.random() * texts.length)];
+                if (type === 'summary') {
+                    this.data.personal.summary += (this.data.personal.summary ? " " : "") + text;
+                    this.update('personal.summary', this.data.personal.summary);
+                } else if (type === 'exp') {
+                    const item = this.data.experience.find(i => i.id === id);
+                    if (item) {
+                        item.description += (item.description ? " " : "") + text;
+                        this.save();
+                    }
+                }
+                this.renderEditor();
+            },
+
+            generateCoverLetter() {
+                const p = this.data.personal;
+                const c = this.data.coverLetter;
+                c.content = `Dear ${c.recipient || 'Hiring Manager'},\n\nI am writing to apply for the position at ${c.companyName}. As a ${p.title} with experience in ${this.data.skills[0] || 'my field'}, I believe I am a great fit.\n\n${c.jobDescription ? `Regarding your requirement for "${c.jobDescription.substring(0,20)}...", I have relevant experience.` : ''}\n\n${p.summary}\n\nSincerely,\n${p.fullName}`;
+                this.save();
+                this.renderEditor();
+                this.renderPreview();
+            },
+
+            downloadJSON() {
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.data));
+                const anchor = document.createElement('a');
+                anchor.setAttribute("href", dataStr);
+                anchor.setAttribute("download", "cv_backup.json");
+                document.body.appendChild(anchor);
+                anchor.click();
+                anchor.remove();
+            },
+
+            importJSON(input) {
+                const file = input.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        this.data = JSON.parse(e.target.result);
+                        this.save();
+                        this.init();
+                        alert("Restored!");
+                    } catch (err) { alert("Invalid File"); }
+                };
+                reader.readAsText(file);
+            },
+
+            handleImageUpload(input) {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.cropper.img = e.target.result;
+                        document.getElementById('crop-img').src = this.cropper.img;
+                        const modal = document.getElementById('cropper-modal');
+                        modal.classList.remove('hidden');
+                        setTimeout(() => modal.classList.remove('opacity-0'), 10);
+                        this.cropper.zoom = 1;
+                        this.cropper.x = 0;
+                        this.cropper.y = 0;
+                        this.updateCropTransform();
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            },
+            closeCropper() {
+                const modal = document.getElementById('cropper-modal');
+                modal.classList.add('opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+                document.querySelector('input[type="file"]').value = '';
+            },
+            setupCropperEvents() {
+                const area = document.getElementById('crop-area');
+                const slider = document.getElementById('zoom-slider');
+                area.addEventListener('mousedown', (e) => {
+                    this.cropper.dragging = true;
+                    this.cropper.startX = e.clientX - this.cropper.x;
+                    this.cropper.startY = e.clientY - this.cropper.y;
+                });
+                window.addEventListener('mousemove', (e) => {
+                    if (this.cropper.dragging) {
+                        this.cropper.x = e.clientX - this.cropper.startX;
+                        this.cropper.y = e.clientY - this.cropper.startY;
+                        this.updateCropTransform();
+                    }
+                });
+                window.addEventListener('mouseup', () => this.cropper.dragging = false);
+                slider.addEventListener('input', (e) => {
+                    this.cropper.zoom = parseFloat(e.target.value);
+                    this.updateCropTransform();
+                });
+            },
+            updateCropTransform() {
+                const img = document.getElementById('crop-img');
+                img.style.transform = `translate(-50%, -50%) translate(${this.cropper.x}px, ${this.cropper.y}px) scale(${this.cropper.zoom})`;
+            },
+            saveCrop() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 300; canvas.height = 300;
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0,0,300,300);
+                const img = new Image();
+                img.src = this.cropper.img;
+                img.onload = () => {
+                    ctx.translate(150, 150);
+                    ctx.scale(this.cropper.zoom, this.cropper.zoom);
+                    const scaleFactor = 300 / 256; 
+                    ctx.translate(this.cropper.x * scaleFactor, this.cropper.y * scaleFactor);
+                    ctx.drawImage(img, -img.naturalWidth/2, -img.naturalHeight/2);
+                    this.data.personal.photo = canvas.toDataURL('image/png');
+                    this.save();
+                    this.renderEditor(); 
+                    this.closeCropper();
+                };
+            },
+
+            adjustScale(delta) {
+                this.scale = Math.max(0.3, Math.min(1.5, this.scale + delta));
+                this.applyScale();
+            },
+            autoFit() {
+                const wrapper = document.getElementById('preview-wrapper');
+                // Calculate scale to fit A4 width (210mm ~ 794px) inside wrapper minus padding
+                const availWidth = wrapper.clientWidth - 80; // 40px padding on each side
+                const a4WidthPx = 794; 
+                this.scale = Math.min(1, availWidth / a4WidthPx); 
+                this.applyScale();
+            },
+            setupResize() {
+                setTimeout(() => this.autoFit(), 100);
+                window.addEventListener('resize', () => this.autoFit());
+            },
+            applyScale() {
+                const container = document.getElementById('preview-container');
+                container.style.transform = `scale(${this.scale})`;
+                document.getElementById('zoom-level').innerText = `${Math.round(this.scale * 100)}%`;
+            },
+
+            // --- 4. PREVIEW RENDERING (The 5 Specific Templates) ---
+            renderPreview() {
+                const container = document.getElementById('preview-container');
+                const data = this.data;
+                const p = data.personal;
+                const theme = data.theme.color;
+                const fontClass = data.theme.font || 'font-inter';
+
+                // Apply global font settings to the container
+                container.className = `a4-page transition-transform duration-200 origin-top ${fontClass} text-slate-800`;
+
+                if (this.activeTab === 'cover_letter') {
+                    // (Keep existing Cover Letter render logic)
+                    container.innerHTML = `
+                        <div class="p-16 h-full flex flex-col">
+                            <div class="border-b-2 pb-8 mb-10" style="border-color: ${theme}">
+                                <h1 class="text-5xl font-bold uppercase tracking-tight text-gray-900" style="color: ${theme}">${p.fullName}</h1>
+                                <p class="text-xl text-gray-600 font-medium mt-2">${p.title}</p>
+                                <div class="flex flex-wrap gap-6 text-sm text-gray-500 mt-4">
+                                    <span class="flex items-center gap-2"><i data-lucide="mail" width="14"></i> ${p.email}</span>
+                                    ${p.phone ? `<span class="flex items-center gap-2"><i data-lucide="phone" width="14"></i> ${p.phone}</span>` : ''}
+                                </div>
+                            </div>
+                            <div class="mb-10 font-bold text-gray-900">${new Date().toLocaleDateString()}</div>
+                            <div class="mb-10">
+                                <p class="font-bold text-gray-900 mb-1">${data.coverLetter.recipient}</p>
+                                ${data.coverLetter.companyName ? `<p class="text-gray-600 font-medium">${data.coverLetter.companyName}</p>` : ''}
+                            </div>
+                            <div class="whitespace-pre-wrap text-justify leading-loose text-gray-700 text-base flex-1">${data.coverLetter.content}</div>
+                        </div>`;
+                    lucide.createIcons();
+                    return;
+                }
+
+                let html = '';
+
+                // --- TEMPLATE 1: EURO-STYLE (Sreejisha PDF Reference) ---
+                if (this.template === 'euro') {
+                    html = `
+                        <div class="grid grid-cols-12 h-full text-slate-800 font-sans">
+                            <!-- Left Sidebar (Info) -->
+                            <div class="col-span-4 bg-slate-100 p-6 border-r border-slate-200 text-xs">
+                                <div class="mb-6">
+                                    <h4 class="text-xs font-bold uppercase text-slate-400 mb-2">Europass</h4>
+                                    ${p.photo ? `<img src="${p.photo}" class="w-28 h-36 object-cover border border-slate-300 shadow-sm mb-4">` : ''}
+                                    <h1 class="text-lg font-bold text-slate-900 uppercase leading-tight mb-2">${p.fullName}</h1>
+                                </div>
+                                <div class="space-y-4 text-xs">
+                                    <div class="space-y-1">
+                                        <p><strong>Passport:</strong> ${p.passportNumber || '-'}</p>
+                                        <p><strong>Date of birth:</strong> ${p.dob || '-'}</p>
+                                        <p><strong>Place of birth:</strong> ${p.placeOfBirth || '-'}</p>
+                                        <p><strong>Nationality:</strong> ${p.nationality || '-'}</p>
+                                        <p><strong>Gender:</strong> ${p.gender || '-'}</p>
+                                    </div>
+                                    <div class="border-t border-slate-300 pt-3 space-y-2">
+                                        <p class="flex gap-2"><i data-lucide="phone" width="12"></i> ${p.phone}</p>
+                                        <p class="flex gap-2 break-all"><i data-lucide="mail" width="12"></i> ${p.email}</p>
+                                        <p class="flex gap-2"><i data-lucide="map-pin" width="12"></i> ${p.location}</p>
+                                    </div>
+                                    <div class="border-t border-slate-300 pt-3">
+                                        <h3 class="font-bold uppercase mb-2 border-b border-slate-300 pb-1">Language Skills</h3>
+                                        ${(data.languages || []).map(l => `<div class="mb-2"><div class="font-bold">${l.name}</div><div class="grid grid-cols-3 gap-1 text-[9px] text-slate-500"><span>R:${l.read}</span><span>W:${l.write}</span><span>S:${l.speak}</span></div></div>`).join('')}
+                                    </div>
+                                    <div class="border-t border-slate-200 pt-3">
+                                        <h3 class="font-bold uppercase mb-2 border-b border-slate-300 pb-1">Skills</h3>
+                                        <div class="flex flex-wrap gap-1">${data.skills.map(s => `<span class="bg-white border border-slate-300 px-1 py-0.5 rounded">${s}</span>`).join('')}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Right Content -->
+                            <div class="col-span-8 p-8">
+                                <div class="mb-8">
+                                    <h3 class="font-bold text-slate-900 uppercase border-b border-slate-300 pb-1 mb-3 flex items-center gap-2"><i data-lucide="user" width="16"></i> About Me</h3>
+                                    <p class="text-sm text-justify leading-relaxed">${p.summary}</p>
+                                </div>
+                                <div class="mb-8">
+                                    <h3 class="font-bold text-slate-900 uppercase border-b border-slate-300 pb-1 mb-4 flex items-center gap-2"><i data-lucide="briefcase" width="16"></i> Work Experience</h3>
+                                    ${data.experience.map(e => `
+                                        <div class="mb-5 break-inside-avoid">
+                                            <div class="flex justify-between items-baseline mb-1"><h4 class="font-bold text-sm uppercase text-slate-800">${e.company}</h4><span class="text-xs font-bold text-slate-500">${e.start} - ${e.end}</span></div>
+                                            <p class="text-sm font-bold text-slate-700 mb-1 italic">${e.role}</p>
+                                            <p class="text-xs text-justify leading-relaxed text-slate-600">${e.description}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="mb-8">
+                                    <h3 class="font-bold text-slate-900 uppercase border-b border-slate-300 pb-1 mb-4 flex items-center gap-2"><i data-lucide="graduation-cap" width="16"></i> Education</h3>
+                                    ${data.education.map(e => `
+                                        <div class="mb-3">
+                                            <div class="flex justify-between text-xs font-bold text-slate-500"><span>${e.year}</span></div>
+                                            <div class="font-bold text-sm text-slate-800 uppercase">${e.degree}</div>
+                                            <div class="text-xs">${e.school}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>`;
+                } else if (this.template === 'ats') {
+                    // ATS-Standard (Roshil Raju)
+                    html = `
+                    <div class="p-12 leading-normal h-full">
+                        <div class="text-center border-b border-black pb-4 mb-6">
+                            <h1 class="text-3xl font-bold uppercase tracking-wide mb-1">${p.fullName}</h1>
+                            <p class="text-lg font-bold mb-2">${p.title}</p>
+                            <div class="text-sm flex justify-center flex-wrap gap-4">
+                                <span>${p.location}</span><span>${p.email}</span><span>${p.phone}</span>${p.linkedin ? `<span>${p.linkedin}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="mb-6 break-inside-avoid">
+                            <h3 class="font-bold uppercase text-sm border-b border-black mb-2">Summary</h3>
+                            <p class="text-sm text-justify">${p.summary}</p>
+                        </div>
+                        <div class="mb-6 break-inside-avoid">
+                            <h3 class="font-bold uppercase text-sm border-b border-black mb-2">Professional Skills</h3>
+                            <p class="text-sm leading-relaxed">${data.skills.join(' • ')}</p>
+                        </div>
+                        <div class="mb-6">
+                            <h3 class="font-bold uppercase text-sm border-b border-black mb-3">Job and Duty</h3>
+                            ${data.experience.map(e => `
+                                <div class="mb-4 break-inside-avoid">
+                                    <div class="flex justify-between font-bold text-sm"><span>${e.role}</span><span>${e.start} - ${e.end}</span></div>
+                                    <div class="flex justify-between italic text-sm mb-1"><span>${e.company}</span><span>${e.locationType || ''}</span></div>
+                                    <p class="text-sm text-justify pl-2 border-l-2 border-gray-200">${e.description}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="mb-6 break-inside-avoid">
+                            <h3 class="font-bold uppercase text-sm border-b border-black mb-2">Qualification</h3>
+                            ${data.education.map(e => `<div class="flex justify-between text-sm mb-1"><span class="font-bold">${e.degree}</span><span>${e.school}, ${e.year}</span></div>`).join('')}
+                        </div>
+                        <div class="mb-6 break-inside-avoid">
+                            <h3 class="font-bold uppercase text-sm border-b border-black mb-2">Language Skills</h3>
+                            <div class="text-sm">${(data.languages || []).map(l => l.name).join(' • ')}</div>
+                        </div>
+                    </div>`;
+                } else if (this.template === 'modern') {
+                    // Modern Sidebar
+                    html = `
+                    <div class="grid grid-cols-12 h-full">
+                        <div class="col-span-4 bg-slate-800 text-white p-8">
+                            <div class="text-center mb-8">
+                                ${p.photo ? `<img src="${p.photo}" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-white object-cover">` : ''}
+                                <h1 class="text-2xl font-bold">${p.fullName}</h1>
+                                <p class="opacity-80">${p.title}</p>
+                            </div>
+                            <div class="space-y-6 text-sm">
+                                <div><h3 class="font-bold border-b border-gray-600 pb-1 mb-2">CONTACT</h3><div class="space-y-2 opacity-90"><div>${p.email}</div><div>${p.phone}</div><div>${p.location}</div></div></div>
+                                <div><h3 class="font-bold border-b border-gray-600 pb-1 mb-2">SKILLS</h3><div class="flex flex-wrap gap-1">${data.skills.map(s=>`<span class="bg-white/10 px-2 py-1 rounded text-xs">${s}</span>`).join('')}</div></div>
+                                <div><h3 class="font-bold border-b border-gray-600 pb-1 mb-2">LANGUAGES</h3>${(data.languages||[]).map(l=>`<div class="text-xs flex justify-between"><span>${l.name}</span><span class="opacity-70">${l.speak}</span></div>`).join('')}</div>
+                            </div>
+                        </div>
+                        <div class="col-span-8 p-10 bg-white">
+                            <div class="mb-8 border-b pb-4"><h2 class="text-xl font-bold uppercase text-blue-600 mb-2">Profile</h2><p class="text-sm text-gray-600 text-justify">${p.summary}</p></div>
+                            <div><h2 class="text-xl font-bold uppercase text-blue-600 mb-4 border-b pb-2">Experience</h2>${data.experience.map(e => `<div class="mb-5 break-inside-avoid"><h3 class="font-bold text-lg text-gray-800">${e.role}</h3><div class="flex justify-between text-sm text-gray-500 mb-2 font-medium"><span>${e.company}</span><span>${e.start} - ${e.end}</span></div><p class="text-sm text-gray-600 text-justify leading-relaxed">${e.description}</p></div>`).join('')}</div>
+                            <div class="mt-8"><h2 class="text-xl font-bold uppercase text-blue-600 mb-4 border-b pb-2">Education</h2>${data.education.map(e => `<div class="mb-3 break-inside-avoid"><h3 class="font-bold text-gray-800">${e.degree}</h3><p class="text-sm text-gray-500">${e.school}, ${e.year}</p></div>`).join('')}</div>
+                        </div>
+                    </div>`;
+                } else if (this.template === 'creative') {
+                    // Creative Bold
+                    html = `
+                    <div class="h-full bg-white flex flex-col">
+                        <div class="h-48 bg-yellow-400 p-10 flex items-center gap-8 relative overflow-hidden">
+                            <div class="w-64 h-64 bg-yellow-300 rounded-full absolute -top-20 -right-20"></div>
+                            ${p.photo ? `<img src="${p.photo}" class="w-32 h-32 rounded-full border-4 border-white shadow-lg z-10 object-cover">` : ''}
+                            <div class="z-10">
+                                <h1 class="text-5xl font-black text-gray-900 uppercase leading-none">${p.fullName}</h1>
+                                <p class="text-2xl font-medium text-gray-800 mt-2">${p.title}</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-12 flex-1">
+                            <div class="col-span-4 bg-gray-50 p-10 border-r border-gray-100">
+                                <div class="mb-8"><h3 class="font-black text-sm uppercase text-gray-400 mb-3">Contact</h3><div class="space-y-1 text-sm font-bold"><p>${p.email}</p><p>${p.phone}</p><p>${p.location}</p></div></div>
+                                <div><h3 class="font-black text-sm uppercase text-gray-400 mb-3">Skills</h3><div class="flex flex-wrap gap-2">${data.skills.map(s => `<span class="bg-white px-3 py-1 rounded-full shadow-sm text-xs font-bold border">${s}</span>`).join('')}</div></div>
+                            </div>
+                            <div class="col-span-8 p-10">
+                                <div class="mb-10"><h3 class="font-black text-2xl mb-3 text-yellow-500">ABOUT</h3><p class="text-sm leading-relaxed">${p.summary}</p></div>
+                                <div><h3 class="font-black text-2xl mb-6 text-yellow-500">WORK HISTORY</h3>${data.experience.map(e => `<div class="mb-8 pl-6 border-l-4 border-yellow-200 break-inside-avoid"><h4 class="font-bold text-xl">${e.role}</h4><p class="text-xs font-bold uppercase text-gray-400 mb-3">${e.company} • ${e.start}-${e.end}</p><p class="text-sm text-gray-600 leading-relaxed">${e.description}</p></div>`).join('')}</div>
+                            </div>
+                        </div>
+                    </div>`;
+                } else if (this.template === 'vibrant') {
+                     // Vibrant Template (New)
+                     html = `
+                     <div class="h-full bg-white flex flex-col font-sans">
+                         <div class="bg-slate-900 text-white p-10 flex justify-between items-center border-b-4 border-purple-500">
+                            <div>
+                                <h1 class="text-5xl font-black tracking-tight mb-2">${p.fullName}</h1>
+                                <p class="text-xl font-medium text-purple-400 uppercase tracking-widest">${p.title}</p>
+                            </div>
+                            ${p.photo ? `<img src="${p.photo}" class="w-32 h-32 rounded-lg border-4 border-purple-500 shadow-xl object-cover">` : ''}
+                         </div>
+                         <div class="flex-1 grid grid-cols-12">
+                            <div class="col-span-4 bg-slate-100 p-8 border-r border-slate-200">
+                                <div class="mb-8">
+                                    <h3 class="text-sm font-black uppercase text-purple-600 mb-4 border-b-2 border-purple-200 pb-1">Contact</h3>
+                                    <div class="space-y-2 text-sm font-medium text-slate-700">
+                                        <div class="flex items-center gap-2"><i data-lucide="mail" width="14" class="text-purple-500"></i> ${p.email}</div>
+                                        <div class="flex items-center gap-2"><i data-lucide="phone" width="14" class="text-purple-500"></i> ${p.phone}</div>
+                                        <div class="flex items-center gap-2"><i data-lucide="map-pin" width="14" class="text-purple-500"></i> ${p.location}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-black uppercase text-purple-600 mb-4 border-b-2 border-purple-200 pb-1">Expertise</h3>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${data.skills.map(s => `<span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold border border-purple-200">${s}</span>`).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-span-8 p-10">
+                                <div class="mb-10">
+                                    <h3 class="text-xl font-bold uppercase text-slate-800 mb-3 flex items-center gap-2"><span class="bg-purple-500 w-2 h-6 block"></span> About Me</h3>
+                                    <p class="text-sm text-slate-600 leading-relaxed text-justify">${p.summary}</p>
+                                </div>
+                                <div class="mb-10">
+                                    <h3 class="text-xl font-bold uppercase text-slate-800 mb-6 flex items-center gap-2"><span class="bg-purple-500 w-2 h-6 block"></span> Experience</h3>
+                                    ${data.experience.map(e => `
+                                        <div class="mb-8 relative pl-6 border-l-2 border-slate-200 break-inside-avoid">
+                                            <div class="absolute -left-[9px] top-0 w-4 h-4 bg-purple-500 rounded-full border-4 border-white"></div>
+                                            <h4 class="text-lg font-bold text-slate-800">${e.role}</h4>
+                                            <div class="flex justify-between text-xs font-bold uppercase text-purple-600 mb-2 mt-1"><span>${e.company}</span><span>${e.start} - ${e.end}</span></div>
+                                            <p class="text-sm text-slate-600 leading-relaxed">${e.description}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                         </div>
+                     </div>
+                     `;
+                } else {
+                    // Professional (Classic) - Fallback
+                    html = `
+                    <div class="p-16 h-full bg-white font-serif text-gray-800">
+                        <div class="text-center border-b-2 border-gray-200 pb-8 mb-10">
+                            <h1 class="text-4xl font-bold uppercase tracking-wider text-gray-900">${p.fullName}</h1>
+                            <p class="text-lg italic text-gray-600 mt-2">${p.title}</p>
+                            <div class="text-sm mt-3 text-gray-500">${p.email} • ${p.phone} • ${p.location}</div>
+                        </div>
+                        <div class="mb-10 break-inside-avoid">
+                            <h3 class="font-bold uppercase text-sm tracking-widest border-b border-gray-200 mb-4 pb-1">Summary</h3>
+                            <p class="text-sm leading-relaxed text-justify">${p.summary}</p>
+                        </div>
+                        <div class="mb-10">
+                            <h3 class="font-bold uppercase text-sm tracking-widest border-b border-gray-200 mb-5 pb-1">Experience</h3>
+                            ${data.experience.map(e => `
+                                <div class="mb-6 break-inside-avoid">
+                                    <div class="flex justify-between font-bold text-sm mb-1"><span>${e.role}</span><span>${e.start} - ${e.end}</span></div>
+                                    <div class="text-xs italic text-gray-600 mb-2">${e.company}</div>
+                                    <p class="text-sm text-justify leading-relaxed">${e.description}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="grid grid-cols-2 gap-10">
+                            <div class="break-inside-avoid">
+                                <h3 class="font-bold uppercase text-sm tracking-widest border-b border-gray-200 mb-4 pb-1">Education</h3>
+                                ${data.education.map(e => `<div class="mb-3 text-sm"><p class="font-bold">${e.degree}</p><p>${e.school}, ${e.year}</p></div>`).join('')}
+                            </div>
+                            <div class="break-inside-avoid">
+                                <h3 class="font-bold uppercase text-sm tracking-widest border-b border-gray-200 mb-4 pb-1">Core Skills</h3>
+                                <p class="text-sm leading-relaxed">${data.skills.join(', ')}</p>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                container.innerHTML = html;
+                lucide.createIcons();
+            }
+        };
+
+        // Initialize App
+        app.init();
+
+    </script>
+</body>
+</html>
