@@ -212,6 +212,7 @@
             </div>
         </div>
         <div class="flex gap-3">
+            <!-- Restored Restore/Backup Buttons -->
             <label class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-full text-sm font-medium transition-colors cursor-pointer shadow-sm">
                 <i data-lucide="upload" width="16"></i> Restore
                 <input type="file" accept=".json" onchange="app.importJSON(this)" class="hidden" />
@@ -357,6 +358,8 @@
                 gender: "Male",
                 maritalStatus: "Single",
                 linkedin: "linkedin.com/in/johndoe",
+                facebook: "facebook.com/johndoe",
+                instagram: "instagram.com/johndoe",
                 portfolio: "johndoe-portfolio.com",
                 photo: null, 
                 summary: "Results-oriented Project Manager with over 8 years of experience leading cross-functional teams in the tech sector. Proven track record of delivering complex software projects on time and under budget ($2M+). Expert in Agile methodologies, risk management, and stakeholder communication. Seeking to leverage leadership skills to drive innovation at a forward-thinking technology firm."
@@ -372,7 +375,7 @@
                     id: 1, 
                     role: "Senior Project Manager", 
                     company: "Tech Innovators Inc.", 
-                    website: "https://techinnovators.com", // Added website
+                    website: "https://techinnovators.com", 
                     location: "New York, USA",
                     start: "2019-01-01", 
                     end: "Present", 
@@ -382,7 +385,7 @@
                     id: 2, 
                     role: "Project Coordinator", 
                     company: "Creative Solutions Ltd.", 
-                    website: "https://creativesolutions.com", // Added website
+                    website: "https://creativesolutions.com", 
                     location: "Chicago, USA",
                     start: "2015-06-01", 
                     end: "2018-12-01", 
@@ -395,7 +398,7 @@
                     degree: "MBA in Project Management", 
                     field: "Business Administration", 
                     school: "New York University", 
-                    website: "https://nyu.edu", // Added website
+                    website: "https://nyu.edu", 
                     year: "2015-05-20", 
                     category: "Academic" 
                 },
@@ -1069,6 +1072,7 @@
 
                 container.innerHTML = html;
                 if(window.lucide) lucide.createIcons();
+                this.initDatePickers(); // Initialize Flatpickr after DOM update
             },
 
             // --- IMAGE & JSON HELPERS ---
@@ -1076,12 +1080,34 @@
                 if (input.files && input.files[0]) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
-                        this.cropper.img = e.target.result;
-                        document.getElementById('crop-img').src = this.cropper.img;
-                        const modal = document.getElementById('cropper-modal');
-                        modal.classList.remove('hidden');
-                        setTimeout(() => modal.classList.remove('opacity-0'), 10);
-                        this.cropper.zoom = 1; this.cropper.x = 0; this.cropper.y = 0; this.updateCropTransform();
+                        // Create image to detect dimensions before showing
+                        const img = new Image();
+                        img.onload = () => {
+                            this.cropper.img = e.target.result;
+                            document.getElementById('crop-img').src = this.cropper.img;
+                            const modal = document.getElementById('cropper-modal');
+                            modal.classList.remove('hidden');
+                            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+                            
+                            // Auto-fit logic: Calculate scale to cover the 256px crop area
+                            const minDimension = Math.min(img.width, img.height);
+                            // Default to slightly larger than cover to ensure no whitespace
+                            let initialScale = (256 / minDimension) * 1.2; 
+                            
+                            // Set initial state
+                            this.cropper.zoom = initialScale;
+                            this.cropper.x = 0; 
+                            this.cropper.y = 0; 
+                            
+                            // Update Slider Range dynamically based on image size
+                            const slider = document.getElementById('zoom-slider');
+                            slider.min = initialScale * 0.5;
+                            slider.max = initialScale * 5;
+                            slider.value = initialScale;
+                            
+                            this.updateCropTransform();
+                        };
+                        img.src = e.target.result;
                     };
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -1101,19 +1127,38 @@
             },
             updateCropTransform() { document.getElementById('crop-img').style.transform = `translate(-50%, -50%) translate(${this.cropper.x}px, ${this.cropper.y}px) scale(${this.cropper.zoom})`; },
             saveCrop() {
-                const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); canvas.width = 400; canvas.height = 400;
-                ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0,0,400,400);
+                const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); 
+                // High resolution output
+                canvas.width = 400; 
+                canvas.height = 400;
+                
+                // Create Circular Clipping Path
+                ctx.beginPath();
+                ctx.arc(200, 200, 200, 0, Math.PI * 2, true);
+                ctx.closePath();
+                ctx.clip();
+                
+                // Fill white background (optional, prevents transparency issues)
+                ctx.fillStyle = '#FFFFFF'; 
+                ctx.fillRect(0,0,400,400);
+
                 const img = new Image(); img.src = this.cropper.img;
                 img.onload = () => {
-                    // Correct transform order for WYSIWYG crop
-                    ctx.translate(200, 200); 
+                    // Mapping UI (256px) -> Canvas (400px)
                     const scaleFactor = 400 / 256; 
-                    // Apply translation first (scaled to canvas units), then scale
+                    
+                    ctx.translate(200, 200); 
                     ctx.translate(this.cropper.x * scaleFactor, this.cropper.y * scaleFactor);
-                    ctx.scale(this.cropper.zoom, this.cropper.zoom);
+                    
+                    // CRITICAL FIX: Scale the zoom by the ratio too
+                    ctx.scale(this.cropper.zoom * scaleFactor, this.cropper.zoom * scaleFactor);
+                    
                     ctx.drawImage(img, -img.naturalWidth/2, -img.naturalHeight/2);
                     
-                    this.data.personal.photo = canvas.toDataURL('image/png'); this.save(); this.renderEditor(); this.closeCropper();
+                    this.data.personal.photo = canvas.toDataURL('image/png'); 
+                    this.save(); 
+                    this.renderEditor(); 
+                    this.closeCropper();
                 };
             },
             downloadJSON() {
