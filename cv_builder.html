@@ -63,6 +63,62 @@
             border-color: #2563eb !important;
         }
 
+        /* Rich Text Editor Styles */
+        .rich-editor {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+        .rich-editor:focus-within {
+            background: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .rich-toolbar {
+            display: flex;
+            gap: 4px;
+            padding: 8px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .rich-btn {
+            padding: 4px 8px;
+            border-radius: 6px;
+            color: #64748b;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .rich-btn:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        .rich-content {
+            padding: 12px;
+            min-height: 100px;
+            outline: none;
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.625; /* leading-relaxed */
+            color: #334155;
+        }
+        .rich-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .rich-content ol {
+            list-style-type: decimal;
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .rich-content b { font-weight: 700; }
+        .rich-content i { font-style: italic; }
+        .rich-content u { text-decoration: underline; }
+
         /* PRINT STYLES - CRITICAL FOR VECTOR PDF */
         @media print {
             @page { 
@@ -114,6 +170,10 @@
             }
             
             .break-inside-avoid { page-break-inside: avoid; }
+            
+            /* Fix lists in preview for print */
+            ul { list-style-type: disc !important; padding-left: 1.2em !important; }
+            ol { list-style-type: decimal !important; padding-left: 1.2em !important; }
         }
         
         .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -285,6 +345,7 @@
                 email: "johndoe.professional@email.com",
                 phone: "+1 555 123 4567",
                 whatsapp: "+1 555 987 6543",
+                alternativePhone: "+1 555 000 9999", 
                 location: "New York City, NY, USA",
                 postalAddress: "123 Business Avenue, Suite 400, Manhattan, NY 10001, USA",
                 nationality: "American",
@@ -311,17 +372,21 @@
                     id: 1, 
                     role: "Senior Project Manager", 
                     company: "Tech Innovators Inc.", 
+                    website: "https://techinnovators.com", // Added website
+                    location: "New York, USA",
                     start: "2019-01-01", 
                     end: "Present", 
-                    description: "Lead a team of 15 developers and designers in the end-to-end delivery of enterprise SaaS products. Managed a project portfolio valued at $3.5M annually. Implemented Scrum methodologies, resulting in a 20% increase in team productivity. Successfully negotiated vendor contracts, saving the company 10% on external resources." 
+                    description: "<ul><li>Lead a team of 15 developers and designers in the end-to-end delivery of enterprise SaaS products.</li><li>Managed a project portfolio valued at $3.5M annually.</li><li>Implemented Scrum methodologies, resulting in a 20% increase in team productivity.</li><li>Successfully negotiated vendor contracts, saving the company 10% on external resources.</li></ul>" 
                 },
                 { 
                     id: 2, 
                     role: "Project Coordinator", 
                     company: "Creative Solutions Ltd.", 
+                    website: "https://creativesolutions.com", // Added website
+                    location: "Chicago, USA",
                     start: "2015-06-01", 
                     end: "2018-12-01", 
-                    description: "Assisted senior managers in planning and executing marketing campaigns for Fortune 500 clients. Coordinated project schedules, resources, and budgets. Maintained client relationships and ensured all deliverables met quality standards and deadlines." 
+                    description: "<ul><li>Assisted senior managers in planning and executing marketing campaigns for Fortune 500 clients.</li><li>Coordinated project schedules, resources, and budgets.</li><li>Maintained client relationships and ensured all deliverables met quality standards and deadlines.</li></ul>" 
                 }
             ],
             education: [
@@ -330,6 +395,7 @@
                     degree: "MBA in Project Management", 
                     field: "Business Administration", 
                     school: "New York University", 
+                    website: "https://nyu.edu", // Added website
                     year: "2015-05-20", 
                     category: "Academic" 
                 },
@@ -338,6 +404,7 @@
                     degree: "PMP Certification", 
                     field: "Project Management", 
                     school: "Project Management Institute (PMI)", 
+                    website: "", 
                     year: "2016-08-15", 
                     category: "Certification" 
                 }
@@ -427,6 +494,10 @@
 
             // --- AI LOGIC ---
             async callGemini(prompt, systemPrompt) {
+                if (!apiKey) {
+                    alert("API Key is missing. Please add your API key in the source code or use the demo version.");
+                    return "";
+                }
                 let delay = 1000;
                 for (let i = 0; i < 5; i++) {
                     try {
@@ -448,12 +519,20 @@
                 this.renderEditor();
                 try {
                     let prompt = ""; let system = "You are a professional CV writer. Improve text to be impact-driven. Return text only.";
-                    if (type === 'summary') prompt = `Improve CV summary: ${this.data.personal.summary}`;
-                    else if (type === 'exp') prompt = `Polish job bullets: ${this.data.experience.find(i => i.id === id).description}`;
+                    
+                    if (type === 'summary') {
+                        prompt = `Improve CV summary: ${this.data.personal.summary}`;
+                        system = "You are a professional CV writer. Write a compelling, professional summary in a single paragraph.";
+                    }
+                    else if (type === 'exp') {
+                        prompt = `Rewrite these job responsibilities into concise, impact-driven bullet points using HTML <ul> and <li> tags. Content: ${this.data.experience.find(i => i.id === id).description}`;
+                        system = "You are a professional CV writer. Return ONLY HTML list items (<ul><li>...</li></ul>). Do not use Markdown.";
+                    }
                     else if (type === 'skills') {
                          prompt = `Suggest 10 comma-separated technical and soft skills for a ${this.data.personal.title}. Output format: Skill1, Skill2, Skill3`;
                          system = "Output ONLY a comma-separated list of skills.";
                     }
+                    
                     const result = await this.callGemini(prompt, system);
                     if (result) {
                         if (type === 'summary') this.update('personal.summary', result.trim());
@@ -469,7 +548,7 @@
                     const cl = this.data.coverLetter; const p = this.data.personal;
                     const prompt = `Write a tailored cover letter for ${p.fullName} applying to ${cl.companyName} as a ${p.title}. 
                         Summary: ${p.summary}. Skills: ${this.data.skills.join(',')}. Description: ${cl.jobDescription}.`;
-                    const result = await this.callGemini(prompt, "Write professional cover letter content only.");
+                    const result = await this.callGemini(prompt, "Write professional cover letter content only. Use standard paragraph formatting.");
                     if (result) this.update('coverLetter.content', result.trim());
                 } catch (e) { alert("AI Generation failed."); } finally { this.aiLoading = null; this.renderEditor(); }
             },
@@ -485,6 +564,10 @@
                     this.recognition.onresult = (event) => {
                         const transcript = event.results[0][0].transcript;
                         if (this.listeningTarget) {
+                           // For rich text, simple append might break HTML structure, but simplistic approach:
+                           // If listening target is description (rich text), just append text.
+                           // Actually rich text contenteditable handles this better manually.
+                           // Keeping simple string append for now as fallback.
                            const currentVal = this.listeningTarget.type === 'summary' ? this.data.personal.summary : this.data.experience.find(i=>i.id===this.listeningTarget.id).description;
                            const newVal = (currentVal ? currentVal + " " : "") + transcript;
                            
@@ -568,6 +651,28 @@
             textarea(label, value, path) {
                 return `<div><label class="block text-xs font-bold text-slate-500 uppercase mb-1 tracking-wide">${label}</label><textarea oninput="app.update('${path}', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm resize-none" rows="2">${value || ''}</textarea></div>`;
             },
+            
+            // --- RICH TEXT EDITOR RENDERER ---
+            renderRichEditor(label, value, onInputCode) {
+                // Paste handler to strip formatting and insert clean text
+                const pasteHandler = "event.preventDefault(); const text = (event.clipboardData || window.clipboardData).getData('text'); document.execCommand('insertText', false, text);";
+                
+                return `
+                <div class="group">
+                    ${label ? `<label class="block text-xs font-bold text-slate-500 uppercase mb-1 tracking-wide">${label}</label>` : ''}
+                    <div class="rich-editor focus-within:ring-2 focus-within:ring-blue-100 focus-within:border-blue-400 transition-all">
+                        <div class="rich-toolbar flex items-center">
+                            <button class="rich-btn" onclick="document.execCommand('bold',false,null); event.preventDefault();" title="Bold"><i data-lucide="bold" width="14"></i></button>
+                            <button class="rich-btn" onclick="document.execCommand('italic',false,null); event.preventDefault();" title="Italic"><i data-lucide="italic" width="14"></i></button>
+                            <button class="rich-btn" onclick="document.execCommand('underline',false,null); event.preventDefault();" title="Underline"><i data-lucide="underline" width="14"></i></button>
+                            <div class="w-px h-4 bg-slate-300 mx-1 self-center"></div>
+                            <button class="rich-btn" onclick="document.execCommand('insertUnorderedList',false,null); event.preventDefault();" title="Bullet List"><i data-lucide="list" width="14"></i></button>
+                        </div>
+                        <div class="rich-content" contenteditable="true" oninput="${onInputCode}" onpaste="${pasteHandler}">${value || ''}</div>
+                    </div>
+                </div>`;
+            },
+
             select(label, value, path, options) {
                 return `<div><label class="block text-xs font-bold text-slate-500 uppercase mb-1 tracking-wide">${label}</label><select onchange="app.update('${path}', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm bg-white cursor-pointer"><option value="">Select...</option>${options.map(opt => `<option value="${opt}" ${value === opt ? 'selected' : ''}>${opt}</option>`).join('')}</select></div>`;
             },
@@ -591,8 +696,13 @@
             },
 
             addItem(section) {
-                const item = { id: Date.now(), role: "Role", company: "Company", start: "", end: "", description: "" };
-                if (section === 'education') item.category = "Academic";
+                const item = { id: Date.now(), role: "Role", company: "Company", website: "", location: "", start: "", end: "", description: "" };
+                if (section === 'education') {
+                    item.school = "School"; 
+                    item.degree = "Degree";
+                    item.website = "";
+                    item.category = "Academic";
+                }
                 this.data[section].push(item);
                 this.renderEditor();
                 this.save();
@@ -624,22 +734,44 @@
                     html = `
                     <div class="space-y-6 animate-in fade-in slide-in-from-left-4">
                         <div class="flex items-center gap-5 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                            <div class="w-20 h-20 rounded-full bg-white border-2 border-white shadow-md overflow-hidden shrink-0">
-                                ${p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center text-slate-300"><i data-lucide="user" width="32"></i></div>`}
+                            <!-- Photo Indicator (Image hidden in editor, shown only on template) -->
+                            <div class="w-20 h-20 rounded-full bg-white border-2 border-white shadow-md overflow-hidden shrink-0 flex items-center justify-center">
+                                ${p.photo ? 
+                                    `<div class="text-center animate-in zoom-in">
+                                        <i data-lucide="image" class="text-blue-500 mx-auto mb-1" width="24"></i>
+                                        <span class="text-[8px] font-bold text-blue-600 uppercase tracking-wide block">Saved</span>
+                                    </div>` : 
+                                    `<div class="text-slate-300"><i data-lucide="user" width="32"></i></div>`
+                                }
                             </div>
-                            <label class="cursor-pointer bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-50 shadow-sm"><i data-lucide="camera" width="14"></i> Upload<input type="file" accept="image/*" class="hidden" onchange="app.handleImageUpload(this)"></label>
+                            <div>
+                                <label class="cursor-pointer bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-50 shadow-sm transition-colors mb-1">
+                                    <i data-lucide="camera" width="14"></i> ${p.photo ? 'Change Photo' : 'Upload Photo'}
+                                    <input type="file" accept="image/*" class="hidden" onchange="app.handleImageUpload(this)">
+                                </label>
+                                ${p.photo ? `<button onclick="app.update('personal.photo', null)" class="text-[10px] text-red-400 hover:text-red-600 font-medium flex items-center gap-1"><i data-lucide="trash-2" width="10"></i> Remove</button>` : ''}
+                            </div>
                         </div>
                         ${this.input('Full Name', p.fullName, 'personal.fullName')}
                         ${this.jobSelect('Job Title', p.title, 'personal.title')}
                         <div class="grid grid-cols-2 gap-4">${this.input('Email', p.email, 'personal.email')}${this.input('Phone', p.phone, 'personal.phone')}</div>
-                        <div class="grid grid-cols-2 gap-4">${this.input('WhatsApp', p.whatsapp, 'personal.whatsapp')}${this.input('Location', p.location, 'personal.location')}</div>
+                        <div class="grid grid-cols-2 gap-4">${this.input('WhatsApp', p.whatsapp, 'personal.whatsapp')}${this.input('Alt Contact', p.alternativePhone, 'personal.alternativePhone')}</div>
+                        <div class="grid grid-cols-1 gap-4">${this.input('Location', p.location, 'personal.location')}</div>
                         ${this.textarea('Postal Address', p.postalAddress, 'personal.postalAddress')}
+                        
+                        <div class="grid grid-cols-3 gap-4">
+                            ${this.input('LinkedIn', p.linkedin, 'personal.linkedin')}
+                            ${this.input('Facebook', p.facebook, 'personal.facebook')}
+                            ${this.input('Instagram', p.instagram, 'personal.instagram')}
+                        </div>
+
                         <div class="grid grid-cols-2 gap-4">${this.input('DOB', p.dob, 'personal.dob', 'text', 'date-picker')}${this.input('Nationality', p.nationality, 'personal.nationality')}</div>
                         <div class="grid grid-cols-2 gap-4">${this.input('Passport No', p.passportNumber, 'personal.passportNumber')}${this.input('Portfolio', p.portfolio, 'personal.portfolio')}</div>
                         <div class="grid grid-cols-2 gap-4">${this.select('Gender', p.gender, 'personal.gender', GENDER_OPTS)}${this.select('Marital Status', p.maritalStatus, 'personal.maritalStatus', MARITAL_OPTS)}</div>
-                        <div class="pt-2">
-                            <div class="flex justify-between items-center mb-1">
-                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Summary</label>
+                        
+                        <div class="pt-4 border-t border-slate-100">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Professional Summary</label>
                                 <div class="flex gap-2">
                                      <button onclick="app.startListening('summary')" class="text-[10px] text-slate-400 hover:text-red-500 flex items-center gap-1 transition-colors px-2 py-1 rounded bg-slate-50 hover:bg-slate-100 ${this.listening && this.listeningTarget?.type === 'summary' ? 'mic-listening' : ''}"><i data-lucide="mic" width="12"></i> Dictate</button>
                                      <button onclick="app.aiAssist('summary')" class="text-[10px] bg-purple-50 text-purple-600 px-2 py-1 rounded font-bold flex items-center gap-1 hover:bg-purple-100 transition-colors ${this.aiLoading === 'summary' ? 'ai-glow' : ''}" ${this.aiLoading === 'summary' ? 'disabled' : ''}>
@@ -647,7 +779,8 @@
                                      </button>
                                 </div>
                             </div>
-                            <textarea oninput="app.update('personal.summary', this.value)" rows="5" class="input-creative w-full p-3 rounded-xl text-sm leading-relaxed">${p.summary || ''}</textarea>
+                            <!-- RICH TEXT EDITOR FOR SUMMARY (No duplicate label) -->
+                            ${this.renderRichEditor('', p.summary, "app.update('personal.summary', this.innerHTML)")}
                         </div>
                     </div>`;
                 } else if (this.activeTab === 'experience') {
@@ -660,7 +793,11 @@
                             <div class="space-y-3">
                                 <div class="grid grid-cols-1 gap-4 pr-8">
                                     ${this.jobSelect('Role / Position', exp.role, '', true, exp.id)}
-                                    <input value="${exp.company}" oninput="app.updateArray('experience', ${exp.id}, 'company', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm" placeholder="Company Name">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <input value="${exp.company}" oninput="app.updateArray('experience', ${exp.id}, 'company', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm" placeholder="Company Name">
+                                        <input value="${exp.website || ''}" oninput="app.updateArray('experience', ${exp.id}, 'website', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm" placeholder="Website (Optional)">
+                                    </div>
+                                    <input value="${exp.location || ''}" oninput="app.updateArray('experience', ${exp.id}, 'location', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm" placeholder="Location / Country">
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
@@ -690,7 +827,8 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <textarea oninput="app.updateArray('experience', ${exp.id}, 'description', this.value)" rows="3" class="input-creative w-full p-3 rounded-lg text-sm leading-relaxed" placeholder="Detailed job description...">${exp.description}</textarea>
+                                    <!-- RICH TEXT EDITOR FOR RESPONSIBILITIES -->
+                                    ${this.renderRichEditor('Description', exp.description, `app.updateArray('experience', ${exp.id}, 'description', this.innerHTML)`)}
                                 </div>
                             </div>
                         </div>`}).join('')}</div>`;
@@ -701,7 +839,10 @@
                             <button onclick="app.removeItem('education', ${edu.id})" class="absolute top-4 right-4 text-slate-300 hover:text-red-500"><i data-lucide="trash-2" width="16"></i></button>
                             <div class="space-y-3 pr-8">
                                 <select onchange="app.updateArray('education', ${edu.id}, 'category', this.value)" class="input-creative w-full p-2 rounded-lg text-sm mb-2">${EDU_CATEGORIES.map(c => `<option value="${c}" ${edu.category === c ? 'selected' : ''}>${c}</option>`).join('')}</select>
-                                <input value="${edu.school}" oninput="app.updateArray('education', ${edu.id}, 'school', this.value)" class="input-creative w-full p-2.5 rounded-lg font-bold text-sm" placeholder="School">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input value="${edu.school}" oninput="app.updateArray('education', ${edu.id}, 'school', this.value)" class="input-creative w-full p-2.5 rounded-lg font-bold text-sm" placeholder="School">
+                                    <input value="${edu.website || ''}" oninput="app.updateArray('education', ${edu.id}, 'website', this.value)" class="input-creative w-full p-2.5 rounded-lg text-sm" placeholder="Website (Optional)">
+                                </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <input value="${edu.degree}" oninput="app.updateArray('education', ${edu.id}, 'degree', this.value)" class="input-creative w-full p-2 rounded-lg text-sm" placeholder="Major">
                                     <div>
@@ -776,45 +917,93 @@
                     html = `
                     <div class="grid grid-cols-12 flex-1 min-h-[297mm] text-slate-800">
                         <div class="col-span-4 bg-slate-50 p-6 border-r border-slate-200 text-xs flex flex-col">
-                            <h2 class="text-[10px] uppercase font-bold text-slate-400 mb-2 tracking-widest">Europass</h2>
-                            ${p.photo ? `<img src="${p.photo}" class="w-full aspect-[3/4] object-cover border border-slate-200 mb-4 shadow-sm">` : ''}
-                            <h1 class="text-xl font-bold uppercase mb-4 leading-tight" style="color:${theme}">${p.fullName}</h1>
-                            <div class="space-y-4">
-                                <div class="space-y-1">
-                                    <p><strong>Passport:</strong> ${p.passportNumber || '-'}</p>
-                                    <p><strong>DOB:</strong> ${p.dob || '-'}</p>
-                                    <p><strong>Nationality:</strong> ${p.nationality || '-'}</p>
-                                    <p><strong>Gender:</strong> ${p.gender || '-'}</p>
-                                    <p><strong>Marital:</strong> ${p.maritalStatus || '-'}</p>
-                                    <p><strong>POB:</strong> ${p.placeOfBirth || '-'}</p>
+                            ${p.photo ? `<div class="flex justify-center mb-6"><img src="${p.photo}" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"></div>` : ''}
+                            <h1 class="text-xl font-bold uppercase mb-2 leading-tight" style="color:${theme}">${p.fullName}</h1>
+                            <p class="text-sm font-bold text-slate-500 uppercase mb-6 tracking-wider">${p.title}</p>
+                            
+                            <div class="space-y-6 flex-1">
+                                <!-- Contact -->
+                                <div class="space-y-2">
+                                    <h3 class="font-bold uppercase border-b border-slate-300 pb-1 mb-2" style="color:${theme}">Contact</h3>
+                                    <p class="flex items-center gap-2"><i data-lucide="phone" width="12" style="color:${theme}"></i> ${p.phone}</p>
+                                    ${p.whatsapp ? `<p class="flex items-center gap-2"><i data-lucide="message-circle" width="12" style="color:${theme}"></i> ${p.whatsapp}</p>` : ''}
+                                    ${p.alternativePhone ? `<p class="flex items-center gap-2"><i data-lucide="phone-call" width="12" style="color:${theme}"></i> ${p.alternativePhone}</p>` : ''}
+                                    <p class="flex items-center gap-2 break-all"><i data-lucide="mail" width="12" style="color:${theme}"></i> ${p.email}</p>
+                                    <p class="flex items-center gap-2"><i data-lucide="map-pin" width="12" style="color:${theme}"></i> ${p.location}</p>
                                 </div>
-                                <div class="border-t border-slate-200 pt-3 space-y-2">
-                                    <p class="flex gap-2"><i data-lucide="phone" width="12" style="color:${theme}"></i> ${p.phone}</p>
-                                    <p class="flex gap-2 break-all"><i data-lucide="mail" width="12" style="color:${theme}"></i> ${p.email}</p>
-                                    <p class="flex gap-2"><i data-lucide="map-pin" width="12" style="color:${theme}"></i> ${p.location}</p>
+
+                                <!-- Socials -->
+                                <div class="space-y-2">
+                                    <h3 class="font-bold uppercase border-b border-slate-300 pb-1 mb-2" style="color:${theme}">Socials</h3>
+                                    ${p.linkedin ? `<a href="${p.linkedin}" target="_blank" class="flex items-center gap-2 hover:underline"><i data-lucide="linkedin" width="12" style="color:${theme}"></i> LinkedIn</a>` : ''}
+                                    ${p.facebook ? `<a href="${p.facebook}" target="_blank" class="flex items-center gap-2 hover:underline"><i data-lucide="facebook" width="12" style="color:${theme}"></i> Facebook</a>` : ''}
+                                    ${p.instagram ? `<a href="${p.instagram}" target="_blank" class="flex items-center gap-2 hover:underline"><i data-lucide="instagram" width="12" style="color:${theme}"></i> Instagram</a>` : ''}
                                 </div>
-                                <div class="border-t border-slate-200 pt-3">
-                                    <h3 class="font-bold uppercase mb-2 border-b border-slate-300 pb-1" style="color:${theme}">Language Skills</h3>
-                                    ${(this.data.languages || []).map(l => `<div class="mb-2"><strong>${l.name}</strong><br><span class="opacity-60 text-[10px]">R:${l.read} W:${l.write} S:${l.speak}</span></div>`).join('')}
-                                </div>
-                                <div class="border-t border-slate-200 pt-3">
+
+                                <!-- Skills -->
+                                <div>
                                     <h3 class="font-bold uppercase mb-2 border-b border-slate-300 pb-1" style="color:${theme}">Skills</h3>
-                                    <div class="flex flex-wrap gap-1">${this.data.skills.map(s => `<span class="bg-white border border-slate-300 px-1 py-0.5 rounded">${s}</span>`).join('')}</div>
+                                    <div class="flex flex-wrap gap-1">${this.data.skills.map(s => `<span class="bg-white border border-slate-300 px-2 py-1 rounded shadow-sm">${s}</span>`).join('')}</div>
+                                </div>
+
+                                <!-- Languages -->
+                                <div>
+                                    <h3 class="font-bold uppercase mb-2 border-b border-slate-300 pb-1" style="color:${theme}">Languages</h3>
+                                    ${(this.data.languages || []).map(l => `<div class="mb-2 flex justify-between items-center"><strong>${l.name}</strong><span class="opacity-70 text-[10px] bg-slate-200 px-1.5 py-0.5 rounded">${l.speak}</span></div>`).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Personal Details (Pushed to bottom) -->
+                            <div class="mt-auto pt-6 border-t border-slate-200">
+                                <h3 class="font-bold uppercase mb-3 text-slate-400 tracking-wider text-[10px]">Personal Details</h3>
+                                <div class="space-y-2 text-[10px] text-slate-600">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700">Passport:</span> <span>${p.passportNumber || '-'}</span></div>
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700">DOB:</span> <span>${p.dob || '-'}</span></div>
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700">Nationality:</span> <span>${p.nationality || '-'}</span></div>
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700">Gender:</span> <span>${p.gender || '-'}</span></div>
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700">Marital:</span> <span>${p.maritalStatus || '-'}</span></div>
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700">POB:</span> <span>${p.placeOfBirth || '-'}</span></div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-span-8 p-8 flex flex-col">
                             <div class="mb-8">
                                 <h3 class="font-bold text-slate-900 uppercase border-b-2 border-slate-300 pb-1 mb-3 flex items-center gap-2" style="color:${theme}"><i data-lucide="user" width="16"></i> About Me</h3>
-                                <p class="text-sm text-justify leading-relaxed">${p.summary}</p>
+                                <div class="text-sm text-justify leading-relaxed rich-content">${p.summary}</div>
                             </div>
                             <div class="mb-8">
                                 <h3 class="font-bold text-slate-900 uppercase border-b-2 border-slate-300 pb-1 mb-4 flex items-center gap-2" style="color:${theme}"><i data-lucide="briefcase" width="16"></i> Experience</h3>
-                                ${this.data.experience.map(e => `<div class="mb-5 break-inside-avoid"><div class="flex justify-between items-baseline mb-1"><h4 class="font-bold text-sm uppercase text-slate-800">${e.company}</h4><span class="text-xs font-bold text-slate-500">${app.formatDate(e.start)} - ${app.formatDate(e.end)}</span></div><p class="text-sm font-bold mb-1 italic" style="color:${theme}">${e.role}</p><p class="text-xs text-justify leading-relaxed text-slate-600">${e.description}</p></div>`).join('')}
+                                ${this.data.experience.map(e => `
+                                    <div class="mb-5 break-inside-avoid">
+                                        <div class="flex justify-between items-baseline mb-1">
+                                            <div class="flex-1">
+                                                ${e.website 
+                                                    ? `<a href="${e.website}" target="_blank" class="font-bold text-sm uppercase text-slate-800 inline-block mr-2 hover:underline flex items-center gap-1 group">${e.company} <i data-lucide="external-link" width="10" class="opacity-0 group-hover:opacity-100 transition-opacity"></i></a>` 
+                                                    : `<h4 class="font-bold text-sm uppercase text-slate-800 inline-block mr-2">${e.company}</h4>`
+                                                }
+                                                <span class="text-xs text-slate-500 italic block sm:inline-block">${e.location || ''}</span>
+                                            </div>
+                                            <span class="text-xs font-bold text-slate-500 whitespace-nowrap ml-4">${app.formatDate(e.start)} - ${app.formatDate(e.end)}</span>
+                                        </div>
+                                        <p class="text-sm font-bold mb-1 italic" style="color:${theme}">${e.role}</p>
+                                        <div class="text-xs text-justify leading-relaxed text-slate-600 rich-content">${e.description}</div>
+                                    </div>
+                                `).join('')}
                             </div>
                             <div class="mb-8">
                                 <h3 class="font-bold text-slate-900 uppercase border-b-2 border-slate-300 pb-1 mb-4 flex items-center gap-2" style="color:${theme}"><i data-lucide="graduation-cap" width="16"></i> Education</h3>
-                                ${this.data.education.map(e => `<div class="mb-3 break-inside-avoid"><div class="flex justify-between text-xs font-bold text-slate-500"><span>${app.formatDate(e.year)}</span></div><div class="font-bold text-sm text-slate-800 uppercase">${e.degree}</div><div class="text-xs">${e.school}</div></div>`).join('')}
+                                ${this.data.education.map(e => `
+                                    <div class="mb-3 break-inside-avoid">
+                                        <div class="flex justify-between text-xs font-bold text-slate-500"><span>${app.formatDate(e.year)}</span></div>
+                                        <div class="font-bold text-sm text-slate-800 uppercase">${e.degree}</div>
+                                        <div class="text-xs">
+                                            ${e.website 
+                                                ? `<a href="${e.website}" target="_blank" class="hover:underline flex items-center gap-1 group">${e.school} <i data-lucide="external-link" width="8" class="opacity-0 group-hover:opacity-100 transition-opacity"></i></a>` 
+                                                : e.school
+                                            }
+                                        </div>
+                                    </div>
+                                `).join('')}
                             </div>
                         </div>
                     </div>`;
@@ -827,12 +1016,16 @@
                             <p class="text-lg font-bold mb-2">${p.title}</p>
                             <div class="text-sm flex justify-center gap-4 flex-wrap mt-2">
                                 <span>${p.location}</span>|<span>${p.email}</span>|<span>${p.phone}</span>
-                                ${p.linkedin ? `|<span>${p.linkedin}</span>` : ''}
+                                ${p.whatsapp ? `|<span>${p.whatsapp}</span>` : ''}
+                                ${p.alternativePhone ? `|<span>${p.alternativePhone}</span>` : ''}
+                                ${p.linkedin ? `| <span><a href="${p.linkedin}" class="text-inherit no-underline">LinkedIn</a></span>` : ''}
+                                ${p.facebook ? `| <span><a href="${p.facebook}" class="text-inherit no-underline">Facebook</a></span>` : ''}
+                                ${p.instagram ? `| <span><a href="${p.instagram}" class="text-inherit no-underline">Instagram</a></span>` : ''}
                             </div>
                         </div>
                         <div class="mb-6 break-inside-avoid">
                             <h3 class="font-bold uppercase text-sm border-b mb-2" style="border-color:${theme}; color:${theme}">Summary</h3>
-                            <p class="text-sm text-justify">${p.summary}</p>
+                            <div class="text-sm text-justify rich-content">${p.summary}</div>
                         </div>
                         <div class="mb-6 break-inside-avoid">
                             <h3 class="font-bold uppercase text-sm border-b mb-2" style="border-color:${theme}; color:${theme}">Professional Skills</h3>
@@ -842,15 +1035,30 @@
                             <h3 class="font-bold uppercase text-sm border-b mb-3" style="border-color:${theme}; color:${theme}">Job and Duty</h3>
                             ${this.data.experience.map(e => `
                                 <div class="mb-4 break-inside-avoid">
-                                    <div class="flex justify-between font-bold text-sm"><span>${e.role}</span><span>${app.formatDate(e.start)} - ${app.formatDate(e.end)}</span></div>
-                                    <div class="flex justify-between italic text-sm mb-1"><span>${e.company}</span><span>${e.locationType || ''}</span></div>
-                                    <p class="text-sm text-justify pl-2 border-l-2 border-gray-200">${e.description}</p>
+                                    <div class="flex justify-between font-bold text-sm">
+                                        <span>${e.role}</span>
+                                        <span class="whitespace-nowrap">${app.formatDate(e.start)} - ${app.formatDate(e.end)}</span>
+                                    </div>
+                                    <div class="flex justify-between italic text-sm mb-1">
+                                        <span>
+                                            ${e.website ? `<a href="${e.website}" class="text-inherit underline">${e.company}</a>` : e.company}
+                                        </span>
+                                        <span>${e.location || ''}</span>
+                                    </div>
+                                    <div class="text-sm text-justify pl-2 border-l-2 border-gray-200 rich-content">${e.description}</div>
                                 </div>
                             `).join('')}
                         </div>
                         <div class="mb-6 break-inside-avoid">
                             <h3 class="font-bold uppercase text-sm border-b mb-2" style="border-color:${theme}; color:${theme}">Qualification</h3>
-                            ${this.data.education.map(e => `<div class="flex justify-between text-sm mb-1"><span class="font-bold">${e.degree}</span><span>${e.school}, ${app.formatDate(e.year)}</span></div>`).join('')}
+                            ${this.data.education.map(e => `
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-bold">${e.degree}</span>
+                                    <span>
+                                        ${e.website ? `<a href="${e.website}" class="text-inherit underline">${e.school}</a>` : e.school}, ${app.formatDate(e.year)}
+                                    </span>
+                                </div>
+                            `).join('')}
                         </div>
                         <div class="mb-6 break-inside-avoid">
                             <h3 class="font-bold uppercase text-sm border-b mb-2" style="border-color:${theme}; color:${theme}">Language Skills</h3>
@@ -897,9 +1105,14 @@
                 ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0,0,400,400);
                 const img = new Image(); img.src = this.cropper.img;
                 img.onload = () => {
-                    ctx.translate(200, 200); ctx.scale(this.cropper.zoom, this.cropper.zoom);
-                    const scaleFactor = 400 / 256; ctx.translate(this.cropper.x * scaleFactor, this.cropper.y * scaleFactor);
+                    // Correct transform order for WYSIWYG crop
+                    ctx.translate(200, 200); 
+                    const scaleFactor = 400 / 256; 
+                    // Apply translation first (scaled to canvas units), then scale
+                    ctx.translate(this.cropper.x * scaleFactor, this.cropper.y * scaleFactor);
+                    ctx.scale(this.cropper.zoom, this.cropper.zoom);
                     ctx.drawImage(img, -img.naturalWidth/2, -img.naturalHeight/2);
+                    
                     this.data.personal.photo = canvas.toDataURL('image/png'); this.save(); this.renderEditor(); this.closeCropper();
                 };
             },
