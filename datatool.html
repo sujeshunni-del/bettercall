@@ -249,6 +249,27 @@
             font-size: 1.2rem;
             margin-bottom: 4px;
         }
+
+        /* Creative Empty Field Highlighter */
+        input:not([type="checkbox"]):not([type="file"]):not([readonly]), 
+        select, 
+        textarea {
+            transition: all 0.3s ease;
+        }
+        
+        /* The Red Highlight Class */
+        .highlight-empty {
+            border-color: #fca5a5 !important; /* Tailwind red-300 */
+            background-color: #fef2f2 !important; /* Tailwind red-50 */
+            box-shadow: 0 0 0 1px #fca5a5 !important; /* Subtle glow ring */
+        }
+        
+        /* Clear highlight when user clicks/focuses to type */
+        .highlight-empty:focus {
+            border-color: #3b82f6 !important; /* Default Blue */
+            background-color: #ffffff !important;
+            box-shadow: none !important;
+        }
     </style>
 </head>
 <body class="bg-gray-100 h-screen overflow-hidden flex flex-col font-sans">
@@ -539,10 +560,12 @@
                             <input type="text" id="input-fname" class="border rounded px-2 py-1.5 text-sm" placeholder="First Name (As per Passport)">
                             <input type="text" id="input-sname" class="border rounded px-2 py-1.5 text-sm" placeholder="Surname (As per Passport)">
                             <select id="input-gender" class="border rounded px-2 py-1.5 text-sm bg-white">
+                                <option value="" selected disabled class="text-gray-400">Select Gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
                             <select id="input-marital" class="border rounded px-2 py-1.5 text-sm bg-white">
+                                <option value="" selected disabled class="text-gray-400">Select Status</option>
                                 <option value="Single">Single</option>
                                 <option value="Married">Married</option>
                             </select>
@@ -739,7 +762,7 @@
                     <div class="mt-2 p-2 bg-gray-50 border border-gray-200 rounded">
                         <span class="block text-slate-500 font-bold text-[7pt] mb-1">POSTAL ADDRESS</span>
                         <span class="font-semibold text-[10pt] leading-snug">
-                            <span id="prev-address"></span>, <span id="prev-location"></span> <span id="prev-zip"></span>
+                            <span id="prev-address"></span> <span id="prev-location"></span> <span id="prev-zip"></span>
                         </span>
                     </div>
                 </div>
@@ -984,12 +1007,8 @@
             inputs.forEach(input => {
                 if(input.id === 'input-ref-id') {
                      input.value = nextRefId; // Set newly generated ID
-                } else if(input.id === 'input-gender') {
-                    input.value = 'Male';
-                } else if(input.id === 'input-marital') {
-                    input.value = 'Single';
                 } else {
-                    input.value = '';
+                    input.value = ''; // Clear all inputs, including gender/marital
                 }
             });
 
@@ -1061,7 +1080,7 @@
                     { id: "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38", value: getDateTs('input-dob') }, // DATE OF BIRTH
                     { id: "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", value: getDateTs('input-passport-exp') }, // PASSPORT EXPIRY
                     
-                    // { id: "e79e1c4e-b123-4bd9-8051-34859ea4b87e", value: getValUpper('input-nationality') }, // NATIONALITY
+                    { id: "e79e1c4e-b123-4bd9-8051-34859ea4b87e", value: getValUpper('input-nationality') }, // NATIONALITY (Uncommented)
                     { id: "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5", value: getValUpper('input-residence') }, // PRESENT RESIDENCE
                     { id: "2e18821e-1c19-4de5-afb8-77ff11ee6327", value: getValUpper('input-email') }, // Email
                     
@@ -1076,10 +1095,13 @@
                     { id: "b8798515-8962-40a7-a8cd-2685f9fd676c", value: getValUpper('input-sname') }, // SUR NAME (Surname separate)
                     { id: "ae3be10a-cc2d-459e-a80a-1727115b2f0c", value: getValUpper('input-address') }, // ADDRESS
                     
+                    // Added Gender Field - REPLACE ID with your actual ClickUp Custom Field ID
+                    { id: "4e32a1b5-9081-4f3c-9f02-8f26a1b2c3d4", value: getValUpper('input-gender') }, // GENDER
+
                     // { id: "410dd336-f23f-4893-859f-d04e420f6431", value: getValUpper('input-position') }, // JOB TITLE
                     // { id: "41c89ec2-4e22-4e85-ae57-de0e614bea88", value: getValUpper('input-location') }, // STATE
                     { id: "a25c1d42-6191-4fde-8eb4-7f2059fd71e3", value: refId }, // REFERENCE ID
-                    // { id: "dd59c787-da25-4760-ab85-2974e1ae8838", value: getValUpper('input-country') } // COUNTRY
+                    { id: "dd59c787-da25-4760-ab85-2974e1ae8838", value: getValUpper('input-country') } // COUNTRY (Uncommented & Mapped)
                 ];
 
                 const cleanCustomFields = customFields.filter(f => f.value !== null && f.value !== "" && !Number.isNaN(f.value));
@@ -1340,6 +1362,19 @@
 
             updateCheckboxList(attachments, 'att', 'prev-attachments');
             updateCheckboxList(submissions, 'sub', 'prev-submission');
+            
+            // --- Highlight Empty Fields Logic ---
+            // Select inputs, selects, and textareas that are not checkboxes/files/readonly
+            const inputsToCheck = document.querySelectorAll('#app-form input:not([type="checkbox"]):not([type="file"]):not([readonly]), #app-form select, #app-form textarea');
+            
+            inputsToCheck.forEach(input => {
+                // If value is empty/whitespace, add highlight class
+                if (!input.value.trim()) {
+                    input.classList.add('highlight-empty');
+                } else {
+                    input.classList.remove('highlight-empty');
+                }
+            });
         }
 
         function updateTable(inputId, previewId, renderFn) {
@@ -1846,8 +1881,8 @@
                     document.getElementById('input-passport-no').value = data.passportNo || "";
                     document.getElementById('input-mobile').value = data.mobile || "";
                     document.getElementById('input-email').value = data.email || "";
-                    document.getElementById('input-gender').value = data.gender || "Male";
-                    document.getElementById('input-marital').value = data.maritalStatus || "Single";
+                    document.getElementById('input-gender').value = data.gender || "";
+                    document.getElementById('input-marital').value = data.maritalStatus || "";
                     document.getElementById('input-dob').value = data.dob || "";
                     document.getElementById('input-age').value = data.age || "";
                     document.getElementById('input-passport-exp').value = data.passportExp || "";
