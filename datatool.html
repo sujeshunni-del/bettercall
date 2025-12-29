@@ -183,17 +183,46 @@
             color: white;
         }
 
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3b82f6;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
+        /* Scanner Animation Styles */
+        .scanner-container {
+            position: relative;
+            width: 120px;
+            height: 160px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+            margin-bottom: 1rem;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .scanner-doc-icon {
+            font-size: 60px;
+            color: #cbd5e1;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .scanner-line {
+            position: absolute;
+            top: -10%;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #3b82f6;
+            box-shadow: 0 0 15px 2px #3b82f6;
+            animation: scanMove 2s ease-in-out infinite;
+            z-index: 10;
+        }
+        @keyframes scanMove {
+            0% { top: -10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 110%; opacity: 0; }
+        }
+        
+        .scan-success-icon {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         /* Navigation Button Styles */
@@ -266,8 +295,8 @@
                         <span>Search Candidate</span>
                     </button>
                     
-                    <!-- OCR (Make File) -->
-                    <button onclick="triggerOCR()" class="nav-btn bg-blue-700/50 border-blue-600 hover:bg-blue-600">
+                    <!-- OCR (Make File) - Opens NEW MODAL -->
+                    <button onclick="openFileModal()" class="nav-btn bg-blue-700/50 border-blue-600 hover:bg-blue-600">
                         <i class="fa-solid fa-file-import"></i>
                         <span>Upload Files</span>
                     </button>
@@ -310,7 +339,7 @@
     <div class="flex flex-1 overflow-hidden relative">
         
         <!-- Search Modal -->
-        <div id="search-modal" class="hidden absolute inset-0 bg-gray-900/50 z-50 flex items-center justify-center backdrop-blur-sm">
+        <div id="search-modal" class="hidden absolute inset-0 bg-gray-900/50 z-[50] flex items-center justify-center backdrop-blur-sm">
             <div class="bg-white rounded-lg shadow-xl p-6 w-96 transform transition-all scale-100">
                 <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-magnifying-glass text-blue-600"></i> Search Candidate
@@ -328,21 +357,102 @@
             </div>
         </div>
 
-        <!-- Left Panel: Editor -->
-        <div class="w-2/5 bg-white border-r border-gray-200 overflow-y-auto editor-scroll flex flex-col">
-            <!-- Updated Input for Multiple Files -->
-            <input type="file" id="ocr-upload" class="hidden" multiple accept="image/*,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onchange="processOCR(this)">
-            
-            <!-- Loading Overlay -->
-            <div id="ocr-loader" class="hidden absolute inset-0 bg-white/95 z-50 flex-col items-center justify-center">
-                <div class="loader mb-4"></div>
-                <h3 class="text-lg font-bold text-slate-700 mb-2">Analyzing Documents</h3>
-                <p id="ocr-status" class="text-sm text-gray-500 font-medium">Starting...</p>
-                <div class="w-64 bg-gray-200 rounded-full h-2.5 mt-3">
-                    <div id="ocr-progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+        <!-- NEW: File Upload & Selection Modal -->
+        <div id="file-upload-modal" class="hidden absolute inset-0 bg-gray-900/60 z-[70] flex items-center justify-center backdrop-blur-sm">
+            <div class="bg-white rounded-xl shadow-2xl w-[500px] transform transition-all flex flex-col max-h-[80vh]">
+                <!-- Header -->
+                <div class="px-6 py-4 border-b flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up text-blue-600"></i> Upload Documents
+                    </h3>
+                    <button onclick="closeFileModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-times"></i></button>
+                </div>
+                
+                <!-- Body -->
+                <div class="p-6 overflow-y-auto flex-1">
+                    <!-- Drop Zone / Button -->
+                    <div class="border-2 border-dashed border-blue-200 bg-blue-50 rounded-lg p-6 text-center hover:bg-blue-100 transition cursor-pointer mb-4" onclick="document.getElementById('hidden-file-input').click()">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm text-blue-600">
+                            <i class="fa-solid fa-plus text-xl"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-blue-800">Click to Select Files</p>
+                        <p class="text-xs text-gray-500 mt-1">Supports Image, PDF, DOCX</p>
+                    </div>
+                    <input type="file" id="hidden-file-input" class="hidden" multiple accept="image/*,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onchange="handleFileSelect(this)">
+
+                    <!-- File List -->
+                    <div id="selected-files-container" class="space-y-2">
+                        <!-- Items appended here by JS -->
+                        <p class="text-center text-xs text-gray-400 italic mt-4" id="no-files-msg">No files selected yet.</p>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="px-6 py-4 border-t bg-gray-50 rounded-b-xl flex justify-between items-center">
+                    <span id="file-count-label" class="text-xs font-bold text-gray-500">0 Files Selected</span>
+                    <div class="flex gap-2">
+                        <button onclick="closeFileModal()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-200 rounded-lg font-medium transition">Cancel</button>
+                        <button onclick="startBatchOCR()" id="start-ocr-btn" class="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            Start OCR <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: Creative Scanner Animation Overlay -->
+        <div id="scanner-overlay" class="hidden absolute inset-0 bg-white/95 z-[80] flex flex-col items-center justify-center backdrop-blur-md">
+            <!-- Active Scanning State -->
+            <div id="scan-anim-box" class="flex flex-col items-center transition-all duration-300">
+                <div class="scanner-container">
+                    <div class="scanner-line"></div>
+                    <i class="fa-solid fa-file-lines scanner-doc-icon"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-1 animate-pulse">Scanning Documents...</h3>
+                <p id="scanner-status" class="text-sm text-blue-600 font-medium">Initializing AI Engine...</p>
+                
+                <!-- Progress Bar -->
+                <div class="w-64 bg-gray-200 rounded-full h-1.5 mt-4 overflow-hidden">
+                    <div id="scanner-progress" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
                 </div>
             </div>
 
+            <!-- Success State (Hidden initially) -->
+            <div id="scan-success-box" class="hidden flex flex-col items-center text-center transform scale-90 transition-all duration-300">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4 scan-success-icon shadow-lg">
+                    <i class="fa-solid fa-check text-4xl text-green-600"></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800 mb-2">Scanning Done!</h3>
+                <p class="text-gray-500 text-sm">Data has been successfully extracted.</p>
+                <div class="mt-6">
+                    <button onclick="closeScannerOverlay()" class="px-6 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition shadow-lg">
+                        View Results
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Animation Modal (Data Save & Export) -->
+        <div id="success-overlay" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[60] flex items-center justify-center transition-all duration-300 opacity-0">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 transform scale-90 transition-all duration-300 flex flex-col items-center gap-4 text-center max-w-sm w-full mx-4 border border-gray-100">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-2 animate-[pulse_2s_infinite]">
+                    <i class="fa-solid fa-check text-4xl text-green-600"></i>
+                </div>
+                <div>
+                    <h3 id="success-title" class="text-2xl font-black text-gray-800 mb-2">Data Saved!</h3>
+                    <p id="success-desc" class="text-gray-500 text-sm leading-relaxed">
+                        Candidate <span id="success-ref-id" class="font-bold text-gray-800"></span> has been successfully recorded in the database.
+                    </p>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-1 mt-2 overflow-hidden">
+                    <div class="bg-green-500 h-full w-full animate-[width_2.5s_ease-out]"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Left Panel: Editor -->
+        <div class="w-2/5 bg-white border-r border-gray-200 overflow-y-auto editor-scroll flex flex-col">
+            
             <!-- Template Settings (Initially Hidden) -->
             <div id="template-panel" class="hidden bg-slate-100 p-4 border-b border-gray-200 shadow-inner">
                 <h3 class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2">
@@ -650,7 +760,7 @@
                     </table>
                 </div>
 
-                <!-- Section: Education (Moved below Experience) -->
+                <!-- Section: Education (Moved below Education) -->
                 <div id="prev-section-education" class="report-section mb-4">
                     <h2 class="section-title"><i class="fa-solid fa-graduation-cap"></i> EDUCATION</h2>
                     <table class="creative-table">
@@ -718,6 +828,9 @@
             "Relationship Cert", "Affidavit"
         ];
 
+        // GLOBAL: Store selected files for OCR
+        let filesToProcess = [];
+
         document.addEventListener('DOMContentLoaded', () => {
             renderCheckboxes('attachments-list', attachments, 'att');
             renderCheckboxes('submission-list', submissions, 'sub');
@@ -742,6 +855,78 @@
             
             updatePreview();
         });
+
+        // --- File Modal Logic ---
+        function openFileModal() {
+            document.getElementById('file-upload-modal').classList.remove('hidden');
+        }
+
+        function closeFileModal() {
+            document.getElementById('file-upload-modal').classList.add('hidden');
+            // Reset queue if needed or keep? Let's keep for better UX, reset only on "New"
+        }
+
+        function handleFileSelect(input) {
+            if (input.files) {
+                for (let file of input.files) {
+                    filesToProcess.push(file);
+                }
+            }
+            // Clear input so same file can be added again if needed
+            input.value = "";
+            renderFileList();
+        }
+
+        function removeFileFromQueue(index) {
+            filesToProcess.splice(index, 1);
+            renderFileList();
+        }
+
+        function renderFileList() {
+            const container = document.getElementById('selected-files-container');
+            const noFilesMsg = document.getElementById('no-files-msg');
+            const countLabel = document.getElementById('file-count-label');
+            const startBtn = document.getElementById('start-ocr-btn');
+
+            container.innerHTML = '';
+            
+            if (filesToProcess.length === 0) {
+                noFilesMsg.classList.remove('hidden');
+                startBtn.disabled = true;
+                countLabel.innerText = "0 Files Selected";
+                return;
+            }
+
+            noFilesMsg.classList.add('hidden');
+            startBtn.disabled = false;
+            countLabel.innerText = `${filesToProcess.length} Files Selected`;
+
+            filesToProcess.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm";
+                
+                let iconClass = "fa-file";
+                let colorClass = "text-gray-500";
+                
+                if (file.type.includes('image')) { iconClass = "fa-file-image"; colorClass = "text-purple-500"; }
+                else if (file.type.includes('pdf')) { iconClass = "fa-file-pdf"; colorClass = "text-red-500"; }
+                else if (file.type.includes('word')) { iconClass = "fa-file-word"; colorClass = "text-blue-500"; }
+
+                item.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <i class="fa-solid ${iconClass} ${colorClass} text-lg"></i>
+                        <div class="truncate">
+                            <p class="text-sm font-medium text-slate-700 truncate">${file.name}</p>
+                            <p class="text-[10px] text-gray-400 uppercase">${(file.size / 1024).toFixed(1)} KB</p>
+                        </div>
+                    </div>
+                    <button onclick="removeFileFromQueue(${index})" class="text-gray-300 hover:text-red-500 transition">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+        }
 
         // --- Search Modal Logic ---
         function openSearchModal() {
@@ -829,8 +1014,9 @@
             document.getElementById('prev-photo').classList.add('hidden');
             document.getElementById('prev-photo-placeholder').classList.remove('hidden');
 
-            // Reset file input
-            document.getElementById('ocr-upload').value = '';
+            // Reset file queue
+            filesToProcess = [];
+            renderFileList();
 
             updatePreview();
         }
@@ -1004,7 +1190,27 @@
 
                 if (!attachResponse.ok) throw new Error("Failed to upload PDF attachment.");
 
-                alert(`Success! Task ${isUpdate ? 'UPDATED' : 'CREATED'} in ClickUp (ID: ${taskId}) with PDF.`);
+                // --- SUCCESS ANIMATION FOR CLICKUP ---
+                document.getElementById('success-title').innerText = "Export Complete!";
+                document.getElementById('success-desc').innerHTML = `Candidate <span class="font-bold text-gray-800">${refId}</span> has been successfully ${isUpdate ? 'updated' : 'created'} in ClickUp.`;
+
+                const overlay = document.getElementById('success-overlay');
+                const overlayCard = overlay.querySelector('div');
+                
+                overlay.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-0');
+                    overlayCard.classList.remove('scale-90');
+                    overlayCard.classList.add('scale-100');
+                }, 10);
+
+                setTimeout(() => {
+                    overlay.classList.add('opacity-0');
+                    overlayCard.classList.remove('scale-100');
+                    overlayCard.classList.add('scale-90');
+                    setTimeout(() => { overlay.classList.add('hidden'); }, 300);
+                }, 3000);
 
             } catch (error) {
                 console.error(error);
@@ -1217,27 +1423,38 @@
             }
         }
 
-        function triggerOCR() { document.getElementById('ocr-upload').click(); }
+        function closeScannerOverlay() {
+            document.getElementById('scanner-overlay').classList.add('hidden');
+            // Reset state for next use
+            setTimeout(() => {
+                document.getElementById('scan-anim-box').classList.remove('hidden');
+                document.getElementById('scan-success-box').classList.add('hidden');
+                document.getElementById('scan-success-box').classList.add('scale-90');
+                document.getElementById('scanner-progress').style.width = '0%';
+            }, 500);
+        }
         
-        async function processOCR(input) {
-            if (!input.files || input.files.length === 0) return;
-            
-            const loader = document.getElementById('ocr-loader');
-            const status = document.getElementById('ocr-status');
-            const progress = document.getElementById('ocr-progress-bar');
+        async function startBatchOCR() {
+            // 1. Close File Modal
+            closeFileModal();
+
+            // 2. Open Scanner Overlay
+            const overlay = document.getElementById('scanner-overlay');
+            const status = document.getElementById('scanner-status');
+            const progress = document.getElementById('scanner-progress');
             const apiKey = document.getElementById('gemini-api-key').value;
             
-            loader.classList.remove('hidden'); 
-            loader.classList.add('flex');
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
             
             let combinedText = "";
             let filesProcessed = 0;
-            const totalFiles = input.files.length;
+            const totalFiles = filesToProcess.length;
 
             try {
-                for (let file of input.files) {
-                    status.innerText = `Processing ${file.name} (${filesProcessed + 1}/${totalFiles})...`;
-                    progress.style.width = `${((filesProcessed) / totalFiles) * 100}%`;
+                for (let file of filesToProcess) {
+                    status.innerText = `Scanning: ${file.name} (${filesProcessed + 1}/${totalFiles})...`;
+                    progress.style.width = `${((filesProcessed) / totalFiles) * 80}%`; // 80% for local processing
                     
                     let text = "";
                     
@@ -1253,26 +1470,36 @@
                     filesProcessed++;
                 }
 
-                progress.style.width = "100%";
+                // AI Processing Phase
+                progress.style.width = "90%";
                 
                 if (apiKey) {
-                    status.innerText = "Sending to Gemini AI for analysis...";
+                    status.innerText = "Sending extracted data to AI Core...";
                     await analyzeWithGemini(combinedText, apiKey);
                 } else {
-                    status.innerText = "Analyzing text (Regex Mode)...";
-                    // Small delay to let UI update
-                    await new Promise(r => setTimeout(r, 500));
+                    status.innerText = "Parsing text patterns (Regex Mode)...";
+                    await new Promise(r => setTimeout(r, 800)); // Animation delay
                     fillFromOCR(combinedText);
                 }
                 
-                loader.classList.add('hidden'); 
-                loader.classList.remove('flex');
-                alert("Processing Complete! Data populated from " + totalFiles + " files.");
+                // Complete!
+                progress.style.width = "100%";
+                
+                // Switch to Success View
+                setTimeout(() => {
+                    document.getElementById('scan-anim-box').classList.add('hidden');
+                    const successBox = document.getElementById('scan-success-box');
+                    successBox.classList.remove('hidden');
+                    // Trigger reflow for animation
+                    setTimeout(() => {
+                        successBox.classList.remove('scale-90');
+                        successBox.classList.add('scale-100');
+                    }, 50);
+                }, 500);
 
             } catch (error) {
                 console.error(error);
-                loader.classList.add('hidden'); 
-                loader.classList.remove('flex');
+                closeScannerOverlay();
                 alert("Error processing files: " + error.message);
             }
         }
@@ -1370,8 +1597,8 @@
                 // Limit to first 2 pages to prevent browser crash on large docs
                 const pagesToScan = Math.min(pdf.numPages, 2);
                 
-                const status = document.getElementById('ocr-status');
-                if(status) status.innerText = "Scanned PDF detected. Running OCR on pages...";
+                const status = document.getElementById('scanner-status');
+                if(status) status.innerText = "Scanned PDF detected. Running Deep OCR...";
 
                 for (let i = 1; i <= pagesToScan; i++) {
                     const page = await pdf.getPage(i);
@@ -1547,7 +1774,35 @@
                     body: JSON.stringify(formData)
                 });
 
-                alert("Data sent to Google Sheet!");
+                // --- SHOW SUCCESS OVERLAY ---
+                // Set the specific text for Sheet Save
+                document.getElementById('success-title').innerText = "Data Saved!";
+                document.getElementById('success-desc').innerHTML = `Candidate <span id="success-ref-id" class="font-bold text-gray-800">${formData.refId}</span> has been successfully recorded in the database.`;
+                
+                const overlay = document.getElementById('success-overlay');
+                const overlayCard = overlay.querySelector('div');
+                
+                // Show overlay
+                overlay.classList.remove('hidden');
+                
+                // Trigger reflow to ensure transition happens
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-0');
+                    overlayCard.classList.remove('scale-90');
+                    overlayCard.classList.add('scale-100');
+                }, 10);
+
+                // Auto hide after 2.5 seconds
+                setTimeout(() => {
+                    overlay.classList.add('opacity-0');
+                    overlayCard.classList.remove('scale-100');
+                    overlayCard.classList.add('scale-90');
+                    
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                    }, 300); // Wait for fade out transition
+                }, 2500);
+
                 
                 // Save current ID to local storage as last used
                 localStorage.setItem('lastRefId', formData.refId);
