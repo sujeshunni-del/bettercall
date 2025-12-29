@@ -1452,14 +1452,31 @@
                     return val ? new Date(val).getTime() : null;
                 };
 
+                // --- NEW STEP: FETCH VALID FIELDS DYNAMICALLY ---
+                // This prevents FIELD_058 (Cannot find custom field) errors
+                btn.innerHTML = `<i class="fa-solid fa-sync fa-spin"></i> Mapping Fields...`;
+                
+                const fieldsResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, {
+                    method: 'GET',
+                    headers: { 'Authorization': CLICKUP_API_KEY }
+                });
+
+                if (!fieldsResponse.ok) {
+                    const err = await fieldsResponse.text();
+                    throw new Error(`Failed to fetch ClickUp List Fields: ${err}`);
+                }
+                
+                const fieldsData = await fieldsResponse.json();
+                const validFieldIds = new Set(fieldsData.fields.map(f => f.id));
+                console.log("Valid ClickUp Fields:", Array.from(validFieldIds));
+
                 // ClickUp Fields Configuration
-                // IMPORTANT: If you get "FIELD_011" error, it means you are sending Text to a Dropdown field.
-                // SOLUTION: Change the field type in ClickUp to "Text" OR comment out the field below.
-                const customFields = [
+                // We define ALL potential candidates here. The code will automatically remove any that don't exist in your ClickUp List.
+                const potentialFields = [
                     { id: "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38", value: getDateTs('input-dob') }, // DATE OF BIRTH
                     { id: "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", value: getDateTs('input-passport-exp') }, // PASSPORT EXPIRY
                     
-                    // { id: "e79e1c4e-b123-4bd9-8051-34859ea4b87e", value: getValUpper('input-nationality') }, // NATIONALITY (DISABLED: Causes 400 Error if Dropdown)
+                    { id: "e79e1c4e-b123-4bd9-8051-34859ea4b87e", value: getValUpper('input-nationality') }, // NATIONALITY 
                     { id: "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5", value: getValUpper('input-residence') }, // PRESENT RESIDENCE
                     { id: "2e18821e-1c19-4de5-afb8-77ff11ee6327", value: getValUpper('input-email') }, // Email
                     
@@ -1474,39 +1491,53 @@
                     { id: "b8798515-8962-40a7-a8cd-2685f9fd676c", value: getValUpper('input-sname') }, // SUR NAME (Surname separate)
                     { id: "ae3be10a-cc2d-459e-a80a-1727115b2f0c", value: getValUpper('input-address') }, // ADDRESS
                     
-                    // { id: "4e32a1b5-9081-4f3c-9f02-8f26a1b2c3d4", value: getValUpper('input-gender') }, // GENDER (DISABLED: Causes 400 Error if Dropdown)
+                    { id: "4e32a1b5-9081-4f3c-9f02-8f26a1b2c3d4", value: getValUpper('input-gender') }, // GENDER
 
-                    // { id: "410dd336-f23f-4893-859f-d04e420f6431", value: getValUpper('input-position') }, // JOB TITLE
-                    // { id: "41c89ec2-4e22-4e85-ae57-de0e614bea88", value: getValUpper('input-location') }, // STATE
+                    { id: "410dd336-f23f-4893-859f-d04e420f6431", value: getValUpper('input-position') }, // JOB TITLE
+                    { id: "41c89ec2-4e22-4e85-ae57-de0e614bea88", value: getValUpper('input-location') }, // STATE
                     { id: "a25c1d42-6191-4fde-8eb4-7f2059fd71e3", value: refId }, // REFERENCE ID
-                    // { id: "dd59c787-da25-4760-ab85-2974e1ae8838", value: getValUpper('input-country') } // COUNTRY (DISABLED: Causes 400 Error if Dropdown)
+                    { id: "dd59c787-da25-4760-ab85-2974e1ae8838", value: getValUpper('input-country') } // COUNTRY
                 ];
 
-                const cleanCustomFields = customFields.filter(f => f.value !== null && f.value !== "" && !Number.isNaN(f.value));
+                // Filter 1: Remove null/empty values
+                // Filter 2: Remove IDs that don't exist in ClickUp (Fixes FIELD_058)
+                const cleanCustomFields = potentialFields.filter(f => 
+                    f.value !== null && 
+                    f.value !== "" && 
+                    !Number.isNaN(f.value) && 
+                    validFieldIds.has(f.id)
+                );
 
                 // 2. CHECK IF TASK EXISTS (Search by Ref ID)
                 // Ref ID Custom Field UUID: a25c1d42-6191-4fde-8eb4-7f2059fd71e3
-                const query = JSON.stringify([{
-                    "field_id": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
-                    "operator": "=",
-                    "value": refId
-                }]);
-                
-                const searchResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task?custom_fields=${encodeURIComponent(query)}&include_closed=true`, {
-                    method: 'GET',
-                    headers: { 'Authorization': CLICKUP_API_KEY }
-                });
-
-                if(!searchResponse.ok) throw new Error("Failed to search existing tasks.");
-                
-                const searchResult = await searchResponse.json();
+                const refFieldId = "a25c1d42-6191-4fde-8eb4-7f2059fd71e3";
                 let taskId = null;
                 let isUpdate = false;
 
-                if (searchResult.tasks && searchResult.tasks.length > 0) {
+                // Only search if the Ref ID field actually exists
+                if (validFieldIds.has(refFieldId)) {
+                    const query = JSON.stringify([{
+                        "field_id": refFieldId,
+                        "operator": "=",
+                        "value": refId
+                    }]);
+                    
+                    const searchResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task?custom_fields=${encodeURIComponent(query)}&include_closed=true`, {
+                        method: 'GET',
+                        headers: { 'Authorization': CLICKUP_API_KEY }
+                    });
+
+                    if(searchResponse.ok) {
+                        const searchResult = await searchResponse.json();
+                        if (searchResult.tasks && searchResult.tasks.length > 0) {
+                            taskId = searchResult.tasks[0].id;
+                            isUpdate = true;
+                        }
+                    }
+                }
+
+                if (isUpdate) {
                     // Task Found -> Update
-                    taskId = searchResult.tasks[0].id;
-                    isUpdate = true;
                     btn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Updating Task...`;
 
                     // Update Name
@@ -1519,8 +1550,7 @@
                         body: JSON.stringify({ name: taskName, description: "Updated via Resume Extractor" })
                     });
 
-                    // Update Custom Fields (Must be done individually for updates usually, or iterate)
-                    // We use Promise.all to speed it up
+                    // Update Custom Fields
                     const fieldUpdates = cleanCustomFields.map(field => {
                         return fetch(`https://api.clickup.com/api/v2/task/${taskId}/field/${field.id}`, {
                             method: 'POST',
