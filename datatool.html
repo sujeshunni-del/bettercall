@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Resume Extractor & Application Tool</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- OCR & Document Parsing Libraries -->
+    <!-- Tesseract.js for Images -->
+    <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
+    
+    <!-- PDF.js for PDF Parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Initialize PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    
+    <!-- Mammoth.js for DOCX Parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    
+    <!-- html2pdf.js for PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        /* A4 Paper Styling for Preview */
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 8mm; /* Reduced padding */
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-family: 'Arial', sans-serif; 
+            color: #1a202c;
+            overflow: hidden;
+            position: relative;
+            line-height: 1.2;
+            text-transform: uppercase; 
+        }
+
+        /* Print Specifics */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-area, #print-area * {
+                visibility: visible;
+            }
+            #print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                box-shadow: none;
+                height: auto;
+                min-height: 0;
+            }
+        }
+
+        /* Custom Scrollbar */
+        .editor-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .editor-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .editor-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 3px;
+        }
+        
+        /* Creative Report Styles */
+        .creative-header {
+            background-color: #1e293b; 
+            color: white;
+            padding: 8px 12px; /* Reduced padding */
+            margin-bottom: 10px;
+            border-left: 5px solid #3b82f6; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .report-section {
+            margin-bottom: 10px; /* Tighter spacing */
+        }
+
+        .section-title {
+            color: #1e293b;
+            font-weight: 800;
+            border-bottom: 2px solid #3b82f6;
+            margin-bottom: 8px; /* Increased spacing below title */
+            padding-bottom: 2px;
+            font-size: 9pt; /* Smaller title */
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 6px;
+            color: #3b82f6;
+        }
+
+        .data-label {
+            font-size: 7pt; /* Optimized for space */
+            color: #64748b;
+            font-weight: 700;
+            margin-bottom: 0px;
+            display: block;
+        }
+        
+        .data-value {
+            font-size: 8.5pt; /* Optimized for space */
+            color: #000;
+            font-weight: 600;
+            display: block;
+            min-height: 12px; 
+            line-height: 1.2;
+        }
+
+        /* Compact Grid Box for Info */
+        .info-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 4px 6px; /* Reduced padding */
+            border-radius: 4px;
+        }
+
+        table.creative-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8pt;
+        }
+        
+        table.creative-table th {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: bold;
+            text-align: left;
+            padding: 2px 4px; /* Reduced padding */
+            font-size: 7.5pt;
+        }
+        
+        table.creative-table td {
+            padding: 2px 4px; /* Reduced padding */
+            border-bottom: 1px solid #e2e8f0;
+            border-left: 1px solid #f1f5f9;
+            border-right: 1px solid #f1f5f9;
+        }
+        
+        table.creative-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        /* Checkbox lists */
+        .checklist-item {
+            font-size: 7.5pt;
+            display: flex;
+            align-items: center;
+            margin-bottom: 1px;
+        }
+        .check-box-icon {
+            width: 9px;
+            height: 9px;
+            border: 1px solid #333;
+            margin-right: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .check-box-icon.checked {
+            background-color: #333;
+            border-color: #333;
+            color: white;
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Navigation Button Styles */
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            color: white;
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            min-width: 70px;
+        }
+        .nav-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
+        }
+        .nav-btn i {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen overflow-hidden flex flex-col font-sans">
+
+    <!-- Header / Top Bar -->
+    <header class="bg-slate-900 text-white p-2 shadow-lg z-10 shrink-0">
+        <div class="flex justify-between items-center w-full">
+            
+            <!-- Branding -->
+            <div class="flex items-center gap-3 px-2">
+                <div class="w-10 h-10 bg-blue-600 rounded flex items-center justify-center shadow-lg">
+                    <i class="fa-solid fa-file-invoice text-xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-sm font-bold uppercase tracking-wider text-gray-200">Resume Extractor</h1>
+                    <p class="text-[10px] text-blue-400">Multi-File Processing System</p>
+                </div>
+            </div>
+
+            <!-- API Key Input & Action Buttons -->
+            <div class="flex items-center gap-4">
+                <!-- API Key Input -->
+                <div class="relative group">
+                    <div class="flex items-center bg-slate-800 border border-slate-600 rounded-lg px-2 py-1">
+                        <i class="fa-solid fa-key text-yellow-500 text-xs mr-2"></i>
+                        <input type="password" id="gemini-api-key" placeholder="Enter Gemini API Key for Smart OCR" class="bg-transparent border-none text-xs text-white placeholder-gray-500 focus:ring-0 w-48">
+                    </div>
+                    <div class="absolute top-full mt-1 left-0 bg-gray-800 text-xs text-gray-300 p-2 rounded shadow-lg hidden group-hover:block w-64 z-50">
+                        Optional: Enter Google Gemini API Key for advanced AI extraction. Without this, standard regex extraction is used.
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex gap-2">
+                    <!-- New / Reset Button -->
+                    <button onclick="resetForm()" class="nav-btn hover:border-red-400 hover:text-red-400">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>New</span>
+                    </button>
+
+                    <!-- Search -->
+                    <button onclick="openSearchModal()" class="nav-btn hover:border-blue-400 hover:text-blue-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Search Candidate</span>
+                    </button>
+                    
+                    <!-- OCR (Make File) -->
+                    <button onclick="triggerOCR()" class="nav-btn bg-blue-700/50 border-blue-600 hover:bg-blue-600">
+                        <i class="fa-solid fa-file-import"></i>
+                        <span>Upload Files</span>
+                    </button>
+
+                    <!-- Report / Template -->
+                    <button onclick="toggleTemplatePanel()" class="nav-btn hover:border-yellow-400 hover:text-yellow-400">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Template</span>
+                    </button>
+
+                    <!-- ClickUp Export -->
+                    <button onclick="exportToClickUp()" class="nav-btn hover:border-purple-400 hover:text-purple-400">
+                        <i class="fa-solid fa-check-to-slot"></i>
+                        <span>ClickUp</span>
+                    </button>
+
+                    <!-- Save / Google Sheet Export -->
+                    <button onclick="saveToGoogleSheet()" class="nav-btn hover:border-green-400 hover:text-green-400">
+                        <i class="fa-brands fa-google-drive"></i>
+                        <span>Save Sheet</span>
+                    </button>
+
+                    <!-- Native Print Button (For Wondershare/Printers) -->
+                    <button onclick="printReport()" class="nav-btn hover:border-cyan-400 hover:text-cyan-400">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Print</span>
+                    </button>
+
+                     <!-- PDF Download (Existing but styled as action) -->
+                     <button onclick="downloadPDF()" class="nav-btn bg-green-700/50 border-green-600 hover:bg-green-600">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Img PDF</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <!-- Search Modal -->
+        <div id="search-modal" class="hidden absolute inset-0 bg-gray-900/50 z-50 flex items-center justify-center backdrop-blur-sm">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-96 transform transition-all scale-100">
+                <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass text-blue-600"></i> Search Candidate
+                </h3>
+                <div class="mb-4">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">REFERENCE ID</label>
+                    <input type="text" id="modal-ref-id" class="w-full border-2 border-blue-200 rounded px-3 py-2 text-lg font-bold text-center uppercase tracking-widest focus:border-blue-500 focus:outline-none" placeholder="BC00001">
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button onclick="closeSearchModal()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">Cancel</button>
+                    <button onclick="executeSearch()" id="modal-search-btn" class="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2">
+                        <span>Search</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Left Panel: Editor -->
+        <div class="w-2/5 bg-white border-r border-gray-200 overflow-y-auto editor-scroll flex flex-col">
+            <!-- Updated Input for Multiple Files -->
+            <input type="file" id="ocr-upload" class="hidden" multiple accept="image/*,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onchange="processOCR(this)">
+            
+            <!-- Loading Overlay -->
+            <div id="ocr-loader" class="hidden absolute inset-0 bg-white/95 z-50 flex-col items-center justify-center">
+                <div class="loader mb-4"></div>
+                <h3 class="text-lg font-bold text-slate-700 mb-2">Analyzing Documents</h3>
+                <p id="ocr-status" class="text-sm text-gray-500 font-medium">Starting...</p>
+                <div class="w-64 bg-gray-200 rounded-full h-2.5 mt-3">
+                    <div id="ocr-progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Template Settings (Initially Hidden) -->
+            <div id="template-panel" class="hidden bg-slate-100 p-4 border-b border-gray-200 shadow-inner">
+                <h3 class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Report Visibility Settings
+                </h3>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="toggleSection('header', this)" class="rounded text-blue-600 focus:ring-blue-500">
+                        <span>Header (Job Details)</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="toggleSection('personal', this)" class="rounded text-blue-600 focus:ring-blue-500">
+                        <span>Personal Info</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="toggleSection('passport', this)" class="rounded text-blue-600 focus:ring-blue-500">
+                        <span>Passport Info</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="toggleSection('contact', this)" class="rounded text-blue-600 focus:ring-blue-500">
+                        <span>Contact Info</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="toggleSection('experience', this)" class="rounded text-blue-600 focus:ring-blue-500">
+                        <span>Experience</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="toggleSection('education', this)" class="rounded text-blue-600 focus:ring-blue-500">
+                        <span>Education</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="toggleSection('languages', this)" class="rounded text-blue-600 focus:ring-blue-500">
+                        <span>Languages</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="toggleSection('attachments', this)" class="rounded text-blue-600 focus:ring-blue-500">
+                        <span>Checklists (Attachments)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <form id="app-form" oninput="updatePreview()" class="p-6 space-y-6">
+                
+                <!-- Unique Reference ID Block (READ ONLY) -->
+                <div class="bg-blue-50 border border-blue-200 p-3 rounded-lg flex items-center justify-between">
+                    <label class="text-xs font-bold text-blue-700 uppercase">Candidate Reference ID:</label>
+                    <input type="text" id="input-ref-id" value="BC00001" readonly class="border border-blue-300 rounded px-2 py-1 text-sm font-bold text-blue-800 w-32 text-center bg-gray-100 cursor-not-allowed outline-none uppercase">
+                </div>
+
+                <!-- Section: Job Apply Details -->
+                <div class="space-y-4">
+                    <h2 class="text-sm font-bold text-slate-700 border-b pb-1">JOB DETAILS</h2>
+                    <div class="grid grid-cols-1 gap-3">
+                        <div class="flex gap-2">
+                            <input type="text" id="input-country" class="w-1/2 border rounded px-2 py-1.5 text-sm" placeholder="Applying Country">
+                            <input type="text" id="input-client" class="w-1/2 border rounded px-2 py-1.5 text-sm" placeholder="Client Name">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="input-skill-type" class="border rounded px-2 py-1.5 text-sm w-1/3 bg-white">
+                                <option value="Skilled">Skilled</option>
+                                <option value="Unskilled">Unskilled</option>
+                            </select>
+                            <input type="text" id="input-position" class="w-2/3 border rounded px-2 py-1.5 text-sm" placeholder="Position (e.g. Driver)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Personal Information -->
+                <div class="space-y-4">
+                    <h2 class="text-sm font-bold text-slate-700 border-b pb-1">PERSONAL INFORMATION</h2>
+                    <div class="flex gap-3">
+                        <div class="w-24 shrink-0">
+                            <div class="border-2 border-dashed border-gray-300 rounded h-28 flex items-center justify-center cursor-pointer hover:bg-gray-50 relative overflow-hidden group" onclick="document.getElementById('photo-upload').click()">
+                                <img id="photo-preview-input" src="" class="absolute inset-0 w-full h-full object-cover hidden">
+                                <div class="text-center p-1 group-hover:opacity-75 transition">
+                                    <i class="fa-solid fa-camera text-gray-400"></i>
+                                    <span class="block text-[10px] text-gray-400 leading-tight mt-1">Upload Photo</span>
+                                </div>
+                            </div>
+                            <input type="file" id="photo-upload" class="hidden" accept="image/*" onchange="previewImage(this)">
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-2">
+                            <input type="text" id="input-fname" class="border rounded px-2 py-1.5 text-sm" placeholder="First Name (As per Passport)">
+                            <input type="text" id="input-sname" class="border rounded px-2 py-1.5 text-sm" placeholder="Surname (As per Passport)">
+                            <select id="input-gender" class="border rounded px-2 py-1.5 text-sm bg-white">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            <select id="input-marital" class="border rounded px-2 py-1.5 text-sm bg-white">
+                                <option value="Single">Single</option>
+                                <option value="Married">Married</option>
+                            </select>
+                            <input type="date" id="input-dob" class="border rounded px-2 py-1.5 text-sm" onchange="calculateAge()">
+                            <input type="number" id="input-age" class="border rounded px-2 py-1.5 text-sm bg-gray-50" readonly placeholder="Age (Auto)">
+                            <input type="text" id="input-residence" class="col-span-2 border rounded px-2 py-1.5 text-sm" placeholder="Present Residence">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Passport Information -->
+                <div class="space-y-4">
+                    <h2 class="text-sm font-bold text-slate-700 border-b pb-1">PASSPORT INFO</h2>
+                    <div class="grid grid-cols-2 gap-2">
+                         <div class="col-span-2">
+                             <label class="text-[10px] text-gray-500 font-bold">NATIONALITY</label>
+                             <input type="text" id="input-nationality" class="w-full border rounded px-2 py-1.5 text-sm uppercase" placeholder="Nationality">
+                         </div>
+                        <input type="text" id="input-passport-no" class="border rounded px-2 py-1.5 text-sm uppercase" placeholder="Passport No">
+                        <div class="flex flex-col">
+                             <label class="text-[10px] text-gray-500">Expiry Date</label>
+                            <input type="date" id="input-passport-exp" class="border rounded px-2 py-1.5 text-sm">
+                        </div>
+                        <input type="text" id="input-pob" class="border rounded px-2 py-1.5 text-sm" placeholder="Place of Birth">
+                        <input type="text" id="input-state-birth" class="border rounded px-2 py-1.5 text-sm" placeholder="State of Birth">
+                        <input type="text" id="input-place-issue" class="col-span-2 border rounded px-2 py-1.5 text-sm" placeholder="Place of Issue">
+                    </div>
+                </div>
+
+                <!-- Section: Contact Details -->
+                <div class="space-y-4">
+                    <h2 class="text-sm font-bold text-slate-700 border-b pb-1">CONTACT DETAILS</h2>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="input-mobile" class="border rounded px-2 py-1.5 text-sm" placeholder="Mobile">
+                        <input type="text" id="input-whatsapp" class="border rounded px-2 py-1.5 text-sm" placeholder="WhatsApp">
+                        <input type="text" id="input-alt" class="border rounded px-2 py-1.5 text-sm" placeholder="Alt Phone">
+                        <input type="email" id="input-email" class="border rounded px-2 py-1.5 text-sm" placeholder="Email">
+                        <textarea id="input-address" class="col-span-2 border rounded px-2 py-1.5 text-sm h-14 resize-none" placeholder="Postal Address"></textarea>
+                        <input type="text" id="input-location" class="border rounded px-2 py-1.5 text-sm" placeholder="City/State">
+                        <input type="text" id="input-zip" class="border rounded px-2 py-1.5 text-sm" placeholder="Zip Code">
+                        <input type="text" id="input-linkedin" class="col-span-2 border rounded px-2 py-1.5 text-sm" placeholder="LinkedIn Profile">
+                    </div>
+                </div>
+
+                <!-- Section: Experience (Moved above Education) -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center border-b pb-1">
+                        <h2 class="text-sm font-bold text-slate-700">EXPERIENCE</h2>
+                        <button type="button" onclick="addExperienceRow()" class="text-xs text-blue-600 hover:underline"><i class="fa-solid fa-plus"></i> Add</button>
+                    </div>
+                    <div id="experience-inputs" class="space-y-2"></div>
+                </div>
+
+                <!-- Section: Education (Moved below Experience) -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center border-b pb-1">
+                        <h2 class="text-sm font-bold text-slate-700">EDUCATION</h2>
+                        <button type="button" onclick="addEducationRow()" class="text-xs text-blue-600 hover:underline"><i class="fa-solid fa-plus"></i> Add</button>
+                    </div>
+                    <div id="education-inputs" class="space-y-2"></div>
+                </div>
+
+                <!-- Section: Languages -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center border-b pb-1">
+                        <h2 class="text-sm font-bold text-slate-700">LANGUAGES</h2>
+                        <button type="button" onclick="addLanguageRow()" class="text-xs text-blue-600 hover:underline"><i class="fa-solid fa-plus"></i> Add</button>
+                    </div>
+                    <div id="language-inputs" class="space-y-2"></div>
+                </div>
+
+                <!-- Section: Attachments -->
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="space-y-2">
+                        <h2 class="text-sm font-bold text-slate-700 border-b pb-1">ATTACHMENTS</h2>
+                        <div class="space-y-1" id="attachments-list"></div>
+                    </div>
+                    <div class="space-y-2">
+                        <h2 class="text-sm font-bold text-slate-700 border-b pb-1">SUBMISSION CHECKS</h2>
+                        <div class="space-y-1" id="submission-list"></div>
+                    </div>
+                </div>
+
+                <div class="h-8"></div>
+            </form>
+        </div>
+
+        <!-- Right Panel: Live Preview -->
+        <div class="w-3/5 bg-gray-500 overflow-y-auto flex justify-center p-6">
+            
+            <div id="print-area" class="a4-page shadow-xl">
+                
+                <!-- Creative Header -->
+                <div id="prev-section-header" class="creative-header">
+                    <div>
+                        <h1 class="text-xl font-bold tracking-widest">APPLICATION FORM</h1>
+                        <div class="text-[9pt] mt-1 opacity-90 font-light">
+                            REF: <span id="prev-ref-id" class="font-bold text-yellow-400"></span> 
+                            <span class="mx-2">|</span>
+                            POSITION: <span id="prev-position" class="font-bold"></span> 
+                        </div>
+                    </div>
+                    <div class="text-right text-[8pt]">
+                        <p class="font-bold text-blue-300">COUNTRY & VISA TYPE</p>
+                        <p class="text-lg font-bold leading-none uppercase">
+                            <span id="prev-country"></span> 
+                            <span id="prev-visa-type" class="text-sm font-normal ml-1"></span>
+                        </p>
+                        <p class="mt-1 text-gray-300">Client: <span id="prev-client"></span></p>
+                        <p class="text-gray-400 mt-1"><span id="print-date"></span></p>
+                    </div>
+                </div>
+
+                <!-- Profile Block (Combines Personal + Photo) -->
+                <div id="prev-section-personal" class="report-section mb-3">
+                    <div class="flex gap-4 items-start">
+                        <!-- Photo -->
+                        <div class="w-[35mm] h-[45mm] border-2 border-slate-200 bg-slate-50 shrink-0 flex items-center justify-center overflow-hidden">
+                            <img id="prev-photo" src="" class="w-full h-full object-cover hidden">
+                            <div id="prev-photo-placeholder" class="text-slate-300 text-[9px] text-center p-1 font-bold">
+                                PHOTO
+                            </div>
+                        </div>
+
+                        <!-- Info Grid -->
+                        <div class="flex-1">
+                            <h2 class="section-title"><i class="fa-solid fa-user"></i> PROFILE</h2>
+                            
+                            <!-- Redesigned Grid: 3 Rows Layout -->
+                            <div class="grid grid-cols-6 gap-2">
+                                
+                                <!-- ROW 1: Name (Big Font) -->
+                                <div class="col-span-3 info-box bg-blue-50/50 border-blue-100">
+                                    <span class="data-label text-blue-800 text-[8pt]">FIRST NAME</span>
+                                    <span id="prev-fname" class="data-value text-[13pt] font-black tracking-wide border-b border-gray-300 pb-1 mt-1 leading-none truncate uppercase"></span>
+                                </div>
+                                <div class="col-span-3 info-box bg-blue-50/50 border-blue-100">
+                                    <span class="data-label text-blue-800 text-[8pt]">SURNAME</span>
+                                    <span id="prev-sname" class="data-value text-[13pt] font-black tracking-wide border-b border-gray-300 pb-1 mt-1 leading-none truncate uppercase"></span>
+                                </div>
+
+                                <!-- ROW 2: Vitals (3 Columns) -->
+                                <div class="col-span-2 info-box">
+                                    <span class="data-label">BIRTH DATE</span>
+                                    <span id="prev-dob" class="data-value font-semibold"></span>
+                                </div>
+                                <div class="col-span-2 info-box">
+                                    <span class="data-label">AGE / GENDER</span>
+                                    <span class="data-value"><span id="prev-age"></span> YRS / <span id="prev-gender"></span></span>
+                                </div>
+                                <div class="col-span-2 info-box">
+                                    <span class="data-label">STATUS</span>
+                                    <span id="prev-marital" class="data-value"></span>
+                                </div>
+
+                                <!-- ROW 3: Origin & Location (2 Columns) -->
+                                <div class="col-span-3 info-box bg-gray-50 border-gray-200">
+                                     <span class="data-label">NATIONALITY</span>
+                                    <span id="prev-nationality" class="data-value font-bold truncate"></span>
+                                </div>
+                                <div class="col-span-3 info-box bg-gray-50 border-gray-200">
+                                     <span class="data-label">PRESENT RESIDENCE</span>
+                                    <span id="prev-residence" class="data-value truncate"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passport Strip (Compact) -->
+                <div id="prev-section-passport" class="report-section mb-4">
+                    <h2 class="section-title"><i class="fa-solid fa-passport"></i> PASSPORT DETAILS</h2>
+                    <div class="grid grid-cols-4 gap-4 text-[8.5pt] bg-slate-50 border border-slate-200 p-3 rounded">
+                        <div><span class="text-gray-500 font-bold block text-[7pt]">PASSPORT NO</span> <span id="prev-passport-no" class="font-bold"></span></div>
+                        <div><span class="text-gray-500 font-bold block text-[7pt]">EXPIRY</span> <span id="prev-passport-exp"></span></div>
+                        <div><span class="text-gray-500 font-bold block text-[7pt]">ISSUED AT</span> <span id="prev-place-issue"></span></div>
+                        <div><span class="text-gray-500 font-bold block text-[7pt]">BIRTH PLACE</span> <span id="prev-pob"></span></div>
+                    </div>
+                </div>
+
+                <!-- Contact Block (Redesigned to match Passport) -->
+                <div id="prev-section-contact" class="report-section mb-6">
+                    <h2 class="section-title mb-3"><i class="fa-solid fa-address-card"></i> CONTACT DETAILS</h2>
+                    
+                    <!-- Mobile/Email Grid -->
+                    <div class="grid grid-cols-3 gap-4 text-[8.5pt] bg-slate-50 border border-slate-200 p-3 rounded mb-2">
+                        <div><span class="text-gray-500 font-bold block text-[7pt]">MOBILE</span> <span id="prev-mobile" class="font-bold"></span></div>
+                        <div><span class="text-gray-500 font-bold block text-[7pt]">WHATSAPP</span> <span id="prev-whatsapp" class="font-semibold"></span></div>
+                        <div class="col-span-1"><span class="text-gray-500 font-bold block text-[7pt]">EMAIL</span> <span id="prev-email" class="break-all"></span></div>
+                    </div>
+
+                     <!-- Separate Address Area -->
+                    <div class="mt-2 p-2 bg-gray-50 border border-gray-200 rounded">
+                        <span class="block text-slate-500 font-bold text-[7pt] mb-1">POSTAL ADDRESS</span>
+                        <span class="font-semibold text-[10pt] leading-snug">
+                            <span id="prev-address"></span>, <span id="prev-location"></span> <span id="prev-zip"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Section: Experience (Moved above Education) -->
+                <div id="prev-section-experience" class="report-section mb-4">
+                    <h2 class="section-title"><i class="fa-solid fa-briefcase"></i> EXPERIENCE</h2>
+                    <table class="creative-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%">COMPANY</th>
+                                <th style="width: 30%">POSITION</th>
+                                <th style="width: 25%">DURATION</th>
+                                <th style="width: 15%" class="text-center">TOTAL YRS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prev-experience-body"></tbody>
+                    </table>
+                </div>
+
+                <!-- Section: Education (Moved below Experience) -->
+                <div id="prev-section-education" class="report-section mb-4">
+                    <h2 class="section-title"><i class="fa-solid fa-graduation-cap"></i> EDUCATION</h2>
+                    <table class="creative-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%">CERTIFICATE</th>
+                                <th style="width: 45%">INSTITUTION</th>
+                                <th style="width: 15%" class="text-center">YEAR</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prev-education-body"></tbody>
+                    </table>
+                </div>
+
+                <!-- Section: Languages (Inline with Checklists if space allows, but strict rows requested) -->
+                <div id="prev-section-languages" class="report-section mb-4">
+                     <h2 class="section-title"><i class="fa-solid fa-language"></i> LANGUAGES</h2>
+                     <table class="creative-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%">LANGUAGE</th>
+                                <th style="width: 20%" class="text-center">SPEAK</th>
+                                <th style="width: 20%" class="text-center">READ</th>
+                                <th style="width: 20%" class="text-center">WRITE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prev-language-body"></tbody>
+                    </table>
+                </div>
+
+                <!-- Footer Grid: Checklists -->
+                <div id="prev-section-attachments" class="report-section mt-6 pt-4 border-t-2 border-slate-800">
+                    <div class="grid grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-[9pt] font-bold text-slate-800 uppercase mb-2 bg-slate-100 p-1">ATTACHMENTS PROVIDED</h4>
+                            <ul class="grid grid-cols-2 gap-x-2" id="prev-attachments"></ul>
+                        </div>
+                        <div>
+                            <h4 class="text-[9pt] font-bold text-slate-800 uppercase mb-2 bg-slate-100 p-1">SUBMISSION CHECKLIST</h4>
+                            <ul class="grid grid-cols-2 gap-x-2" id="prev-submission"></ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const CLICKUP_API_KEY = "pk_260468481_S4KLO3ZGV6P1PL1POHKXNS1LA5ISSG0P";
+        const CLICKUP_LIST_ID = "901814555582";
+        // PASTE YOUR GOOGLE WEB APP URL HERE:
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydb1l-C2lEftCLeaN9jJ3hWNGoe5I88-tfZOYffbvvneCsaL6GpjGxuFuP9T4eK9oqlg/exec"; 
+
+        // --- Configuration & Initialization ---
+        const attachments = [
+            "Complete CV", "Photo", "Passport Scan", "Old Passport", 
+            "Edu. Certificates", "Exp. Certificates", "Awards", 
+            "National ID", "Police Clearance", "Bank Statement"
+        ];
+        const submissions = [
+            "Embassy Appt", "App. Form", "Work Permit", 
+            "Contract", "Accom. Proof", "Marriage Cert", 
+            "Relationship Cert", "Affidavit"
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCheckboxes('attachments-list', attachments, 'att');
+            renderCheckboxes('submission-list', submissions, 'sub');
+            
+            // Add 1 Default Row for Education & Experience
+            addEducationRow();
+            addExperienceRow();
+            
+            // Add 1 default for Language
+            addLanguageRow();
+
+            // Format Current Date
+            const today = new Date();
+            const formattedToday = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+            document.getElementById('print-date').innerText = formattedToday;
+
+             // Load last RefID from local storage or use default
+            const lastRefId = localStorage.getItem('lastRefId');
+            if (lastRefId) {
+                document.getElementById('input-ref-id').value = generateNextRefId(lastRefId);
+            }
+            
+            updatePreview();
+        });
+
+        // --- Search Modal Logic ---
+        function openSearchModal() {
+            document.getElementById('search-modal').classList.remove('hidden');
+            document.getElementById('modal-ref-id').focus();
+        }
+
+        function closeSearchModal() {
+            document.getElementById('search-modal').classList.add('hidden');
+        }
+
+        function executeSearch() {
+            const refId = document.getElementById('modal-ref-id').value;
+            if (refId) {
+                closeSearchModal();
+                searchFromGoogleSheet(refId);
+            }
+        }
+
+        // --- Print Function ---
+        function printReport() {
+            window.print();
+        }
+
+        // --- New Action Button Logic ---
+        
+        function toggleTemplatePanel() {
+            const panel = document.getElementById('template-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        // AUTO INCREMENT HELPER
+        function generateNextRefId(currentId) {
+            const prefix = "BC";
+            const match = currentId.match(/\d+$/);
+            if (match) {
+                // Increment number and pad to 5 digits
+                const number = parseInt(match[0], 10) + 1;
+                return prefix + String(number).padStart(5, '0');
+            }
+            // Default if format is different or null
+            return "BC00001";
+        }
+
+        // RESET FORM FUNCTION
+        function resetForm() {
+            if(!confirm("Are you sure you want to clear all data and start a new extraction?")) return;
+
+            // Calculate next Ref ID based on current value before clearing
+            const currentRefId = document.getElementById('input-ref-id').value;
+            const nextRefId = generateNextRefId(currentRefId);
+
+            // Reset standard inputs
+            const inputs = document.querySelectorAll('#app-form input:not([type="checkbox"]), #app-form textarea, #app-form select');
+            inputs.forEach(input => {
+                if(input.id === 'input-ref-id') {
+                     input.value = nextRefId; // Set newly generated ID
+                } else if(input.id === 'input-gender') {
+                    input.value = 'Male';
+                } else if(input.id === 'input-marital') {
+                    input.value = 'Single';
+                } else {
+                    input.value = '';
+                }
+            });
+
+            // Reset Checkboxes
+            const checkboxes = document.querySelectorAll('#app-form input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = false);
+
+            // Reset Dynamic Sections
+            document.getElementById('education-inputs').innerHTML = '';
+            document.getElementById('experience-inputs').innerHTML = '';
+            document.getElementById('language-inputs').innerHTML = '';
+
+            // Add default rows
+            addEducationRow();
+            addExperienceRow();
+            addLanguageRow();
+
+            // Reset Photo
+            document.getElementById('photo-preview-input').src = "";
+            document.getElementById('photo-preview-input').classList.add('hidden');
+            document.getElementById('prev-photo').src = "";
+            document.getElementById('prev-photo').classList.add('hidden');
+            document.getElementById('prev-photo-placeholder').classList.remove('hidden');
+
+            // Reset file input
+            document.getElementById('ocr-upload').value = '';
+
+            updatePreview();
+        }
+
+        function sanitizePhoneForClickUp(phone) {
+            if (!phone) return null;
+            // Remove invalid chars (keep only digits and +)
+            const cleaned = phone.replace(/[^0-9+]/g, '');
+            // Simple validation: must have at least 5 digits to be useful
+            if (cleaned.length < 5) return null; 
+            return cleaned;
+        }
+
+        function getValUpper(id) {
+            const val = document.getElementById(id).value;
+            return val ? val.toUpperCase() : "";
+        }
+
+        async function exportToClickUp() {
+            const btn = document.querySelector('button[onclick="exportToClickUp()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Checking...`;
+            btn.disabled = true;
+
+            try {
+                // 1. Prepare Data (All Uppercase)
+                // Task Name = First Name only
+                const taskName = getValUpper('input-fname');
+                const refId = getValUpper('input-ref-id');
+                
+                if(!taskName || !refId) throw new Error("First Name and Reference ID are required.");
+
+                // Helper to get Date as Unix Timestamp (ms)
+                const getDateTs = (id) => {
+                    const val = document.getElementById(id).value;
+                    return val ? new Date(val).getTime() : null;
+                };
+
+                // ClickUp Fields Configuration
+                // Note: Dropdown fields (Nationality, Job Title, Country) are commented out to prevent errors if they are not Text fields in ClickUp.
+                const customFields = [
+                    { id: "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38", value: getDateTs('input-dob') }, // DATE OF BIRTH
+                    { id: "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", value: getDateTs('input-passport-exp') }, // PASSPORT EXPIRY
+                    
+                    // { id: "e79e1c4e-b123-4bd9-8051-34859ea4b87e", value: getValUpper('input-nationality') }, // NATIONALITY
+                    { id: "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5", value: getValUpper('input-residence') }, // PRESENT RESIDENCE
+                    { id: "2e18821e-1c19-4de5-afb8-77ff11ee6327", value: getValUpper('input-email') }, // Email
+                    
+                    { id: "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c", value: parseInt(document.getElementById('input-age').value) || 0 }, // AGE
+                    
+                    // PHONE FIELDS
+                    { id: "5693724c-ee50-469b-a4a9-3848fe6d3115", value: sanitizePhoneForClickUp(document.getElementById('input-mobile').value) }, // MOBILE
+                    { id: "8efe7c3f-70cc-46d4-b6db-1324e5071b29", value: sanitizePhoneForClickUp(document.getElementById('input-alt').value) }, // PHONE
+                    { id: "87b4eee7-444f-4ec4-9882-441965757a68", value: sanitizePhoneForClickUp(document.getElementById('input-whatsapp').value) }, // WHATSAPP
+                    
+                    { id: "03d06003-2084-4906-8514-31b2f862c83d", value: getValUpper('input-passport-no') }, // PASSPORT NUMBER
+                    { id: "b8798515-8962-40a7-a8cd-2685f9fd676c", value: getValUpper('input-sname') }, // SUR NAME (Surname separate)
+                    { id: "ae3be10a-cc2d-459e-a80a-1727115b2f0c", value: getValUpper('input-address') }, // ADDRESS
+                    
+                    // { id: "410dd336-f23f-4893-859f-d04e420f6431", value: getValUpper('input-position') }, // JOB TITLE
+                    // { id: "41c89ec2-4e22-4e85-ae57-de0e614bea88", value: getValUpper('input-location') }, // STATE
+                    { id: "a25c1d42-6191-4fde-8eb4-7f2059fd71e3", value: refId }, // REFERENCE ID
+                    // { id: "dd59c787-da25-4760-ab85-2974e1ae8838", value: getValUpper('input-country') } // COUNTRY
+                ];
+
+                const cleanCustomFields = customFields.filter(f => f.value !== null && f.value !== "" && !Number.isNaN(f.value));
+
+                // 2. CHECK IF TASK EXISTS (Search by Ref ID)
+                // Ref ID Custom Field UUID: a25c1d42-6191-4fde-8eb4-7f2059fd71e3
+                const query = JSON.stringify([{
+                    "field_id": "a25c1d42-6191-4fde-8eb4-7f2059fd71e3",
+                    "operator": "=",
+                    "value": refId
+                }]);
+                
+                const searchResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task?custom_fields=${encodeURIComponent(query)}&include_closed=true`, {
+                    method: 'GET',
+                    headers: { 'Authorization': CLICKUP_API_KEY }
+                });
+
+                if(!searchResponse.ok) throw new Error("Failed to search existing tasks.");
+                
+                const searchResult = await searchResponse.json();
+                let taskId = null;
+                let isUpdate = false;
+
+                if (searchResult.tasks && searchResult.tasks.length > 0) {
+                    // Task Found -> Update
+                    taskId = searchResult.tasks[0].id;
+                    isUpdate = true;
+                    btn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Updating Task...`;
+
+                    // Update Name
+                    await fetch(`https://api.clickup.com/api/v2/task/${taskId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': CLICKUP_API_KEY,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ name: taskName, description: "Updated via Resume Extractor" })
+                    });
+
+                    // Update Custom Fields (Must be done individually for updates usually, or iterate)
+                    // We use Promise.all to speed it up
+                    const fieldUpdates = cleanCustomFields.map(field => {
+                        return fetch(`https://api.clickup.com/api/v2/task/${taskId}/field/${field.id}`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': CLICKUP_API_KEY,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ value: field.value })
+                        });
+                    });
+                    await Promise.all(fieldUpdates);
+
+                } else {
+                    // Task Not Found -> Create New
+                    btn.innerHTML = `<i class="fa-solid fa-plus"></i> Creating Task...`;
+                    const taskPayload = {
+                        name: taskName,
+                        description: "Imported via Resume Extractor Tool",
+                        custom_fields: cleanCustomFields
+                    };
+
+                    const createTaskResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': CLICKUP_API_KEY,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(taskPayload)
+                    });
+
+                    if (!createTaskResponse.ok) {
+                        const errText = await createTaskResponse.text();
+                        throw new Error(`ClickUp API Error (Task): ${createTaskResponse.status} - ${errText}`);
+                    }
+
+                    const taskData = await createTaskResponse.json();
+                    taskId = taskData.id;
+                }
+
+                // 3. Generate & Upload PDF
+                btn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Uploading PDF...`;
+
+                const element = document.getElementById('print-area');
+                let pdfBlob;
+                try {
+                    pdfBlob = await html2pdf().set({
+                        margin: 0,
+                        filename: 'Application_Report.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    }).from(element).output('blob');
+                } catch(pdfErr) {
+                    console.error(pdfErr);
+                    alert(`Task ${isUpdate ? 'updated' : 'created'} (ID: ${taskId}), but PDF generation failed.`);
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('attachment', pdfBlob, `${taskName.replace(/\s+/g, '_')}_Report.pdf`);
+
+                const attachResponse = await fetch(`https://api.clickup.com/api/v2/task/${taskId}/attachment`, {
+                    method: 'POST',
+                    headers: { 'Authorization': CLICKUP_API_KEY },
+                    body: formData
+                });
+
+                if (!attachResponse.ok) throw new Error("Failed to upload PDF attachment.");
+
+                alert(`Success! Task ${isUpdate ? 'UPDATED' : 'CREATED'} in ClickUp (ID: ${taskId}) with PDF.`);
+
+            } catch (error) {
+                console.error(error);
+                if (error.isTrusted) {
+                    alert("Network Error or CORS Blocked.\n\nBrowser blocked connection to ClickUp. Use a CORS extension or run on a server.");
+                } else {
+                    alert("Export Failed: " + error.message);
+                }
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function renderCheckboxes(containerId, list, prefix) {
+            const container = document.getElementById(containerId);
+            list.forEach((item, index) => {
+                const id = `${prefix}-${index}`;
+                const div = document.createElement('div');
+                div.className = "flex items-center gap-2";
+                div.innerHTML = `
+                    <input type="checkbox" id="input-${id}" onchange="updatePreview()" class="w-3.5 h-3.5 text-blue-600 rounded focus:ring-blue-500">
+                    <label for="input-${id}" class="text-xs text-slate-600 uppercase">${item}</label>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function addEducationRow(data = {}) {
+            const div = document.createElement('div');
+            div.className = "flex gap-2 items-center group";
+            div.innerHTML = `
+                <input type="text" placeholder="Degree/Cert" value="${data.degree || ''}" class="border rounded p-1 text-xs w-2/5" oninput="updatePreview()">
+                <input type="text" placeholder="Institution" value="${data.institution || ''}" class="border rounded p-1 text-xs w-2/5" oninput="updatePreview()">
+                <input type="text" placeholder="Year" value="${data.year || ''}" class="border rounded p-1 text-xs w-1/5" oninput="updatePreview()">
+                <button type="button" onclick="this.parentElement.remove(); updatePreview()" class="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash"></i></button>
+            `;
+            document.getElementById('education-inputs').appendChild(div);
+        }
+
+        function addExperienceRow(data = {}) {
+            const div = document.createElement('div');
+            div.className = "flex gap-2 items-center group";
+            div.innerHTML = `
+                <input type="text" placeholder="Company" value="${data.company || ''}" class="border rounded p-1 text-xs w-1/4" oninput="updatePreview()">
+                <input type="text" placeholder="Position" value="${data.position || ''}" class="border rounded p-1 text-xs w-1/4" oninput="updatePreview()">
+                <input type="text" placeholder="Dates" value="${data.dates || ''}" class="border rounded p-1 text-xs w-1/4" oninput="updatePreview()">
+                <input type="text" placeholder="Yrs" value="${data.years || ''}" class="border rounded p-1 text-xs w-1/6" oninput="updatePreview()">
+                <button type="button" onclick="this.parentElement.remove(); updatePreview()" class="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash"></i></button>
+            `;
+            document.getElementById('experience-inputs').appendChild(div);
+        }
+
+        function addLanguageRow(data = {}) {
+            const levels = `<option>NATIVE</option><option>FLUENT</option><option selected>INTERMEDIATE</option><option>BASIC</option>`;
+            const div = document.createElement('div');
+            div.className = "flex gap-2 items-center group";
+            div.innerHTML = `
+                <input type="text" placeholder="Language" value="${data.language || ''}" class="border rounded p-1 text-xs w-1/4" oninput="updatePreview()">
+                <select class="border rounded p-1 text-[10px] w-1/5" onchange="updatePreview()">${levels}</select>
+                <select class="border rounded p-1 text-[10px] w-1/5" onchange="updatePreview()">${levels}</select>
+                <select class="border rounded p-1 text-[10px] w-1/5" onchange="updatePreview()">${levels}</select>
+                <button type="button" onclick="this.parentElement.remove(); updatePreview()" class="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash"></i></button>
+            `;
+            document.getElementById('language-inputs').appendChild(div);
+        }
+
+        function formatDate(dateString) {
+            if(!dateString) return "";
+            const [year, month, day] = dateString.split('-');
+            if(year && month && day) {
+                return `${day}/${month}/${year}`;
+            }
+            return dateString;
+        }
+
+        function updatePreview() {
+            const fields = [
+                'ref-id', 'country', 'client', 'position', 'skill-type', 'fname', 'sname', 
+                'nationality', 'gender', 'marital', 'age', 'residence', 'passport-no', 
+                'pob', 'place-issue', 'state-birth', 'mobile', 
+                'whatsapp', 'email', 'alt', 'linkedin', 'address', 'location', 'zip'
+            ];
+
+            fields.forEach(id => {
+                const input = document.getElementById(`input-${id}`);
+                const output = document.getElementById(`prev-${id}`);
+                if(input && output) output.innerText = input.value || "";
+            });
+
+            // Special: Visa Type append to Country header
+            const skillType = document.getElementById('input-skill-type');
+            const visaOutput = document.getElementById('prev-visa-type');
+            if(skillType && visaOutput) visaOutput.innerText = skillType.value || "";
+
+            const dobInput = document.getElementById('input-dob');
+            const dobOutput = document.getElementById('prev-dob');
+            if(dobInput && dobOutput) dobOutput.innerText = formatDate(dobInput.value);
+
+            const expInput = document.getElementById('input-passport-exp');
+            const expOutput = document.getElementById('prev-passport-exp');
+            if(expInput && expOutput) expOutput.innerText = formatDate(expInput.value);
+
+            // Update Tables - SMART ROW FILTERING
+            updateTable('education-inputs', 'prev-education-body', (inputs) => `
+                <td class="font-bold">${inputs[0].value}</td>
+                <td>${inputs[1].value}</td>
+                <td class="text-center">${inputs[2].value}</td>
+            `);
+
+            updateTable('experience-inputs', 'prev-experience-body', (inputs) => `
+                <td class="font-bold">${inputs[0].value}</td>
+                <td>${inputs[1].value}</td>
+                <td>${inputs[2].value}</td>
+                <td class="text-center">${inputs[3].value}</td>
+            `);
+
+            updateTable('language-inputs', 'prev-language-body', (inputs, row) => {
+                const selects = row.querySelectorAll('select');
+                return `
+                    <td class="font-bold">${inputs[0].value}</td>
+                    <td class="text-center text-[8pt]">${selects[0].value}</td>
+                    <td class="text-center text-[8pt]">${selects[1].value}</td>
+                    <td class="text-center text-[8pt]">${selects[2].value}</td>
+                `;
+            });
+
+            updateCheckboxList(attachments, 'att', 'prev-attachments');
+            updateCheckboxList(submissions, 'sub', 'prev-submission');
+        }
+
+        function updateTable(inputId, previewId, renderFn) {
+            const container = document.getElementById(inputId);
+            const tbody = document.getElementById(previewId);
+            tbody.innerHTML = '';
+            Array.from(container.children).forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                let hasData = false;
+                inputs.forEach(input => {
+                    if (input.value.trim() !== '') hasData = true;
+                });
+                
+                if (hasData) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = renderFn(inputs, row);
+                    tbody.appendChild(tr);
+                }
+            });
+        }
+
+        function updateCheckboxList(list, prefix, targetId) {
+            const target = document.getElementById(targetId);
+            target.innerHTML = '';
+            list.forEach((item, index) => {
+                const cb = document.getElementById(`input-${prefix}-${index}`);
+                if(cb.checked) {
+                    const li = document.createElement('li');
+                    li.className = "checklist-item";
+                    li.innerHTML = `<span class="check-box-icon checked"><i class="fa-solid fa-check text-[7px]"></i></span> ${item}`;
+                    target.appendChild(li);
+                } 
+            });
+        }
+
+        function calculateAge() {
+            const dob = document.getElementById('input-dob').value;
+            if (dob) {
+                const today = new Date();
+                const birthDate = new Date(dob);
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+                document.getElementById('input-age').value = age;
+            } else {
+                 document.getElementById('input-age').value = "";
+            }
+            updatePreview();
+        }
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('photo-preview-input').src = e.target.result;
+                    document.getElementById('photo-preview-input').classList.remove('hidden');
+                    document.getElementById('prev-photo').src = e.target.result;
+                    document.getElementById('prev-photo').classList.remove('hidden');
+                    document.getElementById('prev-photo-placeholder').classList.add('hidden');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('print-area');
+            const opt = {
+                margin: 0,
+                filename: 'Application_Report.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // Added simple error handling wrapper if needed for direct button call,
+            // though most logic is in the button handler for async operations.
+            try {
+                html2pdf().set(opt).from(element).save();
+            } catch(e) {
+                alert("PDF Error: " + e.message);
+            }
+        }
+
+        function triggerOCR() { document.getElementById('ocr-upload').click(); }
+        
+        async function processOCR(input) {
+            if (!input.files || input.files.length === 0) return;
+            
+            const loader = document.getElementById('ocr-loader');
+            const status = document.getElementById('ocr-status');
+            const progress = document.getElementById('ocr-progress-bar');
+            const apiKey = document.getElementById('gemini-api-key').value;
+            
+            loader.classList.remove('hidden'); 
+            loader.classList.add('flex');
+            
+            let combinedText = "";
+            let filesProcessed = 0;
+            const totalFiles = input.files.length;
+
+            try {
+                for (let file of input.files) {
+                    status.innerText = `Processing ${file.name} (${filesProcessed + 1}/${totalFiles})...`;
+                    progress.style.width = `${((filesProcessed) / totalFiles) * 100}%`;
+                    
+                    let text = "";
+                    
+                    if (file.type === 'application/pdf') {
+                        text = await extractTextFromPDF(file);
+                    } else if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                        text = await extractTextFromDOCX(file);
+                    } else if (file.type.startsWith('image/')) {
+                        text = await extractTextFromImage(file);
+                    }
+                    
+                    combinedText += `\n--- FILE: ${file.name} ---\n` + text;
+                    filesProcessed++;
+                }
+
+                progress.style.width = "100%";
+                
+                if (apiKey) {
+                    status.innerText = "Sending to Gemini AI for analysis...";
+                    await analyzeWithGemini(combinedText, apiKey);
+                } else {
+                    status.innerText = "Analyzing text (Regex Mode)...";
+                    // Small delay to let UI update
+                    await new Promise(r => setTimeout(r, 500));
+                    fillFromOCR(combinedText);
+                }
+                
+                loader.classList.add('hidden'); 
+                loader.classList.remove('flex');
+                alert("Processing Complete! Data populated from " + totalFiles + " files.");
+
+            } catch (error) {
+                console.error(error);
+                loader.classList.add('hidden'); 
+                loader.classList.remove('flex');
+                alert("Error processing files: " + error.message);
+            }
+        }
+
+        async function analyzeWithGemini(text, apiKey) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const prompt = `
+                Extract structured data from the following resume text. 
+                Return strictly JSON. 
+                Dates should be YYYY-MM-DD.
+                Fields: firstName, surname, email, mobile, nationality, gender, maritalStatus, dob, passportNo, passportExpiry, pob, placeIssue, address, education (array: degree, institution, year), experience (array: company, position, dates, years).
+                
+                Text:
+                ${text.substring(0, 30000)}
+            `;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
+
+            if (!response.ok) throw new Error("Gemini API Error");
+
+            const data = await response.json();
+            const rawJson = data.candidates[0].content.parts[0].text.replace(/```json|```/g, '').trim();
+            const extractedData = JSON.parse(rawJson);
+            
+            applyDataToForm(extractedData);
+        }
+
+        function applyDataToForm(data) {
+            const fill = (id, val) => {
+                const el = document.getElementById(id);
+                if (el && !el.value && val) el.value = val;
+            };
+
+            if(data.firstName) fill('input-fname', data.firstName);
+            if(data.surname) fill('input-sname', data.surname);
+            if(data.email) fill('input-email', data.email);
+            if(data.mobile) fill('input-mobile', data.mobile);
+            if(data.nationality) fill('input-nationality', data.nationality);
+            if(data.passportNo) fill('input-passport-no', data.passportNo);
+            if(data.dob) { fill('input-dob', data.dob); calculateAge(); }
+            if(data.passportExpiry) fill('input-passport-exp', data.passportExpiry);
+            if(data.pob) fill('input-pob', data.pob);
+            if(data.placeIssue) fill('input-place-issue', data.placeIssue);
+            if(data.address) fill('input-address', data.address);
+            
+            if(data.gender) {
+                const g = data.gender.toLowerCase();
+                const sel = document.getElementById('input-gender');
+                if(!sel.value && g.startsWith('m')) sel.value = 'Male';
+                if(!sel.value && g.startsWith('f')) sel.value = 'Female';
+            }
+
+            if(data.education && Array.isArray(data.education)) {
+                data.education.forEach(edu => addEducationRow(edu));
+            }
+            if(data.experience && Array.isArray(data.experience)) {
+                data.experience.forEach(exp => addExperienceRow(exp));
+            }
+
+            updatePreview();
+        }
+
+        async function extractTextFromImage(file) {
+            const result = await Tesseract.recognize(file, 'eng');
+            return result.data.text;
+        }
+
+        async function extractTextFromPDF(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+            let fullText = "";
+            
+            // Check if PDF contains scanned images by sampling first page text
+            const page1 = await pdf.getPage(1);
+            const textContent = await page1.getTextContent();
+            const hasText = textContent.items.length > 5; // Heuristic
+
+            if (hasText) {
+                // Digital PDF: Extract text directly
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(" ");
+                    fullText += pageText + "\n";
+                }
+            } else {
+                // Scanned PDF: Render to image then OCR
+                // Limit to first 2 pages to prevent browser crash on large docs
+                const pagesToScan = Math.min(pdf.numPages, 2);
+                
+                const status = document.getElementById('ocr-status');
+                if(status) status.innerText = "Scanned PDF detected. Running OCR on pages...";
+
+                for (let i = 1; i <= pagesToScan; i++) {
+                    const page = await pdf.getPage(i);
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    await page.render({ canvasContext: context, viewport: viewport }).promise;
+                    const imgData = canvas.toDataURL('image/png');
+                    const ocrResult = await Tesseract.recognize(imgData, 'eng');
+                    fullText += ocrResult.data.text + "\n";
+                }
+            }
+            return fullText;
+        }
+
+        async function extractTextFromDOCX(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+            return result.value;
+        }
+
+        function fillFromOCR(text) {
+            console.log("Analyzing text via Regex..."); 
+
+            const fill = (id, val) => {
+                const el = document.getElementById(id);
+                if (el && !el.value && val) el.value = val;
+            };
+
+            const emailMatch = text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/i);
+            if(emailMatch) fill('input-email', emailMatch[0].toLowerCase());
+
+            const phoneMatch = text.match(/(?:Mobile|Phone|Cell|Tel)[\s:.-]*([\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6})/i);
+            if(phoneMatch) fill('input-mobile', phoneMatch[1].trim());
+
+            const passportMatch = text.match(/\b[A-Z]{1}[0-9]{7,9}\b/);
+            if(passportMatch) fill('input-passport-no', passportMatch[0]);
+
+            const datePattern = /[0-9]{2}[\/\-\.][0-9]{2}[\/\-\.][0-9]{2,4}/g;
+            const lines = text.split('\n');
+            lines.forEach(line => {
+                const lower = line.toLowerCase();
+                if (lower.includes('birth') || lower.includes('dob')) {
+                    const dob = line.match(datePattern);
+                    if (dob) {
+                        const iso = convertToISODate(dob[0]);
+                        if(iso) { fill('input-dob', iso); calculateAge(); }
+                    }
+                }
+                if (lower.includes('expir')) {
+                    const exp = line.match(datePattern);
+                    if (exp) {
+                        const iso = convertToISODate(exp[0]);
+                        if(iso) fill('input-passport-exp', iso);
+                    }
+                }
+            });
+
+            const pobMatch = text.match(/(?:Place of Birth|Birth Place)[\s:.-]*([A-Za-z,\s]+)/i);
+            if(pobMatch) fill('input-pob', pobMatch[1].trim());
+
+            const nameMatch = text.match(/(?:Name|Given Name|Full Name)[\s:.-]*([A-Za-z\s]+)/i);
+            if (nameMatch) {
+                const names = nameMatch[1].trim().split(' ');
+                if(names.length > 0) fill('input-fname', names[0]);
+                if(names.length > 1) fill('input-sname', names.slice(1).join(' '));
+            } 
+
+            const natMatch = text.match(/(?:Nationality|Citizen of)[\s:.-]*([A-Za-z]+)/i);
+            if(natMatch) fill('input-nationality', natMatch[1].toUpperCase());
+
+            if(text.toLowerCase().includes("passport")) document.getElementById('input-att-2').checked = true;
+            if(text.toLowerCase().includes("resume") || text.toLowerCase().includes("curriculum vitae")) document.getElementById('input-att-0').checked = true;
+            
+            updatePreview();
+        }
+
+        function convertToISODate(dateStr) {
+            if(!dateStr) return null;
+            dateStr = dateStr.replace(/,/g, '');
+            const parts = dateStr.match(/(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})/);
+            if(parts) {
+                const day = parts[1].padStart(2, '0');
+                const month = parts[2].padStart(2, '0');
+                const year = parts[3];
+                return `${year}-${month}-${day}`;
+            }
+            return null;
+        }
+
+        async function saveToGoogleSheet() {
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("YOUR_")) {
+                alert("Please configure the GOOGLE_SCRIPT_URL in the code first.");
+                return;
+            }
+
+            const btn = document.querySelector('button[onclick="saveToGoogleSheet()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
+            btn.disabled = true;
+
+            try {
+                // Collect All Data including dynamic tables
+                const education = [];
+                document.querySelectorAll('#education-inputs > div').forEach(row => {
+                    const inputs = row.querySelectorAll('input');
+                    if(inputs[0].value) education.push({
+                        degree: inputs[0].value,
+                        institution: inputs[1].value,
+                        year: inputs[2].value
+                    });
+                });
+
+                const experience = [];
+                document.querySelectorAll('#experience-inputs > div').forEach(row => {
+                    const inputs = row.querySelectorAll('input');
+                    if(inputs[0].value) experience.push({
+                        company: inputs[0].value,
+                        position: inputs[1].value,
+                        dates: inputs[2].value,
+                        years: inputs[3].value
+                    });
+                });
+
+                const languages = [];
+                document.querySelectorAll('#language-inputs > div').forEach(row => {
+                    const inputs = row.querySelectorAll('input');
+                    const selects = row.querySelectorAll('select');
+                    if(inputs[0].value) languages.push({
+                        language: inputs[0].value,
+                        speak: selects[0].value,
+                        read: selects[1].value,
+                        write: selects[2].value
+                    });
+                });
+
+                const formData = {
+                    refId: document.getElementById('input-ref-id').value,
+                    firstName: document.getElementById('input-fname').value,
+                    surname: document.getElementById('input-sname').value,
+                    position: document.getElementById('input-position').value,
+                    country: document.getElementById('input-country').value,
+                    passportNo: document.getElementById('input-passport-no').value,
+                    mobile: document.getElementById('input-mobile').value,
+                    email: document.getElementById('input-email').value,
+                    gender: document.getElementById('input-gender').value,
+                    maritalStatus: document.getElementById('input-marital').value,
+                    dob: document.getElementById('input-dob').value,
+                    age: document.getElementById('input-age').value,
+                    passportExp: document.getElementById('input-passport-exp').value,
+                    pob: document.getElementById('input-pob').value,
+                    placeIssue: document.getElementById('input-place-issue').value,
+                    nationality: document.getElementById('input-nationality').value,
+                    residence: document.getElementById('input-residence').value,
+                    address: document.getElementById('input-address').value,
+                    altPhone: document.getElementById('input-alt').value,
+                    whatsapp: document.getElementById('input-whatsapp').value,
+                    linkedin: document.getElementById('input-linkedin').value,
+                    education: JSON.stringify(education),
+                    experience: JSON.stringify(experience),
+                    languages: JSON.stringify(languages)
+                };
+
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    mode: 'no-cors', 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                alert("Data sent to Google Sheet!");
+                
+                // Save current ID to local storage as last used
+                localStorage.setItem('lastRefId', formData.refId);
+
+            } catch (error) {
+                console.error(error);
+                alert("Error saving to sheet: " + error.message);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        async function searchFromGoogleSheet(searchRefId) {
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("YOUR_")) {
+                alert("Please configure the GOOGLE_SCRIPT_URL in the code first.");
+                return;
+            }
+
+            const refId = searchRefId || document.getElementById('modal-ref-id').value;
+            if (!refId) return;
+
+            const btn = document.getElementById('modal-search-btn') || document.querySelector('button[onclick="openSearchModal()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Finding...`;
+            btn.disabled = true;
+
+            try {
+                // Fetch GET request
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?refId=${encodeURIComponent(refId)}`);
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    // Populate form
+                    const data = result.data;
+                    document.getElementById('input-ref-id').value = data.refId || "";
+                    document.getElementById('input-fname').value = data.firstName || "";
+                    document.getElementById('input-sname').value = data.surname || "";
+                    document.getElementById('input-position').value = data.position || "";
+                    document.getElementById('input-country').value = data.country || "";
+                    document.getElementById('input-passport-no').value = data.passportNo || "";
+                    document.getElementById('input-mobile').value = data.mobile || "";
+                    document.getElementById('input-email').value = data.email || "";
+                    document.getElementById('input-gender').value = data.gender || "Male";
+                    document.getElementById('input-marital').value = data.maritalStatus || "Single";
+                    document.getElementById('input-dob').value = data.dob || "";
+                    document.getElementById('input-age').value = data.age || "";
+                    document.getElementById('input-passport-exp').value = data.passportExp || "";
+                    document.getElementById('input-pob').value = data.pob || "";
+                    document.getElementById('input-place-issue').value = data.placeIssue || "";
+                    document.getElementById('input-nationality').value = data.nationality || "";
+                    document.getElementById('input-residence').value = data.residence || "";
+                    document.getElementById('input-address').value = data.address || "";
+                    document.getElementById('input-alt').value = data.altPhone || "";
+                    document.getElementById('input-whatsapp').value = data.whatsapp || "";
+                    document.getElementById('input-linkedin').value = data.linkedin || "";
+
+                    // Clear and Populate Tables
+                    document.getElementById('education-inputs').innerHTML = '';
+                    document.getElementById('experience-inputs').innerHTML = '';
+                    document.getElementById('language-inputs').innerHTML = '';
+
+                    if(data.education) {
+                        try {
+                            const edu = JSON.parse(data.education);
+                            edu.forEach(item => addEducationRow(item));
+                        } catch(e) {}
+                    }
+                    if(data.experience) {
+                        try {
+                            const exp = JSON.parse(data.experience);
+                            exp.forEach(item => addExperienceRow(item));
+                        } catch(e) {}
+                    }
+                    if(data.languages) {
+                        try {
+                            const lang = JSON.parse(data.languages);
+                            lang.forEach(item => addLanguageRow(item));
+                        } catch(e) {}
+                    }
+
+                    // Ensure minimum rows
+                    if(document.getElementById('education-inputs').children.length === 0) addEducationRow();
+                    if(document.getElementById('experience-inputs').children.length === 0) addExperienceRow();
+                    if(document.getElementById('language-inputs').children.length === 0) addLanguageRow();
+
+                    calculateAge();
+                    updatePreview();
+                    alert("Data loaded successfully!");
+                } else {
+                    // Specific message when not found
+                    alert("Candidate not found.");
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("Search failed: " + error.message);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
