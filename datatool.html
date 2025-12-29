@@ -1453,12 +1453,13 @@
                 };
 
                 // ClickUp Fields Configuration
-                // Note: Dropdown fields (Nationality, Job Title, Country) are commented out to prevent errors if they are not Text fields in ClickUp.
+                // IMPORTANT: If you get "FIELD_011" error, it means you are sending Text to a Dropdown field.
+                // SOLUTION: Change the field type in ClickUp to "Text" OR comment out the field below.
                 const customFields = [
                     { id: "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38", value: getDateTs('input-dob') }, // DATE OF BIRTH
                     { id: "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", value: getDateTs('input-passport-exp') }, // PASSPORT EXPIRY
                     
-                    { id: "e79e1c4e-b123-4bd9-8051-34859ea4b87e", value: getValUpper('input-nationality') }, // NATIONALITY (Uncommented)
+                    // { id: "e79e1c4e-b123-4bd9-8051-34859ea4b87e", value: getValUpper('input-nationality') }, // NATIONALITY (DISABLED: Causes 400 Error if Dropdown)
                     { id: "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5", value: getValUpper('input-residence') }, // PRESENT RESIDENCE
                     { id: "2e18821e-1c19-4de5-afb8-77ff11ee6327", value: getValUpper('input-email') }, // Email
                     
@@ -1473,13 +1474,12 @@
                     { id: "b8798515-8962-40a7-a8cd-2685f9fd676c", value: getValUpper('input-sname') }, // SUR NAME (Surname separate)
                     { id: "ae3be10a-cc2d-459e-a80a-1727115b2f0c", value: getValUpper('input-address') }, // ADDRESS
                     
-                    // Added Gender Field - REPLACE ID with your actual ClickUp Custom Field ID
-                    { id: "4e32a1b5-9081-4f3c-9f02-8f26a1b2c3d4", value: getValUpper('input-gender') }, // GENDER
+                    // { id: "4e32a1b5-9081-4f3c-9f02-8f26a1b2c3d4", value: getValUpper('input-gender') }, // GENDER (DISABLED: Causes 400 Error if Dropdown)
 
                     // { id: "410dd336-f23f-4893-859f-d04e420f6431", value: getValUpper('input-position') }, // JOB TITLE
                     // { id: "41c89ec2-4e22-4e85-ae57-de0e614bea88", value: getValUpper('input-location') }, // STATE
                     { id: "a25c1d42-6191-4fde-8eb4-7f2059fd71e3", value: refId }, // REFERENCE ID
-                    { id: "dd59c787-da25-4760-ab85-2974e1ae8838", value: getValUpper('input-country') } // COUNTRY (Uncommented & Mapped)
+                    // { id: "dd59c787-da25-4760-ab85-2974e1ae8838", value: getValUpper('input-country') } // COUNTRY (DISABLED: Causes 400 Error if Dropdown)
                 ];
 
                 const cleanCustomFields = customFields.filter(f => f.value !== null && f.value !== "" && !Number.isNaN(f.value));
@@ -1553,6 +1553,10 @@
 
                     if (!createTaskResponse.ok) {
                         const errText = await createTaskResponse.text();
+                        // SPECIFIC ERROR HANDLING FOR DROP DOWN ISSUE
+                        if (errText.includes("FIELD_011") || errText.includes("option index")) {
+                            throw new Error("ClickUp Type Mismatch: A 'Dropdown' field is receiving text. Change the ClickUp field to 'Text' type.");
+                        }
                         throw new Error(`ClickUp API Error (Task): ${createTaskResponse.status} - ${errText}`);
                     }
 
