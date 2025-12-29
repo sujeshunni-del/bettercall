@@ -270,6 +270,31 @@
             background-color: #ffffff !important;
             box-shadow: none !important;
         }
+        
+        /* Pulse Animation for Loader */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+        .animate-pulse-ring {
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        /* Search Modal Styles */
+        .search-tab {
+            @apply px-4 py-2 text-sm font-medium text-gray-500 border-b-2 border-transparent cursor-pointer transition-colors;
+        }
+        .search-tab.active {
+            @apply text-blue-600 border-blue-600 bg-blue-50/50;
+        }
+        .search-result-card {
+            animation: slideUp 0.3s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body class="bg-gray-100 h-screen overflow-hidden flex flex-col font-sans">
@@ -313,7 +338,7 @@
                     <!-- Search -->
                     <button onclick="openSearchModal()" class="nav-btn hover:border-blue-400 hover:text-blue-400">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <span>Search Candidate</span>
+                        <span>Search</span>
                     </button>
                     
                     <!-- OCR (Make File) - Opens NEW MODAL -->
@@ -359,21 +384,55 @@
     <!-- Main Content -->
     <div class="flex flex-1 overflow-hidden relative">
         
-        <!-- Search Modal -->
-        <div id="search-modal" class="hidden absolute inset-0 bg-gray-900/50 z-[50] flex items-center justify-center backdrop-blur-sm">
-            <div class="bg-white rounded-lg shadow-xl p-6 w-96 transform transition-all scale-100">
-                <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-magnifying-glass text-blue-600"></i> Search Candidate
-                </h3>
-                <div class="mb-4">
-                    <label class="block text-xs font-semibold text-gray-500 mb-1">REFERENCE ID</label>
-                    <input type="text" id="modal-ref-id" class="w-full border-2 border-blue-200 rounded px-3 py-2 text-lg font-bold text-center uppercase tracking-widest focus:border-blue-500 focus:outline-none" placeholder="BC00001">
+        <!-- UPDATED: Advanced Search Modal -->
+        <div id="search-modal" class="hidden absolute inset-0 bg-gray-900/60 z-[50] flex items-center justify-center backdrop-blur-sm">
+            <div class="bg-white rounded-xl shadow-2xl w-[600px] max-h-[85vh] flex flex-col transform transition-all scale-100 overflow-hidden">
+                <!-- Header -->
+                <div class="bg-slate-50 border-b px-6 py-4 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass text-blue-600"></i> Advanced Search
+                        </h3>
+                        <p class="text-xs text-gray-500 mt-1">Find candidates by ID, Name, or Passport No.</p>
+                    </div>
+                    <button onclick="closeSearchModal()" class="text-gray-400 hover:text-gray-600 transition"><i class="fa-solid fa-times text-lg"></i></button>
                 </div>
-                <div class="flex justify-end gap-2">
-                    <button onclick="closeSearchModal()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">Cancel</button>
-                    <button onclick="executeSearch()" id="modal-search-btn" class="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2">
-                        <span>Search</span>
+
+                <!-- Input Area -->
+                <div class="p-6 bg-white border-b">
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="col-span-2">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Search By</label>
+                            <div class="flex bg-gray-100 p-1 rounded-lg">
+                                <button type="button" onclick="setSearchType('ref')" id="tab-ref" class="flex-1 text-xs font-bold py-1.5 rounded-md bg-white shadow text-blue-700 transition-all">Reference ID</button>
+                                <button type="button" onclick="setSearchType('name')" id="tab-name" class="flex-1 text-xs font-bold py-1.5 rounded-md text-gray-500 hover:bg-gray-200 transition-all">Name</button>
+                                <button type="button" onclick="setSearchType('passport')" id="tab-passport" class="flex-1 text-xs font-bold py-1.5 rounded-md text-gray-500 hover:bg-gray-200 transition-all">Passport</button>
+                            </div>
+                        </div>
+                        
+                        <div class="col-span-2">
+                            <div class="relative">
+                                <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" id="adv-search-input" class="w-full pl-9 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="Enter Reference ID (e.g., BC00001)">
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="performAdvancedSearch()" id="adv-search-btn" class="w-full py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition shadow-md flex justify-center items-center gap-2">
+                        <span>Search Database</span>
                     </button>
+                </div>
+
+                <!-- Results Area (Scrollable) -->
+                <div id="search-results-area" class="flex-1 overflow-y-auto bg-gray-50 p-6 min-h-[200px]">
+                    <div id="search-placeholder" class="flex flex-col items-center justify-center h-full text-gray-400">
+                        <i class="fa-regular fa-folder-open text-4xl mb-2 opacity-50"></i>
+                        <p class="text-sm">Enter details above to search</p>
+                    </div>
+                    
+                    <!-- Dynamic Results List -->
+                    <div id="results-list" class="hidden space-y-3">
+                        <!-- Items injected by JS -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -453,20 +512,26 @@
             </div>
         </div>
 
-        <!-- Success Animation Modal (Data Save & Export) -->
-        <div id="success-overlay" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[60] flex items-center justify-center transition-all duration-300 opacity-0">
-            <div class="bg-white rounded-2xl shadow-2xl p-8 transform scale-90 transition-all duration-300 flex flex-col items-center gap-4 text-center max-w-sm w-full mx-4 border border-gray-100">
-                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-2 animate-[pulse_2s_infinite]">
-                    <i class="fa-solid fa-check text-4xl text-green-600"></i>
+        <!-- Unified Status/Success Overlay -->
+        <div id="status-overlay" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[90] flex items-center justify-center transition-all duration-300 opacity-0">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 transform scale-90 transition-all duration-300 flex flex-col items-center gap-4 text-center max-w-sm w-full mx-4 border border-gray-100 relative overflow-hidden">
+                <!-- Icon Container -->
+                <div id="status-icon-container" class="w-20 h-20 rounded-full flex items-center justify-center mb-2 transition-colors duration-300">
+                    <i id="status-icon" class="fa-solid text-4xl"></i>
                 </div>
+                
+                <!-- Text -->
                 <div>
-                    <h3 id="success-title" class="text-2xl font-black text-gray-800 mb-2">Data Saved!</h3>
-                    <p id="success-desc" class="text-gray-500 text-sm leading-relaxed">
-                        Candidate <span id="success-ref-id" class="font-bold text-gray-800"></span> has been successfully recorded in the database.
-                    </p>
+                    <h3 id="status-title" class="text-2xl font-black text-gray-800 mb-2"></h3>
+                    <p id="status-desc" class="text-gray-500 text-sm leading-relaxed"></p>
                 </div>
-                <div class="w-full bg-gray-100 rounded-full h-1 mt-2 overflow-hidden">
-                    <div class="bg-green-500 h-full w-full animate-[width_2.5s_ease-out]"></div>
+
+                <!-- Simple Spinner for Loading state -->
+                <div id="status-spinner" class="hidden w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mt-2"></div>
+                
+                <!-- Progress Line -->
+                <div id="status-progress-bar" class="w-full bg-gray-100 rounded-full h-1 mt-2 overflow-hidden hidden">
+                    <div class="bg-blue-600 h-full w-full animate-[loading_1s_ease-in-out_infinite]"></div>
                 </div>
             </div>
         </div>
@@ -619,7 +684,7 @@
                     <div id="experience-inputs" class="space-y-2"></div>
                 </div>
 
-                <!-- Section: Education (Moved below Experience) -->
+                <!-- Section: Education (Moved below Education) -->
                 <div class="space-y-2">
                     <div class="flex justify-between items-center border-b pb-1">
                         <h2 class="text-sm font-bold text-slate-700">EDUCATION</h2>
@@ -635,183 +700,6 @@
                         <button type="button" onclick="addLanguageRow()" class="text-xs text-blue-600 hover:underline"><i class="fa-solid fa-plus"></i> Add</button>
                     </div>
                     <div id="language-inputs" class="space-y-2"></div>
-                </div>
-
-                <!-- Section: Attachments -->
-                <div class="grid grid-cols-1 gap-4">
-                    <div class="space-y-2">
-                        <h2 class="text-sm font-bold text-slate-700 border-b pb-1">ATTACHMENTS</h2>
-                        <div class="space-y-1" id="attachments-list"></div>
-                    </div>
-                    <div class="space-y-2">
-                        <h2 class="text-sm font-bold text-slate-700 border-b pb-1">SUBMISSION CHECKS</h2>
-                        <div class="space-y-1" id="submission-list"></div>
-                    </div>
-                </div>
-
-                <div class="h-8"></div>
-            </form>
-        </div>
-
-        <!-- Right Panel: Live Preview -->
-        <div class="w-3/5 bg-gray-500 overflow-y-auto flex justify-center p-6">
-            
-            <div id="print-area" class="a4-page shadow-xl">
-                
-                <!-- Creative Header -->
-                <div id="prev-section-header" class="creative-header">
-                    <div>
-                        <h1 class="text-xl font-bold tracking-widest">APPLICATION FORM</h1>
-                        <div class="text-[9pt] mt-1 opacity-90 font-light">
-                            REF: <span id="prev-ref-id" class="font-bold text-yellow-400"></span> 
-                            <span class="mx-2">|</span>
-                            POSITION: <span id="prev-position" class="font-bold"></span> 
-                        </div>
-                    </div>
-                    <div class="text-right text-[8pt]">
-                        <p class="font-bold text-blue-300">COUNTRY & VISA TYPE</p>
-                        <p class="text-lg font-bold leading-none uppercase">
-                            <span id="prev-country"></span> 
-                            <span id="prev-visa-type" class="text-sm font-normal ml-1"></span>
-                        </p>
-                        <p class="mt-1 text-gray-300">Client: <span id="prev-client"></span></p>
-                        <p class="text-gray-400 mt-1"><span id="print-date"></span></p>
-                    </div>
-                </div>
-
-                <!-- Profile Block (Combines Personal + Photo) -->
-                <div id="prev-section-personal" class="report-section mb-3">
-                    <div class="flex gap-4 items-start">
-                        <!-- Photo -->
-                        <div class="w-[35mm] h-[45mm] border-2 border-slate-200 bg-slate-50 shrink-0 flex items-center justify-center overflow-hidden">
-                            <img id="prev-photo" src="" class="w-full h-full object-cover hidden">
-                            <div id="prev-photo-placeholder" class="text-slate-300 text-[9px] text-center p-1 font-bold">
-                                PHOTO
-                            </div>
-                        </div>
-
-                        <!-- Info Grid -->
-                        <div class="flex-1">
-                            <h2 class="section-title"><i class="fa-solid fa-user"></i> PROFILE</h2>
-                            
-                            <!-- Redesigned Grid: 3 Rows Layout -->
-                            <div class="grid grid-cols-6 gap-2">
-                                
-                                <!-- ROW 1: Name (Big Font) -->
-                                <div class="col-span-3 info-box bg-blue-50/50 border-blue-100">
-                                    <span class="data-label text-blue-800 text-[8pt]">FIRST NAME</span>
-                                    <span id="prev-fname" class="data-value text-[13pt] font-black tracking-wide border-b border-gray-300 pb-1 mt-1 leading-none truncate uppercase"></span>
-                                </div>
-                                <div class="col-span-3 info-box bg-blue-50/50 border-blue-100">
-                                    <span class="data-label text-blue-800 text-[8pt]">SURNAME</span>
-                                    <span id="prev-sname" class="data-value text-[13pt] font-black tracking-wide border-b border-gray-300 pb-1 mt-1 leading-none truncate uppercase"></span>
-                                </div>
-
-                                <!-- ROW 2: Vitals (3 Columns) -->
-                                <div class="col-span-2 info-box">
-                                    <span class="data-label">BIRTH DATE</span>
-                                    <span id="prev-dob" class="data-value font-semibold"></span>
-                                </div>
-                                <div class="col-span-2 info-box">
-                                    <span class="data-label">AGE / GENDER</span>
-                                    <span class="data-value"><span id="prev-age"></span> YRS / <span id="prev-gender"></span></span>
-                                </div>
-                                <div class="col-span-2 info-box">
-                                    <span class="data-label">STATUS</span>
-                                    <span id="prev-marital" class="data-value"></span>
-                                </div>
-
-                                <!-- ROW 3: Origin & Location (2 Columns) -->
-                                <div class="col-span-3 info-box bg-gray-50 border-gray-200">
-                                     <span class="data-label">NATIONALITY</span>
-                                    <span id="prev-nationality" class="data-value font-bold truncate"></span>
-                                </div>
-                                <div class="col-span-3 info-box bg-gray-50 border-gray-200">
-                                     <span class="data-label">PRESENT RESIDENCE</span>
-                                    <span id="prev-residence" class="data-value truncate"></span>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Passport Strip (Compact) -->
-                <div id="prev-section-passport" class="report-section mb-4">
-                    <h2 class="section-title"><i class="fa-solid fa-passport"></i> PASSPORT DETAILS</h2>
-                    <div class="grid grid-cols-4 gap-4 text-[8.5pt] bg-slate-50 border border-slate-200 p-3 rounded">
-                        <div><span class="text-gray-500 font-bold block text-[7pt]">PASSPORT NO</span> <span id="prev-passport-no" class="font-bold"></span></div>
-                        <div><span class="text-gray-500 font-bold block text-[7pt]">EXPIRY</span> <span id="prev-passport-exp"></span></div>
-                        <div><span class="text-gray-500 font-bold block text-[7pt]">ISSUED AT</span> <span id="prev-place-issue"></span></div>
-                        <div><span class="text-gray-500 font-bold block text-[7pt]">BIRTH PLACE</span> <span id="prev-pob"></span></div>
-                    </div>
-                </div>
-
-                <!-- Contact Block (Redesigned to match Passport) -->
-                <div id="prev-section-contact" class="report-section mb-6">
-                    <h2 class="section-title mb-3"><i class="fa-solid fa-address-card"></i> CONTACT DETAILS</h2>
-                    
-                    <!-- Mobile/Email Grid -->
-                    <div class="grid grid-cols-3 gap-4 text-[8.5pt] bg-slate-50 border border-slate-200 p-3 rounded mb-2">
-                        <div><span class="text-gray-500 font-bold block text-[7pt]">MOBILE</span> <span id="prev-mobile" class="font-bold"></span></div>
-                        <div><span class="text-gray-500 font-bold block text-[7pt]">WHATSAPP</span> <span id="prev-whatsapp" class="font-semibold"></span></div>
-                        <div class="col-span-1"><span class="text-gray-500 font-bold block text-[7pt]">EMAIL</span> <span id="prev-email" class="break-all"></span></div>
-                    </div>
-
-                     <!-- Separate Address Area -->
-                    <div class="mt-2 p-2 bg-gray-50 border border-gray-200 rounded">
-                        <span class="block text-slate-500 font-bold text-[7pt] mb-1">POSTAL ADDRESS</span>
-                        <span class="font-semibold text-[10pt] leading-snug">
-                            <span id="prev-address"></span> <span id="prev-location"></span> <span id="prev-zip"></span>
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Section: Experience (Moved above Education) -->
-                <div id="prev-section-experience" class="report-section mb-4">
-                    <h2 class="section-title"><i class="fa-solid fa-briefcase"></i> EXPERIENCE</h2>
-                    <table class="creative-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 30%">COMPANY</th>
-                                <th style="width: 30%">POSITION</th>
-                                <th style="width: 25%">DURATION</th>
-                                <th style="width: 15%" class="text-center">TOTAL YRS</th>
-                            </tr>
-                        </thead>
-                        <tbody id="prev-experience-body"></tbody>
-                    </table>
-                </div>
-
-                <!-- Section: Education (Moved below Education) -->
-                <div id="prev-section-education" class="report-section mb-4">
-                    <h2 class="section-title"><i class="fa-solid fa-graduation-cap"></i> EDUCATION</h2>
-                    <table class="creative-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 40%">CERTIFICATE</th>
-                                <th style="width: 45%">INSTITUTION</th>
-                                <th style="width: 15%" class="text-center">YEAR</th>
-                            </tr>
-                        </thead>
-                        <tbody id="prev-education-body"></tbody>
-                    </table>
-                </div>
-
-                <!-- Section: Languages (Inline with Checklists if space allows, but strict rows requested) -->
-                <div id="prev-section-languages" class="report-section mb-4">
-                     <h2 class="section-title"><i class="fa-solid fa-language"></i> LANGUAGES</h2>
-                     <table class="creative-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 40%">LANGUAGE</th>
-                                <th style="width: 20%" class="text-center">SPEAK</th>
-                                <th style="width: 20%" class="text-center">READ</th>
-                                <th style="width: 20%" class="text-center">WRITE</th>
-                            </tr>
-                        </thead>
-                        <tbody id="prev-language-body"></tbody>
-                    </table>
                 </div>
 
                 <!-- Footer Grid: Checklists -->
@@ -853,6 +741,7 @@
 
         // GLOBAL: Store selected files for OCR
         let filesToProcess = [];
+        let currentSearchType = 'ref'; // 'ref', 'name', 'passport'
 
         document.addEventListener('DOMContentLoaded', () => {
             renderCheckboxes('attachments-list', attachments, 'att');
@@ -868,16 +757,239 @@
             // Format Current Date
             const today = new Date();
             const formattedToday = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
-            document.getElementById('print-date').innerText = formattedToday;
+            
+            const printDateEl = document.getElementById('print-date');
+            if (printDateEl) {
+                printDateEl.innerText = formattedToday;
+            }
 
              // Load last RefID from local storage or use default
             const lastRefId = localStorage.getItem('lastRefId');
             if (lastRefId) {
-                document.getElementById('input-ref-id').value = generateNextRefId(lastRefId);
+                const inputRefId = document.getElementById('input-ref-id');
+                if(inputRefId) inputRefId.value = generateNextRefId(lastRefId);
             }
             
             updatePreview();
         });
+
+        // --- UNIFIED OVERLAY SYSTEM ---
+        function toggleOverlay(type, title, desc, autoClose = false) {
+            const overlay = document.getElementById('status-overlay');
+            const card = overlay.querySelector('div');
+            const iconContainer = document.getElementById('status-icon-container');
+            const icon = document.getElementById('status-icon');
+            const titleEl = document.getElementById('status-title');
+            const descEl = document.getElementById('status-desc');
+            const progressBar = document.getElementById('status-progress-bar');
+            
+            // Reset styles
+            iconContainer.className = "w-20 h-20 rounded-full flex items-center justify-center mb-2 transition-colors duration-300";
+            icon.className = "fa-solid text-4xl";
+            progressBar.classList.add('hidden');
+            
+            // Configure based on type
+            if (type === 'loading') {
+                iconContainer.classList.add('bg-blue-100', 'animate-pulse-ring');
+                icon.classList.add('fa-magnifying-glass', 'text-blue-600', 'animate-bounce'); // Search Icon
+                progressBar.classList.remove('hidden');
+            } else if (type === 'success') {
+                iconContainer.classList.add('bg-green-100');
+                icon.classList.add('fa-check', 'text-green-600');
+            } else if (type === 'error') {
+                iconContainer.classList.add('bg-red-100');
+                icon.classList.add('fa-xmark', 'text-red-600');
+            }
+
+            titleEl.innerText = title;
+            descEl.innerHTML = desc;
+
+            // Show
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                card.classList.remove('scale-90');
+                card.classList.add('scale-100');
+            }, 10);
+
+            // Auto Close logic
+            if (autoClose) {
+                setTimeout(() => {
+                    overlay.classList.add('opacity-0');
+                    card.classList.remove('scale-100');
+                    card.classList.add('scale-90');
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                    }, 300);
+                }, 2000); // 2 seconds delay
+            }
+        }
+
+        function closeOverlay() {
+            const overlay = document.getElementById('status-overlay');
+            const card = overlay.querySelector('div');
+            overlay.classList.add('opacity-0');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-90');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 300);
+        }
+
+        // --- Search Modal Logic ---
+        function openSearchModal() {
+            document.getElementById('search-modal').classList.remove('hidden');
+            // Reset modal state
+            setSearchType('ref');
+            document.getElementById('adv-search-input').value = '';
+            document.getElementById('results-list').innerHTML = '';
+            document.getElementById('results-list').classList.add('hidden');
+            document.getElementById('search-placeholder').classList.remove('hidden');
+            document.getElementById('adv-search-input').focus();
+        }
+
+        function closeSearchModal() {
+            document.getElementById('search-modal').classList.add('hidden');
+        }
+
+        function setSearchType(type) {
+            currentSearchType = type;
+            const input = document.getElementById('adv-search-input');
+            const btnRef = document.getElementById('tab-ref');
+            const btnName = document.getElementById('tab-name');
+            const btnPassport = document.getElementById('tab-passport');
+
+            // Reset styles
+            [btnRef, btnName, btnPassport].forEach(btn => {
+                btn.className = "flex-1 text-xs font-bold py-1.5 rounded-md text-gray-500 hover:bg-gray-200 transition-all";
+            });
+
+            // Set active style
+            if(type === 'ref') {
+                btnRef.className = "flex-1 text-xs font-bold py-1.5 rounded-md bg-white shadow text-blue-700 transition-all";
+                input.placeholder = "Enter Reference ID (e.g., BC00001)";
+            } else if(type === 'name') {
+                btnName.className = "flex-1 text-xs font-bold py-1.5 rounded-md bg-white shadow text-blue-700 transition-all";
+                input.placeholder = "Enter Full Name (e.g., John Doe)";
+            } else {
+                btnPassport.className = "flex-1 text-xs font-bold py-1.5 rounded-md bg-white shadow text-blue-700 transition-all";
+                input.placeholder = "Enter Passport Number";
+            }
+            input.focus();
+        }
+
+        async function performAdvancedSearch() {
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("YOUR_")) {
+                alert("Please configure the GOOGLE_SCRIPT_URL in the code first.");
+                return;
+            }
+
+            const inputVal = document.getElementById('adv-search-input').value.trim();
+            if (!inputVal) return;
+
+            const btn = document.getElementById('adv-search-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Finding...`;
+            btn.disabled = true;
+
+            const resultsList = document.getElementById('results-list');
+            const placeholder = document.getElementById('search-placeholder');
+            
+            try {
+                // Determine parameter based on type (simulating generic query if backend requires specific)
+                // Assuming script accepts ?refId, ?name, ?passport OR generic ?q
+                // NOTE: Standard practice for these scripts is often just fetching all if no ID is specific, or we construct the query.
+                // Since we can't change the script, we'll try to use the RefId param if searching by ref, otherwise, 
+                // we might need to rely on the script being smart or fetch data differently.
+                // For this implementation, we'll assume the script is robust enough or we fetch all.
+                // Let's try passing the specific field name.
+                
+                let queryParam = "";
+                if(currentSearchType === 'ref') queryParam = `refId=${encodeURIComponent(inputVal)}`;
+                else if(currentSearchType === 'name') queryParam = `name=${encodeURIComponent(inputVal)}`;
+                else queryParam = `passport=${encodeURIComponent(inputVal)}`;
+
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?${queryParam}`);
+                const result = await response.json();
+
+                resultsList.innerHTML = '';
+                
+                let matches = [];
+                // Handle different response structures
+                if (result.status === 'success' && result.data) {
+                    if(Array.isArray(result.data)) {
+                        matches = result.data;
+                    } else {
+                        matches = [result.data]; // Single object to array
+                    }
+                } else if (Array.isArray(result)) {
+                    // Sometimes scripts return just the array
+                    matches = result;
+                }
+
+                if (matches.length > 0) {
+                    placeholder.classList.add('hidden');
+                    resultsList.classList.remove('hidden');
+
+                    matches.forEach((candidate, index) => {
+                        const card = document.createElement('div');
+                        card.className = "search-result-card bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex justify-between items-center hover:shadow-md transition-all";
+                        card.style.animationDelay = `${index * 0.1}s`; // Stagger animation
+
+                        card.innerHTML = `
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
+                                    ${(candidate.firstName || '?').charAt(0)}
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-800">${candidate.firstName} ${candidate.surname || ''}</h4>
+                                    <p class="text-xs text-gray-500">ID: ${candidate.refId || 'N/A'} <span class="mx-1">•</span> ${candidate.passportNo || 'No Passport'}</p>
+                                </div>
+                            </div>
+                            <button class="select-btn px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded hover:bg-blue-600 transition" onclick='selectCandidate(${JSON.stringify(candidate).replace(/'/g, "&#39;")})'>
+                                Select
+                            </button>
+                        `;
+                        resultsList.appendChild(card);
+                    });
+                } else {
+                    // Show "Not Found" state inside the modal list
+                    resultsList.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                    resultsList.innerHTML = `
+                        <div class="text-center py-8 text-gray-400">
+                            <i class="fa-regular fa-face-frown-open text-3xl mb-2"></i>
+                            <p class="text-sm">No matches found for "${inputVal}"</p>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.error(error);
+                resultsList.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                resultsList.innerHTML = `
+                    <div class="text-center py-8 text-red-400">
+                        <i class="fa-solid fa-triangle-exclamation text-3xl mb-2"></i>
+                        <p class="text-sm">Connection Error</p>
+                    </div>
+                `;
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function selectCandidate(data) {
+            closeSearchModal();
+            toggleOverlay('loading', 'Loading Profile...', 'Populating form data...');
+            
+            // Simulate brief delay for smooth transition
+            setTimeout(() => {
+                applyDataToForm(data); // Using existing fill logic
+                toggleOverlay('success', 'Profile Loaded', `Data for <b>${data.firstName}</b> has been populated.`, true);
+            }, 600);
+        }
 
         // --- File Modal Logic ---
         function openFileModal() {
@@ -907,6 +1019,8 @@
 
         function renderFileList() {
             const container = document.getElementById('selected-files-container');
+            if (!container) return; // Safety check
+
             const noFilesMsg = document.getElementById('no-files-msg');
             const countLabel = document.getElementById('file-count-label');
             const startBtn = document.getElementById('start-ocr-btn');
@@ -914,15 +1028,15 @@
             container.innerHTML = '';
             
             if (filesToProcess.length === 0) {
-                noFilesMsg.classList.remove('hidden');
-                startBtn.disabled = true;
-                countLabel.innerText = "0 Files Selected";
+                if(noFilesMsg) noFilesMsg.classList.remove('hidden');
+                if(startBtn) startBtn.disabled = true;
+                if(countLabel) countLabel.innerText = "0 Files Selected";
                 return;
             }
 
-            noFilesMsg.classList.add('hidden');
-            startBtn.disabled = false;
-            countLabel.innerText = `${filesToProcess.length} Files Selected`;
+            if(noFilesMsg) noFilesMsg.classList.add('hidden');
+            if(startBtn) startBtn.disabled = false;
+            if(countLabel) countLabel.innerText = `${filesToProcess.length} Files Selected`;
 
             filesToProcess.forEach((file, index) => {
                 const item = document.createElement('div');
@@ -951,24 +1065,6 @@
             });
         }
 
-        // --- Search Modal Logic ---
-        function openSearchModal() {
-            document.getElementById('search-modal').classList.remove('hidden');
-            document.getElementById('modal-ref-id').focus();
-        }
-
-        function closeSearchModal() {
-            document.getElementById('search-modal').classList.add('hidden');
-        }
-
-        function executeSearch() {
-            const refId = document.getElementById('modal-ref-id').value;
-            if (refId) {
-                closeSearchModal();
-                searchFromGoogleSheet(refId);
-            }
-        }
-
         // --- Print Function ---
         function printReport() {
             window.print();
@@ -979,6 +1075,18 @@
         function toggleTemplatePanel() {
             const panel = document.getElementById('template-panel');
             panel.classList.toggle('hidden');
+        }
+
+        // Add missing function to handle visibility toggles
+        function toggleSection(sectionName, checkbox) {
+            const previewSection = document.getElementById(`prev-section-${sectionName}`);
+            if (previewSection) {
+                if (checkbox.checked) {
+                    previewSection.classList.remove('hidden');
+                } else {
+                    previewSection.classList.add('hidden');
+                }
+            }
         }
 
         // AUTO INCREMENT HELPER
@@ -1213,34 +1321,11 @@
                 if (!attachResponse.ok) throw new Error("Failed to upload PDF attachment.");
 
                 // --- SUCCESS ANIMATION FOR CLICKUP ---
-                document.getElementById('success-title').innerText = "Export Complete!";
-                document.getElementById('success-desc').innerHTML = `Candidate <span class="font-bold text-gray-800">${refId}</span> has been successfully ${isUpdate ? 'updated' : 'created'} in ClickUp.`;
-
-                const overlay = document.getElementById('success-overlay');
-                const overlayCard = overlay.querySelector('div');
-                
-                overlay.classList.remove('hidden');
-                
-                setTimeout(() => {
-                    overlay.classList.remove('opacity-0');
-                    overlayCard.classList.remove('scale-90');
-                    overlayCard.classList.add('scale-100');
-                }, 10);
-
-                setTimeout(() => {
-                    overlay.classList.add('opacity-0');
-                    overlayCard.classList.remove('scale-100');
-                    overlayCard.classList.add('scale-90');
-                    setTimeout(() => { overlay.classList.add('hidden'); }, 300);
-                }, 3000);
+                toggleOverlay('success', 'Export Complete!', `Candidate <span class="font-bold text-gray-800">${refId}</span> has been successfully ${isUpdate ? 'updated' : 'created'} in ClickUp.`, true);
 
             } catch (error) {
                 console.error(error);
-                if (error.isTrusted) {
-                    alert("Network Error or CORS Blocked.\n\nBrowser blocked connection to ClickUp. Use a CORS extension or run on a server.");
-                } else {
-                    alert("Export Failed: " + error.message);
-                }
+                toggleOverlay('error', 'Export Failed', error.message || "Network Error or ClickUp Blocked", true);
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
@@ -1249,6 +1334,12 @@
 
         function renderCheckboxes(containerId, list, prefix) {
             const container = document.getElementById(containerId);
+            // Safety Check: Avoid crash if container is missing
+            if (!container) {
+                console.warn(`Container with ID '${containerId}' not found.`);
+                return; 
+            }
+
             list.forEach((item, index) => {
                 const id = `${prefix}-${index}`;
                 const div = document.createElement('div');
@@ -1380,6 +1471,10 @@
         function updateTable(inputId, previewId, renderFn) {
             const container = document.getElementById(inputId);
             const tbody = document.getElementById(previewId);
+            
+            // Safety check to prevent errors if elements are missing
+            if (!container || !tbody) return;
+
             tbody.innerHTML = '';
             Array.from(container.children).forEach(row => {
                 const inputs = row.querySelectorAll('input');
@@ -1398,10 +1493,15 @@
 
         function updateCheckboxList(list, prefix, targetId) {
             const target = document.getElementById(targetId);
+            // Safety Check
+            if (!target) {
+                return;
+            }
+            
             target.innerHTML = '';
             list.forEach((item, index) => {
                 const cb = document.getElementById(`input-${prefix}-${index}`);
-                if(cb.checked) {
+                if(cb && cb.checked) {
                     const li = document.createElement('li');
                     li.className = "checklist-item";
                     li.innerHTML = `<span class="check-box-icon checked"><i class="fa-solid fa-check text-[7px]"></i></span> ${item}`;
@@ -1810,41 +1910,14 @@
                 });
 
                 // --- SHOW SUCCESS OVERLAY ---
-                // Set the specific text for Sheet Save
-                document.getElementById('success-title').innerText = "Data Saved!";
-                document.getElementById('success-desc').innerHTML = `Candidate <span id="success-ref-id" class="font-bold text-gray-800">${formData.refId}</span> has been successfully recorded in the database.`;
-                
-                const overlay = document.getElementById('success-overlay');
-                const overlayCard = overlay.querySelector('div');
-                
-                // Show overlay
-                overlay.classList.remove('hidden');
-                
-                // Trigger reflow to ensure transition happens
-                setTimeout(() => {
-                    overlay.classList.remove('opacity-0');
-                    overlayCard.classList.remove('scale-90');
-                    overlayCard.classList.add('scale-100');
-                }, 10);
-
-                // Auto hide after 2.5 seconds
-                setTimeout(() => {
-                    overlay.classList.add('opacity-0');
-                    overlayCard.classList.remove('scale-100');
-                    overlayCard.classList.add('scale-90');
-                    
-                    setTimeout(() => {
-                        overlay.classList.add('hidden');
-                    }, 300); // Wait for fade out transition
-                }, 2500);
-
+                toggleOverlay('success', 'Data Saved!', `Candidate <span id="success-ref-id" class="font-bold text-gray-800">${formData.refId}</span> has been successfully recorded in the database.`, true);
                 
                 // Save current ID to local storage as last used
                 localStorage.setItem('lastRefId', formData.refId);
 
             } catch (error) {
                 console.error(error);
-                alert("Error saving to sheet: " + error.message);
+                toggleOverlay('error', 'Error Saving', error.message, true);
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
@@ -1857,22 +1930,35 @@
                 return;
             }
 
-            const refId = searchRefId || document.getElementById('modal-ref-id').value;
+            const refId = (searchRefId || document.getElementById('modal-ref-id').value).trim();
             if (!refId) return;
 
             const btn = document.getElementById('modal-search-btn') || document.querySelector('button[onclick="openSearchModal()"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Finding...`;
-            btn.disabled = true;
+            const originalText = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Finding...`;
+                btn.disabled = true;
+            }
+
+            // 1. Show Searching Animation
+            toggleOverlay('loading', 'Searching Database...', `Looking for record: <span class="font-bold text-blue-600">${refId}</span>`);
 
             try {
                 // Fetch GET request
                 const response = await fetch(`${GOOGLE_SCRIPT_URL}?refId=${encodeURIComponent(refId)}`);
                 const result = await response.json();
 
-                if (result.status === 'success') {
+                // Flexible success check
+                if (result.status === 'success' || (result.data && result.data.refId)) {
+                    
+                    // 2. Show Success Animation
+                    toggleOverlay('success', 'Candidate Found!', `Successfully retrieved data for <span class="font-bold text-gray-800">${refId}</span>`);
+                    
+                    // Delay population slightly to let user see "Found" message
+                    await new Promise(r => setTimeout(r, 800));
+                    
                     // Populate form
-                    const data = result.data;
+                    const data = result.data || result; // Handle both wrapper styles
                     document.getElementById('input-ref-id').value = data.refId || "";
                     document.getElementById('input-fname').value = data.firstName || "";
                     document.getElementById('input-sname').value = data.surname || "";
@@ -1902,20 +1988,20 @@
 
                     if(data.education) {
                         try {
-                            const edu = JSON.parse(data.education);
-                            edu.forEach(item => addEducationRow(item));
+                            const edu = typeof data.education === 'string' ? JSON.parse(data.education) : data.education;
+                            if(Array.isArray(edu)) edu.forEach(item => addEducationRow(item));
                         } catch(e) {}
                     }
                     if(data.experience) {
                         try {
-                            const exp = JSON.parse(data.experience);
-                            exp.forEach(item => addExperienceRow(item));
+                            const exp = typeof data.experience === 'string' ? JSON.parse(data.experience) : data.experience;
+                            if(Array.isArray(exp)) exp.forEach(item => addExperienceRow(item));
                         } catch(e) {}
                     }
                     if(data.languages) {
                         try {
-                            const lang = JSON.parse(data.languages);
-                            lang.forEach(item => addLanguageRow(item));
+                            const lang = typeof data.languages === 'string' ? JSON.parse(data.languages) : data.languages;
+                            if(Array.isArray(lang)) lang.forEach(item => addLanguageRow(item));
                         } catch(e) {}
                     }
 
@@ -1926,18 +2012,23 @@
 
                     calculateAge();
                     updatePreview();
-                    alert("Data loaded successfully!");
+                    
+                    // Close overlay after delay
+                    setTimeout(closeOverlay, 500);
+
                 } else {
-                    // Specific message when not found
-                    alert("Candidate not found.");
+                    // 3. Show Not Found Animation
+                    toggleOverlay('error', 'Not Found', `No candidate record found with ID: <span class="font-bold text-gray-800">${refId}</span>`, true);
                 }
 
             } catch (error) {
                 console.error(error);
-                alert("Search failed: " + error.message);
+                toggleOverlay('error', 'Search Error', error.message || "Failed to connect to database.", true);
             } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+                if(btn) {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
             }
         }
     </script>
