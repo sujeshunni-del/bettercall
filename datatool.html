@@ -1368,8 +1368,14 @@
 
         // --- HELPER FUNCTIONS ---
 
+        // NEW: Safer way to get values that prevents "Cannot read properties of null" errors
+        function getValueSafe(id) {
+            const el = document.getElementById(id);
+            return el ? el.value : "";
+        }
+
         function getValUpper(id) {
-            const val = document.getElementById(id).value;
+            const val = getValueSafe(id);
             return val ? val.toUpperCase() : "";
         }
 
@@ -2178,10 +2184,12 @@
         }
 
         async function exportToClickUp() {
-            const btn = document.querySelector('button[onclick="exportToClickUp()"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Checking...`;
-            btn.disabled = true;
+            const btn = document.getElementById('btn-clickup'); // Use ID selector for safety
+            const originalText = btn ? btn.innerHTML : "ClickUp";
+            if(btn) {
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Checking...`;
+                btn.disabled = true;
+            }
 
             try {
                 const taskName = getValUpper('input-fname');
@@ -2190,11 +2198,12 @@
                 if(!taskName || !refId) throw new Error("First Name and Reference ID are required.");
 
                 const getDateTs = (id) => {
-                    const val = document.getElementById(id).value;
+                    const val = getValueSafe(id);
                     return val ? new Date(val).getTime() : null;
                 };
 
-                btn.innerHTML = `<i class="fa-solid fa-sync fa-spin"></i> Mapping Fields...`;
+                if(btn) btn.innerHTML = `<i class="fa-solid fa-sync fa-spin"></i> Mapping Fields...`;
+                
                 const fieldsResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, {
                     method: 'GET',
                     headers: { 'Authorization': CLICKUP_API_KEY }
@@ -2214,10 +2223,10 @@
                     { id: "e79e1c4e-b123-4bd9-8051-34859ea4b87e", value: getValUpper('input-nationality') },
                     { id: "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5", value: getValUpper('input-residence') },
                     { id: "2e18821e-1c19-4de5-afb8-77ff11ee6327", value: getValUpper('input-email') },
-                    { id: "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c", value: parseInt(document.getElementById('input-age').value) || 0 },
-                    { id: "5693724c-ee50-469b-a4a9-3848fe6d3115", value: sanitizePhoneForClickUp(document.getElementById('input-mobile').value) },
-                    { id: "8efe7c3f-70cc-46d4-b6db-1324e5071b29", value: sanitizePhoneForClickUp(document.getElementById('input-alt').value) },
-                    { id: "87b4eee7-444f-4ec4-9882-441965757a68", value: sanitizePhoneForClickUp(document.getElementById('input-whatsapp').value) },
+                    { id: "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c", value: parseInt(getValueSafe('input-age')) || 0 },
+                    { id: "5693724c-ee50-469b-a4a9-3848fe6d3115", value: sanitizePhoneForClickUp(getValueSafe('input-mobile')) },
+                    { id: "8efe7c3f-70cc-46d4-b6db-1324e5071b29", value: sanitizePhoneForClickUp(getValueSafe('input-alt')) },
+                    { id: "87b4eee7-444f-4ec4-9882-441965757a68", value: sanitizePhoneForClickUp(getValueSafe('input-whatsapp')) },
                     { id: "03d06003-2084-4906-8514-31b2f862c83d", value: getValUpper('input-passport-no') },
                     { id: "b8798515-8962-40a7-a8cd-2685f9fd676c", value: getValUpper('input-sname') },
                     { id: "ae3be10a-cc2d-459e-a80a-1727115b2f0c", value: getValUpper('input-address') },
@@ -2256,7 +2265,7 @@
                 }
 
                 if (isUpdate) {
-                    btn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Updating Task...`;
+                    if(btn) btn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Updating Task...`;
                     await fetch(`https://api.clickup.com/api/v2/task/${taskId}`, {
                         method: 'PUT',
                         headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
@@ -2272,7 +2281,7 @@
                     await Promise.all(fieldUpdates);
 
                 } else {
-                    btn.innerHTML = `<i class="fa-solid fa-plus"></i> Creating Task...`;
+                    if(btn) btn.innerHTML = `<i class="fa-solid fa-plus"></i> Creating Task...`;
                     const taskPayload = {
                         name: taskName,
                         description: "Imported via Resume Extractor Tool",
@@ -2295,7 +2304,7 @@
                     taskId = taskData.id;
                 }
 
-                btn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Uploading PDF...`;
+                if(btn) btn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Uploading PDF...`;
                 const element = document.getElementById('print-area');
                 let pdfBlob;
                 try {
@@ -2347,8 +2356,10 @@
                     alert("Export Failed: " + error.message);
                 }
             } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+                if(btn) {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
             }
         }
     </script>
