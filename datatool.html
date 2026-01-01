@@ -644,6 +644,7 @@
                     <div class="grid grid-cols-1 gap-3">
                         <div class="flex gap-2">
                             <input type="text" id="input-client" class="w-1/2 border rounded px-2 py-1.5 text-sm" placeholder="Client Name">
+                            <input type="text" id="input-country" class="w-1/2 border rounded px-2 py-1.5 text-sm" placeholder="Country">
                         </div>
                         <div class="flex gap-2">
                             <select id="input-skill-type" class="border rounded px-2 py-1.5 text-sm w-1/3 bg-white">
@@ -2039,27 +2040,30 @@
                 });
 
                 const formData = {
-                    refId: document.getElementById('input-ref-id').value,
-                    firstName: document.getElementById('input-fname').value,
-                    surname: document.getElementById('input-sname').value,
-                    position: document.getElementById('input-position').value,
-                    country: document.getElementById('input-country').value,
-                    passportNo: document.getElementById('input-passport-no').value,
-                    mobile: document.getElementById('input-mobile').value,
-                    email: document.getElementById('input-email').value,
-                    gender: document.getElementById('input-gender').value,
-                    maritalStatus: document.getElementById('input-marital').value,
-                    dob: document.getElementById('input-dob').value,
-                    age: document.getElementById('input-age').value,
-                    passportExp: document.getElementById('input-passport-exp').value,
-                    pob: document.getElementById('input-pob').value,
-                    placeIssue: document.getElementById('input-place-issue').value,
-                    nationality: document.getElementById('input-nationality').value,
-                    residence: document.getElementById('input-residence').value,
-                    address: document.getElementById('input-address').value,
-                    altPhone: document.getElementById('input-alt').value,
-                    whatsapp: document.getElementById('input-whatsapp').value,
-                    linkedin: document.getElementById('input-linkedin').value,
+                    refId: getValueSafe('input-ref-id'),
+                    firstName: getValueSafe('input-fname'),
+                    surname: getValueSafe('input-sname'),
+                    position: getValueSafe('input-position'),
+                    country: getValueSafe('input-country'),
+                    passportNo: getValueSafe('input-passport-no'),
+                    mobile: getValueSafe('input-mobile'),
+                    email: getValueSafe('input-email'),
+                    gender: getValueSafe('input-gender'),
+                    maritalStatus: getValueSafe('input-marital'),
+                    dob: getValueSafe('input-dob'),
+                    age: getValueSafe('input-age'),
+                    passportExp: getValueSafe('input-passport-exp'),
+                    pob: getValueSafe('input-pob'),
+                    placeIssue: getValueSafe('input-place-issue'),
+                    nationality: getValueSafe('input-nationality'),
+                    residence: getValueSafe('input-residence'),
+                    address: getValueSafe('input-address'),
+                    altPhone: getValueSafe('input-alt'),
+                    whatsapp: getValueSafe('input-whatsapp'),
+                    linkedin: getValueSafe('input-linkedin'),
+                    location: getValueSafe('input-location'),
+                    zip: getValueSafe('input-zip'),
+                    stateBirth: getValueSafe('input-state-birth'),
                     education: JSON.stringify(education),
                     experience: JSON.stringify(experience),
                     languages: JSON.stringify(languages)
@@ -2246,8 +2250,16 @@
                     { id: "ae3be10a-cc2d-459e-a80a-1727115b2f0c", value: getValUpper('input-address') },
                     // GENDER
                     { id: "fda5d956-0642-44f3-bbe7-c6c06b27fb2e", value: getValUpper('input-gender') },
-                    // JOB TITILE
-                    { id: "410dd336-f23f-4893-859f-d04e420f6431", value: getValUpper('input-position') }
+                    // JOB TITLE
+                    { id: "410dd336-f23f-4893-859f-d04e420f6431", value: getValUpper('input-position') },
+                    // STATE (City/Location)
+                    { id: "41c89ec2-4e22-4e85-ae57-de0e614bea88", value: getValUpper('input-location') },
+                    // APPLY COUNTRY
+                    { id: "dab9b7e7-5f2b-4958-aac8-de76f24e213b", value: getValUpper('input-country') },
+                    // NATIONALITY
+                    { id: "4402d5e4-93b4-447e-8647-3417abf1a6e2", value: getValUpper('input-nationality') },
+                    // PRESENT RESIDENCE
+                    { id: "20cb0f76-df42-4761-96e5-a268855f0eb9", value: getValUpper('input-residence') }
                 ];
 
                 const cleanCustomFields = potentialFields.filter(f => 
@@ -2284,15 +2296,18 @@
                         headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
                         body: JSON.stringify({ name: taskName, description: "Updated via Resume Extractor" })
                     });
-                    const fieldUpdates = cleanCustomFields.map(field => {
-                        return fetch(`https://api.clickup.com/api/v2/task/${taskId}/field/${field.id}`, {
-                            method: 'POST',
-                            headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ value: field.value })
-                        });
-                    });
-                    await Promise.all(fieldUpdates);
-
+                    // Execute updates sequentially and catch individual errors (e.g., bad phone format)
+                    for (const field of cleanCustomFields) {
+                        try {
+                            await fetch(`https://api.clickup.com/api/v2/task/${taskId}/field/${field.id}`, {
+                                method: 'POST',
+                                headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ value: field.value })
+                            });
+                        } catch(e) {
+                            console.warn(`Failed to update field ${field.id}:`, e);
+                        }
+                    }
                 } else {
                     if(btn) btn.innerHTML = `<i class="fa-solid fa-plus"></i> Creating Task...`;
                     const taskPayload = {
@@ -2311,10 +2326,32 @@
                         if (errText.includes("FIELD_011") || errText.includes("option index")) {
                             throw new Error("ClickUp Type Mismatch: A 'Dropdown' field is receiving text. Change the ClickUp field to 'Text' type.");
                         }
-                        throw new Error(`ClickUp API Error (Task): ${createTaskResponse.status} - ${errText}`);
+                        // If it fails on creation, it might be due to a specific required field being bad. 
+                        // Try creation with minimal info, then update fields one by one.
+                        console.warn("Direct creation failed, attempting fallback creation + update...", errText);
+                         const fallbackResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+                            method: 'POST',
+                            headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ name: taskName, description: "Fallback Creation" })
+                        });
+                        if(!fallbackResponse.ok) throw new Error(`ClickUp API Error (Task): ${createTaskResponse.status} - ${errText}`);
+                        
+                        const taskData = await fallbackResponse.json();
+                        taskId = taskData.id;
+                        isUpdate = true; // Proceed to update fields individually
+                         for (const field of cleanCustomFields) {
+                            try {
+                                await fetch(`https://api.clickup.com/api/v2/task/${taskId}/field/${field.id}`, {
+                                    method: 'POST',
+                                    headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ value: field.value })
+                                });
+                            } catch(e) { console.warn(`Failed to update field ${field.id}:`, e); }
+                        }
+                    } else {
+                        const taskData = await createTaskResponse.json();
+                        taskId = taskData.id;
                     }
-                    const taskData = await createTaskResponse.json();
-                    taskId = taskData.id;
                 }
 
                 if(btn) btn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Uploading PDF...`;
