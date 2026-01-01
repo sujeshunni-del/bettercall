@@ -1110,19 +1110,27 @@
             const input = document.getElementById('input-ref-id');
             const originalValue = input.value;
             // Show temporary loading state
-            input.value = "SYNCING...";
+            input.value = "SCANNING...";
             
             try {
                 // Fetch all data to find the max ID
-                // Added 'no-cache' to headers to prevent stale data
+                // REMOVED custom headers to prevent CORS preflight errors
                 const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=readAll&t=${new Date().getTime()}`, {
                     method: "GET",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" }
+                    redirect: "follow"
                 });
                 
                 if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
 
-                const result = await response.json();
+                const text = await response.text();
+                // Parse safely
+                let result;
+                try {
+                    result = JSON.parse(text);
+                } catch(e) {
+                    console.warn("RefID Fetch: JSON Parse failed. Response might be HTML.", text.substring(0, 150));
+                    throw new Error("Invalid Server Response");
+                }
                 
                 let maxId = 0;
                 let data = [];
@@ -1137,12 +1145,22 @@
                 if (data.length > 0) {
                     data.forEach(row => {
                         // Normalize key access (handle RefId, refId, Reference ID, etc.)
-                        const ref = row.refId || row.RefId || row.ref_id || row.ReferenceID || row['Reference ID'] || "";
+                        let ref = row.refId || row.RefId || row.ref_id || row.ReferenceID || row['Reference ID'] || "";
                         
-                        // Match format BC followed by digits
-                        if (ref && typeof ref === 'string' && ref.match(/^BC\d+$/)) {
-                            const num = parseInt(ref.replace('BC', ''), 10);
-                            if (!isNaN(num) && num > maxId) maxId = num;
+                        // Fallback: If key not found, search values for pattern in the whole row
+                        if (!ref && typeof row === 'object') {
+                            const vals = Object.values(row);
+                            const found = vals.find(v => typeof v === 'string' && v.trim().match(/^BC\d+$/i));
+                            if(found) ref = found;
+                        }
+
+                        // Match format BC followed by digits (Case insensitive)
+                        if (ref && typeof ref === 'string') {
+                            const match = ref.trim().match(/^BC(\d+)$/i);
+                            if (match) {
+                                const num = parseInt(match[1], 10);
+                                if (!isNaN(num) && num > maxId) maxId = num;
+                            }
                         }
                     });
                 }
@@ -1150,8 +1168,12 @@
                 // Fallback to local storage if sheet is empty but local has data
                 if (maxId === 0) {
                      const lastLocal = localStorage.getItem('lastRefId');
-                     if (lastLocal && lastLocal.match(/^BC\d+$/)) {
-                         maxId = parseInt(lastLocal.replace('BC', ''), 10);
+                     if (lastLocal) {
+                         const match = lastLocal.match(/^BC(\d+)$/i);
+                         if (match) {
+                             const localNum = parseInt(match[1], 10);
+                             if (localNum > maxId) maxId = localNum;
+                         }
                      }
                 }
 
@@ -1172,7 +1194,7 @@
                 if (lastLocal) {
                     input.value = generateNextRefId(lastLocal);
                 } else {
-                    input.value = originalValue !== "SYNCING..." ? originalValue : "BC00001";
+                    input.value = originalValue !== "SCANNING..." ? originalValue : "BC00001";
                 }
                 // Update preview for fallback
                 const output = document.getElementById('prev-ref-id');
@@ -1211,21 +1233,25 @@
             
             try {
                 // Fetch ALL data from Google Sheet
-                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=readAll&t=${new Date().getTime()}`);
+                // Explicitly allow redirects and NO custom headers for simple GET
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=readAll&t=${new Date().getTime()}`, {
+                    method: "GET",
+                    redirect: "follow"
+                });
                 
-                if (!response.ok) throw new Error("Network response was not ok");
+                if (!response.ok) throw new Error(`HTTP Status ${response.status}`);
                 
                 const text = await response.text();
                 let result;
                 try {
                     result = JSON.parse(text);
                 } catch (jsonErr) {
-                    console.warn("JSON Parse failed, response might be HTML error", text.substring(0, 100));
-                    throw new Error("Invalid Data Format");
+                    console.warn("Search Fetch: JSON Parse failed. Response might be HTML error page.", text.substring(0, 100));
+                    throw new Error("Invalid Data Format from Server");
                 }
                 
                 let rawData = [];
-                if (result.status === 'success' && Array.isArray(result.data)) {
+                if (result && result.status === 'success' && Array.isArray(result.data)) {
                     rawData = result.data;
                 } else if (Array.isArray(result)) {
                     rawData = result;
@@ -1254,7 +1280,7 @@
                     isDataLoaded = true;
                     console.log(`Loaded ${cachedCandidates.length} candidates for fuzzy search.`);
                     // If results container is showing error, clear it
-                    if(resultsContainer.innerText.includes("Could not load")) {
+                    if(resultsContainer.innerText.includes("Could not load") || resultsContainer.innerText.includes("Connection Failed")) {
                         resultsContainer.innerHTML = `<div class="text-center p-4 text-gray-400 text-xs">Database loaded. Ready to search.</div>`;
                     }
                 } else {
@@ -1663,7 +1689,6 @@
             templateCheckboxes.forEach(cb => {
                 cb.checked = true; // Check the box
                 // Parse the section name from the inline onchange handler to show the section
-                // format: toggleSection('header', this)
                 const onchangeAttr = cb.getAttribute('onchange');
                 if (onchangeAttr) {
                     const match = onchangeAttr.match(/'([^']+)'/);
@@ -1691,6 +1716,10 @@
 
             filesToProcess = [];
             renderFileList();
+            
+            // Invalidate Search Cache so next search is fresh
+            isDataLoaded = false;
+            cachedCandidates = [];
             
             // Get fresh ID from sheet for the new form
             fetchNextRefIdFromSheet();
@@ -1902,17 +1931,43 @@
             let hasValue = false;
 
             rows.forEach(row => {
-                const yrsInput = row.querySelectorAll('input')[3]; // The 4th input is 'Yrs'
+                const inputs = row.querySelectorAll('input');
+                const datesInput = inputs[2];
+                const yrsInput = inputs[3];
+                
+                let rowMonths = 0;
+                
+                // 1. Try to Parse Date Range (e.g., "2021-11-15 to Present")
+                if (datesInput && datesInput.value.trim()) {
+                    const parsed = parseExperienceMonths(datesInput.value);
+                    if (parsed !== null) {
+                        rowMonths = parsed;
+                        // Auto-fill Yrs field if empty
+                        if (!yrsInput.value.trim()) {
+                            const y = Math.floor(rowMonths / 12);
+                            const m = rowMonths % 12;
+                            let str = "";
+                            if (y > 0) str += `${y}y `;
+                            if (m > 0) str += `${m}m`;
+                            if (!str) str = "0m";
+                            yrsInput.value = str.trim();
+                        }
+                    }
+                }
+
+                // 2. Parse the Yrs Input (Manual or Auto-filled)
                 if (yrsInput && yrsInput.value.trim()) {
                     const val = yrsInput.value.trim().toLowerCase();
                     hasValue = true;
                     
-                    // Regex to parse "2y", "2.5", "2 years 4 months"
+                    // Regex to parse "2y 6m", "2.5", "2 years"
                     const yearMatch = val.match(/(\d+(?:\.\d+)?)\s*(y|yrs?|years?)/);
                     const monthMatch = val.match(/(\d+(?:\.\d+)?)\s*(m|mos?|months?)/);
                     
-                    let rowMonths = 0;
-                    
+                    // Reset rowMonths to ensure we don't double count if we just parsed it above 
+                    // (Actually we should trust the input value now as the source of truth for the Total)
+                    rowMonths = 0;
+
                     if (yearMatch) {
                         rowMonths += parseFloat(yearMatch[1]) * 12;
                     } 
@@ -1920,16 +1975,16 @@
                         rowMonths += parseFloat(monthMatch[1]);
                     }
                     
-                    // If no explicit labels found, assume pure number is Years (standard resume format)
+                    // If no explicit labels found, assume pure number is Years
                     if (!yearMatch && !monthMatch) {
                         const floatVal = parseFloat(val);
                         if (!isNaN(floatVal)) {
                             rowMonths += floatVal * 12;
                         }
                     }
-                    
-                    totalMonths += rowMonths;
                 }
+                
+                totalMonths += rowMonths;
             });
 
             const displayEl = document.getElementById('prev-exp-total');
@@ -1943,9 +1998,7 @@
                 if (years > 0) text += `${years} Yrs `;
                 if (months > 0) text += `${months} Mos`;
                 
-                // Edge case: exactly X years
                 if (years > 0 && months === 0) text = `${years} Years`;
-                // Edge case: only months
                 if (years === 0 && months > 0) text = `${months} Months`;
 
                 valueEl.innerText = text;
@@ -1953,6 +2006,47 @@
             } else {
                 displayEl.classList.add('hidden');
             }
+        }
+
+        // Helper to parse date ranges like "2021-11-15 to Present"
+        function parseExperienceMonths(dateStr) {
+            if (!dateStr) return null;
+            
+            // Separators: " to ", " - ", " – "
+            const parts = dateStr.split(/\s+(?:to|-|–)\s+/i);
+            
+            if (parts.length !== 2) return null; // Must be a range
+            
+            let startStr = parts[0].trim();
+            let endStr = parts[1].trim().toLowerCase();
+            
+            // Parse Start
+            // Handle "Nov 2021" by adding default day
+            if (startStr.match(/^[a-zA-Z]+\s+\d{4}$/)) startStr = "1 " + startStr;
+            const startDate = new Date(startStr);
+            if (isNaN(startDate.getTime())) return null;
+
+            // Parse End
+            let endDate = new Date();
+            if (['present', 'now', 'current', 'today', 'till date'].includes(endStr)) {
+                endDate = new Date(); // Now
+            } else {
+                if (endStr.match(/^[a-zA-Z]+\s+\d{4}$/)) endStr = "1 " + endStr;
+                endDate = new Date(endStr);
+            }
+            if (isNaN(endDate.getTime())) return null;
+
+            // Calculate Difference
+            let months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
+            months -= startDate.getMonth();
+            months += endDate.getMonth();
+            
+            // Adjust for day of month (e.g. 15th to 14th shouldn't be full month)
+            if (endDate.getDate() < startDate.getDate()) {
+                months--;
+            }
+            
+            return months < 0 ? 0 : months;
         }
 
         function updateCheckboxList(list, prefix, targetId) {
