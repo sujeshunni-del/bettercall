@@ -1075,9 +1075,11 @@
                 // Find highest existing BC number
                 if (data.length > 0) {
                     data.forEach(row => {
-                        const ref = row.refId || "";
+                        // Normalize key access (handle RefId, refId, Reference ID, etc.)
+                        const ref = row.refId || row.RefId || row.ref_id || row.ReferenceID || row['Reference ID'] || "";
+                        
                         // Match format BC followed by digits
-                        if (ref && ref.match(/^BC\d+$/)) {
+                        if (ref && typeof ref === 'string' && ref.match(/^BC\d+$/)) {
                             const num = parseInt(ref.replace('BC', ''), 10);
                             if (!isNaN(num) && num > maxId) maxId = num;
                         }
@@ -1126,9 +1128,15 @@
         function openAdvancedSearch() {
             const modal = document.getElementById('advanced-search-modal');
             modal.classList.remove('hidden');
-            document.getElementById('adv-search-input').focus();
+            const input = document.getElementById('adv-search-input');
+            input.focus();
             
-            // Pre-load data for faster search
+            // Add Enter key listener
+            input.onkeydown = function(e) {
+                if(e.key === 'Enter') handleAdvSearch();
+            };
+            
+            // Pre-load data for faster search if not loaded
             if (!isDataLoaded) {
                 loadAllCandidates();
             }
@@ -1143,17 +1151,35 @@
                 const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=readAll&t=${new Date().getTime()}`);
                 const result = await response.json();
                 
+                let rawData = [];
                 if (result.status === 'success' && Array.isArray(result.data)) {
-                    cachedCandidates = result.data;
+                    rawData = result.data;
+                } else if (Array.isArray(result)) {
+                    rawData = result;
+                }
+
+                // Normalize Data Keys to ensure search works regardless of Sheet Headers
+                cachedCandidates = rawData.map(item => ({
+                    refId: item.refId || item.RefId || item['Reference ID'] || item.ref_id || "",
+                    firstName: item.firstName || item.FirstName || item['First Name'] || "",
+                    surname: item.surname || item.Surname || item['Surname'] || "",
+                    passportNo: item.passportNo || item.Passport || item['Passport No'] || "",
+                    mobile: item.mobile || item.Mobile || item['Mobile'] || "",
+                    email: item.email || item.Email || "",
+                    position: item.position || item.Position || "",
+                    country: item.country || item.Country || "",
+                    // Keep original object for other fields if needed, or map strictly
+                    ...item 
+                }));
+
+                if (cachedCandidates.length > 0) {
                     isDataLoaded = true;
                     console.log(`Loaded ${cachedCandidates.length} candidates for fuzzy search.`);
-                } else if (Array.isArray(result)) {
-                    // Handle case where script returns raw array
-                    cachedCandidates = result;
-                    isDataLoaded = true;
                 }
             } catch (e) {
                 console.error("Background data load failed:", e);
+                const container = document.getElementById('adv-search-results');
+                if(container) container.innerHTML = `<div class="text-center p-4 text-red-400 text-xs">Connection to database failed.</div>`;
             } finally {
                 loader.classList.add('hidden');
             }
@@ -1191,7 +1217,7 @@
             const countLabel = document.getElementById('result-count');
 
             if (!query) {
-                alert("Please enter a search term.");
+                // alert("Please enter a search term."); // Optional: Don't alert, just do nothing or show message
                 return;
             }
 
@@ -1379,24 +1405,23 @@
             document.getElementById('experience-inputs').innerHTML = '';
             document.getElementById('language-inputs').innerHTML = '';
 
-            if(data.education) {
-                try {
-                    const edu = (typeof data.education === 'string') ? JSON.parse(data.education) : data.education;
-                    if(Array.isArray(edu)) edu.forEach(item => addEducationRow(item));
-                } catch(e) { console.log("Edu parsing error", e); }
-            }
-            if(data.experience) {
-                try {
-                    const exp = (typeof data.experience === 'string') ? JSON.parse(data.experience) : data.experience;
-                    if(Array.isArray(exp)) exp.forEach(item => addExperienceRow(item));
-                } catch(e) { console.log("Exp parsing error", e); }
-            }
-            if(data.languages) {
-                try {
-                    const lang = (typeof data.languages === 'string') ? JSON.parse(data.languages) : data.languages;
-                    if(Array.isArray(lang)) lang.forEach(item => addLanguageRow(item));
-                } catch(e) { console.log("Lang parsing error", e); }
-            }
+            // Handle potential JSON strings or objects
+            const parseField = (field) => {
+                if (!field) return [];
+                if (typeof field === 'string') {
+                    try { return JSON.parse(field); } catch(e) { return []; }
+                }
+                return Array.isArray(field) ? field : [];
+            };
+
+            const edu = parseField(data.education);
+            edu.forEach(item => addEducationRow(item));
+
+            const exp = parseField(data.experience);
+            exp.forEach(item => addExperienceRow(item));
+
+            const lang = parseField(data.languages);
+            lang.forEach(item => addLanguageRow(item));
 
             // Ensure minimum rows
             if(document.getElementById('education-inputs').children.length === 0) addEducationRow();
@@ -1432,6 +1457,11 @@
         }
 
         // --- HELPER FUNCTIONS ---
+
+        // NEW: Fix for search modal not working - alias the function
+        function executeSearch() {
+            searchFromGoogleSheet();
+        }
 
         // NEW: Safer way to get values that prevents "Cannot read properties of null" errors
         function getValueSafe(id) {
