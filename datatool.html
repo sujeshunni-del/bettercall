@@ -637,16 +637,39 @@
                 <!-- Unique Reference ID Block (READ ONLY) -->
                 <div class="bg-blue-50 border border-blue-200 p-3 rounded-lg flex items-center justify-between">
                     <label class="text-xs font-bold text-blue-700 uppercase">Candidate Reference ID:</label>
-                    <input type="text" id="input-ref-id" value="BC00001" readonly class="border border-blue-300 rounded px-2 py-1 text-sm font-bold text-blue-800 w-32 text-center bg-gray-100 cursor-not-allowed outline-none uppercase">
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="input-ref-id" value="BC00001" readonly class="border border-blue-300 rounded px-2 py-1 text-sm font-bold text-blue-800 w-32 text-center bg-gray-100 cursor-not-allowed outline-none uppercase">
+                        <button type="button" onclick="fetchNextRefIdFromSheet()" class="text-blue-500 hover:text-blue-700 transition" title="Refresh ID from Database">
+                            <i class="fa-solid fa-sync"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Section: Job Apply Details -->
                 <div class="space-y-4">
-                    <h2 class="text-sm font-bold text-slate-700 border-b pb-1">JOB DETAILS</h2>
+                    <h2 class="text-sm font-bold text-slate-700 border-b pb-1">APPLICATION DETAILS</h2>
                     <div class="grid grid-cols-1 gap-3">
                         <div class="flex gap-2">
                             <input type="text" id="input-client" class="w-1/2 border rounded px-2 py-1.5 text-sm" placeholder="Client Name">
-                            <input type="text" id="input-country" class="w-1/2 border rounded px-2 py-1.5 text-sm" placeholder="Country">
+                            <select id="input-country" class="w-1/2 border rounded px-2 py-1.5 text-sm bg-white">
+                                <option value="" disabled selected>Select Country</option>
+                                <option value="GERMANY">GERMANY</option>
+                                <option value="SWEDEN">SWEDEN</option>
+                                <option value="FINLAND">FINLAND</option>
+                                <option value="SLOVAKIA">SLOVAKIA</option>
+                                <option value="ITALY">ITALY</option>
+                                <option value="NETHERLANDS">NETHERLANDS</option>
+                                <option value="FRANCE">FRANCE</option>
+                                <option value="POLAND">POLAND</option>
+                                <option value="CZECH REPUBLIC">CZECH REPUBLIC</option>
+                                <option value="LATVIA">LATVIA</option>
+                                <option value="CROATIA">CROATIA</option>
+                                <option value="MONTENEGRO">MONTENEGRO</option>
+                                <option value="SERBIA">SERBIA</option>
+                                <option value="MACEDONIA">MACEDONIA</option>
+                                <option value="ALBANIA">ALBANIA</option>
+                                <option value="BELARUS">BELARUS</option>
+                            </select>
                         </div>
                         <div class="flex gap-2">
                             <select id="input-skill-type" class="border rounded px-2 py-1.5 text-sm w-1/3 bg-white">
@@ -732,7 +755,23 @@
                                 <input type="date" id="input-dob" class="w-full border rounded px-2 py-1.5 text-sm" onchange="calculateAge()">
                             </div>
                             <input type="number" id="input-age" class="border rounded px-2 py-1.5 text-sm bg-gray-50" readonly placeholder="Age (Auto)">
-                            <input type="text" id="input-residence" class="col-span-2 border rounded px-2 py-1.5 text-sm" placeholder="Present Residence *">
+                            <select id="input-residence" class="col-span-2 border rounded px-2 py-1.5 text-sm bg-white">
+                                <option value="" disabled selected>Present Residence *</option>
+                                <option value="INDIA">INDIA</option>
+                                <option value="PAKISTAN">PAKISTAN</option>
+                                <option value="SRI LANKA">SRI LANKA</option>
+                                <option value="NEPAL">NEPAL</option>
+                                <option value="BANGLADESH">BANGLADESH</option>
+                                <option value="PHILIPPINES">PHILIPPINES</option>
+                                <option value="KENYA">KENYA</option>
+                                <option value="EGYPT">EGYPT</option>
+                                <option value="BAHRAIN">BAHRAIN</option>
+                                <option value="KUWAIT">KUWAIT</option>
+                                <option value="OMAN">OMAN</option>
+                                <option value="QATAR">QATAR</option>
+                                <option value="SAUDI ARABIA">SAUDI ARABIA</option>
+                                <option value="UAE">UAE</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -743,7 +782,17 @@
                     <div class="grid grid-cols-2 gap-2">
                          <div class="col-span-2">
                              <label class="text-[10px] text-gray-500 font-bold">NATIONALITY *</label>
-                             <input type="text" id="input-nationality" class="w-full border rounded px-2 py-1.5 text-sm uppercase" placeholder="Nationality">
+                             <select id="input-nationality" class="w-full border rounded px-2 py-1.5 text-sm uppercase bg-white">
+                                 <option value="" disabled selected>Select Nationality</option>
+                                 <option value="INDIA">INDIA</option>
+                                 <option value="PAKISTAN">PAKISTAN</option>
+                                 <option value="SRI LANKA">SRI LANKA</option>
+                                 <option value="NEPAL">NEPAL</option>
+                                 <option value="BANGLADESH">BANGLADESH</option>
+                                 <option value="PHILIPPINES">PHILIPPINES</option>
+                                 <option value="KENYA">KENYA</option>
+                                 <option value="EGYPT">EGYPT</option>
+                             </select>
                          </div>
                         <input type="text" id="input-passport-no" class="border rounded px-2 py-1.5 text-sm uppercase" placeholder="Passport No *">
                         <div class="flex flex-col relative">
@@ -942,9 +991,13 @@
                         </thead>
                         <tbody id="prev-experience-body"></tbody>
                     </table>
+                    <!-- NEW: Total Experience Display -->
+                    <div id="prev-exp-total" class="text-right text-[9pt] font-bold mt-1 pt-1 border-t-2 border-slate-100 hidden text-slate-700">
+                        TOTAL EXPERIENCE: <span id="exp-total-value" class="text-blue-800"></span>
+                    </div>
                 </div>
 
-                <!-- Section: Education (Moved below Education) -->
+                <!-- Section: Education (Moved below Experience) -->
                 <div id="prev-section-education" class="report-section mb-4">
                     <h2 class="section-title"><i class="fa-solid fa-graduation-cap"></i> EDUCATION</h2>
                     <table class="creative-table">
@@ -1055,18 +1108,26 @@
         // --- NEW: Fetch Next ID from Sheet ---
         async function fetchNextRefIdFromSheet() {
             const input = document.getElementById('input-ref-id');
+            const originalValue = input.value;
             // Show temporary loading state
             input.value = "SYNCING...";
             
             try {
                 // Fetch all data to find the max ID
-                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=readAll&t=${new Date().getTime()}`);
+                // Added 'no-cache' to headers to prevent stale data
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=readAll&t=${new Date().getTime()}`, {
+                    method: "GET",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" }
+                });
+                
+                if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+
                 const result = await response.json();
                 
                 let maxId = 0;
                 let data = [];
 
-                if (result.status === 'success' && Array.isArray(result.data)) {
+                if (result && result.status === 'success' && Array.isArray(result.data)) {
                     data = result.data;
                 } else if (Array.isArray(result)) {
                     data = result;
@@ -1106,12 +1167,12 @@
 
             } catch (e) {
                 console.error("Failed to fetch next ID from sheet", e);
-                // Fallback to basic logic if API fails
+                // Restore or fallback logic if API fails
                 const lastLocal = localStorage.getItem('lastRefId');
                 if (lastLocal) {
                     input.value = generateNextRefId(lastLocal);
                 } else {
-                    input.value = "BC00001";
+                    input.value = originalValue !== "SYNCING..." ? originalValue : "BC00001";
                 }
                 // Update preview for fallback
                 const output = document.getElementById('prev-ref-id');
@@ -1136,26 +1197,43 @@
                 if(e.key === 'Enter') handleAdvSearch();
             };
             
-            // Pre-load data for faster search if not loaded
-            if (!isDataLoaded) {
+            // Reload data every time modal opens to ensure freshness, 
+            // unless we just loaded it successfully.
+            if (!isDataLoaded || cachedCandidates.length === 0) {
                 loadAllCandidates();
             }
         }
 
         async function loadAllCandidates() {
             const loader = document.getElementById('adv-search-loader');
+            const resultsContainer = document.getElementById('adv-search-results');
             loader.classList.remove('hidden');
             
             try {
                 // Fetch ALL data from Google Sheet
                 const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=readAll&t=${new Date().getTime()}`);
-                const result = await response.json();
+                
+                if (!response.ok) throw new Error("Network response was not ok");
+                
+                const text = await response.text();
+                let result;
+                try {
+                    result = JSON.parse(text);
+                } catch (jsonErr) {
+                    console.warn("JSON Parse failed, response might be HTML error", text.substring(0, 100));
+                    throw new Error("Invalid Data Format");
+                }
                 
                 let rawData = [];
                 if (result.status === 'success' && Array.isArray(result.data)) {
                     rawData = result.data;
                 } else if (Array.isArray(result)) {
                     rawData = result;
+                } else if (result && typeof result === 'object') {
+                    // Try to find any array property in the object
+                    const values = Object.values(result);
+                    const foundArray = values.find(v => Array.isArray(v));
+                    if (foundArray) rawData = foundArray;
                 }
 
                 // Normalize Data Keys to ensure search works regardless of Sheet Headers
@@ -1168,18 +1246,24 @@
                     email: item.email || item.Email || "",
                     position: item.position || item.Position || "",
                     country: item.country || item.Country || "",
-                    // Keep original object for other fields if needed, or map strictly
+                    // Keep original object for other fields
                     ...item 
                 }));
 
                 if (cachedCandidates.length > 0) {
                     isDataLoaded = true;
                     console.log(`Loaded ${cachedCandidates.length} candidates for fuzzy search.`);
+                    // If results container is showing error, clear it
+                    if(resultsContainer.innerText.includes("Could not load")) {
+                        resultsContainer.innerHTML = `<div class="text-center p-4 text-gray-400 text-xs">Database loaded. Ready to search.</div>`;
+                    }
+                } else {
+                    console.warn("Data loaded but array is empty.");
                 }
             } catch (e) {
                 console.error("Background data load failed:", e);
-                const container = document.getElementById('adv-search-results');
-                if(container) container.innerHTML = `<div class="text-center p-4 text-red-400 text-xs">Connection to database failed.</div>`;
+                isDataLoaded = false;
+                // Don't show error immediately on load, only on search
             } finally {
                 loader.classList.add('hidden');
             }
@@ -1217,20 +1301,26 @@
             const countLabel = document.getElementById('result-count');
 
             if (!query) {
-                // alert("Please enter a search term."); // Optional: Don't alert, just do nothing or show message
                 return;
             }
 
-            // Ensure data is loaded
+            loader.classList.remove('hidden');
+
+            // If data isn't loaded, try one more time explicitly
             if (!isDataLoaded || cachedCandidates.length === 0) {
                 await loadAllCandidates();
                 if (cachedCandidates.length === 0) {
-                    resultsContainer.innerHTML = `<div class="text-center p-4 text-red-500">Could not load database. Check connection.</div>`;
+                    resultsContainer.innerHTML = `
+                        <div class="flex flex-col items-center justify-center p-6 text-center">
+                            <i class="fa-solid fa-triangle-exclamation text-3xl text-red-400 mb-2"></i>
+                            <p class="text-sm font-bold text-red-500">Connection Failed</p>
+                            <p class="text-xs text-gray-500 mt-1">Could not retrieve data from Google Sheet.</p>
+                            <button onclick="loadAllCandidates()" class="mt-3 px-3 py-1 bg-slate-200 hover:bg-slate-300 rounded text-xs">Retry Connection</button>
+                        </div>`;
+                    loader.classList.add('hidden');
                     return;
                 }
             }
-
-            loader.classList.remove('hidden');
 
             // --- CLIENT SIDE FUZZY SEARCH LOGIC ---
             // 50% Matching Logic (Levenshtein-like or Inclusion)
@@ -1564,8 +1654,26 @@
                 }
             });
 
+            // Clear form checkboxes (Checklists inside the form)
             const checkboxes = document.querySelectorAll('#app-form input[type="checkbox"]');
             checkboxes.forEach(cb => cb.checked = false);
+
+            // --- Reset Template Visibility Settings (Refresh Template) ---
+            const templateCheckboxes = document.querySelectorAll('#template-panel input[type="checkbox"]');
+            templateCheckboxes.forEach(cb => {
+                cb.checked = true; // Check the box
+                // Parse the section name from the inline onchange handler to show the section
+                // format: toggleSection('header', this)
+                const onchangeAttr = cb.getAttribute('onchange');
+                if (onchangeAttr) {
+                    const match = onchangeAttr.match(/'([^']+)'/);
+                    if (match && match[1]) {
+                        const section = match[1];
+                        const el = document.getElementById(`prev-section-${section}`);
+                        if (el) el.classList.remove('hidden');
+                    }
+                }
+            });
 
             document.getElementById('education-inputs').innerHTML = '';
             document.getElementById('experience-inputs').innerHTML = '';
@@ -1713,6 +1821,9 @@
                 <td class="text-center">${inputs[3].value}</td>
             `);
 
+            // --- NEW: Calculate Total Experience ---
+            calculateTotalExperience();
+
             updateTable('language-inputs', 'prev-language-body', (inputs, row) => {
                 const selects = row.querySelectorAll('select');
                 return `
@@ -1782,6 +1893,66 @@
                     tbody.appendChild(tr);
                 }
             });
+        }
+
+        // --- NEW FUNCTION: Calculate Grand Total Years & Months ---
+        function calculateTotalExperience() {
+            let totalMonths = 0;
+            const rows = document.querySelectorAll('#experience-inputs > div');
+            let hasValue = false;
+
+            rows.forEach(row => {
+                const yrsInput = row.querySelectorAll('input')[3]; // The 4th input is 'Yrs'
+                if (yrsInput && yrsInput.value.trim()) {
+                    const val = yrsInput.value.trim().toLowerCase();
+                    hasValue = true;
+                    
+                    // Regex to parse "2y", "2.5", "2 years 4 months"
+                    const yearMatch = val.match(/(\d+(?:\.\d+)?)\s*(y|yrs?|years?)/);
+                    const monthMatch = val.match(/(\d+(?:\.\d+)?)\s*(m|mos?|months?)/);
+                    
+                    let rowMonths = 0;
+                    
+                    if (yearMatch) {
+                        rowMonths += parseFloat(yearMatch[1]) * 12;
+                    } 
+                    if (monthMatch) {
+                        rowMonths += parseFloat(monthMatch[1]);
+                    }
+                    
+                    // If no explicit labels found, assume pure number is Years (standard resume format)
+                    if (!yearMatch && !monthMatch) {
+                        const floatVal = parseFloat(val);
+                        if (!isNaN(floatVal)) {
+                            rowMonths += floatVal * 12;
+                        }
+                    }
+                    
+                    totalMonths += rowMonths;
+                }
+            });
+
+            const displayEl = document.getElementById('prev-exp-total');
+            const valueEl = document.getElementById('exp-total-value');
+
+            if (hasValue && totalMonths > 0) {
+                const years = Math.floor(totalMonths / 12);
+                const months = Math.round(totalMonths % 12);
+                
+                let text = "";
+                if (years > 0) text += `${years} Yrs `;
+                if (months > 0) text += `${months} Mos`;
+                
+                // Edge case: exactly X years
+                if (years > 0 && months === 0) text = `${years} Years`;
+                // Edge case: only months
+                if (years === 0 && months > 0) text = `${months} Months`;
+
+                valueEl.innerText = text;
+                displayEl.classList.remove('hidden');
+            } else {
+                displayEl.classList.add('hidden');
+            }
         }
 
         function updateCheckboxList(list, prefix, targetId) {
