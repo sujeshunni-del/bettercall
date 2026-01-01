@@ -1044,14 +1044,76 @@
             const formattedToday = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
             document.getElementById('print-date').innerText = formattedToday;
 
-             // Load last RefID from local storage or use default
-            const lastRefId = localStorage.getItem('lastRefId');
-            if (lastRefId) {
-                document.getElementById('input-ref-id').value = generateNextRefId(lastRefId);
-            }
+            // Fetch next ID from Google Sheet instead of LocalStorage
+            fetchNextRefIdFromSheet();
             
             updatePreview();
         });
+
+        // --- NEW: Fetch Next ID from Sheet ---
+        async function fetchNextRefIdFromSheet() {
+            const input = document.getElementById('input-ref-id');
+            // Show temporary loading state
+            input.value = "SYNCING...";
+            
+            try {
+                // Fetch all data to find the max ID
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=readAll&t=${new Date().getTime()}`);
+                const result = await response.json();
+                
+                let maxId = 0;
+                let data = [];
+
+                if (result.status === 'success' && Array.isArray(result.data)) {
+                    data = result.data;
+                } else if (Array.isArray(result)) {
+                    data = result;
+                }
+
+                // Find highest existing BC number
+                if (data.length > 0) {
+                    data.forEach(row => {
+                        const ref = row.refId || "";
+                        // Match format BC followed by digits
+                        if (ref && ref.match(/^BC\d+$/)) {
+                            const num = parseInt(ref.replace('BC', ''), 10);
+                            if (!isNaN(num) && num > maxId) maxId = num;
+                        }
+                    });
+                }
+                
+                // Fallback to local storage if sheet is empty but local has data
+                if (maxId === 0) {
+                     const lastLocal = localStorage.getItem('lastRefId');
+                     if (lastLocal && lastLocal.match(/^BC\d+$/)) {
+                         maxId = parseInt(lastLocal.replace('BC', ''), 10);
+                     }
+                }
+
+                // Generate next ID
+                const nextId = maxId + 1;
+                const newRefStr = "BC" + String(nextId).padStart(5, '0');
+                
+                input.value = newRefStr;
+                
+                // Update preview specifically for Ref ID
+                const output = document.getElementById('prev-ref-id');
+                if(output) output.innerText = newRefStr;
+
+            } catch (e) {
+                console.error("Failed to fetch next ID from sheet", e);
+                // Fallback to basic logic if API fails
+                const lastLocal = localStorage.getItem('lastRefId');
+                if (lastLocal) {
+                    input.value = generateNextRefId(lastLocal);
+                } else {
+                    input.value = "BC00001";
+                }
+                // Update preview for fallback
+                const output = document.getElementById('prev-ref-id');
+                if(output) output.innerText = input.value;
+            }
+        }
 
         // --- ADVANCED SEARCH LOGIC ---
 
@@ -1462,14 +1524,10 @@
         function resetForm() {
             if(!confirm("Are you sure you want to clear all data and start a new extraction?")) return;
 
-            const currentRefId = document.getElementById('input-ref-id').value;
-            const nextRefId = generateNextRefId(currentRefId);
-
+            // Clear inputs
             const inputs = document.querySelectorAll('#app-form input:not([type="checkbox"]), #app-form textarea, #app-form select');
             inputs.forEach(input => {
-                if(input.id === 'input-ref-id') {
-                     input.value = nextRefId;
-                } else {
+                if(input.id !== 'input-ref-id') { // Don't clear ref ID yet, we will refresh it
                     input.value = '';
                 }
             });
@@ -1493,6 +1551,9 @@
 
             filesToProcess = [];
             renderFileList();
+            
+            // Get fresh ID from sheet for the new form
+            fetchNextRefIdFromSheet();
 
             updatePreview();
         }
