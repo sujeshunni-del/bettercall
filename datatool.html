@@ -32,11 +32,115 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        /* A4 Paper Styling for Preview */
+        /* --- GLOBAL & NEOMORPHISM STYLES --- */
+        body {
+            background-color: #f1f5f9; /* Slate 100 */
+        }
+
+        /* Dark Neomorphic Header */
+        header {
+            background-color: #1e293b !important; /* Slate 800 base */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Neomorphic Button Base */
+        .neo-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 65px;
+            height: 55px;
+            border-radius: 12px;
+            background: linear-gradient(145deg, #202c3e, #1b2535);
+            box-shadow: 5px 5px 10px #131a26, 
+                        -5px -5px 10px #293850;
+            color: #94a3b8; /* Slate 400 */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.25s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .neo-btn i {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .neo-btn span {
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Hover States with Glow Effects */
+        .neo-btn:hover {
+            transform: translateY(-2px);
+            color: #fff;
+            box-shadow: 6px 6px 12px #131a26, 
+                        -6px -6px 12px #293850;
+        }
+
+        .neo-btn:hover::after {
+            opacity: 1;
+        }
+
+        /* Active/Pressed State */
+        .neo-btn:active {
+            transform: translateY(1px);
+            background: #1e293b;
+            box-shadow: inset 4px 4px 8px #131a26, 
+                        inset -4px -4px 8px #293850;
+            border-color: transparent;
+        }
+
+        /* Disabled State */
+        .neo-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+            background: #1e293b;
+        }
+
+        /* Color Accents on Hover */
+        .action-red:hover i { color: #ef4444; text-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
+        .action-yellow:hover i { color: #eab308; text-shadow: 0 0 12px rgba(234, 179, 8, 0.6); }
+        .action-indigo:hover i { color: #6366f1; text-shadow: 0 0 12px rgba(99, 102, 241, 0.6); }
+        .action-blue:hover i { color: #3b82f6; text-shadow: 0 0 12px rgba(59, 130, 246, 0.6); }
+        .action-purple:hover i { color: #a855f7; text-shadow: 0 0 12px rgba(168, 85, 247, 0.6); }
+        .action-orange:hover i { color: #f97316; text-shadow: 0 0 12px rgba(249, 115, 22, 0.6); }
+        .action-cyan:hover i { color: #06b6d4; text-shadow: 0 0 12px rgba(6, 182, 212, 0.6); }
+        .action-green:hover i { color: #22c55e; text-shadow: 0 0 12px rgba(34, 197, 94, 0.6); }
+
+        /* Neomorphic Container for AI Toggle */
+        .neo-inset {
+            background: #1e293b;
+            box-shadow: inset 3px 3px 6px #131a26, 
+                        inset -3px -3px 6px #293850;
+            border-radius: 9999px;
+            padding: 4px 12px;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+
+        /* Divider */
+        .neo-divider {
+            width: 2px;
+            height: 40px;
+            background: #1e293b;
+            box-shadow: 1px 1px 2px #293850, inset 1px 1px 2px #131a26;
+            border-radius: 2px;
+            margin: 0 8px;
+        }
+
+        /* --- PREVIEW & PRINT STYLES --- */
         .a4-page {
             width: 210mm;
             min-height: 297mm;
-            padding: 10mm; /* Increased slightly for better safe zone */
+            padding: 10mm;
             margin: 0 auto;
             background: white;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -48,386 +152,144 @@
             text-transform: uppercase; 
         }
 
-        /* STRICT PRINT STYLES */
         @media print {
-            /* Hide everything by default */
-            body > * {
-                display: none !important;
-            }
-
-            /* Only show the print area container */
-            .flex-1 {
-                display: block !important;
-                overflow: visible !important;
-                height: auto !important;
-            }
-
-            /* Hide the right panel container styling */
-            .w-3\/5 {
-                width: 100% !important;
-                background: white !important;
-                overflow: visible !important;
-                display: block !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            /* Show the actual page */
-            #print-area {
-                display: block !important;
-                visibility: visible !important;
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 210mm !important;
-                margin: 0 !important;
-                padding: 10mm !important; /* Keep internal padding */
-                box-shadow: none !important;
-                border: none !important;
-                min-height: auto !important;
-            }
-
-            /* Ensure background graphics print */
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
-            /* Define Page Size */
-            @page {
-                size: A4;
-                margin: 0; /* Remove browser default margins */
-            }
+            body > * { display: none !important; }
+            .flex-1 { display: block !important; overflow: visible !important; height: auto !important; }
+            .w-3\/5 { width: 100% !important; background: white !important; overflow: visible !important; display: block !important; margin: 0 !important; padding: 0 !important; }
+            #print-area { display: block !important; visibility: visible !important; position: absolute; left: 0; top: 0; width: 210mm !important; margin: 0 !important; padding: 10mm !important; box-shadow: none !important; border: none !important; min-height: auto !important; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            @page { size: A4; margin: 0; }
         }
 
-        /* Custom Scrollbar */
-        .editor-scroll::-webkit-scrollbar {
-            width: 6px;
-        }
-        .editor-scroll::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-        }
-        .editor-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 3px;
-        }
+        .editor-scroll::-webkit-scrollbar { width: 6px; }
+        .editor-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .editor-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         
-        /* Creative Report Styles */
-        .creative-header {
-            background-color: #1e293b; 
-            color: white;
-            padding: 8px 12px; /* Reduced padding */
-            margin-bottom: 10px;
-            border-left: 5px solid #3b82f6; 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .creative-header { background-color: #1e293b; color: white; padding: 8px 12px; margin-bottom: 10px; border-left: 5px solid #3b82f6; display: flex; justify-content: space-between; align-items: center; }
+        .report-section { margin-bottom: 10px; }
+        .section-title { color: #1e293b; font-weight: 800; border-bottom: 2px solid #3b82f6; margin-bottom: 8px; padding-bottom: 2px; font-size: 9pt; letter-spacing: 0.5px; display: flex; align-items: center; }
+        .section-title i { margin-right: 6px; color: #3b82f6; }
+        .data-label { font-size: 7pt; color: #64748b; font-weight: 700; margin-bottom: 0px; display: block; }
+        .data-value { font-size: 8.5pt; color: #000; font-weight: 600; display: block; min-height: 12px; line-height: 1.2; }
+        .info-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 4px 6px; border-radius: 4px; }
+        table.creative-table { width: 100%; border-collapse: collapse; font-size: 8pt; }
+        table.creative-table th { background-color: #3b82f6; color: white; font-weight: bold; text-align: left; padding: 2px 4px; font-size: 7.5pt; }
+        table.creative-table td { padding: 2px 4px; border-bottom: 1px solid #e2e8f0; border-left: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; }
+        table.creative-table tr:nth-child(even) { background-color: #f8fafc; }
+        .checklist-item { font-size: 7.5pt; display: flex; align-items: center; margin-bottom: 1px; }
+        .check-box-icon { width: 9px; height: 9px; border: 1px solid #333; margin-right: 4px; display: flex; align-items: center; justify-content: center; }
+        .check-box-icon.checked { background-color: #333; border-color: #333; color: white; }
 
-        .report-section {
-            margin-bottom: 10px; /* Tighter spacing */
-        }
+        /* Scanner Animation */
+        .scanner-container { position: relative; width: 120px; height: 160px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); margin-bottom: 1rem; }
+        .scanner-doc-icon { font-size: 60px; color: #cbd5e1; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .scanner-line { position: absolute; top: -10%; left: 0; width: 100%; height: 3px; background: #3b82f6; box-shadow: 0 0 15px 2px #3b82f6; animation: scanMove 2s ease-in-out infinite; z-index: 10; }
+        @keyframes scanMove { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
+        .scan-success-icon { animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-        .section-title {
-            color: #1e293b;
-            font-weight: 800;
-            border-bottom: 2px solid #3b82f6;
-            margin-bottom: 8px; /* Increased spacing below title */
-            padding-bottom: 2px;
-            font-size: 9pt; /* Smaller title */
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .section-title i {
-            margin-right: 6px;
-            color: #3b82f6;
-        }
+        /* Form Inputs */
+        input:not([type="checkbox"]):not([type="file"]):not([readonly]), select, textarea { transition: all 0.3s ease; outline: none; }
+        .highlight-empty { border-color: #f87171 !important; background-color: #fef2f2 !important; box-shadow: 0 0 0 1px #f87171 !important; }
+        .highlight-empty:focus { border-color: #f87171 !important; background-color: #ffffff !important; box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2) !important; }
+        .highlight-filled { border-color: #4ade80 !important; background-color: #f0fdf4 !important; box-shadow: 0 0 0 1px #4ade80 !important; }
+        .highlight-filled:focus { border-color: #4ade80 !important; background-color: #f0fdf4 !important; box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2) !important; }
 
-        .data-label {
-            font-size: 7pt; /* Optimized for space */
-            color: #64748b;
-            font-weight: 700;
-            margin-bottom: 0px;
-            display: block;
-        }
-        
-        .data-value {
-            font-size: 8.5pt; /* Optimized for space */
-            color: #000;
-            font-weight: 600;
-            display: block;
-            min-height: 12px; 
-            line-height: 1.2;
-        }
-
-        /* Compact Grid Box for Info */
-        .info-box {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 4px 6px; /* Reduced padding */
-            border-radius: 4px;
-        }
-
-        table.creative-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 8pt;
-        }
-        
-        table.creative-table th {
-            background-color: #3b82f6;
-            color: white;
-            font-weight: bold;
-            text-align: left;
-            padding: 2px 4px; /* Reduced padding */
-            font-size: 7.5pt;
-        }
-        
-        table.creative-table td {
-            padding: 2px 4px; /* Reduced padding */
-            border-bottom: 1px solid #e2e8f0;
-            border-left: 1px solid #f1f5f9;
-            border-right: 1px solid #f1f5f9;
-        }
-        
-        table.creative-table tr:nth-child(even) {
-            background-color: #f8fafc;
-        }
-
-        /* Checkbox lists */
-        .checklist-item {
-            font-size: 7.5pt;
-            display: flex;
-            align-items: center;
-            margin-bottom: 1px;
-        }
-        .check-box-icon {
-            width: 9px;
-            height: 9px;
-            border: 1px solid #333;
-            margin-right: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .check-box-icon.checked {
-            background-color: #333;
-            border-color: #333;
-            color: white;
-        }
-
-        /* Scanner Animation Styles */
-        .scanner-container {
-            position: relative;
-            width: 120px;
-            height: 160px;
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
-            margin-bottom: 1rem;
-        }
-        .scanner-doc-icon {
-            font-size: 60px;
-            color: #cbd5e1;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .scanner-line {
-            position: absolute;
-            top: -10%;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: #3b82f6;
-            box-shadow: 0 0 15px 2px #3b82f6;
-            animation: scanMove 2s ease-in-out infinite;
-            z-index: 10;
-        }
-        @keyframes scanMove {
-            0% { top: -10%; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 110%; opacity: 0; }
-        }
-        
-        .scan-success-icon {
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        /* Navigation Button Styles */
-        .nav-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            transition: all 0.2s;
-            cursor: pointer;
-            color: white;
-            background-color: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            min-width: 70px;
-        }
-        .nav-btn:hover {
-            background-color: rgba(255,255,255,0.2);
-            transform: translateY(-1px);
-        }
-        .nav-btn i {
-            font-size: 1.2rem;
-            margin-bottom: 4px;
-        }
-
-        /* Creative Field Highlighters */
-        input:not([type="checkbox"]):not([type="file"]):not([readonly]), 
-        select, 
-        textarea {
-            transition: all 0.3s ease;
-            outline: none; /* Remove default browser outline to let our colors shine */
-        }
-        
-        /* The Red Highlight Class (Empty - Required) */
-        .highlight-empty {
-            border-color: #f87171 !important; /* Tailwind red-400 */
-            background-color: #fef2f2 !important; /* Tailwind red-50 */
-            box-shadow: 0 0 0 1px #f87171 !important;
-        }
-        /* When typing in an empty required field */
-        .highlight-empty:focus {
-            border-color: #f87171 !important;
-            background-color: #ffffff !important; /* White bg for readability while typing */
-            box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2) !important; /* Red glow */
-        }
-
-        /* The Green Highlight Class (Filled - Required) */
-        .highlight-filled {
-            border-color: #4ade80 !important; /* Tailwind green-400 */
-            background-color: #f0fdf4 !important; /* Tailwind green-50 */
-            box-shadow: 0 0 0 1px #4ade80 !important;
-        }
-        /* When typing in a filled required field (Success State) */
-        .highlight-filled:focus {
-            border-color: #4ade80 !important;
-            background-color: #f0fdf4 !important; /* Keep green tint */
-            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2) !important; /* Green glow */
-        }
-
-        /* --- ADVANCED SEARCH STYLES --- */
-        .adv-glass {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-        .adv-search-tab {
-            @apply px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200 border border-transparent;
-        }
-        .adv-search-tab.active {
-            @apply bg-indigo-600 text-white shadow-lg shadow-indigo-500/30;
-        }
-        .adv-search-tab.inactive {
-            @apply text-slate-500 hover:bg-slate-100 hover:text-slate-700;
-        }
-        .adv-result-card {
-            @apply p-4 rounded-xl border border-slate-200 bg-white transition-all duration-200 cursor-pointer;
-        }
-        .adv-result-card:hover {
-            @apply border-indigo-400 shadow-md transform -translate-y-1 ring-1 ring-indigo-100;
-        }
+        /* Advanced Search */
+        .adv-glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .adv-search-tab { @apply px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200 border border-transparent; }
+        .adv-search-tab.active { @apply bg-indigo-600 text-white shadow-lg shadow-indigo-500/30; }
+        .adv-search-tab.inactive { @apply text-slate-500 hover:bg-slate-100 hover:text-slate-700; }
+        .adv-result-card { @apply p-4 rounded-xl border border-slate-200 bg-white transition-all duration-200 cursor-pointer; }
+        .adv-result-card:hover { @apply border-indigo-400 shadow-md transform -translate-y-1 ring-1 ring-indigo-100; }
     </style>
 </head>
 <body class="bg-gray-100 h-screen overflow-hidden flex flex-col font-sans">
 
-    <!-- Header / Top Bar -->
-    <header class="bg-slate-900 text-white p-2 shadow-lg z-10 shrink-0">
-        <div class="flex justify-between items-center w-full">
+    <!-- Header / Top Bar (Creative Neomorphism) -->
+    <header class="p-3 shadow-lg z-10 shrink-0 border-b border-slate-700">
+        <div class="flex justify-between items-center w-full px-2">
             
             <!-- Branding -->
-            <div class="flex items-center gap-3 px-2">
-                <div class="w-10 h-10 bg-blue-600 rounded flex items-center justify-center shadow-lg">
-                    <i class="fa-solid fa-file-invoice text-xl text-white"></i>
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center shadow-lg border border-blue-400/20">
+                    <i class="fa-solid fa-file-invoice text-2xl text-white"></i>
                 </div>
                 <div>
-                    <h1 class="text-sm font-bold uppercase tracking-wider text-gray-200">Resume Extractor</h1>
-                    <p class="text-[10px] text-blue-400">Deep Scan & AI Enabled</p>
+                    <h1 class="text-md font-extrabold uppercase tracking-widest text-slate-200" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Resume<span class="text-blue-500">X</span>tractor</h1>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                        <p class="text-[9px] text-slate-400 font-medium tracking-wide">AI-POWERED SYSTEM</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Action Buttons & AI Toggle -->
-            <div class="flex items-center gap-4">
+            <!-- Action Toolbar -->
+            <div class="flex items-center gap-3">
                 
-                <!-- AI Switch -->
-                <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700 mr-2">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase">Use AI (Puter)</span>
+                <!-- AI Switch (Inset Style) -->
+                <div class="neo-inset flex items-center gap-3 mr-4">
+                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider"><i class="fa-solid fa-brain text-purple-400 mr-1"></i> AI Mode</span>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="ai-toggle" class="sr-only peer" checked>
-                        <div class="w-8 h-4 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-600"></div>
+                        <div class="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-300 after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-purple-600 peer-checked:after:bg-white shadow-inner"></div>
                     </label>
                 </div>
 
-                <!-- SECTION 1: General Tools -->
-                <div class="flex gap-2 border-r border-slate-700 pr-3">
-                    <!-- New / Reset Button -->
-                    <button onclick="resetForm()" class="nav-btn hover:border-red-400 hover:text-red-400" title="Reset Form & ID">
+                <!-- SECTION 1: Management -->
+                <div class="flex gap-3">
+                    <button onclick="resetForm()" class="neo-btn action-red" title="Reset Form">
                         <i class="fa-solid fa-rotate-right"></i>
                         <span>New</span>
                     </button>
 
-                    <!-- Report / Template -->
-                    <button onclick="toggleTemplatePanel()" class="nav-btn hover:border-yellow-400 hover:text-yellow-400" title="Toggle Sections">
+                    <button onclick="toggleTemplatePanel()" class="neo-btn action-yellow" title="Settings">
                         <i class="fa-solid fa-sliders"></i>
                         <span>Template</span>
                     </button>
 
-                    <!-- Advanced Search Button -->
-                    <button onclick="openAdvancedSearch()" class="nav-btn bg-indigo-600 border border-indigo-500 shadow-lg hover:bg-indigo-500 shadow-indigo-500/20" title="Search Database">
+                    <button onclick="openAdvancedSearch()" class="neo-btn action-indigo" title="Search DB">
                         <i class="fa-solid fa-bolt"></i>
-                        <span>Adv. Search</span>
+                        <span>Search</span>
                     </button>
                 </div>
 
-                <!-- SECTION 2: Core Processing -->
-                <div class="flex gap-2 border-r border-slate-700 pr-3">
-                    <!-- OCR Files -->
-                    <button onclick="openFileModal()" class="nav-btn bg-blue-700/50 border-blue-600 hover:bg-blue-600" title="Extract Data from Files">
+                <!-- Divider -->
+                <div class="neo-divider"></div>
+
+                <!-- SECTION 2: Processing -->
+                <div class="flex gap-3">
+                    <button onclick="openFileModal()" class="neo-btn action-blue" title="OCR Upload">
                         <i class="fa-solid fa-file-import"></i>
                         <span>OCR Files</span>
                     </button>
 
-                    <!-- ClickUp Export Data Only -->
-                    <button id="btn-save-data" onclick="saveDataToClickUp()" class="nav-btn hover:border-purple-400 hover:text-purple-400 opacity-50 cursor-not-allowed" disabled title="Save Data Fields Only">
+                    <button id="btn-save-data" onclick="saveDataToClickUp()" class="neo-btn action-purple" disabled title="Save Data Only">
                         <i class="fa-solid fa-database"></i>
-                        <span>ClickUp Save</span>
+                        <span>Save Data</span>
                     </button>
 
-                    <!-- ClickUp Upload PDF Only -->
-                    <button id="btn-upload-pdf" onclick="savePdfToClickUp()" class="nav-btn hover:border-orange-400 hover:text-orange-400 opacity-50 cursor-not-allowed" disabled title="Upload PDF to Task">
+                    <button id="btn-upload-pdf" onclick="savePdfToClickUp()" class="neo-btn action-orange" disabled title="Upload PDF">
                         <i class="fa-solid fa-cloud-arrow-up"></i>
                         <span>Save PDF</span>
                     </button>
                 </div>
 
+                <!-- Divider -->
+                <div class="neo-divider"></div>
+
                 <!-- SECTION 3: Output -->
-                <div class="flex gap-2">
-                    <!-- Native Print Button -->
-                    <!-- Native Print Button (For Wondershare/Printers) -->
-                    <button id="btn-print" onclick="printReport()" class="nav-btn hover:border-cyan-400 hover:text-cyan-400 opacity-50 cursor-not-allowed" disabled title="Print to PDF/Printer">
+                <div class="flex gap-3">
+                    <button id="btn-print" onclick="printReport()" class="neo-btn action-cyan" disabled title="Print">
                         <i class="fa-solid fa-print"></i>
                         <span>Print</span>
                     </button>
 
-                     <!-- PDF Download (Existing but styled as action) -->
-                     <button id="btn-pdf" onclick="downloadPDF()" class="nav-btn bg-green-700/50 border-green-600 hover:bg-green-600 opacity-50 cursor-not-allowed" disabled title="Download Image PDF">
+                     <button id="btn-pdf" onclick="downloadPDF()" class="neo-btn action-green" disabled title="Download">
                         <i class="fa-solid fa-download"></i>
                         <span>Img PDF</span>
                     </button>
                 </div>
+
             </div>
         </div>
     </header>
@@ -690,7 +552,7 @@
                     <div class="grid grid-cols-1 gap-3">
                         <div class="flex gap-2">
                             <input type="text" id="input-client" class="w-1/2 border rounded px-2 py-1.5 text-sm" placeholder="Client Name">
-                            <select id="input-country" class="w-1/2 border rounded px-2 py-1.5 text-sm bg-white">
+                            <select id="input-country" class="w-1/2 border rounded px-2 py-1.5 text-sm bg-white" onchange="updatePreview()">
                                 <option value="" disabled selected>Select Country</option>
                                 <option value="GERMANY">GERMANY</option>
                                 <option value="SWEDEN">SWEDEN</option>
@@ -711,7 +573,7 @@
                             </select>
                         </div>
                         <div class="flex gap-2">
-                            <select id="input-skill-type" class="border rounded px-2 py-1.5 text-sm w-1/3 bg-white">
+                            <select id="input-skill-type" class="border rounded px-2 py-1.5 text-sm w-1/3 bg-white" onchange="updatePreview()">
                                 <option value="" disabled selected>Select Visa Type</option>
                                 <option value="AIRPORT TRANSIT VISA">AIRPORT TRANSIT VISA</option>
                                 <option value="SCHENGEN SHORT STAY VISA">SCHENGEN SHORT STAY VISA</option>
@@ -779,12 +641,12 @@
                         <div class="flex-1 grid grid-cols-2 gap-2">
                             <input type="text" id="input-fname" class="border rounded px-2 py-1.5 text-sm" placeholder="First Name (As per Passport) *">
                             <input type="text" id="input-sname" class="border rounded px-2 py-1.5 text-sm" placeholder="Surname (As per Passport) *">
-                            <select id="input-gender" class="border rounded px-2 py-1.5 text-sm bg-white">
-                                <option value="" selected disabled class="text-gray-400">Select Gender</option>
+                            <select id="input-gender" class="border rounded px-2 py-1.5 text-sm bg-white" onchange="updatePreview()">
+                                <option value="" selected disabled class="text-gray-400">Select Gender *</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
-                            <select id="input-marital" class="border rounded px-2 py-1.5 text-sm bg-white">
+                            <select id="input-marital" class="border rounded px-2 py-1.5 text-sm bg-white" onchange="updatePreview()">
                                 <option value="" selected disabled class="text-gray-400">Select Status *</option>
                                 <option value="Single">Single</option>
                                 <option value="Married">Married</option>
@@ -794,7 +656,7 @@
                                 <input type="date" id="input-dob" class="w-full border rounded px-2 py-1.5 text-sm" onchange="calculateAge()">
                             </div>
                             <input type="number" id="input-age" class="border rounded px-2 py-1.5 text-sm bg-gray-50" readonly placeholder="Age (Auto)">
-                            <select id="input-residence" class="col-span-2 border rounded px-2 py-1.5 text-sm bg-white">
+                            <select id="input-residence" class="col-span-2 border rounded px-2 py-1.5 text-sm bg-white" onchange="updatePreview()">
                                 <option value="" disabled selected>Present Residence *</option>
                                 <option value="INDIA">INDIA</option>
                                 <option value="PAKISTAN">PAKISTAN</option>
@@ -821,7 +683,7 @@
                     <div class="grid grid-cols-2 gap-2">
                          <div class="col-span-2">
                              <label class="text-[10px] text-gray-500 font-bold">NATIONALITY *</label>
-                             <select id="input-nationality" class="w-full border rounded px-2 py-1.5 text-sm uppercase bg-white">
+                             <select id="input-nationality" class="w-full border rounded px-2 py-1.5 text-sm uppercase bg-white" onchange="updatePreview()">
                                  <option value="" disabled selected>Select Nationality</option>
                                  <option value="INDIA">INDIA</option>
                                  <option value="PAKISTAN">PAKISTAN</option>
@@ -1097,6 +959,7 @@
             'input-nationality', 
             'input-residence', 
             'input-marital', 
+            'input-gender', // Added Gender
             'input-dob', 
             'input-passport-no', 
             'input-passport-exp', 
@@ -1124,21 +987,15 @@
             renderCheckboxes('attachments-list', attachments, 'att');
             renderCheckboxes('submission-list', submissions, 'sub');
             
-            // Add 1 Default Row for Education & Experience
             addEducationRow();
             addExperienceRow();
-            
-            // Add 1 default for Language
             addLanguageRow();
 
-            // Format Current Date
             const today = new Date();
             const formattedToday = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
             document.getElementById('print-date').innerText = formattedToday;
 
-            // Fetch next ID from Google Sheet instead of LocalStorage
             fetchNextRefIdFromSheet();
-            
             updatePreview();
         });
 
@@ -1148,9 +1005,7 @@
             const field = task.custom_fields.find(f => f.id === fieldId);
             if (!field) return "";
             
-            // Handle different types of values
             if (field.value) {
-                // Dropdowns usually return an index, we need the text option
                 if (field.type === 'drop_down' && field.type_config && field.type_config.options) {
                     const option = field.type_config.options[field.value];
                     return option ? option.name : "";
@@ -1371,19 +1226,11 @@
 
         function setAdvSearchType(type) {
             currentAdvSearchType = type;
-            
-            // Update UI
             ['name', 'passport', 'ref'].forEach(t => {
                 const tab = document.getElementById(`tab-${t}`);
-                if (t === type) {
-                    tab.classList.add('active');
-                    tab.classList.remove('inactive');
-                } else {
-                    tab.classList.add('inactive');
-                    tab.classList.remove('active');
-                }
+                if (t === type) { tab.classList.add('active'); tab.classList.remove('inactive'); }
+                else { tab.classList.add('inactive'); tab.classList.remove('active'); }
             });
-            
             const input = document.getElementById('adv-search-input');
             if(type === 'ref') input.placeholder = "Enter Reference ID...";
             else if(type === 'passport') input.placeholder = "Enter Passport Number...";
@@ -1394,98 +1241,54 @@
             const query = document.getElementById('adv-search-input').value.trim();
             const resultsContainer = document.getElementById('adv-search-results');
             const loader = document.getElementById('adv-search-loader');
-            const countLabel = document.getElementById('result-count');
 
-            if (!query) {
-                return;
-            }
+            if (!query) return;
 
             loader.classList.remove('hidden');
 
-            // If data isn't loaded, try one more time explicitly
             if (!isDataLoaded || cachedCandidates.length === 0) {
                 await loadAllCandidates();
                 if (cachedCandidates.length === 0) {
-                    resultsContainer.innerHTML = `
-                        <div class="flex flex-col items-center justify-center p-6 text-center">
-                            <i class="fa-solid fa-triangle-exclamation text-3xl text-red-400 mb-2"></i>
-                            <p class="text-sm font-bold text-red-500">Connection Failed</p>
-                            <p class="text-xs text-gray-500 mt-1">Could not retrieve data from ClickUp.</p>
-                            <button onclick="loadAllCandidates()" class="mt-3 px-3 py-1 bg-slate-200 hover:bg-slate-300 rounded text-xs">Retry Connection</button>
-                        </div>`;
+                    resultsContainer.innerHTML = `<div class="text-center p-4 text-red-500 text-sm">Connection Failed. Could not retrieve data from ClickUp.</div>`;
                     loader.classList.add('hidden');
                     return;
                 }
             }
-
-            // --- CLIENT SIDE FUZZY SEARCH LOGIC ---
-            // 50% Matching Logic (Levenshtein-like or Inclusion)
             
             const results = cachedCandidates.filter(c => {
                 const q = query.toLowerCase();
                 let target = "";
+                if (currentAdvSearchType === 'name') target = (c.firstName + " " + c.surname).toLowerCase();
+                else if (currentAdvSearchType === 'passport') target = (c.passportNo || "").toLowerCase();
+                else if (currentAdvSearchType === 'ref') target = (c.refId || "").toLowerCase();
 
-                if (currentAdvSearchType === 'name') {
-                    target = (c.firstName + " " + c.surname).toLowerCase();
-                } else if (currentAdvSearchType === 'passport') {
-                    target = (c.passportNo || "").toLowerCase();
-                } else if (currentAdvSearchType === 'ref') {
-                    target = (c.refId || "").toLowerCase();
-                }
-
-                // 1. Direct Include (100% match of substring)
                 if (target.includes(q)) return true;
-
-                // 2. Fuzzy Match (Approximate)
-                // If the search term is at least 3 chars, check for similarity
                 if (q.length >= 3) {
                     const distance = levenshteinDistance(q, target);
                     const maxLength = Math.max(q.length, target.length);
                     const similarity = 1 - (distance / maxLength);
-                    
-                    // "50% matching" means 0.5 similarity or higher
                     return similarity >= 0.5;
                 }
-
                 return false;
             });
 
             loader.classList.add('hidden');
             renderAdvancedResults(results);
-            countLabel.innerText = results.length;
+            document.getElementById('result-count').innerText = results.length;
         }
 
-        // Levenshtein Distance Algorithm for Fuzzy Matching
         function levenshteinDistance(a, b) {
             if (a.length === 0) return b.length;
             if (b.length === 0) return a.length;
-
             const matrix = [];
-
-            for (let i = 0; i <= b.length; i++) {
-                matrix[i] = [i];
-            }
-
-            for (let j = 0; j <= a.length; j++) {
-                matrix[0][j] = j;
-            }
-
+            for (let i = 0; i <= b.length; i++) { matrix[i] = [i]; }
+            for (let j = 0; j <= a.length; j++) { matrix[0][j] = j; }
             for (let i = 1; i <= b.length; i++) {
                 for (let j = 1; j <= a.length; j++) {
-                    if (b.charAt(i - 1) === a.charAt(j - 1)) {
-                        matrix[i][j] = matrix[i - 1][j - 1];
-                    } else {
-                        matrix[i][j] = Math.min(
-                            matrix[i - 1][j - 1] + 1, // substitution
-                            Math.min(
-                                matrix[i][j - 1] + 1, // insertion
-                                matrix[i - 1][j] + 1  // deletion
-                            )
-                        );
-                    }
+                    if (b.charAt(i - 1) === a.charAt(j - 1)) { matrix[i][j] = matrix[i - 1][j - 1]; }
+                    else { matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)); }
                 }
             }
-
             return matrix[b.length][a.length];
         }
 
@@ -1494,76 +1297,34 @@
             container.innerHTML = '';
 
             if (!results || results.length === 0) {
-                container.innerHTML = `
-                    <div class="flex flex-col items-center justify-center h-48 text-center">
-                        <i class="fa-solid fa-triangle-exclamation text-3xl text-amber-300 mb-3"></i>
-                        <p class="text-sm font-medium text-slate-500">No matching candidates found.</p>
-                        <p class="text-xs text-slate-400">Try checking spelling or try a shorter term.</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="text-center p-6 opacity-60"><p>No candidates found.</p></div>`;
                 return;
             }
             
-            // Limit display to 50 results for performance
             const displayResults = results.slice(0, 50);
-
             displayResults.forEach(c => {
-                // Fallbacks for data fields to prevent "undefined"
-                const firstName = c.firstName || 'Unknown';
-                const surname = c.surname || '';
-                const refId = c.refId || 'N/A';
-                const position = c.position || 'N/A';
-                const country = c.country || 'N/A';
-                const passport = c.passportNo || 'N/A';
-                const mobile = c.mobile || 'N/A';
-
                 const card = document.createElement('div');
                 card.className = "adv-result-card group";
-                // Pass the whole candidate object to the select function
                 card.onclick = function() { selectAdvancedCandidate(c); };
-                
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold border border-slate-200 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                                ${firstName[0] || '?'}${surname[0] || ''}
+                                ${c.firstName[0] || '?'}${c.surname[0] || ''}
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-800 text-sm group-hover:text-indigo-700 uppercase">${firstName} ${surname}</h4>
-                                <p class="text-xs text-slate-500">${position} • ${country}</p>
+                                <h4 class="font-bold text-slate-800 text-sm group-hover:text-indigo-700 uppercase">${c.firstName} ${c.surname}</h4>
+                                <p class="text-xs text-slate-500">${c.position || 'N/A'} • ${c.country || 'N/A'}</p>
                             </div>
                         </div>
-                        <span class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-[10px] font-mono font-bold border border-indigo-100">
-                            ${refId}
-                        </span>
-                    </div>
-                    <div class="mt-3 grid grid-cols-2 gap-2 text-xs text-slate-500">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-passport w-4 text-center"></i>
-                            <span class="font-mono uppercase">${passport}</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-phone w-4 text-center"></i>
-                            <span>${mobile}</span>
-                        </div>
-                    </div>
-                `;
+                        <span class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-[10px] font-mono font-bold border border-indigo-100">${c.refId || 'N/A'}</span>
+                    </div>`;
                 container.appendChild(card);
             });
-            
-            if(results.length > 50) {
-                 const more = document.createElement('div');
-                 more.className = "text-center text-xs text-gray-400 py-2";
-                 more.innerText = `...and ${results.length - 50} more results. Refine your search.`;
-                 container.appendChild(more);
-            }
         }
 
         function selectAdvancedCandidate(data) {
-            // Close Modal
             closeAdvancedSearch();
-
-            // Populate Form from ClickUp Data
             document.getElementById('input-ref-id').value = data.refId || "";
             document.getElementById('input-fname').value = data.firstName || "";
             document.getElementById('input-sname').value = data.surname || "";
@@ -1585,22 +1346,15 @@
             document.getElementById('input-linkedin').value = data.linkedin || "";
             document.getElementById('input-location').value = data.location || "";
 
-            // --- COMPLEX DATA PARSING FROM DESCRIPTION ---
             document.getElementById('education-inputs').innerHTML = '';
             document.getElementById('experience-inputs').innerHTML = '';
             document.getElementById('language-inputs').innerHTML = '';
 
             let extraData = {};
             if (data.description) {
-                // Try to find JSON block in description
                 const jsonMatch = data.description.match(/```json\s*([\s\S]*?)\s*```/);
                 if (jsonMatch && jsonMatch[1]) {
-                    try {
-                        extraData = JSON.parse(jsonMatch[1]);
-                        console.log("Parsed complex data from ClickUp description:", extraData);
-                    } catch(e) {
-                        console.warn("Found JSON block in description but failed to parse:", e);
-                    }
+                    try { extraData = JSON.parse(jsonMatch[1]); } catch(e) {}
                 }
             }
 
@@ -1612,48 +1366,27 @@
             exp.forEach(item => addExperienceRow(item));
             lang.forEach(item => addLanguageRow(item));
 
-            // Ensure minimum rows
             if(document.getElementById('education-inputs').children.length === 0) addEducationRow();
             if(document.getElementById('experience-inputs').children.length === 0) addExperienceRow();
             if(document.getElementById('language-inputs').children.length === 0) addLanguageRow();
 
-            // Refresh UI
             calculateAge();
             updatePreview();
-
-            // Show Toast
+            
             const successOverlay = document.getElementById('success-overlay');
             if(successOverlay) {
                 document.getElementById('success-title').innerText = "Candidate Loaded";
                 document.getElementById('success-desc').innerHTML = `Candidate <b>${data.refId || data.firstName}</b> data populated from ClickUp.`;
-                
-                successOverlay.classList.remove('hidden');
-                // Trigger reflow
-                setTimeout(() => {
-                    successOverlay.classList.remove('opacity-0');
-                    const card = successOverlay.querySelector('div');
-                    card.classList.remove('scale-90');
-                    card.classList.add('scale-100');
-                    
-                    setTimeout(() => {
-                        successOverlay.classList.add('opacity-0');
-                        card.classList.remove('scale-100');
-                        card.classList.add('scale-90');
-                        setTimeout(() => successOverlay.classList.add('hidden'), 300);
-                    }, 1500);
-                }, 10);
+                showSuccessOverlay();
             }
         }
 
         // --- HELPER FUNCTIONS ---
 
-        // NEW: Fix for search modal not working - alias the function
         function executeSearch() {
-            // Deprecated Google Sheet Search, now aliasing to new logic just in case
             alert("Please use the 'Adv. Search' button for the new ClickUp integration.");
         }
 
-        // NEW: Safer way to get values that prevents "Cannot read properties of null" errors
         function getValueSafe(id) {
             const el = document.getElementById(id);
             return el ? el.value : "";
@@ -1746,23 +1479,19 @@
         function resetForm() {
             if(!confirm("Are you sure you want to clear all data and start a new extraction?")) return;
 
-            // Clear inputs
             const inputs = document.querySelectorAll('#app-form input:not([type="checkbox"]), #app-form textarea, #app-form select');
             inputs.forEach(input => {
-                if(input.id !== 'input-ref-id') { // Don't clear ref ID yet, we will refresh it
+                if(input.id !== 'input-ref-id') { 
                     input.value = '';
                 }
             });
 
-            // Clear form checkboxes (Checklists inside the form)
             const checkboxes = document.querySelectorAll('#app-form input[type="checkbox"]');
             checkboxes.forEach(cb => cb.checked = false);
 
-            // --- Reset Template Visibility Settings (Refresh Template) ---
             const templateCheckboxes = document.querySelectorAll('#template-panel input[type="checkbox"]');
             templateCheckboxes.forEach(cb => {
-                cb.checked = true; // Check the box
-                // Parse the section name from the inline onchange handler to show the section
+                cb.checked = true; 
                 const onchangeAttr = cb.getAttribute('onchange');
                 if (onchangeAttr) {
                     const match = onchangeAttr.match(/'([^']+)'/);
@@ -1791,11 +1520,9 @@
             filesToProcess = [];
             renderFileList();
             
-            // Invalidate Search Cache so next search is fresh
             isDataLoaded = false;
             cachedCandidates = [];
             
-            // Get fresh ID from sheet for the new form
             fetchNextRefIdFromSheet();
 
             updatePreview();
@@ -1962,7 +1689,7 @@
             });
 
             // 3. Enable/Disable Buttons based on validity
-            const actionBtns = ['btn-clickup', 'btn-print', 'btn-pdf']; // Removed btn-sheet
+            const actionBtns = ['btn-save-data', 'btn-upload-pdf', 'btn-print', 'btn-pdf']; // Updated IDs
             actionBtns.forEach(btnId => {
                 const btn = document.getElementById(btnId);
                 if(btn) {
@@ -2166,59 +1893,41 @@
             }
         }
 
-        // --- UPDATED: PDF Generation (Fixes Blank Page) ---
-        async function downloadPDF() {
+        function downloadPDF() {
             const element = document.getElementById('print-area');
-            
-            // 1. Create a clone to manipulate styles without affecting the UI
             const clone = element.cloneNode(true);
-            
-            // 2. Remove shadows and force dimensions on the clone
             clone.style.boxShadow = 'none';
             clone.style.margin = '0';
-            clone.style.width = '210mm'; // Force A4 width
-            // Remove min-height to prevent forcing a second page if content is short
+            clone.style.width = '210mm'; 
             clone.style.minHeight = 'auto'; 
             clone.style.height = 'auto'; 
 
-            // 3. Place clone in a temporary container off-screen
             const container = document.createElement('div');
             container.style.position = 'absolute';
             container.style.left = '-9999px';
             container.style.top = '0';
-            container.style.width = '210mm'; // Constrain container
+            container.style.width = '210mm'; 
             container.appendChild(clone);
             document.body.appendChild(container);
 
-            // 4. Generate PDF with strict pagebreak settings
             const opt = {
-                margin: 0, // No margin, we handle padding in CSS
+                margin: 0, 
                 filename: 'Application_Report.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2, 
-                    useCORS: true, 
-                    scrollY: 0, // Prevent scrolling issues
-                    windowWidth: 794 // Approx 210mm in pixels at 96dpi
-                },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0, windowWidth: 794 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Avoid breaking inside elements
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } 
             };
 
-            try {
-                await html2pdf().set(opt).from(clone).save();
-            } catch(e) {
-                alert("PDF Error: " + e.message);
-            } finally {
-                // Clean up
+            html2pdf().set(opt).from(clone).save().then(() => {
                 document.body.removeChild(container);
-            }
+            }).catch(e => {
+                alert("PDF Error: " + e.message);
+                document.body.removeChild(container);
+            });
         }
 
-        // --- UPDATED: Print Function ---
         function printReport() {
-            // Simply trigger window print. 
-            // The @media print CSS defined in <style> handles the hiding of other elements.
             window.print();
         }
 
@@ -2237,8 +1946,6 @@
             const overlay = document.getElementById('scanner-overlay');
             const status = document.getElementById('scanner-status');
             const progress = document.getElementById('scanner-progress');
-            
-            // Replaced API Key check with Toggle Switch
             const useAI = document.getElementById('ai-toggle').checked;
             
             overlay.classList.remove('hidden');
@@ -2562,11 +2269,12 @@
             updatePreview();
         }
 
-        async function exportToClickUp() {
-            const btn = document.getElementById('btn-clickup'); // Use ID selector for safety
-            const originalText = btn ? btn.innerHTML : "ClickUp";
+        // --- NEW: Save Data Only Function ---
+        async function saveDataToClickUp() {
+            const btn = document.getElementById('btn-save-data');
+            const originalText = btn ? btn.innerHTML : "Save Data";
             if(btn) {
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Checking...`;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
                 btn.disabled = true;
             }
 
@@ -2576,7 +2284,6 @@
                 
                 if(!taskName || !refId) throw new Error("First Name and Reference ID are required.");
 
-                // Gather Complex Data
                 const complexData = getTableData();
                 const descriptionContent = `
 Imported via Resume Extractor Tool
@@ -2589,178 +2296,81 @@ ${JSON.stringify(complexData, null, 2)}
 \`\`\`
 ---
 `;
-
-                const getDateTs = (id) => {
-                    const val = getValueSafe(id);
-                    return val ? new Date(val).getTime() : null;
-                };
-
-                if(btn) btn.innerHTML = `<i class="fa-solid fa-sync fa-spin"></i> Mapping Fields...`;
+                const taskId = await createOrUpdateTask(refId, taskName, descriptionContent);
                 
-                const fieldsResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, {
-                    method: 'GET',
-                    headers: { 'Authorization': CLICKUP_API_KEY }
-                });
+                document.getElementById('success-title').innerText = "Data Saved!";
+                document.getElementById('success-desc').innerHTML = `Candidate <span class="font-bold text-gray-800">${refId}</span> data has been successfully saved to ClickUp (ID: ${taskId}).`;
+                showSuccessOverlay();
 
-                if (!fieldsResponse.ok) {
-                    const err = await fieldsResponse.text();
-                    throw new Error(`Failed to fetch ClickUp List Fields: ${err}`);
+            } catch (error) {
+                console.error(error);
+                alert("Save Failed: " + error.message);
+            } finally {
+                if(btn) {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
                 }
+            }
+        }
+
+        // --- NEW: Save PDF Only Function ---
+        async function savePdfToClickUp() {
+            const btn = document.getElementById('btn-upload-pdf');
+            const originalText = btn ? btn.innerHTML : "Upload PDF";
+            if(btn) {
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Uploading...`;
+                btn.disabled = true;
+            }
+
+            try {
+                const taskName = getValUpper('input-fname');
+                const refId = getValUpper('input-ref-id');
                 
-                const fieldsData = await fieldsResponse.json();
-                const validFieldIds = new Set(fieldsData.fields.map(f => f.id));
+                if(!taskName || !refId) throw new Error("First Name and Reference ID are required.");
 
-                const potentialFields = [
-                    // DATE OF BIRTH
-                    { id: "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38", value: getDateTs('input-dob') },
-                    // PASSPORT expiry
-                    { id: "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", value: getDateTs('input-passport-exp') },
-                    // EMAIL
-                    { id: "2e18821e-1c19-4de5-afb8-77ff11ee6327", value: getValUpper('input-email') },
-                    // AGE
-                    { id: "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c", value: parseInt(getValueSafe('input-age')) || 0 },
-                    // ALT PHONE
-                    { id: "343cabc5-9af5-48ca-a54e-f5bffd8c245d", value: sanitizePhoneForClickUp(getValueSafe('input-alt')) },
-                    // MOBILE
-                    { id: "5693724c-ee50-469b-a4a9-3848fe6d3115", value: sanitizePhoneForClickUp(getValueSafe('input-mobile')) },
-                    // WHATSAPP
-                    { id: "87b4eee7-444f-4ec4-9882-441965757a68", value: sanitizePhoneForClickUp(getValueSafe('input-whatsapp')) },
-                    // Case Reference ID
-                    { id: "a25c1d42-6191-4fde-8eb4-7f2059fd71e3", value: refId },
-                    // liNKEDIN
-                    { id: "a60c7069-d4a9-4c17-90ba-9dfa7305e1a1", value: getValUpper('input-linkedin') },
-                    // MARITAL STATUS
-                    { id: "03d06003-2084-4906-8514-31b2f862c83d", value: getValUpper('input-marital') },
-                    // PASSPORT NUMBER
-                    { id: "b8798515-8962-40a7-a8cd-2685f9fd676c", value: getValUpper('input-passport-no') },
-                    // SUR NAME
-                    { id: "34d446a2-fe50-45bc-8e3b-64660ebdd6f7", value: getValUpper('input-sname') },
-                    // ADDRESS
-                    { id: "ae3be10a-cc2d-459e-a80a-1727115b2f0c", value: getValUpper('input-address') },
-                    // GENDER
-                    { id: "fda5d956-0642-44f3-bbe7-c6c06b27fb2e", value: getValUpper('input-gender') },
-                    // JOB TITLE
-                    { id: "410dd336-f23f-4893-859f-d04e420f6431", value: getValUpper('input-position') },
-                    // STATE (City/Location)
-                    { id: "41c89ec2-4e22-4e85-ae57-de0e614bea88", value: getValUpper('input-location') },
-                    // APPLY COUNTRY
-                    { id: "dab9b7e7-5f2b-4958-aac8-de76f24e213b", value: getValUpper('input-country') },
-                    // NATIONALITY
-                    { id: "4402d5e4-93b4-447e-8647-3417abf1a6e2", value: getValUpper('input-nationality') },
-                    // PRESENT RESIDENCE
-                    { id: "20cb0f76-df42-4761-96e5-a268855f0eb9", value: getValUpper('input-residence') }
-                ];
-
-                const cleanCustomFields = potentialFields.filter(f => 
-                    f.value !== null && f.value !== "" && !Number.isNaN(f.value) && validFieldIds.has(f.id)
-                );
-
-                const refFieldId = "a25c1d42-6191-4fde-8eb4-7f2059fd71e3";
-                let taskId = null;
-                let isUpdate = false;
-
-                if (validFieldIds.has(refFieldId)) {
-                    const query = JSON.stringify([{
-                        "field_id": refFieldId,
-                        "operator": "=",
-                        "value": refId
-                    }]);
-                    const searchResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task?custom_fields=${encodeURIComponent(query)}&include_closed=true`, {
-                        method: 'GET',
-                        headers: { 'Authorization': CLICKUP_API_KEY }
-                    });
-                    if(searchResponse.ok) {
-                        const searchResult = await searchResponse.json();
-                        if (searchResult.tasks && searchResult.tasks.length > 0) {
-                            taskId = searchResult.tasks[0].id;
-                            isUpdate = true;
-                        }
-                    }
+                // 1. Find Task
+                const taskId = await findTaskByRefId(refId);
+                
+                if (!taskId) {
+                    throw new Error("Task not found in ClickUp. Please click 'Save Data' first to create the record.");
                 }
 
-                if (isUpdate) {
-                    if(btn) btn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Updating Task...`;
-                    await fetch(`https://api.clickup.com/api/v2/task/${taskId}`, {
-                        method: 'PUT',
-                        headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            name: taskName, 
-                            description: descriptionContent 
-                        })
-                    });
-                    // Execute updates sequentially and catch individual errors (e.g., bad phone format)
-                    for (const field of cleanCustomFields) {
-                        try {
-                            await fetch(`https://api.clickup.com/api/v2/task/${taskId}/field/${field.id}`, {
-                                method: 'POST',
-                                headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ value: field.value })
-                            });
-                        } catch(e) {
-                            console.warn(`Failed to update field ${field.id}:`, e);
-                        }
-                    }
-                } else {
-                    if(btn) btn.innerHTML = `<i class="fa-solid fa-plus"></i> Creating Task...`;
-                    const taskPayload = {
-                        name: taskName,
-                        description: descriptionContent,
-                        custom_fields: cleanCustomFields
-                    };
-                    const createTaskResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
-                        method: 'POST',
-                        headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                        body: JSON.stringify(taskPayload)
-                    });
-
-                    if (!createTaskResponse.ok) {
-                        const errText = await createTaskResponse.text();
-                        // Fallback handling...
-                        console.warn("Direct creation failed, attempting fallback creation + update...", errText);
-                         const fallbackResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
-                            method: 'POST',
-                            headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ 
-                                name: taskName, 
-                                description: descriptionContent 
-                            })
-                        });
-                        if(!fallbackResponse.ok) throw new Error(`ClickUp API Error (Task): ${createTaskResponse.status} - ${errText}`);
-                        
-                        const taskData = await fallbackResponse.json();
-                        taskId = taskData.id;
-                        isUpdate = true; // Proceed to update fields individually
-                         for (const field of cleanCustomFields) {
-                            try {
-                                await fetch(`https://api.clickup.com/api/v2/task/${taskId}/field/${field.id}`, {
-                                    method: 'POST',
-                                    headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ value: field.value })
-                                });
-                            } catch(e) { console.warn(`Failed to update field ${field.id}:`, e); }
-                        }
-                    } else {
-                        const taskData = await createTaskResponse.json();
-                        taskId = taskData.id;
-                    }
-                }
-
-                if(btn) btn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Uploading PDF...`;
+                // 2. Generate PDF (Clone method to avoid visual glitches)
                 const element = document.getElementById('print-area');
+                const clone = element.cloneNode(true);
+                clone.style.boxShadow = 'none';
+                clone.style.margin = '0';
+                clone.style.width = '210mm'; 
+                clone.style.minHeight = 'auto'; 
+                clone.style.height = 'auto'; 
+
+                const container = document.createElement('div');
+                container.style.position = 'absolute';
+                container.style.left = '-9999px';
+                container.style.top = '0';
+                container.style.width = '210mm'; 
+                container.appendChild(clone);
+                document.body.appendChild(container);
+
                 let pdfBlob;
                 try {
-                    pdfBlob = await html2pdf().set({
-                        margin: 0,
+                    const opt = {
+                        margin: 0, 
                         filename: 'Application_Report.pdf',
                         image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2, useCORS: true },
-                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    }).from(element).output('blob');
+                        html2canvas: { scale: 2, useCORS: true, scrollY: 0, windowWidth: 794 },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } 
+                    };
+                    // Get blob directly
+                    pdfBlob = await html2pdf().set(opt).from(clone).output('blob');
                 } catch(pdfErr) {
-                    alert(`Task ${isUpdate ? 'updated' : 'created'} (ID: ${taskId}), but PDF generation failed.`);
-                    return;
+                    throw new Error("PDF Generation Failed: " + pdfErr.message);
+                } finally {
+                    document.body.removeChild(container);
                 }
 
+                // 3. Upload Attachment
                 const formData = new FormData();
                 formData.append('attachment', pdfBlob, `${taskName.replace(/\s+/g, '_')}_Report.pdf`);
 
@@ -2770,38 +2380,152 @@ ${JSON.stringify(complexData, null, 2)}
                     body: formData
                 });
 
-                if (!attachResponse.ok) throw new Error("Failed to upload PDF attachment.");
+                if (!attachResponse.ok) throw new Error("Failed to upload PDF attachment to ClickUp.");
 
-                document.getElementById('success-title').innerText = "Export Complete!";
-                document.getElementById('success-desc').innerHTML = `Candidate <span class="font-bold text-gray-800">${refId}</span> has been successfully ${isUpdate ? 'updated' : 'created'} in ClickUp.`;
-                const overlay = document.getElementById('success-overlay');
-                const overlayCard = overlay.querySelector('div');
-                overlay.classList.remove('hidden');
-                setTimeout(() => {
-                    overlay.classList.remove('opacity-0');
-                    overlayCard.classList.remove('scale-90');
-                    overlayCard.classList.add('scale-100');
-                }, 10);
-                setTimeout(() => {
-                    overlay.classList.add('opacity-0');
-                    overlayCard.classList.remove('scale-100');
-                    overlayCard.classList.add('scale-90');
-                    setTimeout(() => { overlay.classList.add('hidden'); }, 3000);
-                }, 3000);
+                document.getElementById('success-title').innerText = "PDF Uploaded!";
+                document.getElementById('success-desc').innerHTML = `PDF Report successfully attached to candidate <span class="font-bold text-gray-800">${refId}</span>.`;
+                showSuccessOverlay();
 
             } catch (error) {
                 console.error(error);
-                if (error.isTrusted) {
-                    alert("Network Error or CORS Blocked. Browser blocked connection to ClickUp.");
-                } else {
-                    alert("Export Failed: " + error.message);
-                }
+                alert("Upload Failed: " + error.message);
             } finally {
                 if(btn) {
                     btn.innerHTML = originalText;
                     btn.disabled = false;
                 }
             }
+        }
+
+        // --- HELPER: Find Task ID by Ref ID ---
+        async function findTaskByRefId(refId) {
+            const refFieldId = "a25c1d42-6191-4fde-8eb4-7f2059fd71e3";
+            const query = JSON.stringify([{ "field_id": refFieldId, "operator": "=", "value": refId }]);
+            
+            const searchResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task?custom_fields=${encodeURIComponent(query)}&include_closed=true`, {
+                method: 'GET',
+                headers: { 'Authorization': CLICKUP_API_KEY }
+            });
+            
+            if(searchResponse.ok) {
+                const searchResult = await searchResponse.json();
+                if (searchResult.tasks && searchResult.tasks.length > 0) {
+                    return searchResult.tasks[0].id;
+                }
+            }
+            return null;
+        }
+
+        // --- HELPER: Create or Update Task Logic ---
+        async function createOrUpdateTask(refId, taskName, description) {
+            const getDateTs = (id) => { const val = getValueSafe(id); return val ? new Date(val).getTime() : null; };
+            
+            // Fetch Fields to validate
+            const fieldsResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, {
+                method: 'GET',
+                headers: { 'Authorization': CLICKUP_API_KEY }
+            });
+            const fieldsData = await fieldsResponse.json();
+            const validFieldIds = new Set(fieldsData.fields.map(f => f.id));
+
+            const potentialFields = [
+                { id: "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38", value: getDateTs('input-dob') },
+                { id: "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", value: getDateTs('input-passport-exp') },
+                { id: "2e18821e-1c19-4de5-afb8-77ff11ee6327", value: getValUpper('input-email') },
+                { id: "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c", value: parseInt(getValueSafe('input-age')) || 0 },
+                { id: "343cabc5-9af5-48ca-a54e-f5bffd8c245d", value: sanitizePhoneForClickUp(getValueSafe('input-alt')) },
+                { id: "5693724c-ee50-469b-a4a9-3848fe6d3115", value: sanitizePhoneForClickUp(getValueSafe('input-mobile')) },
+                { id: "87b4eee7-444f-4ec4-9882-441965757a68", value: sanitizePhoneForClickUp(getValueSafe('input-whatsapp')) },
+                { id: "a25c1d42-6191-4fde-8eb4-7f2059fd71e3", value: refId },
+                { id: "a60c7069-d4a9-4c17-90ba-9dfa7305e1a1", value: getValUpper('input-linkedin') },
+                { id: "03d06003-2084-4906-8514-31b2f862c83d", value: getValUpper('input-marital') },
+                { id: "b8798515-8962-40a7-a8cd-2685f9fd676c", value: getValUpper('input-passport-no') },
+                { id: "34d446a2-fe50-45bc-8e3b-64660ebdd6f7", value: getValUpper('input-sname') },
+                { id: "ae3be10a-cc2d-459e-a80a-1727115b2f0c", value: getValUpper('input-address') },
+                { id: "fda5d956-0642-44f3-bbe7-c6c06b27fb2e", value: getValUpper('input-gender') },
+                { id: "410dd336-f23f-4893-859f-d04e420f6431", value: getValUpper('input-position') },
+                { id: "41c89ec2-4e22-4e85-ae57-de0e614bea88", value: getValUpper('input-location') },
+                { id: "dab9b7e7-5f2b-4958-aac8-de76f24e213b", value: getValUpper('input-country') },
+                { id: "4402d5e4-93b4-447e-8647-3417abf1a6e2", value: getValUpper('input-nationality') },
+                { id: "20cb0f76-df42-4761-96e5-a268855f0eb9", value: getValUpper('input-residence') }
+            ];
+
+            const cleanCustomFields = potentialFields.filter(f => 
+                f.value !== null && f.value !== "" && !Number.isNaN(f.value) && validFieldIds.has(f.id)
+            );
+
+            let taskId = await findTaskByRefId(refId);
+
+            if (taskId) {
+                // UPDATE
+                await fetch(`https://api.clickup.com/api/v2/task/${taskId}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: taskName, description: description })
+                });
+                for (const field of cleanCustomFields) {
+                    try {
+                        await fetch(`https://api.clickup.com/api/v2/task/${taskId}/field/${field.id}`, {
+                            method: 'POST',
+                            headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ value: field.value })
+                        });
+                    } catch(e) { console.warn(`Failed to update field ${field.id}:`, e); }
+                }
+            } else {
+                // CREATE
+                const taskPayload = {
+                    name: taskName,
+                    description: description,
+                    custom_fields: cleanCustomFields
+                };
+                const createTaskResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+                    method: 'POST',
+                    headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(taskPayload)
+                });
+
+                if (!createTaskResponse.ok) {
+                    // Fallback if full payload fails
+                    const fallbackResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+                        method: 'POST',
+                        headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: taskName, description: description })
+                    });
+                    if(!fallbackResponse.ok) throw new Error("Task Creation Failed");
+                    const taskData = await fallbackResponse.json();
+                    taskId = taskData.id;
+                    // Update fields separately
+                    for (const field of cleanCustomFields) {
+                        await fetch(`https://api.clickup.com/api/v2/task/${taskId}/field/${field.id}`, {
+                            method: 'POST',
+                            headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ value: field.value })
+                        });
+                    }
+                } else {
+                    const taskData = await createTaskResponse.json();
+                    taskId = taskData.id;
+                }
+            }
+            return taskId;
+        }
+
+        function showSuccessOverlay() {
+            const overlay = document.getElementById('success-overlay');
+            const overlayCard = overlay.querySelector('div');
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                overlayCard.classList.remove('scale-90');
+                overlayCard.classList.add('scale-100');
+            }, 10);
+            setTimeout(() => {
+                overlay.classList.add('opacity-0');
+                overlayCard.classList.remove('scale-100');
+                overlayCard.classList.add('scale-90');
+                setTimeout(() => { overlay.classList.add('hidden'); }, 3000);
+            }, 3000);
         }
     </script>
 </body>
