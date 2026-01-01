@@ -1725,12 +1725,17 @@
                 <td class="text-center">${inputs[2].value}</td>
             `);
 
-            updateTable('experience-inputs', 'prev-experience-body', (inputs) => `
+            updateTable('experience-inputs', 'prev-experience-body', (inputs) => {
+                // Helper to format the display column nicely
+                const rawDuration = inputs[3].value;
+                const formattedDuration = formatDurationDisplay(rawDuration);
+                
+                return `
                 <td class="font-bold">${inputs[0].value}</td>
                 <td>${inputs[1].value}</td>
                 <td>${inputs[2].value}</td>
-                <td class="text-center">${inputs[3].value}</td>
-            `);
+                <td class="text-center font-semibold text-blue-900">${formattedDuration}</td>
+            `});
 
             // --- NEW: Calculate Total Experience ---
             calculateTotalExperience();
@@ -1827,43 +1832,21 @@
                         // Auto-fill Yrs field if empty
                         if (!yrsInput.value.trim()) {
                             const y = Math.floor(rowMonths / 12);
-                            const m = rowMonths % 12;
+                            const m = Math.round(rowMonths % 12);
                             let str = "";
-                            if (y > 0) str += `${y}y `;
-                            if (m > 0) str += `${m}m`;
-                            if (!str) str = "0m";
+                            if (y > 0) str += `${y} Years `;
+                            if (m > 0) str += `${m} Months`;
+                            if (!str) str = "0 Months";
                             yrsInput.value = str.trim();
                         }
                     }
                 }
 
-                // 2. Parse the Yrs Input (Manual or Auto-filled)
+                // 2. Parse the Yrs Input for Total Calculation
                 if (yrsInput && yrsInput.value.trim()) {
-                    const val = yrsInput.value.trim().toLowerCase();
                     hasValue = true;
-                    
-                    // Regex to parse "2y 6m", "2.5", "2 years"
-                    const yearMatch = val.match(/(\d+(?:\.\d+)?)\s*(y|yrs?|years?)/);
-                    const monthMatch = val.match(/(\d+(?:\.\d+)?)\s*(m|mos?|months?)/);
-                    
-                    // Reset rowMonths to ensure we don't double count if we just parsed it above 
-                    // (Actually we should trust the input value now as the source of truth for the Total)
-                    rowMonths = 0;
-
-                    if (yearMatch) {
-                        rowMonths += parseFloat(yearMatch[1]) * 12;
-                    } 
-                    if (monthMatch) {
-                        rowMonths += parseFloat(monthMatch[1]);
-                    }
-                    
-                    // If no explicit labels found, assume pure number is Years
-                    if (!yearMatch && !monthMatch) {
-                        const floatVal = parseFloat(val);
-                        if (!isNaN(floatVal)) {
-                            rowMonths += floatVal * 12;
-                        }
-                    }
+                    const val = yrsInput.value.trim();
+                    rowMonths = parseDurationToMonths(val);
                 }
                 
                 totalMonths += rowMonths;
@@ -1877,8 +1860,8 @@
                 const months = Math.round(totalMonths % 12);
                 
                 let text = "";
-                if (years > 0) text += `${years} Yrs `;
-                if (months > 0) text += `${months} Mos`;
+                if (years > 0) text += `${years} Years `;
+                if (months > 0) text += `${months} Months`;
                 
                 if (years > 0 && months === 0) text = `${years} Years`;
                 if (years === 0 && months > 0) text = `${months} Months`;
@@ -1890,40 +1873,95 @@
             }
         }
 
+        // Helper: Convert "6.5", "6 Years 2 Months" to total months count
+        function parseDurationToMonths(val) {
+            if (!val) return 0;
+            val = val.toLowerCase();
+            let months = 0;
+
+            // Regex for "X Years Y Months"
+            const yearMatch = val.match(/(\d+(?:\.\d+)?)\s*(?:y|yrs?|years?)/);
+            const monthMatch = val.match(/(\d+(?:\.\d+)?)\s*(?:m|mos?|months?)/);
+
+            if (yearMatch) months += parseFloat(yearMatch[1]) * 12;
+            if (monthMatch) months += parseFloat(monthMatch[1]);
+
+            // Regex for pure decimal "6.7" -> Treat as Years (Standard decimal)
+            if (!yearMatch && !monthMatch) {
+                const floatVal = parseFloat(val);
+                if (!isNaN(floatVal)) {
+                    months += floatVal * 12;
+                }
+            }
+            return months;
+        }
+
+        // Helper: Format display string (e.g. "6.7" -> "6 Years 8 Months")
+        function formatDurationDisplay(val) {
+            if (!val) return "";
+            // If it already contains letters, return as is (assumed pre-formatted)
+            if (val.match(/[a-z]/i)) return val;
+
+            // If it's a pure number like "6.7"
+            const floatVal = parseFloat(val);
+            if (!isNaN(floatVal)) {
+                const years = Math.floor(floatVal);
+                // Convert decimal fraction to months (e.g. 0.5 * 12 = 6)
+                const months = Math.round((floatVal - years) * 12);
+                
+                let parts = [];
+                if (years > 0) parts.push(`${years} Years`);
+                if (months > 0) parts.push(`${months} Months`);
+                if (parts.length === 0) return "0 Months";
+                return parts.join(" ");
+            }
+            return val;
+        }
+
         // Helper to parse date ranges like "2021-11-15 to Present"
         function parseExperienceMonths(dateStr) {
             if (!dateStr) return null;
             
-            // Separators: " to ", " - ", " – "
-            const parts = dateStr.split(/\s+(?:to|-|–)\s+/i);
+            // Normalize separators: Replace 'to', 'till', 'until' with hyphen
+            let cleanStr = dateStr.replace(/\s+(?:to|till|until)\s+/gi, ' - ');
+            // Split by hyphen or en/em-dash
+            const parts = cleanStr.split(/\s*[-–—]\s*/);
             
-            if (parts.length !== 2) return null; // Must be a range
+            if (parts.length !== 2) return null; 
             
             let startStr = parts[0].trim();
             let endStr = parts[1].trim().toLowerCase();
             
-            // Parse Start
-            // Handle "Nov 2021" by adding default day
-            if (startStr.match(/^[a-zA-Z]+\s+\d{4}$/)) startStr = "1 " + startStr;
-            const startDate = new Date(startStr);
-            if (isNaN(startDate.getTime())) return null;
+            // Parse Helper
+            const parseDate = (s) => {
+                // Handle "Nov 2021" -> "1 Nov 2021"
+                if (s.match(/^[a-zA-Z]+\s+\d{4}$/)) return new Date("1 " + s);
+                // Handle "2021" -> "1 Jan 2021"
+                if (s.match(/^\d{4}$/)) return new Date("1 Jan " + s);
+                const d = new Date(s);
+                return isNaN(d.getTime()) ? null : d;
+            };
+
+            const startDate = parseDate(startStr);
+            if (!startDate) return null;
 
             // Parse End
-            let endDate = new Date();
-            if (['present', 'now', 'current', 'today', 'till date'].includes(endStr)) {
-                endDate = new Date(); // Now
-            } else {
-                if (endStr.match(/^[a-zA-Z]+\s+\d{4}$/)) endStr = "1 " + endStr;
-                endDate = new Date(endStr);
+            let endDate = new Date(); // Default to Now
+            const currentKeywords = ['present', 'now', 'current', 'today', 'till date', 'date'];
+            
+            // If NOT a keyword, try to parse as date
+            if (!currentKeywords.some(k => endStr.includes(k))) {
+                const parsedEnd = parseDate(endStr);
+                if (parsedEnd) endDate = parsedEnd;
+                else return null; // Invalid end date
             }
-            if (isNaN(endDate.getTime())) return null;
 
             // Calculate Difference
             let months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
             months -= startDate.getMonth();
             months += endDate.getMonth();
             
-            // Adjust for day of month (e.g. 15th to 14th shouldn't be full month)
+            // Adjust for day of month (e.g. Started 20th, ended 10th -> not full month)
             if (endDate.getDate() < startDate.getDate()) {
                 months--;
             }
