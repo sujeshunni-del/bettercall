@@ -32,19 +32,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        /* --- GLOBAL & NEOMORPHISM STYLES --- */
+        /* --- GLOBAL & LIGHT NEOMORPHISM STYLES --- */
         body {
-            background-color: #f1f5f9; /* Slate 100 */
+            background-color: #eef2f6; /* Soft Blue-Gray Background */
+            color: #334155;
         }
 
-        /* Dark Neomorphic Header */
+        /* Light Neomorphic Header */
         header {
-            background-color: #1e293b !important; /* Slate 800 base */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            background-color: #eef2f6 !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.05);
         }
 
-        /* Neomorphic Button Base */
+        /* Neomorphic Button Base (Light) */
         .neo-btn {
             display: flex;
             flex-direction: column;
@@ -52,19 +53,19 @@
             justify-content: center;
             min-width: 65px;
             height: 55px;
-            border-radius: 12px;
-            background: linear-gradient(145deg, #202c3e, #1b2535);
-            box-shadow: 5px 5px 10px #131a26, 
-                        -5px -5px 10px #293850;
-            color: #94a3b8; /* Slate 400 */
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            box-shadow:  7px 7px 14px #d1d9e6, 
+                        -7px -7px 14px #ffffff;
+            color: #64748b; /* Slate 500 */
+            border: 1px solid rgba(255,255,255,0.4);
             transition: all 0.25s ease;
             position: relative;
             cursor: pointer;
         }
 
         .neo-btn i {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 4px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -76,64 +77,126 @@
             text-transform: uppercase;
         }
 
-        /* Hover States with Glow Effects */
+        /* Hover States (Light Mode Glows) */
         .neo-btn:hover {
             transform: translateY(-2px);
-            color: #fff;
-            box-shadow: 6px 6px 12px #131a26, 
-                        -6px -6px 12px #293850;
-        }
-
-        .neo-btn:hover::after {
-            opacity: 1;
+            box-shadow:  8px 8px 16px #d1d9e6, 
+                        -8px -8px 16px #ffffff;
         }
 
         /* Active/Pressed State */
         .neo-btn:active {
             transform: translateY(1px);
-            background: #1e293b;
-            box-shadow: inset 4px 4px 8px #131a26, 
-                        inset -4px -4px 8px #293850;
+            background: #eef2f6;
+            box-shadow: inset 6px 6px 12px #d1d9e6, 
+                        inset -6px -6px 12px #ffffff;
             border-color: transparent;
         }
 
         /* Disabled State */
         .neo-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.6;
             cursor: not-allowed;
             transform: none !important;
-            box-shadow: none !important;
-            background: #1e293b;
+            box-shadow: inset 2px 2px 5px #e2e8f0, inset -2px -2px 5px #ffffff !important;
+            background: #eef2f6;
+            color: #cbd5e1;
         }
 
-        /* Color Accents on Hover */
-        .action-red:hover i { color: #ef4444; text-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
-        .action-yellow:hover i { color: #eab308; text-shadow: 0 0 12px rgba(234, 179, 8, 0.6); }
-        .action-indigo:hover i { color: #6366f1; text-shadow: 0 0 12px rgba(99, 102, 241, 0.6); }
-        .action-blue:hover i { color: #3b82f6; text-shadow: 0 0 12px rgba(59, 130, 246, 0.6); }
-        .action-purple:hover i { color: #a855f7; text-shadow: 0 0 12px rgba(168, 85, 247, 0.6); }
-        .action-orange:hover i { color: #f97316; text-shadow: 0 0 12px rgba(249, 115, 22, 0.6); }
-        .action-cyan:hover i { color: #06b6d4; text-shadow: 0 0 12px rgba(6, 182, 212, 0.6); }
-        .action-green:hover i { color: #22c55e; text-shadow: 0 0 12px rgba(34, 197, 94, 0.6); }
+        /* Color Accents on Hover (Vibrant but suited for light theme) */
+        .action-red:hover i { color: #ef4444; transform: scale(1.1); }
+        .action-yellow:hover i { color: #d97706; transform: scale(1.1); }
+        .action-indigo:hover i { color: #4f46e5; transform: scale(1.1); }
+        .action-blue:hover i { color: #2563eb; transform: scale(1.1); }
+        .action-purple:hover i { color: #9333ea; transform: scale(1.1); }
+        .action-orange:hover i { color: #ea580c; transform: scale(1.1); }
+        .action-cyan:hover i { color: #0891b2; transform: scale(1.1); }
+        .action-green:hover i { color: #16a34a; transform: scale(1.1); }
 
         /* Neomorphic Container for AI Toggle */
         .neo-inset {
-            background: #1e293b;
-            box-shadow: inset 3px 3px 6px #131a26, 
-                        inset -3px -3px 6px #293850;
+            background: #eef2f6;
+            box-shadow: inset 5px 5px 10px #d1d9e6, 
+                        inset -5px -5px 10px #ffffff;
             border-radius: 9999px;
-            padding: 4px 12px;
-            border: 1px solid rgba(255,255,255,0.02);
+            padding: 6px 14px;
+            border: 1px solid rgba(255,255,255,0.5);
         }
 
         /* Divider */
         .neo-divider {
             width: 2px;
             height: 40px;
-            background: #1e293b;
-            box-shadow: 1px 1px 2px #293850, inset 1px 1px 2px #131a26;
+            background: #cbd5e1;
             border-radius: 2px;
             margin: 0 8px;
+            opacity: 0.5;
+        }
+
+        /* --- CREATIVE SCANNER ANIMATION --- */
+        .scanner-wrapper {
+            position: relative;
+            width: 140px;
+            height: 180px;
+            perspective: 1000px;
+        }
+        
+        .scanner-doc {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            gap: 10px;
+            transform: rotateX(10deg);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .doc-line { height: 8px; background: #e2e8f0; border-radius: 4px; width: 100%; }
+        .doc-line.short { width: 60%; }
+        .doc-photo { width: 40px; height: 40px; background: #cbd5e1; border-radius: 50%; align-self: flex-end; }
+
+        .scan-laser {
+            position: absolute;
+            top: -20%;
+            left: -10%;
+            width: 120%;
+            height: 20%;
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0) 0%, rgba(59, 130, 246, 0.5) 50%, rgba(59, 130, 246, 0.8) 100%);
+            filter: drop-shadow(0 0 15px #3b82f6);
+            animation: cyberScan 2s ease-in-out infinite;
+            z-index: 10;
+            border-bottom: 2px solid #60a5fa;
+            opacity: 0.8;
+        }
+
+        @keyframes cyberScan {
+            0% { top: -20%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 110%; opacity: 0; }
+        }
+
+        /* --- SUCCESS OVERLAY STYLES --- */
+        .success-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .success-card.active {
+            transform: scale(1);
+            opacity: 1;
         }
 
         /* --- PREVIEW & PRINT STYLES --- */
@@ -154,11 +217,12 @@
 
         @media print {
             body > * { display: none !important; }
-            .flex-1 { display: block !important; overflow: visible !important; height: auto !important; }
-            .w-3\/5 { width: 100% !important; background: white !important; overflow: visible !important; display: block !important; margin: 0 !important; padding: 0 !important; }
-            #print-area { display: block !important; visibility: visible !important; position: absolute; left: 0; top: 0; width: 210mm !important; margin: 0 !important; padding: 10mm !important; box-shadow: none !important; border: none !important; min-height: auto !important; }
+            #editor-panel { display: none !important; }
+            .flex-1 { display: block !important; height: auto !important; overflow: visible !important; }
+            #preview-panel { width: 100% !important; background: white !important; margin: 0 !important; padding: 0 !important; display: block !important; overflow: visible !important; }
+            #print-area { display: block !important; visibility: visible !important; position: relative !important; left: auto !important; top: auto !important; width: 100% !important; max-width: 210mm !important; margin: 0 auto !important; padding: 0 !important; box-shadow: none !important; border: none !important; min-height: auto !important; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            @page { size: A4; margin: 0; }
+            @page { size: A4; margin: 10mm; }
         }
 
         .editor-scroll::-webkit-scrollbar { width: 6px; }
@@ -180,13 +244,6 @@
         .check-box-icon { width: 9px; height: 9px; border: 1px solid #333; margin-right: 4px; display: flex; align-items: center; justify-content: center; }
         .check-box-icon.checked { background-color: #333; border-color: #333; color: white; }
 
-        /* Scanner Animation */
-        .scanner-container { position: relative; width: 120px; height: 160px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); margin-bottom: 1rem; }
-        .scanner-doc-icon { font-size: 60px; color: #cbd5e1; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        .scanner-line { position: absolute; top: -10%; left: 0; width: 100%; height: 3px; background: #3b82f6; box-shadow: 0 0 15px 2px #3b82f6; animation: scanMove 2s ease-in-out infinite; z-index: 10; }
-        @keyframes scanMove { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
-        .scan-success-icon { animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-
         /* Form Inputs */
         input:not([type="checkbox"]):not([type="file"]):not([readonly]), select, textarea { transition: all 0.3s ease; outline: none; }
         .highlight-empty { border-color: #f87171 !important; background-color: #fef2f2 !important; box-shadow: 0 0 0 1px #f87171 !important; }
@@ -205,20 +262,20 @@
 </head>
 <body class="bg-gray-100 h-screen overflow-hidden flex flex-col font-sans">
 
-    <!-- Header / Top Bar (Creative Neomorphism) -->
-    <header class="p-3 shadow-lg z-10 shrink-0 border-b border-slate-700">
+    <!-- Header / Top Bar (Light Neomorphism) -->
+    <header class="p-3 shadow-sm z-10 shrink-0 border-b border-slate-200">
         <div class="flex justify-between items-center w-full px-2">
             
             <!-- Branding -->
             <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center shadow-lg border border-blue-400/20">
-                    <i class="fa-solid fa-file-invoice text-2xl text-white"></i>
+                <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-md border border-slate-100">
+                    <i class="fa-solid fa-file-invoice text-2xl text-blue-600"></i>
                 </div>
                 <div>
-                    <h1 class="text-md font-extrabold uppercase tracking-widest text-slate-200" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Resume<span class="text-blue-500">X</span>tractor</h1>
+                    <h1 class="text-md font-extrabold uppercase tracking-widest text-slate-700">Resume<span class="text-blue-500">X</span>tractor</h1>
                     <div class="flex items-center gap-2">
                         <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                        <p class="text-[9px] text-slate-400 font-medium tracking-wide">AI-POWERED SYSTEM</p>
+                        <p class="text-[9px] text-slate-400 font-medium tracking-wide">SYSTEM READY</p>
                     </div>
                 </div>
             </div>
@@ -226,12 +283,12 @@
             <!-- Action Toolbar -->
             <div class="flex items-center gap-3">
                 
-                <!-- AI Switch (Inset Style) -->
+                <!-- AI Switch (Light Inset) -->
                 <div class="neo-inset flex items-center gap-3 mr-4">
-                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider"><i class="fa-solid fa-brain text-purple-400 mr-1"></i> AI Mode</span>
+                    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-wider"><i class="fa-solid fa-brain text-purple-500 mr-1"></i> Smart Scan</span>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="ai-toggle" class="sr-only peer" checked>
-                        <div class="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-300 after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-purple-600 peer-checked:after:bg-white shadow-inner"></div>
+                        <div class="w-8 h-4 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-purple-500 peer-checked:after:bg-white shadow-inner"></div>
                     </label>
                 </div>
 
@@ -438,58 +495,63 @@
             </div>
         </div>
 
-        <!-- NEW: Creative Scanner Animation Overlay -->
-        <div id="scanner-overlay" class="hidden absolute inset-0 bg-white/95 z-[80] flex flex-col items-center justify-center backdrop-blur-md">
-            <!-- Active Scanning State -->
+        <!-- CREATIVE SCANNER ANIMATION OVERLAY -->
+        <div id="scanner-overlay" class="hidden absolute inset-0 bg-white/98 z-[80] flex flex-col items-center justify-center backdrop-blur-md">
+            <!-- Animation Box -->
             <div id="scan-anim-box" class="flex flex-col items-center transition-all duration-300">
-                <div class="scanner-container">
-                    <div class="scanner-line"></div>
-                    <i class="fa-solid fa-file-lines scanner-doc-icon"></i>
+                
+                <div class="scanner-wrapper mb-6">
+                    <div class="scanner-doc">
+                        <div class="doc-photo"></div>
+                        <div class="doc-line"></div>
+                        <div class="doc-line"></div>
+                        <div class="doc-line short"></div>
+                        <div class="doc-line"></div>
+                        <div class="doc-line short"></div>
+                    </div>
+                    <div class="scan-laser"></div>
                 </div>
-                <h3 class="text-xl font-bold text-slate-800 mb-1 animate-pulse">Scanning Documents...</h3>
-                <p id="scanner-status" class="text-sm text-blue-600 font-medium">Initializing AI Engine...</p>
+
+                <h3 class="text-2xl font-black text-slate-800 mb-2 tracking-tight">ANALYZING DOCUMENTS</h3>
+                <p id="scanner-status" class="text-sm text-blue-500 font-medium font-mono uppercase tracking-widest">Initializing Neural Engine...</p>
                 
                 <!-- Progress Bar -->
-                <div class="w-64 bg-gray-200 rounded-full h-1.5 mt-4 overflow-hidden">
-                    <div id="scanner-progress" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                <div class="w-64 bg-slate-100 rounded-full h-2 mt-6 overflow-hidden shadow-inner">
+                    <div id="scanner-progress" class="bg-gradient-to-r from-blue-500 to-purple-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
                 </div>
             </div>
 
             <!-- Success State (Hidden initially) -->
             <div id="scan-success-box" class="hidden flex flex-col items-center text-center transform scale-90 transition-all duration-300">
-                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4 scan-success-icon shadow-lg">
-                    <i class="fa-solid fa-check text-4xl text-green-600"></i>
+                <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6 scan-success-icon shadow-lg border-4 border-white">
+                    <i class="fa-solid fa-check text-5xl text-green-500"></i>
                 </div>
-                <h3 class="text-2xl font-black text-slate-800 mb-2">Scanning Done!</h3>
-                <p class="text-gray-500 text-sm">Data has been successfully extracted.</p>
-                <div class="mt-6">
-                    <button onclick="closeScannerOverlay()" class="px-6 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition shadow-lg">
-                        View Results
-                    </button>
+                <h3 class="text-3xl font-black text-slate-800 mb-2">Extraction Complete</h3>
+                <p class="text-slate-500 text-sm mb-8">Data has been successfully parsed and populated.</p>
+                <button onclick="closeScannerOverlay()" class="px-8 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition shadow-lg font-bold tracking-wide">
+                    View Results
+                </button>
+            </div>
+        </div>
+
+        <!-- NEW: AUTO-DISMISS SUCCESS POPUP (Floating Window) -->
+        <div id="success-overlay" class="hidden fixed inset-0 z-[100] flex items-center justify-center pointer-events-none">
+            <div class="success-card">
+                <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-100">
+                    <i class="fa-solid fa-check text-2xl text-green-500"></i>
+                </div>
+                <h3 id="success-title" class="text-xl font-bold text-slate-800 mb-2">Success!</h3>
+                <p id="success-desc" class="text-sm text-slate-500 leading-relaxed max-w-xs mx-auto">Operation completed successfully.</p>
+                
+                <!-- Progress Bar for auto-close -->
+                <div class="w-full bg-slate-100 h-1 mt-6 rounded-full overflow-hidden">
+                    <div class="bg-green-500 h-full animate-[width_3s_linear_forwards]" style="width: 100%"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Success Animation Modal (Data Save & Export) -->
-        <div id="success-overlay" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[60] flex items-center justify-center transition-all duration-300 opacity-0">
-            <div class="bg-white rounded-2xl shadow-2xl p-8 transform scale-90 transition-all duration-300 flex flex-col items-center gap-4 text-center max-w-sm w-full mx-4 border border-gray-100">
-                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-2 animate-[pulse_2s_infinite]">
-                    <i class="fa-solid fa-check text-4xl text-green-600"></i>
-                </div>
-                <div>
-                    <h3 id="success-title" class="text-2xl font-black text-gray-800 mb-2">Data Saved!</h3>
-                    <p id="success-desc" class="text-gray-500 text-sm leading-relaxed">
-                        Candidate <span id="success-ref-id" class="font-bold text-gray-800"></span> has been successfully recorded in the database.
-                    </p>
-                </div>
-                <div class="w-full bg-gray-100 rounded-full h-1 mt-2 overflow-hidden">
-                    <div class="bg-green-500 h-full w-full animate-[width_2.5s_ease-out]"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Left Panel: Editor -->
-        <div class="w-2/5 bg-white border-r border-gray-200 overflow-y-auto editor-scroll flex flex-col">
+        <!-- Left Panel: Editor (Added ID for Print Hide) -->
+        <div id="editor-panel" class="w-2/5 bg-white border-r border-gray-200 overflow-y-auto editor-scroll flex flex-col">
             
             <!-- Template Settings (Initially Hidden) -->
             <div id="template-panel" class="hidden bg-slate-100 p-4 border-b border-gray-200 shadow-inner">
@@ -540,7 +602,7 @@
                     <label class="text-xs font-bold text-blue-700 uppercase">Candidate Reference ID:</label>
                     <div class="flex items-center gap-2">
                         <input type="text" id="input-ref-id" value="BC00001" readonly class="border border-blue-300 rounded px-2 py-1 text-sm font-bold text-blue-800 w-32 text-center bg-gray-100 cursor-not-allowed outline-none uppercase">
-                        <button type="button" onclick="fetchNextRefIdFromSheet()" class="text-blue-500 hover:text-blue-700 transition" title="Refresh ID from Database">
+                        <button type="button" onclick="fetchNextRefId()" class="text-blue-500 hover:text-blue-700 transition" title="Refresh ID from Database">
                             <i class="fa-solid fa-sync"></i>
                         </button>
                     </div>
@@ -764,8 +826,8 @@
             </form>
         </div>
 
-        <!-- Right Panel: Live Preview -->
-        <div class="w-3/5 bg-gray-500 overflow-y-auto flex justify-center p-6">
+        <!-- Right Panel: Live Preview (Added ID for Print Targeting) -->
+        <div id="preview-panel" class="w-3/5 bg-gray-500 overflow-y-auto flex justify-center p-6">
             
             <div id="print-area" class="a4-page shadow-xl">
                 
@@ -793,7 +855,6 @@
                 <!-- Profile Block (Combines Personal + Photo) -->
                 <div id="prev-section-personal" class="report-section mb-3">
                     <div class="flex gap-4 items-start">
-                        <!-- Photo -->
                         <div class="w-[35mm] h-[45mm] border-2 border-slate-200 bg-slate-50 shrink-0 flex items-center justify-center overflow-hidden">
                             <img id="prev-photo" src="" class="w-full h-full object-cover hidden">
                             <div id="prev-photo-placeholder" class="text-slate-300 text-[9px] text-center p-1 font-bold">
@@ -995,7 +1056,7 @@
             const formattedToday = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
             document.getElementById('print-date').innerText = formattedToday;
 
-            fetchNextRefIdFromSheet();
+            fetchNextRefId();
             updatePreview();
         });
 
@@ -1016,7 +1077,7 @@
         }
 
         // --- NEW: Fetch Next ID from ClickUp ---
-        async function fetchNextRefIdFromSheet() {
+        async function fetchNextRefId() {
             const input = document.getElementById('input-ref-id');
             const originalValue = input.value;
             // Show temporary loading state
@@ -1523,7 +1584,7 @@
             isDataLoaded = false;
             cachedCandidates = [];
             
-            fetchNextRefIdFromSheet();
+            fetchNextRefId();
 
             updatePreview();
         }
