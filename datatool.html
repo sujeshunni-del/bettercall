@@ -2218,23 +2218,36 @@
                 const validFieldIds = new Set(fieldsData.fields.map(f => f.id));
 
                 const potentialFields = [
+                    // DATE OF BIRTH
                     { id: "72d7dec6-eb69-4d1d-b5ea-af6e99d28a38", value: getDateTs('input-dob') },
+                    // PASSPORT expiry
                     { id: "5aa1bec5-f188-4ef7-8f7d-2b4778fbe738", value: getDateTs('input-passport-exp') },
-                    { id: "e79e1c4e-b123-4bd9-8051-34859ea4b87e", value: getValUpper('input-nationality') },
-                    { id: "dbb3620a-3cc3-44c0-8a01-d92a1594d6f5", value: getValUpper('input-residence') },
+                    // EMAIL
                     { id: "2e18821e-1c19-4de5-afb8-77ff11ee6327", value: getValUpper('input-email') },
+                    // AGE
                     { id: "f4ba427f-6e9c-4aa2-ae5c-8159e1254d2c", value: parseInt(getValueSafe('input-age')) || 0 },
+                    // ALT PHONE
+                    { id: "343cabc5-9af5-48ca-a54e-f5bffd8c245d", value: sanitizePhoneForClickUp(getValueSafe('input-alt')) },
+                    // MOBILE
                     { id: "5693724c-ee50-469b-a4a9-3848fe6d3115", value: sanitizePhoneForClickUp(getValueSafe('input-mobile')) },
-                    { id: "8efe7c3f-70cc-46d4-b6db-1324e5071b29", value: sanitizePhoneForClickUp(getValueSafe('input-alt')) },
+                    // WHATSAPP
                     { id: "87b4eee7-444f-4ec4-9882-441965757a68", value: sanitizePhoneForClickUp(getValueSafe('input-whatsapp')) },
-                    { id: "03d06003-2084-4906-8514-31b2f862c83d", value: getValUpper('input-passport-no') },
-                    { id: "b8798515-8962-40a7-a8cd-2685f9fd676c", value: getValUpper('input-sname') },
-                    { id: "ae3be10a-cc2d-459e-a80a-1727115b2f0c", value: getValUpper('input-address') },
-                    { id: "4e32a1b5-9081-4f3c-9f02-8f26a1b2c3d4", value: getValUpper('input-gender') },
-                    { id: "410dd336-f23f-4893-859f-d04e420f6431", value: getValUpper('input-position') },
-                    { id: "41c89ec2-4e22-4e85-ae57-de0e614bea88", value: getValUpper('input-location') },
+                    // Case Reference ID
                     { id: "a25c1d42-6191-4fde-8eb4-7f2059fd71e3", value: refId },
-                    { id: "dd59c787-da25-4760-ab85-2974e1ae8838", value: getValUpper('input-country') }
+                    // liNKEDIN
+                    { id: "a60c7069-d4a9-4c17-90ba-9dfa7305e1a1", value: getValUpper('input-linkedin') },
+                    // MARITAL STATUS
+                    { id: "03d06003-2084-4906-8514-31b2f862c83d", value: getValUpper('input-marital') },
+                    // PASSPORT NUMBER
+                    { id: "b8798515-8962-40a7-a8cd-2685f9fd676c", value: getValUpper('input-passport-no') },
+                    // SUR NAME
+                    { id: "34d446a2-fe50-45bc-8e3b-64660ebdd6f7", value: getValUpper('input-sname') },
+                    // ADDRESS
+                    { id: "ae3be10a-cc2d-459e-a80a-1727115b2f0c", value: getValUpper('input-address') },
+                    // GENDER
+                    { id: "fda5d956-0642-44f3-bbe7-c6c06b27fb2e", value: getValUpper('input-gender') },
+                    // JOB TITILE
+                    { id: "410dd336-f23f-4893-859f-d04e420f6431", value: getValUpper('input-position') }
                 ];
 
                 const cleanCustomFields = potentialFields.filter(f => 
