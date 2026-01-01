@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional Resume Extractor & Application Tool</title>
     
+    <!-- Puter.js for AI -->
+    <script src="https://js.puter.com/v2/"></script>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -324,17 +327,16 @@
                 </div>
             </div>
 
-            <!-- API Key Input & Action Buttons -->
+            <!-- Action Buttons & AI Toggle -->
             <div class="flex items-center gap-4">
-                <!-- API Key Input -->
-                <div class="relative group">
-                    <div class="flex items-center bg-slate-800 border border-slate-600 rounded-lg px-2 py-1">
-                        <i class="fa-solid fa-key text-yellow-500 text-xs mr-2"></i>
-                        <input type="password" id="gemini-api-key" placeholder="Gemini Key (Optional)" class="bg-transparent border-none text-xs text-white placeholder-gray-500 focus:ring-0 w-32">
-                    </div>
-                    <div class="absolute top-full mt-1 left-0 bg-gray-800 text-xs text-gray-300 p-2 rounded shadow-lg hidden group-hover:block w-64 z-50">
-                        Optional: Use Google Gemini for AI-based analysis. If empty, the system uses the new Deep Regex & MRZ Engine.
-                    </div>
+                
+                <!-- AI Switch -->
+                <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase">Use AI (Puter)</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="ai-toggle" class="sr-only peer" checked>
+                        <div class="w-8 h-4 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
                 </div>
 
                 <!-- Buttons -->
@@ -1826,7 +1828,9 @@
             const overlay = document.getElementById('scanner-overlay');
             const status = document.getElementById('scanner-status');
             const progress = document.getElementById('scanner-progress');
-            const apiKey = document.getElementById('gemini-api-key').value;
+            
+            // Replaced API Key check with Toggle Switch
+            const useAI = document.getElementById('ai-toggle').checked;
             
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
@@ -1853,9 +1857,9 @@
                 }
 
                 progress.style.width = "90%";
-                if (apiKey) {
-                    status.innerText = "Sending extracted data to AI Core...";
-                    await analyzeWithGemini(combinedText, apiKey);
+                if (useAI) {
+                    status.innerText = "Analyzing with Puter AI...";
+                    await analyzeWithPuter(combinedText);
                 } else {
                     status.innerText = "Running Deep Regex & MRZ Engine...";
                     await new Promise(r => setTimeout(r, 800));
@@ -1880,32 +1884,61 @@
             }
         }
 
-        async function analyzeWithGemini(text, apiKey) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        async function analyzeWithPuter(text) {
             const prompt = `
                 Extract structured data from the following resume text. 
-                Return strictly JSON. 
-                Dates should be YYYY-MM-DD.
-                Fields: firstName, surname, email, mobile, nationality, gender, maritalStatus, dob, passportNo, passportExpiry, pob, placeIssue, address, education (array: degree, institution, year), experience (array: company, position, dates, years).
+                Return strictly a valid JSON object (no markdown, no backticks).
+                Dates should be YYYY-MM-DD format.
                 
-                Text:
+                Required JSON Structure:
+                {
+                    "firstName": "String",
+                    "surname": "String",
+                    "email": "String",
+                    "mobile": "String",
+                    "nationality": "String",
+                    "gender": "String",
+                    "maritalStatus": "String",
+                    "dob": "YYYY-MM-DD",
+                    "passportNo": "String",
+                    "passportExpiry": "YYYY-MM-DD",
+                    "pob": "String",
+                    "placeIssue": "String",
+                    "address": "String",
+                    "education": [{"degree": "", "institution": "", "year": ""}],
+                    "experience": [{"company": "", "position": "", "dates": "", "years": ""}]
+                }
+                
+                Text to Analyze:
                 ${text.substring(0, 30000)}
             `;
 
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }]
-                })
-            });
+            try {
+                // Using Puter.js chat API
+                const response = await puter.ai.chat(prompt);
+                
+                // Handle different response formats (string vs object)
+                let rawText = "";
+                if (typeof response === 'string') {
+                    rawText = response;
+                } else if (response && response.message && response.message.content) {
+                    rawText = response.message.content;
+                } else {
+                    console.log("Unexpected Puter Response:", response);
+                    throw new Error("Invalid response format from AI");
+                }
 
-            if (!response.ok) throw new Error("Gemini API Error");
+                // Clean up potential markdown formatting
+                const jsonStr = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+                const extractedData = JSON.parse(jsonStr);
+                applyDataToForm(extractedData);
 
-            const data = await response.json();
-            const rawJson = data.candidates[0].content.parts[0].text.replace(/```json|```/g, '').trim();
-            const extractedData = JSON.parse(rawJson);
-            applyDataToForm(extractedData);
+            } catch (err) {
+                console.error("AI Analysis Failed:", err);
+                // Fallback to Regex if AI fails
+                fillFromOCR(text); 
+                alert("AI Analysis encountered an issue. Switched to standard extraction.");
+            }
         }
 
         function applyDataToForm(data) {
