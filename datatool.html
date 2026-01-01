@@ -365,16 +365,10 @@
                         <span>Template</span>
                     </button>
 
-                    <!-- ClickUp Export -->
+                    <!-- ClickUp Export / Save PDF -->
                     <button id="btn-clickup" onclick="exportToClickUp()" class="nav-btn hover:border-purple-400 hover:text-purple-400 opacity-50 cursor-not-allowed" disabled title="Fill required fields">
-                        <i class="fa-solid fa-check-to-slot"></i>
-                        <span>ClickUp</span>
-                    </button>
-
-                    <!-- Save / Google Sheet Export -->
-                    <button id="btn-sheet" onclick="saveToGoogleSheet()" class="nav-btn hover:border-green-400 hover:text-green-400 opacity-50 cursor-not-allowed" disabled title="Fill required fields">
-                        <i class="fa-brands fa-google-drive"></i>
-                        <span>Save Sheet</span>
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <span>Save PDF</span>
                     </button>
 
                     <!-- Native Print Button (For Wondershare/Printers) -->
@@ -1050,8 +1044,6 @@
         // --- CONFIGURATION ---
         const CLICKUP_API_KEY = "pk_260468481_S4KLO3ZGV6P1PL1POHKXNS1LA5ISSG0P";
         const CLICKUP_LIST_ID = "901814555582";
-        // PASTE YOUR GOOGLE WEB APP URL HERE:
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydb1l-C2lEftCLeaN9jJ3hWNGoe5I88-tfZOYffbvvneCsaL6GpjGxuFuP9T4eK9oqlg/exec"; 
 
         // Define Required Fields for Validation
         const REQUIRED_FIELDS = [
@@ -1182,6 +1174,44 @@
             }
         }
 
+        // --- HELPER: Gather Table Data for Export ---
+        function getTableData() {
+            const education = [];
+            document.querySelectorAll('#education-inputs > div').forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                if(inputs[0].value) education.push({
+                    degree: inputs[0].value,
+                    institution: inputs[1].value,
+                    year: inputs[2].value
+                });
+            });
+
+            const experience = [];
+            document.querySelectorAll('#experience-inputs > div').forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                if(inputs[0].value) experience.push({
+                    company: inputs[0].value,
+                    position: inputs[1].value,
+                    dates: inputs[2].value,
+                    years: inputs[3].value
+                });
+            });
+
+            const languages = [];
+            document.querySelectorAll('#language-inputs > div').forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                const selects = row.querySelectorAll('select');
+                if(inputs[0].value) languages.push({
+                    language: inputs[0].value,
+                    speak: selects[0].value,
+                    read: selects[1].value,
+                    write: selects[2].value
+                });
+            });
+
+            return { education, experience, languages };
+        }
+
         // --- ADVANCED SEARCH LOGIC ---
 
         let currentAdvSearchType = 'name';
@@ -1255,6 +1285,8 @@
                     email: getClickUpField(task, F.email),
                     position: getClickUpField(task, F.position),
                     country: getClickUpField(task, F.country),
+                    // Capture description for complex data parsing
+                    description: task.description || "",
                     // Store other fields for filling form
                     dob: getClickUpField(task, F.dob) ? new Date(parseInt(getClickUpField(task, F.dob))).toISOString().split('T')[0] : "",
                     passportExp: getClickUpField(task, F.exp) ? new Date(parseInt(getClickUpField(task, F.exp))).toISOString().split('T')[0] : "",
@@ -1508,11 +1540,32 @@
             document.getElementById('input-linkedin').value = data.linkedin || "";
             document.getElementById('input-location').value = data.location || "";
 
-            // NOTE: Education, Experience, Languages are complex tables not currently stored in standard fields in ClickUp export logic.
-            // We clear them to avoid showing previous data.
+            // --- COMPLEX DATA PARSING FROM DESCRIPTION ---
             document.getElementById('education-inputs').innerHTML = '';
             document.getElementById('experience-inputs').innerHTML = '';
             document.getElementById('language-inputs').innerHTML = '';
+
+            let extraData = {};
+            if (data.description) {
+                // Try to find JSON block in description
+                const jsonMatch = data.description.match(/```json\s*([\s\S]*?)\s*```/);
+                if (jsonMatch && jsonMatch[1]) {
+                    try {
+                        extraData = JSON.parse(jsonMatch[1]);
+                        console.log("Parsed complex data from ClickUp description:", extraData);
+                    } catch(e) {
+                        console.warn("Found JSON block in description but failed to parse:", e);
+                    }
+                }
+            }
+
+            const edu = Array.isArray(extraData.education) ? extraData.education : [];
+            const exp = Array.isArray(extraData.experience) ? extraData.experience : [];
+            const lang = Array.isArray(extraData.languages) ? extraData.languages : [];
+
+            edu.forEach(item => addEducationRow(item));
+            exp.forEach(item => addExperienceRow(item));
+            lang.forEach(item => addLanguageRow(item));
 
             // Ensure minimum rows
             if(document.getElementById('education-inputs').children.length === 0) addEducationRow();
@@ -1864,7 +1917,7 @@
             });
 
             // 3. Enable/Disable Buttons based on validity
-            const actionBtns = ['btn-clickup', 'btn-sheet', 'btn-print', 'btn-pdf'];
+            const actionBtns = ['btn-clickup', 'btn-print', 'btn-pdf']; // Removed btn-sheet
             actionBtns.forEach(btnId => {
                 const btn = document.getElementById(btnId);
                 if(btn) {
@@ -2424,256 +2477,6 @@
             updatePreview();
         }
 
-        // Helper: Convert DD/MM/YYYY or DD-MMM-YY to YYYY-MM-DD
-        function convertToISODate(dateStr, futureBias = false) {
-            if(!dateStr) return null;
-            
-            // Normalize separator
-            let norm = dateStr.replace(/[\/\.]/g, '-');
-            let parts = norm.split('-');
-            
-            if (parts.length !== 3) return null;
-
-            let d = parseInt(parts[0]);
-            let mStr = parts[1];
-            let y = parseInt(parts[2]);
-
-            // Handle Month names (JAN, Feb, etc.)
-            let m = 0;
-            if (isNaN(mStr)) {
-                const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
-                m = months.indexOf(mStr.toLowerCase()) + 1;
-            } else {
-                m = parseInt(mStr);
-            }
-
-            if(m < 1 || m > 12) return null;
-
-            // Handle 2 digit year
-            if (y < 100) {
-                const currentYear = new Date().getFullYear() % 100;
-                // Simple heuristic: if year is greater than current + 10, it's probably 19XX (e.g. DOB), unless future bias for expiry
-                if (futureBias) {
-                    y += 2000; 
-                } else {
-                     y += (y > currentYear + 10) ? 1900 : 2000;
-                }
-            }
-
-            return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-        }
-
-        // Helper: Parse Compact YYMMDD date (from MRZ)
-        function parseCompactDate(yymmdd, futureBias = false) {
-            if(!yymmdd || yymmdd.length !== 6 || isNaN(yymmdd)) return null;
-            let y = parseInt(yymmdd.substring(0,2));
-            let m = parseInt(yymmdd.substring(2,4));
-            let d = parseInt(yymmdd.substring(4,6));
-
-            const currentYear = new Date().getFullYear() % 100;
-             if (futureBias) {
-                y += 2000; 
-            } else {
-                 y += (y > currentYear + 10) ? 1900 : 2000;
-            }
-
-            if(m < 1 || m > 12 || d < 1 || d > 31) return null;
-             return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-        }
-
-        async function saveToGoogleSheet() {
-            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("YOUR_")) {
-                alert("Please configure the GOOGLE_SCRIPT_URL in the code first.");
-                return;
-            }
-
-            const btn = document.querySelector('button[onclick="saveToGoogleSheet()"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
-            btn.disabled = true;
-
-            try {
-                const education = [];
-                document.querySelectorAll('#education-inputs > div').forEach(row => {
-                    const inputs = row.querySelectorAll('input');
-                    if(inputs[0].value) education.push({
-                        degree: inputs[0].value,
-                        institution: inputs[1].value,
-                        year: inputs[2].value
-                    });
-                });
-
-                const experience = [];
-                document.querySelectorAll('#experience-inputs > div').forEach(row => {
-                    const inputs = row.querySelectorAll('input');
-                    if(inputs[0].value) experience.push({
-                        company: inputs[0].value,
-                        position: inputs[1].value,
-                        dates: inputs[2].value,
-                        years: inputs[3].value
-                    });
-                });
-
-                const languages = [];
-                document.querySelectorAll('#language-inputs > div').forEach(row => {
-                    const inputs = row.querySelectorAll('input');
-                    const selects = row.querySelectorAll('select');
-                    if(inputs[0].value) languages.push({
-                        language: inputs[0].value,
-                        speak: selects[0].value,
-                        read: selects[1].value,
-                        write: selects[2].value
-                    });
-                });
-
-                const formData = {
-                    refId: getValueSafe('input-ref-id'),
-                    firstName: getValueSafe('input-fname'),
-                    surname: getValueSafe('input-sname'),
-                    position: getValueSafe('input-position'),
-                    country: getValueSafe('input-country'),
-                    passportNo: getValueSafe('input-passport-no'),
-                    mobile: getValueSafe('input-mobile'),
-                    email: getValueSafe('input-email'),
-                    gender: getValueSafe('input-gender'),
-                    maritalStatus: getValueSafe('input-marital'),
-                    dob: getValueSafe('input-dob'),
-                    age: getValueSafe('input-age'),
-                    passportExp: getValueSafe('input-passport-exp'),
-                    pob: getValueSafe('input-pob'),
-                    placeIssue: getValueSafe('input-place-issue'),
-                    nationality: getValueSafe('input-nationality'),
-                    residence: getValueSafe('input-residence'),
-                    address: getValueSafe('input-address'),
-                    altPhone: getValueSafe('input-alt'),
-                    whatsapp: getValueSafe('input-whatsapp'),
-                    linkedin: getValueSafe('input-linkedin'),
-                    location: getValueSafe('input-location'),
-                    zip: getValueSafe('input-zip'),
-                    stateBirth: getValueSafe('input-state-birth'),
-                    education: JSON.stringify(education),
-                    experience: JSON.stringify(experience),
-                    languages: JSON.stringify(languages)
-                };
-
-                await fetch(GOOGLE_SCRIPT_URL, {
-                    method: "POST",
-                    mode: 'no-cors', 
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-
-                document.getElementById('success-title').innerText = "Data Saved!";
-                document.getElementById('success-desc').innerHTML = `Candidate <span id="success-ref-id" class="font-bold text-gray-800">${formData.refId}</span> has been successfully recorded in the database.`;
-                const overlay = document.getElementById('success-overlay');
-                const overlayCard = overlay.querySelector('div');
-                overlay.classList.remove('hidden');
-                setTimeout(() => {
-                    overlay.classList.remove('opacity-0');
-                    overlayCard.classList.remove('scale-90');
-                    overlayCard.classList.add('scale-100');
-                }, 10);
-                setTimeout(() => {
-                    overlay.classList.add('opacity-0');
-                    overlayCard.classList.remove('scale-100');
-                    overlayCard.classList.add('scale-90');
-                    setTimeout(() => { overlay.classList.add('hidden'); }, 300);
-                }, 2500);
-
-                localStorage.setItem('lastRefId', formData.refId);
-
-            } catch (error) {
-                console.error(error);
-                alert("Error saving to sheet: " + error.message);
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        }
-
-        async function searchFromGoogleSheet(searchRefId) {
-            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("YOUR_")) {
-                alert("Please configure the GOOGLE_SCRIPT_URL in the code first.");
-                return;
-            }
-            const refId = searchRefId || document.getElementById('modal-ref-id').value;
-            if (!refId) return;
-
-            const btn = document.getElementById('modal-search-btn') || document.querySelector('button[onclick="openSearchModal()"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Finding...`;
-            btn.disabled = true;
-
-            try {
-                const response = await fetch(`${GOOGLE_SCRIPT_URL}?refId=${encodeURIComponent(refId)}`);
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    const data = result.data;
-                    document.getElementById('input-ref-id').value = data.refId || "";
-                    document.getElementById('input-fname').value = data.firstName || "";
-                    document.getElementById('input-sname').value = data.surname || "";
-                    document.getElementById('input-position').value = data.position || "";
-                    document.getElementById('input-country').value = data.country || "";
-                    document.getElementById('input-passport-no').value = data.passportNo || "";
-                    document.getElementById('input-mobile').value = data.mobile || "";
-                    document.getElementById('input-email').value = data.email || "";
-                    document.getElementById('input-gender').value = data.gender || "";
-                    document.getElementById('input-marital').value = data.maritalStatus || "";
-                    document.getElementById('input-dob').value = data.dob || "";
-                    document.getElementById('input-age').value = data.age || "";
-                    document.getElementById('input-passport-exp').value = data.passportExp || "";
-                    document.getElementById('input-pob').value = data.pob || "";
-                    document.getElementById('input-place-issue').value = data.placeIssue || "";
-                    document.getElementById('input-nationality').value = data.nationality || "";
-                    document.getElementById('input-residence').value = data.residence || "";
-                    document.getElementById('input-address').value = data.address || "";
-                    document.getElementById('input-alt').value = data.altPhone || "";
-                    document.getElementById('input-whatsapp').value = data.whatsapp || "";
-                    document.getElementById('input-linkedin').value = data.linkedin || "";
-
-                    document.getElementById('education-inputs').innerHTML = '';
-                    document.getElementById('experience-inputs').innerHTML = '';
-                    document.getElementById('language-inputs').innerHTML = '';
-
-                    if(data.education) {
-                        try {
-                            const edu = JSON.parse(data.education);
-                            edu.forEach(item => addEducationRow(item));
-                        } catch(e) {}
-                    }
-                    if(data.experience) {
-                        try {
-                            const exp = JSON.parse(data.experience);
-                            exp.forEach(item => addExperienceRow(item));
-                        } catch(e) {}
-                    }
-                    if(data.languages) {
-                        try {
-                            const lang = JSON.parse(data.languages);
-                            lang.forEach(item => addLanguageRow(item));
-                        } catch(e) {}
-                    }
-                    if(document.getElementById('education-inputs').children.length === 0) addEducationRow();
-                    if(document.getElementById('experience-inputs').children.length === 0) addExperienceRow();
-                    if(document.getElementById('language-inputs').children.length === 0) addLanguageRow();
-
-                    calculateAge();
-                    updatePreview();
-                    alert("Data loaded successfully!");
-                } else {
-                    alert("Candidate not found.");
-                }
-
-            } catch (error) {
-                console.error(error);
-                alert("Search failed: " + error.message);
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        }
-
         async function exportToClickUp() {
             const btn = document.getElementById('btn-clickup'); // Use ID selector for safety
             const originalText = btn ? btn.innerHTML : "ClickUp";
@@ -2687,6 +2490,20 @@
                 const refId = getValUpper('input-ref-id');
                 
                 if(!taskName || !refId) throw new Error("First Name and Reference ID are required.");
+
+                // Gather Complex Data
+                const complexData = getTableData();
+                const descriptionContent = `
+Imported via Resume Extractor Tool
+Reference ID: ${refId}
+
+---
+**Structured Data (Do Not Edit Manually):**
+\`\`\`json
+${JSON.stringify(complexData, null, 2)}
+\`\`\`
+---
+`;
 
                 const getDateTs = (id) => {
                     const val = getValueSafe(id);
@@ -2781,7 +2598,10 @@
                     await fetch(`https://api.clickup.com/api/v2/task/${taskId}`, {
                         method: 'PUT',
                         headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name: taskName, description: "Updated via Resume Extractor" })
+                        body: JSON.stringify({ 
+                            name: taskName, 
+                            description: descriptionContent 
+                        })
                     });
                     // Execute updates sequentially and catch individual errors (e.g., bad phone format)
                     for (const field of cleanCustomFields) {
@@ -2799,7 +2619,7 @@
                     if(btn) btn.innerHTML = `<i class="fa-solid fa-plus"></i> Creating Task...`;
                     const taskPayload = {
                         name: taskName,
-                        description: "Imported via Resume Extractor Tool",
+                        description: descriptionContent,
                         custom_fields: cleanCustomFields
                     };
                     const createTaskResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
@@ -2810,16 +2630,15 @@
 
                     if (!createTaskResponse.ok) {
                         const errText = await createTaskResponse.text();
-                        if (errText.includes("FIELD_011") || errText.includes("option index")) {
-                            throw new Error("ClickUp Type Mismatch: A 'Dropdown' field is receiving text. Change the ClickUp field to 'Text' type.");
-                        }
-                        // If it fails on creation, it might be due to a specific required field being bad. 
-                        // Try creation with minimal info, then update fields one by one.
+                        // Fallback handling...
                         console.warn("Direct creation failed, attempting fallback creation + update...", errText);
                          const fallbackResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
                             method: 'POST',
                             headers: { 'Authorization': CLICKUP_API_KEY, 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ name: taskName, description: "Fallback Creation" })
+                            body: JSON.stringify({ 
+                                name: taskName, 
+                                description: descriptionContent 
+                            })
                         });
                         if(!fallbackResponse.ok) throw new Error(`ClickUp API Error (Task): ${createTaskResponse.status} - ${errText}`);
                         
