@@ -320,7 +320,7 @@
                 </div>
                 <div>
                     <h1 class="text-sm font-bold uppercase tracking-wider text-gray-200">Resume Extractor</h1>
-                    <p class="text-[10px] text-blue-400">Multi-File Processing System</p>
+                    <p class="text-[10px] text-blue-400">Deep Scan & AI Enabled</p>
                 </div>
             </div>
 
@@ -330,10 +330,10 @@
                 <div class="relative group">
                     <div class="flex items-center bg-slate-800 border border-slate-600 rounded-lg px-2 py-1">
                         <i class="fa-solid fa-key text-yellow-500 text-xs mr-2"></i>
-                        <input type="password" id="gemini-api-key" placeholder="Enter Gemini API Key for Smart OCR" class="bg-transparent border-none text-xs text-white placeholder-gray-500 focus:ring-0 w-48">
+                        <input type="password" id="gemini-api-key" placeholder="Gemini Key (Optional)" class="bg-transparent border-none text-xs text-white placeholder-gray-500 focus:ring-0 w-32">
                     </div>
                     <div class="absolute top-full mt-1 left-0 bg-gray-800 text-xs text-gray-300 p-2 rounded shadow-lg hidden group-hover:block w-64 z-50">
-                        Optional: Enter Google Gemini API Key for advanced AI extraction. Without this, standard regex extraction is used.
+                        Optional: Use Google Gemini for AI-based analysis. If empty, the system uses the new Deep Regex & MRZ Engine.
                     </div>
                 </div>
 
@@ -1857,7 +1857,7 @@
                     status.innerText = "Sending extracted data to AI Core...";
                     await analyzeWithGemini(combinedText, apiKey);
                 } else {
-                    status.innerText = "Parsing text patterns (Regex Mode)...";
+                    status.innerText = "Running Deep Regex & MRZ Engine...";
                     await new Promise(r => setTimeout(r, 800));
                     fillFromOCR(combinedText);
                 }
@@ -1987,72 +1987,194 @@
             return result.value;
         }
 
+        // --- NEW: STRONG OCR ENGINE (REGEX + MRZ + CONTEXT) ---
         function fillFromOCR(text) {
-            console.log("Analyzing text via Regex..."); 
+            console.log("Starting Deep Regex Engine Analysis..."); 
             const fill = (id, val) => {
                 const el = document.getElementById(id);
-                if (el && !el.value && val) el.value = val;
+                // Only fill if empty to avoid overwriting user edits or previous better matches
+                if (el && !el.value && val) el.value = val.trim();
             };
 
-            const emailMatch = text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/i);
+            // 1. Clean Text
+            const cleanText = text.replace(/\|/g, 'I').replace(/\[/g, 'I').replace(/\]/g, 'I'); 
+            
+            // 2. MRZ PARSING (Machine Readable Zone for Passports) - HIGH CONFIDENCE
+            // Look for lines starting with P< or I< or V<
+            const mrzLines = cleanText.match(/[PIVA]<[A-Z0-9<]{30,}/g);
+            if (mrzLines && mrzLines.length >= 2) {
+                console.log("MRZ Detected - Extracting Passport Data");
+                try {
+                    const line2 = mrzLines.find(l => l.match(/[A-Z0-9]{9}\d{1}[A-Z]{3}\d{6}/)); // Contains number, dob, expiry
+                    const line1 = mrzLines.find(l => l.startsWith('P<')); // Name line
+
+                    if (line2) {
+                        // Passport Number (First 9 chars)
+                        let pptNo = line2.substring(0, 9).replace(/</g, '');
+                        fill('input-passport-no', pptNo);
+                        
+                        // DOB (Chars 13-19: YYMMDD)
+                        let dobRaw = line2.substring(13, 19);
+                        let dobDate = parseCompactDate(dobRaw); 
+                        if(dobDate) { fill('input-dob', dobDate); calculateAge(); }
+
+                        // Sex (Char 20)
+                        let sex = line2.charAt(20);
+                        if(sex === 'M') document.getElementById('input-gender').value = 'Male';
+                        if(sex === 'F') document.getElementById('input-gender').value = 'Female';
+
+                        // Expiry (Chars 21-27: YYMMDD)
+                        let expRaw = line2.substring(21, 27);
+                        let expDate = parseCompactDate(expRaw, true); // true = future bias
+                        if(expDate) fill('input-passport-exp', expDate);
+
+                         // Nationality (Chars 10-13)
+                         let natCode = line2.substring(10, 13).replace(/</g, '');
+                         if(natCode && natCode.length === 3) fill('input-nationality', natCode); 
+                    }
+
+                    if (line1) {
+                        // Name Extraction: P<USASURNAME<<GIVEN<NAME<<<<
+                        let namePart = line1.substring(5);
+                        let parts = namePart.split('<<');
+                        if(parts.length >= 1) fill('input-sname', parts[0].replace(/</g, ' '));
+                        if(parts.length >= 2) fill('input-fname', parts[1].replace(/</g, ' '));
+                    }
+                    
+                    // Auto-check passport attachment if MRZ found
+                    document.getElementById('input-att-2').checked = true;
+
+                } catch (e) { console.error("MRZ Parse Error", e); }
+            }
+
+            // 3. STRONG REGEX PARSING (Fallback & Supplement)
+
+            // Email (Refined to avoid noise)
+            const emailMatch = cleanText.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
             if(emailMatch) fill('input-email', emailMatch[0].toLowerCase());
 
-            const phoneMatch = text.match(/(?:Mobile|Phone|Cell|Tel)[\s:.-]*([\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6})/i);
-            if(phoneMatch) fill('input-mobile', phoneMatch[1].trim());
+            // Phone (International format bias)
+            // Looks for numbers starting with + or 00, or explicitly labelled
+            const phoneContext = cleanText.match(/(?:Mobile|Phone|Cell|Tel|WhatsApp)[:\s.-]*([+\d\s()-]{8,20})/i);
+            if (phoneContext) fill('input-mobile', phoneContext[1].replace(/[^\d+]/g, ''));
+            else {
+                // Fallback: finding lone phone-like strings
+                const phoneMatch = cleanText.match(/(?:\+91|\+971|\+1|\+44|00)[-\s]?[0-9]{3}[-\s]?[0-9]{3,}/);
+                if(phoneMatch) fill('input-mobile', phoneMatch[0]);
+            }
 
-            const passportMatch = text.match(/\b[A-Z]{1}[0-9]{7,9}\b/);
-            if(passportMatch) fill('input-passport-no', passportMatch[0]);
-
-            const datePattern = /[0-9]{2}[\/\-\.][0-9]{2}[\/\-\.][0-9]{2,4}/g;
-            const lines = text.split('\n');
-            lines.forEach(line => {
-                const lower = line.toLowerCase();
-                if (lower.includes('birth') || lower.includes('dob')) {
-                    const dob = line.match(datePattern);
-                    if (dob) {
-                        const iso = convertToISODate(dob[0]);
-                        if(iso) { fill('input-dob', iso); calculateAge(); }
+            // Dates (Context Aware)
+            const findDateWithContext = (keywords, elementId, futureBias = false) => {
+                const lines = cleanText.split('\n');
+                const datePattern = /\b(\d{1,2})[\/\-\.](\d{1,2}|[A-Za-z]{3})[\/\-\.](\d{2,4})\b/; // Matches 12/01/2020 or 12-Jan-2020
+                
+                for (let line of lines) {
+                    if (keywords.some(k => line.toLowerCase().includes(k))) {
+                        const match = line.match(datePattern);
+                        if (match) {
+                            const iso = convertToISODate(match[0], futureBias);
+                            if(iso) { fill(elementId, iso); return; }
+                        }
                     }
                 }
-                if (lower.includes('expir')) {
-                    const exp = line.match(datePattern);
-                    if (exp) {
-                        const iso = convertToISODate(exp[0]);
-                        if(iso) fill('input-passport-exp', iso);
-                    }
-                }
-            });
+            };
 
-            const pobMatch = text.match(/(?:Place of Birth|Birth Place)[\s:.-]*([A-Za-z,\s]+)/i);
-            if(pobMatch) fill('input-pob', pobMatch[1].trim());
+            findDateWithContext(['birth', 'dob', 'born'], 'input-dob', false);
+            findDateWithContext(['expiry', 'expires', 'valid until'], 'input-passport-exp', true);
 
-            const nameMatch = text.match(/(?:Name|Given Name|Full Name)[\s:.-]*([A-Za-z\s]+)/i);
-            if (nameMatch) {
-                const names = nameMatch[1].trim().split(' ');
-                if(names.length > 0) fill('input-fname', names[0]);
-                if(names.length > 1) fill('input-sname', names.slice(1).join(' '));
-            } 
+            // Names (If not filled by MRZ)
+            if (!document.getElementById('input-fname').value) {
+                const nameContext = cleanText.match(/(?:Name|Given Name)[:\s]+([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)/);
+                if(nameContext) fill('input-fname', nameContext[1]);
+            }
+            if (!document.getElementById('input-sname').value) {
+                const surContext = cleanText.match(/(?:Surname|Family Name|Last Name)[:\s]+([A-Z][a-z]+)/);
+                if(surContext) fill('input-sname', surContext[1]);
+            }
 
-            const natMatch = text.match(/(?:Nationality|Citizen of)[\s:.-]*([A-Za-z]+)/i);
+            // Gender (Regex)
+            const genderMatch = cleanText.match(/\b(Male|Female|Sex\s*[:\s-]*[MF])\b/i);
+            if (genderMatch) {
+                const g = genderMatch[0].toUpperCase();
+                if (g.includes('FEMALE') || g.includes(' F')) document.getElementById('input-gender').value = 'Female';
+                else if (g.includes('MALE') || g.includes(' M')) document.getElementById('input-gender').value = 'Male';
+            }
+
+            // Passport Number (Fallback if MRZ failed)
+            if (!document.getElementById('input-passport-no').value) {
+                // Look for 1 letter followed by 7-9 digits (Standard format)
+                const pptMatch = cleanText.match(/\b[A-Z]{1}\d{7,9}\b/);
+                if(pptMatch) fill('input-passport-no', pptMatch[0]);
+            }
+
+            // Nationality (Keyword Search)
+            const natMatch = cleanText.match(/(?:Nationality|Citizen of)[:\s]*([A-Za-z]+)/i);
             if(natMatch) fill('input-nationality', natMatch[1].toUpperCase());
 
-            if(text.toLowerCase().includes("passport")) document.getElementById('input-att-2').checked = true;
-            if(text.toLowerCase().includes("resume") || text.toLowerCase().includes("curriculum vitae")) document.getElementById('input-att-0').checked = true;
+            // Checklists Inference
+            if(cleanText.toLowerCase().includes("resume") || cleanText.toLowerCase().includes("curriculum vitae")) document.getElementById('input-att-0').checked = true;
+            if(cleanText.toLowerCase().includes("diploma") || cleanText.toLowerCase().includes("degree")) document.getElementById('input-att-4').checked = true;
             
+            // Trigger calculations
+            if(document.getElementById('input-dob').value) calculateAge();
             updatePreview();
         }
 
-        function convertToISODate(dateStr) {
+        // Helper: Convert DD/MM/YYYY or DD-MMM-YY to YYYY-MM-DD
+        function convertToISODate(dateStr, futureBias = false) {
             if(!dateStr) return null;
-            dateStr = dateStr.replace(/,/g, '');
-            const parts = dateStr.match(/(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})/);
-            if(parts) {
-                const day = parts[1].padStart(2, '0');
-                const month = parts[2].padStart(2, '0');
-                const year = parts[3];
-                return `${year}-${month}-${day}`;
+            
+            // Normalize separator
+            let norm = dateStr.replace(/[\/\.]/g, '-');
+            let parts = norm.split('-');
+            
+            if (parts.length !== 3) return null;
+
+            let d = parseInt(parts[0]);
+            let mStr = parts[1];
+            let y = parseInt(parts[2]);
+
+            // Handle Month names (JAN, Feb, etc.)
+            let m = 0;
+            if (isNaN(mStr)) {
+                const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+                m = months.indexOf(mStr.toLowerCase()) + 1;
+            } else {
+                m = parseInt(mStr);
             }
-            return null;
+
+            if(m < 1 || m > 12) return null;
+
+            // Handle 2 digit year
+            if (y < 100) {
+                const currentYear = new Date().getFullYear() % 100;
+                // Simple heuristic: if year is greater than current + 10, it's probably 19XX (e.g. DOB), unless future bias for expiry
+                if (futureBias) {
+                    y += 2000; 
+                } else {
+                     y += (y > currentYear + 10) ? 1900 : 2000;
+                }
+            }
+
+            return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        }
+
+        // Helper: Parse Compact YYMMDD date (from MRZ)
+        function parseCompactDate(yymmdd, futureBias = false) {
+            if(!yymmdd || yymmdd.length !== 6 || isNaN(yymmdd)) return null;
+            let y = parseInt(yymmdd.substring(0,2));
+            let m = parseInt(yymmdd.substring(2,4));
+            let d = parseInt(yymmdd.substring(4,6));
+
+            const currentYear = new Date().getFullYear() % 100;
+             if (futureBias) {
+                y += 2000; 
+            } else {
+                 y += (y > currentYear + 10) ? 1900 : 2000;
+            }
+
+            if(m < 1 || m > 12 || d < 1 || d > 31) return null;
+             return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         }
 
         async function saveToGoogleSheet() {
@@ -2456,7 +2578,7 @@
                     overlay.classList.add('opacity-0');
                     overlayCard.classList.remove('scale-100');
                     overlayCard.classList.add('scale-90');
-                    setTimeout(() => { overlay.classList.add('hidden'); }, 300);
+                    setTimeout(() => { overlay.classList.add('hidden'); }, 3000);
                 }, 3000);
 
             } catch (error) {
