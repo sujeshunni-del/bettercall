@@ -36,7 +36,7 @@
         .a4-page {
             width: 210mm;
             min-height: 297mm;
-            padding: 8mm; /* Reduced padding */
+            padding: 10mm; /* Increased slightly for better safe zone */
             margin: 0 auto;
             background: white;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -48,23 +48,55 @@
             text-transform: uppercase; 
         }
 
-        /* Print Specifics */
+        /* STRICT PRINT STYLES */
         @media print {
-            body * {
-                visibility: hidden;
+            /* Hide everything by default */
+            body > * {
+                display: none !important;
             }
-            #print-area, #print-area * {
-                visibility: visible;
+
+            /* Only show the print area container */
+            .flex-1 {
+                display: block !important;
+                overflow: visible !important;
+                height: auto !important;
             }
+
+            /* Hide the right panel container styling */
+            .w-3\/5 {
+                width: 100% !important;
+                background: white !important;
+                overflow: visible !important;
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Show the actual page */
             #print-area {
+                display: block !important;
+                visibility: visible !important;
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: 100%;
-                margin: 0;
-                box-shadow: none;
-                height: auto;
-                min-height: 0;
+                width: 210mm !important;
+                margin: 0 !important;
+                padding: 10mm !important; /* Keep internal padding */
+                box-shadow: none !important;
+                border: none !important;
+                min-height: auto !important;
+            }
+
+            /* Ensure background graphics print */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Define Page Size */
+            @page {
+                size: A4;
+                margin: 0; /* Remove browser default margins */
             }
         }
 
@@ -331,7 +363,7 @@
             <div class="flex items-center gap-4">
                 
                 <!-- AI Switch -->
-                <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
+                <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700 mr-2">
                     <span class="text-[10px] font-bold text-gray-400 uppercase">Use AI (Puter)</span>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="ai-toggle" class="sr-only peer" checked>
@@ -339,46 +371,59 @@
                     </label>
                 </div>
 
-                <!-- Buttons -->
-                <div class="flex gap-2">
+                <!-- SECTION 1: General Tools -->
+                <div class="flex gap-2 border-r border-slate-700 pr-3">
                     <!-- New / Reset Button -->
-                    <button onclick="resetForm()" class="nav-btn hover:border-red-400 hover:text-red-400">
+                    <button onclick="resetForm()" class="nav-btn hover:border-red-400 hover:text-red-400" title="Reset Form & ID">
                         <i class="fa-solid fa-rotate-right"></i>
                         <span>New</span>
                     </button>
 
-                    <!-- Advanced Search Button -->
-                    <button onclick="openAdvancedSearch()" class="nav-btn bg-indigo-600 border border-indigo-500 shadow-lg hover:bg-indigo-500 shadow-indigo-500/20">
-                        <i class="fa-solid fa-bolt"></i>
-                        <span>Adv. Search</span>
-                    </button>
-                    
-                    <!-- OCR (Make File) - Opens NEW MODAL -->
-                    <button onclick="openFileModal()" class="nav-btn bg-blue-700/50 border-blue-600 hover:bg-blue-600">
-                        <i class="fa-solid fa-file-import"></i>
-                        <span>Upload Files</span>
-                    </button>
-
                     <!-- Report / Template -->
-                    <button onclick="toggleTemplatePanel()" class="nav-btn hover:border-yellow-400 hover:text-yellow-400">
+                    <button onclick="toggleTemplatePanel()" class="nav-btn hover:border-yellow-400 hover:text-yellow-400" title="Toggle Sections">
                         <i class="fa-solid fa-sliders"></i>
                         <span>Template</span>
                     </button>
 
-                    <!-- ClickUp Export / Save PDF -->
-                    <button id="btn-clickup" onclick="exportToClickUp()" class="nav-btn hover:border-purple-400 hover:text-purple-400 opacity-50 cursor-not-allowed" disabled title="Fill required fields">
+                    <!-- Advanced Search Button -->
+                    <button onclick="openAdvancedSearch()" class="nav-btn bg-indigo-600 border border-indigo-500 shadow-lg hover:bg-indigo-500 shadow-indigo-500/20" title="Search Database">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Adv. Search</span>
+                    </button>
+                </div>
+
+                <!-- SECTION 2: Core Processing -->
+                <div class="flex gap-2 border-r border-slate-700 pr-3">
+                    <!-- OCR Files -->
+                    <button onclick="openFileModal()" class="nav-btn bg-blue-700/50 border-blue-600 hover:bg-blue-600" title="Extract Data from Files">
+                        <i class="fa-solid fa-file-import"></i>
+                        <span>OCR Files</span>
+                    </button>
+
+                    <!-- ClickUp Export Data Only -->
+                    <button id="btn-save-data" onclick="saveDataToClickUp()" class="nav-btn hover:border-purple-400 hover:text-purple-400 opacity-50 cursor-not-allowed" disabled title="Save Data Fields Only">
+                        <i class="fa-solid fa-database"></i>
+                        <span>ClickUp Save</span>
+                    </button>
+
+                    <!-- ClickUp Upload PDF Only -->
+                    <button id="btn-upload-pdf" onclick="savePdfToClickUp()" class="nav-btn hover:border-orange-400 hover:text-orange-400 opacity-50 cursor-not-allowed" disabled title="Upload PDF to Task">
                         <i class="fa-solid fa-cloud-arrow-up"></i>
                         <span>Save PDF</span>
                     </button>
+                </div>
 
+                <!-- SECTION 3: Output -->
+                <div class="flex gap-2">
+                    <!-- Native Print Button -->
                     <!-- Native Print Button (For Wondershare/Printers) -->
-                    <button id="btn-print" onclick="printReport()" class="nav-btn hover:border-cyan-400 hover:text-cyan-400 opacity-50 cursor-not-allowed" disabled title="Fill required fields">
+                    <button id="btn-print" onclick="printReport()" class="nav-btn hover:border-cyan-400 hover:text-cyan-400 opacity-50 cursor-not-allowed" disabled title="Print to PDF/Printer">
                         <i class="fa-solid fa-print"></i>
                         <span>Print</span>
                     </button>
 
                      <!-- PDF Download (Existing but styled as action) -->
-                     <button id="btn-pdf" onclick="downloadPDF()" class="nav-btn bg-green-700/50 border-green-600 hover:bg-green-600 opacity-50 cursor-not-allowed" disabled title="Fill required fields">
+                     <button id="btn-pdf" onclick="downloadPDF()" class="nav-btn bg-green-700/50 border-green-600 hover:bg-green-600 opacity-50 cursor-not-allowed" disabled title="Download Image PDF">
                         <i class="fa-solid fa-download"></i>
                         <span>Img PDF</span>
                     </button>
@@ -2121,20 +2166,60 @@
             }
         }
 
-        function downloadPDF() {
+        // --- UPDATED: PDF Generation (Fixes Blank Page) ---
+        async function downloadPDF() {
             const element = document.getElementById('print-area');
+            
+            // 1. Create a clone to manipulate styles without affecting the UI
+            const clone = element.cloneNode(true);
+            
+            // 2. Remove shadows and force dimensions on the clone
+            clone.style.boxShadow = 'none';
+            clone.style.margin = '0';
+            clone.style.width = '210mm'; // Force A4 width
+            // Remove min-height to prevent forcing a second page if content is short
+            clone.style.minHeight = 'auto'; 
+            clone.style.height = 'auto'; 
+
+            // 3. Place clone in a temporary container off-screen
+            const container = document.createElement('div');
+            container.style.position = 'absolute';
+            container.style.left = '-9999px';
+            container.style.top = '0';
+            container.style.width = '210mm'; // Constrain container
+            container.appendChild(clone);
+            document.body.appendChild(container);
+
+            // 4. Generate PDF with strict pagebreak settings
             const opt = {
-                margin: 0,
+                margin: 0, // No margin, we handle padding in CSS
                 filename: 'Application_Report.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true, 
+                    scrollY: 0, // Prevent scrolling issues
+                    windowWidth: 794 // Approx 210mm in pixels at 96dpi
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Avoid breaking inside elements
             };
+
             try {
-                html2pdf().set(opt).from(element).save();
+                await html2pdf().set(opt).from(clone).save();
             } catch(e) {
                 alert("PDF Error: " + e.message);
+            } finally {
+                // Clean up
+                document.body.removeChild(container);
             }
+        }
+
+        // --- UPDATED: Print Function ---
+        function printReport() {
+            // Simply trigger window print. 
+            // The @media print CSS defined in <style> handles the hiding of other elements.
+            window.print();
         }
 
         function closeScannerOverlay() {
