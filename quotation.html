@@ -571,92 +571,90 @@
                 // Create Login Overlay
                 const div = document.createElement('div');
                 div.id = 'loginOverlay';
-                div.className = 'fixed inset-0 z-[100] flex items-center justify-center p-4 fade-in overflow-hidden';
-                // Deep sophisticated gradient background
-                div.style.background = 'radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%)';
+                div.className = 'fixed inset-0 z-[100] flex items-center justify-center p-4 fade-in overflow-hidden bg-slate-900';
+                
+                // Dubai Skyline Image
+                const bgUrl = "https://images.unsplash.com/photo-1512453979798-5ea904ac66de?q=80&w=2000&auto=format&fit=crop"; 
                 
                 div.innerHTML = `
-                    <!-- Decorative Background Elements (Animated) -->
-                    <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                        <div class="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[100px] animate-[pulse_8s_ease-in-out_infinite]"></div>
-                        <div class="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[100px] animate-[pulse_10s_ease-in-out_infinite]"></div>
+                    <!-- Background Image with Overlay -->
+                    <div class="absolute inset-0 z-0">
+                        <!-- Animated Background -->
+                        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transform animate-[slowZoom_30s_infinite_alternate]" style="background-image: url('${bgUrl}');"></div>
+                        <!-- Dark Gradient Overlay for Readability -->
+                        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[1px]"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-slate-900/20"></div>
                     </div>
 
-                    <!-- Card Container -->
-                    <div class="relative w-full max-w-[420px] bg-white/95 backdrop-blur-2xl rounded-[2rem] shadow-2xl border border-white/20 p-8 md:p-10 transform transition-all duration-500 hover:shadow-blue-900/20">
+                    <!-- Login Card -->
+                    <div class="relative z-10 w-full max-w-[380px] bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl p-8 overflow-hidden transform transition-all duration-500 hover:shadow-blue-900/30">
+                        <!-- Decorative Glass Reflection -->
+                        <div class="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/30 rounded-full blur-[60px] pointer-events-none"></div>
+                        <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-500/20 rounded-full blur-[60px] pointer-events-none"></div>
                         
-                        <!-- Header Section -->
-                        <div class="text-center mb-10 relative">
-                            <div class="relative inline-block group">
-                                <!-- Company Logo Container -->
-                                <div class="w-24 h-24 bg-white rounded-2xl flex items-center justify-center shadow-xl shadow-slate-900/10 transform -rotate-3 transition-transform duration-300 group-hover:rotate-0 border border-slate-100 p-4">
-                                    <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/b42b6aac234ae66a83e4b31e4b2d61a3f67ffa87/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain">
-                                </div>
-                                <!-- Online Status Dot -->
-                                <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center p-1 shadow-sm">
-                                    <div class="w-full h-full bg-emerald-500 rounded-full animate-pulse"></div>
-                                </div>
+                        <!-- Header -->
+                        <div class="text-center mb-8 relative">
+                            <!-- UPDATED: Logo with Beat & Glow Animation (No Twist) -->
+                            <div class="w-24 h-24 mx-auto bg-white/95 rounded-2xl flex items-center justify-center mb-6 p-4 animate-[beatGlow_3s_ease-in-out_infinite]">
+                                <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/b42b6aac234ae66a83e4b31e4b2d61a3f67ffa87/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain">
                             </div>
                             
-                            <h2 class="text-3xl font-black text-slate-800 tracking-tighter mt-6 mb-1">
-                                Better Call
-                            </h2>
-                            <div class="flex items-center justify-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                                <span class="w-8 h-px bg-slate-200"></span>
-                                Immigration CRM
-                                <span class="w-8 h-px bg-slate-200"></span>
+                            <h2 class="text-2xl font-black text-white tracking-tight drop-shadow-lg uppercase">Better Call</h2>
+                            <div class="flex items-center justify-center gap-2 mt-2">
+                                <span class="h-px w-6 bg-blue-400/50"></span>
+                                <p class="text-[9px] text-blue-100 uppercase tracking-[0.25em] font-medium">IMMIGRATION</p>
+                                <span class="h-px w-6 bg-blue-400/50"></span>
                             </div>
                         </div>
 
-                        <!-- Login Form -->
-                        <form onsubmit="event.preventDefault(); auth.login(this.username.value, this.password.value)" class="space-y-6">
-                            
-                            <!-- Username Field -->
-                            <div class="group relative">
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 ml-1 transition-colors group-focus-within:text-blue-600">Access ID</label>
-                                <div class="relative transition-all duration-300 focus-within:scale-[1.02]">
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                                        <i class="fa-regular fa-id-card text-lg"></i>
+                        <!-- Form -->
+                        <form onsubmit="event.preventDefault(); auth.login(this.username.value, this.password.value)" class="space-y-5 relative z-10">
+                            <div class="space-y-1">
+                                <label class="text-[9px] uppercase font-bold text-blue-100/70 ml-1 tracking-wider">User Identity</label>
+                                <div class="relative group">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-white/50 group-focus-within:text-white transition-colors">
+                                        <i class="fa-regular fa-user"></i>
                                     </div>
-                                    <input type="text" name="username" 
-                                        class="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-sm font-bold text-slate-700 placeholder-slate-300 outline-none focus:bg-white focus:border-blue-500 focus:shadow-lg focus:shadow-blue-500/10 transition-all" 
-                                        required placeholder="Enter User ID" autocomplete="off">
+                                    <input type="text" name="username" required placeholder="Enter User ID" autocomplete="off"
+                                        class="w-full pl-11 pr-4 py-3 bg-slate-900/60 border border-white/10 rounded-xl text-white placeholder-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all font-medium backdrop-blur-sm hover:bg-slate-900/70">
                                 </div>
                             </div>
 
-                            <!-- Password Field -->
-                            <div class="group relative">
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 ml-1 transition-colors group-focus-within:text-blue-600">Secure Key</label>
-                                <div class="relative transition-all duration-300 focus-within:scale-[1.02]">
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                                        <i class="fa-solid fa-fingerprint text-lg"></i>
+                            <div class="space-y-1">
+                                <label class="text-[9px] uppercase font-bold text-blue-100/70 ml-1 tracking-wider">Secure Key</label>
+                                <div class="relative group">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-white/50 group-focus-within:text-white transition-colors">
+                                        <i class="fa-solid fa-lock"></i>
                                     </div>
-                                    <input type="password" name="password" 
-                                        class="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-sm font-bold text-slate-700 placeholder-slate-300 outline-none focus:bg-white focus:border-blue-500 focus:shadow-lg focus:shadow-blue-500/10 transition-all" 
-                                        required placeholder="••••••••">
+                                    <input type="password" name="password" required placeholder="••••••••"
+                                        class="w-full pl-11 pr-4 py-3 bg-slate-900/60 border border-white/10 rounded-xl text-white placeholder-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all font-medium backdrop-blur-sm hover:bg-slate-900/70">
                                 </div>
                             </div>
 
-                            <!-- Submit Button -->
-                            <button type="submit" id="btnLogin" class="w-full py-4 mt-2 bg-slate-900 text-white rounded-2xl font-bold text-sm tracking-wide shadow-xl shadow-slate-900/20 hover:bg-slate-800 hover:shadow-2xl hover:shadow-slate-900/30 hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-3 group overflow-hidden relative">
-                                <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
-                                <span class="relative z-10">Authenticate</span> 
-                                <i class="fa-solid fa-arrow-right-long relative z-10 group-hover:translate-x-1 transition-transform"></i>
+                            <button type="submit" id="btnLogin" class="w-full py-3.5 mt-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-900/50 transform transition-all hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 group">
+                                <span>Sign In</span>
+                                <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition-transform"></i>
                             </button>
-
                         </form>
 
-                        <!-- Footer Info -->
-                        <div class="mt-8 text-center">
-                            <p class="text-[10px] text-slate-400 font-medium flex items-center justify-center gap-2 opacity-60 hover:opacity-100 transition-opacity cursor-default">
-                                <i class="fa-solid fa-lock text-slate-300"></i> 
-                                <span>End-to-End Encrypted Session</span>
+                        <!-- Footer -->
+                        <div class="mt-8 text-center pt-4 border-t border-white/10">
+                            <p class="text-[8px] text-white/40 font-light tracking-wide flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-building-shield"></i> Secure Session • Dubai Healthcare City
                             </p>
                         </div>
                     </div>
-                    
+
                     <style>
-                        @keyframes shimmer { 100% { transform: translateX(100%); } }
+                        @keyframes slowZoom {
+                            0% { transform: scale(1); }
+                            100% { transform: scale(1.1); }
+                        }
+                        /* Added Beat & Glow Animation */
+                        @keyframes beatGlow {
+                            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
+                            50% { transform: scale(1.05); box-shadow: 0 0 35px rgba(59, 130, 246, 0.6); }
+                        }
                     </style>
                 `;
                 document.body.appendChild(div);
