@@ -101,39 +101,117 @@
             flex-direction: column;
         }
         
+        /* Updated Typography for A4 */
         .print-header { border-bottom: 2px solid #0f172a; padding-bottom: 15px; margin-bottom: 20px; }
-        .print-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600; margin-bottom: 2px; }
-        .print-value { font-size: 11px; font-weight: 600; color: #0f172a; }
-        .print-table th { background: #f8fafc; font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; padding: 8px 12px; font-weight: 700; border-bottom: 1px solid #e2e8f0; }
-        .print-table td { padding: 8px 12px; font-size: 11px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+        .print-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 700; margin-bottom: 4px; }
+        .print-value { font-size: 13px; font-weight: 600; color: #0f172a; line-height: 1.4; }
+        
+        /* Larger Table Fonts */
+        .print-table th { 
+            background: #f8fafc; 
+            font-size: 10px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em; 
+            color: #475569; 
+            padding: 10px 12px; 
+            font-weight: 800; 
+            border-bottom: 2px solid #e2e8f0; 
+        }
+        .print-table td { 
+            padding: 12px 12px; 
+            font-size: 12px; 
+            border-bottom: 1px solid #f1f5f9; 
+            color: #334155; 
+        }
         .print-table tr:last-child td { border-bottom: none; }
-        .print-total-row td { border-top: 2px solid #0f172a; background: #f8fafc; font-weight: 700; color: #0f172a; font-size: 12px; }
+        .print-total-row td { border-top: 2px solid #0f172a; background: #f8fafc; font-weight: 800; color: #0f172a; font-size: 14px; padding-top: 15px; }
 
         @media screen and (max-width: 800px) {
-            .a4-paper { width: 100%; min-height: auto; padding: 15px; }
+            .a4-paper { width: 100%; min-height: auto; height: auto; padding-bottom: 20px; }
+            .prop-header, .prop-body { padding: 20px; }
         }
         
-        /* UPDATED PRINT STYLES FOR A4 PDF */
+        /* UPDATED PRINT STYLES FOR VECTOR QUALITY */
         @media print {
-            @page { size: A4; margin: 0; }
-            body { background: white; margin: 0; padding: 0; }
-            body * { visibility: hidden; }
-            #previewModal {
-                position: fixed; left: 0; top: 0; width: 100%; height: 100%;
-                margin: 0; padding: 0; background: white; visibility: visible;
-                overflow: visible; z-index: 9999; display: block !important;
+            @page { 
+                size: A4; 
+                margin: 0; 
             }
-            .a4-paper {
-                visibility: visible; position: absolute; left: 0; top: 0;
-                width: 210mm !important; height: 297mm !important;
-                margin: 0 !important; padding: 12mm !important;
-                box-shadow: none !important; border: none !important;
-                background: white !important;
+            
+            html, body {
+                width: 210mm;
+                height: 297mm;
+                background: white;
+                margin: 0;
+                padding: 0;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
-            .a4-paper * { visibility: visible; }
-            .no-print { display: none !important; }
+
+            /* Hide everything by default */
+            body * { 
+                visibility: hidden; 
+                animation: none !important; 
+                transition: none !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+
+            /* Show only the preview modal container and content */
+            #previewModal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background: white;
+                visibility: visible;
+                overflow: visible;
+                z-index: 9999;
+                display: block !important;
+            }
+
+            .a4-paper {
+                visibility: visible;
+                position: relative; /* Flow naturally */
+                width: 210mm !important;
+                height: 296mm !important; /* Precise height */
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                border: none !important;
+                box-shadow: none !important;
+                overflow: hidden !important; /* Keep layout strict */
+                transform: none !important;
+                
+                /* Ensure Vector Rendering */
+                -webkit-font-smoothing: antialiased !important;
+                -moz-osx-font-smoothing: grayscale !important;
+                text-rendering: geometricPrecision !important;
+            }
+
+            /* Ensure all children of the paper are visible */
+            .a4-paper * {
+                visibility: visible;
+            }
+
+            /* Hide toolbar */
+            .no-print { 
+                display: none !important; 
+            }
+            
+            /* Fix Backgrounds */
+            .prop-header {
+                background-color: #0f172a !important; /* Ensure header color prints */
+                color: white !important;
+            }
+            
+            /* Ensure text colors are solid for vector output */
+            p, h1, h2, h3, span, div {
+                color-adjust: exact;
+            }
         }
     </style>
 </head>
@@ -233,170 +311,133 @@
             <!-- A4 Document (Redesigned) -->
             <div class="a4-paper" id="a4Content">
                 
-                <!-- 1. CREATIVE HEADER SECTION -->
-                <div class="relative mb-10">
-                    <!-- Background Typographic Element -->
-                    <div class="absolute -top-10 left-0 w-full overflow-hidden leading-none select-none pointer-events-none opacity-5">
-                        <span class="text-[140px] font-black text-slate-900 tracking-tighter uppercase font-sans">Proposal</span>
-                    </div>
-
-                    <div class="relative z-10 flex justify-between items-end pb-6 border-b-2 border-slate-900 pt-8 px-2">
-                        <!-- Left: Brand Identity -->
-                        <div class="flex flex-col gap-5">
-                            <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/b42b6aac234ae66a83e4b31e4b2d61a3f67ffa87/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="h-12 w-auto">
+                <!-- 1. HEADER SECTION -->
+                <div class="flex justify-between items-start mb-6 pb-6 border-b-2 border-slate-900 pt-10 px-12">
+                    <div>
+                        <!-- Logo + Company Name -->
+                        <div class="flex items-center gap-5 mb-4">
+                            <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/b42b6aac234ae66a83e4b31e4b2d61a3f67ffa87/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="h-16 w-auto">
                             <div>
-                                <h1 class="text-xs font-black text-slate-900 uppercase tracking-[0.2em]">Better Call Immigration</h1>
-                                <div class="flex items-center gap-2 text-[8px] font-medium text-slate-500 mt-1.5 uppercase tracking-wide">
-                                    <span>Dubai Healthcare City</span>
-                                    <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
-                                    <span>Immigration Services</span>
-                                </div>
+                                <h1 class="text-2xl font-black text-slate-900 uppercase tracking-tight leading-none">Better Call</h1>
+                                <p class="text-[10px] font-bold text-blue-600 uppercase tracking-[0.25em] leading-none mt-1">Immigration</p>
                             </div>
-                        </div>
-
-                        <!-- Right: Reference & Meta -->
-                        <div class="text-right">
-                            <div class="flex flex-col items-end">
-                                <div class="bg-blue-600 text-white text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 shadow-md shadow-blue-200">
-                                    Official Quotation
-                                </div>
-                                
-                                <div class="flex flex-col gap-0.5">
-                                    <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Reference ID</span>
-                                    <span class="font-mono text-xl font-bold text-slate-900 tracking-tight" id="p_ref_full">BCIQ-1002</span>
-                                </div>
-                                
-                                <div class="mt-2 flex items-center justify-end gap-2 text-[9px]">
-                                    <span class="text-slate-400">Date:</span>
-                                    <span class="font-bold text-slate-700" id="p_date">---</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. Client & Trip Summary -->
-                <div class="border border-slate-200 rounded-xl overflow-hidden mb-6 flex">
-                    <!-- Client Col -->
-                    <div class="flex-1 p-4 border-r border-slate-100">
-                        <h3 class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-user-circle"></i> Proposal For
-                        </h3>
-                        <p class="text-sm font-bold text-slate-800 uppercase" id="p_client">CLIENT NAME</p>
-                        <div class="grid grid-cols-2 gap-y-1 mt-2">
-                            <div>
-                                <p class="print-label">Nationality</p>
-                                <p class="print-value" id="p_nation">---</p>
-                            </div>
-                            <div>
-                                <p class="print-label">Phone</p>
-                                <p class="print-value" id="p_phone">---</p>
-                            </div>
-                            <div class="col-span-2 mt-1">
-                                <p class="print-label">Position</p>
-                                <p class="print-value" id="p_job">---</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Travel Col -->
-                    <div class="flex-1 p-4 bg-slate-50/50">
-                        <h3 class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-plane"></i> Visa Application Details
-                        </h3>
-                        <div class="grid grid-cols-2 gap-y-3">
-                            <div>
-                                <p class="print-label">Destination</p>
-                                <p class="print-value text-blue-700" id="p_dest">---</p>
-                            </div>
-                            <div>
-                                <p class="print-label">Applicants</p>
-                                <p class="print-value" id="p_pax">1 Pax</p>
-                            </div>
-                            <div class="col-span-2">
-                                <p class="print-label">Visa Category</p>
-                                <p class="print-value" id="p_visa">---</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Financial Table -->
-                <div class="mb-6">
-                    <h3 class="text-[10px] font-bold text-slate-800 uppercase tracking-widest mb-2 border-l-2 border-blue-500 pl-2">Financial Breakdown</h3>
-                    <table class="w-full text-left border-collapse print-table">
-                        <thead>
-                            <tr>
-                                <th class="w-1/2">Description</th>
-                                <th class="text-right">Amount (EUR)</th>
-                                <th class="text-right">Amount (AED)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="p_table_body">
-                            <!-- Populated via JS -->
-                        </tbody>
-                        <tfoot class="print-total-row">
-                            <tr>
-                                <td class="pt-3">Total Amount Payable</td>
-                                <td class="text-right pt-3" id="p_total_eur">€0.00</td>
-                                <td class="text-right pt-3" id="p_total_aed">AED 0.00</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-                <!-- 4. Payment Plan (Compact Timeline) -->
-                <div class="mb-auto">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="text-[10px] font-bold text-slate-800 uppercase tracking-widest border-l-2 border-blue-500 pl-2">Payment Schedule</h3>
-                        <span class="text-[9px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200" id="p_plan_name">Standard Plan</span>
-                    </div>
-                    
-                    <div class="bg-slate-50 rounded-xl border border-slate-200 p-4">
-                        <div class="flex justify-between text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1">
-                            <span>Installment</span>
-                            <span>Amount Due</span>
-                        </div>
-                        <div class="space-y-2" id="p_payment_schedule">
-                            <!-- Populated via JS -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. Footer / Terms (Small & Compact) -->
-                <div class="prop-footer mt-4 pt-4 border-t border-slate-200">
-                    <div class="grid grid-cols-3 gap-8 items-end">
-                        <div class="col-span-2 space-y-1 text-[6px] leading-relaxed text-slate-500 text-justify">
-                            <p class="font-bold text-slate-700 mb-1 text-[7px] uppercase">Terms & Conditions:</p>
-                            <p>1. <strong>Fees:</strong> Registration fees are strictly non-refundable.</p>
-                            <p>2. <strong>Approval:</strong> Visa issuance is at the sole discretion of the Embassy/Consulate.</p>
-                            <p>3. <strong>Validity:</strong> This proposal is valid for 7 days from the date of issue.</p>
-                            <p>4. <strong>Documents:</strong> Client is responsible for the authenticity of provided documents.</p>
                         </div>
                         
-                        <!-- CREATIVE ADVISOR CARD (Compact) -->
-                        <div class="col-span-1">
-                            <div class="bg-slate-50 border-l-2 border-blue-600 p-2 rounded-r-md">
-                                <p class="text-[6px] font-bold text-slate-400 uppercase tracking-widest mb-1">Your Consultant</p>
-                                <div class="flex items-center gap-2 mb-1">
-                                    <div class="w-5 h-5 rounded-full bg-slate-200 flex items-center justify-center text-[8px] font-bold text-slate-600 border border-white shadow-sm" id="p_advisor_initial">A</div>
-                                    <div>
-                                        <p class="text-[8px] font-black text-slate-800 uppercase leading-none" id="p_advisor_name">Advisor Name</p>
-                                        <p class="text-[6px] font-medium text-slate-500 uppercase leading-none mt-0.5" id="p_advisor_role">Immigration Consultant</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-1.5 mt-1 pt-1 border-t border-slate-200/50">
-                                    <i class="fa-solid fa-phone text-[7px] text-blue-500"></i>
-                                    <p class="text-[8px] font-mono font-bold text-slate-700" id="p_advisor_phone">+971 -- --- ----</p>
-                                </div>
+                        <div class="text-[10px] text-slate-500 font-medium uppercase tracking-widest leading-relaxed pl-1">
+                            <p>Dubai Healthcare City, Building 64</p>
+                            <p>R320, 12th Floor, Citibank</p>
+                            <p>Dubai, United Arab Emirates</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <h1 class="text-5xl font-black text-slate-900 uppercase tracking-tighter mb-3 opacity-90">Quotation</h1>
+                        <div class="space-y-1">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reference No.</p>
+                            <p class="text-xl font-mono font-bold text-blue-600" id="p_ref_full">---</p>
+                        </div>
+                        <div class="mt-3 space-y-1">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Date Issued</p>
+                            <p class="text-base font-bold text-slate-700" id="p_date">---</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. ADDRESS / DETAILS GRID -->
+                <div class="px-12 mb-8">
+                    <div class="flex gap-16">
+                        <!-- Client Info -->
+                        <div class="flex-1">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 border-b border-slate-200 pb-1">Prepared For</p>
+                            <h3 class="text-xl font-bold text-slate-900 uppercase mb-3 leading-tight" id="p_client">Client Name</h3>
+                            <div class="space-y-2 text-xs text-slate-600">
+                                <p class="flex items-center gap-3"><span class="w-20 text-slate-400 uppercase font-bold text-[10px]">Position</span> <span class="font-semibold" id="p_job">---</span></p>
+                                <p class="flex items-center gap-3"><span class="w-20 text-slate-400 uppercase font-bold text-[10px]">Nationality</span> <span class="font-semibold" id="p_nation">---</span></p>
+                                <p class="flex items-center gap-3"><span class="w-20 text-slate-400 uppercase font-bold text-[10px]">Contact</span> <span class="font-mono font-semibold" id="p_phone">---</span></p>
                             </div>
-                            <div class="text-right mt-2">
-                                <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/b42b6aac234ae66a83e4b31e4b2d61a3f67ffa87/Bettercall%20Logo%20SVG%2003.svg" alt="Logo" class="h-4 w-auto ml-auto opacity-40 grayscale">
+                        </div>
+
+                        <!-- Visa Info -->
+                        <div class="flex-1">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 border-b border-slate-200 pb-1">Visa Details</p>
+                            <h3 class="text-xl font-bold text-blue-600 uppercase mb-3 leading-tight" id="p_dest">Destination</h3>
+                            <div class="space-y-2 text-xs text-slate-600">
+                                <p class="flex items-center gap-3"><span class="w-24 text-slate-400 uppercase font-bold text-[10px]">Visa Type</span> <span class="font-semibold" id="p_visa">---</span></p>
+                                <p class="flex items-center gap-3"><span class="w-24 text-slate-400 uppercase font-bold text-[10px]">Applicants</span> <span class="font-semibold" id="p_pax">1 Pax</span></p>
+                                <p class="flex items-center gap-3"><span class="w-24 text-slate-400 uppercase font-bold text-[10px]">Service</span> <span class="font-semibold">Standard Processing</span></p>
                             </div>
                         </div>
                     </div>
-                    <div class="text-center mt-2 pt-2 border-t border-slate-100 text-slate-300 text-[6px]">
-                        Generated electronically via Better Call System • Reference: <span id="p_ref_footer">---</span>
+                </div>
+
+                <!-- 3. FINANCIAL TABLE -->
+                <div class="px-12 mb-6 flex-1">
+                    <table class="w-full text-left border-collapse mb-6">
+                        <thead>
+                            <tr class="border-b-2 border-slate-900">
+                                <th class="py-3 text-[10px] font-bold text-slate-900 uppercase tracking-wider w-1/2">Description / Service</th>
+                                <th class="py-3 text-[10px] font-bold text-slate-900 uppercase tracking-wider text-right">Amount (EUR)</th>
+                                <th class="py-3 text-[10px] font-bold text-slate-900 uppercase tracking-wider text-right">Amount (AED)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="p_table_body" class="text-xs text-slate-700">
+                            <!-- Content Populated via JS -->
+                        </tbody>
+                    </table>
+                    
+                    <div class="flex justify-end">
+                        <div class="bg-slate-50 p-5 rounded-xl min-w-[240px] border border-slate-200 shadow-sm">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 text-right">Total Payable</p>
+                            <div class="flex justify-end items-baseline gap-2">
+                                <span class="text-3xl font-black text-slate-900" id="p_total_eur">€0.00</span>
+                            </div>
+                            <p class="text-right text-xs font-mono font-bold text-slate-500 mt-1 border-t border-slate-200 pt-1" id="p_total_aed">AED 0.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. PAYMENT SCHEDULE & FOOTER -->
+                <div class="px-12 pb-12 mt-auto bg-white">
+                    
+                    <!-- Schedule -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-3">
+                            <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Payment Schedule</h4>
+                            <span class="text-[9px] px-2 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200 uppercase font-bold" id="p_plan_name">Standard</span>
+                        </div>
+                        <div class="grid grid-cols-1 gap-2 border-l-2 border-slate-200 pl-5" id="p_payment_schedule">
+                            <!-- Content Populated via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Terms & Signature Grid -->
+                    <div class="border-t border-slate-200 pt-6 grid grid-cols-4 gap-10">
+                        <div class="col-span-3">
+                            <h5 class="text-[9px] font-bold text-slate-900 uppercase mb-2">Terms & Conditions</h5>
+                            <ul class="text-[9px] text-slate-500 space-y-1.5 list-disc pl-3 leading-relaxed">
+                                <li><strong>Non-Refundable:</strong> All registration and processing fees are strictly non-refundable under any circumstance.</li>
+                                <li><strong>Consultancy Only:</strong> Visa issuance is at the sole discretion of the Embassy. We act as consultants only.</li>
+                                <li><strong>Validity:</strong> This quotation is valid for 7 days. Exchange rates are subject to change.</li>
+                                <li><strong>Documents:</strong> The applicant is responsible for the authenticity of provided documents.</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Advisor Card -->
+                        <div class="col-span-1">
+                            <div class="bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
+                                <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-2">Immigration Consultant</p>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold shadow-md" id="p_advisor_initial">A</div>
+                                    <div>
+                                        <p class="text-[10px] font-bold text-slate-900 uppercase leading-none" id="p_advisor_name">Name</p>
+                                        <p class="text-[8px] text-slate-500 mt-1 font-mono font-medium" id="p_advisor_phone">+971...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-8 pt-4 border-t border-slate-100">
+                        <p class="text-[8px] text-slate-300 uppercase tracking-widest font-medium">Better Call Immigration • Dubai Healthcare City • Building 64</p>
                     </div>
                 </div>
 
@@ -595,16 +636,15 @@
                         <!-- Header -->
                         <div class="text-center mb-8 relative">
                             <!-- UPDATED: Logo with Beat & Glow Animation (No Twist) -->
-                            <div class="w-24 h-24 mx-auto bg-white/95 rounded-2xl flex items-center justify-center mb-6 p-4 animate-[beatGlow_3s_ease-in-out_infinite]">
+                            <div class="w-24 h-24 mx-auto bg-white/95 rounded-2xl flex items-center justify-center mb-4 p-4 animate-[beatGlow_3s_ease-in-out_infinite]">
                                 <img src="https://raw.githubusercontent.com/sujeshunni-del/bettercall/b42b6aac234ae66a83e4b31e4b2d61a3f67ffa87/Bettercall%20Logo%20SVG%2003.svg" alt="Better Call Logo" class="w-full h-full object-contain">
                             </div>
                             
-                            <h2 class="text-2xl font-black text-white tracking-tight drop-shadow-lg uppercase">Better Call</h2>
-                            <div class="flex items-center justify-center gap-2 mt-2">
-                                <span class="h-px w-6 bg-blue-400/50"></span>
-                                <p class="text-[9px] text-blue-100 uppercase tracking-[0.25em] font-medium">IMMIGRATION</p>
-                                <span class="h-px w-6 bg-blue-400/50"></span>
-                            </div>
+                            <!-- UPDATED: Company Name near Logo -->
+                            <h2 class="text-2xl font-black text-white tracking-tight drop-shadow-lg uppercase leading-none">
+                                Better Call<br>
+                                <span class="text-blue-400 text-lg tracking-widest">Immigration</span>
+                            </h2>
                         </div>
 
                         <!-- Form -->
@@ -1550,7 +1590,7 @@
                                             <option value="">Select Nationality</option>
                                             ${nationalities.map(n => `<option value="${n}">${n}</option>`).join('')}
                                         </select>
-                                        <div id="customNationalityDiv" class="hidden mt-2"><input type="text" id="customNationalityInput" placeholder="Specify Nationality" class="w-full p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-700"></div>
+                                        <div id="customNationalityDiv" class="hidden mt-2"><input type="text" id="customNationalityInput" placeholder="Specify Nationality" class="w-full p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-700" oninput="app.validateProposal()"></div>
                                     </div>
                                     <div class="space-y-1"><label class="text-xs font-semibold text-slate-600">No. of Applicants</label><input type="number" id="paxInput" value="1" min="1" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" oninput="app.calculateTotal()"></div>
                                 </div>
@@ -1907,12 +1947,12 @@
 
                                     </div>
 
-                                    <!-- Actions (Share Button Removed) -->
+                                    <!-- Actions (Save & Preview Disabled by Default) -->
                                     <div class="p-4 bg-slate-50 border-t border-slate-100 grid grid-cols-2 gap-3">
-                                        <button onclick="app.openPreview()" class="py-2.5 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-blue-600 hover:border-blue-200 transition-all shadow-sm">
+                                        <button onclick="app.openPreview()" id="btnPreviewProposal" disabled class="py-2.5 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-blue-600 hover:border-blue-200 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-slate-600 disabled:hover:border-slate-200">
                                             <i class="fa-regular fa-eye mr-1"></i> Preview
                                         </button>
-                                        <button onclick="app.saveQuotation()" class="py-2.5 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-purple-600 hover:border-purple-200 transition-all shadow-sm">
+                                        <button onclick="app.saveQuotation()" id="btnSaveProposal" disabled class="py-2.5 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-purple-600 hover:border-purple-200 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-slate-600 disabled:hover:border-slate-200">
                                             <i class="fa-solid fa-floppy-disk mr-1"></i> Save
                                         </button>
                                     </div>
@@ -1934,7 +1974,10 @@
                 document.getElementById('r_dest').innerText = "---";
                 document.getElementById('r_visa').innerText = "---";
                 
-                if (!countryId) return;
+                if (!countryId) {
+                    this.validateProposal();
+                    return;
+                }
 
                 const country = db.get('countries').find(c => c.id == countryId);
                 if (country) {
@@ -1992,9 +2035,9 @@
                 const quotes = db.get('quotes');
                 let maxId = 1000;
                 quotes.forEach(q => {
-                    if (q.refId && typeof q.refId === 'string' && q.refId.startsWith('BCIQ-')) {
-                        const numStr = q.refId.replace('BCIQ-', '');
-                        const num = parseInt(numStr, 10);
+                    if (q.refId) {
+                        // Extract number regardless of prefix
+                        const num = parseInt(String(q.refId).replace(/\D/g, ''), 10);
                         if (!isNaN(num) && num > maxId) {
                             maxId = num;
                         }
@@ -2017,21 +2060,21 @@
 
                     // 1. Check Local DB first
                     const localNext = this.generateLocalRefId();
-                    const localNum = parseInt(localNext.replace('BCIQ-', ''));
-                    if(localNum > maxId) maxId = localNum - 1; // Sync with local max
+                    const localNum = parseInt(localNext.replace(/\D/g, ''), 10);
+                    if(localNum > maxId) maxId = localNum - 1; 
 
                     // 2. Check ClickUp Data
                     if(data.tasks) {
                         data.tasks.forEach(t => {
                             const refField = t.custom_fields.find(f => f.id === clickUpConfig.quoteFields.refId);
-                            // Some tasks might store it in name or description, but we check Custom Field
-                            if(refField && refField.value) {
-                                 const val = String(refField.value);
-                                 // Look for pattern BCIQ-XXXX
-                                 const match = val.match(/BCIQ-(\d+)/);
-                                 if(match) {
-                                     const num = parseInt(match[1]);
-                                     if(num > maxId) maxId = num;
+                            // Robust check: Custom field value OR Task description/name fallback
+                            const valToCheck = (refField && refField.value) ? String(refField.value) : '';
+                            
+                            if(valToCheck) {
+                                 // Extract digits only
+                                 const num = parseInt(valToCheck.replace(/\D/g, ''), 10);
+                                 if(!isNaN(num) && num > maxId && num < 99999) { // Sanity check < 99999 to avoid phone numbers
+                                     maxId = num;
                                  }
                             }
                         });
@@ -2064,7 +2107,7 @@
                      const nextRef = await this.fetchNextRefId();
                      
                      // 1. Clear Inputs
-                     const inputs = ['f_name', 'f_phone', 'f_nation', 'countrySelect', 'costInput', 'regFeeInput']; // Removed f_job as it's now select + input
+                     const inputs = ['f_name', 'f_phone', 'f_nation', 'countrySelect', 'costInput', 'regFeeInput']; 
                      inputs.forEach(id => {
                          const el = document.getElementById(id);
                          if(el) el.value = '';
@@ -2093,13 +2136,13 @@
                      const customInput = document.getElementById('customDiscountInput');
                      if(customInput) customInput.value = '';
                      
-                     const instTwo = document.querySelector('input[name="instalment"][value="2"]'); // Default to 2
+                     const instTwo = document.querySelector('input[name="instalment"][value="2"]'); 
                      if(instTwo) instTwo.checked = true;
 
                      // 3. Set Ref & Lock it
                      if(rRef) {
                          rRef.innerText = nextRef;
-                         rRef.dataset.fixedRef = nextRef; // Important: Prevents updateReceipt from overwriting
+                         rRef.dataset.fixedRef = nextRef; 
                          rRef.classList.remove('animate-pulse');
                      }
                      
@@ -2117,12 +2160,17 @@
                      document.getElementById('disp_reg_aed').innerText = 'AED 0.00';
                      
                      this.calculateTotal();
-                     // Optional: remove toast on auto-load to keep it cleaner, or keep it for feedback
-                     // this.showToast(`New Proposal Started: ${nextRef}`);
 
                  } catch(e) {
-                     this.showToast('Error initializing proposal', 'error');
+                     this.showToast('Using local reference ID', 'warning');
                      console.error(e);
+                     // Fallback in case of critical error
+                     if(rRef) {
+                         const fallbackRef = this.generateLocalRefId();
+                         rRef.innerText = fallbackRef;
+                         rRef.dataset.fixedRef = fallbackRef;
+                         rRef.classList.remove('animate-pulse');
+                     }
                  } finally {
                      if(btn) {
                          // UPDATED BUTTON TEXT RESET
@@ -2165,6 +2213,8 @@
                          rRef.innerText = "DRAFT"; 
                      }
                  }
+                 
+                 this.validateProposal();
             },
             
             // NEW: Handle Job Dropdown Toggle
@@ -2176,6 +2226,46 @@
                 } else {
                     customInput.classList.add('hidden');
                     customInput.value = '';
+                }
+                this.validateProposal();
+            },
+
+            // --- VALIDATION LOGIC ---
+            validateProposal() {
+                const btnPreview = document.getElementById('btnPreviewProposal');
+                const btnSave = document.getElementById('btnSaveProposal');
+                if(!btnPreview || !btnSave) return;
+
+                // 1. Application Details Check
+                const fName = document.getElementById('f_name')?.value.trim();
+                const fPhone = document.getElementById('f_phone')?.value.trim();
+                const fNation = document.getElementById('f_nation')?.value;
+                const fNationCustom = document.getElementById('customNationalityInput')?.value.trim();
+                const fJob = document.getElementById('f_job')?.value;
+                const fJobCustom = document.getElementById('f_job_custom')?.value.trim();
+                const pax = parseInt(document.getElementById('paxInput')?.value) || 0;
+                
+                const isNationValid = fNation === 'OTHER' ? (fNationCustom !== '') : (fNation !== '');
+                const isJobValid = fJob === 'OTHER' ? (fJobCustom !== '') : (fJob !== '');
+                
+                // 2. Pricing Check
+                const country = document.getElementById('countrySelect')?.value;
+                const visa = document.getElementById('visaSelect')?.value;
+                // Cost inputs are generally read-only/hidden but populated when visa is selected
+                // We ensure visa is selected which implies pricing is active
+                
+                // 3. Payment Plan Check
+                const instalmentChecked = document.querySelector('input[name="instalment"]:checked');
+
+                const isValid = fName && fPhone && isNationValid && isJobValid && 
+                                pax > 0 && country && visa && instalmentChecked;
+
+                if(isValid) {
+                    btnPreview.removeAttribute('disabled');
+                    btnSave.removeAttribute('disabled');
+                } else {
+                    btnPreview.setAttribute('disabled', 'true');
+                    btnSave.setAttribute('disabled', 'true');
                 }
             },
 
@@ -2413,6 +2503,8 @@
                             el.innerHTML = html;
                         }
                     }
+                    
+                    this.validateProposal();
 
                 } catch(e) {
                     console.error("Calculation Error", e);
