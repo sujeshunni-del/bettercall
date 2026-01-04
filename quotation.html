@@ -1708,7 +1708,7 @@
                                         <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                                             <!-- Custom Amount (Replaces Standard) -->
                                             <label class="cursor-pointer relative">
-                                                <input type="radio" name="discountName" value="custom" class="peer sr-only" checked onchange="app.calculateTotal()">
+                                                <input type="radio" name="discountName" value="custom" class="peer sr-only" checked onchange="app.syncPaymentOptions('discount')">
                                                 <div class="h-full p-3 rounded-xl border border-dashed border-slate-300 bg-white hover:border-blue-400 hover:bg-blue-50/10 transition-all peer-checked:border-solid peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:shadow-sm group">
                                                     <div class="flex justify-between items-center mb-2">
                                                         <span class="text-xs font-bold text-slate-600 group-hover:text-blue-600">Custom</span>
@@ -1718,7 +1718,7 @@
                                                         <span class="absolute left-2 text-xs font-bold text-slate-400 group-hover/input:text-blue-400">€</span>
                                                         <input type="number" id="customDiscountInput" placeholder="0" 
                                                             class="w-full pl-5 pr-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all text-right placeholder-slate-300"
-                                                            onclick="this.closest('label').querySelector('input[type=radio]').checked = true; app.calculateTotal()"
+                                                            onclick="this.closest('label').querySelector('input[type=radio]').checked = true; app.syncPaymentOptions('discount')"
                                                             oninput="app.calculateTotal()">
                                                     </div>
                                                 </div>
@@ -1726,7 +1726,7 @@
 
                                             <!-- Full Pay (10%) -->
                                             <label class="cursor-pointer relative">
-                                                <input type="radio" name="discountName" value="full_pay" class="peer sr-only" onchange="app.calculateTotal()">
+                                                <input type="radio" name="discountName" value="full_pay" class="peer sr-only" onchange="app.syncPaymentOptions('discount')">
                                                 <div class="h-full p-3 rounded-xl border border-emerald-100 bg-emerald-50/30 hover:bg-emerald-50 transition-all peer-checked:border-emerald-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-emerald-500/20 group">
                                                     <div class="flex justify-between items-start mb-1">
                                                         <span class="text-xs font-bold text-emerald-800 peer-checked:text-white">Full Pay</span>
@@ -1738,7 +1738,7 @@
 
                                             <!-- Couple (5%) -->
                                             <label class="cursor-pointer relative">
-                                                <input type="radio" name="discountName" value="couple" class="peer sr-only" onchange="app.calculateTotal()">
+                                                <input type="radio" name="discountName" value="couple" class="peer sr-only" onchange="app.syncPaymentOptions('discount')">
                                                 <div class="h-full p-3 rounded-xl border border-pink-100 bg-pink-50/30 hover:bg-pink-50 transition-all peer-checked:border-pink-500 peer-checked:bg-pink-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-pink-500/20 group">
                                                     <div class="flex justify-between items-start mb-1">
                                                         <span class="text-xs font-bold text-pink-800 peer-checked:text-white">Couple</span>
@@ -1750,7 +1750,7 @@
 
                                             <!-- Group (10%) -->
                                             <label class="cursor-pointer relative">
-                                                <input type="radio" id="groupDiscBtn" name="discountName" value="group" class="peer sr-only" onchange="app.calculateTotal()">
+                                                <input type="radio" id="groupDiscBtn" name="discountName" value="group" class="peer sr-only" onchange="app.syncPaymentOptions('discount')">
                                                 <div id="groupDiscUI" class="h-full p-3 rounded-xl border border-blue-100 bg-blue-50/30 hover:bg-blue-50 transition-all peer-checked:border-blue-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-blue-500/20 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed group">
                                                     <div class="flex justify-between items-start mb-1">
                                                         <span class="text-xs font-bold text-blue-800 peer-checked:text-white">Group</span>
@@ -1762,7 +1762,7 @@
 
                                             <!-- Skilled (5%) -->
                                             <label class="cursor-pointer relative">
-                                                <input type="radio" name="discountName" value="skilled" class="peer sr-only" onchange="app.calculateTotal()">
+                                                <input type="radio" name="discountName" value="skilled" class="peer sr-only" onchange="app.syncPaymentOptions('discount')">
                                                 <div class="h-full p-3 rounded-xl border border-violet-100 bg-violet-50/30 hover:bg-violet-50 transition-all peer-checked:border-violet-600 peer-checked:bg-violet-600 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-violet-500/20 group">
                                                     <div class="flex justify-between items-start mb-1">
                                                         <span class="text-xs font-bold text-violet-800 peer-checked:text-white">Skilled</span>
@@ -1774,7 +1774,7 @@
 
                                             <!-- Reference (4%) -->
                                             <label class="cursor-pointer relative">
-                                                <input type="radio" name="discountName" value="reference" class="peer sr-only" onchange="app.calculateTotal()">
+                                                <input type="radio" name="discountName" value="reference" class="peer sr-only" onchange="app.syncPaymentOptions('discount')">
                                                 <div class="h-full p-3 rounded-xl border border-orange-100 bg-orange-50/30 hover:bg-orange-50 transition-all peer-checked:border-orange-500 peer-checked:bg-orange-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-orange-500/20 group">
                                                     <div class="flex justify-between items-start mb-1">
                                                         <span class="text-xs font-bold text-orange-800 peer-checked:text-white">Reference</span>
@@ -1795,7 +1795,7 @@
                                     
                                     <!-- Plan 1: Full Payment (Emerald) -->
                                     <label class="cursor-pointer relative group">
-                                        <input type="radio" name="instalment" value="1" class="peer sr-only" onchange="app.calculateTotal()">
+                                        <input type="radio" name="instalment" value="1" class="peer sr-only" onchange="app.syncPaymentOptions('plan')">
                                         <div class="p-5 rounded-2xl border border-slate-200 bg-white transition-all duration-200 
                                             hover:shadow-md hover:border-emerald-300 hover:-translate-y-1
                                             peer-checked:border-emerald-500 peer-checked:bg-emerald-50/40 peer-checked:ring-1 peer-checked:ring-emerald-500
@@ -1823,7 +1823,7 @@
 
                                     <!-- Plan 2: 2 Instalments (Blue) -->
                                     <label class="cursor-pointer relative group">
-                                        <input type="radio" name="instalment" value="2" checked class="peer sr-only" onchange="app.calculateTotal()">
+                                        <input type="radio" name="instalment" value="2" checked class="peer sr-only" onchange="app.syncPaymentOptions('plan')">
                                         <div class="p-5 rounded-2xl border border-slate-200 bg-white transition-all duration-200 
                                             hover:shadow-md hover:border-blue-300 hover:-translate-y-1
                                             peer-checked:border-blue-500 peer-checked:bg-blue-50/40 peer-checked:ring-1 peer-checked:ring-blue-500
@@ -2274,6 +2274,36 @@
                 this.validateProposal();
             },
 
+            // --- SYNC PAYMENT OPTIONS ---
+            syncPaymentOptions(source) {
+                const discFullPay = document.querySelector('input[name="discountName"][value="full_pay"]');
+                const planFullPay = document.querySelector('input[name="instalment"][value="1"]');
+                const discCustom = document.querySelector('input[name="discountName"][value="custom"]');
+                const planTwo = document.querySelector('input[name="instalment"][value="2"]');
+
+                if (source === 'plan') {
+                    if (planFullPay.checked) {
+                        if (discFullPay) discFullPay.checked = true;
+                    } else {
+                        // If switching AWAY from full payment plan, and discount is currently full pay, reset discount to Custom
+                        if (discFullPay && discFullPay.checked) {
+                            if (discCustom) discCustom.checked = true;
+                        }
+                    }
+                } else if (source === 'discount') {
+                    if (discFullPay.checked) {
+                        if (planFullPay) planFullPay.checked = true;
+                    } else {
+                        // If switching AWAY from full pay discount, and plan is currently full payment, reset plan to 2 Installments
+                        if (planFullPay && planFullPay.checked) {
+                            if (planTwo) planTwo.checked = true;
+                        }
+                    }
+                }
+                
+                this.calculateTotal();
+            },
+
             // --- VALIDATION LOGIC ---
             validateProposal() {
                 const btnPreview = document.getElementById('btnPreviewProposal');
@@ -2380,7 +2410,18 @@
                     let planAdjustment = 0;
                     let planAdjustmentLabel = "Adjustment";
 
-                    if(instType === '1') { planAdjustment = -(amountAfterDiscount * 0.10); planAdjustmentLabel = "Full Pay Save (10%)"; } 
+                    if(instType === '1') { 
+                        // UPDATED LOGIC: If discount is already 'full_pay', do NOT apply plan adjustment (avoid double count)
+                        if (discType === 'full_pay') {
+                            planAdjustment = 0;
+                            planAdjustmentLabel = "Included in Discount";
+                        } else {
+                            // If they somehow selected Plan 1 but NOT Full Pay Discount (e.g. they selected Couple discount)
+                            // Then apply the 10% here as the "Plan" benefit
+                            planAdjustment = -(amountAfterDiscount * 0.10); 
+                            planAdjustmentLabel = "Full Pay Save (10%)"; 
+                        }
+                    } 
                     else if (instType === '2') { planAdjustment = (amountAfterDiscount * 0.10); planAdjustmentLabel = "Split Fee (10%)"; } 
                     else if (instType === '3') { planAdjustment = (amountAfterDiscount * 0.15); planAdjustmentLabel = "Split Fee (15%)"; } 
                     else if (instType === '4') { planAdjustment = (amountAfterDiscount * 0.20); planAdjustmentLabel = "Split Fee (20%)"; }
