@@ -127,8 +127,29 @@
         .print-total-row td { border-top: 2px solid #0f172a; background: #f8fafc; font-weight: 800; color: #0f172a; font-size: 14px; padding-top: 15px; }
 
         @media screen and (max-width: 800px) {
-            .a4-paper { width: 100%; min-height: auto; height: auto; padding-bottom: 20px; }
+            .a4-paper { 
+                /* Mobile Preview: Scale down to fit width, user can zoom if needed */
+                transform: scale(0.45); 
+                transform-origin: top center; 
+                margin-bottom: -140mm; /* Compensate for empty space from scaling */
+            }
             .prop-header, .prop-body { padding: 20px; }
+            
+            /* Adjust Modal Layout for Mobile */
+            #previewModal {
+                align-items: flex-start;
+                padding-top: 20px;
+                overflow-x: hidden; /* Prevent horizontal scroll on body from scale */
+            }
+            
+            /* Stack buttons in toolbar */
+            #previewModal .flex.justify-end {
+                justify-content: center;
+                width: 100%;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+            }
         }
         
         /* UPDATED PRINT STYLES FOR VECTOR QUALITY */
@@ -343,7 +364,7 @@
                 </div>
 
                 <!-- 2. ADDRESS / DETAILS GRID -->
-                <div class="px-12 mb-8">
+                <div class="px-12 mb-6">
                     <div class="flex gap-16">
                         <!-- Client Info -->
                         <div class="flex-1">
@@ -369,10 +390,11 @@
                     </div>
                 </div>
 
-                <!-- 3. FINANCIAL TABLE -->
-                <div class="px-12 mb-6 flex-1">
-                    <table class="w-full text-left border-collapse mb-6">
-                        <thead>
+                <!-- 3. FINANCIAL TABLE & TOTAL -->
+                <div class="px-12 mb-4">
+                    <table class="w-full text-left border-collapse mb-4">
+                        <thead id="p_table_head">
+                            <!-- Populated via JS -->
                             <tr class="border-b-2 border-slate-900">
                                 <th class="py-3 text-[10px] font-bold text-slate-900 uppercase tracking-wider w-1/2">Description / Service</th>
                                 <th class="py-3 text-[10px] font-bold text-slate-900 uppercase tracking-wider text-right">Amount (EUR)</th>
@@ -384,36 +406,33 @@
                         </tbody>
                     </table>
                     
-                    <div class="flex justify-end">
-                        <div class="bg-slate-50 p-5 rounded-xl min-w-[240px] border border-slate-200 shadow-sm">
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 text-right">Total Payable</p>
-                            <div class="flex justify-end items-baseline gap-2">
-                                <span class="text-3xl font-black text-slate-900" id="p_total_eur">€0.00</span>
-                            </div>
-                            <p class="text-right text-xs font-mono font-bold text-slate-500 mt-1 border-t border-slate-200 pt-1" id="p_total_aed">AED 0.00</p>
+                    <!-- TOTAL BLOCK (Fixed visibility) -->
+                    <div class="flex justify-end mt-4">
+                        <div id="p_total_container">
+                            <!-- Dynamic Content via JS -->
                         </div>
                     </div>
                 </div>
 
                 <!-- 4. PAYMENT SCHEDULE & FOOTER -->
-                <div class="px-12 pb-12 mt-auto bg-white">
+                <div class="px-12 pb-10 mt-auto bg-white">
                     
                     <!-- Schedule -->
-                    <div class="mb-8">
-                        <div class="flex items-center gap-3 mb-3">
+                    <div class="mb-6">
+                        <div class="flex items-center gap-3 mb-2">
                             <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Payment Schedule</h4>
                             <span class="text-[9px] px-2 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200 uppercase font-bold" id="p_plan_name">Standard</span>
                         </div>
-                        <div class="grid grid-cols-1 gap-2 border-l-2 border-slate-200 pl-5" id="p_payment_schedule">
+                        <div class="grid grid-cols-1 gap-1.5 border-l-2 border-slate-200 pl-5" id="p_payment_schedule">
                             <!-- Content Populated via JS -->
                         </div>
                     </div>
 
                     <!-- Terms & Signature Grid -->
-                    <div class="border-t border-slate-200 pt-6 grid grid-cols-4 gap-10">
+                    <div class="border-t border-slate-200 pt-4 grid grid-cols-4 gap-8">
                         <div class="col-span-3">
                             <h5 class="text-[9px] font-bold text-slate-900 uppercase mb-2">Terms & Conditions</h5>
-                            <ul class="text-[9px] text-slate-500 space-y-1.5 list-disc pl-3 leading-relaxed">
+                            <ul class="text-[8px] text-slate-500 space-y-1 list-disc pl-3 leading-relaxed">
                                 <li><strong>Non-Refundable:</strong> All registration and processing fees are strictly non-refundable under any circumstance.</li>
                                 <li><strong>Consultancy Only:</strong> Visa issuance is at the sole discretion of the Embassy. We act as consultants only.</li>
                                 <li><strong>Validity:</strong> This quotation is valid for 7 days. Exchange rates are subject to change.</li>
@@ -436,7 +455,7 @@
                         </div>
                     </div>
                     
-                    <div class="text-center mt-8 pt-4 border-t border-slate-100">
+                    <div class="text-center mt-6 pt-4 border-t border-slate-100">
                         <p class="text-[8px] text-slate-300 uppercase tracking-widest font-medium">Better Call Immigration • Dubai Healthcare City • Building 64</p>
                     </div>
                 </div>
@@ -526,16 +545,41 @@
             async init() {
                 try {
                     const response = await fetch(`https://api.currencyfreaks.com/v2.0/rates/latest?apikey=${this.apiKey}`);
+                    if (!response.ok) throw new Error("API Response Not OK");
                     const data = await response.json();
                     this.rates = data.rates;
                     
                     const statusEl = document.getElementById('currencyStatus');
-                    statusEl.innerHTML = `<i class="fa-solid fa-check-circle"></i> Rates Live`;
-                    statusEl.classList.remove('bg-yellow-50', 'text-yellow-700');
-                    statusEl.classList.add('bg-green-50', 'text-green-700');
+                    if(statusEl) {
+                        statusEl.innerHTML = `<i class="fa-solid fa-check-circle"></i> Rates Live`;
+                        statusEl.classList.remove('bg-yellow-50', 'text-yellow-700');
+                        statusEl.classList.add('bg-green-50', 'text-green-700');
+                    }
                 } catch (e) {
-                    console.error("Currency Fetch Error", e);
-                    document.getElementById('currencyStatus').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Rate Error`;
+                    console.warn("Currency API Failed, using fallback rates.", e);
+                    
+                    // FALLBACK RATES (Approximate)
+                    this.rates = {
+                        "USD": "1",
+                        "EUR": "0.96", 
+                        "AED": "3.6725",
+                        "GBP": "0.79",
+                        "INR": "84.0",
+                        "PKR": "278.0",
+                        "LKR": "290.0",
+                        "NPR": "135.0",
+                        "BDT": "120.0",
+                        "PHP": "58.0",
+                        "KES": "129.0",
+                        "EGP": "49.0"
+                    };
+
+                    const statusEl = document.getElementById('currencyStatus');
+                    if(statusEl) {
+                        statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Offline Rates`;
+                        statusEl.classList.remove('bg-green-50', 'text-green-700');
+                        statusEl.classList.add('bg-yellow-50', 'text-yellow-700');
+                    }
                 }
             },
 
@@ -932,8 +976,8 @@
                     // 5. Render Admin Dashboard
                     container.innerHTML = `
                         <div class="fade-in space-y-6">
-                            <!-- Welcome Header -->
-                            <div class="flex flex-col md:flex-row justify-between items-end gap-4 mb-2">
+                            <!-- Welcome Header (Mobile Fixed Alignment) -->
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-2">
                                 <div>
                                     <h2 class="text-2xl font-bold text-slate-800">Executive Overview</h2>
                                     <div class="flex items-center gap-2 text-sm text-slate-500">
@@ -1026,7 +1070,7 @@
                                         <i class="fa-solid fa-chart-simple text-slate-300"></i>
                                     </div>
                                     
-                                    <div class="flex items-end gap-4 h-48 w-full px-2">
+                                    <div class="flex items-end gap-2 md:gap-4 h-48 w-full px-2">
                                         <!-- Mock Data Bars using CSS (Static for UI Demo, could be dynamic) -->
                                         ${[35, 55, 45, 70, 60, 85, 95].map((h, i) => `
                                             <div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
@@ -1534,17 +1578,17 @@
                 ].sort();
 
                 container.innerHTML = `
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in h-full">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in lg:h-full h-auto pb-20 lg:pb-0">
                         <!-- Left Column: Inputs -->
-                        <div class="lg:col-span-2 space-y-6 overflow-y-auto pr-2 pb-10">
+                        <div class="lg:col-span-2 space-y-6 lg:overflow-y-auto h-auto pr-1 lg:pr-2 pb-2">
                             
                             <!-- NEW PROPOSAL BUTTON ROW -->
-                            <div class="flex justify-between items-center">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
                                 <div>
                                     <h3 class="font-bold text-slate-700 text-lg">Proposal Details</h3>
                                     <p class="text-xs text-slate-500">Fill in client information below</p>
                                 </div>
-                                <div class="flex items-center gap-3">
+                                <div class="flex items-center gap-3 w-full md:w-auto">
                                     <!-- MOVED: Advisor Name Display -->
                                     <div class="hidden sm:flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm">
                                          <div class="relative">
@@ -1560,7 +1604,7 @@
                                     </div>
 
                                     <!-- NEW BUTTON -->
-                                    <button onclick="app.createNewProposal()" id="btnNewProposal" class="bg-slate-900 text-white px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20 flex items-center gap-2 border border-slate-700">
+                                    <button onclick="app.createNewProposal()" id="btnNewProposal" class="bg-slate-900 text-white px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20 flex-1 md:flex-none flex items-center justify-center gap-2 border border-slate-700">
                                         <i class="fa-solid fa-plus"></i> New
                                     </button>
                                 </div>
@@ -2883,7 +2927,7 @@ ${JSON.stringify(data, null, 2)}
 
                     // --- DYNAMIC TABLE GENERATION ---
                     const tbody = document.getElementById('p_table_body');
-                    const theadTr = document.querySelector('.print-table thead tr'); // Updated selector
+                    const thead = document.getElementById('p_table_head');
                     
                     // Safely get inputs
                     const costVal = parseFloat(document.getElementById('costInput')?.value) || 0;
@@ -2928,37 +2972,44 @@ ${JSON.stringify(data, null, 2)}
                     const hasLocal = this.selectedLocalCurrency && this.selectedLocalCurrency !== 'EUR' && this.selectedLocalCurrency !== 'AED';
                     const localCode = this.selectedLocalCurrency || '';
                     
-                    if(theadTr) {
-                        theadTr.innerHTML = `
-                            <th class="w-1/2 text-left p-2">Description</th>
-                            <th class="text-right p-2">Amount (EUR)</th>
-                            <th class="text-right p-2">Amount (AED)</th>
-                            ${hasLocal ? `<th class="text-right p-2">${localCode}</th>` : `<th class="hidden"></th>`}
+                    // 1. UPDATE TABLE HEADER DYNAMICALLY
+                    if (thead) {
+                        let headerHtml = `
+                            <tr class="border-b-2 border-slate-900">
+                                <th class="py-3 text-[10px] font-bold text-slate-900 uppercase tracking-wider w-1/2">Description / Service</th>
+                                <th class="py-3 text-[10px] font-bold text-slate-900 uppercase tracking-wider text-right">Amount (EUR)</th>
+                                <th class="py-3 text-[10px] font-bold text-slate-900 uppercase tracking-wider text-right">Amount (AED)</th>
                         `;
+                        if (hasLocal) {
+                            headerHtml += `<th class="py-3 text-[10px] font-bold text-slate-900 uppercase tracking-wider text-right">Amount (${localCode})</th>`;
+                        }
+                        headerHtml += `</tr>`;
+                        thead.innerHTML = headerHtml;
                     }
 
-                    const createRow = (label, eur, colorClass = "") => {
+                    // 2. CREATE TABLE ROWS
+                    const createRow = (label, eur, colorClass = "", extraClass = "") => {
                         const aed = currencyLayer.getEuroToAED(eur);
                         let localHtml = '';
                         if (hasLocal) {
                             const usd = eur / (currencyLayer.rates['EUR'] || 0.92);
                             const local = usd * (currencyLayer.rates[localCode] || 0);
-                            localHtml = `<td class="text-right font-mono text-xs">${currencyLayer.format(local, localCode)}</td>`;
+                            localHtml = `<td class="text-right font-mono text-xs ${extraClass}">${currencyLayer.format(local, localCode)}</td>`;
                         }
                         
                         return `
                             <tr class="${colorClass}">
-                                <td class="font-medium">${label}</td>
-                                <td class="text-right font-mono">€${eur.toFixed(2)}</td>
-                                <td class="text-right font-mono">AED ${aed.toFixed(2)}</td>
+                                <td class="font-medium ${extraClass}">${label}</td>
+                                <td class="text-right font-mono ${extraClass}">€${eur.toFixed(2)}</td>
+                                <td class="text-right font-mono ${extraClass}">AED ${aed.toFixed(2)}</td>
                                 ${localHtml}
                             </tr>
                         `;
                     };
 
                     let rowsHtml = '';
-                    rowsHtml += createRow(`Visa Fee: ${destName} - ${visaName}`, costEur);
-                    rowsHtml += createRow("Registration / Processing Fee", regEur);
+                    rowsHtml += createRow(`Visa Fee: ${destName} - ${visaName}`, costEur, "", "pb-4 border-b-[8px] border-transparent");
+                    rowsHtml += createRow("Registration / Processing Fee", regEur, "", "pb-4 border-b-[8px] border-transparent");
                     rowsHtml += createRow("VAT (5%)", vatEur);
                     
                     if (discAmt > 0) rowsHtml += createRow(discLabel, -discAmt, "text-emerald-700 font-semibold");
@@ -2967,20 +3018,38 @@ ${JSON.stringify(data, null, 2)}
                     if(tbody) tbody.innerHTML = rowsHtml;
 
                     const totalAed = currencyLayer.getEuroToAED(finalTotal);
-                    let totalLocalHtml = '';
-                    if (hasLocal) {
-                        const usd = finalTotal / (currencyLayer.rates['EUR'] || 0.92);
-                        const local = usd * (currencyLayer.rates[localCode] || 0);
-                        totalLocalHtml = `<td class="text-right font-bold text-slate-900 pt-3">${currencyLayer.format(local, localCode)}</td>`;
-                    }
+                    
+                    // 3. CREATIVE TOTAL SECTION
+                    const totalContainer = document.getElementById('p_total_container');
+                    if (totalContainer) {
+                        let totalLocalDisplay = '';
+                        if (hasLocal) {
+                            const usd = finalTotal / (currencyLayer.rates['EUR'] || 0.92);
+                            const local = usd * (currencyLayer.rates[localCode] || 0);
+                            totalLocalDisplay = `
+                                <div class="pl-3 ml-3 border-l border-slate-200">
+                                    <span class="block text-[8px] font-bold text-slate-400 uppercase">${localCode}</span>
+                                    <span class="block text-xs font-mono font-bold text-slate-600">${currencyLayer.format(local, localCode)}</span>
+                                </div>
+                            `;
+                        }
 
-                    const tfoot = document.querySelector('.print-total-row tr');
-                    if(tfoot) {
-                        tfoot.innerHTML = `
-                            <td class="pt-3">Total Amount Payable</td>
-                            <td class="text-right pt-3" id="p_total_eur">€${finalTotal.toFixed(2)}</td>
-                            <td class="text-right pt-3" id="p_total_aed">AED ${totalAed.toFixed(2)}</td>
-                            ${totalLocalHtml}
+                        totalContainer.innerHTML = `
+                            <div class="bg-white border-2 border-slate-900 rounded-lg p-3 min-w-[200px]">
+                                <div class="flex justify-between items-center mb-1">
+                                    <p class="text-[9px] font-black text-slate-900 uppercase tracking-widest">Total Payable</p>
+                                </div>
+                                <div class="text-right mb-2">
+                                    <span class="text-2xl font-black text-slate-900 tracking-tight">€${finalTotal.toFixed(2)}</span>
+                                </div>
+                                <div class="flex justify-end items-center border-t border-slate-100 pt-2">
+                                    <div class="text-right">
+                                        <span class="block text-[8px] font-bold text-slate-400 uppercase">AED</span>
+                                        <span class="block text-xs font-mono font-bold text-slate-600">AED ${totalAed.toFixed(2)}</span>
+                                    </div>
+                                    ${totalLocalDisplay}
+                                </div>
+                            </div>
                         `;
                     }
 
@@ -3052,6 +3121,7 @@ ${JSON.stringify(data, null, 2)}
                     return a.name.localeCompare(b.name);
                 });
 
+                // ... (Visa Types Array) ...
                 const allVisaTypes = [
                     "AIRPORT TRANSIT VISA", "SCHENGEN SHORT STAY VISA", "SCHENGEN LONG STAY VISA", "TOURIST VISA", "BUSINESS VISA", 
                     "VISIT VISA", "FAMILY VISIT VISA", "MEDICAL VISA", "CULTURAL VISA", "SPORTS VISA", "STUDENT VISA", 
@@ -3072,8 +3142,8 @@ ${JSON.stringify(data, null, 2)}
                                 <span class="px-2.5 py-0.5 bg-slate-100 text-slate-500 rounded-full text-xs font-bold border border-slate-200">${visas.length} Active</span>
                             </div>
                             
-                            <div class="flex gap-3 w-full md:w-auto">
-                                <div class="relative flex-1 md:w-64">
+                            <div class="flex gap-3 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+                                <div class="relative flex-1 min-w-[200px] md:min-w-[250px]">
                                     <input type="text" placeholder="Search visas..." onkeyup="app.filterVisas(this.value)" class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
                                 </div>
@@ -3086,10 +3156,10 @@ ${JSON.stringify(data, null, 2)}
                             </div>
                         </div>
 
-                        <!-- Main List (Removed Bulk Action Bar) -->
+                        <!-- Main List (Responsive) -->
                         <div class="flex-1 overflow-y-auto bg-white border border-slate-200 rounded-xl shadow-sm relative">
-                            <!-- Header (Removed Checkbox Column) -->
-                            <div class="sticky top-0 bg-slate-50 border-b border-slate-200 z-10 grid grid-cols-12 gap-4 p-3 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            <!-- Desktop Header -->
+                            <div class="hidden md:grid sticky top-0 bg-slate-50 border-b border-slate-200 z-10 grid-cols-12 gap-4 p-3 text-xs font-bold text-slate-500 uppercase tracking-wider">
                                 <div class="col-span-5">Visa Details</div>
                                 <div class="col-span-2">Code</div>
                                 <div class="col-span-2 text-right">Cost</div>
@@ -3184,20 +3254,49 @@ ${JSON.stringify(data, null, 2)}
                     const countryName = country ? country.name : 'Unknown';
                     const code = v.visaCode || '<span class="text-slate-300">-</span>';
                     
-                    // Removed checkbox column, adjusted col-spans
                     return `
-                    <div class="grid grid-cols-12 gap-4 p-3 items-center hover:bg-slate-50 transition-colors group visa-item" data-search="${countryName.toLowerCase()} ${v.name.toLowerCase()} ${v.visaCode ? v.visaCode.toLowerCase() : ''}">
-                        <div class="col-span-5">
+                    <div class="visa-item p-3 hover:bg-slate-50 transition-colors group flex flex-col md:grid md:grid-cols-12 md:gap-4 md:items-center" data-search="${countryName.toLowerCase()} ${v.name.toLowerCase()} ${v.visaCode ? v.visaCode.toLowerCase() : ''}">
+                        
+                        <!-- Mobile Top Row: Country + Edit Button -->
+                        <div class="flex justify-between items-start md:hidden mb-2">
+                            <div class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-earth-americas text-blue-500"></i> ${countryName}
+                            </div>
+                            <button onclick="app.initEditVisa('${v.id}')" class="p-2 text-blue-600 bg-blue-50 rounded-lg"><i class="fa-solid fa-pencil"></i></button>
+                        </div>
+
+                        <!-- Desktop: Details -->
+                        <div class="md:col-span-5 hidden md:block">
                             <div class="font-bold text-slate-700 text-sm truncate flex items-center gap-2">
                                 <i class="fa-solid fa-earth-americas text-blue-500"></i>
                                 ${countryName}
                             </div>
                             <div class="text-[10px] text-slate-400 ml-6 truncate" title="${v.name}">${v.name}</div>
                         </div>
-                        <div class="col-span-2 font-mono text-xs text-slate-500">${code}</div>
-                        <div class="col-span-2 text-right font-mono text-sm font-bold text-slate-700">€${v.cost}</div>
-                        <div class="col-span-2 text-right font-mono text-sm text-slate-500">€${v.regFee}</div>
-                        <div class="col-span-1 text-right">
+
+                        <!-- Mobile: Visa Name & Code -->
+                        <div class="md:hidden text-xs text-slate-500 mb-2">
+                            <div class="font-medium text-slate-700 mb-1">${v.name}</div>
+                            <div class="font-mono bg-slate-100 px-1 rounded inline-block text-[10px]">${code}</div>
+                        </div>
+
+                        <!-- Desktop: Code -->
+                        <div class="md:col-span-2 hidden md:block font-mono text-xs text-slate-500">${code}</div>
+
+                        <!-- Pricing (Responsive) -->
+                        <div class="flex justify-between items-center md:col-span-4 md:grid md:grid-cols-2 md:gap-4 md:justify-end border-t border-slate-100 pt-2 md:border-0 md:pt-0">
+                            <div class="md:text-right">
+                                <span class="md:hidden text-[10px] text-slate-400 uppercase font-bold mr-2">Cost</span>
+                                <span class="font-mono text-sm font-bold text-slate-700">€${v.cost}</span>
+                            </div>
+                            <div class="md:text-right">
+                                <span class="md:hidden text-[10px] text-slate-400 uppercase font-bold mr-2">Reg</span>
+                                <span class="font-mono text-sm text-slate-500">€${v.regFee}</span>
+                            </div>
+                        </div>
+
+                        <!-- Desktop: Action -->
+                        <div class="md:col-span-1 text-right hidden md:block">
                             <button onclick="app.initEditVisa('${v.id}')" class="p-2 text-slate-400 hover:text-blue-600 transition-colors"><i class="fa-solid fa-pencil"></i></button>
                         </div>
                     </div>`;
@@ -3978,12 +4077,13 @@ ${JSON.stringify(data, null, 2)}
                                 <span class="px-2.5 py-0.5 bg-slate-100 text-slate-500 rounded-full text-xs font-bold border border-slate-200" id="userCountBadge">0 Active</span>
                             </div>
                             
-                            <div class="flex gap-3 w-full md:w-auto">
-                                <div class="relative flex-1 md:w-64">
+                            <!-- Mobile Responsive Toolbar -->
+                            <div class="flex gap-3 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
+                                <div class="relative flex-1 min-w-[200px] md:min-w-[250px]">
                                     <input type="text" placeholder="Search users..." id="userSearch" onkeyup="app.filterUsers(this.value)" class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 outline-none transition-all">
                                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
                                 </div>
-                                <button onclick="app.fetchUsersFromClickUp(true)" id="btnSyncUsers" class="px-4 py-2 bg-white text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-50 transition-colors border border-slate-200 shadow-sm flex items-center gap-2">
+                                <button onclick="app.fetchUsersFromClickUp(true)" id="btnSyncUsers" class="px-4 py-2 bg-white text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-50 transition-colors border border-slate-200 shadow-sm flex items-center gap-2 whitespace-nowrap">
                                     <i class="fa-solid fa-rotate"></i> <span class="hidden sm:inline">Sync</span>
                                 </button>
                                 <button onclick="app.initAddUser()" class="px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/20 whitespace-nowrap flex items-center gap-2">
@@ -3992,28 +4092,30 @@ ${JSON.stringify(data, null, 2)}
                             </div>
                         </div>
 
-                        <!-- User List -->
+                        <!-- User List (Horizontal Scroll for Mobile) -->
                         <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex-1 overflow-y-auto relative">
-                            <table class="w-full text-sm text-left">
-                                <thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase border-b border-slate-200 tracking-wider sticky top-0 z-10">
-                                    <tr>
-                                        <th class="px-6 py-4">User Profile</th>
-                                        <th class="px-6 py-4">Role</th>
-                                        <th class="px-6 py-4">Status</th>
-                                        <th class="px-6 py-4 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100" id="userListBody">
-                                    <tr>
-                                        <td colspan="4" class="px-6 py-10 text-center">
-                                            <div class="flex flex-col items-center justify-center text-slate-400">
-                                                <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
-                                                <p>Loading users from ClickUp...</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left min-w-[800px]">
+                                    <thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase border-b border-slate-200 tracking-wider sticky top-0 z-10">
+                                        <tr>
+                                            <th class="px-6 py-4">User Profile</th>
+                                            <th class="px-6 py-4">Role</th>
+                                            <th class="px-6 py-4">Status</th>
+                                            <th class="px-6 py-4 text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-100" id="userListBody">
+                                        <tr>
+                                            <td colspan="4" class="px-6 py-10 text-center">
+                                                <div class="flex flex-col items-center justify-center text-slate-400">
+                                                    <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
+                                                    <p>Loading users from ClickUp...</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
