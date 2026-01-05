@@ -2230,8 +2230,8 @@ Expiry: ${passportExp}
                 const mobile = cleanPhoneNumber(document.getElementById('mobile').value);
                 const targetCountry = document.getElementById('targetCountry').value;
                 
-                // 1. Initialize array with ONLY primitive types (Text, Number, Date) first.
-                // We exclude Dropdowns initially to prevent 400 Errors if mapping fails.
+                // 1. Initialize array with SAFE primitive types only (Text, Email, Date)
+                // We exclude anything that MIGHT be a Dropdown to prevent 400 Errors.
                 let customFieldsArray = [
                     { id: CLICKUP_FIELDS["SUR NAME"], value: document.getElementById('lastName').value },
                     { id: CLICKUP_FIELDS["MOBILE"], value: mobile },
@@ -2240,20 +2240,21 @@ Expiry: ${passportExp}
                     { id: CLICKUP_FIELDS["DATE OF BIRTH"], value: getUnixTime(document.getElementById('dob').value) },
                     { id: CLICKUP_FIELDS["AGE"], value: parseInt(document.getElementById('age').value) },
                     { id: CLICKUP_FIELDS["EMAIL"], value: document.getElementById('email').value },
-                    { id: CLICKUP_FIELDS["EXPERIENCE"], value: parseInt(document.getElementById('experience').value) || 0 },
                     { id: CLICKUP_FIELDS["Case Reference ID"], value: ref }
                 ];
 
-                // Filter out null/undefined values immediately
+                // Filter out null/undefined/empty values
                 customFieldsArray = customFieldsArray.filter(f => f.value !== null && f.value !== undefined && f.value !== "");
                 
-                // 2. Prepare Dropdown Data
+                // 2. Prepare Data that MIGHT be Dropdowns
+                // We move EXPERIENCE here too, just in case it is configured as a Dropdown in ClickUp.
                 const potentialDropdowns = [
                    { key: "NATIONALITY", val: document.getElementById('nationality').value },
                    { key: "PRESENT RESIDENCE", val: document.getElementById('presentResidence').value },
                    { key: "QUALIFICATION", val: document.querySelector('input[name="qualification"]:checked')?.value },
                    { key: "JOB ROLE", val: document.getElementById('currentJob').value },
-                   { key: "TARGET_COUNTRY", val: targetCountry }
+                   { key: "TARGET_COUNTRY", val: targetCountry },
+                   { key: "EXPERIENCE", val: parseInt(document.getElementById('experience').value) || 0 }
                 ];
 
                 // 3. Attempt to fetch Field Definitions to map Dropdowns correctly
@@ -2266,29 +2267,41 @@ Expiry: ${passportExp}
                         potentialDropdowns.forEach(item => {
                             if(!item.val) return; // Skip empty
                             const fid = CLICKUP_FIELDS[item.key];
+                            if(!fid) return;
+
                             const def = fieldDefs.find(f => f.id === fid);
                             
-                            if (def && (def.type === 'drop_down' || def.type === 'labels')) {
-                                // STRICT MAPPING: Only push if we find a matching Option ID
-                                const opt = def.type_config.options.find(o => o.name.toLowerCase() === item.val.toLowerCase()) 
-                                         || def.type_config.options.find(o => o.name === "OTHER");
-                                
-                                if(opt) {
-                                    customFieldsArray.push({ id: fid, value: opt.id });
-                                } else {
-                                    console.warn(`ClickUp Mapping: Option '${item.val}' not found for field ${item.key}. Skipping to prevent 400 Error.`);
-                                    // We do NOT push the raw string here, as that causes the API to reject the whole task.
+                            if (def) {
+                                // CASE A: It is confirmed as a DROPDOWN or LABEL
+                                if (def.type === 'drop_down' || def.type === 'labels') {
+                                    // Normalize value for comparison
+                                    const valStr = String(item.val).toLowerCase();
+                                    
+                                    // Find matching option
+                                    const opt = def.type_config.options.find(o => o.name.toLowerCase() === valStr) 
+                                             || def.type_config.options.find(o => o.name === "OTHER");
+                                    
+                                    if(opt) {
+                                        customFieldsArray.push({ id: fid, value: opt.id });
+                                    } else {
+                                        console.warn(`ClickUp Mapping: Option '${item.val}' not found in dropdown '${def.name}'. Skipping field.`);
+                                        // DO NOT push raw value here. It will crash.
+                                    }
+                                } 
+                                // CASE B: It is confirmed as a TEXT, NUMBER, EMAIL, etc.
+                                else {
+                                    customFieldsArray.push({ id: fid, value: item.val });
                                 }
-                            } else if (fid) {
-                                // If it's not a dropdown (e.g. text field we didn't know about), push raw value
-                                customFieldsArray.push({ id: fid, value: item.val });
+                            } else {
+                                // CASE C: Field Definition NOT found.
+                                // It's risky to send raw text if we don't know the type.
+                                // Better to skip the Custom Field than fail the whole Task Creation.
+                                console.warn(`Field definition for ${item.key} (${fid}) not found. Skipping to prevent 400 Error.`);
                             }
                         });
                     } else {
                         console.warn("ClickUp Field Definitions fetch failed. Skipping Dropdown fields to ensure Task Creation.");
-                        // In this scenario, we deliberately skip pushing Qualification/Job/Country to custom_fields.
-                        // Sending raw text to a Dropdown field causes the API to fail completely.
-                        // The data is NOT lost; it is included in the 'description' report below.
+                        // Loop did not run, so potentially dropdown fields are strictly skipped.
                     }
                 } catch(e) { 
                     console.warn("Network error fetching ClickUp fields. Skipping Dropdown fields.", e);
@@ -2340,6 +2353,7 @@ Expiry: ${passportExp}
                         let errorMsg = "Please check inputs";
                         if (err.err) errorMsg = err.err;
                         if (err.ECODE === "OAUTH_027") errorMsg = "API Key Invalid/Expired";
+                        if (err.ECODE === "FIELD_011") errorMsg = "System Config Error (Field Type Mismatch). Please contact support.";
                         
                         showModal("Submission Error: " + errorMsg);
                         return false; // FAILED
