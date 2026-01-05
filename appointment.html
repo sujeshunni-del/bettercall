@@ -2257,6 +2257,7 @@ Expiry: ${passportExp}
 
                 // Keys that MUST NEVER send raw text (to prevent 400 Bad Request)
                 const strictDropdownKeys = ["NATIONALITY", "PRESENT RESIDENCE", "QUALIFICATION", "JOB ROLE", "TARGET_COUNTRY"];
+                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
                 // 3. Attempt to fetch Field Definitions to map Dropdowns correctly
                 try {
@@ -2271,48 +2272,45 @@ Expiry: ${passportExp}
                             if(!fid) return;
 
                             const def = fieldDefs.find(f => f.id === fid);
-                            
-                            // LOGIC FOR STRICT DROPDOWNS
-                            if (strictDropdownKeys.includes(item.key)) {
-                                if (def && (def.type === 'drop_down' || def.type === 'labels')) {
-                                    // It's a Dropdown/Label. We MUST find a UUID.
-                                    const valStr = String(item.val).toLowerCase();
-                                    const options = def.type_config && def.type_config.options ? def.type_config.options : [];
+                            const isStrict = strictDropdownKeys.includes(item.key);
 
-                                    // Try to match Option Name or "Other"
-                                    const opt = options.find(o => {
-                                        const optName = o.name.toLowerCase();
-                                        return optName === valStr || 
-                                               optName === valStr + " year" || 
-                                               optName === valStr + " years";
-                                    }) || options.find(o => o.name === "OTHER");
-                                    
-                                    if(opt) {
-                                        customFieldsArray.push({ id: fid, value: opt.id });
-                                    } else {
-                                        console.warn(`ClickUp Mapping: STRICT option '${item.val}' not found in field '${def.name}' (${item.key}). SKIPPING.`);
-                                        // DO NOT PUSH RAW VALUE.
-                                    }
+                            // Strategy:
+                            // If Strict: ONLY push if we find a UUID match. NEVER push raw.
+                            // If Not Strict: Push UUID if match found, else push raw.
+
+                            if (def && (def.type === 'drop_down' || def.type === 'labels')) {
+                                // It is a Dropdown/Label. We MUST find a UUID.
+                                const valStr = String(item.val).toLowerCase();
+                                const options = def.type_config && def.type_config.options ? def.type_config.options : [];
+
+                                // Try to match Option Name or "Other"
+                                const opt = options.find(o => {
+                                    const optName = o.name.toLowerCase();
+                                    return optName === valStr || 
+                                           optName === valStr + " year" || 
+                                           optName === valStr + " years";
+                                }) || options.find(o => o.name === "OTHER");
+                                
+                                if(opt) {
+                                    customFieldsArray.push({ id: fid, value: opt.id });
                                 } else {
-                                    console.warn(`ClickUp Mapping: Field ${item.key} is marked Strict but API says type is '${def ? def.type : 'unknown'}'. Skipping.`);
-                                }
-                            } 
-                            // LOGIC FOR NON-STRICT FIELDS (e.g. EXPERIENCE which might be Number or Text)
-                            else {
-                                if (def && (def.type === 'drop_down' || def.type === 'labels')) {
-                                    // It IS a dropdown, try to map it
-                                    const valStr = String(item.val).toLowerCase();
-                                    const options = def.type_config && def.type_config.options ? def.type_config.options : [];
-                                    const opt = options.find(o => o.name.toLowerCase() === valStr);
-                                    if(opt) {
-                                        customFieldsArray.push({ id: fid, value: opt.id });
+                                    // Option not found.
+                                    if(isStrict) {
+                                        console.warn(`ClickUp Mapping: STRICT option '${item.val}' not found in field '${def.name}' (${item.key}). SKIPPING.`);
                                     } else {
-                                        // Not strict, so maybe we can try raw value? 
-                                        // Actually, raw value on a dropdown ALWAYS fails. Safer to skip.
+                                        // Non-strict dropdown? Still unsafe to push raw text to a dropdown field.
+                                        // Better to skip to be safe.
                                         console.warn(`ClickUp Mapping: Option '${item.val}' not found for dropdown ${item.key}. Skipping.`);
                                     }
+                                }
+                            } else {
+                                // Field Definition not found OR it's not a dropdown (e.g. Text/Number)
+                                if (isStrict) {
+                                    // It is marked strict (should be dropdown) but we couldn't confirm it's a dropdown (or def missing).
+                                    // To be absolutely safe against 400 errors, we SKIP strict fields if we can't map them to UUIDs.
+                                    console.warn(`Strict Field ${item.key} - Definition missing or not dropdown. Skipping to prevent crash.`);
                                 } else {
-                                    // Not a dropdown (e.g. Text, Number), safe to push raw value
+                                    // Non-strict (e.g. Experience as Number), safe to push raw
                                     customFieldsArray.push({ id: fid, value: item.val });
                                 }
                             }
@@ -2324,6 +2322,20 @@ Expiry: ${passportExp}
                     console.warn("Network error fetching ClickUp fields. Skipping Dropdown fields.", e);
                 }
                 
+                // FINAL SAFETY NET: Filter out any strict keys that somehow got raw text pushed
+                customFieldsArray = customFieldsArray.filter(f => {
+                    // Check if this field ID belongs to a strict key
+                    const isStrictField = strictDropdownKeys.some(key => CLICKUP_FIELDS[key] === f.id);
+                    if (isStrictField) {
+                        // If it's strict, value MUST be UUID
+                        if (!uuidRegex.test(f.value)) {
+                            console.error(`SAFETY BLOCK: Prevented raw text '${f.value}' from being sent to strict field ${f.id}`);
+                            return false; // Remove from array
+                        }
+                    }
+                    return true;
+                });
+
                 // Construct Full Description
                 const fullDescription = generateProfileReport();
 
