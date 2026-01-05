@@ -2264,6 +2264,9 @@ Expiry: ${passportExp}
                     if(res.ok) {
                         const fieldDefs = (await res.json()).fields || [];
                         
+                        // List of keys that MUST be treated as dropdowns/labels to prevent 400 errors
+                        const strictDropdownKeys = ["NATIONALITY", "PRESENT RESIDENCE", "QUALIFICATION", "JOB ROLE", "TARGET_COUNTRY"];
+
                         potentialDropdowns.forEach(item => {
                             if(!item.val) return; // Skip empty
                             const fid = CLICKUP_FIELDS[item.key];
@@ -2272,31 +2275,48 @@ Expiry: ${passportExp}
                             const def = fieldDefs.find(f => f.id === fid);
                             
                             if (def) {
-                                // CASE A: It is confirmed as a DROPDOWN or LABEL
-                                if (def.type === 'drop_down' || def.type === 'labels') {
+                                // Check if it is a dropdown type OR if it's in our strict list
+                                const isDropdownType = def.type === 'drop_down' || def.type === 'labels';
+                                const isStrictKey = strictDropdownKeys.includes(item.key);
+
+                                if (isDropdownType || isStrictKey) {
+                                    // It is a Dropdown. We MUST send a UUID.
                                     // Normalize value for comparison
                                     const valStr = String(item.val).toLowerCase();
                                     
-                                    // Find matching option
-                                    const opt = def.type_config.options.find(o => o.name.toLowerCase() === valStr) 
-                                             || def.type_config.options.find(o => o.name === "OTHER");
+                                    // Helper to safely access options
+                                    const options = def.type_config && def.type_config.options ? def.type_config.options : [];
+
+                                    // Find matching option (Exact match OR "Other")
+                                    // Also handle numeric Experience mapping (e.g. input "1" matches option "1" or "1 Year")
+                                    const opt = options.find(o => {
+                                        const optName = o.name.toLowerCase();
+                                        return optName === valStr || 
+                                               optName === valStr + " year" || 
+                                               optName === valStr + " years";
+                                    }) || options.find(o => o.name === "OTHER");
                                     
                                     if(opt) {
                                         customFieldsArray.push({ id: fid, value: opt.id });
                                     } else {
-                                        console.warn(`ClickUp Mapping: Option '${item.val}' not found in dropdown '${def.name}'. Skipping field.`);
-                                        // DO NOT push raw value here. It will crash.
+                                        console.warn(`ClickUp Mapping: Option '${item.val}' not found in field '${def.name}' (${item.key}). Skipping to prevent 400 Error.`);
+                                        // CRITICAL: Do NOT fall back to pushing raw value here.
                                     }
                                 } 
-                                // CASE B: It is confirmed as a TEXT, NUMBER, EMAIL, etc.
+                                // CASE B: Confirmed Text/Number/Email field
                                 else {
                                     customFieldsArray.push({ id: fid, value: item.val });
                                 }
                             } else {
                                 // CASE C: Field Definition NOT found.
-                                // It's risky to send raw text if we don't know the type.
-                                // Better to skip the Custom Field than fail the whole Task Creation.
-                                console.warn(`Field definition for ${item.key} (${fid}) not found. Skipping to prevent 400 Error.`);
+                                // If it's a strict key, skip it to be safe.
+                                if (strictDropdownKeys.includes(item.key)) {
+                                     console.warn(`Field definition for strict dropdown ${item.key} (${fid}) not found. Skipping.`);
+                                } else {
+                                     // For others (like Experience if not strict), we might risk raw value, or just skip.
+                                     // Safest is to skip if we aren't sure.
+                                     console.warn(`Field definition for ${item.key} (${fid}) not found. Skipping.`);
+                                }
                             }
                         });
                     } else {
