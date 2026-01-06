@@ -2366,15 +2366,15 @@
                     const totalCost = costPerPax * pax;
                     const totalReg = regPerPax * pax;
 
-                    const vatTotal = (totalCost + totalReg) * 0.05;
+                    // UPDATED: VAT on Base Cost only (Registration is separate)
+                    const vatTotal = totalCost * 0.05;
+                    
                     const vatInput = document.getElementById('vatInput');
                     if(vatInput) vatInput.value = vatTotal.toFixed(2);
                     
                     const dispVat = document.getElementById('disp_vat_aed');
                     if(dispVat) dispVat.innerText = `AED ${currencyLayer.getEuroToAED(vatTotal).toFixed(2)}`;
                     
-                    let subTotal = totalCost + totalReg + vatTotal;
-
                     // Discount Logic
                     const discRadio = document.querySelector('input[name="discountName"]:checked');
                     let discType = discRadio ? discRadio.value : 'none';
@@ -2390,18 +2390,18 @@
 
                     let discountAmt = 0;
                     let discountLabel = "Discount";
-                    if (discType === 'couple') { discountAmt = subTotal * 0.05; discountLabel = "Couple (5%)"; }
-                    else if (discType === 'group' && pax > 3) { discountAmt = subTotal * 0.10; discountLabel = "Group (10%)"; }
-                    else if (discType === 'reference') { discountAmt = subTotal * 0.04; discountLabel = "Ref (4%)"; }
-                    else if (discType === 'skilled') { discountAmt = subTotal * 0.05; discountLabel = "Skilled (5%)"; }
-                    else if (discType === 'full_pay') { discountAmt = subTotal * 0.10; discountLabel = "Full Pay (10%)"; }
+
+                    // UPDATED: Discounts calculated on Base Amount (totalCost) only
+                    if (discType === 'couple') { discountAmt = totalCost * 0.05; discountLabel = "Couple (5%)"; }
+                    else if (discType === 'group' && pax > 3) { discountAmt = totalCost * 0.10; discountLabel = "Group (10%)"; }
+                    else if (discType === 'reference') { discountAmt = totalCost * 0.04; discountLabel = "Ref (4%)"; }
+                    else if (discType === 'skilled') { discountAmt = totalCost * 0.05; discountLabel = "Skilled (5%)"; }
+                    else if (discType === 'full_pay') { discountAmt = totalCost * 0.10; discountLabel = "Full Pay (10%)"; }
                     else if (discType === 'custom') {
                         const cVal = parseFloat(document.getElementById('customDiscountInput').value) || 0;
                         discountAmt = cVal;
                         discountLabel = "Special Discount";
                     }
-
-                    let amountAfterDiscount = subTotal - discountAmt;
 
                     // Instalment Logic
                     const instRadio = document.querySelector('input[name="instalment"]:checked');
@@ -2410,23 +2410,24 @@
                     let planAdjustment = 0;
                     let planAdjustmentLabel = "Adjustment";
 
+                    // UPDATED: Surcharges/Adjustments calculated on Base Amount (totalCost) only
                     if(instType === '1') { 
-                        // UPDATED LOGIC: If discount is already 'full_pay', do NOT apply plan adjustment (avoid double count)
+                        // If discount is already 'full_pay', do NOT apply plan adjustment (avoid double count)
                         if (discType === 'full_pay') {
                             planAdjustment = 0;
                             planAdjustmentLabel = "Included in Discount";
                         } else {
-                            // If they somehow selected Plan 1 but NOT Full Pay Discount (e.g. they selected Couple discount)
-                            // Then apply the 10% here as the "Plan" benefit
-                            planAdjustment = -(amountAfterDiscount * 0.10); 
+                            planAdjustment = -(totalCost * 0.10); 
                             planAdjustmentLabel = "Full Pay Save (10%)"; 
                         }
                     } 
-                    else if (instType === '2') { planAdjustment = (amountAfterDiscount * 0.10); planAdjustmentLabel = "Split Fee (10%)"; } 
-                    else if (instType === '3') { planAdjustment = (amountAfterDiscount * 0.15); planAdjustmentLabel = "Split Fee (15%)"; } 
-                    else if (instType === '4') { planAdjustment = (amountAfterDiscount * 0.20); planAdjustmentLabel = "Split Fee (20%)"; }
+                    else if (instType === '2') { planAdjustment = (totalCost * 0.10); planAdjustmentLabel = "Split Fee (10%)"; } 
+                    else if (instType === '3') { planAdjustment = (totalCost * 0.15); planAdjustmentLabel = "Split Fee (15%)"; } 
+                    else if (instType === '4') { planAdjustment = (totalCost * 0.20); planAdjustmentLabel = "Split Fee (20%)"; }
                     
-                    const grandTotal = amountAfterDiscount + planAdjustment;
+                    // UPDATED: Grand Total Calculation
+                    // Base + VAT + Reg - Discount + Surcharge
+                    const grandTotal = totalCost + vatTotal + totalReg - discountAmt + planAdjustment;
 
                     // --- UPDATE RECEIPT ROWS ---
                     this.renderReceiptRow('row_cost_values', totalCost);
@@ -2476,8 +2477,8 @@
                                     const eurRate = (currencyLayer.rates && currencyLayer.rates.EUR) ? parseFloat(currencyLayer.rates.EUR) : 0.92;
                                     const usd = iAmtEur / eurRate;
                                     const localRate = (currencyLayer.rates && currencyLayer.rates[this.selectedLocalCurrency]) ? parseFloat(currencyLayer.rates[this.selectedLocalCurrency]) : 0;
-                                    const amtLocal = usd * localRate; // Define as amtLocal
-                                    localHtml = `<div class="text-[9px] text-blue-500 font-mono font-bold">${currencyLayer.format(amtLocal, this.selectedLocalCurrency)}</div>`; // Use amtLocal
+                                    const amtLocal = usd * localRate;
+                                    localHtml = `<div class="text-[9px] text-blue-500 font-mono font-bold">${currencyLayer.format(amtLocal, this.selectedLocalCurrency)}</div>`;
                                 }
 
                                 listHtml += `
@@ -2512,19 +2513,25 @@
                         4: { main: 'text-amber-700', sub: 'text-amber-600', border: 'border-amber-100', bg: 'bg-amber-50' }
                     };
 
-                    const calcInstalmentTotal = (baseAmt, type) => {
-                        if (type === '1') return baseAmt - (baseAmt * 0.10); 
-                        if (type === '2') return baseAmt + (baseAmt * 0.10); 
-                        if (type === '3') return baseAmt + (baseAmt * 0.15); 
-                        if (type === '4') return baseAmt + (baseAmt * 0.20); 
-                        return baseAmt; 
+                    // UPDATED: Calculate specific plan total dynamically for display
+                    const calcPlanSpecificTotal = (type) => {
+                        let adj = 0;
+                        if(type === '1') {
+                             if (discType === 'full_pay') adj = 0; 
+                             else adj = -(totalCost * 0.10);
+                        }
+                        else if (type === '2') adj = (totalCost * 0.10);
+                        else if (type === '3') adj = (totalCost * 0.15);
+                        else if (type === '4') adj = (totalCost * 0.20);
+                        
+                        return totalCost + vatTotal + totalReg - discountAmt + adj;
                     };
 
                     for(let i=1; i<=4; i++) {
                         const el = document.getElementById(`plan_${i}_details`);
                         if(el) {
                             const splits = splitConfigs[i];
-                            const planTotal = calcInstalmentTotal(amountAfterDiscount, i.toString());
+                            const planTotal = calcPlanSpecificTotal(i.toString());
                             const styles = styleMap[i];
                             
                             let badgeHtml = '';
@@ -2548,12 +2555,12 @@
                                     const eurRate = (currencyLayer.rates && currencyLayer.rates.EUR) ? parseFloat(currencyLayer.rates.EUR) : 0.92;
                                     const usd = amtEur / eurRate;
                                     const localRate = (currencyLayer.rates && currencyLayer.rates[this.selectedLocalCurrency]) ? parseFloat(currencyLayer.rates[this.selectedLocalCurrency]) : 0;
-                                    const amtLocal = usd * localRate; // Defined as amtLocal
+                                    const amtLocal = usd * localRate;
                                     localLine = `
                                         <div class="flex justify-between items-center mt-1 pt-1 border-t border-slate-100/50">
                                             <span class="text-[9px] font-bold text-slate-500 opacity-80 flex items-center gap-1"><i class="fa-solid fa-earth-americas text-[8px]"></i> ${this.selectedLocalCurrency}</span>
                                             <span class="text-[10px] font-mono font-bold text-slate-600">${currencyLayer.format(amtLocal, this.selectedLocalCurrency)}</span>
-                                        </div>`; // Use amtLocal
+                                        </div>`;
                                 }
 
                                 const labels = ["1st Instalment", "2nd Instalment", "3rd Instalment", "4th Instalment"];
@@ -2596,61 +2603,58 @@
                 }
             },
 
-            renderReceiptRow(containerId, amountEur, colorClass="text-slate-800") {
-                const container = document.getElementById(containerId);
-                if(!container) return;
+            // --- MISSING HELPER FUNCTIONS ADDED HERE ---
 
-                const aed = currencyLayer.getEuroToAED(amountEur);
-                
-                let html = `<div class="font-bold ${colorClass}">€${Math.abs(amountEur).toFixed(2)}</div>`;
-                html += `<div class="text-[10px] text-slate-400 font-mono">AED ${Math.abs(aed).toFixed(2)}</div>`;
-                
-                // Add Local Currency if exists
+            renderReceiptRow(elementId, amountEur, colorClass = "") {
+                const el = document.getElementById(elementId);
+                if (!el) return;
+
+                const amountAed = currencyLayer.getEuroToAED(amountEur);
+                let html = `<div class="font-bold text-slate-700 ${colorClass}">€${amountEur.toFixed(2)}</div>
+                            <div class="text-[10px] text-slate-400 font-mono">AED ${amountAed.toFixed(2)}</div>`;
+
                 if (this.selectedLocalCurrency && this.selectedLocalCurrency !== 'EUR' && this.selectedLocalCurrency !== 'AED') {
                     const eurRate = (currencyLayer.rates && currencyLayer.rates.EUR) ? parseFloat(currencyLayer.rates.EUR) : 0.92;
-                    const usd = Math.abs(amountEur) / eurRate;
+                    const usd = amountEur / eurRate;
                     const localRate = (currencyLayer.rates && currencyLayer.rates[this.selectedLocalCurrency]) ? parseFloat(currencyLayer.rates[this.selectedLocalCurrency]) : 0;
-                    const localAmt = usd * localRate; // Define as localAmt
+                    const amountLocal = usd * localRate;
                     
-                    html += `<div class="text-[9px] text-blue-500 font-mono font-bold border-t border-slate-100 mt-0.5 pt-0.5">${currencyLayer.format(localAmt, this.selectedLocalCurrency)}</div>`; // Use localAmt
+                    html += `<div class="text-[9px] text-blue-500 font-mono font-bold mt-0.5">${currencyLayer.format(amountLocal, this.selectedLocalCurrency)}</div>`;
                 }
-
-                container.innerHTML = html;
+                
+                el.innerHTML = html;
             },
 
-            generateCurrencyBlock(amountEUR, isCompact = false) {
-                const eurRate = (currencyLayer.rates && currencyLayer.rates.EUR) ? parseFloat(currencyLayer.rates.EUR) : 0.92;
-                const amountUSD = amountEUR / eurRate;
-                const amountAED = currencyLayer.getEuroToAED(amountEUR);
-                
-                // Helper to create the big blocks
-                const createBigBlock = (label, amount, sub, bg, text, border) => `
-                    <div class="relative overflow-hidden p-3 rounded-2xl ${bg} ${text} ${border} border shadow-sm group transition-all hover:scale-[1.02] cursor-default">
-                        <div class="absolute -right-2 -top-2 opacity-10 text-4xl"><i class="fa-solid fa-coins"></i></div>
-                        <div class="flex justify-between items-end relative z-10">
-                            <div>
-                                <div class="text-[10px] font-bold uppercase tracking-widest opacity-70">${label}</div>
-                                <div class="text-xl font-extrabold tracking-tight mt-0.5 leading-none">${amount}</div>
-                            </div>
-                            <div class="text-[10px] font-bold px-2 py-1 rounded-lg bg-white/20 backdrop-blur-sm">${sub}</div>
+            generateCurrencyBlock(amountEur) {
+                const amountAed = currencyLayer.getEuroToAED(amountEur);
+                let html = `
+                    <div class="bg-slate-900 rounded-lg p-3 text-white">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Total Payable</span>
+                            <span class="text-[9px] font-bold bg-white/10 px-1.5 py-0.5 rounded text-blue-200">EUR</span>
+                        </div>
+                        <div class="text-2xl font-bold tracking-tight mb-2">€${amountEur.toFixed(2)}</div>
+                        <div class="pt-2 border-t border-white/10 flex justify-between items-center">
+                            <span class="text-[9px] font-bold text-slate-400">AED Equivalent</span>
+                            <span class="text-xs font-mono font-bold text-emerald-400">AED ${amountAed.toFixed(2)}</span>
                         </div>
                     </div>
                 `;
 
-                // 1. EUR Block
-                let html = createBigBlock('Euro', `€${currencyLayer.format(amountEUR, 'EUR').replace('€','')}`, 'Base', 'bg-slate-800', 'text-white', 'border-slate-700');
-                
-                // 2. AED Block
-                html += `<div class="mt-2">` + createBigBlock('UAE Dirham', `AED ${amountAED.toFixed(0)}`, 'Local', 'bg-emerald-50', 'text-emerald-800', 'border-emerald-100') + `</div>`;
-
-                // 3. Optional Nationality Block
                 if (this.selectedLocalCurrency && this.selectedLocalCurrency !== 'EUR' && this.selectedLocalCurrency !== 'AED') {
+                    const eurRate = (currencyLayer.rates && currencyLayer.rates.EUR) ? parseFloat(currencyLayer.rates.EUR) : 0.92;
+                    const usd = amountEur / eurRate;
                     const localRate = (currencyLayer.rates && currencyLayer.rates[this.selectedLocalCurrency]) ? parseFloat(currencyLayer.rates[this.selectedLocalCurrency]) : 0;
-                    const localAmount = amountUSD * localRate;
-                    
-                    html += `<div class="mt-2">` + createBigBlock(this.selectedLocalCurrency, currencyLayer.format(localAmount, this.selectedLocalCurrency), 'Home', 'bg-blue-600', 'text-white', 'border-blue-500') + `</div>`;
+                    const amountLocal = usd * localRate;
+
+                    html += `
+                        <div class="mt-2 p-2 rounded-lg bg-blue-50 border border-blue-100 flex justify-between items-center">
+                            <span class="text-[9px] font-bold text-blue-400 uppercase flex items-center gap-1"><i class="fa-solid fa-earth-americas"></i> ${this.selectedLocalCurrency}</span>
+                            <span class="text-xs font-mono font-bold text-blue-700">${currencyLayer.format(amountLocal, this.selectedLocalCurrency)}</span>
+                        </div>
+                    `;
                 }
-                
+
                 return html;
             },
 
@@ -2673,33 +2677,41 @@
                 
                 const totalCost = costPerPax * pax;
                 const totalReg = regPerPax * pax;
-                const vatTotal = (totalCost + totalReg) * 0.05;
-                const subTotal = totalCost + totalReg + vatTotal;
-
+                
+                // UPDATED: VAT on Base Cost only
+                const vatTotal = totalCost * 0.05;
+                
                 // Discount
                 const discRadio = document.querySelector('input[name="discountName"]:checked');
                 const discType = discRadio ? discRadio.value : 'none';
                 let discountAmt = 0;
-                if (discType === 'couple') discountAmt = subTotal * 0.05;
-                else if (discType === 'group' && pax > 3) discountAmt = subTotal * 0.10;
-                else if (discType === 'reference') discountAmt = subTotal * 0.04;
-                else if (discType === 'skilled') discountAmt = subTotal * 0.05;
-                else if (discType === 'full_pay') discountAmt = subTotal * 0.10;
+                
+                // UPDATED: Discounts calculated on Base Amount (totalCost)
+                if (discType === 'couple') discountAmt = totalCost * 0.05;
+                else if (discType === 'group' && pax > 3) discountAmt = totalCost * 0.10;
+                else if (discType === 'reference') discountAmt = totalCost * 0.04;
+                else if (discType === 'skilled') discountAmt = totalCost * 0.05;
+                else if (discType === 'full_pay') discountAmt = totalCost * 0.10;
                 else if (discType === 'custom') {
                      discountAmt = parseFloat(document.getElementById('customDiscountInput').value) || 0;
                 }
-                const amtAfterDisc = subTotal - discountAmt;
 
                 // Instalment / Plan Adjustment
                 const instRadio = document.querySelector('input[name="instalment"]:checked');
                 const instType = instRadio ? instRadio.value : '1';
                 let planAdj = 0;
-                if(instType === '1') planAdj = -(amtAfterDisc * 0.10);
-                else if (instType === '2') planAdj = amtAfterDisc * 0.10;
-                else if (instType === '3') planAdj = amtAfterDisc * 0.15;
-                else if (instType === '4') planAdj = amtAfterDisc * 0.20;
                 
-                const grandTotal = amtAfterDisc + planAdj;
+                // UPDATED: Surcharge/Adjustment on Base Amount (totalCost)
+                if(instType === '1') {
+                    if (discType === 'full_pay') planAdj = 0; // Already discounted
+                    else planAdj = -(totalCost * 0.10);
+                }
+                else if (instType === '2') planAdj = totalCost * 0.10;
+                else if (instType === '3') planAdj = totalCost * 0.15;
+                else if (instType === '4') planAdj = totalCost * 0.20;
+                
+                // UPDATED: Final Grand Total
+                const grandTotal = totalCost + vatTotal + totalReg - discountAmt + planAdj;
 
                 // Calculate individual instalments
                 let inst1=0, inst2=0, inst3=0, inst4=0;
