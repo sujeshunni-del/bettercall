@@ -1121,6 +1121,9 @@
             "BOOKING_TYPE": "03414f61-a879-4d14-bee0-7186a3de27d5",
             "TARGET_COUNTRY": "dd59c787-da25-4760-ab85-2974e1ae8838"
         };
+        
+        // Keys that MUST be treated as dropdowns to prevent FIELD_011 error
+        const DROPDOWN_KEYS = ["NATIONALITY", "PRESENT RESIDENCE", "QUALIFICATION", "JOB ROLE", "TARGET_COUNTRY", "ADVISOR", "BOOKING_TYPE"];
 
         const targetCountries = [
             { name: "SWEDEN", type: "schengen", color: "hover:shadow-blue-300 hover:border-blue-400", bg: "bg-blue-50", icon: "🇸🇪" },
@@ -2662,7 +2665,7 @@
                 customFieldsArray.push({ id: CLICKUP_FIELDS["PASSPORT EXPIRY"], value: passExpVal });
             }
 
-            // 3. DYNAMIC DROPDOWN MAPPING (Fixed logic from appointment.html)
+            // 3. DYNAMIC DROPDOWN MAPPING
             try {
                 // Fetch field definitions to get Option IDs
                 const fieldRes = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`, { 
@@ -2678,6 +2681,9 @@
                         const fid = CLICKUP_FIELDS[key];
                         const def = fieldDefs.find(f => f.id === fid);
                         
+                        // Check if this key is supposed to be strictly a dropdown
+                        const isStrictDropdown = DROPDOWN_KEYS.includes(key);
+
                         if(def && (def.type === 'drop_down' || def.type === 'labels')) {
                             // Find matching option by name (case-insensitive)
                             const opt = def.type_config.options.find(o => o.name.toLowerCase() === val.toLowerCase()) 
@@ -2685,9 +2691,11 @@
                             
                             if(opt) {
                                 customFieldsArray.push({ id: fid, value: opt.id });
+                            } else {
+                                console.warn(`Dropdown option mismatch for ${key}: ${val}`);
                             }
-                        } else if (fid) {
-                            // If it's just a text field, save raw value
+                        } else if (fid && !isStrictDropdown) {
+                            // Only push raw text if it's NOT a restricted dropdown field
                             customFieldsArray.push({ id: fid, value: val });
                         }
                     };
@@ -2704,9 +2712,7 @@
                 }
             } catch(e) {
                 console.error("Field Mapping Error:", e);
-                // Fallback: If mapping fails, try sending raw text (might fail for dropdowns but worth a try)
-                if(qualVal) customFieldsArray.push({ id: CLICKUP_FIELDS["QUALIFICATION"], value: qualVal });
-                if(jobRole) customFieldsArray.push({ id: CLICKUP_FIELDS["JOB ROLE"], value: jobRole });
+                // FIX: Removed the unsafe fallback that was pushing strings to Dropdown fields
             }
             
             const payload = {
@@ -2756,13 +2762,14 @@ Generated via Better Call Web App
                     return true;
                 } else {
                     const err = await res.json();
-                    console.error("ClickUp Error:", err);
+                    console.error("ClickUp Error Details:", JSON.stringify(err));
+                    
                     if(err.ECODE === 'FIELD_016') {
                         showModal("Submission Error: Invalid Phone Number format.");
                     } else if (err.err && err.err.includes("option index")) {
-                        showModal("System Error: One of the dropdown fields (Nationality/Job) does not match the options in ClickUp.");
+                        showModal("System Error: Dropdown value mismatch. Please contact admin.");
                     } else {
-                        showModal("Submission Error: " + (err.err || "Check Custom Fields configuration"));
+                        showModal("Submission Error: " + (err.err || "Check Console for details"));
                     }
                     return false;
                 }
